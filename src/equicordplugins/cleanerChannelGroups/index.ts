@@ -10,7 +10,7 @@ import definePlugin from "@utils/types";
 
 export default definePlugin({
     name: "CleanerChannelGroups",
-    description: t("cleanerChannelGroups.description"),
+    description: t("equicord.cleanerChannelGroups.description"),
     authors: [EquicordDevs.justjxke],
     patches: [
         {

@@ -1,10 +1,10 @@
 {
-    "description":"Auxilia na tradução Equicord",
-    "settings":{
-        "forceLocale":{
-            "description":"Forçar uma localidade diferente para Equicord usar",
-            "followDiscord":"Padrão (siga Discord)"
+    "description": "Auxilia na tradução Equicord",
+    "settings": {
+        "forceLocale": {
+            "description": "Forçar uma localidade diferente para Equicord usar",
+            "followDiscord": "Padrão (siga Discord)"
         },
-        "showMissingKeys":"Se a localidade atual não tiver traduções, mostre as chaves em vez de voltar ao inglês"
+        "showMissingKeys": "Se a localidade atual não tiver traduções, mostre as chaves em vez de voltar ao inglês"
     }
 }

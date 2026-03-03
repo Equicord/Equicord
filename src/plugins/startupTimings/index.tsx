@@ -27,12 +27,12 @@ import StartupTimingPage from "./StartupTimingPage";
 
 export default definePlugin({
     name: "StartupTimings",
-    description: t("startupTimings.description"),
+    description: t("vencord.startupTimings.description"),
     authors: [Devs.Megu],
     start() {
         SettingsPlugin.customEntries.push({
             key: "vencord_startup_timings",
-            title: t("startupTimings.ui.title"),
+            title: t("vencord.startupTimings.ui.title"),
             Component: StartupTimingPage,
             Icon: ClockIcon
         });

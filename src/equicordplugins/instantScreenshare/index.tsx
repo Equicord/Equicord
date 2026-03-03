@@ -57,7 +57,7 @@ async function autoStartStream(instant = true) {
 
 export default definePlugin({
     name: "InstantScreenshare",
-    description: t("instantScreenshare.description"),
+    description: t("equicord.instantScreenshare.description"),
     authors: [Devs.HAHALOSAH, Devs.thororen, EquicordDevs.mart],
     dependencies: ["EquicordToolbox"],
     tags: ["ScreenshareKeybind"],
@@ -66,21 +66,21 @@ export default definePlugin({
 
     settingsAboutComponent: () => (
         <>
-            <HeadingSecondary>{t("instantScreenshare.info.linux")}</HeadingSecondary>
+            <HeadingSecondary>{t("equicord.instantScreenshare.info.linux")}</HeadingSecondary>
             <Paragraph>
-                {t("instantScreenshare.info.wayland")}
+                {t("equicord.instantScreenshare.info.wayland")}
                 <br />
-                {t("instantScreenshare.info.x11")}
+                {t("equicord.instantScreenshare.info.x11")}
             </Paragraph>
             <br />
-            <HeadingSecondary>{t("instantScreenshare.info.videoDevices")}</HeadingSecondary>
+            <HeadingSecondary>{t("equicord.instantScreenshare.info.videoDevices")}</HeadingSecondary>
             <Paragraph>
-                {t("instantScreenshare.info.videoDevicesInfo")}
+                {t("equicord.instantScreenshare.info.videoDevicesInfo")}
             </Paragraph>
             <br />
-            <HeadingSecondary>{t("instantScreenshare.info.soundPreview")}</HeadingSecondary>
+            <HeadingSecondary>{t("equicord.instantScreenshare.info.soundPreview")}</HeadingSecondary>
             <Paragraph>
-                {t("instantScreenshare.info.soundPreviewInfo")}
+                {t("equicord.instantScreenshare.info.soundPreviewInfo")}
             </Paragraph>
         </>
     ),
@@ -127,9 +127,9 @@ export default definePlugin({
     },
 
     toolboxActions: {
-        [t("instantScreenshare.ui.instantScreenshare")]() {
+        [t("equicord.instantScreenshare.ui.instantScreenshare")]() {
             settings.store.toolboxManagement = !settings.store.toolboxManagement;
-            showToast(settings.store.toolboxManagement ? t("instantScreenshare.ui.instantScreenshareEnabled") : t("instantScreenshare.ui.instantScreenshareDisabled"), Toasts.Type.SUCCESS);
+            showToast(settings.store.toolboxManagement ? t("equicord.instantScreenshare.ui.instantScreenshareEnabled") : t("equicord.instantScreenshare.ui.instantScreenshareDisabled"), Toasts.Type.SUCCESS);
         }
     }
 });

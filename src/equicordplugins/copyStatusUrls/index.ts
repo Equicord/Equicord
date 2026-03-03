@@ -23,7 +23,7 @@ const getMetadataFromApi: (activity: any, userId: string) => Promise<any> = find
 
 export default definePlugin({
     name: "CopyStatusUrls",
-    description: t("copyStatusUrls.description"),
+    description: t("equicord.copyStatusUrls.description"),
     authors: [Devs.sadan],
 
     patches: [
@@ -46,7 +46,7 @@ export default definePlugin({
                 copyToClipboard(button_urls[index]);
                 Toasts.show({
                     id: Toasts.genId(),
-                    message: t("copyStatusUrls.toast.copied"),
+                    message: t("equicord.copyStatusUrls.toast.copied"),
                     type: Toasts.Type.SUCCESS,
                     options: {
                         position: Toasts.Position.TOP
@@ -56,7 +56,7 @@ export default definePlugin({
                 console.error(e);
                 Toasts.show({
                     id: Toasts.genId(),
-                    message: t("copyStatusUrls.toast.error"),
+                    message: t("equicord.copyStatusUrls.toast.error"),
                     type: Toasts.Type.FAILURE,
                     options: {
                         position: Toasts.Position.TOP

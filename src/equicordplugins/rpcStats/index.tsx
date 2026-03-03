@@ -172,7 +172,7 @@ async function updateData() {
 
 export default definePlugin({
     name: "RPCStats",
-    description: t("rpcStats.description"),
+    description: t("equicord.rpcStats.description"),
     authors: [Devs.Samwich],
     async start() {
         updateData();

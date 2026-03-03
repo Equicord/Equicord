@@ -27,7 +27,7 @@ export function RenameButton({ session, state }: { session: SessionInfo["session
                 ))
             }
         >
-            {t("betterSessions.rename")}
+            {t("vencord.betterSessions.rename")}
         </Button>
     );
 }

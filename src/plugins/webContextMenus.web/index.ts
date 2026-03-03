@@ -53,7 +53,7 @@ const settings = definePluginSettings({
     // menu handler instead of the web one, which breaks the other menus that aren't enabled
     addBack: {
         type: OptionType.BOOLEAN,
-        description: t("webContextMenus.settings.addBack"),
+        description: t("vencord.webContextMenus.settings.addBack"),
         default: hideSetting,
         restartNeeded: true,
         // Web slate menu has proper spellcheck suggestions and image context menu is also pretty good,
@@ -88,7 +88,7 @@ function fixImageUrl(urlString: string) {
 
 export default definePlugin({
     name: "WebContextMenus",
-    description: t("webContextMenus.description"),
+    description: t("vencord.webContextMenus.description"),
     authors: [Devs.Ven],
     enabledByDefault: true,
     required: requiredByPlatform,

@@ -24,7 +24,7 @@ import { moment } from "@webpack/common";
 export default definePlugin({
     name: "DontRoundMyTimestamps",
     authors: [Devs.Lexi],
-    description: t("dontRoundMyTimestamps.description"),
+    description: t("vencord.dontRoundMyTimestamps.description"),
 
     start() {
         moment.relativeTimeRounding(Math.floor);

@@ -15,14 +15,14 @@ import { UserStore } from "@webpack/common";
 const settings = definePluginSettings({
     colorEffects: {
         type: OptionType.BOOLEAN,
-        description: t("characterCounter.settings.colorEffects"),
+        description: t("equicord.characterCounter.settings.colorEffects"),
         default: true,
     },
 });
 
 export default definePlugin({
     name: "CharacterCounter",
-    description: t("characterCounter.description"),
+    description: t("equicord.characterCounter.description"),
     authors: [EquicordDevs.creations, EquicordDevs.Panniku, Devs.thororen],
     settings,
     patches: [

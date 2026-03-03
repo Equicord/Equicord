@@ -13,24 +13,24 @@ const settings = definePluginSettings({
     defaultLayout: {
         type: OptionType.SELECT,
         options: [
-            { label: t("overrideForumDefaults.layouts.list"), value: 1, default: true },
-            { label: t("overrideForumDefaults.layouts.gallery"), value: 2 }
+            { label: t("vencord.overrideForumDefaults.layouts.list"), value: 1, default: true },
+            { label: t("vencord.overrideForumDefaults.layouts.gallery"), value: 2 }
         ],
-        description: t("overrideForumDefaults.settings.defaultLayout")
+        description: t("vencord.overrideForumDefaults.settings.defaultLayout")
     },
     defaultSortOrder: {
         type: OptionType.SELECT,
         options: [
-            { label: t("overrideForumDefaults.sortOrders.recentlyActive"), value: 0, default: true },
-            { label: t("overrideForumDefaults.sortOrders.datePosted"), value: 1 }
+            { label: t("vencord.overrideForumDefaults.sortOrders.recentlyActive"), value: 0, default: true },
+            { label: t("vencord.overrideForumDefaults.sortOrders.datePosted"), value: 1 }
         ],
-        description: t("overrideForumDefaults.settings.defaultSortOrder")
+        description: t("vencord.overrideForumDefaults.settings.defaultSortOrder")
     }
 });
 
 export default definePlugin({
     name: "OverrideForumDefaults",
-    description: t("overrideForumDefaults.description"),
+    description: t("vencord.overrideForumDefaults.description"),
     authors: [Devs.Inbestigator],
     patches: [
         {

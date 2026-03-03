@@ -13,7 +13,7 @@ import { FluxDispatcher } from "@webpack/common";
 
 const settings = definePluginSettings({
     idleTimeout: {
-        description: t("customIdle.settings.idleTimeout"),
+        description: t("vencord.customIdle.settings.idleTimeout"),
         type: OptionType.SLIDER,
         markers: makeRange(0, 60, 5),
         default: 10,
@@ -21,7 +21,7 @@ const settings = definePluginSettings({
         restartNeeded: true // Because of the setInterval patch
     },
     remainInIdle: {
-        description: t("customIdle.settings.remainInIdle"),
+        description: t("vencord.customIdle.settings.remainInIdle"),
         type: OptionType.BOOLEAN,
         default: true
     }
@@ -29,7 +29,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "CustomIdle",
-    description: t("customIdle.description"),
+    description: t("vencord.customIdle.description"),
     authors: [Devs.newwares],
     settings,
     patches: [
@@ -61,13 +61,13 @@ export default definePlugin({
             return;
         }
 
-        const backOnlineMessage = t("customIdle.ui.backOnlineMessage");
+        const backOnlineMessage = t("vencord.customIdle.ui.backOnlineMessage");
         if (
             currentNotice?.[1] === backOnlineMessage ||
             noticesQueue.some(([, noticeMessage]) => noticeMessage === backOnlineMessage)
         ) return;
 
-        showNotice(backOnlineMessage, t("customIdle.ui.exitIdle"), () => {
+        showNotice(backOnlineMessage, t("vencord.customIdle.ui.exitIdle"), () => {
             popNotice();
             FluxDispatcher.dispatch({
                 type: "IDLE",

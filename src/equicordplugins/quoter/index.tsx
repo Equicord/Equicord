@@ -22,7 +22,7 @@ import { createQuoteImage, ensureFontLoaded, generateFileNamePreview, getFileExt
 const settings = definePluginSettings({
     quoteFont: {
         type: OptionType.SELECT,
-        description: t("quoter.settings.quoteFont"),
+        description: t("equicord.quoter.settings.quoteFont"),
         options: [
             { label: "M PLUS Rounded 1c", value: QuoteFont.MPlusRounded, default: true },
             { label: "Open Sans", value: QuoteFont.OpenSans },
@@ -33,24 +33,24 @@ const settings = definePluginSettings({
     },
     watermark: {
         type: OptionType.STRING,
-        description: t("quoter.settings.watermark"),
+        description: t("equicord.quoter.settings.watermark"),
         default: "Made with Equicord"
     },
     grayscale: {
         type: OptionType.BOOLEAN,
-        description: t("quoter.settings.grayscale"),
+        description: t("equicord.quoter.settings.grayscale"),
         default: true,
         hidden: true
     },
     showWatermark: {
         type: OptionType.BOOLEAN,
-        description: t("quoter.settings.showWatermark"),
+        description: t("equicord.quoter.settings.showWatermark"),
         default: false,
         hidden: true
     },
     saveAsGif: {
         type: OptionType.BOOLEAN,
-        description: t("quoter.settings.saveAsGif"),
+        description: t("equicord.quoter.settings.saveAsGif"),
         default: false,
         hidden: true
     }
@@ -58,7 +58,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "Quoter",
-    description: t("quoter.description"),
+    description: t("equicord.quoter.description"),
     authors: [Devs.Samwich, Devs.thororen, EquicordDevs.neoarz, Devs.prism],
     settings,
 

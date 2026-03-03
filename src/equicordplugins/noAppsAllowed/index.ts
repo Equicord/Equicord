@@ -10,7 +10,7 @@ import definePlugin from "@utils/types";
 
 export default definePlugin({
     name: "NoAppsAllowed",
-    description: t("noAppsAllowed.description"),
+    description: t("equicord.noAppsAllowed.description"),
     authors: [EquicordDevs.meowabyte],
     patches: [
         {

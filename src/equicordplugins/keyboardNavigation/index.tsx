@@ -20,7 +20,7 @@ let isRecordingGlobal: boolean = false;
 
 export const settings = definePluginSettings({
     hotkey: {
-        description: t("keyboardNavigation.settings.hotkey"),
+        description: t("equicord.keyboardNavigation.settings.hotkey"),
         type: OptionType.COMPONENT,
         default: ["Control", "Shift", "P"],
         component: () => {
@@ -70,7 +70,7 @@ export const settings = definePluginSettings({
                         <div className={`${cl("key-recorder")} ${isRecording ? cl("recording") : ""}`}>
                             {settings.store.hotkey.map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" + ")}
                             <button className={`${cl("key-recorder-button")} ${isRecording ? cl("recording-button") : ""}`} disabled={isRecording}>
-                                {isRecording ? t("keyboardNavigation.ui.recording") : t("keyboardNavigation.ui.recordKeybind")}
+                                {isRecording ? t("equicord.keyboardNavigation.ui.recording") : t("equicord.keyboardNavigation.ui.recordKeybind")}
                             </button>
                         </div>
                     </div>
@@ -79,7 +79,7 @@ export const settings = definePluginSettings({
         }
     },
     allowMouseControl: {
-        description: t("keyboardNavigation.settings.allowMouseControl"),
+        description: t("equicord.keyboardNavigation.settings.allowMouseControl"),
         type: OptionType.BOOLEAN,
         default: true
     }
@@ -87,7 +87,7 @@ export const settings = definePluginSettings({
 
 export default definePlugin({
     name: "KeyboardNavigation",
-    description: t("keyboardNavigation.description"),
+    description: t("equicord.keyboardNavigation.description"),
     authors: [Devs.Ethan],
     settings,
 
@@ -97,7 +97,7 @@ export default definePlugin({
         if (IS_DEV) {
             registerAction({
                 id: "openDevSettings",
-                label: t("keyboardNavigation.commands.openDevSettings"),
+                label: t("equicord.keyboardNavigation.commands.openDevSettings"),
                 callback: () => SettingsRouter.openUserSettings("equicord_patch_helper_panel"),
                 registrar: "Equicord"
             });

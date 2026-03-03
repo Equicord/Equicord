@@ -69,7 +69,7 @@ function AppearanceIcon() {
 const settings = definePluginSettings({
     roleIconFileFormat: {
         type: OptionType.SELECT,
-        description: t("betterRoleContext.settings.roleIconFileFormat"),
+        description: t("vencord.betterRoleContext.settings.roleIconFileFormat"),
         options: [
             {
                 label: "png",
@@ -90,7 +90,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "BetterRoleContext",
-    description: t("betterRoleContext.description"),
+    description: t("vencord.betterRoleContext.description"),
     authors: [Devs.Ven, Devs.goodbee],
     dependencies: ["UserSettingsAPI"],
 
@@ -113,7 +113,7 @@ export default definePlugin({
                 children.unshift(
                     <Menu.MenuItem
                         id="vc-copy-role-color"
-                        label={t("betterRoleContext.copyRoleColor")}
+                        label={t("vencord.betterRoleContext.copyRoleColor")}
                         action={() => copyToClipboard(role.colorString!)}
                         icon={AppearanceIcon}
                     />
@@ -124,7 +124,7 @@ export default definePlugin({
                 children.unshift(
                     <Menu.MenuItem
                         id="vc-edit-role"
-                        label={t("betterRoleContext.editRole")}
+                        label={t("vencord.betterRoleContext.editRole")}
                         action={async () => {
                             await GuildSettingsActions.open(guild.id, "ROLES");
                             GuildSettingsActions.selectRole(id);
@@ -139,7 +139,7 @@ export default definePlugin({
                 children.push(
                     <Menu.MenuItem
                         id="vc-view-role-icon"
-                        label={t("betterRoleContext.viewRoleIcon")}
+                        label={t("vencord.betterRoleContext.viewRoleIcon")}
                         action={() => openRoleIconModal(role.id, roleIcon, role.name)}
                         icon={ImageIcon}
                     />

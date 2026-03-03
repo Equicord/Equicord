@@ -14,7 +14,7 @@ import { makeDevBanner, settings } from "./components";
 
 export default definePlugin({
     name: "DiscordDevBanner",
-    description: t("discordDevBanner.description"),
+    description: t("equicord.discordDevBanner.description"),
     authors: [EquicordDevs.KrystalSkull, Devs.thororen],
     settings,
     patches: [

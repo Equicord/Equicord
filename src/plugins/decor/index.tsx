@@ -27,7 +27,7 @@ export interface AvatarDecoration {
 
 export default definePlugin({
     name: "Decor",
-    description: t("decor.description"),
+    description: t("vencord.decor.description"),
     authors: [Devs.FieryFlames],
     patches: [
         // Patch MediaResolver to return correct URL for Decor avatar decorations

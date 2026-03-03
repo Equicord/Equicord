@@ -59,7 +59,7 @@ function handleKeydown({ code, ctrlKey, shiftKey, altKey }: KeyboardEvent) {
 
 export default definePlugin({
     name: "ToggleVideoBind",
-    description: t("toggleVideoBind.description"),
+    description: t("equicord.toggleVideoBind.description"),
     authors: [EquicordDevs.mochienya],
     settings,
     start() {

@@ -38,7 +38,7 @@ const UserContextMenuPatch: NavContextMenuPatchCallback = (children, { user }: U
     children.push(
         <Menu.MenuItem
             id="vc-copy-user-mention"
-            label={t("copyUserMention.contextMenu.copyUserMention")}
+            label={t("equicord.copyUserMention.contextMenu.copyUserMention")}
             action={() => copyToClipboard(`<@${user.id}>`)}
             icon={MentionIcon}
         />
@@ -48,7 +48,7 @@ const UserContextMenuPatch: NavContextMenuPatchCallback = (children, { user }: U
 export default definePlugin({
     name: "CopyUserMention",
     authors: [EquicordDevs.Cortex, Devs.castdrian],
-    description: t("copyUserMention.description"),
+    description: t("equicord.copyUserMention.description"),
     contextMenus: {
         "user-context": UserContextMenuPatch
     }

@@ -35,35 +35,35 @@ const cl = classNameFactory("vc-declutter-");
 export const settings = definePluginSettings({
     userProfileHeader: {
         type: OptionType.COMPONENT,
-        component: () => SectionSeparator(t("declutter.headers.userProfile")),
+        component: () => SectionSeparator(t("equicord.declutter.headers.userProfile")),
     },
     removeAvatarDecoration: {
         type: OptionType.BOOLEAN,
-        description: t("declutter.settings.removeAvatarDecoration"),
+        description: t("equicord.declutter.settings.removeAvatarDecoration"),
         default: true,
         restartNeeded: true,
     },
     removeNameplate: {
         type: OptionType.BOOLEAN,
-        description: t("declutter.settings.removeNameplate"),
+        description: t("equicord.declutter.settings.removeNameplate"),
         default: true,
         restartNeeded: true,
     },
     removeProfileEffect: {
         type: OptionType.BOOLEAN,
-        description: t("declutter.settings.removeProfileEffect"),
+        description: t("equicord.declutter.settings.removeProfileEffect"),
         default: true,
         restartNeeded: true,
     },
     removeClanTag: {
         type: OptionType.BOOLEAN,
-        description: t("declutter.settings.removeClanTag"),
+        description: t("equicord.declutter.settings.removeClanTag"),
         default: true,
         restartNeeded: true,
     },
     alwaysShowUsername: {
         type: OptionType.BOOLEAN,
-        description: t("declutter.settings.alwaysShowUsername"),
+        description: t("equicord.declutter.settings.alwaysShowUsername"),
         default: true,
         restartNeeded: true
     },
@@ -71,7 +71,7 @@ export const settings = definePluginSettings({
         type: OptionType.COMPONENT,
         component: () => (
             <Notice.Info className={cl("accessibility-notice")}>
-                <Translate i18nKey="declutter.headers.accessibilityNotice">
+                <Translate i18nKey="equicord.declutter.headers.accessibilityNotice">
                     Discord already has a built-in username style option in Accessibility settings.
                 </Translate>
             </Notice.Info>
@@ -79,57 +79,57 @@ export const settings = definePluginSettings({
     },
     friendsListHeader: {
         type: OptionType.COMPONENT,
-        component: () => SectionSeparator(t("declutter.headers.friendsList")),
+        component: () => SectionSeparator(t("equicord.declutter.headers.friendsList")),
     },
     removeShopAboveDM: {
         type: OptionType.BOOLEAN,
-        description: t("declutter.settings.removeShopAboveDM"),
+        description: t("equicord.declutter.settings.removeShopAboveDM"),
         default: false,
         restartNeeded: true,
     },
     removeQuestsAboveDM: {
         type: OptionType.BOOLEAN,
-        description: t("declutter.settings.removeQuestsAboveDM"),
+        description: t("equicord.declutter.settings.removeQuestsAboveDM"),
         default: false,
         restartNeeded: true,
     },
     miscHeader: {
         type: OptionType.COMPONENT,
-        component: () => SectionSeparator(t("declutter.headers.misc")),
+        component: () => SectionSeparator(t("equicord.declutter.headers.misc")),
     },
     removeServerBoostInfo: {
         type: OptionType.BOOLEAN,
-        description: t("declutter.settings.removeServerBoostInfo"),
+        description: t("equicord.declutter.settings.removeServerBoostInfo"),
         default: true,
         restartNeeded: true,
     },
     removeBillingSettings: {
         type: OptionType.BOOLEAN,
-        description: t("declutter.settings.removeBillingSettings"),
+        description: t("equicord.declutter.settings.removeBillingSettings"),
         default: true,
         restartNeeded: true,
     },
     removeGiftButton: {
         type: OptionType.BOOLEAN,
-        description: t("declutter.settings.removeGiftButton"),
+        description: t("equicord.declutter.settings.removeGiftButton"),
         default: true,
         restartNeeded: true,
     },
     removeUnavailableEmojiPicker: {
         type: OptionType.BOOLEAN,
-        description: t("declutter.settings.removeUnavailableEmojiPicker"),
+        description: t("equicord.declutter.settings.removeUnavailableEmojiPicker"),
         default: true,
         restartNeeded: true,
     },
     removeAudioMenus: {
         type: OptionType.BOOLEAN,
-        description: t("declutter.settings.removeAudioMenus"),
+        description: t("equicord.declutter.settings.removeAudioMenus"),
         default: true,
         restartNeeded: true
     },
     removeButtonTooltips: {
         type: OptionType.BOOLEAN,
-        description: t("declutter.settings.removeButtonTooltips"),
+        description: t("equicord.declutter.settings.removeButtonTooltips"),
         default: false,
         restartNeeded: true
     },
@@ -148,7 +148,7 @@ function SectionSeparator(title: string) {
 
 export default definePlugin({
     name: "Declutter",
-    description: t("declutter.description"),
+    description: t("equicord.declutter.description"),
     authors: [EquicordDevs.Leon135, Devs.prism, Devs.Kyuuhachi],
     settings,
     patches: [

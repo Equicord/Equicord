@@ -24,7 +24,7 @@ import definePlugin from "@utils/types";
 migratePluginSettings("IloveSpam", "iLoveSpam");
 export default definePlugin({
     name: "ILoveSpam",
-    description: t("iLoveSpam.description"),
+    description: t("vencord.iLoveSpam.description"),
     authors: [Devs.botato, Devs.Nyako],
     patches: [
         {

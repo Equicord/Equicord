@@ -96,7 +96,7 @@ const logger = new Logger("XSOverlay");
 const settings = definePluginSettings({
     webSocketPort: {
         type: OptionType.NUMBER,
-        description: t("xsOverlay.webSocketPort"),
+        description: t("vencord.xsOverlay.webSocketPort"),
         default: 42070,
         async onChange() {
             await start();
@@ -104,69 +104,69 @@ const settings = definePluginSettings({
     },
     preferUDP: {
         type: OptionType.BOOLEAN,
-        description: t("xsOverlay.preferUDPDescription"),
+        description: t("vencord.xsOverlay.preferUDPDescription"),
         default: false,
         disabled: () => IS_WEB
     },
     botNotifications: {
         type: OptionType.BOOLEAN,
-        description: t("xsOverlay.botNotifications"),
+        description: t("vencord.xsOverlay.botNotifications"),
         default: false
     },
     serverNotifications: {
         type: OptionType.BOOLEAN,
-        description: t("xsOverlay.serverNotifications"),
+        description: t("vencord.xsOverlay.serverNotifications"),
         default: true
     },
     dmNotifications: {
         type: OptionType.BOOLEAN,
-        description: t("xsOverlay.dmNotifications"),
+        description: t("vencord.xsOverlay.dmNotifications"),
         default: true
     },
     groupDmNotifications: {
         type: OptionType.BOOLEAN,
-        description: t("xsOverlay.groupDmNotifications"),
+        description: t("vencord.xsOverlay.groupDmNotifications"),
         default: true
     },
     callNotifications: {
         type: OptionType.BOOLEAN,
-        description: t("xsOverlay.callNotifications"),
+        description: t("vencord.xsOverlay.callNotifications"),
         default: true
     },
     pingColor: {
         type: OptionType.STRING,
-        description: t("xsOverlay.pingColor"),
+        description: t("vencord.xsOverlay.pingColor"),
         default: "#7289da"
     },
     channelPingColor: {
         type: OptionType.STRING,
-        description: t("xsOverlay.channelPingColor"),
+        description: t("vencord.xsOverlay.channelPingColor"),
         default: "#8a2be2"
     },
     soundPath: {
         type: OptionType.STRING,
-        description: t("xsOverlay.soundPath"),
+        description: t("vencord.xsOverlay.soundPath"),
         default: "default"
     },
     timeout: {
         type: OptionType.NUMBER,
-        description: t("xsOverlay.timeout"),
+        description: t("vencord.xsOverlay.timeout"),
         default: 3,
     },
     lengthBasedTimeout: {
         type: OptionType.BOOLEAN,
-        description: t("xsOverlay.lengthBasedTimeout"),
+        description: t("vencord.xsOverlay.lengthBasedTimeout"),
         default: true
     },
     opacity: {
         type: OptionType.SLIDER,
-        description: t("xsOverlay.opacity"),
+        description: t("vencord.xsOverlay.opacity"),
         default: 1,
         markers: makeRange(0, 1, 0.1)
     },
     volume: {
         type: OptionType.SLIDER,
-        description: t("xsOverlay.volume"),
+        description: t("vencord.xsOverlay.volume"),
         default: 0.2,
         markers: makeRange(0, 1, 0.1)
     },
@@ -188,7 +188,7 @@ const Native = VencordNative.pluginHelpers.XSOverlay as PluginNative<typeof impo
 
 export default definePlugin({
     name: "XSOverlay",
-    description: t("xsOverlay.description"),
+    description: t("vencord.xsOverlay.description"),
     authors: [Devs.Nyako],
     tags: ["vr", "notify"],
     reporterTestable: ReporterTestable.None,
@@ -198,7 +198,7 @@ export default definePlugin({
         CALL_UPDATE({ call }: { call: Call; }) {
             if (call?.ringing?.includes(UserStore.getCurrentUser().id) && settings.store.callNotifications) {
                 const channel = ChannelStore.getChannel(call.channel_id);
-                sendOtherNotif(t("xsOverlay.incomingCall"), `${channel.name} ${t("xsOverlay.isCallingYou")}`);
+                sendOtherNotif(t("vencord.xsOverlay.incomingCall"), `${channel.name} ${t("vencord.xsOverlay.isCallingYou")}`);
             }
         },
         MESSAGE_CREATE({ message, optimistic }: { message: Message; optimistic: boolean; }) {
@@ -227,20 +227,20 @@ export default definePlugin({
             }
 
             if (message.referenced_message) {
-                titleString += ` (${t("xsOverlay.reply")})`;
+                titleString += ` (${t("vencord.xsOverlay.reply")})`;
             }
 
             if (message.embeds.length > 0) {
-                finalMsg += ` [${t("xsOverlay.embed")}] `;
+                finalMsg += ` [${t("vencord.xsOverlay.embed")}] `;
                 if (message.content === "") {
-                    finalMsg = t("xsOverlay.sentEmbeds");
+                    finalMsg = t("vencord.xsOverlay.sentEmbeds");
                 }
             }
 
             if (message.sticker_items) {
-                finalMsg += ` [${t("xsOverlay.sticker")}] `;
+                finalMsg += ` [${t("vencord.xsOverlay.sticker")}] `;
                 if (message.content === "") {
-                    finalMsg = t("xsOverlay.sentSticker");
+                    finalMsg = t("vencord.xsOverlay.sentSticker");
                 }
             }
 
@@ -250,11 +250,11 @@ export default definePlugin({
             );
 
             images.forEach(img => {
-                finalMsg += ` [${t("xsOverlay.image")}: ${img.filename}] `;
+                finalMsg += ` [${t("vencord.xsOverlay.image")}: ${img.filename}] `;
             });
 
             message.attachments.filter(a => a && !a.content_type?.startsWith("image")).forEach(a => {
-                finalMsg += ` [${t("xsOverlay.attachment")}: ${a.filename}] `;
+                finalMsg += ` [${t("vencord.xsOverlay.attachment")}: ${a.filename}] `;
             });
 
             // make mentions readable
@@ -304,8 +304,8 @@ export default definePlugin({
 
     settingsAboutComponent: () => (
         <>
-            <Button onClick={() => sendOtherNotif(t("xsOverlay.testNotification"), t("xsOverlay.helloFromVendor"))}>
-                {t("xsOverlay.sendTestNotification")}
+            <Button onClick={() => sendOtherNotif(t("vencord.xsOverlay.testNotification"), t("vencord.xsOverlay.helloFromVendor"))}>
+                {t("vencord.xsOverlay.sendTestNotification")}
             </Button>
         </>
     )

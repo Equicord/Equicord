@@ -33,7 +33,7 @@ type EmojiDescriptor = {
 export default definePlugin({
     name: "DragFavoriteEmotes",
     authors: [EquicordDevs.PWall],
-    description: t("dragFavoriteEmotes.description"),
+    description: t("equicord.dragFavoriteEmotes.description"),
     patches: [
         {
             find: "#{intl::EMOJI_FAVORITE_TOOLTIP}",

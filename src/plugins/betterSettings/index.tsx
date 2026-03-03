@@ -36,19 +36,19 @@ const Classes = findCssClassesLazy("animating", "baseLayer", "bg", "layer", "lay
 
 const settings = definePluginSettings({
     disableFade: {
-        description: t("betterSettings.settings.disableFade"),
+        description: t("vencord.betterSettings.settings.disableFade"),
         type: OptionType.BOOLEAN,
         default: true,
         restartNeeded: true
     },
     organizeMenu: {
-        description: t("betterSettings.settings.organizeMenu"),
+        description: t("vencord.betterSettings.settings.organizeMenu"),
         type: OptionType.BOOLEAN,
         default: true,
         restartNeeded: true
     },
     eagerLoad: {
-        description: t("betterSettings.settings.eagerLoad"),
+        description: t("vencord.betterSettings.settings.eagerLoad"),
         type: OptionType.BOOLEAN,
         default: true,
         restartNeeded: true

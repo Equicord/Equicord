@@ -48,17 +48,17 @@ const getSpacingPx = (spacing: Spacing | undefined) => (spacing ?? Spacing.COMPA
 const settings = definePluginSettings({
     iconSize: {
         type: OptionType.NUMBER,
-        description: t("showConnections.settings.iconSize"),
+        description: t("vencord.showConnections.settings.iconSize"),
         default: 32
     },
     iconSpacing: {
         type: OptionType.SELECT,
-        description: t("showConnections.settings.iconSpacing"),
+        description: t("vencord.showConnections.settings.iconSpacing"),
         default: Spacing.COZY,
         options: [
-            { label: t("showConnections.settings.compact"), value: Spacing.COMPACT },
-            { label: t("showConnections.settings.cozy"), value: Spacing.COZY }, // US Spelling :/
-            { label: t("showConnections.settings.roomy"), value: Spacing.ROOMY }
+            { label: t("vencord.showConnections.settings.compact"), value: Spacing.COMPACT },
+            { label: t("vencord.showConnections.settings.cozy"), value: Spacing.COZY }, // US Spelling :/
+            { label: t("vencord.showConnections.settings.roomy"), value: Spacing.ROOMY }
         ]
     }
 });
@@ -161,7 +161,7 @@ function CompactConnectionComponent({ connection, theme }: { connection: Connect
 
 export default definePlugin({
     name: "ShowConnections",
-    description: t("showConnections.description"),
+    description: t("vencord.showConnections.description"),
     authors: [Devs.TheKodeToad],
     settings,
 

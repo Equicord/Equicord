@@ -244,7 +244,7 @@ const webpackModulesProbablyLoaded = Webpack.onceReady.then(() => sleep(1000));
 
 export default definePlugin({
     name: "ConsoleShortcuts",
-    description: t("consoleShortcuts.description"),
+    description: t("vencord.consoleShortcuts.description"),
     authors: [Devs.Ven],
     startAt: StartAt.Init,
 

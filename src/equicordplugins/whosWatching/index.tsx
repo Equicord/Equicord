@@ -73,7 +73,7 @@ const AvatarStyles = findCssClassesLazy("moreUsers", "emptyUser", "avatarContain
 
 export default definePlugin({
     name: "WhosWatching",
-    description: t("whosWatching.description"),
+    description: t("equicord.whosWatching.description"),
     authors: [EquicordDevs.Fres],
     settings,
     patches: [

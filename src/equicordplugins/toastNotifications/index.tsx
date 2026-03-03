@@ -209,7 +209,7 @@ const addMention = (id: string, type: string, guildId?: string): ReactNode => {
 
 export default definePlugin({
     name: "ToastNotifications",
-    description: t("toastNotifications.description"),
+    description: t("equicord.toastNotifications.description"),
     authors: [EquicordDevs.Skully, EquicordDevs.Ethan, EquicordDevs.Buzzy],
     settings,
     flux: {

@@ -31,15 +31,15 @@ const opt = (description: string) => ({
 } satisfies PluginSettingDef);
 
 const settings = definePluginSettings({
-    showTimeouts: opt(t("showHiddenThings.settings.showTimeouts")),
-    showInvitesPaused: opt(t("showHiddenThings.settings.showInvitesPaused")),
-    showModView: opt(t("showHiddenThings.settings.showModView"))
+    showTimeouts: opt(t("vencord.showHiddenThings.settings.showTimeouts")),
+    showInvitesPaused: opt(t("vencord.showHiddenThings.settings.showInvitesPaused")),
+    showModView: opt(t("vencord.showHiddenThings.settings.showModView"))
 });
 
 export default definePlugin({
     name: "ShowHiddenThings",
     tags: ["ShowTimeouts", "ShowInvitesPaused", "ShowModView", "DisableDiscoveryFilters"],
-    description: t("showHiddenThings.description"),
+    description: t("vencord.showHiddenThings.description"),
     authors: [Devs.Dolfies],
     settings,
 

@@ -451,7 +451,7 @@ let container: HTMLDivElement | null = null;
 
 export default definePlugin({
     name: "Snowfall",
-    description: t("snowfall.description"),
+    description: t("equicord.snowfall.description"),
     authors: [EquicordDevs.ZcraftElite, EquicordDevs.square],
 
     settingsAboutComponent: () => (

@@ -70,17 +70,17 @@ export function Husk(props: IconProps) {
 
 const settings = definePluginSettings({
     findInServer: {
-        description: t("husk.settings.findInServer"),
+        description: t("equicord.husk.settings.findInServer"),
         type: OptionType.BOOLEAN,
         default: true
     },
     emojiName: {
-        description: t("husk.settings.emojiName"),
+        description: t("equicord.husk.settings.emojiName"),
         type: OptionType.STRING,
         default: "husk"
     },
     emojiID: {
-        description: t("husk.settings.emojiID"),
+        description: t("equicord.husk.settings.emojiID"),
         type: OptionType.BIGINT,
         default: 1026532993923293184n
     }
@@ -99,14 +99,14 @@ function getEmojiIdThatShouldBeUsed(guildId: string) {
 
 export default definePlugin({
     name: "Husk",
-    description: t("husk.description"),
+    description: t("equicord.husk.description"),
     authors: [Devs.nin0dev],
     settings,
     messagePopoverButton: {
         icon: Husk,
         render(msg) {
             return {
-                label: t("husk.ui.husk"),
+                label: t("equicord.husk.ui.husk"),
                 icon: Husk,
                 message: msg,
                 channel: ChannelStore.getChannel(msg.channel_id),

@@ -12,7 +12,7 @@ import definePlugin, { OptionType } from "@utils/types";
 const settings = definePluginSettings({
     inviteDuration: {
         type: OptionType.SELECT,
-        description: t("inviteDefaults.settings.inviteDuration"),
+        description: t("equicord.inviteDefaults.settings.inviteDuration"),
         options: [
             { label: "30 minutes", value: 1800 },
             { label: "1 hour", value: 3600 },
@@ -20,14 +20,14 @@ const settings = definePluginSettings({
             { label: "12 hours", value: 43200 },
             { label: "1 day", value: 86400 },
             { label: "7 days", value: 604800 },
-            { label: t("inviteDefaults.options.forever"), value: 0, default: true },
+            { label: t("equicord.inviteDefaults.options.forever"), value: 0, default: true },
         ],
     },
     maxUses: {
         type: OptionType.SELECT,
-        description: t("inviteDefaults.settings.maxUses"),
+        description: t("equicord.inviteDefaults.settings.maxUses"),
         options: [
-            { label: t("inviteDefaults.options.infinite"), value: 0, default: true },
+            { label: t("equicord.inviteDefaults.options.infinite"), value: 0, default: true },
             { label: "1", value: 1 },
             { label: "5", value: 5 },
             { label: "10", value: 10 },
@@ -39,13 +39,13 @@ const settings = definePluginSettings({
     temporaryMembership: {
         type: OptionType.BOOLEAN,
         default: false,
-        description: t("inviteDefaults.settings.temporaryMembership"),
+        description: t("equicord.inviteDefaults.settings.temporaryMembership"),
     },
 });
 
 export default definePlugin({
     name: "InviteDefaults",
-    description: t("inviteDefaults.description"),
+    description: t("equicord.inviteDefaults.description"),
     authors: [EquicordDevs.VillainsRule],
     settings,
     patches: [

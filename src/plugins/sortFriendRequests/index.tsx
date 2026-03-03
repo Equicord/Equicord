@@ -46,7 +46,7 @@ function getSince(user: User) {
 const settings = definePluginSettings({
     showDates: {
         type: OptionType.BOOLEAN,
-        description: t("sortFriendRequests.settings.showDates"),
+        description: t("vencord.sortFriendRequests.settings.showDates"),
         default: false,
         restartNeeded: true
     }
@@ -56,7 +56,7 @@ migratePluginSettings("SortFriends", "SortFriendRequests");
 export default definePlugin({
     name: "SortFriends",
     authors: [Devs.Megu, EquicordDevs.CallMeGii],
-    description: t("sortFriendRequests.description"),
+    description: t("vencord.sortFriendRequests.description"),
     isModified: true,
     settings,
 
@@ -123,7 +123,7 @@ export default definePlugin({
                                 clipRule="evenodd"
                             ></path>
                         </svg>
-                        <span>{t("sortFriendRequests.added")} &mdash; {since.toDateString()}</span>
+                        <span>{t("vencord.sortFriendRequests.added")} &mdash; {since.toDateString()}</span>
                     </div>
                 </span>
             </Flex>

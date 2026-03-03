@@ -1,37 +1,37 @@
 {
-    "commands":{
-        "errorExecuting":"Ocorreu um erro ao executar o comando \"{name}\""
+    "commands": {
+        "errorExecuting": "Ocorreu um erro ao executar o comando \"{name}\""
     },
-    "memberListDecorators":{
-        "fallback":"Falha ao renderizar {key} Decorador da lista de membros"
+    "memberListDecorators": {
+        "fallback": "Falha ao renderizar {key} Decorador da lista de membros"
     },
-    "messageAccessories":{
-        "fallback":"Falha ao renderizar {key} acessório de mensagem"
+    "messageAccessories": {
+        "fallback": "Falha ao renderizar {key} acessório de mensagem"
     },
-    "messageDecorations":{
-        "fallback":"Falha ao renderizar {key} Decoração de mensagem"
+    "messageDecorations": {
+        "fallback": "Falha ao renderizar {key} Decoração de mensagem"
     },
-    "notices":{
-        "fallback":"Erro ao mostrar aviso"
+    "notices": {
+        "fallback": "Erro ao mostrar aviso"
     },
-    "notifications":{
-        "dismissNotification":"Dispensar notificação",
-        "logs":{
-            "body_one":"Isso removerá permanentemente a notificação {count}. Esta ação não pode ser desfeita.",
-            "body_other":"Isso removerá permanentemente as notificações de {count}. Esta ação não pode ser desfeita.",
-            "body_zero":"Nenhuma notificação selecionada.",
-            "cancel":"Deixa pra lá",
-            "clearNotificationLog":"Limpar registro de notificação",
-            "confirm":"Faça isso!",
-            "title":"Tem certeza?"
+    "notifications": {
+        "dismissNotification": "Dispensar notificação",
+        "logs": {
+            "body_one": "Isso removerá permanentemente a notificação {count}. Esta ação não pode ser desfeita.",
+            "body_other": "Isso removerá permanentemente as notificações de {count}. Esta ação não pode ser desfeita.",
+            "body_zero": "Nenhuma notificação selecionada.",
+            "cancel": "Deixa pra lá",
+            "clearNotificationLog": "Limpar registro de notificação",
+            "confirm": "Faça isso!",
+            "title": "Tem certeza?"
         },
-        "missedNotifications":{
-            "body_one":"{count} notificação recebida",
-            "body_other":"{count} notificações recebidas",
-            "title":"Enquanto você estava fora"
+        "missedNotifications": {
+            "body_one": "{count} notificação recebida",
+            "body_other": "{count} notificações recebidas",
+            "title": "Enquanto você estava fora"
         },
-        "noNotifications":"Nenhuma notificação ainda",
-        "notificationLog":"Registro de notificação",
-        "notificationSettings":"Config. de notificação"
+        "noNotifications": "Nenhuma notificação ainda",
+        "notificationLog": "Registro de notificação",
+        "notificationSettings": "Config. de notificação"
     }
 }

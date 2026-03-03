@@ -314,7 +314,7 @@ function TranscriptionModal(props: { modalProps: ModalProps, src: string, option
 export default definePlugin({
     name: "VoiceMessageTranscriber",
     authors: [Devs.TheSun],
-    description: t("voiceMessageTranscriber.description"),
+    description: t("equicord.voiceMessageTranscriber.description"),
     patches: [
         {
             find: ".VOICE_MESSAGE)),",

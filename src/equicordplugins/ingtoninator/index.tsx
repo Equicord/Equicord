@@ -21,13 +21,13 @@ const settings = definePluginSettings({
     showIcon: {
         type: OptionType.BOOLEAN,
         default: true,
-        description: t("ingtoninator.settings.showIcon"),
+        description: t("equicord.ingtoninator.settings.showIcon"),
         restartNeeded: true
     },
     isEnabled: {
         type: OptionType.BOOLEAN,
         default: true,
-        description: t("ingtoninator.settings.isEnabled")
+        description: t("equicord.ingtoninator.settings.isEnabled")
     }
 });
 
@@ -116,7 +116,7 @@ const IngtoninatorButton: ChatBarButtonFactory = ({ isMainChat }) => {
 
     return (
         <ChatBarButton
-            tooltip={isEnabled ? t("ingtoninator.ui.enabled") : t("ingtoninator.ui.disabled")}
+            tooltip={isEnabled ? t("equicord.ingtoninator.ui.enabled") : t("equicord.ingtoninator.ui.disabled")}
             onClick={toggle}
         >
             {isEnabled ? (
@@ -146,7 +146,7 @@ function disabledIcon() {
 
 export default definePlugin({
     name: "Ingtoninator",
-    description: t("ingtoninator.description"),
+    description: t("equicord.ingtoninator.description"),
     authors: [EquicordDevs.zyqunix, EquicordDevs.BioTomateDE],
     settings,
     chatBarButton: {

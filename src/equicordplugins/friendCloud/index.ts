@@ -52,17 +52,17 @@ interface UserPosition {
 
 export default definePlugin({
     name: "FriendCloud",
-    description: t("friendCloud.description"),
+    description: t("equicord.friendCloud.description"),
     authors: [EquicordDevs.Fafa],
     commands: [
         {
             inputType: ApplicationCommandInputType.BUILT_IN,
             name: "friendcloud",
-            description: t("friendCloud.commands.friendcloud"),
+            description: t("equicord.friendCloud.commands.friendcloud"),
             options: [
                 {
                     name: "count",
-                    description: t("friendCloud.commands.count"),
+                    description: t("equicord.friendCloud.commands.count"),
                     type: ApplicationCommandOptionType.NUMBER,
                     required: false
                 }
@@ -70,14 +70,14 @@ export default definePlugin({
             execute: async (opts, cmdCtx) => {
                 const count = findOption(opts, "count", 25);
 
-                if (!count) return sendBotMessage(cmdCtx.channel.id, { content: t("friendCloud.errors.countMustBeHigher") });
+                if (!count) return sendBotMessage(cmdCtx.channel.id, { content: t("equicord.friendCloud.errors.countMustBeHigher") });
 
                 try {
                     const affinities: AffinitiesV2[] = findStore("UserAffinitiesV2Store").getUserAffinities();
 
                     if (!affinities?.length) {
                         return sendBotMessage(cmdCtx.channel.id, {
-                            content: t("friendCloud.errors.noAffinities")
+                            content: t("equicord.friendCloud.errors.noAffinities")
                         });
                     }
 
@@ -92,7 +92,7 @@ export default definePlugin({
 
                     if (!users.length) {
                         return sendBotMessage(cmdCtx.channel.id, {
-                            content: t("friendCloud.errors.noValidUsers")
+                            content: t("equicord.friendCloud.errors.noValidUsers")
                         });
                     }
 
@@ -154,7 +154,7 @@ export default definePlugin({
                             if (loadedImages === totalImages) {
                                 canvas.toBlob(blob => {
                                     if (!blob) {
-                                        sendBotMessage(cmdCtx.channel.id, { content: t("friendCloud.errors.couldntGenerate") });
+                                        sendBotMessage(cmdCtx.channel.id, { content: t("equicord.friendCloud.errors.couldntGenerate") });
                                         return;
                                     }
                                     const file = new File([blob], "affinities-cloud.png", { type: "image/png" });

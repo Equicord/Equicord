@@ -41,7 +41,7 @@ async function jumpToUserMessage(channelId: string, guildId: string, userId: str
         if (!messageId) {
             Toasts.show({
                 type: Toasts.Type.FAILURE,
-                message: t("jumpTo.errors.noMessagesFound"),
+                message: t("equicord.jumpTo.errors.noMessagesFound"),
                 id: Toasts.genId()
             });
             return;
@@ -51,7 +51,7 @@ async function jumpToUserMessage(channelId: string, guildId: string, userId: str
     } catch (e) {
         Toasts.show({
             type: Toasts.Type.FAILURE,
-            message: t("jumpTo.errors.failedSearch"),
+            message: t("equicord.jumpTo.errors.failedSearch"),
             id: Toasts.genId()
         });
     }
@@ -72,12 +72,12 @@ const ChannelMenuPatch: NavContextMenuPatchCallback = (
     children.push(
         <Menu.MenuItem
             id="vc-jump-to-first"
-            label={t("jumpTo.ui.jumpToFirst")}
+            label={t("equicord.jumpTo.ui.jumpToFirst")}
             action={() => jumpToFirstMessage(targetChannel.id, targetChannel.guild_id)}
         />,
         <Menu.MenuItem
             id="vc-jump-to-last"
-            label={t("jumpTo.ui.jumpToLast")}
+            label={t("equicord.jumpTo.ui.jumpToLast")}
             action={() => jumpToLastMessage(targetChannel.id, targetChannel.guild_id)}
         />
     );
@@ -89,12 +89,12 @@ const UserMenuPatch: NavContextMenuPatchCallback = (children, { user, channel }:
     children.push(
         <Menu.MenuItem
             id="vc-jump-to-first"
-            label={t("jumpTo.ui.jumpToFirst")}
+            label={t("equicord.jumpTo.ui.jumpToFirst")}
             action={() => jumpToFirstMessage(channel.id, null)}
         />,
         <Menu.MenuItem
             id="vc-jump-to-last"
-            label={t("jumpTo.ui.jumpToLast")}
+            label={t("equicord.jumpTo.ui.jumpToLast")}
             action={() => jumpToLastMessage(channel.id, null)}
         />
     );
@@ -108,12 +108,12 @@ const MessageMenuPatch: NavContextMenuPatchCallback = (children, { message }: { 
     children.push(
         <Menu.MenuItem
             id="vc-jump-to-first-user"
-            label={t("jumpTo.ui.jumpToFirst")}
+            label={t("equicord.jumpTo.ui.jumpToFirst")}
             action={() => jumpToUserMessage(channelId, guildId, message.author.id, true)}
         />,
         <Menu.MenuItem
             id="vc-jump-to-last-user"
-            label={t("jumpTo.ui.jumpToLast")}
+            label={t("equicord.jumpTo.ui.jumpToLast")}
             action={() => jumpToUserMessage(channelId, guildId, message.author.id, false)}
         />
     );
@@ -121,7 +121,7 @@ const MessageMenuPatch: NavContextMenuPatchCallback = (children, { message }: { 
 
 export default definePlugin({
     name: "JumpTo",
-    description: t("jumpTo.description"),
+    description: t("equicord.jumpTo.description"),
     authors: [Devs.Samwich, Devs.thororen],
     contextMenus: {
         "channel-context": ChannelMenuPatch,

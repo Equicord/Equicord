@@ -10,7 +10,7 @@ import definePlugin from "@utils/types";
 
 export default definePlugin({
     name: "SelfForward",
-    description: t("selfForward.description"),
+    description: t("equicord.selfForward.description"),
     authors: [EquicordDevs.VillainsRule],
     patches: [
         {

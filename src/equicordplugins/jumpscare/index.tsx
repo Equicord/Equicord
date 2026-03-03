@@ -19,17 +19,17 @@ let jumpscareRoot: Root | undefined;
 const settings = definePluginSettings({
     imageSource: {
         type: OptionType.STRING,
-        description: t("jumpscare.settings.imageSource"),
+        description: t("equicord.jumpscare.settings.imageSource"),
         default: "https://github.com/Equicord/Equibored/blob/main/icons/jumpscare/troll.gif?raw=true"
     },
     audioSource: {
         type: OptionType.STRING,
-        description: t("jumpscare.settings.audioSource"),
+        description: t("equicord.jumpscare.settings.audioSource"),
         default: "https://github.com/Equicord/Equibored/raw/main/sounds/jumpscare/trollolol.mp3?raw=true"
     },
     chance: {
         type: OptionType.NUMBER,
-        description: t("jumpscare.settings.chance"),
+        description: t("equicord.jumpscare.settings.chance"),
         default: 1000
     }
 });
@@ -48,7 +48,7 @@ function getJumpscareRoot(): Root {
 
 export default definePlugin({
     name: "Jumpscare",
-    description: t("jumpscare.description"),
+    description: t("equicord.jumpscare.description"),
     authors: [Devs.surgedevs],
     dependencies: ["AudioPlayerAPI"],
     settings,

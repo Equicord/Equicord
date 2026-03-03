@@ -12,7 +12,7 @@ import { MessageStore } from "@webpack/common";
 export default definePlugin({
     name: "BetterPlusReacts",
     authors: [Devs.Joona],
-    description: t("betterPlusReacts.description"),
+    description: t("equicord.betterPlusReacts.description"),
     patches: [
         {
             find: ".SLASH_COMMAND_USED,",

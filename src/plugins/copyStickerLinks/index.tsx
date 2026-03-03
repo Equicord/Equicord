@@ -44,14 +44,14 @@ function buildMenuItem(sticker: PartialSticker, addBottomSeparator: boolean) {
                 <Menu.MenuItem
                     id="vc-copy-sticker-link"
                     key="vc-copy-sticker-link"
-                    label={t("copyStickerLinks.copyLink")}
-                    action={() => copyWithToast(getUrl(sticker), t("copyStickerLinks.linkCopied"))}
+                    label={t("vencord.copyStickerLinks.copyLink")}
+                    action={() => copyWithToast(getUrl(sticker), t("vencord.copyStickerLinks.linkCopied"))}
                 />
 
                 <Menu.MenuItem
                     id="vc-open-sticker-link"
                     key="vc-open-sticker-link"
-                    label={t("copyStickerLinks.openLink")}
+                    label={t("vencord.copyStickerLinks.openLink")}
                     action={() => VencordNative.native.openExternal(getUrl(sticker))}
                 />
             </Menu.MenuGroup>
@@ -87,7 +87,7 @@ const expressionPickerPatch: NavContextMenuPatchCallback = (children, props: { t
 
 export default definePlugin({
     name: "CopyStickerLinks",
-    description: t("copyStickerLinks.description"),
+    description: t("vencord.copyStickerLinks.description"),
     authors: [Devs.Ven, Devs.Byeoon],
     contextMenus: {
         "message": messageContextMenuPatch,

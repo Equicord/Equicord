@@ -22,7 +22,7 @@ import { t } from "@utils/translation";
 
 export default definePlugin({
     name: "NoticesAPI",
-    description: t("noticesAPI.description"),
+    description: t("vencord.noticesAPI.description"),
     authors: [Devs.Ven],
     required: true,
     patches: [

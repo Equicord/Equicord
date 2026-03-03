@@ -1,10 +1,10 @@
 {
-    "description":"Auttaa kääntämään Equicord",
-    "settings":{
-        "forceLocale":{
-            "description":"Pakota eri kielialue Equicord:lle käytettäväksi",
-            "followDiscord":"Oletus (seuraa Discord)"
+    "description": "Auttaa kääntämään Equicord",
+    "settings": {
+        "forceLocale": {
+            "description": "Pakota eri kielialue Equicord:lle käytettäväksi",
+            "followDiscord": "Oletus (seuraa Discord)"
         },
-        "showMissingKeys":"Jos nykyisestä kielestä puuttuu käännöksiä, näytä näppäimet sen sijaan, että palaat englanniksi"
+        "showMissingKeys": "Jos nykyisestä kielestä puuttuu käännöksiä, näytä näppäimet sen sijaan, että palaat englanniksi"
     }
 }

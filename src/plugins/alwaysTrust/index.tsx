@@ -36,31 +36,31 @@ const settings = definePluginSettings({
     domain: {
         type: OptionType.BOOLEAN,
         default: true,
-        description: t("alwaysTrust.settings.domain"),
+        description: t("vencord.alwaysTrust.settings.domain"),
         restartNeeded: true
     },
     file: {
         type: OptionType.BOOLEAN,
         default: true,
-        description: t("alwaysTrust.settings.file"),
+        description: t("vencord.alwaysTrust.settings.file"),
         restartNeeded: true
     },
     noDeleteSafety: {
         type: OptionType.BOOLEAN,
         default: true,
-        description: t("alwaysTrust.settings.noDeleteSafety"),
+        description: t("vencord.alwaysTrust.settings.noDeleteSafety"),
         restartNeeded: true
     },
     confirmModal: {
         type: OptionType.BOOLEAN,
-        description: t("alwaysTrust.settings.confirmModal"),
+        description: t("vencord.alwaysTrust.settings.confirmModal"),
         default: true
     },
 });
 
 export default definePlugin({
     name: "AlwaysTrust",
-    description: t("alwaysTrust.description"),
+    description: t("vencord.alwaysTrust.description"),
     authors: [Devs.zt, Devs.Trwy],
     isModified: true,
     settings,
@@ -93,10 +93,10 @@ export default definePlugin({
     async HandleGuildDeleteModal(server) {
         if (settings.store.confirmModal) {
             return Alerts.show({
-                title: t("alwaysTrust.ui.deleteServerTitle"),
-                body: <p>{t("alwaysTrust.ui.deleteServerBody")}</p>,
+                title: t("vencord.alwaysTrust.ui.deleteServerTitle"),
+                body: <p>{t("vencord.alwaysTrust.ui.deleteServerBody")}</p>,
                 confirmColor: Button.Colors.RED,
-                confirmText: t("alwaysTrust.ui.deleteServerConfirm"),
+                confirmText: t("vencord.alwaysTrust.ui.deleteServerConfirm"),
                 onConfirm: () => GetPropsAndDeleteGuild(server.id),
                 cancelText: t("vencord.cancel")
             });

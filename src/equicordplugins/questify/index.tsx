@@ -1172,7 +1172,7 @@ migratePluginToSettings(true, "Questify", "QuestCompleter", "completeVideoQuests
 
 export default definePlugin({
     name: "Questify",
-    description: t("questify.description"),
+    description: t("equicord.questify.description"),
     authors: [EquicordDevs.Etorix],
     dependencies: ["AudioPlayerAPI", "ServerListAPI"],
     startAt: StartAt.Init, // Needed in order to beat Read All Messages to inserting above the server list.

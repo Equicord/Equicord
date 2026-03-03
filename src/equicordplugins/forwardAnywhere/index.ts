@@ -14,18 +14,18 @@ import { Channel, Message } from "@vencord/discord-types";
 // Taken From Signature :)
 const settings = definePluginSettings({
     forwardPreface: {
-        description: t("forwardAnywhere.settings.forwardPreface"),
+        description: t("equicord.forwardAnywhere.settings.forwardPreface"),
         type: OptionType.SELECT,
         options: [
-            { label: t("forwardAnywhere.options.greaterThan"), value: ">", default: true },
-            { label: t("forwardAnywhere.options.hash"), value: "-#" }
+            { label: t("equicord.forwardAnywhere.options.greaterThan"), value: ">", default: true },
+            { label: t("equicord.forwardAnywhere.options.hash"), value: "-#" }
         ]
     }
 });
 
 export default definePlugin({
     name: "ForwardAnywhere",
-    description: t("forwardAnywhere.description"),
+    description: t("equicord.forwardAnywhere.description"),
     authors: [Devs.thororen],
     settings,
     patches: [

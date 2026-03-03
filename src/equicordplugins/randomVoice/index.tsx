@@ -164,7 +164,7 @@ function RandomVoiceIcon({ className }: { className?: string; }) {
 
 export default definePlugin({
     name: "RandomVoice",
-    description: t("randomVoice.description"),
+    description: t("equicord.randomVoice.description"),
     authors: [EquicordDevs.xijexo, EquicordDevs.omaw, Devs.thororen],
 
     userAreaButton: {

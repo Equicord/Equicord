@@ -69,19 +69,19 @@ function findReplies(message: Message) {
 const settings = definePluginSettings({
     includePings: {
         type: OptionType.BOOLEAN,
-        description: t("findReply.settings.includePings"),
+        description: t("equicord.findReply.settings.includePings"),
         default: false,
         restartNeeded: false
     },
     includeAuthor: {
         type: OptionType.BOOLEAN,
-        description: t("findReply.settings.includeAuthor"),
+        description: t("equicord.findReply.settings.includeAuthor"),
         default: false,
         restartNeeded: false
     },
     hideButtonIfNoReply: {
         type: OptionType.BOOLEAN,
-        description: t("findReply.settings.hideButtonIfNoReply"),
+        description: t("equicord.findReply.settings.hideButtonIfNoReply"),
         default: true,
         restartNeeded: true
     }
@@ -89,7 +89,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "FindReply",
-    description: t("findReply.description"),
+    description: t("equicord.findReply.description"),
     authors: [Devs.newwares],
     settings,
     messagePopoverButton: {
@@ -99,7 +99,7 @@ export default definePlugin({
             const replies = findReplies(message);
             if (settings.store.hideButtonIfNoReply && !replies.length) return null;
             return {
-                label: t("findReply.ui.jumpToReply"),
+                label: t("equicord.findReply.ui.jumpToReply"),
                 icon: FindReplyIcon,
                 message,
                 channel: ChannelStore.getChannel(message.channel_id),
@@ -116,14 +116,14 @@ export default definePlugin({
                         if (replies.length > 1) {
                             Toasts.show({
                                 id: Toasts.genId(),
-                                message: t("findReply.toasts.useBottomPanel"),
+                                message: t("equicord.findReply.toasts.useBottomPanel"),
                                 type: Toasts.Type.MESSAGE
                             });
                             const container = document.querySelector("[class*=channelBottomBarArea_]");
                             if (!container) {
                                 Toasts.show({
                                     id: Toasts.genId(),
-                                    message: t("findReply.toasts.containerNotFound"),
+                                    message: t("equicord.findReply.toasts.containerNotFound"),
                                     type: Toasts.Type.FAILURE
                                 });
                                 return;
@@ -140,7 +140,7 @@ export default definePlugin({
                     } else {
                         Toasts.show({
                             id: Toasts.genId(),
-                            message: t("findReply.toasts.noReplyFound"),
+                            message: t("equicord.findReply.toasts.noReplyFound"),
                             type: Toasts.Type.FAILURE
                         });
                     }

@@ -23,7 +23,7 @@ import definePlugin from "@utils/types";
 
 export default definePlugin({
     name: "MoreKaomoji",
-    description: t("moreKaomoji.description"),
+    description: t("equicord.moreKaomoji.description"),
     authors: [Devs.JacobTm, EquicordDevs.voidbbg],
     commands: [
         {

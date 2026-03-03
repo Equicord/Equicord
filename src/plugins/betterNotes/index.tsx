@@ -25,13 +25,13 @@ import definePlugin, { OptionType } from "@utils/types";
 const settings = definePluginSettings({
     hide: {
         type: OptionType.BOOLEAN,
-        description: t("betterNotesBox.settings.hide"),
+        description: t("vencord.betterNotesBox.settings.hide"),
         default: false,
         restartNeeded: true
     },
     noSpellCheck: {
         type: OptionType.BOOLEAN,
-        description: t("betterNotesBox.settings.noSpellCheck"),
+        description: t("vencord.betterNotesBox.settings.noSpellCheck"),
         disabled: () => Settings.plugins.BetterNotesBox.hide,
         default: false
     }
@@ -39,7 +39,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "BetterNotesBox",
-    description: t("betterNotesBox.description"),
+    description: t("vencord.betterNotesBox.description"),
     authors: [Devs.Ven],
     settings,
 

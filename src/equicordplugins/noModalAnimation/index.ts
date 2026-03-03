@@ -10,7 +10,7 @@ import definePlugin from "@utils/types";
 
 export default definePlugin({
     name: "NoModalAnimation",
-    description: t("noModalAnimation.description"),
+    description: t("equicord.noModalAnimation.description"),
     authors: [Devs.AutumnVN],
     patches: [
         {

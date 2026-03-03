@@ -1,37 +1,37 @@
 {
-    "commands":{
-        "errorExecuting":"Det oppsto en feil under utførelse av kommandoen \"{name}\""
+    "commands": {
+        "errorExecuting": "Det oppsto en feil under utførelse av kommandoen \"{name}\""
     },
-    "memberListDecorators":{
-        "fallback":"Kunne ikke gjengi {key} medlemslistedekorator"
+    "memberListDecorators": {
+        "fallback": "Kunne ikke gjengi {key} medlemslistedekorator"
     },
-    "messageAccessories":{
-        "fallback":"Kunne ikke gjengi {key} meldingstilbehør"
+    "messageAccessories": {
+        "fallback": "Kunne ikke gjengi {key} meldingstilbehør"
     },
-    "messageDecorations":{
-        "fallback":"Kunne ikke gjengi {key} Meldingsdekorasjon"
+    "messageDecorations": {
+        "fallback": "Kunne ikke gjengi {key} Meldingsdekorasjon"
     },
-    "notices":{
-        "fallback":"Feil under visning av varsel"
+    "notices": {
+        "fallback": "Feil under visning av varsel"
     },
-    "notifications":{
-        "dismissNotification":"Avvis varsel",
-        "logs":{
-            "body_one":"Dette fjerner {count}-varselet permanent. Denne handlingen kan ikke angres.",
-            "body_other":"Dette fjerner {count} varsler permanent. Denne handlingen kan ikke angres.",
-            "body_zero":"Ingen varsling er valgt.",
-            "cancel":"Glem det",
-            "clearNotificationLog":"Tøm varslingslogg",
-            "confirm":"Gjør det!",
-            "title":"Er du sikker?"
+    "notifications": {
+        "dismissNotification": "Avvis varsel",
+        "logs": {
+            "body_one": "Dette fjerner {count}-varselet permanent. Denne handlingen kan ikke angres.",
+            "body_other": "Dette fjerner {count} varsler permanent. Denne handlingen kan ikke angres.",
+            "body_zero": "Ingen varsling er valgt.",
+            "cancel": "Glem det",
+            "clearNotificationLog": "Tøm varslingslogg",
+            "confirm": "Gjør det!",
+            "title": "Er du sikker?"
         },
-        "missedNotifications":{
-            "body_one":"{count} varsel mottatt",
-            "body_other":"{count} varsler mottatt",
-            "title":"Mens du var borte"
+        "missedNotifications": {
+            "body_one": "{count} varsel mottatt",
+            "body_other": "{count} varsler mottatt",
+            "title": "Mens du var borte"
         },
-        "noNotifications":"Ingen varsler ennå",
-        "notificationLog":"Varslingslogg",
-        "notificationSettings":"Varslingsinnstillinger"
+        "noNotifications": "Ingen varsler ennå",
+        "notificationLog": "Varslingslogg",
+        "notificationSettings": "Varslingsinnstillinger"
     }
 }

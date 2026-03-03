@@ -51,11 +51,11 @@ const enum MenuItemParentType {
 
 export const settings = definePluginSettings({
     permissionsSortOrder: {
-        description: t("permissionsViewer.settings.permissionsSortOrder"),
+        description: t("vencord.permissionsViewer.settings.permissionsSortOrder"),
         type: OptionType.SELECT,
         options: [
-            { label: t("permissionsViewer.settings.highestRole"), value: PermissionsSortOrder.HighestRole, default: true },
-            { label: t("permissionsViewer.settings.lowestRole"), value: PermissionsSortOrder.LowestRole }
+            { label: t("vencord.permissionsViewer.settings.highestRole"), value: PermissionsSortOrder.HighestRole, default: true },
+            { label: t("vencord.permissionsViewer.settings.lowestRole"), value: PermissionsSortOrder.LowestRole }
         ]
     },
 });
@@ -66,7 +66,7 @@ function MenuItem(guildId: string, id?: string, type?: MenuItemParentType) {
     return (
         <Menu.MenuItem
             id="perm-viewer-permissions"
-            label={t("permissionsViewer.permissions")}
+            label={t("vencord.permissionsViewer.permissions")}
             action={() => {
                 const guild = GuildStore.getGuild(guildId);
 
@@ -192,7 +192,7 @@ export default definePlugin({
                 )}
             >
                 {popoutProps => (
-                    <TooltipContainer text={t("permissionsViewer.viewPermissions")}>
+                    <TooltipContainer text={t("vencord.permissionsViewer.viewPermissions")}>
                         <Button
                             {...popoutProps}
                             ref={buttonRef}

@@ -28,7 +28,7 @@ import { fromMorse, getCuteAnimeBoys, getCuteNeko, getCutePats, isMorse, makeFre
 
 export default definePlugin({
     name: "MoreCommands",
-    description: t("moreCommands.description"),
+    description: t("equicord.moreCommands.description"),
     authors: [Devs.Arjix, Devs.amy, Devs.Samu, EquicordDevs.zyqunix, EquicordDevs.ShadyGoat, Devs.thororen, Devs.Korbo, Devs.nyx, Devs.amy],
     settings,
     commands: [

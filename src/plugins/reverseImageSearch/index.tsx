@@ -41,7 +41,7 @@ function search(src: string, engine: string) {
 function makeSearchItem(src: string) {
     return (
         <Menu.MenuItem
-            label={t("reverseImageSearch.searchImage")}
+            label={t("vencord.reverseImageSearch.searchImage")}
             key="search-image"
             id="search-image"
         >
@@ -75,7 +75,7 @@ function makeSearchItem(src: string) {
                 label={
                     <Flex alignItems="center" gap="0.5em">
                         <OpenExternalIcon height={16} width={16} />
-                        {t("reverseImageSearch.all")}
+                        {t("vencord.reverseImageSearch.all")}
                     </Flex>
                 }
                 action={() => Object.values(Engines).forEach(e => search(src, e))}
@@ -102,7 +102,7 @@ const imageContextMenuPatch: NavContextMenuPatchCallback = (children, props) => 
 
 export default definePlugin({
     name: "ReverseImageSearch",
-    description: t("reverseImageSearch.description"),
+    description: t("vencord.reverseImageSearch.description"),
     authors: [Devs.Ven, Devs.Nuckyz],
     tags: ["ImageUtilities"],
 

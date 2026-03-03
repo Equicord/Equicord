@@ -93,9 +93,9 @@ function KeybindRecorder() {
     return (
         <div className="vc-command-palette-keybind-input">
             <div className="vc-command-palette-keybind-info">
-                <BaseText size="md" weight="semibold">{t("commandPalette.ui.hotkeyTitle")}</BaseText>
+                <BaseText size="md" weight="semibold">{t("equicord.commandPalette.ui.hotkeyTitle")}</BaseText>
                 <BaseText size="sm" weight="normal" style={{ color: "var(--text-muted)" }}>
-                    {t("commandPalette.ui.hotkeyDescription")}
+                    {t("equicord.commandPalette.ui.hotkeyDescription")}
                 </BaseText>
                 {error && (
                     <BaseText size="xs" weight="normal" className="vc-command-palette-keybind-conflict">
@@ -112,14 +112,14 @@ function KeybindRecorder() {
                 >
                     {isListening ? (
                         <BaseText size="sm" weight="normal" style={{ color: "var(--white)", opacity: 0.8 }}>
-                            {t("commandPalette.ui.pressAnyKey")}
+                            {t("equicord.commandPalette.ui.pressAnyKey")}
                         </BaseText>
                     ) : (
                         formatKeybind(currentKeybind)
                     )}
                 </Button>
                 <Button size="small" variant="secondary" onClick={handleReset}>
-                    {t("commandPalette.ui.reset")}
+                    {t("equicord.commandPalette.ui.reset")}
                 </Button>
             </div>
         </div>
@@ -128,31 +128,31 @@ function KeybindRecorder() {
 
 export const settings = definePluginSettings({
     hotkey: {
-        description: t("commandPalette.settings.hotkey"),
+        description: t("equicord.commandPalette.settings.hotkey"),
         type: OptionType.COMPONENT,
         default: DEFAULT_KEYS,
         component: KeybindRecorder
     },
     visualStyle: {
-        description: t("commandPalette.settings.visualStyle"),
+        description: t("equicord.commandPalette.settings.visualStyle"),
         type: OptionType.SELECT,
         options: [
-            { label: t("commandPalette.settings.visualStyleOptions.classic"), value: "classic", default: true },
-            { label: t("commandPalette.settings.visualStyleOptions.polished"), value: "polished" }
+            { label: t("equicord.commandPalette.settings.visualStyleOptions.classic"), value: "classic", default: true },
+            { label: t("equicord.commandPalette.settings.visualStyleOptions.polished"), value: "polished" }
         ]
     },
     showTags: {
-        description: t("commandPalette.settings.showTags"),
+        description: t("equicord.commandPalette.settings.showTags"),
         type: OptionType.BOOLEAN,
         default: true
     },
     enableTagFilter: {
-        description: t("commandPalette.settings.enableTagFilter"),
+        description: t("equicord.commandPalette.settings.enableTagFilter"),
         type: OptionType.BOOLEAN,
         default: true
     },
     customCommands: {
-        description: t("commandPalette.settings.customCommands"),
+        description: t("equicord.commandPalette.settings.customCommands"),
         type: OptionType.COMPONENT,
         component: CommandPaletteSettingsPanel
     }
@@ -224,7 +224,7 @@ function hotkeyUsesModifiers() {
 
 export default definePlugin({
     name: "CommandPalette",
-    description: t("commandPalette.description"),
+    description: t("equicord.commandPalette.description"),
     authors: [EquicordDevs.justjxke, EquicordDevs.Ethan],
     settings,
     patches: [

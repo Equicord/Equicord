@@ -61,34 +61,34 @@ const debouncedRefresh = debounce(() => refreshThemeList(), 500);
 const settings = definePluginSettings({
     includeLocal: {
         type: OptionType.BOOLEAN,
-        description: t("quickThemeSwitcher.settings.includeLocal"),
+        description: t("equicord.quickThemeSwitcher.settings.includeLocal"),
         default: true,
         onChange: refreshThemeList,
     },
     includeOnline: {
         type: OptionType.BOOLEAN,
-        description: t("quickThemeSwitcher.settings.includeOnline"),
+        description: t("equicord.quickThemeSwitcher.settings.includeOnline"),
         default: true,
         onChange: refreshThemeList,
     },
     sortOrder: {
         type: OptionType.SELECT,
-        description: t("quickThemeSwitcher.settings.sortOrder"),
+        description: t("equicord.quickThemeSwitcher.settings.sortOrder"),
         options: [
-            { label: t("quickThemeSwitcher.settings.sortOptions.az"), value: "alphabetical", default: true },
-            { label: t("quickThemeSwitcher.settings.sortOptions.za"), value: "reverse" },
-            { label: t("quickThemeSwitcher.settings.sortOptions.recent"), value: "recent" },
+            { label: t("equicord.quickThemeSwitcher.settings.sortOptions.az"), value: "alphabetical", default: true },
+            { label: t("equicord.quickThemeSwitcher.settings.sortOptions.za"), value: "reverse" },
+            { label: t("equicord.quickThemeSwitcher.settings.sortOptions.recent"), value: "recent" },
         ],
         onChange: refreshThemeList,
     },
     autoRefresh: {
         type: OptionType.BOOLEAN,
-        description: t("quickThemeSwitcher.settings.autoRefresh"),
+        description: t("equicord.quickThemeSwitcher.settings.autoRefresh"),
         default: true,
     },
     showNotifications: {
         type: OptionType.BOOLEAN,
-        description: t("quickThemeSwitcher.settings.showNotifications"),
+        description: t("equicord.quickThemeSwitcher.settings.showNotifications"),
         default: true,
     },
 });
@@ -244,7 +244,7 @@ const handleThemeNamesChange = () => settings.store.autoRefresh && debouncedRefr
 
 export default definePlugin({
     name: "QuickThemeSwitcher",
-    description: t("quickThemeSwitcher.description"),
+    description: t("equicord.quickThemeSwitcher.description"),
     authors: [Devs.prism],
     settings,
     startAt: StartAt.DOMContentLoaded,

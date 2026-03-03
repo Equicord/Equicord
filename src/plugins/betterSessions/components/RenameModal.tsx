@@ -43,11 +43,11 @@ export function RenameModal({ props, session, state }: { props: ModalProps, sess
     return (
         <ModalRoot {...props}>
             <ModalHeader>
-                <HeadingTertiary>{t("betterSessions.renameModal.title")}</HeadingTertiary>
+                <HeadingTertiary>{t("vencord.betterSessions.renameModal.title")}</HeadingTertiary>
             </ModalHeader>
 
             <ModalContent>
-                <Heading style={{ marginTop: "10px" }}>{t("betterSessions.renameModal.newDeviceName")}</Heading>
+                <Heading style={{ marginTop: "10px" }}>{t("vencord.betterSessions.renameModal.newDeviceName")}</Heading>
                 <TextInput
                     style={{ marginBottom: "10px" }}
                     placeholder={getDefaultName(session.client_info)}
@@ -71,7 +71,7 @@ export function RenameModal({ props, session, state }: { props: ModalProps, sess
                     size={Button.Sizes.NONE}
                     onClick={() => setValue("")}
                 >
-                    {t("betterSessions.renameModal.resetName")}
+                    {t("vencord.betterSessions.renameModal.resetName")}
                 </Button>
             </ModalContent>
 
@@ -87,7 +87,7 @@ export function RenameModal({ props, session, state }: { props: ModalProps, sess
                         color={Button.Colors.BRAND}
                         onClick={onSaveClick}
                     >
-                        {t("betterSessions.renameModal.save")}
+                        {t("vencord.betterSessions.renameModal.save")}
                     </Button>
                 </div>
             </ModalFooter>

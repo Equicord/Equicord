@@ -16,7 +16,7 @@ import { settings } from "./utils/settings";
 
 export default definePlugin({
     name: "ThemeLibrary",
-    description: t("themeLibrary.description"),
+    description: t("equicord.themeLibrary.description"),
     authors: [EquicordDevs.Fafa],
     settings,
     toolboxActions: {

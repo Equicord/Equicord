@@ -1,37 +1,37 @@
 {
-    "commands":{
-        "errorExecuting":"Er is een fout opgetreden tijdens het uitvoeren van de opdracht \"{name}\""
+    "commands": {
+        "errorExecuting": "Er is een fout opgetreden tijdens het uitvoeren van de opdracht \"{name}\""
     },
-    "memberListDecorators":{
-        "fallback":"Kan {key} Ledenlijst-decorateur niet weergeven"
+    "memberListDecorators": {
+        "fallback": "Kan {key} Ledenlijst-decorateur niet weergeven"
     },
-    "messageAccessories":{
-        "fallback":"Kan {key} berichtaccessoire niet weergeven"
+    "messageAccessories": {
+        "fallback": "Kan {key} berichtaccessoire niet weergeven"
     },
-    "messageDecorations":{
-        "fallback":"Kan {key} berichtdecoratie niet weergeven"
+    "messageDecorations": {
+        "fallback": "Kan {key} berichtdecoratie niet weergeven"
     },
-    "notices":{
-        "fallback":"Fout bij weergave van melding"
+    "notices": {
+        "fallback": "Fout bij weergave van melding"
     },
-    "notifications":{
-        "dismissNotification":"Melding afwijzen",
-        "logs":{
-            "body_one":"Hiermee wordt de melding {count} definitief verwijderd. Deze actie kan niet ongedaan worden gemaakt.",
-            "body_other":"Hiermee worden {count}-meldingen permanent verwijderd. Deze actie kan niet ongedaan worden gemaakt.",
-            "body_zero":"Geen melding geselecteerd.",
-            "cancel":"Laat maar",
-            "clearNotificationLog":"Meldingslogboek wissen",
-            "confirm":"Doe het!",
-            "title":"Weet je het zeker?"
+    "notifications": {
+        "dismissNotification": "Melding afwijzen",
+        "logs": {
+            "body_one": "Hiermee wordt de melding {count} definitief verwijderd. Deze actie kan niet ongedaan worden gemaakt.",
+            "body_other": "Hiermee worden {count}-meldingen permanent verwijderd. Deze actie kan niet ongedaan worden gemaakt.",
+            "body_zero": "Geen melding geselecteerd.",
+            "cancel": "Laat maar",
+            "clearNotificationLog": "Meldingslogboek wissen",
+            "confirm": "Doe het!",
+            "title": "Weet je het zeker?"
         },
-        "missedNotifications":{
-            "body_one":"{count} melding ontvangen",
-            "body_other":"{count} meldingen ontvangen",
-            "title":"Terwijl jij weg was"
+        "missedNotifications": {
+            "body_one": "{count} melding ontvangen",
+            "body_other": "{count} meldingen ontvangen",
+            "title": "Terwijl jij weg was"
         },
-        "noNotifications":"Nog geen meldingen",
-        "notificationLog":"Meldingslogboek",
-        "notificationSettings":"Meldinginstellingen"
+        "noNotifications": "Nog geen meldingen",
+        "notificationLog": "Meldingslogboek",
+        "notificationSettings": "Meldinginstellingen"
     }
 }

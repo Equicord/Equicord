@@ -25,7 +25,7 @@ let intervalId: any;
 migratePluginSetting("GlobalBadges", "showRaincord", "showRa1ncord");
 export default definePlugin({
     name: "GlobalBadges",
-    description: t("globalBadges.description"),
+    description: t("equicord.globalBadges.description"),
     authors: [Devs.HypedDomi, EquicordDevs.Wolfie, Devs.thororen],
     settings,
     settingsAboutComponent: () => (
@@ -35,7 +35,7 @@ export default definePlugin({
                 className={cl("settings-button")}
                 onClick={() => openInviteModal(INVITE_LINK)}
             >
-                {t("globalBadges.ui.joinServer")}
+                {t("equicord.globalBadges.ui.joinServer")}
             </Button>
         </>
     ),
@@ -52,7 +52,7 @@ export default definePlugin({
             await loadBadges();
             Toasts.show({
                 id: Toasts.genId(),
-                message: t("globalBadges.ui.refetchSuccess"),
+                message: t("equicord.globalBadges.ui.refetchSuccess"),
                 type: Toasts.Type.SUCCESS
             });
         }

@@ -12,7 +12,7 @@ import { Channel } from "@vencord/discord-types";
 export default definePlugin({
     name: "CleanChannelName",
     authors: [Devs.AutumnVN],
-    description: t("cleanChannelName.description"),
+    description: t("equicord.cleanChannelName.description"),
     patches: [
         {
             find: "loadAllGuildAndPrivateChannelsFromDisk(){",

@@ -11,7 +11,7 @@ import { OptionType } from "@utils/types";
 export const settings = definePluginSettings({
     apiKey: {
         type: OptionType.STRING,
-        description: t("triviaAI.settings.apiKey"),
+        description: t("equicord.triviaAI.settings.apiKey"),
         default: "",
         placeholder: "Enter API Key here for your AI endpoint.",
         componentProps: {
@@ -20,35 +20,35 @@ export const settings = definePluginSettings({
     },
     model: {
         type: OptionType.STRING,
-        description: t("triviaAI.settings.model"),
+        description: t("equicord.triviaAI.settings.model"),
         default: "google/gemini-3-flash-preview",
         placeholder: "e.g. google/gemini-3-flash-preview, inception/mercury, openai/gpt-5.2-chat, etc."
     },
     systemPrompt: {
         type: OptionType.STRING,
-        description: t("triviaAI.settings.systemPrompt"),
+        description: t("equicord.triviaAI.settings.systemPrompt"),
         default: "You are a helpful assistant who answers questions for the user in a concise and short way while using the least amount of words and punctuation.",
         placeholder: "Enter system prompt."
     },
     maxTokens: {
         type: OptionType.NUMBER,
-        description: t("triviaAI.settings.maxTokens"),
+        description: t("equicord.triviaAI.settings.maxTokens"),
         default: 500
     },
     endpoint: {
         type: OptionType.STRING,
-        description: t("triviaAI.settings.endpoint"),
+        description: t("equicord.triviaAI.settings.endpoint"),
         default: "https://openrouter.ai/api/v1/chat/completions",
         placeholder: "Enter your OpenAI compatible AI endpoint here."
     },
     autoRespond: {
         type: OptionType.BOOLEAN,
-        description: t("triviaAI.settings.autoRespond"),
+        description: t("equicord.triviaAI.settings.autoRespond"),
         default: false
     },
     supportImages: {
         type: OptionType.BOOLEAN,
-        description: t("triviaAI.settings.supportImages"),
+        description: t("equicord.triviaAI.settings.supportImages"),
         default: true
     }
 });

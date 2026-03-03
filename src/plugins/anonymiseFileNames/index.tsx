@@ -40,32 +40,32 @@ export const tarExtMatcher = /\.tar\.\w+$/;
 
 const settings = definePluginSettings({
     anonymiseByDefault: {
-        description: t("anonymiseFileNames.settings.anonymiseByDefault"),
+        description: t("vencord.anonymiseFileNames.settings.anonymiseByDefault"),
         type: OptionType.BOOLEAN,
         default: true,
     },
     spoilerMessages: {
-        description: t("anonymiseFileNames.settings.spoilerMessages"),
+        description: t("vencord.anonymiseFileNames.settings.spoilerMessages"),
         type: OptionType.BOOLEAN,
         default: false,
     },
     method: {
-        description: t("anonymiseFileNames.settings.method"),
+        description: t("vencord.anonymiseFileNames.settings.method"),
         type: OptionType.SELECT,
         options: [
-            { label: t("anonymiseFileNames.methods.random"), value: Methods.Random, default: true },
-            { label: t("anonymiseFileNames.methods.consistent"), value: Methods.Consistent },
-            { label: t("anonymiseFileNames.methods.timestamp"), value: Methods.Timestamp },
+            { label: t("vencord.anonymiseFileNames.methods.random"), value: Methods.Random, default: true },
+            { label: t("vencord.anonymiseFileNames.methods.consistent"), value: Methods.Consistent },
+            { label: t("vencord.anonymiseFileNames.methods.timestamp"), value: Methods.Timestamp },
         ],
     },
     randomisedLength: {
-        description: t("anonymiseFileNames.settings.randomisedLength"),
+        description: t("vencord.anonymiseFileNames.settings.randomisedLength"),
         type: OptionType.NUMBER,
         default: 7,
         disabled: () => settings.store.method !== Methods.Random,
     },
     consistent: {
-        description: t("anonymiseFileNames.settings.consistent"),
+        description: t("vencord.anonymiseFileNames.settings.consistent"),
         type: OptionType.STRING,
         default: "image",
         disabled: () => settings.store.method !== Methods.Consistent,
@@ -75,7 +75,7 @@ const settings = definePluginSettings({
 export default definePlugin({
     name: "AnonymiseFileNames",
     authors: [Devs.fawn],
-    description: t("anonymiseFileNames.description"),
+    description: t("vencord.anonymiseFileNames.description"),
     isModified: true,
     settings,
 
@@ -108,7 +108,7 @@ export default definePlugin({
 
         return (
             <ActionBarIcon
-                tooltip={anonymise ? t("anonymiseFileNames.usingAnonymous") : t("anonymiseFileNames.usingNormal")}
+                tooltip={anonymise ? t("vencord.anonymiseFileNames.usingAnonymous") : t("vencord.anonymiseFileNames.usingNormal")}
                 onClick={onToggleAnonymise}
             >
                 {anonymise
@@ -153,13 +153,13 @@ export default definePlugin({
 
     commands: [
         {
-            name: t("anonymiseFileNames.commands.spoiler.name"),
-            description: t("anonymiseFileNames.commands.spoiler.description"),
+            name: t("vencord.anonymiseFileNames.commands.spoiler.name"),
+            description: t("vencord.anonymiseFileNames.commands.spoiler.description"),
             inputType: ApplicationCommandInputType.BUILT_IN,
             options: [
                 {
-                    name: t("anonymiseFileNames.commands.spoiler.optionName"),
-                    description: t("anonymiseFileNames.commands.spoiler.optionDescription"),
+                    name: t("vencord.anonymiseFileNames.commands.spoiler.optionName"),
+                    description: t("vencord.anonymiseFileNames.commands.spoiler.optionDescription"),
                     required: false,
                     type: ApplicationCommandOptionType.BOOLEAN,
                 },
@@ -167,7 +167,7 @@ export default definePlugin({
             execute: async (args, ctx) => {
                 settings.store.spoilerMessages = !!findOption(args, "value", !settings.store.spoilerMessages);
                 sendBotMessage(ctx.channel.id, {
-                    content: settings.store.spoilerMessages ? t("anonymiseFileNames.commands.spoiler.enabled") : t("anonymiseFileNames.commands.spoiler.disabled"),
+                    content: settings.store.spoilerMessages ? t("vencord.anonymiseFileNames.commands.spoiler.enabled") : t("vencord.anonymiseFileNames.commands.spoiler.disabled"),
                 });
             },
         }

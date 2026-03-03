@@ -41,20 +41,20 @@ export const enum PinOrder {
 export const settings = definePluginSettings({
     pinOrder: {
         type: OptionType.SELECT,
-        description: t("pinDms.settings.pinOrder"),
+        description: t("vencord.pinDms.settings.pinOrder"),
         options: [
-            { label: t("pinDms.settings.mostRecentMessage"), value: PinOrder.LastMessage, default: true },
-            { label: t("pinDms.settings.customOrder"), value: PinOrder.Custom }
+            { label: t("vencord.pinDms.settings.mostRecentMessage"), value: PinOrder.LastMessage, default: true },
+            { label: t("vencord.pinDms.settings.customOrder"), value: PinOrder.Custom }
         ]
     },
     canCollapseDmSection: {
         type: OptionType.BOOLEAN,
-        description: t("pinDms.settings.canCollapseDmSection"),
+        description: t("vencord.pinDms.settings.canCollapseDmSection"),
         default: false
     },
     dmSectionCollapsed: {
         type: OptionType.BOOLEAN,
-        description: t("pinDms.settings.dmSectionCollapsed"),
+        description: t("vencord.pinDms.settings.dmSectionCollapsed"),
         default: false,
         hidden: true
     },
@@ -272,7 +272,7 @@ export default definePlugin({
                         >
                             <Menu.MenuItem
                                 id="vc-pindms-edit-category"
-                                label={t("pinDms.editCategory")}
+                                label={t("vencord.pinDms.editCategory")}
                                 action={() => openCategoryModal(category.id, null)}
                             />
 
@@ -282,14 +282,14 @@ export default definePlugin({
                                         {
                                             canMoveCategoryInDirection(category.id, -1) && <Menu.MenuItem
                                                 id="vc-pindms-move-category-up"
-                                                label={t("pinDms.moveUp")}
+                                                label={t("vencord.pinDms.moveUp")}
                                                 action={() => moveCategory(category.id, -1)}
                                             />
                                         }
                                         {
                                             canMoveCategoryInDirection(category.id, 1) && <Menu.MenuItem
                                                 id="vc-pindms-move-category-down"
-                                                label={t("pinDms.moveDown")}
+                                                label={t("vencord.pinDms.moveDown")}
                                                 action={() => moveCategory(category.id, 1)}
                                             />
                                         }
@@ -302,7 +302,7 @@ export default definePlugin({
                             <Menu.MenuItem
                                 id="vc-pindms-delete-category"
                                 color="danger"
-                                label={t("pinDms.deleteCategory")}
+                                label={t("vencord.pinDms.deleteCategory")}
                                 action={() => removeCategory(category.id)}
                             />
 

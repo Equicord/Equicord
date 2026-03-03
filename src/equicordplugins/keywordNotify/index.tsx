@@ -163,8 +163,8 @@ function ListTypeSelector({ listType, setListType }: { listType: ListType, setLi
     return (
         <Select
             options={[
-                { label: t("keywordNotify.options.whitelist"), value: ListType.Whitelist },
-                { label: t("keywordNotify.options.blacklist"), value: ListType.BlackList }
+                { label: t("equicord.keywordNotify.options.whitelist"), value: ListType.Whitelist },
+                { label: t("equicord.keywordNotify.options.blacklist"), value: ListType.BlackList }
             ]}
             placeholder={"Select a list type"}
             isSelected={v => v === listType}
@@ -225,14 +225,14 @@ function KeywordEntries() {
                         </Button>
                     </Flex>
                     <FormSwitch
-                        title={t("keywordNotify.ui.ignoreCase")}
+                        title={t("equicord.keywordNotify.ui.ignoreCase")}
                         className={cl("ignoreCaseSwitch")}
                         value={values[i].ignoreCase}
                         onChange={() => {
                             setIgnoreCase(i, !values[i].ignoreCase);
                         }}
                     />
-                    <Heading tag="h5">{t("keywordNotify.ui.whitelistBlacklist")}</Heading>
+                    <Heading tag="h5">{t("equicord.keywordNotify.ui.whitelistBlacklist")}</Heading>
                     <Flex flexDirection="row">
                         <div style={{ flexGrow: 1 }}>
                             <ListedIds listIds={values[i].listIds} setListIds={e => setListIds(i, e)} />
@@ -243,7 +243,7 @@ function KeywordEntries() {
                         <Button onClick={() => {
                             values[i].listIds.push("");
                             update();
-                        }}>{t("keywordNotify.ui.addId")}</Button>
+                        }}>{t("equicord.keywordNotify.ui.addId")}</Button>
                         <div style={{ flexGrow: 1 }}>
                             <ListTypeSelector listType={values[i].listType} setListType={e => setListType(i, e)} />
                         </div>
@@ -256,7 +256,7 @@ function KeywordEntries() {
     return (
         <>
             {elements}
-            <div><Button onClick={() => addKeywordEntry(update)}>{t("keywordNotify.ui.addKeywordEntry")}</Button></div>
+            <div><Button onClick={() => addKeywordEntry(update)}>{t("equicord.keywordNotify.ui.addKeywordEntry")}</Button></div>
         </>
     );
 }
@@ -300,17 +300,17 @@ function DoubleCheckmarkIcon(props: IconProps) {
 const settings = definePluginSettings({
     ignoreBots: {
         type: OptionType.BOOLEAN,
-        description: t("keywordNotify.settings.ignoreBots"),
+        description: t("equicord.keywordNotify.settings.ignoreBots"),
         default: true
     },
     amountToKeep: {
         type: OptionType.NUMBER,
-        description: t("keywordNotify.settings.amountToKeep"),
+        description: t("equicord.keywordNotify.settings.amountToKeep"),
         default: 50
     },
     keywords: {
         type: OptionType.COMPONENT,
-        description: t("keywordNotify.settings.keywords"),
+        description: t("equicord.keywordNotify.settings.keywords"),
         component: () => <KeywordEntries />
     }
 });
@@ -318,7 +318,7 @@ const settings = definePluginSettings({
 export default definePlugin({
     name: "KeywordNotify",
     authors: [EquicordDevs.camila314, EquicordDevs.x3rt],
-    description: t("keywordNotify.description"),
+    description: t("equicord.keywordNotify.description"),
     settings,
     patches: [
         {
@@ -498,14 +498,14 @@ export default definePlugin({
     keywordTabBar() {
         return (
             <TabBar.Item className={classes(tabClass.tab)} id={8}>
-                {t("keywordNotify.ui.keywords")}
+                {t("equicord.keywordNotify.ui.keywords")}
             </TabBar.Item>
         );
     },
 
     keywordClearButton() {
         return (
-            <Tooltip text={t("keywordNotify.ui.clearAll")}>
+            <Tooltip text={t("equicord.keywordNotify.ui.clearAll")}>
                 {({ onMouseLeave, onMouseEnter }) => (
                     <Button
                         variant="secondary"

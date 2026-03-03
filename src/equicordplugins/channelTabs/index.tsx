@@ -24,7 +24,7 @@ const contextMenuPatch: NavContextMenuPatchCallback = (children, props: { channe
 
     const menuItem = (
         <Menu.MenuItem
-            label={t("channelTabs.contextMenu.openInNewTab")}
+            label={t("equicord.channelTabs.contextMenu.openInNewTab")}
             id="open-link-in-tab"
             action={() => createTab({
                 guildId: channel.guild_id || "@me", // Normalize for DMs/Group Chats
@@ -47,7 +47,7 @@ const contextMenuPatch: NavContextMenuPatchCallback = (children, props: { channe
 
 export default definePlugin({
     name: "ChannelTabs",
-    description: t("channelTabs.description"),
+    description: t("equicord.channelTabs.description"),
     authors: [Devs.TheSun, Devs.TheKodeToad, EquicordDevs.keifufu, Devs.Nickyux, EquicordDevs.DiabeloDEV, EquicordDevs.justjxke],
     dependencies: ["ContextMenuAPI"],
     contextMenus: {

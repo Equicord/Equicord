@@ -54,7 +54,7 @@ const Patch: NavContextMenuPatchCallback = (
     group.push(
         <Menu.MenuItem
             id="vc-hide-server"
-            label={isHidden ? t("hideServers.ui.unhideServer") : t("hideServers.ui.hideServer")}
+            label={isHidden ? t("equicord.hideServers.ui.unhideServer") : t("equicord.hideServers.ui.hideServer")}
             action={() => {
                 if (isHidden) {
                     HiddenServersStore.removeHiddenGuild(guild.id);
@@ -76,7 +76,7 @@ export function removeIndicator() {
 
 export default definePlugin({
     name: "HideServers",
-    description: t("hideServers.description"),
+    description: t("equicord.hideServers.description"),
     authors: [EquicordDevs.bep],
     tags: ["guild", "server", "hide", "folder"],
 
@@ -97,7 +97,7 @@ export default definePlugin({
                 menuItems.push(
                     <Menu.MenuItem
                         id="vc-hide-folder"
-                        label={isHidden ? t("hideServers.ui.unhideFolder") : t("hideServers.ui.hideFolder")}
+                        label={isHidden ? t("equicord.hideServers.ui.unhideFolder") : t("equicord.hideServers.ui.hideFolder")}
                         action={() => {
                             if (isHidden) {
                                 HiddenServersStore.removeHiddenFolder(folderId, guildIds);

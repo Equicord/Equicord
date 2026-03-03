@@ -23,7 +23,7 @@ import { t } from "@utils/translation";
 
 export default definePlugin({
     name: "Unindent",
-    description: t("unindent.description"),
+    description: t("vencord.unindent.description"),
     authors: [Devs.Ven],
 
     patches: [

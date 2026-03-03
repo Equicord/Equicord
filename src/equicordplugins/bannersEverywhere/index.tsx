@@ -29,12 +29,12 @@ interface Nameplate {
 
 const settings = definePluginSettings({
     animate: {
-        description: t("bannersEverywhere.settings.animate"),
+        description: t("equicord.bannersEverywhere.settings.animate"),
         type: OptionType.BOOLEAN,
         default: false
     },
     preferNameplate: {
-        description: t("bannersEverywhere.settings.preferNameplate"),
+        description: t("equicord.bannersEverywhere.settings.preferNameplate"),
         type: OptionType.BOOLEAN,
         default: false
     },
@@ -44,7 +44,7 @@ const DATASTORE_KEY = "bannersEverywhere";
 
 export default definePlugin({
     name: "BannersEverywhere",
-    description: t("bannersEverywhere.description"),
+    description: t("equicord.bannersEverywhere.description"),
     authors: [Devs.ImLvna, Devs.AutumnVN],
     settings,
     patches: [

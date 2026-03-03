@@ -35,12 +35,12 @@ const settings = definePluginSettings({
     onlyWhenInVoice: {
         type: OptionType.BOOLEAN,
         default: true,
-        description: t("followVoiceUser.settings.onlyWhenInVoice")
+        description: t("equicord.followVoiceUser.settings.onlyWhenInVoice")
     },
     leaveWhenUserLeaves: {
         type: OptionType.BOOLEAN,
         default: false,
-        description: t("followVoiceUser.settings.leaveWhenUserLeaves")
+        description: t("equicord.followVoiceUser.settings.leaveWhenUserLeaves")
     }
 });
 
@@ -53,7 +53,7 @@ const UserContextMenuPatch: NavContextMenuPatchCallback = (children, { channel, 
         <Menu.MenuSeparator />,
         <Menu.MenuCheckboxItem
             id="fvu-follow-user"
-            label={t("followVoiceUser.ui.followUser")}
+            label={t("equicord.followVoiceUser.ui.followUser")}
             checked={checked}
             action={() => {
                 if (followedUserInfo?.userId === user.id) {
@@ -74,12 +74,12 @@ const UserContextMenuPatch: NavContextMenuPatchCallback = (children, { channel, 
 
 export default definePlugin({
     name: "FollowVoiceUser",
-    description: t("followVoiceUser.description"),
+    description: t("equicord.followVoiceUser.description"),
     authors: [EquicordDevs.TheArmagan],
     settings,
     settingsAboutComponent: () => (
         <Notice.Info>
-            {t("followVoiceUser.info")}
+            {t("equicord.followVoiceUser.info")}
         </Notice.Info>
     ),
     flux: {

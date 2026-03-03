@@ -48,13 +48,13 @@ export default function ReviewComponent({ review, refetch, profileId }: { review
 
     function delReview() {
         Alerts.show({
-            title: t("reviewDB.confirm.title"),
-            body: t("reviewDB.confirm.deleteBody"),
-            confirmText: t("reviewDB.delete"),
-            cancelText: t("reviewDB.cancel"),
+            title: t("vencord.reviewDB.confirm.title"),
+            body: t("vencord.reviewDB.confirm.deleteBody"),
+            confirmText: t("vencord.reviewDB.delete"),
+            cancelText: t("vencord.reviewDB.cancel"),
             onConfirm: async () => {
                 if (!(await getToken())) {
-                    return showToast(t("reviewDB.mustLogin"));
+                    return showToast(t("vencord.reviewDB.mustLogin"));
                 } else {
                     deleteReview(review.id).then(res => {
                         if (res) {
@@ -68,14 +68,14 @@ export default function ReviewComponent({ review, refetch, profileId }: { review
 
     function reportRev() {
         Alerts.show({
-            title: t("reviewDB.confirm.title"),
-            body: t("reviewDB.confirm.reportBody"),
-            confirmText: t("reviewDB.report"),
-            cancelText: t("reviewDB.cancel"),
+            title: t("vencord.reviewDB.confirm.title"),
+            body: t("vencord.reviewDB.confirm.reportBody"),
+            confirmText: t("vencord.reviewDB.report"),
+            cancelText: t("vencord.reviewDB.cancel"),
             // confirmColor: "red", this just adds a class name and breaks the submit button guh
             onConfirm: async () => {
                 if (!(await getToken())) {
-                    return showToast(t("reviewDB.mustLogin"));
+                    return showToast(t("vencord.reviewDB.mustLogin"));
                 } else {
                     reportReview(review.id);
                 }
@@ -90,14 +90,14 @@ export default function ReviewComponent({ review, refetch, profileId }: { review
             return unblockUser(review.sender.discordID);
 
         Alerts.show({
-            title: t("reviewDB.confirm.title"),
-            body: t("reviewDB.confirm.blockBody"),
-            confirmText: t("reviewDB.block"),
-            cancelText: t("reviewDB.cancel"),
+            title: t("vencord.reviewDB.confirm.title"),
+            body: t("vencord.reviewDB.confirm.blockBody"),
+            confirmText: t("vencord.reviewDB.block"),
+            cancelText: t("vencord.reviewDB.cancel"),
             // confirmColor: "red", this just adds a class name and breaks the submit button guh
             onConfirm: async () => {
                 if (!(await getToken())) {
-                    return showToast(t("reviewDB.mustLogin"));
+                    return showToast(t("vencord.reviewDB.mustLogin"));
                 } else {
                     blockUser(review.sender.discordID);
                 }
@@ -134,15 +134,15 @@ export default function ReviewComponent({ review, refetch, profileId }: { review
                         className={classes(BotTagClasses.botTagVerified, BotTagClasses.botTagRegular, BotTagClasses.px, BotTagClasses.rem)}
                         style={{ marginLeft: "4px" }}>
                         <span className={BotTagClasses.botText}>
-                            {t("reviewDB.system")}
+                            {t("vencord.reviewDB.system")}
                         </span>
                     </span>
                 )}
             </div>
             {isAuthorBlocked && (
                 <ReviewBadge
-                    name={t("reviewDB.blockedUser")}
-                    description={t("reviewDB.blockedUser")}
+                    name={t("vencord.reviewDB.blockedUser")}
+                    description={t("vencord.reviewDB.blockedUser")}
                     icon="/assets/aaee57e0090991557b66.svg"
                     type={0}
                     onClick={() => openBlockModal()}
@@ -163,7 +163,7 @@ export default function ReviewComponent({ review, refetch, profileId }: { review
                         <>
                             {Parser.parseGuildEventDescription(review.comment.substring(0, 200))}...
                             <br />
-                            <a onClick={() => setShowAll(true)}>{t("reviewDB.readMore")}</a>]
+                            <a onClick={() => setShowAll(true)}>{t("vencord.reviewDB.readMore")}</a>]
                         </>
                     )
                     : Parser.parseGuildEventDescription(review.comment)}

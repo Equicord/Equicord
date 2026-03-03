@@ -34,37 +34,37 @@ import managedStyle from "./styles.css?managed";
 export const settings = definePluginSettings({
     saveZoomValues: {
         type: OptionType.BOOLEAN,
-        description: t("imageZoom.settings.saveZoomValues"),
+        description: t("vencord.imageZoom.settings.saveZoomValues"),
         default: true,
     },
 
     invertScroll: {
         type: OptionType.BOOLEAN,
-        description: t("imageZoom.settings.invertScroll"),
+        description: t("vencord.imageZoom.settings.invertScroll"),
         default: true,
     },
 
     nearestNeighbour: {
         type: OptionType.BOOLEAN,
-        description: t("imageZoom.settings.nearestNeighbour"),
+        description: t("vencord.imageZoom.settings.nearestNeighbour"),
         default: false,
     },
 
     square: {
         type: OptionType.BOOLEAN,
-        description: t("imageZoom.settings.square"),
+        description: t("vencord.imageZoom.settings.square"),
         default: false,
     },
 
     zoom: {
-        description: t("imageZoom.settings.zoom"),
+        description: t("vencord.imageZoom.settings.zoom"),
         type: OptionType.SLIDER,
         markers: [1, 5, 10, 20, 30, 40, 50],
         default: 2,
         stickToMarkers: false,
     },
     size: {
-        description: t("imageZoom.settings.size"),
+        description: t("vencord.imageZoom.settings.size"),
         type: OptionType.SLIDER,
         markers: [50, 100, 250, 500, 750, 1000],
         default: 100,
@@ -72,7 +72,7 @@ export const settings = definePluginSettings({
     },
 
     zoomSpeed: {
-        description: t("imageZoom.settings.zoomSpeed"),
+        description: t("vencord.imageZoom.settings.zoomSpeed"),
         type: OptionType.SLIDER,
         markers: [0.1, 0.5, 1, 2, 3, 4, 5],
         default: 0.5,
@@ -92,7 +92,7 @@ const imageContextMenuPatch: NavContextMenuPatchCallback = (children, props) => 
         <Menu.MenuGroup id="image-zoom">
             <Menu.MenuCheckboxItem
                 id="vc-square"
-                label={t("imageZoom.squareLens")}
+                label={t("vencord.imageZoom.squareLens")}
                 checked={square}
                 action={() => {
                     settings.store.square = !square;
@@ -100,7 +100,7 @@ const imageContextMenuPatch: NavContextMenuPatchCallback = (children, props) => 
             />
             <Menu.MenuCheckboxItem
                 id="vc-nearest-neighbour"
-                label={t("imageZoom.nearestNeighbour")}
+                label={t("vencord.imageZoom.nearestNeighbour")}
                 checked={nearestNeighbour}
                 action={() => {
                     settings.store.nearestNeighbour = !nearestNeighbour;
@@ -108,7 +108,7 @@ const imageContextMenuPatch: NavContextMenuPatchCallback = (children, props) => 
             />
             <Menu.MenuControlItem
                 id="vc-zoom"
-                label={t("imageZoom.zoom")}
+                label={t("vencord.imageZoom.zoom")}
                 control={(props, ref) => (
                     <Menu.MenuSliderControl
                         ref={ref}
@@ -122,7 +122,7 @@ const imageContextMenuPatch: NavContextMenuPatchCallback = (children, props) => 
             />
             <Menu.MenuControlItem
                 id="vc-size"
-                label={t("imageZoom.lensSize")}
+                label={t("vencord.imageZoom.lensSize")}
                 control={(props, ref) => (
                     <Menu.MenuSliderControl
                         ref={ref}
@@ -136,7 +136,7 @@ const imageContextMenuPatch: NavContextMenuPatchCallback = (children, props) => 
             />
             <Menu.MenuControlItem
                 id="vc-zoom-speed"
-                label={t("imageZoom.zoomSpeed")}
+                label={t("vencord.imageZoom.zoomSpeed")}
                 control={(props, ref) => (
                     <Menu.MenuSliderControl
                         ref={ref}

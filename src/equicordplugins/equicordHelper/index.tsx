@@ -29,11 +29,11 @@ const WarningIcon = findExportedComponentLazy("WarningIcon");
 const ShieldIcon = findExportedComponentLazy("ShieldIcon");
 
 const StandingConfig: Record<number, { label: string; hoverColor: string; Icon: ComponentType<any>; }> = {
-    [StandingState.ALL_GOOD]: { label: t("equicordHelper.standing.allGood"), hoverColor: "var(--status-positive)", Icon: ShieldIcon },
-    [StandingState.LIMITED]: { label: t("equicordHelper.standing.limited"), hoverColor: "var(--status-warning)", Icon: WarningIcon },
-    [StandingState.VERY_LIMITED]: { label: t("equicordHelper.standing.veryLimited"), hoverColor: "var(--orange-345)", Icon: WarningIcon },
-    [StandingState.AT_RISK]: { label: t("equicordHelper.standing.atRisk"), hoverColor: "var(--status-danger)", Icon: WarningIcon },
-    [StandingState.SUSPENDED]: { label: t("equicordHelper.standing.suspended"), hoverColor: "var(--interactive-muted)", Icon: WarningIcon },
+    [StandingState.ALL_GOOD]: { label: t("equicord.equicordHelper.standing.allGood"), hoverColor: "var(--status-positive)", Icon: ShieldIcon },
+    [StandingState.LIMITED]: { label: t("equicord.equicordHelper.standing.limited"), hoverColor: "var(--status-warning)", Icon: WarningIcon },
+    [StandingState.VERY_LIMITED]: { label: t("equicord.equicordHelper.standing.veryLimited"), hoverColor: "var(--orange-345)", Icon: WarningIcon },
+    [StandingState.AT_RISK]: { label: t("equicord.equicordHelper.standing.atRisk"), hoverColor: "var(--status-danger)", Icon: WarningIcon },
+    [StandingState.SUSPENDED]: { label: t("equicord.equicordHelper.standing.suspended"), hoverColor: "var(--interactive-muted)", Icon: WarningIcon },
 };
 
 function StandingButton() {
@@ -62,48 +62,48 @@ function StandingButton() {
 const settings = definePluginSettings({
     noMirroredCamera: {
         type: OptionType.BOOLEAN,
-        description: t("equicordHelper.settings.noMirroredCamera"),
+        description: t("equicord.equicordHelper.settings.noMirroredCamera"),
         restartNeeded: true,
         default: false,
     },
     removeActivitySection: {
         type: OptionType.BOOLEAN,
-        description: t("equicordHelper.settings.removeActivitySection"),
+        description: t("equicord.equicordHelper.settings.removeActivitySection"),
         restartNeeded: true,
         default: false,
     },
     showYourOwnActivityButtons: {
         type: OptionType.BOOLEAN,
-        description: t("equicordHelper.settings.showYourOwnActivityButtons"),
+        description: t("equicord.equicordHelper.settings.showYourOwnActivityButtons"),
         restartNeeded: true,
         default: false,
     },
     noDefaultHangStatus: {
         type: OptionType.BOOLEAN,
-        description: t("equicordHelper.settings.noDefaultHangStatus"),
+        description: t("equicord.equicordHelper.settings.noDefaultHangStatus"),
         restartNeeded: true,
         default: false,
     },
     refreshSlashCommands: {
         type: OptionType.BOOLEAN,
-        description: t("equicordHelper.settings.refreshSlashCommands"),
+        description: t("equicord.equicordHelper.settings.refreshSlashCommands"),
         default: false,
     },
     forceRoleIcon: {
         type: OptionType.BOOLEAN,
-        description: t("equicordHelper.settings.forceRoleIcon"),
+        description: t("equicord.equicordHelper.settings.forceRoleIcon"),
         restartNeeded: true,
         default: false
     },
     accountStandingButton: {
         type: OptionType.BOOLEAN,
-        description: t("equicordHelper.settings.accountStandingButton"),
+        description: t("equicord.equicordHelper.settings.accountStandingButton"),
         restartNeeded: true,
         default: false,
     },
     restoreFileDownloadButton: {
         type: OptionType.BOOLEAN,
-        description: t("equicordHelper.settings.restoreFileDownloadButton"),
+        description: t("equicord.equicordHelper.settings.restoreFileDownloadButton"),
         restartNeeded: true,
         default: false
     },
@@ -111,7 +111,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "EquicordHelper",
-    description: t("equicordHelper.description"),
+    description: t("equicord.equicordHelper.description"),
     authors: [Devs.thororen, EquicordDevs.nyx, EquicordDevs.Naibuu, EquicordDevs.keircn, EquicordDevs.SerStars, EquicordDevs.mart, EquicordDevs.omaw],
     required: true,
     settings,
@@ -235,13 +235,13 @@ export default definePlugin({
             if (!selfId || isAnyPluginDev(selfId)) return;
             if (VC_SUPPORT_CHANNEL_IDS.includes(channelId) && !clicked) {
                 return Alerts.show({
-                    title: t("equicordHelper.alerts.supportWarningTitle"),
-                    body: t("equicordHelper.alerts.supportWarningBody"),
-                    confirmText: t("equicordHelper.alerts.equicordSupport"),
+                    title: t("equicord.equicordHelper.alerts.supportWarningTitle"),
+                    body: t("equicord.equicordHelper.alerts.supportWarningBody"),
+                    confirmText: t("equicord.equicordHelper.alerts.equicordSupport"),
                     onConfirm() {
                         NavigationRouter.transitionTo(`/channels/${GUILD_ID}/${SUPPORT_CHANNEL_ID}`);
                     },
-                    cancelText: t("equicordHelper.alerts.okayContinue"),
+                    cancelText: t("equicord.equicordHelper.alerts.okayContinue"),
                     onCancel() {
                         clicked = true;
                     },
@@ -252,17 +252,17 @@ export default definePlugin({
     commands: [
         {
             name: "refresh-commands",
-            description: t("equicordHelper.commands.refreshCommands"),
+            description: t("equicord.equicordHelper.commands.refreshCommands"),
             inputType: ApplicationCommandInputType.BUILT_IN,
             predicate: () => settings.store.refreshSlashCommands,
             execute: async (opts, ctx) => {
                 try {
                     ApplicationCommandIndexStore.indices = {};
-                    sendBotMessage(ctx.channel.id, { content: t("equicordHelper.commands.refreshSuccess") });
+                    sendBotMessage(ctx.channel.id, { content: t("equicord.equicordHelper.commands.refreshSuccess") });
                 }
                 catch (e) {
                     console.error("[refreshSlashCommands] Failed to refresh commands:", e);
-                    sendBotMessage(ctx.channel.id, { content: t("equicordHelper.commands.refreshFailed") });
+                    sendBotMessage(ctx.channel.id, { content: t("equicord.equicordHelper.commands.refreshFailed") });
                 }
             }
         }

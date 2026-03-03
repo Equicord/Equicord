@@ -12,7 +12,7 @@ import definePlugin, { makeRange, OptionType } from "@utils/types";
 const settings = definePluginSettings({
     volume: {
         type: OptionType.SLIDER,
-        description: t("fixSpotifyEmbeds.settings.volume"),
+        description: t("vencord.fixSpotifyEmbeds.settings.volume"),
         markers: makeRange(0, 100, 10),
         stickToMarkers: false,
         default: 10
@@ -21,7 +21,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "FixSpotifyEmbeds",
-    description: t("fixSpotifyEmbeds.description"),
+    description: t("vencord.fixSpotifyEmbeds.description"),
     authors: [Devs.Ven],
     settings,
 });

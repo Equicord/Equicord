@@ -27,19 +27,19 @@ const settings = definePluginSettings({
     defaultVoiceMessageSpeed: {
         type: OptionType.SLIDER,
         default: 1,
-        description: t("mediaPlaybackSpeed.settings.defaultVoiceMessageSpeed"),
+        description: t("equicord.mediaPlaybackSpeed.settings.defaultVoiceMessageSpeed"),
         markers: speeds,
     },
     defaultVideoSpeed: {
         type: OptionType.SLIDER,
         default: 1,
-        description: t("mediaPlaybackSpeed.settings.defaultVideoSpeed"),
+        description: t("equicord.mediaPlaybackSpeed.settings.defaultVideoSpeed"),
         markers: speeds,
     },
     defaultAudioSpeed: {
         type: OptionType.SLIDER,
         default: 1,
-        description: t("mediaPlaybackSpeed.settings.defaultAudioSpeed"),
+        description: t("equicord.mediaPlaybackSpeed.settings.defaultAudioSpeed"),
         markers: speeds,
     },
 });
@@ -48,7 +48,7 @@ type MediaRef = RefObject<HTMLMediaElement> | undefined;
 
 export default definePlugin({
     name: "MediaPlaybackSpeed",
-    description: t("mediaPlaybackSpeed.description"),
+    description: t("equicord.mediaPlaybackSpeed.description"),
     authors: [Devs.D3SOX],
     settings,
     patches: [

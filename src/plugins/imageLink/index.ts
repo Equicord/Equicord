@@ -10,7 +10,7 @@ import { t } from "@utils/translation";
 
 export default definePlugin({
     name: "ImageLink",
-    description: t("imageLink.description"),
+    description: t("vencord.imageLink.description"),
     authors: [Devs.Kyuuhachi, Devs.Sqaaakoi],
 
     patches: [

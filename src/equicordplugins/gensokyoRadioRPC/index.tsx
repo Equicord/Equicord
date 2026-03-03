@@ -32,7 +32,7 @@ function getImageAsset(data: string) {
 const settings = definePluginSettings({
     refreshInterval: {
         type: OptionType.SLIDER,
-        description: t("gensokyoRadioRPC.settings.refreshInterval"),
+        description: t("equicord.gensokyoRadioRPC.settings.refreshInterval"),
         markers: [1, 2, 2.5, 3, 5, 10, 15],
         default: 15,
         restartNeeded: true,
@@ -43,14 +43,14 @@ let updateInterval: NodeJS.Timeout | undefined;
 
 export default definePlugin({
     name: "GensokyoRadioRPC",
-    description: t("gensokyoRadioRPC.description"),
+    description: t("equicord.gensokyoRadioRPC.description"),
     authors: [Devs.RyanCaoDev, EquicordDevs.Prince527],
     reporterTestable: ReporterTestable.None,
 
     settingsAboutComponent() {
         return (
             <Paragraph>
-                {t("gensokyoRadioRPC.info")}
+                {t("equicord.gensokyoRadioRPC.info")}
             </Paragraph>
         );
     },

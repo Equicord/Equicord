@@ -29,7 +29,7 @@ export const settings = definePluginSettings({
 export default definePlugin({
     name: "ClientTheme",
     authors: [Devs.Nuckyz],
-    description: t("clientTheme.themeColorDescription"),
+    description: t("vencord.clientTheme.themeColorDescription"),
     settings,
 
     startAt: StartAt.DOMContentLoaded,

@@ -86,7 +86,7 @@ function handleReactionEvent(event: FluxReactionEvent): void {
 
 export default definePlugin({
     name: "ScheduledMessages",
-    description: t("scheduledMessages.description"),
+    description: t("equicord.scheduledMessages.description"),
     authors: [EquicordDevs.mmeta, Devs.prism],
     settings,
 

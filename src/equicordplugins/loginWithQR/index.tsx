@@ -22,12 +22,12 @@ import openQrModal from "./ui/modals/QrModal";
 const settings = definePluginSettings({
     scanQr: {
         type: OptionType.COMPONENT,
-        description: t("loginWithQR.settings.scanQr"),
+        description: t("equicord.loginWithQR.settings.scanQr"),
         component() {
             if (!plugins.LoginWithQR.started)
                 return (
                     <Paragraph>
-                        {t("loginWithQR.ui.enableAndRestart")}
+                        {t("equicord.loginWithQR.ui.enableAndRestart")}
                     </Paragraph>
                 );
 
@@ -42,7 +42,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "LoginWithQR",
-    description: t("loginWithQR.description"),
+    description: t("equicord.loginWithQR.description"),
     authors: [EquicordDevs.nexpid],
 
     settings,

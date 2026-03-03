@@ -1,37 +1,37 @@
 {
-    "commands":{
-        "errorExecuting":"Virhe suoritettaessa komentoa \"{name}\""
+    "commands": {
+        "errorExecuting": "Virhe suoritettaessa komentoa \"{name}\""
     },
-    "memberListDecorators":{
-        "fallback":"{key} jäsenluettelon sisustajan hahmontaminen epäonnistui"
+    "memberListDecorators": {
+        "fallback": "{key} jäsenluettelon sisustajan hahmontaminen epäonnistui"
     },
-    "messageAccessories":{
-        "fallback":"{key} Viestilisälaitteen renderöinti epäonnistui"
+    "messageAccessories": {
+        "fallback": "{key} Viestilisälaitteen renderöinti epäonnistui"
     },
-    "messageDecorations":{
-        "fallback":"{key} Viestin koristelun hahmontaminen epäonnistui"
+    "messageDecorations": {
+        "fallback": "{key} Viestin koristelun hahmontaminen epäonnistui"
     },
-    "notices":{
-        "fallback":"Virhe ilmoituksen näyttämisessä"
+    "notices": {
+        "fallback": "Virhe ilmoituksen näyttämisessä"
     },
-    "notifications":{
-        "dismissNotification":"Hylkää ilmoitus",
-        "logs":{
-            "body_one":"Tämä poistaa pysyvästi {count}-ilmoituksen. Tätä toimintoa ei voi kumota.",
-            "body_other":"Tämä poistaa pysyvästi {count} ilmoitukset. Tätä toimintoa ei voi kumota.",
-            "body_zero":"Ilmoitusta ei ole valittu.",
-            "cancel":"Unohda koko juttu",
-            "clearNotificationLog":"Tyhjennä ilmoitusloki",
-            "confirm":"Tee se!",
-            "title":"Oletko varma?"
+    "notifications": {
+        "dismissNotification": "Hylkää ilmoitus",
+        "logs": {
+            "body_one": "Tämä poistaa pysyvästi {count}-ilmoituksen. Tätä toimintoa ei voi kumota.",
+            "body_other": "Tämä poistaa pysyvästi {count} ilmoitukset. Tätä toimintoa ei voi kumota.",
+            "body_zero": "Ilmoitusta ei ole valittu.",
+            "cancel": "Unohda koko juttu",
+            "clearNotificationLog": "Tyhjennä ilmoitusloki",
+            "confirm": "Tee se!",
+            "title": "Oletko varma?"
         },
-        "missedNotifications":{
-            "body_one":"{count} ilmoitus vastaanotettu",
-            "body_other":"{count} ilmoituksia vastaanotettu",
-            "title":"Kun olit poissa"
+        "missedNotifications": {
+            "body_one": "{count} ilmoitus vastaanotettu",
+            "body_other": "{count} ilmoituksia vastaanotettu",
+            "title": "Kun olit poissa"
         },
-        "noNotifications":"Ei vielä ilmoituksia",
-        "notificationLog":"Ilmoitusloki",
-        "notificationSettings":"Ilmoitusasetukset"
+        "noNotifications": "Ei vielä ilmoituksia",
+        "notificationLog": "Ilmoitusloki",
+        "notificationSettings": "Ilmoitusasetukset"
     }
 }

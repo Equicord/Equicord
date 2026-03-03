@@ -19,7 +19,7 @@ import DataUI from "./components/ui";
 
 export default definePlugin({
     name: "IRememberYou",
-    description: t("iRememberYou.description"),
+    description: t("equicord.iRememberYou.description"),
     authors: [EquicordDevs.zoodogood, EquicordDevs.keircn],
     dependencies: ["MessageEventsAPI"],
 
@@ -28,7 +28,7 @@ export default definePlugin({
     async start() {
         SettingsPlugin.customEntries.push({
             key: "equicord_i_remember_you",
-            title: t("iRememberYou.ui.iRememberYou"),
+            title: t("equicord.iRememberYou.ui.iRememberYou"),
             Component: () => <DataUI usersCollection={data.usersCollection} />,
             Icon: EyeIcon
         });

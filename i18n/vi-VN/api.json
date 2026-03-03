@@ -1,37 +1,37 @@
 {
-    "commands":{
-        "errorExecuting":"Đã xảy ra lỗi khi thực hiện lệnh \"{name}\""
+    "commands": {
+        "errorExecuting": "Đã xảy ra lỗi khi thực hiện lệnh \"{name}\""
     },
-    "memberListDecorators":{
-        "fallback":"Không thể hiển thị {key} Trình trang trí Danh sách Thành viên"
+    "memberListDecorators": {
+        "fallback": "Không thể hiển thị {key} Trình trang trí Danh sách Thành viên"
     },
-    "messageAccessories":{
-        "fallback":"Không thể hiển thị Phụ kiện tin nhắn {key}"
+    "messageAccessories": {
+        "fallback": "Không thể hiển thị Phụ kiện tin nhắn {key}"
     },
-    "messageDecorations":{
-        "fallback":"Không thể hiển thị Trang trí Tin nhắn {key}"
+    "messageDecorations": {
+        "fallback": "Không thể hiển thị Trang trí Tin nhắn {key}"
     },
-    "notices":{
-        "fallback":"Lỗi trong việc hiển thị thông báo"
+    "notices": {
+        "fallback": "Lỗi trong việc hiển thị thông báo"
     },
-    "notifications":{
-        "dismissNotification":"Loại bỏ Thông báo",
-        "logs":{
-            "body_one":"Thao tác này sẽ xóa vĩnh viễn {count} thông báo. Không thể hoàn tác được hành động này.",
-            "body_other":"Thao tác này sẽ xóa vĩnh viễn {count} thông báo. Không thể hoàn tác được hành động này.",
-            "body_zero":"Không có thông báo nào được chọn.",
-            "cancel":"Không có gì",
-            "clearNotificationLog":"Xóa Nhật ký Thông báo",
-            "confirm":"Làm đi!",
-            "title":"Bạn có chắc không?"
+    "notifications": {
+        "dismissNotification": "Loại bỏ Thông báo",
+        "logs": {
+            "body_one": "Thao tác này sẽ xóa vĩnh viễn {count} thông báo. Không thể hoàn tác được hành động này.",
+            "body_other": "Thao tác này sẽ xóa vĩnh viễn {count} thông báo. Không thể hoàn tác được hành động này.",
+            "body_zero": "Không có thông báo nào được chọn.",
+            "cancel": "Không có gì",
+            "clearNotificationLog": "Xóa Nhật ký Thông báo",
+            "confirm": "Làm đi!",
+            "title": "Bạn có chắc không?"
         },
-        "missedNotifications":{
-            "body_one":"Đã nhận được {count} thông báo",
-            "body_other":"Đã nhận được {count} thông báo",
-            "title":"Trong khi bạn đi vắng"
+        "missedNotifications": {
+            "body_one": "Đã nhận được {count} thông báo",
+            "body_other": "Đã nhận được {count} thông báo",
+            "title": "Trong khi bạn đi vắng"
         },
-        "noNotifications":"Chưa có thông báo nào",
-        "notificationLog":"Nhật ký Thông báo",
-        "notificationSettings":"Cài đặt Thông báo"
+        "noNotifications": "Chưa có thông báo nào",
+        "notificationLog": "Nhật ký Thông báo",
+        "notificationSettings": "Cài đặt Thông báo"
     }
 }

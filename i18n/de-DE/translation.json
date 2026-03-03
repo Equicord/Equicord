@@ -1,10 +1,10 @@
 {
-    "description":"Hilft beim Übersetzen von Equicord",
-    "settings":{
-        "forceLocale":{
-            "description":"Erzwinge Equicord eine andere Sprache zu verwenden",
-            "followDiscord":"Standard (Discord folgen)"
+    "description": "Hilft beim Übersetzen von Equicord",
+    "settings": {
+        "forceLocale": {
+            "description": "Erzwinge Equicord eine andere Sprache zu verwenden",
+            "followDiscord": "Standard (Discord folgen)"
         },
-        "showMissingKeys":"Wenn in der aktuellen Sprache keine Übersetzungen vorhanden sind, werden die Übersetzungsschlüssel angezeigt, anstatt auf Englisch zurückzugreifen."
+        "showMissingKeys": "Wenn in der aktuellen Sprache keine Übersetzungen vorhanden sind, werden die Übersetzungsschlüssel angezeigt, anstatt auf Englisch zurückzugreifen."
     }
 }

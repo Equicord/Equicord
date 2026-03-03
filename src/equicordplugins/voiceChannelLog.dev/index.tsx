@@ -108,7 +108,7 @@ let clientOldChannelId: string | undefined;
 
 export default definePlugin({
     name: "VoiceChannelLog",
-    description: t("voiceChannelLog.description"),
+    description: t("equicord.voiceChannelLog.description"),
     authors: [Devs.Sqaaakoi, Devs.thororen, EquicordDevs.nyx],
     contextMenus: {
         "channel-context": patchChannelContextMenu

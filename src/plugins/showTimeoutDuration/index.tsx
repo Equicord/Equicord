@@ -30,11 +30,11 @@ const enum DisplayStyle {
 
 const settings = definePluginSettings({
     displayStyle: {
-        description: t("showTimeoutDuration.displayStyleDescription"),
+        description: t("vencord.showTimeoutDuration.displayStyleDescription"),
         type: OptionType.SELECT,
         options: [
-            { label: t("showTimeoutDuration.inTooltip"), value: DisplayStyle.Tooltip },
-            { label: t("showTimeoutDuration.nextToIcon"), value: DisplayStyle.Inline, default: true },
+            { label: t("vencord.showTimeoutDuration.inTooltip"), value: DisplayStyle.Tooltip },
+            { label: t("vencord.showTimeoutDuration.nextToIcon"), value: DisplayStyle.Inline, default: true },
         ],
     }
 });
@@ -69,7 +69,7 @@ function renderTimeout(message: Message, inline: boolean) {
 
 export default definePlugin({
     name: "ShowTimeoutDuration",
-    description: t("showTimeoutDuration.description"),
+    description: t("vencord.showTimeoutDuration.description"),
     authors: [Devs.Ven, Devs.Sqaaakoi],
 
     settings,
@@ -94,7 +94,7 @@ export default definePlugin({
             <div className="vc-std-wrapper">
                 <TooltipContainer text={text}>{children}</TooltipContainer>
                 <BaseText size="md" color="text-danger">
-                    {renderTimeout(message, true)} {t("showTimeoutDuration.timeoutRemaining")}
+                    {renderTimeout(message, true)} {t("vencord.showTimeoutDuration.timeoutRemaining")}
                 </BaseText>
             </div>
         );

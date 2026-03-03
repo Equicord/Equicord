@@ -23,7 +23,7 @@ import definePlugin from "@utils/types";
 export default definePlugin({
     name: "BetterUploadButton",
     authors: [Devs.fawn, Devs.Ven],
-    description: t("betterUploadButton.description"),
+    description: t("vencord.betterUploadButton.description"),
     patches: [
         {
             find: ".CHAT_INPUT_BUTTON_NOTIFICATION,",

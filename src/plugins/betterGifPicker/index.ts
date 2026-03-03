@@ -12,7 +12,7 @@ import definePlugin, { OptionType } from "@utils/types";
 let closeSuppressCount = 0;
 const settings = definePluginSettings({
     keepOpen: {
-        description: t("betterGifPicker.settings.keepOpen"),
+        description: t("vencord.betterGifPicker.settings.keepOpen"),
         type: OptionType.BOOLEAN,
         default: false
     },
@@ -20,7 +20,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "BetterGifPicker",
-    description: t("betterGifPicker.description"),
+    description: t("vencord.betterGifPicker.description"),
     authors: [Devs.Samwich, EquicordDevs.justjxke],
     isModified: true,
     settings,

@@ -55,7 +55,7 @@ function OnekoColorSettings() {
         <div>
             <div className={cl("color-modal")}>
                 <div>
-                    <Heading className="form-subtitle">{t("cursorBuddy.ui.furColor")}</Heading>
+                    <Heading className="form-subtitle">{t("equicord.cursorBuddy.ui.furColor")}</Heading>
                     <div className={cl("color")}>
                         <ColorPicker
                             color={parseHexToNumber(furColor) ?? 16777215}
@@ -66,7 +66,7 @@ function OnekoColorSettings() {
                 </div>
 
                 <div>
-                    <Heading className="form-subtitle">{t("cursorBuddy.ui.outlineColor")}</Heading>
+                    <Heading className="form-subtitle">{t("equicord.cursorBuddy.ui.outlineColor")}</Heading>
                     <div className={cl("color")}>
                         <ColorPicker
                             color={parseHexToNumber(outlineColor) ?? 0}
@@ -82,30 +82,30 @@ function OnekoColorSettings() {
 
 const settings = definePluginSettings({
     buddy: {
-        description: t("cursorBuddy.settings.buddy"),
+        description: t("equicord.cursorBuddy.settings.buddy"),
         type: OptionType.SELECT,
         options: [
             {
-                label: t("cursorBuddy.settings.buddyOptions.oneko"),
+                label: t("equicord.cursorBuddy.settings.buddyOptions.oneko"),
                 value: "oneko",
                 default: true
             },
             {
-                label: t("cursorBuddy.settings.buddyOptions.fathorse"),
+                label: t("equicord.cursorBuddy.settings.buddyOptions.fathorse"),
                 value: "fathorse"
             }
         ],
         onChange: load,
     },
     speed: {
-        description: t("cursorBuddy.settings.speed"),
+        description: t("equicord.cursorBuddy.settings.speed"),
         type: OptionType.NUMBER,
         default: 10,
         isValid: (value: number) => value >= 0 || "Speed must be bigger than 0",
         onChange: load,
     },
     fps: {
-        description: t("cursorBuddy.settings.fps"),
+        description: t("equicord.cursorBuddy.settings.fps"),
         type: OptionType.NUMBER,
         default: 24,
         isValid: (value: number) => value > 0 || "Framerate must be bigger than 0",
@@ -126,14 +126,14 @@ const settings = definePluginSettings({
         component: OnekoColorSettings,
     },
     furColor: {
-        description: t("cursorBuddy.settings.furColor"),
+        description: t("equicord.cursorBuddy.settings.furColor"),
         type: OptionType.STRING,
         default: "#FFFFFF",
         onChange: load,
         hidden: true,
     },
     outlineColor: {
-        description: t("cursorBuddy.settings.outlineColor"),
+        description: t("equicord.cursorBuddy.settings.outlineColor"),
         type: OptionType.STRING,
         default: "#000000",
         onChange: load,
@@ -150,26 +150,26 @@ const settings = definePluginSettings({
         ),
     },
     size: {
-        description: t("cursorBuddy.settings.size"),
+        description: t("equicord.cursorBuddy.settings.size"),
         type: OptionType.NUMBER,
         default: 120,
         isValid: (value: number) => value > 0 || "Size must be bigger than 0",
         onChange: load
     },
     fade: {
-        description: t("cursorBuddy.settings.fade"),
+        description: t("equicord.cursorBuddy.settings.fade"),
         type: OptionType.BOOLEAN,
         default: true,
         onChange: load
     },
     freeroam: {
-        description: t("cursorBuddy.settings.freeroam"),
+        description: t("equicord.cursorBuddy.settings.freeroam"),
         type: OptionType.BOOLEAN,
         default: true,
         onChange: load
     },
     shake: {
-        description: t("cursorBuddy.settings.shake"),
+        description: t("equicord.cursorBuddy.settings.shake"),
         type: OptionType.BOOLEAN,
         default: false,
         onChange: load,
@@ -235,7 +235,7 @@ function load() {
 migratePluginSettings("CursorBuddy", "Oneko", "oneko");
 export default definePlugin({
     name: "CursorBuddy",
-    description: t("cursorBuddy.description"),
+    description: t("equicord.cursorBuddy.description"),
     authors: [Devs.Ven, Devs.adryd, EquicordDevs.nexpid, EquicordDevs.ZcraftElite],
     tags: ["Oneko", "FatassHorse", "Pet"],
     settings,

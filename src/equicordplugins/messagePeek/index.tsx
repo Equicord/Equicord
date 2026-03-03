@@ -239,7 +239,7 @@ function shouldShowActivity(lastMessage: Message | undefined, hasActivity: boole
 
 export default definePlugin({
     name: "MessagePeek",
-    description: t("messagePeek.description"),
+    description: t("equicord.messagePeek.description"),
     authors: [Devs.prism, EquicordDevs.justjxke],
     settings,
     patches: [

@@ -25,34 +25,34 @@ import { ChannelStore, GuildMemberStore } from "@webpack/common";
 
 const settings = definePluginSettings({
     userList: {
-        description: t("noReplyMention.settings.userList"),
+        description: t("vencord.noReplyMention.settings.userList"),
         type: OptionType.STRING,
         default: "1234567890123445,1234567890123445",
         multiline: true
     },
     roleList: {
-        description: t("noReplyMention.settings.roleList"),
+        description: t("vencord.noReplyMention.settings.roleList"),
         type: OptionType.STRING,
         default: "1234567890123445,1234567890123445",
         multiline: true
     },
     shouldPingListed: {
-        description: t("noReplyMention.settings.shouldPingListed"),
+        description: t("vencord.noReplyMention.settings.shouldPingListed"),
         type: OptionType.SELECT,
         options: [
             {
-                label: t("noReplyMention.settings.doNotPingListed"),
+                label: t("vencord.noReplyMention.settings.doNotPingListed"),
                 value: false,
             },
             {
-                label: t("noReplyMention.settings.onlyPingListed"),
+                label: t("vencord.noReplyMention.settings.onlyPingListed"),
                 value: true,
                 default: true,
             },
         ],
     },
     inverseShiftReply: {
-        description: t("noReplyMention.settings.inverseShiftReply"),
+        description: t("vencord.noReplyMention.settings.inverseShiftReply"),
         type: OptionType.BOOLEAN,
         default: false,
     }
@@ -60,7 +60,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "NoReplyMention",
-    description: t("noReplyMention.description"),
+    description: t("vencord.noReplyMention.description"),
     authors: [Devs.DustyAngel47, Devs.rae, Devs.pylix, Devs.outfoxxed],
     settings,
 

@@ -64,7 +64,7 @@ function promptVoiceChannel(channel: Channel | null | undefined): boolean {
 
 export default definePlugin({
     name: "WaitForSlot",
-    description: t("waitForSlot.description"),
+    description: t("equicord.waitForSlot.description"),
     authors: [EquicordDevs.omaw, Devs.prism],
     settings,
     patches: [

@@ -332,7 +332,7 @@ function showCycleToast() {
 
 export default definePlugin({
     name: "RecentDMSwitcher",
-    description: t("recentDMSwitcher.description"),
+    description: t("equicord.recentDMSwitcher.description"),
     authors: [EquicordDevs.mmeta],
     settings,
 

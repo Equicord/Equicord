@@ -257,39 +257,39 @@ function handleColorChange(value, settingKey, defaultValue) {
 const settings = definePluginSettings({
     oscilloscope: {
         type: OptionType.BOOLEAN,
-        description: t("betterAudioPlayer.settings.oscilloscope"),
+        description: t("equicord.betterAudioPlayer.settings.oscilloscope"),
         default: true,
     },
     spectrograph: {
         type: OptionType.BOOLEAN,
-        description: t("betterAudioPlayer.settings.spectrograph"),
+        description: t("equicord.betterAudioPlayer.settings.spectrograph"),
         default: true,
     },
     oscilloscopeSolidColor: {
         type: OptionType.BOOLEAN,
-        description: t("betterAudioPlayer.settings.oscilloscopeSolidColor"),
+        description: t("equicord.betterAudioPlayer.settings.oscilloscopeSolidColor"),
         default: false,
     },
     oscilloscopeColor: {
         type: OptionType.STRING,
-        description: t("betterAudioPlayer.settings.oscilloscopeColor"),
+        description: t("equicord.betterAudioPlayer.settings.oscilloscopeColor"),
         default: "255, 255, 255",
         onChange: value => handleColorChange(value, "oscilloscopeColor", "255, 255, 255"),
     },
     spectrographSolidColor: {
         type: OptionType.BOOLEAN,
-        description: t("betterAudioPlayer.settings.spectrographSolidColor"),
+        description: t("equicord.betterAudioPlayer.settings.spectrographSolidColor"),
         default: false,
     },
     spectrographColor: {
         type: OptionType.STRING,
-        description: t("betterAudioPlayer.settings.spectrographColor"),
+        description: t("equicord.betterAudioPlayer.settings.spectrographColor"),
         default: "33, 150, 243",
         onChange: value => handleColorChange(value, "spectrographColor", "33, 150, 243"),
     },
     forceMoveBelow: {
         type: OptionType.BOOLEAN,
-        description: t("betterAudioPlayer.settings.forceMoveBelow"),
+        description: t("equicord.betterAudioPlayer.settings.forceMoveBelow"),
         default: true,
     },
 });
@@ -298,7 +298,7 @@ let observer: MutationObserver | null = null;
 
 export default definePlugin({
     name: "BetterAudioPlayer",
-    description: t("betterAudioPlayer.description"),
+    description: t("equicord.betterAudioPlayer.description"),
     authors: [EquicordDevs.creations],
     settings,
     start() {

@@ -135,38 +135,38 @@ function TypingIndicator({ channelId, guildId }: { channelId: string; guildId: s
 const settings = definePluginSettings({
     includeCurrentChannel: {
         type: OptionType.BOOLEAN,
-        description: t("typingIndicator.settings.includeCurrentChannel"),
+        description: t("vencord.typingIndicator.settings.includeCurrentChannel"),
         default: true
     },
     includeMutedChannels: {
         type: OptionType.BOOLEAN,
-        description: t("typingIndicator.settings.includeMutedChannels"),
+        description: t("vencord.typingIndicator.settings.includeMutedChannels"),
         default: false
     },
     includeIgnoredUsers: {
         type: OptionType.BOOLEAN,
-        description: t("typingIndicator.settings.includeIgnoredUsers"),
+        description: t("vencord.typingIndicator.settings.includeIgnoredUsers"),
         default: false
     },
     includeBlockedUsers: {
         type: OptionType.BOOLEAN,
-        description: t("typingIndicator.settings.includeBlockedUsers"),
+        description: t("vencord.typingIndicator.settings.includeBlockedUsers"),
         default: false
     },
     indicatorMode: {
         type: OptionType.SELECT,
-        description: t("typingIndicator.settings.indicatorMode"),
+        description: t("vencord.typingIndicator.settings.indicatorMode"),
         options: [
-            { label: t("typingIndicator.settings.avatarsAndDots"), value: IndicatorMode.Dots | IndicatorMode.Avatars, default: true },
-            { label: t("typingIndicator.settings.animatedDots"), value: IndicatorMode.Dots },
-            { label: t("typingIndicator.settings.avatars"), value: IndicatorMode.Avatars },
+            { label: t("vencord.typingIndicator.settings.avatarsAndDots"), value: IndicatorMode.Dots | IndicatorMode.Avatars, default: true },
+            { label: t("vencord.typingIndicator.settings.animatedDots"), value: IndicatorMode.Dots },
+            { label: t("vencord.typingIndicator.settings.avatars"), value: IndicatorMode.Avatars },
         ],
     }
 });
 
 export default definePlugin({
     name: "TypingIndicator",
-    description: t("typingIndicator.description"),
+    description: t("vencord.typingIndicator.description"),
     authors: [Devs.Nuckyz, Devs.fawn, Devs.Sqaaakoi],
     isModified: true,
     settings,

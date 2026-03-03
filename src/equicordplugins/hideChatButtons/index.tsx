@@ -17,12 +17,12 @@ let hidechatbuttonsopen: boolean | undefined;
 const settings = definePluginSettings({
     Color: {
         type: OptionType.BOOLEAN,
-        description: t("hideChatButtons.settings.color"),
+        description: t("equicord.hideChatButtons.settings.color"),
         default: false,
     },
     Open: {
         type: OptionType.BOOLEAN,
-        description: t("hideChatButtons.settings.open"),
+        description: t("equicord.hideChatButtons.settings.open"),
         default: false,
         onChange: (store: { open: boolean; }) => {
             hidechatbuttonsopen = store.open;
@@ -33,7 +33,7 @@ const settings = definePluginSettings({
 function HideToggleButton(props: { open: boolean | undefined, onClick: MouseEventHandler<HTMLButtonElement>; }) {
     return (<ChatBarButton
         onClick={props.onClick}
-        tooltip={props.open ? t("hideChatButtons.ui.close") : t("hideChatButtons.ui.open")}
+        tooltip={props.open ? t("equicord.hideChatButtons.ui.close") : t("equicord.hideChatButtons.ui.open")}
     >
         <svg
             fill={settings.store.Color && props.open ? "#c32a32" : "currentColor"}
@@ -75,7 +75,7 @@ function ButtonsInnerComponent({ buttons }: { buttons: ReactNode[]; }) {
 
 export default definePlugin({
     name: "HideChatButtons",
-    description: t("hideChatButtons.description"),
+    description: t("equicord.hideChatButtons.description"),
     settings: settings,
     authors: [EquicordDevs.iamme],
     patches: [

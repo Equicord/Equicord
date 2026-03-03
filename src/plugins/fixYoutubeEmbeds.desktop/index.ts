@@ -10,6 +10,6 @@ import definePlugin from "@utils/types";
 
 export default definePlugin({
     name: "FixYoutubeEmbeds",
-    description: t("fixYoutubeEmbeds.description"),
+    description: t("vencord.fixYoutubeEmbeds.description"),
     authors: [Devs.coolelectronics]
 });

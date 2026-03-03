@@ -61,86 +61,86 @@ interface MediaData {
 
 const settings = definePluginSettings({
     serverUrl: {
-        description: t("jellyfinRichPresence.settings.serverUrl"),
+        description: t("equicord.jellyfinRichPresence.settings.serverUrl"),
         type: OptionType.STRING,
     },
     apiKey: {
-        description: t("jellyfinRichPresence.settings.apiKey"),
+        description: t("equicord.jellyfinRichPresence.settings.apiKey"),
         type: OptionType.STRING,
     },
     userId: {
-        description: t("jellyfinRichPresence.settings.userId"),
+        description: t("equicord.jellyfinRichPresence.settings.userId"),
         type: OptionType.STRING,
     },
     nameDisplay: {
-        description: t("jellyfinRichPresence.settings.nameDisplay"),
+        description: t("equicord.jellyfinRichPresence.settings.nameDisplay"),
         type: OptionType.SELECT,
         options: [
-            { label: t("jellyfinRichPresence.nameFormatOptions.seriesMovieName"), value: "default", default: true },
-            { label: t("jellyfinRichPresence.nameFormatOptions.seriesEpisodeName"), value: "full" },
-            { label: t("jellyfinRichPresence.nameFormatOptions.custom"), value: "custom" },
+            { label: t("equicord.jellyfinRichPresence.nameFormatOptions.seriesMovieName"), value: "default", default: true },
+            { label: t("equicord.jellyfinRichPresence.nameFormatOptions.seriesEpisodeName"), value: "full" },
+            { label: t("equicord.jellyfinRichPresence.nameFormatOptions.custom"), value: "custom" },
         ],
     },
     customName: {
-        description: t("jellyfinRichPresence.settings.customName"),
+        description: t("equicord.jellyfinRichPresence.settings.customName"),
         type: OptionType.STRING,
     },
     coverType: {
-        description: t("jellyfinRichPresence.settings.coverType"),
+        description: t("equicord.jellyfinRichPresence.settings.coverType"),
         type: OptionType.SELECT,
         options: [
-            { label: t("jellyfinRichPresence.coverTypeOptions.seriesCover"), value: "series", default: true },
-            { label: t("jellyfinRichPresence.coverTypeOptions.episodeCover"), value: "episode" },
+            { label: t("equicord.jellyfinRichPresence.coverTypeOptions.seriesCover"), value: "series", default: true },
+            { label: t("equicord.jellyfinRichPresence.coverTypeOptions.episodeCover"), value: "episode" },
         ],
     },
     episodeFormat: {
-        description: t("jellyfinRichPresence.settings.episodeFormat"),
+        description: t("equicord.jellyfinRichPresence.settings.episodeFormat"),
         type: OptionType.SELECT,
         options: [
-            { label: t("jellyfinRichPresence.episodeFormatOptions.s01e01"), value: "long", default: true },
-            { label: t("jellyfinRichPresence.episodeFormatOptions.short"), value: "short" },
-            { label: t("jellyfinRichPresence.episodeFormatOptions.fulltext"), value: "fulltext" },
+            { label: t("equicord.jellyfinRichPresence.episodeFormatOptions.s01e01"), value: "long", default: true },
+            { label: t("equicord.jellyfinRichPresence.episodeFormatOptions.short"), value: "short" },
+            { label: t("equicord.jellyfinRichPresence.episodeFormatOptions.fulltext"), value: "fulltext" },
         ],
     },
     showEpisodeName: {
-        description: t("jellyfinRichPresence.settings.showEpisodeName"),
+        description: t("equicord.jellyfinRichPresence.settings.showEpisodeName"),
         type: OptionType.BOOLEAN,
         default: false,
     },
     overrideRichPresenceType: {
-        description: t("jellyfinRichPresence.settings.overrideRichPresenceType"),
+        description: t("equicord.jellyfinRichPresence.settings.overrideRichPresenceType"),
         type: OptionType.SELECT,
         options: [
             {
-                label: t("jellyfinRichPresence.overrideTypeOptions.off"),
+                label: t("equicord.jellyfinRichPresence.overrideTypeOptions.off"),
                 value: false,
                 default: true,
             },
             {
-                label: t("jellyfinRichPresence.overrideTypeOptions.listening"),
+                label: t("equicord.jellyfinRichPresence.overrideTypeOptions.listening"),
                 value: 2,
             },
             {
-                label: t("jellyfinRichPresence.overrideTypeOptions.playing"),
+                label: t("equicord.jellyfinRichPresence.overrideTypeOptions.playing"),
                 value: 0,
             },
             {
-                label: t("jellyfinRichPresence.overrideTypeOptions.streaming"),
+                label: t("equicord.jellyfinRichPresence.overrideTypeOptions.streaming"),
                 value: 1,
             },
             {
-                label: t("jellyfinRichPresence.overrideTypeOptions.watching"),
+                label: t("equicord.jellyfinRichPresence.overrideTypeOptions.watching"),
                 value: 3
             },
         ],
     },
     showPausedState: {
-        description: t("jellyfinRichPresence.settings.showPausedState"),
+        description: t("equicord.jellyfinRichPresence.settings.showPausedState"),
         type: OptionType.BOOLEAN,
         default: true,
     },
     privacyMode: {
-        description: t("jellyfinRichPresence.settings.privacyMode"),
+        description: t("equicord.jellyfinRichPresence.settings.privacyMode"),
         type: OptionType.BOOLEAN,
         default: false,
     },
@@ -166,14 +166,14 @@ function setActivity(activity: Activity | null) {
 
 export default definePlugin({
     name: "JellyfinRichPresence",
-    description: t("jellyfinRichPresence.description"),
+    description: t("equicord.jellyfinRichPresence.description"),
     authors: [EquicordDevs.vmohammad, Devs.SerStars, EquicordDevs.ZcraftElite],
 
     settingsAboutComponent: () => (
         <>
-            <HeadingSecondary>{t("jellyfinRichPresence.howToGetApiKey.title")}</HeadingSecondary>
+            <HeadingSecondary>{t("equicord.jellyfinRichPresence.howToGetApiKey.title")}</HeadingSecondary>
             <Paragraph>
-                {t("jellyfinRichPresence.howToGetApiKey.description")}
+                {t("equicord.jellyfinRichPresence.howToGetApiKey.description")}
                 <ol style={{ marginTop: 8, marginBottom: 8, paddingLeft: 20 }}>
                     <li>1. Log into your Jellyfin instance</li>
                     <li>2. Open your browser's Developer Tools (usually F12 or right-click then Inspect)</li>
@@ -188,7 +188,7 @@ export default definePlugin({
                     </li>
                 </ol>
                 <br />
-                {t("jellyfinRichPresence.howToGetApiKey.userIdInfo")}
+                {t("equicord.jellyfinRichPresence.howToGetApiKey.userIdInfo")}
             </Paragraph>
         </>
     ),
@@ -208,7 +208,7 @@ export default definePlugin({
     async fetchMediaData(): Promise<MediaData | null> {
         if (!settings.store.serverUrl || !settings.store.apiKey || !settings.store.userId) {
             logger.warn("Jellyfin server URL, API key, or user ID is not set in settings.");
-            showToast(t("jellyfinRichPresence.toasts.notConfigured"), "failure", {
+            showToast(t("equicord.jellyfinRichPresence.toasts.notConfigured"), "failure", {
                 duration: 15000,
             });
             return null;
@@ -303,15 +303,15 @@ export default definePlugin({
             case "full":
                 if (mediaData.type === "Episode" && mediaData.seriesName) {
                     appName = settings.store.privacyMode
-                        ? `${mediaData.seriesName} - ${t("jellyfinRichPresence.privacyMode.episodeHidden")}`
+                        ? `${mediaData.seriesName} - ${t("equicord.jellyfinRichPresence.privacyMode.episodeHidden")}`
                         : `${mediaData.seriesName} - ${mediaData.name}`;
                 } else if (mediaData.type === "Audio") {
                     appName = settings.store.privacyMode
-                        ? t("jellyfinRichPresence.privacyMode.trackHidden")
+                        ? t("equicord.jellyfinRichPresence.privacyMode.trackHidden")
                         : `${mediaData.artist || "Unknown Artist"} - ${mediaData.name}`;
                 } else {
                     appName = settings.store.privacyMode
-                        ? t("jellyfinRichPresence.privacyMode.movieHidden")
+                        ? t("equicord.jellyfinRichPresence.privacyMode.movieHidden")
                         : mediaData.name || "Jellyfin";
                 }
                 break;
@@ -319,10 +319,10 @@ export default definePlugin({
                 appName = templateReplace(settings.store.customName || "{name} on Jellyfin");
                 if (settings.store.privacyMode) {
                     appName = appName
-                        .replace(mediaData.name || "", t("jellyfinRichPresence.privacyMode.titleHidden"))
-                        .replace(mediaData.seriesName || "", t("jellyfinRichPresence.privacyMode.seriesHidden"))
-                        .replace(mediaData.artist || "", t("jellyfinRichPresence.privacyMode.artistHidden"))
-                        .replace(mediaData.album || "", t("jellyfinRichPresence.privacyMode.albumHidden"));
+                        .replace(mediaData.name || "", t("equicord.jellyfinRichPresence.privacyMode.titleHidden"))
+                        .replace(mediaData.seriesName || "", t("equicord.jellyfinRichPresence.privacyMode.seriesHidden"))
+                        .replace(mediaData.artist || "", t("equicord.jellyfinRichPresence.privacyMode.artistHidden"))
+                        .replace(mediaData.album || "", t("equicord.jellyfinRichPresence.privacyMode.albumHidden"));
                 }
                 break;
             case "default":
@@ -331,7 +331,7 @@ export default definePlugin({
                     appName = mediaData.seriesName;
                 } else {
                     appName = settings.store.privacyMode
-                        ? t("jellyfinRichPresence.privacyMode.mediaHidden")
+                        ? t("equicord.jellyfinRichPresence.privacyMode.mediaHidden")
                         : mediaData.name || "Jellyfin";
                 }
                 break;
@@ -352,14 +352,14 @@ export default definePlugin({
 
         const getDetails = () => {
             if (mediaData.type === "Episode" && mediaData.seriesName) {
-                return settings.store.privacyMode ? t("jellyfinRichPresence.privacyMode.watchingTvShow") : mediaData.seriesName;
+                return settings.store.privacyMode ? t("equicord.jellyfinRichPresence.privacyMode.watchingTvShow") : mediaData.seriesName;
             }
-            return settings.store.privacyMode ? t("jellyfinRichPresence.privacyMode.watchingSomething") : mediaData.name;
+            return settings.store.privacyMode ? t("equicord.jellyfinRichPresence.privacyMode.watchingSomething") : mediaData.name;
         };
 
         const getState = () => {
             if (mediaData.isPaused) {
-                return t("jellyfinRichPresence.state.paused");
+                return t("equicord.jellyfinRichPresence.state.paused");
             }
             if (mediaData.type === "Episode" && mediaData.seriesName) {
                 let episodeFormat = "";
@@ -391,7 +391,7 @@ export default definePlugin({
                 return episodeFormat;
             }
             if (settings.store.privacyMode) {
-                return mediaData.type === "Audio" ? t("jellyfinRichPresence.privacyMode.listeningToMusic") : (mediaData.year ? "(????)" : undefined);
+                return mediaData.type === "Audio" ? t("equicord.jellyfinRichPresence.privacyMode.listeningToMusic") : (mediaData.year ? "(????)" : undefined);
             }
             return mediaData.artist || (mediaData.year ? `(${mediaData.year})` : undefined);
         };

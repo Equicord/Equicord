@@ -24,7 +24,7 @@ import { GuildStore } from "@webpack/common";
 
 export default definePlugin({
     name: "ForceOwnerCrown",
-    description: t("forceOwnerCrown.description"),
+    description: t("vencord.forceOwnerCrown.description"),
     authors: [Devs.D3SOX, Devs.Nickyux],
     patches: [
         {

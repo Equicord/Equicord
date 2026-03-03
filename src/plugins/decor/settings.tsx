@@ -22,7 +22,7 @@ export const settings = definePluginSettings({
         type: OptionType.COMPONENT,
         component() {
             if (!DecorPlugin.started) return <Paragraph>
-                {t("decor.enableAndRestart")}
+                {t("vencord.decor.enableAndRestart")}
             </Paragraph>;
 
             return <div>
@@ -35,7 +35,7 @@ export const settings = definePluginSettings({
                             closeAllModals();
                             FluxDispatcher.dispatch({ type: "USER_SETTINGS_MODAL_SET_SECTION", section: "Profile Customization" });
                         }}
-                    >{t("decor.profilesLink")}</Link> })}
+                    >{t("vencord.decor.profilesLink")}</Link> })}
                 </Paragraph>
             </div>;
         }

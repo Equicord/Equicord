@@ -40,7 +40,7 @@ const messageCtxPatch: NavContextMenuPatchCallback = (children, { message }: { m
     group.splice(group.findIndex(c => c?.props?.id === "copy-text") + 1, 0, (
         <Menu.MenuItem
             id="vc-trans"
-            label={t("translate.translate")}
+            label={t("vencord.translate.translate")}
             icon={TranslateIcon}
             action={async () => {
                 const trans = await translate("received", content);
@@ -86,7 +86,7 @@ export default definePlugin({
             if (!content) return null;
 
             return {
-                label: t("translate.translate"),
+                label: t("vencord.translate.translate"),
                 icon: TranslateIcon,
                 message,
                 channel: ChannelStore.getChannel(message.channel_id),

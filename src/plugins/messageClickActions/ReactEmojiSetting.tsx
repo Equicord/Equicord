@@ -67,7 +67,7 @@ export function ReactEmojiSetting({ setValue }: IPluginOptionComponentProps) {
 
     return (
         <div>
-            <Heading>{t("messageClickActions.ui.selectEmojiForReactions")}</Heading>
+            <Heading>{t("vencord.messageClickActions.ui.selectEmojiForReactions")}</Heading>
             <div
                 className="vc-message-click-actions-primary-emoji-picker"
                 onClick={event => event.stopPropagation()}
@@ -107,7 +107,7 @@ export function AdditionalReactEmojisSetting({ setValue }: IPluginOptionComponen
 
     return (
         <div>
-            <Heading>{t("messageClickActions.ui.selectAdditionalEmojis")}</Heading>
+            <Heading>{t("vencord.messageClickActions.ui.selectAdditionalEmojis")}</Heading>
             <div
                 style={{
                     marginTop: 8,

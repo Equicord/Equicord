@@ -131,7 +131,7 @@ function sendAudio(blob: Blob, meta: AudioMetadata) {
             }
         });
     });
-    upload.on("error", () => showToast(t("voiceMessages.failedToUpload"), Toasts.Type.FAILURE));
+    upload.on("error", () => showToast(t("vencord.voiceMessages.failedToUpload"), Toasts.Type.FAILURE));
 
     upload.upload();
 }
@@ -157,7 +157,7 @@ const ctxMenuPatch: NavContextMenuPatchCallback = (children, props) => {
                 type: "icon",
                 icon: Microphone
             }}
-            label={t("voiceMessages.send")}
+            label={t("vencord.voiceMessages.send")}
             action={() => openModal(modalProps => <Modal modalProps={modalProps} />)}
         />
     );
@@ -195,7 +195,7 @@ function Modal({ modalProps }: { modalProps: ModalProps; }) {
     return (
         <ModalRoot {...modalProps}>
             <ModalHeader>
-                <Heading>{t("voiceMessages.recordModal")}</Heading>
+                <Heading>{t("vencord.voiceMessages.recordModal")}</Heading>
             </ModalHeader>
 
             <ModalContent className={cl("modal")}>
@@ -215,11 +215,11 @@ function Modal({ modalProps }: { modalProps: ModalProps; }) {
                             setBlobUrl(file);
                         }
                     }}>
-                        {t("voiceMessages.uploadFile")}
+                        {t("vencord.voiceMessages.uploadFile")}
                     </Button>
                 </div>
 
-                <Heading>{t("voiceMessages.preview")}</Heading>
+                <Heading>{t("vencord.voiceMessages.preview")}</Heading>
                 {metaError
                     ? <Paragraph className={cl("error")}>{t("voiceMessages.failedToParse", { error: metaError.message })}</Paragraph>
                     : (
@@ -233,13 +233,13 @@ function Modal({ modalProps }: { modalProps: ModalProps; }) {
                 {isUnsupportedFormat && (
                     <Card variant="warning" className={Margins.top16} defaultPadding>
                         <Forms.FormText>
-                            <Translate i18nKey="voiceMessages.iosWarning" variables={{ type: blob.type }}>
+                            <Translate i18nKey="vencord.voiceMessages.iosWarning" variables={{ type: blob.type }}>
                                 Voice Messages have to be OggOpus to be playable on iOS. This file is <code>{blob.type}</code> so it will not be playable on iOS.
                             </Translate>
                         </Forms.FormText>
 
                         <Paragraph className={Margins.top8}>
-                            <Translate i18nKey="voiceMessages.iosFix">
+                            <Translate i18nKey="vencord.voiceMessages.iosFix">
                                 To fix it, first convert it to OggOpus, for example using the <Link href="https://convertio.co/mp3-opus/">convertio web converter</Link>
                             </Translate>
                         </Paragraph>
@@ -254,9 +254,9 @@ function Modal({ modalProps }: { modalProps: ModalProps; }) {
                     onClick={() => {
                         sendAudio(blob!, meta ?? EMPTY_META);
                         modalProps.onClose();
-                        showToast(t("voiceMessages.sending"), Toasts.Type.MESSAGE);
+                        showToast(t("vencord.voiceMessages.sending"), Toasts.Type.MESSAGE);
                     }}>
-                    {t("voiceMessages.send")}
+                    {t("vencord.voiceMessages.send")}
                 </Button>
             </ModalFooter>
         </ModalRoot>
@@ -266,12 +266,12 @@ function Modal({ modalProps }: { modalProps: ModalProps; }) {
 export const settings = definePluginSettings({
     noiseSuppression: {
         type: OptionType.BOOLEAN,
-        description: t("voiceMessages.noiseSuppression"),
+        description: t("vencord.voiceMessages.noiseSuppression"),
         default: true,
     },
     echoCancellation: {
         type: OptionType.BOOLEAN,
-        description: t("voiceMessages.echoCancellation"),
+        description: t("vencord.voiceMessages.echoCancellation"),
         default: true,
     },
 });

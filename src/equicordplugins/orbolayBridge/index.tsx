@@ -24,49 +24,49 @@ interface ChannelState {
 const settings = definePluginSettings({
     port: {
         type: OptionType.NUMBER,
-        description: t("orbolayBridge.settings.port"),
+        description: t("equicord.orbolayBridge.settings.port"),
         default: 6888,
         restartNeeded: true
     },
     isKeybindEnabled: {
         type: OptionType.BOOLEAN,
-        description: t("orbolayBridge.settings.isKeybindEnabled"),
+        description: t("equicord.orbolayBridge.settings.isKeybindEnabled"),
         default: true,
         restartNeeded: true,
     },
     messageAlignment: {
         type: OptionType.SELECT,
-        description: t("orbolayBridge.settings.messageAlignment"),
+        description: t("equicord.orbolayBridge.settings.messageAlignment"),
         options: [
-            { label: t("orbolayBridge.settings.alignmentOptions.topLeft"), value: "topleft", default: true },
-            { label: t("orbolayBridge.settings.alignmentOptions.topRight"), value: "topright" },
-            { label: t("orbolayBridge.settings.alignmentOptions.bottomLeft"), value: "bottomleft" },
-            { label: t("orbolayBridge.settings.alignmentOptions.bottomRight"), value: "bottomright" },
+            { label: t("equicord.orbolayBridge.settings.alignmentOptions.topLeft"), value: "topleft", default: true },
+            { label: t("equicord.orbolayBridge.settings.alignmentOptions.topRight"), value: "topright" },
+            { label: t("equicord.orbolayBridge.settings.alignmentOptions.bottomLeft"), value: "bottomleft" },
+            { label: t("equicord.orbolayBridge.settings.alignmentOptions.bottomRight"), value: "bottomright" },
         ],
         default: "topright",
         restartNeeded: true
     },
     userAlignment: {
         type: OptionType.SELECT,
-        description: t("orbolayBridge.settings.userAlignment"),
+        description: t("equicord.orbolayBridge.settings.userAlignment"),
         options: [
-            { label: t("orbolayBridge.settings.alignmentOptions.topLeft"), value: "topleft", default: true },
-            { label: t("orbolayBridge.settings.alignmentOptions.topRight"), value: "topright" },
-            { label: t("orbolayBridge.settings.alignmentOptions.bottomLeft"), value: "bottomleft" },
-            { label: t("orbolayBridge.settings.alignmentOptions.bottomRight"), value: "bottomright" },
+            { label: t("equicord.orbolayBridge.settings.alignmentOptions.topLeft"), value: "topleft", default: true },
+            { label: t("equicord.orbolayBridge.settings.alignmentOptions.topRight"), value: "topright" },
+            { label: t("equicord.orbolayBridge.settings.alignmentOptions.bottomLeft"), value: "bottomleft" },
+            { label: t("equicord.orbolayBridge.settings.alignmentOptions.bottomRight"), value: "bottomright" },
         ],
         default: "topleft",
         restartNeeded: true
     },
     voiceSemitransparent: {
         type: OptionType.BOOLEAN,
-        description: t("orbolayBridge.settings.voiceSemitransparent"),
+        description: t("equicord.orbolayBridge.settings.voiceSemitransparent"),
         default: true,
         restartNeeded: true
     },
     messagesSemitransparent: {
         type: OptionType.BOOLEAN,
-        description: t("orbolayBridge.settings.messagesSemitransparent"),
+        description: t("equicord.orbolayBridge.settings.messagesSemitransparent"),
         default: false,
         restartNeeded: true
     },
@@ -314,7 +314,7 @@ const createWebsocket = () => {
 
 export default definePlugin({
     name: "OrbolayBridge",
-    description: t("orbolayBridge.description"),
+    description: t("equicord.orbolayBridge.description"),
     authors: [EquicordDevs.SpikeHD],
     settings,
     flux: {

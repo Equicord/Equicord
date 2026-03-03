@@ -13,13 +13,13 @@ const settings = definePluginSettings(
     {
         targetLanguage: {
             type: OptionType.STRING,
-            description: t("messageTranslate.settings.targetLanguage"),
+            description: t("equicord.messageTranslate.settings.targetLanguage"),
             default: "en",
             restartNeeded: true
         },
         confidenceRequirement: {
             type: OptionType.STRING,
-            description: t("messageTranslate.settings.confidenceRequirement"),
+            description: t("equicord.messageTranslate.settings.confidenceRequirement"),
             default: "0.8",
             restartNeeded: true
         },
@@ -52,7 +52,7 @@ async function TranslateMessage(string) {
 
 export default definePlugin({
     name: "MessageTranslate",
-    description: t("messageTranslate.description"),
+    description: t("equicord.messageTranslate.description"),
     authors: [Devs.Samwich],
     settings,
     TranslateMessage: TranslateMessage,

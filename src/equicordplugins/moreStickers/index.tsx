@@ -22,19 +22,19 @@ import { cl, FFmpegStateContext, loadFFmpeg } from "./utils";
 export const settings = definePluginSettings({
     promptToUpload: {
         type: OptionType.BOOLEAN,
-        description: t("moreStickers.settings.promptToUpload"),
+        description: t("equicord.moreStickers.settings.promptToUpload"),
         default: false
     },
     packs: {
         type: OptionType.COMPONENT,
-        description: t("moreStickers.settings.packs"),
+        description: t("equicord.moreStickers.settings.packs"),
         component: Packs
     }
 });
 
 export default definePlugin({
     name: "MoreStickers",
-    description: t("moreStickers.description"),
+    description: t("equicord.moreStickers.description"),
     authors: [EquicordDevs.Leko, Devs.Arjix],
     settings,
 

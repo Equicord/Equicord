@@ -19,34 +19,34 @@ const extraFramerates = [45, 90, 120, 144, 165, 240];
 const settings = definePluginSettings({
     richPresenceTagging: {
         type: OptionType.SELECT,
-        description: t("clipsEnhancements.settings.richPresenceTagging"),
+        description: t("equicord.clipsEnhancements.settings.richPresenceTagging"),
         options: [
-            { label: t("clipsEnhancements.settings.richPresenceTaggingOptions.always"), value: "always" },
-            { label: t("clipsEnhancements.settings.richPresenceTaggingOptions.whenMatched"), value: "whenMatched", default: true },
-            { label: t("clipsEnhancements.settings.richPresenceTaggingOptions.never"), value: "never" },
+            { label: t("equicord.clipsEnhancements.settings.richPresenceTaggingOptions.always"), value: "always" },
+            { label: t("equicord.clipsEnhancements.settings.richPresenceTaggingOptions.whenMatched"), value: "whenMatched", default: true },
+            { label: t("equicord.clipsEnhancements.settings.richPresenceTaggingOptions.never"), value: "never" },
         ]
     },
     enableScreenshotKeybind: {
         type: OptionType.BOOLEAN,
-        description: t("clipsEnhancements.settings.enableScreenshotKeybind"),
+        description: t("equicord.clipsEnhancements.settings.enableScreenshotKeybind"),
         default: true,
         restartNeeded: true
     },
     enableVoiceOnlyClips: {
         type: OptionType.BOOLEAN,
-        description: t("clipsEnhancements.settings.enableVoiceOnlyClips"),
+        description: t("equicord.clipsEnhancements.settings.enableVoiceOnlyClips"),
         default: true,
         restartNeeded: true
     },
     enableAdvancedSignals: {
         type: OptionType.BOOLEAN,
-        description: t("clipsEnhancements.settings.enableAdvancedSignals"),
+        description: t("equicord.clipsEnhancements.settings.enableAdvancedSignals"),
         default: true,
         restartNeeded: true
     },
     ignorePlatformRestriction: {
         type: OptionType.BOOLEAN,
-        description: t("clipsEnhancements.settings.ignorePlatformRestriction"),
+        description: t("equicord.clipsEnhancements.settings.ignorePlatformRestriction"),
         default: true,
         restartNeeded: true
     },
@@ -61,7 +61,7 @@ const settings = definePluginSettings({
                             SettingsRouter.openUserSettings("clips_panel");
                         }}
                     >
-                        {t("clipsEnhancements.settings.clipsLink")}
+                        {t("equicord.clipsEnhancements.settings.clipsLink")}
                     </Button >
                 </>
             );
@@ -72,7 +72,7 @@ const settings = definePluginSettings({
 migratePluginSettings("ClipsEnhancements", "TimelessClips");
 export default definePlugin({
     name: "ClipsEnhancements",
-    description: t("clipsEnhancements.description"),
+    description: t("equicord.clipsEnhancements.description"),
     authors: [Devs.niko, Devs.Joona, EquicordDevs.keircn],
     settings,
     patches: [

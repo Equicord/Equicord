@@ -49,17 +49,17 @@ const searchEngines = {
 const settings = definePluginSettings({
     hyperlink: {
         type: OptionType.BOOLEAN,
-        description: t("googleThat.settings.hyperlink"),
+        description: t("equicord.googleThat.settings.hyperlink"),
         default: false
     },
     embed: {
         type: OptionType.BOOLEAN,
-        description: t("googleThat.settings.embed"),
+        description: t("equicord.googleThat.settings.embed"),
         default: true
     },
     defaultEngine: {
         type: OptionType.SELECT,
-        description: t("googleThat.settings.defaultEngine"),
+        description: t("equicord.googleThat.settings.defaultEngine"),
         options: Object.keys(searchEngines).map((key, index) => ({
             label: key,
             value: key,
@@ -67,7 +67,7 @@ const settings = definePluginSettings({
         }))
     },
     customEngineURL: {
-        description: t("googleThat.settings.customEngineURL"),
+        description: t("equicord.googleThat.settings.customEngineURL"),
         type: OptionType.STRING,
         placeholder: ""
     }
@@ -75,18 +75,18 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "GoogleThat",
-    description: t("googleThat.description"),
+    description: t("equicord.googleThat.description"),
     authors: [Devs.Samwich, EquicordDevs.KrystalSkull],
     tags: ["search", "google", "query", "duckduckgo", "command"],
     settings,
     commands: [
         {
             name: "googlethat",
-            description: t("googleThat.commands.googlethat"),
+            description: t("equicord.googleThat.commands.googlethat"),
             options: [
                 {
                     name: "input",
-                    description: t("googleThat.commands.input"),
+                    description: t("equicord.googleThat.commands.input"),
                     type: ApplicationCommandOptionType.STRING,
                     required: true,
                 }

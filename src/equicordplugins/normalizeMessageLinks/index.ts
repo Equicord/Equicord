@@ -10,7 +10,7 @@ import definePlugin from "@utils/types";
 
 export default definePlugin({
     name: "NormalizeMessageLinks",
-    description: t("normalizeMessageLinks.description"),
+    description: t("equicord.normalizeMessageLinks.description"),
     authors: [Devs.bb010g],
     patches: [
         {

@@ -16,11 +16,11 @@ export function ClearAliasesConfirmModal({ modalProps, onConfirm }: ClearAliases
     return (
         <ModalRoot {...modalProps} size={ModalSize.SMALL}>
             <ModalHeader>
-                <Heading style={{ flexGrow: 1 }}>{t("favEmojiFirst.ui.confirmModal.title")}</Heading>
+                <Heading style={{ flexGrow: 1 }}>{t("vencord.favEmojiFirst.ui.confirmModal.title")}</Heading>
                 <ModalCloseButton onClick={modalProps.onClose} />
             </ModalHeader>
             <ModalContent>
-                <Paragraph>{t("favEmojiFirst.ui.confirmModal.description")}</Paragraph>
+                <Paragraph>{t("vencord.favEmojiFirst.ui.confirmModal.description")}</Paragraph>
             </ModalContent>
             <ModalFooter>
                 <Button
@@ -31,7 +31,7 @@ export function ClearAliasesConfirmModal({ modalProps, onConfirm }: ClearAliases
                         modalProps.onClose();
                     }}
                 >
-                    {t("favEmojiFirst.ui.confirmModal.confirmButton")}
+                    {t("vencord.favEmojiFirst.ui.confirmModal.confirmButton")}
                 </Button>
             </ModalFooter>
         </ModalRoot>

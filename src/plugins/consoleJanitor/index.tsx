@@ -59,7 +59,7 @@ function AllowLevelSetting({ settingKey }: AllowLevelSettingProps) {
 
 const AllowLevelSettings = ErrorBoundary.wrap(() => {
     return (
-        <SettingsSection name={t("consoleJanitor.filterList")} description={t("consoleJanitor.alwaysAllowLoggers")}>
+        <SettingsSection name={t("vencord.consoleJanitor.filterList")} description={t("vencord.consoleJanitor.alwaysAllowLoggers")}>
             <div style={{ display: "flex", flexDirection: "row" }}>
                 {Object.keys(settings.store.allowLevel).map(key => (
                     <AllowLevelSetting key={key} settingKey={key as keyof AllowLevels} />
@@ -72,19 +72,19 @@ const AllowLevelSettings = ErrorBoundary.wrap(() => {
 const settings = definePluginSettings({
     disableLoggers: {
         type: OptionType.BOOLEAN,
-        description: t("consoleJanitor.settings.disableLoggers"),
+        description: t("vencord.consoleJanitor.settings.disableLoggers"),
         default: false,
         restartNeeded: true
     },
     disableSpotifyLogger: {
         type: OptionType.BOOLEAN,
-        description: t("consoleJanitor.settings.disableSpotifyLogger"),
+        description: t("vencord.consoleJanitor.settings.disableSpotifyLogger"),
         default: true,
         restartNeeded: true
     },
     whitelistedLoggers: {
         type: OptionType.STRING,
-        description: t("consoleJanitor.settings.whitelistedLoggers"),
+        description: t("vencord.consoleJanitor.settings.whitelistedLoggers"),
         default: "GatewaySocket; Routing/Utils",
         multiline: true,
         onChange(newVal: string) {
@@ -108,7 +108,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "ConsoleJanitor",
-    description: t("consoleJanitor.description"),
+    description: t("vencord.consoleJanitor.description"),
     authors: [Devs.Nuckyz, Devs.sadan],
     settings,
 

@@ -33,7 +33,7 @@ import { Button, Parser, Select, useMemo, useState } from "@webpack/common";
 
 const settings = definePluginSettings({
     replaceMessageContents: {
-        description: t("sendTimestamps.settings.replaceMessageContents"),
+        description: t("vencord.sendTimestamps.settings.replaceMessageContents"),
         type: OptionType.BOOLEAN,
         default: true,
     },
@@ -72,7 +72,7 @@ function PickerModal({ rootProps, close }: { rootProps: ModalProps, close(): voi
         <ModalRoot {...rootProps}>
             <ModalHeader className={cl("modal-header")}>
                 <HeadingPrimary className={cl("modal-title")}>
-                    {t("sendTimestamps.timestampPicker")}
+                    {t("vencord.sendTimestamps.timestampPicker")}
                 </HeadingPrimary>
 
                 <ModalCloseButton onClick={close} className={cl("modal-close-button")} />
@@ -89,7 +89,7 @@ function PickerModal({ rootProps, close }: { rootProps: ModalProps, close(): voi
                     }}
                 />
 
-                <Heading>{t("sendTimestamps.timestampFormat")}</Heading>
+                <Heading>{t("vencord.sendTimestamps.timestampFormat")}</Heading>
                 <div className={cl("format-select")}>
                     <Select
                         options={
@@ -110,7 +110,7 @@ function PickerModal({ rootProps, close }: { rootProps: ModalProps, close(): voi
                     />
                 </div>
 
-                <Heading className={Margins.bottom8}>{t("sendTimestamps.preview")}</Heading>
+                <Heading className={Margins.bottom8}>{t("vencord.sendTimestamps.preview")}</Heading>
                 <Paragraph className={cl("preview-text")}>
                     {rendered} ({formatted})
                 </Paragraph>
@@ -122,7 +122,7 @@ function PickerModal({ rootProps, close }: { rootProps: ModalProps, close(): voi
                         insertTextIntoChatInputBox(formatted + " ");
                         close();
                     }}
-                >{t("sendTimestamps.insert")}</Button>
+                >{t("vencord.sendTimestamps.insert")}</Button>
             </ModalFooter>
         </ModalRoot>
     );
@@ -152,7 +152,7 @@ const SendTimestampButton: ChatBarButtonFactory = ({ isAnyChat }) => {
 
     return (
         <ChatBarButton
-            tooltip={t("sendTimestamps.insertTimestamp")}
+            tooltip={t("vencord.sendTimestamps.insertTimestamp")}
             onClick={() => {
                 const key = openModal(props => (
                     <PickerModal
@@ -170,7 +170,7 @@ const SendTimestampButton: ChatBarButtonFactory = ({ isAnyChat }) => {
 
 export default definePlugin({
     name: "SendTimestamps",
-    description: t("sendTimestamps.description"),
+    description: t("vencord.sendTimestamps.description"),
     authors: [Devs.Ven, Devs.Tyler, Devs.Grzesiek11],
     settings,
 
@@ -198,13 +198,13 @@ export default definePlugin({
         return (
             <>
                 <Paragraph>
-                    {t("sendTimestamps.extendedDescription.quickSend")}
+                    {t("vencord.sendTimestamps.extendedDescription.quickSend")}
                 </Paragraph>
                 <Paragraph>
-                    {t("sendTimestamps.extendedDescription.seeBelow")}
+                    {t("vencord.sendTimestamps.extendedDescription.seeBelow")}
                 </Paragraph>
                 <Paragraph>
-                    {t("sendTimestamps.extendedDescription.examples")}
+                    {t("vencord.sendTimestamps.extendedDescription.examples")}
                     <ul>
                         {samples.map(s => (
                             <li key={s}>

@@ -59,17 +59,17 @@ export const TranslateChatBarIcon: ChatBarButtonFactory = ({ isMainChat }) => {
         settings.store.autoTranslate = newState;
         if (newState && settings.store.showAutoTranslateAlert !== false)
             Alerts.show({
-                title: t("translate.autoTranslateEnabled.title"),
+                title: t("vencord.translate.autoTranslateEnabled.title"),
                 body: <>
                     <Paragraph>
-                        <Translate i18nKey="translate.autoTranslateEnabled.body">
+                        <Translate i18nKey="vencord.translate.autoTranslateEnabled.body">
                             You just enabled Auto Translate! Any message <b>will automatically be translated</b> before being sent.
                         </Translate>
                     </Paragraph>
                 </>,
-                confirmText: t("translate.disableAutoTranslate"),
-                cancelText: t("translate.gotIt"),
-                secondaryConfirmText: t("translate.dontShowAgain"),
+                confirmText: t("vencord.translate.disableAutoTranslate"),
+                cancelText: t("vencord.translate.gotIt"),
+                secondaryConfirmText: t("vencord.translate.dontShowAgain"),
                 onConfirmSecondary: () => settings.store.showAutoTranslateAlert = false,
                 onConfirm: () => settings.store.autoTranslate = false,
                 // troll
@@ -79,7 +79,7 @@ export const TranslateChatBarIcon: ChatBarButtonFactory = ({ isMainChat }) => {
 
     const button = (
         <ChatBarButton
-            tooltip={t("translate.openTranslateModal")}
+            tooltip={t("vencord.translate.openTranslateModal")}
             onClick={e => {
                 if (e.shiftKey) return toggle();
 
@@ -98,7 +98,7 @@ export const TranslateChatBarIcon: ChatBarButtonFactory = ({ isMainChat }) => {
 
     if (shouldShowTranslateEnabledTooltip && settings.store.showAutoTranslateTooltip)
         return (
-            <Tooltip text={t("translate.autoTranslateEnabled")} forceOpen>
+            <Tooltip text={t("vencord.translate.autoTranslateEnabled")} forceOpen>
                 {() => button}
             </Tooltip>
         );

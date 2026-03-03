@@ -38,7 +38,7 @@ interface SelectOption<T> {
 }
 
 const makeValidator = (maxLength: number, isRequired = false) => (value: string) => {
-    if (isRequired && !value) return t("customRPC.validation.required");
+    if (isRequired && !value) return t("vencord.customRPC.validation.required");
     if (value.length > maxLength) return t("customRPC.validation.maxLength", { length: maxLength });
     return true;
 };
@@ -46,7 +46,7 @@ const makeValidator = (maxLength: number, isRequired = false) => (value: string)
 const maxLength128 = makeValidator(128);
 
 function isAppIdValid(value: string) {
-    if (!/^\d{16,21}$/.test(value)) return t("customRPC.validation.discordId");
+    if (!/^\d{16,21}$/.test(value)) return t("vencord.customRPC.validation.discordId");
     return true;
 }
 
@@ -60,8 +60,8 @@ function isStreamLinkDisabled() {
 }
 
 function isStreamLinkValid(value: string) {
-    if (!isStreamLinkDisabled() && !/https?:\/\/(www\.)?(twitch\.tv|youtube\.com)\/\w+/.test(value)) return t("customRPC.validation.streamingLink");
-    if (value && value.length > 512) return t("customRPC.validation.streamingLinkLength");
+    if (!isStreamLinkDisabled() && !/https?:\/\/(www\.)?(twitch\.tv|youtube\.com)\/\w+/.test(value)) return t("vencord.customRPC.validation.streamingLink");
+    if (value && value.length > 512) return t("vencord.customRPC.validation.streamingLinkLength");
     return true;
 }
 
@@ -70,20 +70,20 @@ function parseNumber(value: string) {
 }
 
 function isNumberValid(value: number) {
-    if (isNaN(value)) return t("customRPC.validation.number");
-    if (value < 0) return t("customRPC.validation.positiveNumber");
+    if (isNaN(value)) return t("vencord.customRPC.validation.number");
+    if (value < 0) return t("vencord.customRPC.validation.positiveNumber");
     return true;
 }
 
 function isUrlValid(value: string) {
-    if (value && !/^https?:\/\/.+/.test(value)) return t("customRPC.validation.url");
+    if (value && !/^https?:\/\/.+/.test(value)) return t("vencord.customRPC.validation.url");
     return true;
 }
 
 function isImageKeyValid(value: string) {
-    if (/https?:\/\/(cdn|media)\.discordapp\.(com|net)\//.test(value)) return t("customRPC.validation.discordLink");
-    if (/https?:\/\/(?!i\.)?imgur\.com\//.test(value)) return t("customRPC.validation.imgurDirect");
-    if (/https?:\/\/(?!media\.)?tenor\.com\//.test(value)) return t("customRPC.validation.tenorDirect");
+    if (/https?:\/\/(cdn|media)\.discordapp\.(com|net)\//.test(value)) return t("vencord.customRPC.validation.discordLink");
+    if (/https?:\/\/(?!i\.)?imgur\.com\//.test(value)) return t("vencord.customRPC.validation.imgurDirect");
+    if (/https?:\/\/(?!media\.)?tenor\.com\//.test(value)) return t("vencord.customRPC.validation.tenorDirect");
     return true;
 }
 
@@ -121,7 +121,7 @@ function SingleSetting<T>({ settingsKey, label, disabled, isValid, transform }: 
             <Heading tag="h5">{label}</Heading>
             <TextInput
                 type="text"
-                placeholder={t("customRPC.placeholder.enterValue")}
+                placeholder={t("vencord.customRPC.placeholder.enterValue")}
                 value={state}
                 onChange={handleChange}
                 disabled={disabled}
@@ -136,7 +136,7 @@ function SelectSetting<T>({ settingsKey, label, options, disabled }: SelectOptio
         <div className={cl("single", { disabled })}>
             <Heading tag="h5">{label}</Heading>
             <Select
-                placeholder={t("customRPC.placeholder.selectOption")}
+                placeholder={t("vencord.customRPC.placeholder.selectOption")}
                 options={options}
                 maxVisibleItems={5}
                 closeOnSelect={true}
@@ -156,50 +156,50 @@ export function RPCSettings() {
         <div className={cl("root")}>
             <SelectSetting
                 settingsKey="type"
-                label={t("customRPC.activityType")}
+                label={t("vencord.customRPC.activityType")}
                 options={[
                     {
-                        label: t("customRPC.activityTypes.playing"),
+                        label: t("vencord.customRPC.activityTypes.playing"),
                         value: ActivityType.PLAYING,
                         default: true
                     },
                     {
-                        label: t("customRPC.activityTypes.streaming"),
+                        label: t("vencord.customRPC.activityTypes.streaming"),
                         value: ActivityType.STREAMING
                     },
                     {
-                        label: t("customRPC.activityTypes.listening"),
+                        label: t("vencord.customRPC.activityTypes.listening"),
                         value: ActivityType.LISTENING
                     },
                     {
-                        label: t("customRPC.activityTypes.watching"),
+                        label: t("vencord.customRPC.activityTypes.watching"),
                         value: ActivityType.WATCHING
                     },
                     {
-                        label: t("customRPC.activityTypes.competing"),
+                        label: t("vencord.customRPC.activityTypes.competing"),
                         value: ActivityType.COMPETING
                     }
                 ]}
             />
 
             <PairSetting data={[
-                { settingsKey: "appID", label: t("customRPC.appId"), isValid: isAppIdValid },
-                { settingsKey: "appName", label: t("customRPC.appName"), isValid: makeValidator(128, true) },
+                { settingsKey: "appID", label: t("vencord.customRPC.appId"), isValid: isAppIdValid },
+                { settingsKey: "appName", label: t("vencord.customRPC.appName"), isValid: makeValidator(128, true) },
             ]} />
 
             <PairSetting data={[
-                { settingsKey: "details", label: t("customRPC.detailLine1"), isValid: maxLength128 },
-                { settingsKey: "detailsURL", label: t("customRPC.detailUrl"), isValid: isUrlValid },
+                { settingsKey: "details", label: t("vencord.customRPC.detailLine1"), isValid: maxLength128 },
+                { settingsKey: "detailsURL", label: t("vencord.customRPC.detailUrl"), isValid: isUrlValid },
             ]} />
 
             <PairSetting data={[
-                { settingsKey: "state", label: t("customRPC.stateLine2"), isValid: maxLength128 },
-                { settingsKey: "stateURL", label: t("customRPC.stateUrl"), isValid: isUrlValid },
+                { settingsKey: "state", label: t("vencord.customRPC.stateLine2"), isValid: maxLength128 },
+                { settingsKey: "stateURL", label: t("vencord.customRPC.stateUrl"), isValid: isUrlValid },
             ]} />
 
             <SingleSetting
                 settingsKey="streamLink"
-                label={t("customRPC.streamLink")}
+                label={t("vencord.customRPC.streamLink")}
                 disabled={s.type !== ActivityType.STREAMING}
                 isValid={isStreamLinkValid}
             />
@@ -207,14 +207,14 @@ export function RPCSettings() {
             <PairSetting data={[
                 {
                     settingsKey: "partySize",
-                    label: t("customRPC.partySize"),
+                    label: t("vencord.customRPC.partySize"),
                     transform: parseNumber,
                     isValid: isNumberValid,
                     disabled: s.type !== ActivityType.PLAYING,
                 },
                 {
                     settingsKey: "partyMaxSize",
-                    label: t("customRPC.partyMaxSize"),
+                    label: t("vencord.customRPC.partyMaxSize"),
                     transform: parseNumber,
                     isValid: isNumberValid,
                     disabled: s.type !== ActivityType.PLAYING,
@@ -224,49 +224,49 @@ export function RPCSettings() {
             <Divider />
 
             <PairSetting data={[
-                { settingsKey: "imageBig", label: t("customRPC.largeImageUrl"), isValid: isImageKeyValid },
-                { settingsKey: "imageBigTooltip", label: t("customRPC.largeImageText"), isValid: maxLength128 },
+                { settingsKey: "imageBig", label: t("vencord.customRPC.largeImageUrl"), isValid: isImageKeyValid },
+                { settingsKey: "imageBigTooltip", label: t("vencord.customRPC.largeImageText"), isValid: maxLength128 },
             ]} />
-            <SingleSetting settingsKey="imageBigURL" label={t("customRPC.largeImageClickUrl")} isValid={isUrlValid} />
+            <SingleSetting settingsKey="imageBigURL" label={t("vencord.customRPC.largeImageClickUrl")} isValid={isUrlValid} />
 
             <PairSetting data={[
-                { settingsKey: "imageSmall", label: t("customRPC.smallImageUrl"), isValid: isImageKeyValid },
-                { settingsKey: "imageSmallTooltip", label: t("customRPC.smallImageText"), isValid: maxLength128 },
+                { settingsKey: "imageSmall", label: t("vencord.customRPC.smallImageUrl"), isValid: isImageKeyValid },
+                { settingsKey: "imageSmallTooltip", label: t("vencord.customRPC.smallImageText"), isValid: maxLength128 },
             ]} />
-            <SingleSetting settingsKey="imageSmallURL" label={t("customRPC.smallImageClickUrl")} isValid={isUrlValid} />
+            <SingleSetting settingsKey="imageSmallURL" label={t("vencord.customRPC.smallImageClickUrl")} isValid={isUrlValid} />
 
             <Divider />
 
             <PairSetting data={[
-                { settingsKey: "buttonOneText", label: t("customRPC.button1Text"), isValid: makeValidator(31) },
-                { settingsKey: "buttonOneURL", label: t("customRPC.button1Url"), isValid: isUrlValid },
+                { settingsKey: "buttonOneText", label: t("vencord.customRPC.button1Text"), isValid: makeValidator(31) },
+                { settingsKey: "buttonOneURL", label: t("vencord.customRPC.button1Url"), isValid: isUrlValid },
             ]} />
             <PairSetting data={[
-                { settingsKey: "buttonTwoText", label: t("customRPC.button2Text"), isValid: makeValidator(31) },
-                { settingsKey: "buttonTwoURL", label: t("customRPC.button2Url"), isValid: isUrlValid },
+                { settingsKey: "buttonTwoText", label: t("vencord.customRPC.button2Text"), isValid: makeValidator(31) },
+                { settingsKey: "buttonTwoURL", label: t("vencord.customRPC.button2Url"), isValid: isUrlValid },
             ]} />
 
             <Divider />
 
             <SelectSetting
                 settingsKey="timestampMode"
-                label={t("customRPC.timestampMode")}
+                label={t("vencord.customRPC.timestampMode")}
                 options={[
                     {
-                        label: t("customRPC.timestampModes.none"),
+                        label: t("vencord.customRPC.timestampModes.none"),
                         value: TimestampMode.NONE,
                         default: true
                     },
                     {
-                        label: t("customRPC.timestampModes.sinceOpen"),
+                        label: t("vencord.customRPC.timestampModes.sinceOpen"),
                         value: TimestampMode.NOW
                     },
                     {
-                        label: t("customRPC.timestampModes.currentTime"),
+                        label: t("vencord.customRPC.timestampModes.currentTime"),
                         value: TimestampMode.TIME
                     },
                     {
-                        label: t("customRPC.timestampModes.custom"),
+                        label: t("vencord.customRPC.timestampModes.custom"),
                         value: TimestampMode.CUSTOM
                     }
                 ]}
@@ -275,14 +275,14 @@ export function RPCSettings() {
             <PairSetting data={[
                 {
                     settingsKey: "startTime",
-                    label: t("customRPC.startTimestamp"),
+                    label: t("vencord.customRPC.startTimestamp"),
                     transform: parseNumber,
                     isValid: isNumberValid,
                     disabled: s.timestampMode !== TimestampMode.CUSTOM,
                 },
                 {
                     settingsKey: "endTime",
-                    label: t("customRPC.endTimestamp"),
+                    label: t("vencord.customRPC.endTimestamp"),
                     transform: parseNumber,
                     isValid: isNumberValid,
                     disabled: s.timestampMode !== TimestampMode.CUSTOM,

@@ -22,7 +22,7 @@ function ReasonsComponent() {
 
     return (
         <section>
-            <Heading>{t("betterBanReasons.ui.reasons")}</Heading>
+            <Heading>{t("equicord.betterBanReasons.ui.reasons")}</Heading>
             {reasons.map((r, i) => (
                 <div
                     key={i}
@@ -34,7 +34,7 @@ function ReasonsComponent() {
                             reasons[i] = v;
                             settings.store.reasons = reasons;
                         }}
-                        placeholder={t("betterBanReasons.ui.reasonPlaceholder")}
+                        placeholder={t("equicord.betterBanReasons.ui.reasonPlaceholder")}
                     />
                     <Button
                         className={cl("remove-button")}
@@ -52,7 +52,7 @@ function ReasonsComponent() {
             ))}
             <div className={cl("reason-wrapper")}>
                 <Button onClick={() => settings.store.reasons.push("")} className={cl("add-button")} size={Button.Sizes.LARGE} color={Button.Colors.TRANSPARENT}>
-                    <PlusIcon /> {t("betterBanReasons.ui.addAnotherReason")}
+                    <PlusIcon /> {t("equicord.betterBanReasons.ui.addAnotherReason")}
                 </Button>
             </div>
         </section>
@@ -61,20 +61,20 @@ function ReasonsComponent() {
 
 const settings = definePluginSettings({
     reasons: {
-        description: t("betterBanReasons.settings.reasons"),
+        description: t("equicord.betterBanReasons.settings.reasons"),
         type: OptionType.COMPONENT,
         default: [] as string[],
         component: ReasonsComponent,
     },
     isTextInputDefault: {
         type: OptionType.BOOLEAN,
-        description: t("betterBanReasons.settings.isTextInputDefault")
+        description: t("equicord.betterBanReasons.settings.isTextInputDefault")
     }
 });
 
 export default definePlugin({
     name: "BetterBanReasons",
-    description: t("betterBanReasons.description"),
+    description: t("equicord.betterBanReasons.description"),
     authors: [Devs.Inbestigator],
     patches: [
         {

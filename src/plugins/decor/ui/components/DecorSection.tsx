@@ -31,7 +31,7 @@ export default function DecorSection({ hideTitle = false, hideDivider = false, n
     }, [authorization.token]);
 
     return <CustomizationSection
-        title={!hideTitle && t("decor.title")}
+        title={!hideTitle && t("vencord.decor.title")}
         hasBackground={true}
         hideDivider={hideDivider}
         className={noMargin && cl("section-remove-margin")}
@@ -46,14 +46,14 @@ export default function DecorSection({ hideTitle = false, hideDivider = false, n
                 variant="primary"
                 size="small"
             >
-                {t("decor.changeDecoration")}
+                {t("vencord.decor.changeDecoration")}
             </Button>
             {selectedDecoration && authorization.isAuthorized() && <Button
                 onClick={() => selectDecoration(null)}
                 variant="secondary"
                 size={"small"}
             >
-                {t("decor.removeDecoration")}
+                {t("vencord.decor.removeDecoration")}
             </Button>}
         </Flex>
     </CustomizationSection>;

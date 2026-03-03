@@ -199,7 +199,7 @@ async function doClone(guildId: string, data: Sticker | Emoji) {
             id: Toasts.genId()
         });
     } catch (e: any) {
-        let message = t("expressionCloner.somethingWentWrong");
+        let message = t("vencord.expressionCloner.somethingWentWrong");
         try {
             message = JSON.parse(e.text).message;
         } catch { }
@@ -231,7 +231,7 @@ function CloneModal({ data }: { data: Sticker | Emoji; }) {
 
     return (
         <>
-            <Heading className={Margins.top20}>{t("expressionCloner.customName")}</Heading>
+            <Heading className={Margins.top20}>{t("vencord.expressionCloner.customName")}</Heading>
             <CheckedTextInput
                 value={name}
                 onChange={v => {
@@ -241,7 +241,7 @@ function CloneModal({ data }: { data: Sticker | Emoji; }) {
                 validate={v =>
                     (data.t === "Emoji" && v.length > 2 && v.length < 32 && nameValidator.test(v))
                     || (data.t === "Sticker" && v.length > 2 && v.length < 30)
-                    || t("expressionCloner.nameValidation")
+                    || t("vencord.expressionCloner.nameValidation")
                 }
             />
             <div style={{
@@ -324,7 +324,7 @@ function buildMenuItem(type: "Emoji" | "Sticker", fetchData: () => Promisable<Om
         <Menu.MenuItem
             id="emote-cloner"
             key="emote-cloner"
-            label={type === "Emoji" ? t("expressionCloner.cloneEmoji") : t("expressionCloner.cloneSticker")}
+            label={type === "Emoji" ? t("vencord.expressionCloner.cloneEmoji") : t("vencord.expressionCloner.cloneSticker")}
             action={() =>
                 openModalLazy(async () => {
                     const res = await fetchData();

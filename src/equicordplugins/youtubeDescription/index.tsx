@@ -15,7 +15,7 @@ interface ToggleableDescriptionProps { embed: Embed, original: () => any; }
 
 export default definePlugin({
     name: "YoutubeDescription",
-    description: t("youtubeDescription.description"),
+    description: t("equicord.youtubeDescription.description"),
     authors: [Devs.arHSM],
     patches: [
         {

@@ -47,7 +47,7 @@ const userContextMenuPatch: NavContextMenuPatchCallback = (children, { user }: {
 
     const setCustomColorItem = (
         <Menu.MenuItem
-            label={t("customUserColors.contextMenu.setColor")}
+            label={t("equicord.customUserColors.contextMenu.setColor")}
             id="set-color"
             icon={ColorIcon}
             action={async () => {
@@ -65,7 +65,7 @@ const channelContextMenuPatch: NavContextMenuPatchCallback = (children, { channe
 
     const setCustomColorItem = (
         <Menu.MenuItem
-            label={t("customUserColors.contextMenu.setColor")}
+            label={t("equicord.customUserColors.contextMenu.setColor")}
             id="set-color"
             icon={ColorIcon}
             action={async () => {
@@ -88,19 +88,19 @@ export function getCustomColorString(id: string | undefined, withHash?: boolean)
 const settings = definePluginSettings({
     dmList: {
         type: OptionType.BOOLEAN,
-        description: t("customUserColors.settings.dmList"),
+        description: t("equicord.customUserColors.settings.dmList"),
         default: true,
     },
     colorInServers: {
         type: OptionType.BOOLEAN,
-        description: t("customUserColors.settings.colorInServers"),
+        description: t("equicord.customUserColors.settings.colorInServers"),
         default: true,
     }
 });
 
 export default definePlugin({
     name: "CustomUserColors",
-    description: t("customUserColors.description"),
+    description: t("equicord.customUserColors.description"),
     authors: [EquicordDevs.mochienya],
     contextMenus: {
         "user-context": userContextMenuPatch,

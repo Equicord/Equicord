@@ -1,2165 +1,2165 @@
 {
-    "accountPanelServerProfile":{
-        "description":"右键单击左下角您的帐户面板可以查看您在当前服务器中的个人资料",
-        "prioritizeServerProfile":"优先考虑服务器配置文件",
-        "prioritizeServerProfileDescription":"左键单击帐户面板时优先考虑服务器配置文件",
-        "viewAccountProfile":"查看帐户资料",
-        "viewServerProfile":"查看服务器配置文件"
+    "accountPanelServerProfile": {
+        "description": "右键单击左下角您的帐户面板可以查看您在当前服务器中的个人资料",
+        "prioritizeServerProfile": "优先考虑服务器配置文件",
+        "prioritizeServerProfileDescription": "左键单击帐户面板时优先考虑服务器配置文件",
+        "viewAccountProfile": "查看帐户资料",
+        "viewServerProfile": "查看服务器配置文件"
     },
-    "addonCard":{
-        "new":"新的"
+    "addonCard": {
+        "new": "新的"
     },
-    "alwaysAnimate":{
-        "description":"为任何可以动画化的东西制作动画",
-        "settings":{
-            "icons":"始终为服务器图标、头像、装饰等设置动画",
-            "nameplates":"始终为铭牌制作动画",
-            "roleGradients":"始终为角色渐变设置动画",
-            "serverBanners":"始终为服务器横幅设置动画",
-            "statusEmojis":"始终为状态表情符号添加动画"
+    "alwaysAnimate": {
+        "description": "为任何可以动画化的东西制作动画",
+        "settings": {
+            "icons": "始终为服务器图标、头像、装饰等设置动画",
+            "nameplates": "始终为铭牌制作动画",
+            "roleGradients": "始终为角色渐变设置动画",
+            "serverBanners": "始终为服务器横幅设置动画",
+            "statusEmojis": "始终为状态表情符号添加动画"
         }
     },
-    "alwaysExpandRoles":{
-        "description":"始终扩展个人资料弹出窗口中的角色列表",
-        "settings":{
-            "hideArrow":"隐藏箭头"
+    "alwaysExpandRoles": {
+        "description": "始终扩展个人资料弹出窗口中的角色列表",
+        "settings": {
+            "hideArrow": "隐藏箭头"
         }
     },
-    "alwaysTrust":{
-        "description":"删除烦人的不受信任域和可疑文件弹出窗口",
-        "settings":{
-            "confirmModal":"是否应该显示“您确定要删除”模式吗？",
-            "domain":"删除打开链接时的不受信任域弹出窗口",
-            "file":"删除打开链接时的“潜在危险下载”弹出窗口",
-            "noDeleteSafety":"删除删除服务器时删除输入服务器名称的要求"
+    "alwaysTrust": {
+        "description": "删除烦人的不受信任域和可疑文件弹出窗口",
+        "settings": {
+            "confirmModal": "是否应该显示“您确定要删除”模式吗？",
+            "domain": "删除打开链接时的不受信任域弹出窗口",
+            "file": "删除打开链接时的“潜在危险下载”弹出窗口",
+            "noDeleteSafety": "删除删除服务器时删除输入服务器名称的要求"
         },
-        "ui":{
-            "deleteServerBody":"如果这不是很明显的话，它是永久性的。",
-            "deleteServerConfirm":"删除",
-            "deleteServerTitle":"删除服务器？"
+        "ui": {
+            "deleteServerBody": "如果这不是很明显的话，它是永久性的。",
+            "deleteServerConfirm": "删除",
+            "deleteServerTitle": "删除服务器？"
         }
     },
-    "anonymiseFileNames":{
-        "commands":{
-            "spoiler":{
-                "description":"切换你的剧透",
-                "disabled":"剧透已禁用！",
-                "enabled":"剧透已启用！",
-                "name":"剧透",
-                "optionDescription":"切换剧透（默认为切换）",
-                "optionName":"价值"
+    "anonymiseFileNames": {
+        "commands": {
+            "spoiler": {
+                "description": "切换你的剧透",
+                "disabled": "剧透已禁用！",
+                "enabled": "剧透已启用！",
+                "name": "剧透",
+                "optionDescription": "切换剧透（默认为切换）",
+                "optionName": "价值"
             }
         },
-        "description":"匿名上传的文件名",
-        "methods":{
-            "consistent":"持续的",
-            "random":"随机字符",
-            "timestamp":"时间戳"
+        "description": "匿名上传的文件名",
+        "methods": {
+            "consistent": "持续的",
+            "random": "随机字符",
+            "timestamp": "时间戳"
         },
-        "settings":{
-            "anonymiseByDefault":"默认是否对文件名进行匿名化",
-            "consistent":"一致的文件名",
-            "method":"匿名方式",
-            "randomisedLength":"随机字符长度",
-            "spoilerMessages":"剧透消息"
+        "settings": {
+            "anonymiseByDefault": "默认是否对文件名进行匿名化",
+            "consistent": "一致的文件名",
+            "method": "匿名方式",
+            "randomisedLength": "随机字符长度",
+            "spoilerMessages": "剧透消息"
         },
-        "usingAnonymous":"使用匿名文件名",
-        "usingNormal":"使用普通文件名"
+        "usingAnonymous": "使用匿名文件名",
+        "usingNormal": "使用普通文件名"
     },
-    "appleMusicRichPresence":{
-        "activityTypes":{
-            "listening":"听力",
-            "playing":"演奏"
+    "appleMusicRichPresence": {
+        "activityTypes": {
+            "listening": "听力",
+            "playing": "演奏"
         },
-        "assetImageTypes":{
-            "album":"专辑封面",
-            "artist":"艺术家艺术品",
-            "disabled":"关闭"
+        "assetImageTypes": {
+            "album": "专辑封面",
+            "artist": "艺术家艺术品",
+            "disabled": "关闭"
         },
-        "buttons":{
-            "listenOnAppleMusic":"在 Apple Music 上收听",
-            "viewOnSongLink":"在 SongLink 上查看"
+        "buttons": {
+            "listenOnAppleMusic": "在 Apple Music 上收听",
+            "viewOnSongLink": "在 SongLink 上查看"
         },
-        "defaultDetails":"{name}",
-        "defaultLargeText":"{album}",
-        "defaultName":"苹果音乐",
-        "defaultSmallText":"{artist}",
-        "defaultState":"{artist}·{album}",
-        "description":"Discord 让您的 Apple Music 更加丰富！",
-        "name":"AppleMusicRichPresence",
-        "settings":{
-            "activityType":"哪种类型的活动",
-            "detailsString":"活动详细信息格式字符串",
-            "enableButtons":"是否启用按钮",
-            "enableTimestamps":"是否启用时间戳",
-            "largeImageType":"活动资产大图类型",
-            "largeTextString":"活动资产大文本格式字符串",
-            "nameString":"活动名称格式字符串",
-            "refreshInterval":"活动刷新间隔（秒）",
-            "smallImageType":"活动资产小图型",
-            "smallTextString":"活动资产小文本格式字符串",
-            "stateString":"活动状态格式字符串",
-            "statusDisplayType":"在成员列表中显示曲目/艺术家姓名"
+        "defaultDetails": "{name}",
+        "defaultLargeText": "{album}",
+        "defaultName": "苹果音乐",
+        "defaultSmallText": "{artist}",
+        "defaultState": "{artist}·{album}",
+        "description": "Discord 让您的 Apple Music 更加丰富！",
+        "name": "AppleMusicRichPresence",
+        "settings": {
+            "activityType": "哪种类型的活动",
+            "detailsString": "活动详细信息格式字符串",
+            "enableButtons": "是否启用按钮",
+            "enableTimestamps": "是否启用时间戳",
+            "largeImageType": "活动资产大图类型",
+            "largeTextString": "活动资产大文本格式字符串",
+            "nameString": "活动名称格式字符串",
+            "refreshInterval": "活动刷新间隔（秒）",
+            "smallImageType": "活动资产小图型",
+            "smallTextString": "活动资产小文本格式字符串",
+            "stateString": "活动状态格式字符串",
+            "statusDisplayType": "在成员列表中显示曲目/艺术家姓名"
         },
-        "settingsAbout":{
-            "albumPlaceholder":"{album} 被替换为专辑名称。",
-            "artistPlaceholder":"{artist} 替换为艺术家姓名",
-            "intro":"对于可自定义的活动格式字符串，您可以使用几个特殊字符串在活动中包含跟踪数据！",
-            "namePlaceholder":"{name} 替换为曲目名称"
+        "settingsAbout": {
+            "albumPlaceholder": "{album} 被替换为专辑名称。",
+            "artistPlaceholder": "{artist} 替换为艺术家姓名",
+            "intro": "对于可自定义的活动格式字符串，您可以使用几个特殊字符串在活动中包含跟踪数据！",
+            "namePlaceholder": "{name} 替换为曲目名称"
         },
-        "statusDisplayTypes":{
-            "artist":"显示艺术家姓名",
-            "off":"不显示（显示一般监听消息）",
-            "track":"显示曲目名称"
+        "statusDisplayTypes": {
+            "artist": "显示艺术家姓名",
+            "off": "不显示（显示一般监听消息）",
+            "track": "显示曲目名称"
         }
     },
-    "arRPC":{
-        "connected":"连接到arRPC",
-        "connectionFailed":"无法连接到 arRPC，它是否正在运行？",
-        "retry":"重试",
-        "settingsAbout":{
-            "description":"按照 GitHub 存储库中的说明运行服务器，然后启用插件。",
-            "title":"如何使用arRPC"
+    "arRPC": {
+        "connected": "连接到arRPC",
+        "connectionFailed": "无法连接到 arRPC，它是否正在运行？",
+        "retry": "重试",
+        "settingsAbout": {
+            "description": "按照 GitHub 存储库中的说明运行服务器，然后启用插件。",
+            "title": "如何使用arRPC"
         }
     },
-    "autoDndWhilePlaying":{
-        "description":"启动游戏时自动更新您的在线状态（在线、空闲、免打扰）",
-        "settings":{
-            "excludeInvisible":"当您的状态设置为不可见时，防止自动状态更改",
-            "statusToSet":"玩游戏时设置的状态"
+    "autoDndWhilePlaying": {
+        "description": "启动游戏时自动更新您的在线状态（在线、空闲、免打扰）",
+        "settings": {
+            "excludeInvisible": "当您的状态设置为不可见时，防止自动状态更改",
+            "statusToSet": "玩游戏时设置的状态"
         },
-        "statusOptions":{
-            "dnd":"请勿打扰",
-            "idle":"闲置",
-            "invisible":"隐身",
-            "online":"在线"
+        "statusOptions": {
+            "dnd": "请勿打扰",
+            "idle": "闲置",
+            "invisible": "隐身",
+            "online": "在线"
         }
     },
-    "badgeAPI":{
-        "description":"API 为用户添加徽章"
+    "badgeAPI": {
+        "description": "API 为用户添加徽章"
     },
-    "betterFolders":{
-        "settings":{
-            "closeAllFolders":"选择不在文件夹中的服务器时关闭所有文件夹",
-            "closeAllHomeButton":"单击主页按钮时关闭所有文件夹",
-            "closeOthers":"打开文件夹时关闭其他文件夹",
-            "closeServerFolder":"在该文件夹中选择服务器时关闭该文件夹",
-            "folderIconAlways":"总是",
-            "folderIconMultipleExpanded":"当展开多个文件夹时",
-            "folderIconNever":"永不",
-            "forceOpen":"切换到该文件夹的服务器时强制打开该文件夹",
-            "keepIcons":"当主公会栏文件夹在 BetterFolders 侧边栏中打开时，继续在主公会栏文件夹中显示公会图标",
-            "showFolderIcon":"在 BetterFolders 侧边栏中的文件夹行会上方显示文件夹图标",
-            "sidebar":"在专用侧边栏上显示文件夹中的服务器",
-            "sidebarAnim":"打开文件夹侧边栏的动画"
+    "betterFolders": {
+        "settings": {
+            "closeAllFolders": "选择不在文件夹中的服务器时关闭所有文件夹",
+            "closeAllHomeButton": "单击主页按钮时关闭所有文件夹",
+            "closeOthers": "打开文件夹时关闭其他文件夹",
+            "closeServerFolder": "在该文件夹中选择服务器时关闭该文件夹",
+            "folderIconAlways": "总是",
+            "folderIconMultipleExpanded": "当展开多个文件夹时",
+            "folderIconNever": "永不",
+            "forceOpen": "切换到该文件夹的服务器时强制打开该文件夹",
+            "keepIcons": "当主公会栏文件夹在 BetterFolders 侧边栏中打开时，继续在主公会栏文件夹中显示公会图标",
+            "showFolderIcon": "在 BetterFolders 侧边栏中的文件夹行会上方显示文件夹图标",
+            "sidebar": "在专用侧边栏上显示文件夹中的服务器",
+            "sidebarAnim": "打开文件夹侧边栏的动画"
         }
     },
-    "betterGifAltText":{
-        "description":"将 GIF 替代文本从简单的“GIF”更改为包含 gif 标签/文件名"
+    "betterGifAltText": {
+        "description": "将 GIF 替代文本从简单的“GIF”更改为包含 gif 标签/文件名"
     },
-    "betterGifPicker":{
-        "description":"使 gif 选择器默认打开最喜欢的类别",
-        "settings":{
-            "keepOpen":"选择 gif 后保持 gif 选择器打开"
+    "betterGifPicker": {
+        "description": "使 gif 选择器默认打开最喜欢的类别",
+        "settings": {
+            "keepOpen": "选择 gif 后保持 gif 选择器打开"
         }
     },
-    "betterNotesBox":{
-        "description":"隐藏注释或禁用拼写检查（在设置中配置！！）",
-        "settings":{
-            "hide":"隐藏笔记",
-            "noSpellCheck":"禁用笔记中的拼写检查"
+    "betterNotesBox": {
+        "description": "隐藏注释或禁用拼写检查（在设置中配置！！）",
+        "settings": {
+            "hide": "隐藏笔记",
+            "noSpellCheck": "禁用笔记中的拼写检查"
         }
     },
-    "betterRoleContext":{
-        "copyRoleColor":"复制角色颜色",
-        "description":"添加右键单击用户配置文件中的角色时复制角色颜色/编辑角色/查看角色图标的选项",
-        "editRole":"编辑角色",
-        "name":"更好的角色环境",
-        "settings":{
-            "roleIconFileFormat":"查看角色图标时使用的文件格式"
+    "betterRoleContext": {
+        "copyRoleColor": "复制角色颜色",
+        "description": "添加右键单击用户配置文件中的角色时复制角色颜色/编辑角色/查看角色图标的选项",
+        "editRole": "编辑角色",
+        "name": "更好的角色环境",
+        "settings": {
+            "roleIconFileFormat": "查看角色图标时使用的文件格式"
         },
-        "viewRoleIcon":"查看角色图标"
+        "viewRoleIcon": "查看角色图标"
     },
-    "betterRoleDot":{
-        "description":"在 RoleDot（辅助功能设置）上单击复制角色颜色。还允许同时使用 RoleDot 和彩色名称",
-        "settings":{
-            "bothStyles":"显示角色点和彩色名称",
-            "copyRoleColorInProfilePopout":"允许单击配置文件弹出窗口中的角色点来复制角色颜色"
+    "betterRoleDot": {
+        "description": "在 RoleDot（辅助功能设置）上单击复制角色颜色。还允许同时使用 RoleDot 和彩色名称",
+        "settings": {
+            "bothStyles": "显示角色点和彩色名称",
+            "copyRoleColorInProfilePopout": "允许单击配置文件弹出窗口中的角色点来复制角色颜色"
         }
     },
-    "betterSessions":{
-        "newBadge":"新的",
-        "newSession":"新会话：",
-        "rename":"重命名",
-        "renameModal":{
-            "newDeviceName":"新设备名称",
-            "resetName":"重置名称",
-            "save":"保存",
-            "title":"重命名"
+    "betterSessions": {
+        "newBadge": "新的",
+        "newSession": "新会话：",
+        "rename": "重命名",
+        "renameModal": {
+            "newDeviceName": "新设备名称",
+            "resetName": "重置名称",
+            "save": "保存",
+            "title": "重命名"
         },
-        "settings":{
-            "backgroundCheck":"在后台检查新会话，并在检测到新会话时显示通知",
-            "checkInterval":"在后台检查新会话的频率（如果启用），以分钟为单位"
+        "settings": {
+            "backgroundCheck": "在后台检查新会话，并在检测到新会话时显示通知",
+            "checkInterval": "在后台检查新会话的频率（如果启用），以分钟为单位"
         }
     },
-    "betterSettings":{
-        "settings":{
-            "disableFade":"禁用交叉淡入淡出动画",
-            "eagerLoad":"消除了第一次打开菜单时的加载延迟",
-            "organizeMenu":"将设置齿轮上下文菜单组织成类别"
+    "betterSettings": {
+        "settings": {
+            "disableFade": "禁用交叉淡入淡出动画",
+            "eagerLoad": "消除了第一次打开菜单时的加载延迟",
+            "organizeMenu": "将设置齿轮上下文菜单组织成类别"
         }
     },
-    "betterUploadButton":{
-        "description":"单击上传，右键打开菜单"
+    "betterUploadButton": {
+        "description": "单击上传，右键打开菜单"
     },
-    "biggerStreamPreview":{
-        "description":"该插件允许您放大流预览",
-        "name":"更大的流预览",
-        "viewStreamPreview":"查看流预览"
+    "biggerStreamPreview": {
+        "description": "该插件允许您放大流预览",
+        "name": "更大的流预览",
+        "viewStreamPreview": "查看流预览"
     },
-    "blurNsfw":{
-        "description":"模糊 NSFW 频道中的附件直至悬停",
-        "settings":{
-            "blurAllChannels":"模糊所有频道中的附件（不仅仅是 NSFW）",
-            "blurAmount":"模糊量（以像素为单位）"
+    "blurNsfw": {
+        "description": "模糊 NSFW 频道中的附件直至悬停",
+        "settings": {
+            "blurAllChannels": "模糊所有频道中的附件（不仅仅是 NSFW）",
+            "blurAmount": "模糊量（以像素为单位）"
         }
     },
-    "callTimer":{
-        "description":"为语音通道和连接状态中的所有用户添加呼叫计时器。",
-        "settings":{
-            "allCallTimers":"为服务器语音通道中的所有用户添加呼叫计时器",
-            "format":"紧凑或人类可读的格式：",
-            "showRoleColor":"显示用户的角色颜色（如果启用此插件）",
-            "showSeconds":"在计时器中显示秒数",
-            "showWithoutHover":"始终显示计时器，无需悬停",
-            "trackSelf":"也追踪自己",
-            "watchLargeGuilds":"跟踪大型公会中的用户。如果您在许多拥有活跃语音用户的大型公会中，这可能会导致延迟。经过多达 2000 个主动语音用户的测试，没有出现任何问题。"
+    "callTimer": {
+        "description": "为语音通道和连接状态中的所有用户添加呼叫计时器。",
+        "settings": {
+            "allCallTimers": "为服务器语音通道中的所有用户添加呼叫计时器",
+            "format": "紧凑或人类可读的格式：",
+            "showRoleColor": "显示用户的角色颜色（如果启用此插件）",
+            "showSeconds": "在计时器中显示秒数",
+            "showWithoutHover": "始终显示计时器，无需悬停",
+            "trackSelf": "也追踪自己",
+            "watchLargeGuilds": "跟踪大型公会中的用户。如果您在许多拥有活跃语音用户的大型公会中，这可能会导致延迟。经过多达 2000 个主动语音用户的测试，没有出现任何问题。"
         }
     },
-    "cancel":"取消",
-    "chatInputButtonAPI":{
-        "description":"API 将按钮添加到聊天输入"
+    "cancel": "取消",
+    "chatInputButtonAPI": {
+        "description": "API 将按钮添加到聊天输入"
     },
-    "clearURLs":{
-        "description":"自动从您发送的网址中删除跟踪元素"
+    "clearURLs": {
+        "description": "自动从您发送的网址中删除跟踪元素"
     },
-    "clientTheme":{
-        "contrastWarning":"所选颜色与文本对比度不佳",
-        "disableNitroTheme":"禁用硝基主题",
-        "nitroNotSupported":"不支持 Nitro 主题",
-        "resetThemeColor":"重置主题颜色",
-        "switchToMode":"切换到{mode}模式",
-        "themeColor":"主题颜色",
-        "themeColorDescription":"为您的 Discord 客户端主题添加颜色",
-        "themeWontLookGood":"你的主题看起来不太好！"
+    "clientTheme": {
+        "contrastWarning": "所选颜色与文本对比度不佳",
+        "disableNitroTheme": "禁用硝基主题",
+        "nitroNotSupported": "不支持 Nitro 主题",
+        "resetThemeColor": "重置主题颜色",
+        "switchToMode": "切换到{mode}模式",
+        "themeColor": "主题颜色",
+        "themeColorDescription": "为您的 Discord 客户端主题添加颜色",
+        "themeWontLookGood": "你的主题看起来不太好！"
     },
-    "cloud":{
-        "integrations":{
-            "enabled":"云集成已启用！",
-            "error":"设置失败 ({e})",
-            "failedToRetrieveOAuth":"安装失败（无法检索 OAuth 配置）。",
-            "header":"云集成",
-            "noSecret":"安装失败（没有返回秘密？）。",
-            "reauthenticateOtherClient":"我们注意到您在另一个客户端中启用了云集成！由于限制，您需要重新进行身份验证才能继续使用它们。单击此处转到设置页面即可执行此操作！"
+    "cloud": {
+        "integrations": {
+            "enabled": "云集成已启用！",
+            "error": "设置失败 ({e})",
+            "failedToRetrieveOAuth": "安装失败（无法检索 OAuth 配置）。",
+            "header": "云集成",
+            "noSecret": "安装失败（没有返回秘密？）。",
+            "reauthenticateOtherClient": "我们注意到您在另一个客户端中启用了云集成！由于限制，您需要重新进行身份验证才能继续使用它们。单击此处转到设置页面即可执行此操作！"
         },
-        "settings":{
-            "accountChanged":"云同步被禁用，因为该帐户未连接到云应用程序。您可以通过在云设置中连接此帐户来再次启用它。 （注意：它将单独存储您的偏好）",
-            "apiDelete":"无法删除设置（API 返回 {e}）。",
-            "apiEraseAll":"无法删除所有数据（API 返回 {e}），请联系支持人员。",
-            "apiReject":"无法将设置同步到云（API 返回 {e}）。",
-            "deleted":"设置已从云端删除！",
-            "erased":"成功删除所有数据。",
-            "failedToDelete":"无法删除设置 ({e})。",
-            "failedToSync":"无法将设置同步到云端 ({e})。",
-            "header":"云设置",
-            "newerThanCloud":"您的本地设置比云设置更新。",
-            "noSettings":"云端没有任何设置。",
-            "success":"同步设置到云端！",
-            "syncFromCloud":"无法从云端同步设置 ({e})。",
-            "upToDate":"您的设置是最新的。",
-            "updated":"您的设置已更新！单击此处重新启动以完全应用更改！",
-            "updatedRemote":"您的设置已更新！单击此处重新启动以完全应用更改！"
+        "settings": {
+            "accountChanged": "云同步被禁用，因为该帐户未连接到云应用程序。您可以通过在云设置中连接此帐户来再次启用它。 （注意：它将单独存储您的偏好）",
+            "apiDelete": "无法删除设置（API 返回 {e}）。",
+            "apiEraseAll": "无法删除所有数据（API 返回 {e}），请联系支持人员。",
+            "apiReject": "无法将设置同步到云（API 返回 {e}）。",
+            "deleted": "设置已从云端删除！",
+            "erased": "成功删除所有数据。",
+            "failedToDelete": "无法删除设置 ({e})。",
+            "failedToSync": "无法将设置同步到云端 ({e})。",
+            "header": "云设置",
+            "newerThanCloud": "您的本地设置比云设置更新。",
+            "noSettings": "云端没有任何设置。",
+            "success": "同步设置到云端！",
+            "syncFromCloud": "无法从云端同步设置 ({e})。",
+            "upToDate": "您的设置是最新的。",
+            "updated": "您的设置已更新！单击此处重新启动以完全应用更改！",
+            "updatedRemote": "您的设置已更新！单击此处重新启动以完全应用更改！"
         }
     },
-    "colorSighted":{
-        "description":"从状态中删除色盲友好图标，就像 2015-2017 Discord"
+    "colorSighted": {
+        "description": "从状态中删除色盲友好图标，就像 2015-2017 Discord"
     },
-    "commandsAPI":{
-        "description":"使用命令的任何内容都需要 API"
+    "commandsAPI": {
+        "description": "使用命令的任何内容都需要 API"
     },
-    "consoleJanitor":{
-        "alwaysAllowLoggers":"始终允许这些类型的记录器",
-        "description":"禁用烦人的控制台消息/错误",
-        "filterList":"过滤器列表",
-        "name":"控制台管理员",
-        "settings":{
-            "disableLoggers":"禁用 Discords 记录器",
-            "disableSpotifyLogger":"禁用 Spotify 记录器，该记录器会泄露帐户信息和访问令牌",
-            "whitelistedLoggers":"即使其他记录器被隐藏，分号分隔的记录器列表也允许"
+    "consoleJanitor": {
+        "alwaysAllowLoggers": "始终允许这些类型的记录器",
+        "description": "禁用烦人的控制台消息/错误",
+        "filterList": "过滤器列表",
+        "name": "控制台管理员",
+        "settings": {
+            "disableLoggers": "禁用 Discords 记录器",
+            "disableSpotifyLogger": "禁用 Spotify 记录器，该记录器会泄露帐户信息和访问令牌",
+            "whitelistedLoggers": "即使其他记录器被隐藏，分号分隔的记录器列表也允许"
         }
     },
-    "consoleShortcuts":{
-        "description":"为窗口上的许多内容添加较短的别名。运行 `shortcutList` 获取列表。"
+    "consoleShortcuts": {
+        "description": "为窗口上的许多内容添加较短的别名。运行 `shortcutList` 获取列表。"
     },
-    "contextMenuAPI":{
-        "description":"API 用于在上下文菜单中添加/删除项目"
+    "contextMenuAPI": {
+        "description": "API 用于在上下文菜单中添加/删除项目"
     },
-    "contributorCard":{
-        "contributionsButton":"查看您做出的贡献",
-        "description":"由于您已经为 Equicord 做出了贡献，您现在拥有了一个很酷的新徽章！",
-        "subtitle":"感谢您的贡献！",
-        "title":"贡献"
+    "contributorCard": {
+        "contributionsButton": "查看您做出的贡献",
+        "description": "由于您已经为 Equicord 做出了贡献，您现在拥有了一个很酷的新徽章！",
+        "subtitle": "感谢您的贡献！",
+        "title": "贡献"
     },
-    "copyEmojiMarkdown":{
-        "copyEmojiMarkdown":"复制表情符号 Markdown",
-        "copyUnicodeDescription":"复制原始 unicode 字符而不是 :name: 作为默认表情符号 (👽)",
-        "description":"允许您将表情符号复制为格式化字符串 (<:blobcatcozy:1026533070955872337>)",
-        "success":"成功！复制表情符号降价。"
+    "copyEmojiMarkdown": {
+        "copyEmojiMarkdown": "复制表情符号 Markdown",
+        "copyUnicodeDescription": "复制原始 unicode 字符而不是 :name: 作为默认表情符号 (👽)",
+        "description": "允许您将表情符号复制为格式化字符串 (<:blobcatcozy:1026533070955872337>)",
+        "success": "成功！复制表情符号降价。"
     },
-    "copyFileContents":{
-        "copied":"复制了！",
-        "copyFileContents":"复制文件内容",
-        "description":"向文本文件附件添加一个按钮以复制其内容",
-        "fileTooLarge":"文件太大无法复制"
+    "copyFileContents": {
+        "copied": "复制了！",
+        "copyFileContents": "复制文件内容",
+        "description": "向文本文件附件添加一个按钮以复制其内容",
+        "fileTooLarge": "文件太大无法复制"
     },
-    "copyStickerLinks":{
-        "copyLink":"复制链接",
-        "description":"添加复制和打开贴纸链接的功能",
-        "linkCopied":"链接已复制！",
-        "openLink":"打开链接"
+    "copyStickerLinks": {
+        "copyLink": "复制链接",
+        "description": "添加复制和打开贴纸链接的功能",
+        "linkCopied": "链接已复制！",
+        "openLink": "打开链接"
     },
-    "copyUserURLs":{
-        "copyUserURL":"复制用户 URL",
-        "description":"在用户上下文菜单中添加“复制用户 URL”选项。"
+    "copyUserURLs": {
+        "copyUserURL": "复制用户 URL",
+        "description": "在用户上下文菜单中添加“复制用户 URL”选项。"
     },
-    "crashHandler":{
-        "description":"用于处理崩溃并可能在不重新启动的情况下恢复的实用插件",
-        "notifications":{
-            "crashedBody":"Awn :( Discord 已快速崩溃两次，且未尝试恢复。单击此处加入我们的支持服务器！",
-            "crashedTitle":"Discord 崩溃了！",
-            "invalidInvite":"邀请无效或过期",
-            "recoveringBody":"正在尝试恢复...单击此处加入我们的支持服务器！"
+    "crashHandler": {
+        "description": "用于处理崩溃并可能在不重新启动的情况下恢复的实用插件",
+        "notifications": {
+            "crashedBody": "Awn :( Discord 已快速崩溃两次，且未尝试恢复。单击此处加入我们的支持服务器！",
+            "crashedTitle": "Discord 崩溃了！",
+            "invalidInvite": "邀请无效或过期",
+            "recoveringBody": "正在尝试恢复...单击此处加入我们的支持服务器！"
         },
-        "settings":{
-            "attemptToNavigateToHome":"在防止 Discord 崩溃时是否尝试导航到家。",
-            "attemptToPreventCrashes":"是否尝试防止 Discord 崩溃。"
+        "settings": {
+            "attemptToNavigateToHome": "在防止 Discord 崩溃时是否尝试导航到家。",
+            "attemptToPreventCrashes": "是否尝试防止 Discord 崩溃。"
         },
-        "updatePrompt":"呃哦，Discord 刚刚崩溃了...但好消息，有一个 Equicord 更新可以解决这个问题！您想现在更新吗？"
+        "updatePrompt": "呃哦，Discord 刚刚崩溃了...但好消息，有一个 Equicord 更新可以解决这个问题！您想现在更新吗？"
     },
-    "ctrlEnterSend":{
-        "description":"使用Ctrl+Enter发送消息（可自定义）",
-        "settings":{
-            "sendMessageInTheMiddleOfACodeBlock":"是否在代码块中间发送消息",
-            "submitRule":"发送消息的方式"
+    "ctrlEnterSend": {
+        "description": "使用Ctrl+Enter发送消息（可自定义）",
+        "settings": {
+            "sendMessageInTheMiddleOfACodeBlock": "是否在代码块中间发送消息",
+            "submitRule": "发送消息的方式"
         },
-        "submitRuleOptions":{
-            "ctrlEnter":"Ctrl+Enter（Enter 或 Shift+Enter 换行）（macOS 上为 cmd+enter）",
-            "enter":"Enter（Shift+Enter 换行；默认为 Discord）",
-            "shiftEnter":"Shift+Enter（输入换行）"
+        "submitRuleOptions": {
+            "ctrlEnter": "Ctrl+Enter（Enter 或 Shift+Enter 换行）（macOS 上为 cmd+enter）",
+            "enter": "Enter（Shift+Enter 换行；默认为 Discord）",
+            "shiftEnter": "Shift+Enter（输入换行）"
         }
     },
-    "customIdle":{
-        "description":"允许您设置 Discord 空闲之前的时间（或禁用自动空闲）",
-        "settings":{
-            "idleTimeout":"Discord 空闲前的分钟数（0 表示禁用自动空闲）",
-            "remainInIdle":"当您返回Discord时，保持空闲状态，直到您确认要上网"
+    "customIdle": {
+        "description": "允许您设置 Discord 空闲之前的时间（或禁用自动空闲）",
+        "settings": {
+            "idleTimeout": "Discord 空闲前的分钟数（0 表示禁用自动空闲）",
+            "remainInIdle": "当您返回Discord时，保持空闲状态，直到您确认要上网"
         },
-        "ui":{
-            "backOnlineMessage":"欢迎回来！单击按钮即可上网。单击 X 保持空闲直至重新加载。",
-            "exitIdle":"退出空闲状态"
+        "ui": {
+            "backOnlineMessage": "欢迎回来！单击按钮即可上网。单击 X 保持空闲直至重新加载。",
+            "exitIdle": "退出空闲状态"
         }
     },
-    "customRPC":{
-        "activityType":"活动类型",
-        "activityTypes":{
-            "competing":"竞争",
-            "listening":"听力",
-            "playing":"演奏",
-            "streaming":"正在直播",
-            "watching":"正在观看"
+    "customRPC": {
+        "activityType": "活动类型",
+        "activityTypes": {
+            "competing": "竞争",
+            "listening": "听力",
+            "playing": "演奏",
+            "streaming": "正在直播",
+            "watching": "正在观看"
         },
-        "appId":"APP ID",
-        "appName":"应用名称",
-        "button1Text":"按钮 1 文本",
-        "button1Url":"按钮 1 URL",
-        "button2Text":"按钮2文本",
-        "button2Url":"按钮2 URL",
-        "detailLine1":"详细信息（第 1 行）",
-        "detailUrl":"详细信息 URL",
-        "endTimestamp":"结束时间戳（以毫秒为单位）",
-        "instructions":{
-            "buttons":"您在个人资料上看不到自己的按钮，但其他人都可以正常看到。",
-            "devPortal":"进入<0>Discord开发者门户</0>创建应用并获取应用ID。",
-            "imgur":"如果您想使用图片链接，请下载图片并将图片重新上传到<0>Imgur</0>，然后右键单击图片并选择“复制图片地址”即可获取图片链接。",
-            "unicode":"一些奇怪的 unicode 文本（“字体”𝖑𝖎𝖐𝖊 𝖙𝖍𝖎𝖘）可能会导致丰富的存在无法显示，请尝试使用普通字母代替。",
-            "uploadImages":"在 Rich Presence 选项卡中上传图像以获取图像密钥。"
+        "appId": "APP ID",
+        "appName": "应用名称",
+        "button1Text": "按钮 1 文本",
+        "button1Url": "按钮 1 URL",
+        "button2Text": "按钮2文本",
+        "button2Url": "按钮2 URL",
+        "detailLine1": "详细信息（第 1 行）",
+        "detailUrl": "详细信息 URL",
+        "endTimestamp": "结束时间戳（以毫秒为单位）",
+        "instructions": {
+            "buttons": "您在个人资料上看不到自己的按钮，但其他人都可以正常看到。",
+            "devPortal": "进入<0>Discord开发者门户</0>创建应用并获取应用ID。",
+            "imgur": "如果您想使用图片链接，请下载图片并将图片重新上传到<0>Imgur</0>，然后右键单击图片并选择“复制图片地址”即可获取图片链接。",
+            "unicode": "一些奇怪的 unicode 文本（“字体”𝖑𝖎𝖐𝖊 𝖙𝖍𝖎𝖘）可能会导致丰富的存在无法显示，请尝试使用普通字母代替。",
+            "uploadImages": "在 Rich Presence 选项卡中上传图像以获取图像密钥。"
         },
-        "largeImageClickUrl":"可点击大图 URL",
-        "largeImageText":"大图像文本",
-        "largeImageUrl":"大图像 URL/键",
-        "notice":{
-            "body":"活动共享未启用，人们将无法看到您自定义的丰富状态！",
-            "enable":"开启",
-            "title":"注意"
+        "largeImageClickUrl": "可点击大图 URL",
+        "largeImageText": "大图像文本",
+        "largeImageUrl": "大图像 URL/键",
+        "notice": {
+            "body": "活动共享未启用，人们将无法看到您自定义的丰富状态！",
+            "enable": "开启",
+            "title": "注意"
         },
-        "partyMaxSize":"最大聚会人数",
-        "partySize":"聚会规模",
-        "placeholder":{
-            "enterValue":"输入一个值",
-            "selectOption":"选择一个选项"
+        "partyMaxSize": "最大聚会人数",
+        "partySize": "聚会规模",
+        "placeholder": {
+            "enterValue": "输入一个值",
+            "selectOption": "选择一个选项"
         },
-        "smallImageClickUrl":"可点击的小图像 URL",
-        "smallImageText":"小图像文本",
-        "smallImageUrl":"小图像 URL/键",
-        "startTimestamp":"开始时间戳（以毫秒为单位）",
-        "stateLine2":"状态（第 2 行）",
-        "stateUrl":"状态 URL",
-        "streamLink":"流媒体链接（Twitch 或 YouTube，仅当活动类型为流媒体时）",
-        "timestampMode":"时间戳模式",
-        "timestampModes":{
-            "currentTime":"与您当前时间相同（24小时后不重置）",
-            "custom":"自定义",
-            "none":"暂无",
-            "sinceOpen":"自从不和谐开放以来"
+        "smallImageClickUrl": "可点击的小图像 URL",
+        "smallImageText": "小图像文本",
+        "smallImageUrl": "小图像 URL/键",
+        "startTimestamp": "开始时间戳（以毫秒为单位）",
+        "stateLine2": "状态（第 2 行）",
+        "stateUrl": "状态 URL",
+        "streamLink": "流媒体链接（Twitch 或 YouTube，仅当活动类型为流媒体时）",
+        "timestampMode": "时间戳模式",
+        "timestampModes": {
+            "currentTime": "与您当前时间相同（24小时后不重置）",
+            "custom": "自定义",
+            "none": "暂无",
+            "sinceOpen": "自从不和谐开放以来"
         },
-        "validation":{
-            "discordId":"必须是有效的 Discord ID。",
-            "discordLink":"不要使用 Discord 链接。请改用 Imgur 图像链接。",
-            "imgurDirect":"Imgur 链接必须是图像的直接链接（例如 https://i.imgur.com/...). 右键单击图像，然后单击“复制图像地址”",
-            "maxLength":"长度不得超过 {length} 个字符。",
-            "number":"必须是一个数字。",
-            "positiveNumber":"必须是正数。",
-            "required":"此字段是必需的。",
-            "streamingLink":"流媒体链接必须是有效的 URL。",
-            "streamingLinkLength":"流媒体链接不得超过 512 个字符。",
-            "tenorDirect":"Tenor 链接必须是图像的直接链接（例如 https://media.tenor.com/...). 右键单击 GIF，然后单击“复制图像地址”",
-            "url":"必须是有效的 URL。"
+        "validation": {
+            "discordId": "必须是有效的 Discord ID。",
+            "discordLink": "不要使用 Discord 链接。请改用 Imgur 图像链接。",
+            "imgurDirect": "Imgur 链接必须是图像的直接链接（例如 https://i.imgur.com/...). 右键单击图像，然后单击“复制图像地址”",
+            "maxLength": "长度不得超过 {length} 个字符。",
+            "number": "必须是一个数字。",
+            "positiveNumber": "必须是正数。",
+            "required": "此字段是必需的。",
+            "streamingLink": "流媒体链接必须是有效的 URL。",
+            "streamingLinkLength": "流媒体链接不得超过 512 个字符。",
+            "tenorDirect": "Tenor 链接必须是图像的直接链接（例如 https://media.tenor.com/...). 右键单击 GIF，然后单击“复制图像地址”",
+            "url": "必须是有效的 URL。"
         }
     },
-    "dearrow":{
-        "clickToDearrow":"点击取消箭头",
-        "dearrowByDefault":"自动删除视频",
-        "dearrowedClickRestore":"该嵌入已被取消箭头，点击恢复",
-        "description":"使 YouTube 嵌入的标题和缩略图不那么耸人听闻，由 Dearrow 提供支持",
-        "everything":"一切（标题和缩略图）",
-        "hideButton":"在 YouTube 嵌入中隐藏 Dearrow 按钮",
-        "replaceElementsDescription":"选择将替换嵌入的哪些元素",
-        "thumbnails":"缩略图",
-        "titles":"标题"
+    "dearrow": {
+        "clickToDearrow": "点击取消箭头",
+        "dearrowByDefault": "自动删除视频",
+        "dearrowedClickRestore": "该嵌入已被取消箭头，点击恢复",
+        "description": "使 YouTube 嵌入的标题和缩略图不那么耸人听闻，由 Dearrow 提供支持",
+        "everything": "一切（标题和缩略图）",
+        "hideButton": "在 YouTube 嵌入中隐藏 Dearrow 按钮",
+        "replaceElementsDescription": "选择将替换嵌入的哪些元素",
+        "thumbnails": "缩略图",
+        "titles": "标题"
     },
-    "decor":{
-        "accessFromProfiles":"您还可以从 {link} 页面访问装饰装饰。",
-        "changeDecoration":"更换装修",
-        "description":"创建并使用您自己的自定义头像装饰，或从预设中选择您最喜欢的。",
-        "enableAndRestart":"启用装饰并重新启动客户端以更改您的头像装饰。",
-        "profilesLink":"型材",
-        "removeDecoration":"移除装饰",
-        "title":"装饰风格"
+    "decor": {
+        "accessFromProfiles": "您还可以从 {link} 页面访问装饰装饰。",
+        "changeDecoration": "更换装修",
+        "description": "创建并使用您自己的自定义头像装饰，或从预设中选择您最喜欢的。",
+        "enableAndRestart": "启用装饰并重新启动客户端以更改您的头像装饰。",
+        "profilesLink": "型材",
+        "removeDecoration": "移除装饰",
+        "title": "装饰风格"
     },
-    "devCompanion":{
-        "description":"开发伴侣插件。请向 Sadan 报告任何不工作或奇怪的情况（很可能是错误），无论是 ping 还是 dm，谢谢！",
-        "settings":{
-            "notifyOnAutoConnect":"是否在 Dev Companion 自动连接时发出通知。",
-            "reloadAfterToggle":"收到禁用/启用插件命令后重新加载。",
-            "usePatchedModule":"对于提取请求，请使用当前已修补的模块（如果已修补）而不是原始模块进行回复。"
+    "devCompanion": {
+        "description": "开发伴侣插件。请向 Sadan 报告任何不工作或奇怪的情况（很可能是错误），无论是 ping 还是 dm，谢谢！",
+        "settings": {
+            "notifyOnAutoConnect": "是否在 Dev Companion 自动连接时发出通知。",
+            "reloadAfterToggle": "收到禁用/启用插件命令后重新加载。",
+            "usePatchedModule": "对于提取请求，请使用当前已修补的模块（如果已修补）而不是原始模块进行回复。"
         }
     },
-    "disableCallIdle":{
-        "description":"禁止在 3 分钟后自动从 DM 语音呼叫中踢出并转移到 AFK 语音通道。"
+    "disableCallIdle": {
+        "description": "禁止在 3 分钟后自动从 DM 语音呼叫中踢出并转移到 AFK 语音通道。"
     },
-    "donate":"捐",
-    "donorCard":{
-        "donated":{
-            "description":"所有 Vencord 用户都可以看到您的 Vencord 捐赠者徽章，Equicord 用户可以看到您的 Equicord 捐赠者徽章。要更改您的 Vencord 捐赠者徽章，请联系@vending.machine。对于您的 Equicord 捐赠者徽章，请在 Equicord 的服务器中制作票证。",
-            "equicordDescription":"所有Equicord用户都可以看到您的徽章！您可以通过在 Equicord 的服务器中制作票证来管理您的福利。",
-            "subtitle":"感谢您的捐赠！",
-            "title":"捐款",
-            "vencordDescription":"所有Vencord用户都可以看到您的徽章！您可以通过发送消息@{v}来管理您的福利。"
+    "donate": "捐",
+    "donorCard": {
+        "donated": {
+            "description": "所有 Vencord 用户都可以看到您的 Vencord 捐赠者徽章，Equicord 用户可以看到您的 Equicord 捐赠者徽章。要更改您的 Vencord 捐赠者徽章，请联系@vending.machine。对于您的 Equicord 捐赠者徽章，请在 Equicord 的服务器中制作票证。",
+            "equicordDescription": "所有Equicord用户都可以看到您的徽章！您可以通过在 Equicord 的服务器中制作票证来管理您的福利。",
+            "subtitle": "感谢您的捐赠！",
+            "title": "捐款",
+            "vencordDescription": "所有Vencord用户都可以看到您的徽章！您可以通过发送消息@{v}来管理您的福利。"
         },
-        "notDonated":{
-            "description":"请考虑通过捐赠来支持Equicord的发展！",
-            "title":"支持项目"
+        "notDonated": {
+            "description": "请考虑通过捐赠来支持Equicord的发展！",
+            "title": "支持项目"
         }
     },
-    "dontRoundMyTimestamps":{
-        "description":"始终向下舍入相对时间戳，因此 7.6y 变为 7y 而不是 8y"
+    "dontRoundMyTimestamps": {
+        "description": "始终向下舍入相对时间戳，因此 7.6y 变为 7y 而不是 8y"
     },
-    "dynamicImageModalAPI":{
-        "description":"允许您在打开图像模式时省略宽度或高度"
+    "dynamicImageModalAPI": {
+        "description": "允许您在打开图像模式时省略宽度或高度"
     },
-    "experiments":{
-        "description":"允许访问 Discord 中的实验和其他仅限开发的功能！",
-        "devToolsInfo":"您可以通过{keyboardCombo}打开Discord的DevTools",
-        "holdOn":"坚持，稍等！！",
-        "moreInfo":"更多信息",
-        "settings":{
-            "toolbarDevMenu":"将帮助 (?) 工具栏按钮（聊天右上角）更改为 Discord 的开发者菜单"
+    "experiments": {
+        "description": "允许访问 Discord 中的实验和其他仅限开发的功能！",
+        "devToolsInfo": "您可以通过{keyboardCombo}打开Discord的DevTools",
+        "holdOn": "坚持，稍等！！",
+        "moreInfo": "更多信息",
+        "settings": {
+            "toolbarDevMenu": "将帮助 (?) 工具栏按钮（聊天右上角）更改为 Discord 的开发者菜单"
         },
-        "warning1":"实验是未发布的 Discord 功能。它们可能不起作用，甚至会破坏您的客户端或禁用您的帐户。",
-        "warning2":"仅当您知道自己在做什么时才使用实验。 Equicord 对启用实验造成的任何损害不承担任何责任。如果您不知道实验的作用，请忽略它。也不要问我们实验是做什么的，我们可能也不知道。",
-        "warning3":"不可以，您不能使用服务器端功能，例如选中“发送到客户端”框。"
+        "warning1": "实验是未发布的 Discord 功能。它们可能不起作用，甚至会破坏您的客户端或禁用您的帐户。",
+        "warning2": "仅当您知道自己在做什么时才使用实验。 Equicord 对启用实验造成的任何损害不承担任何责任。如果您不知道实验的作用，请忽略它。也不要问我们实验是做什么的，我们可能也不知道。",
+        "warning3": "不可以，您不能使用服务器端功能，例如选中“发送到客户端”框。"
     },
-    "expressionCloner":{
-        "cloneEmoji":"克隆表情符号",
-        "cloneSticker":"克隆贴纸",
-        "cloneTo":"克隆到 {guild}",
-        "clonedSuccess":"成功将{name}克隆到{guild}！",
-        "customName":"自定义名称",
-        "failedToClone":"克隆失败：{error}",
-        "nameValidation":"名称必须介于 2 到 32 个字符之间",
-        "somethingWentWrong":"出了点问题（检查控制台！）"
+    "expressionCloner": {
+        "cloneEmoji": "克隆表情符号",
+        "cloneSticker": "克隆贴纸",
+        "cloneTo": "克隆到 {guild}",
+        "clonedSuccess": "成功将{name}克隆到{guild}！",
+        "customName": "自定义名称",
+        "failedToClone": "克隆失败：{error}",
+        "nameValidation": "名称必须介于 2 到 32 个字符之间",
+        "somethingWentWrong": "出了点问题（检查控制台！）"
     },
-    "f8break":{
-        "description":"当您在 DevTools（+ 断点）打开的情况下按 F8 时，会暂停客户端。"
+    "f8break": {
+        "description": "当您在 DevTools（+ 断点）打开的情况下按 F8 时，会暂停客户端。"
     },
-    "failedToRender":"无法呈现 {tab} 选项卡。如果问题仍然存在，请尝试使用安装程序重新安装！",
-    "fakeNitro":{
-        "description":"允许您发送假表情符号/贴纸、使用硝基主题并以硝基质量进行流式传输",
-        "doNotShowAgain":"不再显示",
-        "emojiNotice":"这是一个 FakeNitro 表情符号，并且像真正的表情符号一样只为您呈现。显示为非插件用户的链接。",
-        "holdOn":"坚持，稍等！",
-        "noAttachmentPerms":{
-            "body":"您无法发送此消息，因为它包含动画 FakeNitro 贴纸，并且您无权在当前频道中附加文件。请撕下贴纸以继续。"
+    "failedToRender": "无法呈现 {tab} 选项卡。如果问题仍然存在，请尝试使用安装程序重新安装！",
+    "fakeNitro": {
+        "description": "允许您发送假表情符号/贴纸、使用硝基主题并以硝基质量进行流式传输",
+        "doNotShowAgain": "不再显示",
+        "emojiNotice": "这是一个 FakeNitro 表情符号，并且像真正的表情符号一样只为您呈现。显示为非插件用户的链接。",
+        "holdOn": "坚持，稍等！",
+        "noAttachmentPerms": {
+            "body": "您无法发送此消息，因为它包含动画 FakeNitro 贴纸，并且您无权在当前频道中附加文件。请撕下贴纸以继续。"
         },
-        "noEmbedPerms":{
-            "body1":"您正在尝试发送/编辑包含 FakeNitro 表情符号或贴纸的消息，",
-            "body2":"但是您无权在当前频道中嵌入链接。",
-            "body3":"您确定要发送此消息吗？您的 FakeNitro 项目将仅显示为链接。",
-            "disableNotice":"您可以在插件设置中禁用此通知。"
+        "noEmbedPerms": {
+            "body1": "您正在尝试发送/编辑包含 FakeNitro 表情符号或贴纸的消息，",
+            "body2": "但是您无权在当前频道中嵌入链接。",
+            "body3": "您确定要发送此消息吗？您的 FakeNitro 项目将仅显示为链接。",
+            "disableNotice": "您可以在插件设置中禁用此通知。"
         },
-        "sendAnyway":"无论如何发送",
-        "settings":{
-            "disableEmbedPermissionCheck":"发送虚假表情符号和贴纸时是否禁用嵌入权限检查",
-            "emojiSize":"发送时表情符号的大小",
-            "enableEmojiBypass":"允许发送假表情符号（也绕过缺少使用自定义表情符号的权限）",
-            "enableStickerBypass":"允许发送假贴纸（也绕过缺少使用贴纸的权限）",
-            "enableStreamQualityBypass":"允许以硝基质量进行流式传输",
-            "hyperLinkText":"超链接应使用什么文本。 {{NAME}} 将替换为表情符号/贴纸名称。",
-            "stickerSize":"发送时贴纸尺寸",
-            "transformCompoundSentence":"是否将假贴纸和表情符号转换为复合句（内容比假表情符号或贴纸链接更多的句子）",
-            "transformEmojis":"是否将假表情符号转为真表情符号",
-            "transformStickers":"是否将假贴纸转为真贴纸",
-            "useEmojiHyperLinks":"发送假表情符号时是否使用超链接",
-            "useStickerHyperLinks":"发送假贴纸时是否使用超链接"
+        "sendAnyway": "无论如何发送",
+        "settings": {
+            "disableEmbedPermissionCheck": "发送虚假表情符号和贴纸时是否禁用嵌入权限检查",
+            "emojiSize": "发送时表情符号的大小",
+            "enableEmojiBypass": "允许发送假表情符号（也绕过缺少使用自定义表情符号的权限）",
+            "enableStickerBypass": "允许发送假贴纸（也绕过缺少使用贴纸的权限）",
+            "enableStreamQualityBypass": "允许以硝基质量进行流式传输",
+            "hyperLinkText": "超链接应使用什么文本。 {{NAME}} 将替换为表情符号/贴纸名称。",
+            "stickerSize": "发送时贴纸尺寸",
+            "transformCompoundSentence": "是否将假贴纸和表情符号转换为复合句（内容比假表情符号或贴纸链接更多的句子）",
+            "transformEmojis": "是否将假表情符号转为真表情符号",
+            "transformStickers": "是否将假贴纸转为真贴纸",
+            "useEmojiHyperLinks": "发送假表情符号时是否使用超链接",
+            "useStickerHyperLinks": "发送假贴纸时是否使用超链接"
         },
-        "stickerNotice":"这是一个 FakeNitro 贴纸，只为您呈现像真正的贴纸一样的效果。显示为非插件用户的链接。"
+        "stickerNotice": "这是一个 FakeNitro 贴纸，只为您呈现像真正的贴纸一样的效果。显示为非插件用户的链接。"
     },
-    "fakeProfileThemes":{
-        "accent":"口音",
-        "colorPickers":"颜色选择器",
-        "copy3y3":"复制 3y3",
-        "fakeColors":"假色",
-        "instructions":"使用下面的颜色选择器设置您的配置文件颜色。这些颜色将被编码到您的个人资料的“关于我”部分。",
-        "nitroColors":"硝基色",
-        "preview":"预览",
-        "primary":"基本的",
-        "usage":"用法"
+    "fakeProfileThemes": {
+        "accent": "口音",
+        "colorPickers": "颜色选择器",
+        "copy3y3": "复制 3y3",
+        "fakeColors": "假色",
+        "instructions": "使用下面的颜色选择器设置您的配置文件颜色。这些颜色将被编码到您的个人资料的“关于我”部分。",
+        "nitroColors": "硝基色",
+        "preview": "预览",
+        "primary": "基本的",
+        "usage": "用法"
     },
-    "favEmojiFirst":{
-        "description":"将您最喜欢的表情符号放在表情符号自动完成中的第一位，并且还具有表情符号别名。",
-        "settings":{
-            "aliases":"管理您的表情符号别名。",
-            "clearAll":"删除所有别名。"
+    "favEmojiFirst": {
+        "description": "将您最喜欢的表情符号放在表情符号自动完成中的第一位，并且还具有表情符号别名。",
+        "settings": {
+            "aliases": "管理您的表情符号别名。",
+            "clearAll": "删除所有别名。"
         },
-        "ui":{
-            "aliasRequired":"需要别名。",
-            "aliasSetFor":"别名设置为 {emoji}。",
-            "aliasValidation":"别名必须为 2-32 个字符，并且只能使用小写字母、数字或下划线。",
-            "confirmModal":{
-                "confirmButton":"删除所有别名",
-                "description":"这将删除您保存的每个表情符号别名。",
-                "title":"删除所有别名"
+        "ui": {
+            "aliasRequired": "需要别名。",
+            "aliasSetFor": "别名设置为 {emoji}。",
+            "aliasValidation": "别名必须为 2-32 个字符，并且只能使用小写字母、数字或下划线。",
+            "confirmModal": {
+                "confirmButton": "删除所有别名",
+                "description": "这将删除您保存的每个表情符号别名。",
+                "title": "删除所有别名"
             },
-            "deleteAllAliases":"删除所有别名",
-            "deletedAllAliases":"删除了所有表情符号别名。",
-            "duplicateAlias":"别名重复",
-            "editAlias":"编辑别名",
-            "failedToDelete":"无法删除别名。",
-            "failedToRemove":"无法删除别名。",
-            "failedToSave":"保存别名失败。",
-            "modal":{
-                "placeholder":"别名，例如“哭泣”",
-                "save":"保存",
-                "setDescription":"为 {emoji} 设置别名",
-                "setTitle":"设置别名"
+            "deleteAllAliases": "删除所有别名",
+            "deletedAllAliases": "删除了所有表情符号别名。",
+            "duplicateAlias": "别名重复",
+            "editAlias": "编辑别名",
+            "failedToDelete": "无法删除别名。",
+            "failedToRemove": "无法删除别名。",
+            "failedToSave": "保存别名失败。",
+            "modal": {
+                "placeholder": "别名，例如“哭泣”",
+                "save": "保存",
+                "setDescription": "为 {emoji} 设置别名",
+                "setTitle": "设置别名"
             },
-            "noAliasesYet":"尚未设置别名。",
-            "remove":"移除",
-            "removedAlias":"删除别名：{alias}：",
-            "setAlias":"设置别名"
+            "noAliasesYet": "尚未设置别名。",
+            "remove": "移除",
+            "removedAlias": "删除别名：{alias}：",
+            "setAlias": "设置别名"
         }
     },
-    "favGifSearch":{
-        "description":"为最喜欢的 gif 添加搜索栏。",
-        "name":"收藏 Gif 搜索",
-        "searchOptions":{
-            "entireUrl":"整个网址",
-            "hostAndPath":"主机和路径 (tenor.com somgif.gif)",
-            "pathOnly":"仅路径 (/somegif.gif)"
+    "favGifSearch": {
+        "description": "为最喜欢的 gif 添加搜索栏。",
+        "name": "收藏 Gif 搜索",
+        "searchOptions": {
+            "entireUrl": "整个网址",
+            "hostAndPath": "主机和路径 (tenor.com somgif.gif)",
+            "pathOnly": "仅路径 (/somegif.gif)"
         },
-        "searchPlaceholder":"搜索最喜欢的 GIF 动图",
-        "settings":{
-            "searchOption":"您要搜索的网址部分"
+        "searchPlaceholder": "搜索最喜欢的 GIF 动图",
+        "settings": {
+            "searchOption": "您要搜索的网址部分"
         }
     },
-    "fixCodeblockGap":{
-        "description":"消除代码块与其下方文本之间的间隙"
+    "fixCodeblockGap": {
+        "description": "消除代码块与其下方文本之间的间隙"
     },
-    "fixImagesQuality":{
-        "animatedImagesAlways":"无论应用程序是否聚焦，聊天中的动画图像（GIF、WebP 等）始终会呈现动画。",
-        "defaultBehavior":"默认行为如下：",
-        "description":"通过以原始分辨率加载图像来提高图像质量",
-        "enableOriginalCaveats":"您还可以在聊天中启用原始图像，但请注意以下注意事项：",
-        "inChatOptimised":"在聊天中，将加载优化但全分辨率的图像。",
-        "inModalOriginal":"在图像模式中，将加载原始图像。",
-        "mayCauseLag":"可能会导致滞后。",
-        "name":"修复图像质量",
-        "settings":{
-            "originalImagesInChat":"同时将原始图像加载到Chat中。警告：阅读上面的注意事项"
+    "fixImagesQuality": {
+        "animatedImagesAlways": "无论应用程序是否聚焦，聊天中的动画图像（GIF、WebP 等）始终会呈现动画。",
+        "defaultBehavior": "默认行为如下：",
+        "description": "通过以原始分辨率加载图像来提高图像质量",
+        "enableOriginalCaveats": "您还可以在聊天中启用原始图像，但请注意以下注意事项：",
+        "inChatOptimised": "在聊天中，将加载优化但全分辨率的图像。",
+        "inModalOriginal": "在图像模式中，将加载原始图像。",
+        "mayCauseLag": "可能会导致滞后。",
+        "name": "修复图像质量",
+        "settings": {
+            "originalImagesInChat": "同时将原始图像加载到Chat中。警告：阅读上面的注意事项"
         }
     },
-    "fixSpotifyEmbeds":{
-        "description":"通过让您自定义音量，修复了 Spotify 嵌入声音异常响亮的问题",
-        "settings":{
-            "volume":"为 Spotify 嵌入设置的音量百分比。任何高于 10% 的声音都非常响亮"
+    "fixSpotifyEmbeds": {
+        "description": "通过让您自定义音量，修复了 Spotify 嵌入声音异常响亮的问题",
+        "settings": {
+            "volume": "为 Spotify 嵌入设置的音量百分比。任何高于 10% 的声音都非常响亮"
         }
     },
-    "fixYoutubeEmbeds":{
-        "description":"绕过在 Discord 上阻止显示的 YouTube 视频（例如 UMG）"
+    "fixYoutubeEmbeds": {
+        "description": "绕过在 Discord 上阻止显示的 YouTube 视频（例如 UMG）"
     },
-    "forceOwnerCrown":{
-        "description":"即使服务器很大，也强制将所有者冠放在用户名旁边。"
+    "forceOwnerCrown": {
+        "description": "即使服务器很大，也强制将所有者冠放在用户名旁边。"
     },
-    "friendInvites":{
-        "commands":{
-            "createFriendInvite":{
-                "description":"生成好友邀请链接。",
-                "name":"创建好友邀请"
+    "friendInvites": {
+        "commands": {
+            "createFriendInvite": {
+                "description": "生成好友邀请链接。",
+                "name": "创建好友邀请"
             },
-            "revokeFriendInvites":{
-                "description":"撤销所有生成的好友邀请。",
-                "name":"撤销好友邀请"
+            "revokeFriendInvites": {
+                "description": "撤销所有生成的好友邀请。",
+                "name": "撤销好友邀请"
             },
-            "viewFriendInvites":{
-                "description":"查看所有生成的好友邀请的列表。",
-                "name":"查看好友邀请"
+            "viewFriendInvites": {
+                "description": "查看所有生成的好友邀请的列表。",
+                "name": "查看好友邀请"
             }
         },
-        "description":"通过斜杠命令创建和管理好友邀请链接（/创建好友邀请、/查看好友邀请、/撤销好友邀请）。",
-        "ui":{
-            "allRevoked":"所有好友邀请均已撤销。",
-            "expires":"到期时间：",
-            "maxUses":"最大用途：",
-            "noActiveInvites":"您没有有效的好友邀请！",
-            "timesUsed":"使用次数："
+        "description": "通过斜杠命令创建和管理好友邀请链接（/创建好友邀请、/查看好友邀请、/撤销好友邀请）。",
+        "ui": {
+            "allRevoked": "所有好友邀请均已撤销。",
+            "expires": "到期时间：",
+            "maxUses": "最大用途：",
+            "noActiveInvites": "您没有有效的好友邀请！",
+            "timesUsed": "使用次数："
         }
     },
-    "friendsSince":{
-        "description":"在用户弹出窗口中显示您何时与某人成为朋友",
-        "heading":"从此成为朋友"
+    "friendsSince": {
+        "description": "在用户弹出窗口中显示您何时与某人成为朋友",
+        "heading": "从此成为朋友"
     },
-    "fullSearchContext":{
-        "description":"使消息搜索结果中的消息上下文菜单包含您期望的所有选项"
+    "fullSearchContext": {
+        "description": "使消息搜索结果中的消息上下文菜单包含您期望的所有选项"
     },
-    "fullUserInChatbox":{
-        "description":"使聊天框中的用户提及具有更多功能，例如左/右键单击"
+    "fullUserInChatbox": {
+        "description": "使聊天框中的用户提及具有更多功能，例如左/右键单击"
     },
-    "gameActivityToggle":{
-        "description":"在麦克风和震耳欲聋的按钮旁边添加一个按钮来切换游戏活动。",
-        "disableGameActivity":"禁用游戏活动",
-        "enableGameActivity":"启用游戏活动",
-        "settings":{
-            "location":"在哪里显示游戏活动切换按钮",
-            "locationPanel":"静音/失聪旁边",
-            "locationToolbox":"Equicord 工具箱",
-            "oldIcon":"使用Discord图标重新设计之前的旧图标样式"
+    "gameActivityToggle": {
+        "description": "在麦克风和震耳欲聋的按钮旁边添加一个按钮来切换游戏活动。",
+        "disableGameActivity": "禁用游戏活动",
+        "enableGameActivity": "启用游戏活动",
+        "settings": {
+            "location": "在哪里显示游戏活动切换按钮",
+            "locationPanel": "静音/失聪旁边",
+            "locationToolbox": "Equicord 工具箱",
+            "oldIcon": "使用Discord图标重新设计之前的旧图标样式"
         }
     },
-    "gifPaste":{
-        "description":"使在 gif 选择器中选择 gif 将链接插入到聊天框中，而不是立即发送"
+    "gifPaste": {
+        "description": "使在 gif 选择器中选择 gif 将链接插入到聊天框中，而不是立即发送"
     },
-    "greetStickerPicker":{
-        "ariaLabel":"问候贴纸选择器",
-        "description":"允许您通过右键单击“挥手打招呼！”来使用任何问候贴纸，而不仅仅是随机贴纸。按钮",
-        "greetMode":"问候模式",
-        "greetModeDescription":"选择问候模式",
-        "greetModeLabel":"打招呼（只能打招呼3次）",
-        "greetStickers":"问候贴纸",
-        "normalMessageLabel":"普通消息（您可以迎接垃圾邮件）",
-        "sendGreets":"发送问候",
-        "unholyMultiGreet":"邪恶多重问候"
+    "greetStickerPicker": {
+        "ariaLabel": "问候贴纸选择器",
+        "description": "允许您通过右键单击“挥手打招呼！”来使用任何问候贴纸，而不仅仅是随机贴纸。按钮",
+        "greetMode": "问候模式",
+        "greetModeDescription": "选择问候模式",
+        "greetModeLabel": "打招呼（只能打招呼3次）",
+        "greetStickers": "问候贴纸",
+        "normalMessageLabel": "普通消息（您可以迎接垃圾邮件）",
+        "sendGreets": "发送问候",
+        "unholyMultiGreet": "邪恶多重问候"
     },
-    "hideAttachments":{
-        "description":"通过悬停按钮隐藏单个消息的附件和嵌入",
-        "hideMedia":"隐藏媒体",
-        "mediaHidden":"媒体隐藏",
-        "showMedia":"展会媒体"
+    "hideAttachments": {
+        "description": "通过悬停按钮隐藏单个消息的附件和嵌入",
+        "hideMedia": "隐藏媒体",
+        "mediaHidden": "媒体隐藏",
+        "showMedia": "展会媒体"
     },
-    "iLoveSpam":{
-        "description":"不要隐藏来自“可能的垃圾邮件发送者”的消息"
+    "iLoveSpam": {
+        "description": "不要隐藏来自“可能的垃圾邮件发送者”的消息"
     },
-    "ignoreActivities":{
-        "disableActivity":"禁用活动",
-        "enableActivity":"启用活动",
-        "filterList":{
-            "description":"要过滤的活动 ID 的逗号分隔列表（对于过滤特定 RPC 活动和 CustomRPC 很有用）",
-            "title":"过滤器列表"
+    "ignoreActivities": {
+        "disableActivity": "禁用活动",
+        "enableActivity": "启用活动",
+        "filterList": {
+            "description": "要过滤的活动 ID 的逗号分隔列表（对于过滤特定 RPC 活动和 CustomRPC 很有用）",
+            "title": "过滤器列表"
         },
-        "importCustomRPC":{
-            "alreadyAdded":"CustomRPC 应用程序 ID 已添加。",
-            "button":"导入自定义RPC ID",
-            "description":"将CustomRPC插件的应用程序id导入到过滤器列表中",
-            "notSet":"未设置 CustomRPC 应用程序 ID。"
+        "importCustomRPC": {
+            "alreadyAdded": "CustomRPC 应用程序 ID 已添加。",
+            "button": "导入自定义RPC ID",
+            "description": "将CustomRPC插件的应用程序id导入到过滤器列表中",
+            "notSet": "未设置 CustomRPC 应用程序 ID。"
         },
-        "settings":{
-            "blacklist":"黑名单",
-            "ignoreCompeting":"忽略所有竞争活动（这些通常是特殊的游戏活动）",
-            "ignoreListening":"忽略所有收听活动（这些通常是 Spotify 活动）",
-            "ignorePlaying":"忽略所有游戏活动（这些通常是游戏和 RPC 活动）",
-            "ignoreStreaming":"忽略所有流媒体活动",
-            "ignoreWatching":"忽略所有观看活动",
-            "listMode":"更改过滤器列表的模式",
-            "whitelist":"白名单"
+        "settings": {
+            "blacklist": "黑名单",
+            "ignoreCompeting": "忽略所有竞争活动（这些通常是特殊的游戏活动）",
+            "ignoreListening": "忽略所有收听活动（这些通常是 Spotify 活动）",
+            "ignorePlaying": "忽略所有游戏活动（这些通常是游戏和 RPC 活动）",
+            "ignoreStreaming": "忽略所有流媒体活动",
+            "ignoreWatching": "忽略所有观看活动",
+            "listMode": "更改过滤器列表的模式",
+            "whitelist": "白名单"
         }
     },
-    "imageFilename":{
-        "description":"将鼠标悬停在图像和 GIF 上时将其文件名显示为工具提示",
-        "settings":{
-            "showFullUrl":"显示图像的完整 URL，而不仅仅是文件名。始终启用 GIF，因为它们通常没有有意义的文件名"
+    "imageFilename": {
+        "description": "将鼠标悬停在图像和 GIF 上时将其文件名显示为工具提示",
+        "settings": {
+            "showFullUrl": "显示图像的完整 URL，而不仅仅是文件名。始终启用 GIF，因为它们通常没有有意义的文件名"
         }
     },
-    "imageLink":{
-        "description":"切勿隐藏消息中的图像链接，即使它是唯一的内容"
+    "imageLink": {
+        "description": "切勿隐藏消息中的图像链接，即使它是唯一的内容"
     },
-    "imageZoom":{
-        "lensSize":"镜片尺寸",
-        "nearestNeighbour":"最近邻",
-        "settings":{
-            "invertScroll":"反转滚动",
-            "nearestNeighbour":"缩放图像时使用最近邻插值",
-            "saveZoomValues":"是否保存变焦和镜头尺寸值",
-            "size":"透镜半径/尺寸",
-            "square":"将镜片设为正方形",
-            "zoom":"镜头变焦",
-            "zoomSpeed":"变焦/镜头尺寸变化的速度有多快"
+    "imageZoom": {
+        "lensSize": "镜片尺寸",
+        "nearestNeighbour": "最近邻",
+        "settings": {
+            "invertScroll": "反转滚动",
+            "nearestNeighbour": "缩放图像时使用最近邻插值",
+            "saveZoomValues": "是否保存变焦和镜头尺寸值",
+            "size": "透镜半径/尺寸",
+            "square": "将镜片设为正方形",
+            "zoom": "镜头变焦",
+            "zoomSpeed": "变焦/镜头尺寸变化的速度有多快"
         },
-        "squareLens":"方形镜片",
-        "zoom":"飞涨",
-        "zoomSpeed":"变焦速度"
+        "squareLens": "方形镜片",
+        "zoom": "飞涨",
+        "zoomSpeed": "变焦速度"
     },
-    "implicitRelationships":{
-        "description":"在“好友”选项卡中显示您的隐式关系。",
-        "settings":{
-            "sortByAffinity":"是否按隐式关系与您的亲和力对它们进行排序。"
+    "implicitRelationships": {
+        "description": "在“好友”选项卡中显示您的隐式关系。",
+        "settings": {
+            "sortByAffinity": "是否按隐式关系与您的亲和力对它们进行排序。"
         },
-        "ui":{
-            "implicitHeader":"隐式 — {count}",
-            "implicitSection":"隐含的"
+        "ui": {
+            "implicitHeader": "隐式 — {count}",
+            "implicitSection": "隐含的"
         }
     },
-    "invite":"邀请",
-    "ircColors":{
-        "description":"使聊天中的用户名颜色独一无二，就像在 IRC 客户端中一样",
-        "settings":{
-            "applyColorOnlyInDms":"仅在直接消息中应用颜色；不要在服务器中应用颜色。",
-            "applyColorOnlyToUsersWithoutColor":"仅将颜色应用于没有预定义颜色的用户",
-            "lightness":"亮度，以 % 为单位。如果颜色太浅或太深，请进行更改",
-            "memberListColors":"替换成员列表中的角色颜色"
+    "invite": "邀请",
+    "ircColors": {
+        "description": "使聊天中的用户名颜色独一无二，就像在 IRC 客户端中一样",
+        "settings": {
+            "applyColorOnlyInDms": "仅在直接消息中应用颜色；不要在服务器中应用颜色。",
+            "applyColorOnlyToUsersWithoutColor": "仅将颜色应用于没有预定义颜色的用户",
+            "lightness": "亮度，以 % 为单位。如果颜色太浅或太深，请进行更改",
+            "memberListColors": "替换成员列表中的角色颜色"
         }
     },
-    "keepCurrentChannel":{
-        "description":"在切换帐户或加载 Discord 之前尝试导航到您所在的频道。"
+    "keepCurrentChannel": {
+        "description": "在切换帐户或加载 Discord 之前尝试导航到您所在的频道。"
     },
-    "lastfmRichPresence":{
-        "apiKeyInstructions":"将<0>应用程序名称</0>和<1>应用程序描述</1>设置为任何内容，并将其余部分留空。",
-        "createApiKey":"创建 API 密钥",
-        "description":"用于 Last.fm 丰富存在的小插件",
-        "howToCreateApiKey":"如何创建 API 键",
-        "lastfmProfile":"Last.fm 个人资料",
-        "missingArt":{
-            "lastfmLogo":"使用大型 Last.fm 徽标",
-            "placeholder":"使用通用占位符"
+    "lastfmRichPresence": {
+        "apiKeyInstructions": "将<0>应用程序名称</0>和<1>应用程序描述</1>设置为任何内容，并将其余部分留空。",
+        "createApiKey": "创建 API 密钥",
+        "description": "用于 Last.fm 丰富存在的小插件",
+        "howToCreateApiKey": "如何创建 API 键",
+        "lastfmProfile": "Last.fm 个人资料",
+        "missingArt": {
+            "lastfmLogo": "使用大型 Last.fm 徽标",
+            "placeholder": "使用通用占位符"
         },
-        "nameFormat":{
-            "albumName":"使用专辑名称（如果歌曲没有专辑，则返回自定义状态文本）",
-            "artistFirst":"使用格式“艺术家 - 歌曲”",
-            "artistOnly":"仅使用艺术家姓名",
-            "songFirst":"使用格式“歌曲 - 艺术家”",
-            "songOnly":"仅使用歌曲名称",
-            "statusName":"使用自定义状态名称"
+        "nameFormat": {
+            "albumName": "使用专辑名称（如果歌曲没有专辑，则返回自定义状态文本）",
+            "artistFirst": "使用格式“艺术家 - 歌曲”",
+            "artistOnly": "仅使用艺术家姓名",
+            "songFirst": "使用格式“歌曲 - 艺术家”",
+            "songOnly": "仅使用歌曲名称",
+            "statusName": "使用自定义状态名称"
         },
-        "settings":{
-            "alwaysHideArt":"禁止下载专辑封面",
-            "apiKey":"自定义 Last.fm API 键。不是必需的，但强烈建议避免使用我们的共享密钥进行速率限制",
-            "clickableLinks":"使曲目、艺术家和专辑名称可点击链接",
-            "hideWithActivity":"如果您有任何其他状态，请隐藏 Last.fm 状态",
-            "hideWithSpotify":"如果 Spotify 正在运行，则隐藏 Last.fm 存在",
-            "missingArt":"当专辑或专辑封面丢失时",
-            "nameFormat":"在状态名称中显示歌曲名称和艺术家名称",
-            "shareUsername":"显示 Last.fm 个人资料的链接",
-            "showLastFmLogo":"在专辑封面旁边显示 Last.fm 徽标",
-            "statusDisplayType":"在成员列表中显示曲目/艺术家姓名",
-            "statusName":"自定义状态文本",
-            "useListeningStatus":"显示“正在收听”状态而不是“正在播放”",
-            "username":"Last.fm 用户名"
+        "settings": {
+            "alwaysHideArt": "禁止下载专辑封面",
+            "apiKey": "自定义 Last.fm API 键。不是必需的，但强烈建议避免使用我们的共享密钥进行速率限制",
+            "clickableLinks": "使曲目、艺术家和专辑名称可点击链接",
+            "hideWithActivity": "如果您有任何其他状态，请隐藏 Last.fm 状态",
+            "hideWithSpotify": "如果 Spotify 正在运行，则隐藏 Last.fm 存在",
+            "missingArt": "当专辑或专辑封面丢失时",
+            "nameFormat": "在状态名称中显示歌曲名称和艺术家名称",
+            "shareUsername": "显示 Last.fm 个人资料的链接",
+            "showLastFmLogo": "在专辑封面旁边显示 Last.fm 徽标",
+            "statusDisplayType": "在成员列表中显示曲目/艺术家姓名",
+            "statusName": "自定义状态文本",
+            "useListeningStatus": "显示“正在收听”状态而不是“正在播放”",
+            "username": "Last.fm 用户名"
         },
-        "statusDisplayType":{
-            "artist":"显示艺术家姓名",
-            "off":"不显示（显示一般监听消息）",
-            "track":"显示曲目名称"
+        "statusDisplayType": {
+            "artist": "显示艺术家姓名",
+            "off": "不显示（显示一般监听消息）",
+            "track": "显示曲目名称"
         }
     },
-    "loading":"加载中...",
-    "loadingQuotes":{
-        "description":"替换 Discords 加载引号",
-        "settings":{
-            "additionalQuotes":"可能出现的其他自定义引号，由以下分隔符分隔",
-            "additionalQuotesDelimiter":"附加引号的分隔符",
-            "enableDiscordPresetQuotes":"启用Discord的预设报价（包括活动期间的活动报价）",
-            "enablePluginPresetQuotes":"启用此插件预设的报价",
-            "replaceEvents":"该插件是否也适用于具有特殊活动主题报价的活动？ （例如万圣节）"
+    "loading": "加载中...",
+    "loadingQuotes": {
+        "description": "替换 Discords 加载引号",
+        "settings": {
+            "additionalQuotes": "可能出现的其他自定义引号，由以下分隔符分隔",
+            "additionalQuotesDelimiter": "附加引号的分隔符",
+            "enableDiscordPresetQuotes": "启用Discord的预设报价（包括活动期间的活动报价）",
+            "enablePluginPresetQuotes": "启用此插件预设的报价",
+            "replaceEvents": "该插件是否也适用于具有特殊活动主题报价的活动？ （例如万圣节）"
         },
-        "ui":{
-            "noQuotesQuote":"您真的禁用了所有加载报价吗？你真是个小丑啊……"
+        "ui": {
+            "noQuotesQuote": "您真的禁用了所有加载报价吗？你真是个小丑啊……"
         }
     },
-    "logs":{
-        "allLogsCleared":"所有日志均已清除",
-        "clearAll":"全部清除",
-        "clearAllLogs":"清除所有日志",
-        "clearAllLogsConfirmation":"您确定要清除所有日志吗？这无法撤消。",
-        "clearLog":"清除日志",
-        "clearLogConfirmation":"您确定要清除此日志吗？这无法撤消。",
-        "clearLogs":"清除日志",
-        "clearLogsConfirmation":"您确定要清除这些日志吗？这无法撤消。",
-        "clearLogsConfirmationNum_one":"您确定要清除 {count} 日志吗",
-        "clearLogsConfirmationNum_other":"您确定要清除 {count} 日志吗",
-        "hideLogs":"隐藏日志",
-        "logCleared":"日志已被清除",
-        "logsCleared":"选定的日志已被清除",
-        "showLogs":"显示日志"
+    "logs": {
+        "allLogsCleared": "所有日志均已清除",
+        "clearAll": "全部清除",
+        "clearAllLogs": "清除所有日志",
+        "clearAllLogsConfirmation": "您确定要清除所有日志吗？这无法撤消。",
+        "clearLog": "清除日志",
+        "clearLogConfirmation": "您确定要清除此日志吗？这无法撤消。",
+        "clearLogs": "清除日志",
+        "clearLogsConfirmation": "您确定要清除这些日志吗？这无法撤消。",
+        "clearLogsConfirmationNum_one": "您确定要清除 {count} 日志吗",
+        "clearLogsConfirmationNum_other": "您确定要清除 {count} 日志吗",
+        "hideLogs": "隐藏日志",
+        "logCleared": "日志已被清除",
+        "logsCleared": "选定的日志已被清除",
+        "showLogs": "显示日志"
     },
-    "memberCount":{
-        "settings":{
-            "memberList":"在会员列表中显示会员数量",
-            "toolTip":"在服务器工具提示上显示成员计数",
-            "voiceActivity":"在成员列表中显示语音活动和成员计数"
+    "memberCount": {
+        "settings": {
+            "memberList": "在会员列表中显示会员数量",
+            "toolTip": "在服务器工具提示上显示成员计数",
+            "voiceActivity": "在成员列表中显示语音活动和成员计数"
         }
     },
-    "memberListDecoratorsAPI":{
-        "description":"API 将装饰器添加到成员列表（在服务器和 DM 中）"
+    "memberListDecoratorsAPI": {
+        "description": "API 将装饰器添加到成员列表（在服务器和 DM 中）"
     },
-    "mentionAvatars":{
-        "description":"在提及中显示用户头像和角色图标",
-        "settings":{
-            "showAtSymbol":"@ 符号是否应显示在用户提及中"
+    "mentionAvatars": {
+        "description": "在提及中显示用户头像和角色图标",
+        "settings": {
+            "showAtSymbol": "@ 符号是否应显示在用户提及中"
         }
     },
-    "menuItemDemanglerAPI":{
-        "description":"破坏 Discord 的菜单项模块"
+    "menuItemDemanglerAPI": {
+        "description": "破坏 Discord 的菜单项模块"
     },
-    "messageAccessoriesAPI":{
-        "description":"API添加消息附件"
+    "messageAccessoriesAPI": {
+        "description": "API添加消息附件"
     },
-    "messageClickActions":{
-        "actions":{
-            "copyContent":"复制内容",
-            "copyId":"复制 ID",
-            "copyLink":"复制链接",
-            "copyUserId":"复制用户 ID",
-            "delete":"删除",
-            "edit":"编辑",
-            "none":"暂无",
-            "openTab":"打开选项卡",
-            "openThread":"打开线程",
-            "pin":"钉上",
-            "quote":"引用",
-            "react":"反应",
-            "reply":"回复"
+    "messageClickActions": {
+        "actions": {
+            "copyContent": "复制内容",
+            "copyId": "复制 ID",
+            "copyLink": "复制链接",
+            "copyUserId": "复制用户 ID",
+            "delete": "删除",
+            "edit": "编辑",
+            "none": "暂无",
+            "openTab": "打开选项卡",
+            "openThread": "打开线程",
+            "pin": "钉上",
+            "quote": "引用",
+            "react": "反应",
+            "reply": "回复"
         },
-        "description":"自定义消息上的点击操作。",
-        "modifiers":{
-            "alt":"替代",
-            "backspace":"退格键",
-            "ctrl":"Ctrl",
-            "delete":"删除",
-            "none":"暂无",
-            "shift":"转移"
+        "description": "自定义消息上的点击操作。",
+        "modifiers": {
+            "alt": "替代",
+            "backspace": "退格键",
+            "ctrl": "Ctrl",
+            "delete": "删除",
+            "none": "暂无",
+            "shift": "转移"
         },
-        "settings":{
-            "clickTimeout":"区分双击/三次点击的超时时间（毫秒）",
-            "deferDoubleClickForTriple":"延迟双击以允许三次单击操作（关闭时禁用三次单击）",
-            "disableInDms":"禁用私信中的所有点击操作",
-            "disableInSystemDms":"禁用系统 DM 中的所有点击操作",
-            "doubleClickAction":"双击操作（您的消息）",
-            "doubleClickHoldThreshold":"双击操作的最长保持时间（毫秒）。按住较长时间可以选择文本",
-            "doubleClickModifier":"双击操作所需的修饰符",
-            "doubleClickOthersAction":"双击时的操作（其他人的消息）",
-            "quoteWithReply":"引用时也回复消息",
-            "reactEmoji":"用于反应动作的表情符号",
-            "selectionHoldTimeout":"允许文本选择的超时（毫秒）",
-            "singleClickAction":"单击即可执行操作（您的消息）",
-            "singleClickModifier":"单击操作所需的修饰符（您的消息）",
-            "singleClickOthersAction":"单击时的操作（其他人的消息）",
-            "singleClickOthersModifier":"单击操作所需的修饰符（其他人的消息）",
-            "tripleClickAction":"三击操作",
-            "tripleClickModifier":"三击操作所需的修饰符",
-            "useSelectionForQuote":"引用时，使用选定的文本（如果有）"
+        "settings": {
+            "clickTimeout": "区分双击/三次点击的超时时间（毫秒）",
+            "deferDoubleClickForTriple": "延迟双击以允许三次单击操作（关闭时禁用三次单击）",
+            "disableInDms": "禁用私信中的所有点击操作",
+            "disableInSystemDms": "禁用系统 DM 中的所有点击操作",
+            "doubleClickAction": "双击操作（您的消息）",
+            "doubleClickHoldThreshold": "双击操作的最长保持时间（毫秒）。按住较长时间可以选择文本",
+            "doubleClickModifier": "双击操作所需的修饰符",
+            "doubleClickOthersAction": "双击时的操作（其他人的消息）",
+            "quoteWithReply": "引用时也回复消息",
+            "reactEmoji": "用于反应动作的表情符号",
+            "selectionHoldTimeout": "允许文本选择的超时（毫秒）",
+            "singleClickAction": "单击即可执行操作（您的消息）",
+            "singleClickModifier": "单击操作所需的修饰符（您的消息）",
+            "singleClickOthersAction": "单击时的操作（其他人的消息）",
+            "singleClickOthersModifier": "单击操作所需的修饰符（其他人的消息）",
+            "tripleClickAction": "三击操作",
+            "tripleClickModifier": "三击操作所需的修饰符",
+            "useSelectionForQuote": "引用时，使用选定的文本（如果有）"
         },
-        "toasts":{
-            "cannotPin":"无法固定：缺少权限",
-            "cannotQuote":"无法引用此消息类型",
-            "cannotReact":"无法反应：缺少权限"
+        "toasts": {
+            "cannotPin": "无法固定：缺少权限",
+            "cannotQuote": "无法引用此消息类型",
+            "cannotReact": "无法反应：缺少权限"
         },
-        "ui":{
-            "linkCopied":"链接已复制！",
-            "maxAdditionalEmojis":"逗号/换行符分隔，最大 {count}",
-            "messageContentCopied":"留言内容已复制！",
-            "messageIdCopied":"消息 ID 已复制！",
-            "selectAdditionalEmojis":"选择其他表情符号",
-            "selectEmojiForReactions":"选择反应表情符号",
-            "userIdCopied":"用户ID已复制！"
+        "ui": {
+            "linkCopied": "链接已复制！",
+            "maxAdditionalEmojis": "逗号/换行符分隔，最大 {count}",
+            "messageContentCopied": "留言内容已复制！",
+            "messageIdCopied": "消息 ID 已复制！",
+            "selectAdditionalEmojis": "选择其他表情符号",
+            "selectEmojiForReactions": "选择反应表情符号",
+            "userIdCopied": "用户ID已复制！"
         }
     },
-    "messageDecorationsAPI":{
-        "description":"API 为消息添加装饰"
+    "messageDecorationsAPI": {
+        "description": "API 为消息添加装饰"
     },
-    "messageEventsAPI":{
-        "description":"使用消息事件的任何内容都需要 API"
+    "messageEventsAPI": {
+        "description": "使用消息事件的任何内容都需要 API"
     },
-    "messageLatency":{
-        "clockAhead":"该用户的时钟提前 {delta}。",
-        "delayedMessage":"延迟消息",
-        "messageDelayed":"此消息的发送延迟了 {delta}。",
-        "oldAndroidClient":"旧的 Discord Android 客户端",
-        "oldDiscordAndroid":"怀疑用户使用旧的 Discord Android 客户端",
-        "settings":{
-            "detectDiscordKotlin":"检测旧的 Discord Android 客户端",
-            "ignoreSelf":"不要将指示符添加到您自己的消息中",
-            "latency":"延迟指示器的阈值（以秒为单位）",
-            "showMillis":"显示毫秒"
+    "messageLatency": {
+        "clockAhead": "该用户的时钟提前 {delta}。",
+        "delayedMessage": "延迟消息",
+        "messageDelayed": "此消息的发送延迟了 {delta}。",
+        "oldAndroidClient": "旧的 Discord Android 客户端",
+        "oldDiscordAndroid": "怀疑用户使用旧的 Discord Android 客户端",
+        "settings": {
+            "detectDiscordKotlin": "检测旧的 Discord Android 客户端",
+            "ignoreSelf": "不要将指示符添加到您自己的消息中",
+            "latency": "延迟指示器的阈值（以秒为单位）",
+            "showMillis": "显示毫秒"
         },
-        "timeUnits":{
-            "day":"天",
-            "days":"天",
-            "hour":"小时",
-            "hours":"小时",
-            "millisecond":"毫秒",
-            "milliseconds":"毫秒",
-            "minute":"分钟",
-            "minutes":"分钟",
-            "second":"第二",
-            "seconds":"秒"
+        "timeUnits": {
+            "day": "天",
+            "days": "天",
+            "hour": "小时",
+            "hours": "小时",
+            "millisecond": "毫秒",
+            "milliseconds": "毫秒",
+            "minute": "分钟",
+            "minutes": "分钟",
+            "second": "第二",
+            "seconds": "秒"
         }
     },
-    "messageLinkEmbeds":{
-        "automodOptions":{
-            "always":"始终使用 automod 嵌入",
-            "never":"切勿使用 automod 嵌入",
-            "prefer":"更喜欢 automod 嵌入，但如果某些内容无法显示，请使用丰富的嵌入"
+    "messageLinkEmbeds": {
+        "automodOptions": {
+            "always": "始终使用 automod 嵌入",
+            "never": "切勿使用 automod 嵌入",
+            "prefer": "更喜欢 automod 嵌入，但如果某些内容无法显示，请使用丰富的嵌入"
         },
-        "channelLabels":{
-            "directMessage":"私信",
-            "groupDM":"Group DM",
-            "server":"服务器"
+        "channelLabels": {
+            "directMessage": "私信",
+            "groupDM": "Group DM",
+            "server": "服务器"
         },
-        "description":"为链接其他消息的消息添加预览",
-        "listModeOptions":{
-            "blacklist":"黑名单",
-            "whitelist":"白名单"
+        "description": "为链接其他消息的消息添加预览",
+        "listModeOptions": {
+            "blacklist": "黑名单",
+            "whitelist": "白名单"
         },
-        "noContent":{
-            "attachments_only_one":"[无内容，{count}附件]",
-            "attachments_only_other":"[无内容，{count}附件]",
-            "both_one":"[无内容，{attachments}附件和{embeds}嵌入]",
-            "both_other":"[无内容，{attachments}附件和{embeds}嵌入]",
-            "embeds_only_one":"[无内容，{count}嵌入]",
-            "embeds_only_other":"[无内容，{count} 嵌入]"
+        "noContent": {
+            "attachments_only_one": "[无内容，{count}附件]",
+            "attachments_only_other": "[无内容，{count}附件]",
+            "both_one": "[无内容，{attachments}附件和{embeds}嵌入]",
+            "both_other": "[无内容，{attachments}附件和{embeds}嵌入]",
+            "embeds_only_one": "[无内容，{count}嵌入]",
+            "embeds_only_other": "[无内容，{count} 嵌入]"
         },
-        "settings":{
-            "automodEmbeds":"使用 automod 嵌入而不是丰富的嵌入（较小但信息较少）",
-            "clearMessageCache":"清除链接消息缓存",
-            "idList":"加入黑名单或白名单的公会/频道/用户 ID（以逗号分隔）",
-            "listMode":"是否使用ID列表作为黑名单或白名单",
-            "messageBackgroundColor":"丰富嵌入中消息的背景颜色"
+        "settings": {
+            "automodEmbeds": "使用 automod 嵌入而不是丰富的嵌入（较小但信息较少）",
+            "clearMessageCache": "清除链接消息缓存",
+            "idList": "加入黑名单或白名单的公会/频道/用户 ID（以逗号分隔）",
+            "listMode": "是否使用ID列表作为黑名单或白名单",
+            "messageBackgroundColor": "丰富嵌入中消息的背景颜色"
         }
     },
-    "messageLogger":{
-        "clearMessageLog":"清除消息日志",
-        "deletedMessages_one":"{count}已删除消息",
-        "deletedMessages_other":"{count}已删除的消息",
-        "deletedMessages_zero":"没有删除的消息",
-        "disableDiffView":"禁用差异视图",
-        "editHistory":"留言编辑历史",
-        "enableDiffView":"启用差异视图",
-        "notLoggedTooltip":"此编辑状态未记录，因此无法显示。",
-        "removeMessageHistory":"删除消息历史记录",
-        "removeMessageTemporary":"删除消息（临时）",
-        "settings":{
-            "collapseDeleted":"是否折叠已删除的消息，类似于阻止的消息",
-            "deleteStyle":"已删除消息的样式",
-            "deleteStyleRedOverlay":"红色叠加",
-            "deleteStyleRedText":"红色文字",
-            "ignoreBots":"是否忽略机器人发送的消息",
-            "ignoreChannels":"要忽略的以逗号分隔的通道 ID 列表",
-            "ignoreGuilds":"要忽略的以逗号分隔的行会 ID 列表",
-            "ignoreSelf":"是否自行忽略消息",
-            "ignoreUsers":"要忽略的以逗号分隔的用户 ID 列表",
-            "inlineEdits":"是否将编辑历史显示为消息内容的一部分",
-            "logDeletes":"是否记录已删除的消息",
-            "logEdits":"是否记录编辑的消息",
-            "separatedDiffs":"差异中单独的添加和删除以获得更具可读性的差异",
-            "showEditDiffs":"显示已编辑消息版本之间的视觉差异"
+    "messageLogger": {
+        "clearMessageLog": "清除消息日志",
+        "deletedMessages_one": "{count}已删除消息",
+        "deletedMessages_other": "{count}已删除的消息",
+        "deletedMessages_zero": "没有删除的消息",
+        "disableDiffView": "禁用差异视图",
+        "editHistory": "留言编辑历史",
+        "enableDiffView": "启用差异视图",
+        "notLoggedTooltip": "此编辑状态未记录，因此无法显示。",
+        "removeMessageHistory": "删除消息历史记录",
+        "removeMessageTemporary": "删除消息（临时）",
+        "settings": {
+            "collapseDeleted": "是否折叠已删除的消息，类似于阻止的消息",
+            "deleteStyle": "已删除消息的样式",
+            "deleteStyleRedOverlay": "红色叠加",
+            "deleteStyleRedText": "红色文字",
+            "ignoreBots": "是否忽略机器人发送的消息",
+            "ignoreChannels": "要忽略的以逗号分隔的通道 ID 列表",
+            "ignoreGuilds": "要忽略的以逗号分隔的行会 ID 列表",
+            "ignoreSelf": "是否自行忽略消息",
+            "ignoreUsers": "要忽略的以逗号分隔的用户 ID 列表",
+            "inlineEdits": "是否将编辑历史显示为消息内容的一部分",
+            "logDeletes": "是否记录已删除的消息",
+            "logEdits": "是否记录编辑的消息",
+            "separatedDiffs": "差异中单独的添加和删除以获得更具可读性的差异",
+            "showEditDiffs": "显示已编辑消息版本之间的视觉差异"
         },
-        "toggleDeletedHighlight":"切换已删除的突出显示"
+        "toggleDeletedHighlight": "切换已删除的突出显示"
     },
-    "messagePopoverAPI":{
-        "description":"API 将按钮添加到消息弹出窗口"
+    "messagePopoverAPI": {
+        "description": "API 将按钮添加到消息弹出窗口"
     },
-    "messageTags":{
-        "commands":{
-            "create":"创建一个新标签",
-            "delete":"去掉自己身上的标签",
-            "list":"列出您自己的所有标签",
-            "message":"使用此标签时您将发送的消息",
-            "preview":"预览标签而不公开发送",
-            "tagName":"触发响应的标签名称",
-            "tags":"自己管理所有标签"
+    "messageTags": {
+        "commands": {
+            "create": "创建一个新标签",
+            "delete": "去掉自己身上的标签",
+            "list": "列出您自己的所有标签",
+            "message": "使用此标签时您将发送的消息",
+            "preview": "预览标签而不公开发送",
+            "tagName": "触发响应的标签名称",
+            "tags": "自己管理所有标签"
         },
-        "description":"允许您保存消息并通过简单的命令使用它们。",
-        "settings":{
-            "clydeDescription":"如果启用，当使用标签时，clyde 会向您发送一条短暂消息。",
-            "clydeName":"发送克莱德消息"
+        "description": "允许您保存消息并通过简单的命令使用它们。",
+        "settings": {
+            "clydeDescription": "如果启用，当使用标签时，clyde 会向您发送一条短暂消息。",
+            "clydeName": "发送克莱德消息"
         },
-        "ui":{
-            "allTags":"所有标签：",
-            "invalidSubCommand":"无效的子命令",
-            "noTagsYet":"哎呀！还没有标签，请使用 `/tags create` 创建一个！",
-            "tagAlreadyExists":"名为 **{name}** 的标签已存在！",
-            "tagCreated":"成功创建标签 **{name}**！",
-            "tagDeleted":"成功删除标签**{name}**！",
-            "tagDoesNotExist":"标签 **{name}** 不再存在！请重新加载你的 Discord 来修复:)",
-            "tagDoesNotExist2":"名为 **{name}** 的标签不存在！",
-            "tagSent":"标签 **{name}** 已发送！"
+        "ui": {
+            "allTags": "所有标签：",
+            "invalidSubCommand": "无效的子命令",
+            "noTagsYet": "哎呀！还没有标签，请使用 `/tags create` 创建一个！",
+            "tagAlreadyExists": "名为 **{name}** 的标签已存在！",
+            "tagCreated": "成功创建标签 **{name}**！",
+            "tagDeleted": "成功删除标签**{name}**！",
+            "tagDoesNotExist": "标签 **{name}** 不再存在！请重新加载你的 Discord 来修复:)",
+            "tagDoesNotExist2": "名为 **{name}** 的标签不存在！",
+            "tagSent": "标签 **{name}** 已发送！"
         }
     },
-    "messageUpdaterAPI":{
-        "description":"API 用于更新和重新渲染消息"
+    "messageUpdaterAPI": {
+        "description": "API 用于更新和重新渲染消息"
     },
-    "moreQuickReactions":{
-        "description":"改进了消息上下文菜单中的快速反应按钮。",
-        "settings":{
-            "columns":"显示快速反应列",
-            "compactMode":"将按钮缩放至原始比例的 75%，同时将内部表情符号放大至 125%。表情符号将是原始大小的 93.75%。建议至少有 5 列",
-            "frequentEmojis":"使用常用的表情符号代替最喜欢的表情符号",
-            "reactionCount":"反应次数（0-42）",
-            "rows":"显示成排的快速反应",
-            "scroll":"启用滚动表情符号列表"
+    "moreQuickReactions": {
+        "description": "改进了消息上下文菜单中的快速反应按钮。",
+        "settings": {
+            "columns": "显示快速反应列",
+            "compactMode": "将按钮缩放至原始比例的 75%，同时将内部表情符号放大至 125%。表情符号将是原始大小的 93.75%。建议至少有 5 列",
+            "frequentEmojis": "使用常用的表情符号代替最喜欢的表情符号",
+            "reactionCount": "反应次数（0-42）",
+            "rows": "显示成排的快速反应",
+            "scroll": "启用滚动表情符号列表"
         }
     },
-    "mutualGroupDMs":{
-        "description":"在配置文件中显示相互组 dms",
-        "members_one":"{count} 会员",
-        "members_other":"{count} 成员",
-        "mutualGroupsHeader":"相互团体",
-        "mutualGroups_one":"{count} 相互 Group",
-        "mutualGroups_other":"{count} 相互组",
-        "noGroupDms":"没有共同的组 dms",
-        "noMutualGroups":"无相互群组"
+    "mutualGroupDMs": {
+        "description": "在配置文件中显示相互组 dms",
+        "members_one": "{count} 会员",
+        "members_other": "{count} 成员",
+        "mutualGroupsHeader": "相互团体",
+        "mutualGroups_one": "{count} 相互 Group",
+        "mutualGroups_other": "{count} 相互组",
+        "noGroupDms": "没有共同的组 dms",
+        "noMutualGroups": "无相互群组"
     },
-    "newGuildSettings":{
-        "applySettings":"应用新公会设置",
-        "description":"加入后自动静音新服务器并更改各种其他设置",
-        "settings":{
-            "allMessages":"所有消息",
-            "events":"自动静音新事件",
-            "everyone":"抑制 @everyone 和 @here",
-            "guild":"自动静音公会",
-            "highlights":"自动抑制高光",
-            "messages":"服务器通知设置",
-            "mobilePush":"自动静音 Mobile 推送通知",
-            "nothing":"无通知",
-            "onlyMentions":"仅 @被提及",
-            "role":"禁止所有角色@提及",
-            "serverDefault":"服务器默认",
-            "showAllChannels":"自动显示所有频道",
-            "voiceChannels":"自动隐藏语音频道中的姓名"
+    "newGuildSettings": {
+        "applySettings": "应用新公会设置",
+        "description": "加入后自动静音新服务器并更改各种其他设置",
+        "settings": {
+            "allMessages": "所有消息",
+            "events": "自动静音新事件",
+            "everyone": "抑制 @everyone 和 @here",
+            "guild": "自动静音公会",
+            "highlights": "自动抑制高光",
+            "messages": "服务器通知设置",
+            "mobilePush": "自动静音 Mobile 推送通知",
+            "nothing": "无通知",
+            "onlyMentions": "仅 @被提及",
+            "role": "禁止所有角色@提及",
+            "serverDefault": "服务器默认",
+            "showAllChannels": "自动显示所有频道",
+            "voiceChannels": "自动隐藏语音频道中的姓名"
         }
     },
-    "nicknameIconsAPI":{
-        "description":"API 在个人资料中向昵称添加图标"
+    "nicknameIconsAPI": {
+        "description": "API 在个人资料中向昵称添加图标"
     },
-    "noBlockedMessages":{
-        "description":"完全隐藏聊天中所有被阻止/忽略的消息。",
-        "settings":{
-            "allowAutoModMessages":"允许 AutoMod 发送的消息绕过过滤。",
-            "alsoHideIgnoredUsers":"还可以隐藏被忽略的用户的消息。",
-            "defaultHideUsers":"如果启用，来自被阻止用户的消息将被完全隐藏，并且来自覆盖列表中用户 ID 的任何消息将被折叠（默认 Discord 行为）。如果禁用，来自被阻止用户的消息将被折叠，并且来自覆盖列表中用户 ID 的任何消息将被完全隐藏。",
-            "disableNotifications":"隐藏被阻止用户的新消息通知。如果下面启用了“默认隐藏用户”并且触发通知的用户在“覆盖用户”中未豁免，则始终为 true。",
-            "hideBlockedUserReplies":"隐藏对被阻止用户的回复。",
-            "overrideUsers":"逗号分隔的用户 ID 列表将被隐藏或折叠，而不是上面选择的默认行为。"
+    "noBlockedMessages": {
+        "description": "完全隐藏聊天中所有被阻止/忽略的消息。",
+        "settings": {
+            "allowAutoModMessages": "允许 AutoMod 发送的消息绕过过滤。",
+            "alsoHideIgnoredUsers": "还可以隐藏被忽略的用户的消息。",
+            "defaultHideUsers": "如果启用，来自被阻止用户的消息将被完全隐藏，并且来自覆盖列表中用户 ID 的任何消息将被折叠（默认 Discord 行为）。如果禁用，来自被阻止用户的消息将被折叠，并且来自覆盖列表中用户 ID 的任何消息将被完全隐藏。",
+            "disableNotifications": "隐藏被阻止用户的新消息通知。如果下面启用了“默认隐藏用户”并且触发通知的用户在“覆盖用户”中未豁免，则始终为 true。",
+            "hideBlockedUserReplies": "隐藏对被阻止用户的回复。",
+            "overrideUsers": "逗号分隔的用户 ID 列表将被隐藏或折叠，而不是上面选择的默认行为。"
         }
     },
-    "noDeepLinks":{
-        "description":"禁用 Discord 愚蠢的深层链接功能，该功能试图强迫您使用他们的桌面应用程序"
+    "noDeepLinks": {
+        "description": "禁用 Discord 愚蠢的深层链接功能，该功能试图强迫您使用他们的桌面应用程序"
     },
-    "noDevtoolsWarning":{
-        "description":"禁用控制台中的“HOLD UP”横幅。作为副作用，还可以防止 Discord 隐藏您的令牌，从而防止随机注销。"
+    "noDevtoolsWarning": {
+        "description": "禁用控制台中的“HOLD UP”横幅。作为副作用，还可以防止 Discord 隐藏您的令牌，从而防止随机注销。"
     },
-    "noF1":{
-        "description":"禁用 F1 帮助绑定。"
+    "noF1": {
+        "description": "禁用 F1 帮助绑定。"
     },
-    "noMaskedUrlPaste":{
-        "description":"在选择文本时粘贴链接不会粘贴为屏蔽的 URL"
+    "noMaskedUrlPaste": {
+        "description": "在选择文本时粘贴链接不会粘贴为屏蔽的 URL"
     },
-    "noMosaic":{
-        "description":"删除Discord图像马赛克",
-        "settings":{
-            "inlineVideo":"不使用轮播模式播放视频"
+    "noMosaic": {
+        "description": "删除Discord图像马赛克",
+        "settings": {
+            "inlineVideo": "不使用轮播模式播放视频"
         }
     },
-    "noOnboardingDelay":{
-        "description":"跳过缓慢而烦人的入职延迟"
+    "noOnboardingDelay": {
+        "description": "跳过缓慢而烦人的入职延迟"
     },
-    "noPendingCount":{
-        "description":"删除传入好友请求、消息请求和硝基优惠的 ping 计数。",
-        "settings":{
-            "hideFriendRequestsCount":"隐藏收到的好友请求计数",
-            "hideMessageRequestsCount":"隐藏消息请求计数",
-            "hidePremiumOffersCount":"隐藏硝基报价计数"
+    "noPendingCount": {
+        "description": "删除传入好友请求、消息请求和硝基优惠的 ping 计数。",
+        "settings": {
+            "hideFriendRequestsCount": "隐藏收到的好友请求计数",
+            "hideMessageRequestsCount": "隐藏消息请求计数",
+            "hidePremiumOffersCount": "隐藏硝基报价计数"
         }
     },
-    "noProfileThemes":{
-        "description":"完全删除除了您自己以外的所有人的 Nitro 个人资料主题"
+    "noProfileThemes": {
+        "description": "完全删除除了您自己以外的所有人的 Nitro 个人资料主题"
     },
-    "noReplyMention":{
-        "description":"默认情况下禁用回复 ping",
-        "settings":{
-            "doNotPingListed":"不要 ping 列出的用户/角色",
-            "inverseShiftReply":"反转Discord的轮班回复行为（启用轮班回复提及用户）",
-            "onlyPingListed":"仅 ping 列出的用户/角色",
-            "roleList":"允许或免除 ping 的角色列表（用逗号或空格分隔）",
-            "shouldPingListed":"行为",
-            "userList":"允许或免除 ping 的用户列表（以逗号或空格分隔）"
+    "noReplyMention": {
+        "description": "默认情况下禁用回复 ping",
+        "settings": {
+            "doNotPingListed": "不要 ping 列出的用户/角色",
+            "inverseShiftReply": "反转Discord的轮班回复行为（启用轮班回复提及用户）",
+            "onlyPingListed": "仅 ping 列出的用户/角色",
+            "roleList": "允许或免除 ping 的角色列表（用逗号或空格分隔）",
+            "shouldPingListed": "行为",
+            "userList": "允许或免除 ping 的用户列表（以逗号或空格分隔）"
         }
     },
-    "noServerEmojis":{
-        "description":"不要在自动完成菜单中显示服务器表情符号。",
-        "settings":{
-            "shownEmojis":"自动完成菜单中显示的表情符号类型。",
-            "shownEmojisOptions":{
-                "all":"Unicode 表情符号和所有服务器表情符号（Discord 默认）",
-                "currentServer":"当前服务器中的 Unicode 表情符号和服务器表情符号",
-                "onlyUnicode":"仅限 unicode 表情符号"
+    "noServerEmojis": {
+        "description": "不要在自动完成菜单中显示服务器表情符号。",
+        "settings": {
+            "shownEmojis": "自动完成菜单中显示的表情符号类型。",
+            "shownEmojisOptions": {
+                "all": "Unicode 表情符号和所有服务器表情符号（Discord 默认）",
+                "currentServer": "当前服务器中的 Unicode 表情符号和服务器表情符号",
+                "onlyUnicode": "仅限 unicode 表情符号"
             }
         }
     },
-    "noSystemBadge":{
-        "description":"禁用任务栏和系统托盘未读计数标志。"
+    "noSystemBadge": {
+        "description": "禁用任务栏和系统托盘未读计数标志。"
     },
-    "noTypingAnimation":{
-        "description":"禁用 CPU 密集型打字点动画"
+    "noTypingAnimation": {
+        "description": "禁用 CPU 密集型打字点动画"
     },
-    "noUnblockToJump":{
-        "description":"允许您跳转到被阻止或被忽略的用户以及可能的垃圾邮件发送者的消息，而无需取消阻止他们"
+    "noUnblockToJump": {
+        "description": "允许您跳转到被阻止或被忽略的用户以及可能的垃圾邮件发送者的消息，而无需取消阻止他们"
     },
-    "noticesAPI":{
-        "description":"修复通知被自动忽略的问题"
+    "noticesAPI": {
+        "description": "修复通知被自动忽略的问题"
     },
-    "notificationVolume":{
-        "description":"保护您的耳朵并为通知和应用内声音设置单独的音量",
-        "settings":{
-            "notificationVolume":"通知音量"
+    "notificationVolume": {
+        "description": "保护您的耳朵并为通知和应用内声音设置单独的音量",
+        "settings": {
+            "notificationVolume": "通知音量"
         }
     },
-    "onePingPerDM":{
-        "description":"如果用户在 DM 中多次发送未读消息，您将只会收到一个音频 ping。",
-        "settings":{
-            "allowEveryone":"接收组 DM 中 @everyone 和 @here 的音频 ping",
-            "allowMentions":"接收@提及的音频 ping",
-            "alwaysPlaySound":"即使禁用时也播放消息通知声音",
-            "channelToAffect":"选择插件影响的 DM 类型",
-            "channelToAffectOptions":{
-                "both":"两个都",
-                "groupDm":"Group 私信",
-                "userDm":"用户私信"
+    "onePingPerDM": {
+        "description": "如果用户在 DM 中多次发送未读消息，您将只会收到一个音频 ping。",
+        "settings": {
+            "allowEveryone": "接收组 DM 中 @everyone 和 @here 的音频 ping",
+            "allowMentions": "接收@提及的音频 ping",
+            "alwaysPlaySound": "即使禁用时也播放消息通知声音",
+            "channelToAffect": "选择插件影响的 DM 类型",
+            "channelToAffectOptions": {
+                "both": "两个都",
+                "groupDm": "Group 私信",
+                "userDm": "用户私信"
             },
-            "ignoreUsers":"其 ping 不应受到限制的用户 ID（逗号 + 空格）"
+            "ignoreUsers": "其 ping 不应受到限制的用户 ID（逗号 + 空格）"
         }
     },
-    "openInApp":{
-        "description":"在各自的应用程序中打开链接，而不是在浏览器中打开",
-        "settings":{
-            "epic":"在 Epic Games 启动器中打开 Epic Games 链接",
-            "itunes":"在 iTunes 应用程序中打开 Apple Music 链接",
-            "spotify":"在 Spotify 应用程序中打开 Spotify 链接",
-            "steam":"在 Steam 应用程序中打开 Steam 链接",
-            "tidal":"在 Tidal 应用程序中打开 Tidal 链接",
-            "vrcx":"在 VRCX 应用程序中打开 VRChat 链接"
+    "openInApp": {
+        "description": "在各自的应用程序中打开链接，而不是在浏览器中打开",
+        "settings": {
+            "epic": "在 Epic Games 启动器中打开 Epic Games 链接",
+            "itunes": "在 iTunes 应用程序中打开 Apple Music 链接",
+            "spotify": "在 Spotify 应用程序中打开 Spotify 链接",
+            "steam": "在 Steam 应用程序中打开 Steam 链接",
+            "tidal": "在 Tidal 应用程序中打开 Tidal 链接",
+            "vrcx": "在 VRCX 应用程序中打开 VRChat 链接"
         },
-        "ui":{
-            "openedInApp":"在本机应用程序中打开链接"
+        "ui": {
+            "openedInApp": "在本机应用程序中打开链接"
         }
     },
-    "overrideForumDefaults":{
-        "description":"允许您覆盖默认的论坛布局/排序顺序。您仍然可以在每个频道的基础上更改它",
-        "layouts":{
-            "gallery":"画廊",
-            "list":"列表"
+    "overrideForumDefaults": {
+        "description": "允许您覆盖默认的论坛布局/排序顺序。您仍然可以在每个频道的基础上更改它",
+        "layouts": {
+            "gallery": "画廊",
+            "list": "列表"
         },
-        "name":"覆盖论坛默认值",
-        "settings":{
-            "defaultLayout":"使用哪种布局作为默认布局",
-            "defaultSortOrder":"使用哪种排序顺序作为默认值"
+        "name": "覆盖论坛默认值",
+        "settings": {
+            "defaultLayout": "使用哪种布局作为默认布局",
+            "defaultSortOrder": "使用哪种排序顺序作为默认值"
         },
-        "sortOrders":{
-            "datePosted":"发布日期",
-            "recentlyActive":"最近活跃"
+        "sortOrders": {
+            "datePosted": "发布日期",
+            "recentlyActive": "最近活跃"
         }
     },
-    "pauseInvitesForever":{
-        "description":"恢复了无限期暂停邀请的选项，删除了愚蠢的 Discord。",
-        "name":"永远暂停邀请",
-        "pauseIndefinitely":"无限期暂停。"
+    "pauseInvitesForever": {
+        "description": "恢复了无限期暂停邀请的选项，删除了愚蠢的 Discord。",
+        "name": "永远暂停邀请",
+        "pauseIndefinitely": "无限期暂停。"
     },
-    "permissionFreeWill":{
-        "description":"禁用频道权限管理的客户端限制。",
-        "settings":{
-            "lockout":"绕过权限锁定预防（“很确定你不想这样做”）",
-            "onboarding":"绕过入职要求（“进行此更改将使您的服务器不兼容[...]”）"
+    "permissionFreeWill": {
+        "description": "禁用频道权限管理的客户端限制。",
+        "settings": {
+            "lockout": "绕过权限锁定预防（“很确定你不想这样做”）",
+            "onboarding": "绕过入职要求（“进行此更改将使您的服务器不兼容[...]”）"
         }
     },
-    "permissionsViewer":{
-        "noPermissions":"无权限显示！",
-        "owner":"所有者",
-        "permissions":"权限",
-        "permissionsTitle":"{header} 权限",
-        "roleOptions":"角色选项",
-        "settings":{
-            "highestRole":"最高角色",
-            "lowestRole":"最低的角色",
-            "permissionsSortOrder":"用于定义哪个角色授予用户某种权限的排序方法"
+    "permissionsViewer": {
+        "noPermissions": "无权限显示！",
+        "owner": "所有者",
+        "permissions": "权限",
+        "permissionsTitle": "{header} 权限",
+        "roleOptions": "角色选项",
+        "settings": {
+            "highestRole": "最高角色",
+            "lowestRole": "最低的角色",
+            "permissionsSortOrder": "用于定义哪个角色授予用户某种权限的排序方法"
         },
-        "unknownRole":"未知角色",
-        "unknownUser":"未知用户",
-        "userOptions":"用户选项",
-        "viewPermissions":"查看权限"
+        "unknownRole": "未知角色",
+        "unknownUser": "未知用户",
+        "userOptions": "用户选项",
+        "viewPermissions": "查看权限"
     },
-    "petpet":{
-        "commands":{
-            "petpet":{
-                "description":"创建宠物 gif。您只能指定图像选项之一",
-                "name":"宠物宠物",
-                "options":{
-                    "delay":"每帧之间的延迟（以毫秒为单位）。四舍五入到最接近的 10 毫秒。默认为最小值 20。",
-                    "image":"使用的图像附件",
-                    "noServerPfp":"使用“用户”选项时，使用普通头像而不是服务器特定头像",
-                    "resolution":"gif 的分辨率。默认为 120。如果您输入一个疯狂的数字并且它冻结 Discord 那是您的错。",
-                    "url":"URL 从中获取图像",
-                    "user":"将其头像用作图像的用户"
+    "petpet": {
+        "commands": {
+            "petpet": {
+                "description": "创建宠物 gif。您只能指定图像选项之一",
+                "name": "宠物宠物",
+                "options": {
+                    "delay": "每帧之间的延迟（以毫秒为单位）。四舍五入到最接近的 10 毫秒。默认为最小值 20。",
+                    "image": "使用的图像附件",
+                    "noServerPfp": "使用“用户”选项时，使用普通头像而不是服务器特定头像",
+                    "resolution": "gif 的分辨率。默认为 120。如果您输入一个疯狂的数字并且它冻结 Discord 那是您的错。",
+                    "url": "URL 从中获取图像",
+                    "user": "将其头像用作图像的用户"
                 }
             }
         },
-        "description":"添加 /petpet 斜线命令以从任何图像创建头戴式 gif",
-        "errors":{
-            "delayMinimum":"延迟必须至少为 20。",
-            "failedToFetchUser":"获取用户失败。检查控制台以获取更多信息。",
-            "noImage":"没有指定图片！",
-            "uploadNotImage":"上传的不是图片"
+        "description": "添加 /petpet 斜线命令以从任何图像创建头戴式 gif",
+        "errors": {
+            "delayMinimum": "延迟必须至少为 20。",
+            "failedToFetchUser": "获取用户失败。检查控制台以获取更多信息。",
+            "noImage": "没有指定图片！",
+            "uploadNotImage": "上传的不是图片"
         }
     },
-    "pictureInPicture":{
-        "description":"将画中画添加到视频中（在“下载”按钮旁边）",
-        "settings":{
-            "loop":"是否循环画中画视频"
+    "pictureInPicture": {
+        "description": "将画中画添加到视频中（在“下载”按钮旁边）",
+        "settings": {
+            "loop": "是否循环画中画视频"
         },
-        "togglePip":"切换画中画"
+        "togglePip": "切换画中画"
     },
-    "pinDms":{
-        "addCategory":"添加类别",
-        "color":"颜色",
-        "create":"创建",
-        "deleteCategory":"删除类别",
-        "editCategory":"编辑类别",
-        "editCategoryTitle":"编辑类别",
-        "moveDown":"下移",
-        "moveUp":"上移",
-        "name":"名称",
-        "newCategory":"新类别",
-        "pinCategory":"引脚类别 {index}",
-        "pinDms":"引脚 DM",
-        "save":"保存",
-        "settings":{
-            "canCollapseDmSection":"允许未分类的 DM 部分可折叠",
-            "customOrder":"自定义（右键单击频道重新排序）",
-            "dmSectionCollapsed":"折叠 DM 部分",
-            "mostRecentMessage":"最近的消息",
-            "pinOrder":"固定的私信应按什么顺序显示？"
+    "pinDms": {
+        "addCategory": "添加类别",
+        "color": "颜色",
+        "create": "创建",
+        "deleteCategory": "删除类别",
+        "editCategory": "编辑类别",
+        "editCategoryTitle": "编辑类别",
+        "moveDown": "下移",
+        "moveUp": "上移",
+        "name": "名称",
+        "newCategory": "新类别",
+        "pinCategory": "引脚类别 {index}",
+        "pinDms": "引脚 DM",
+        "save": "保存",
+        "settings": {
+            "canCollapseDmSection": "允许未分类的 DM 部分可折叠",
+            "customOrder": "自定义（右键单击频道重新排序）",
+            "dmSectionCollapsed": "折叠 DM 部分",
+            "mostRecentMessage": "最近的消息",
+            "pinOrder": "固定的私信应按什么顺序显示？"
         },
-        "unpinDm":"取消固定 DM"
+        "unpinDm": "取消固定 DM"
     },
-    "plainFolderIcon":{
-        "description":"不要在文件夹中显示小公会图标"
+    "plainFolderIcon": {
+        "description": "不要在文件夹中显示小公会图标"
     },
-    "platformIndicators":{
-        "consoleIcons":{
-            "equicord":"Equicord",
-            "suncord":"桑科德",
-            "vencord":"Vencord"
+    "platformIndicators": {
+        "consoleIcons": {
+            "equicord": "Equicord",
+            "suncord": "桑科德",
+            "vencord": "Vencord"
         },
-        "description":"向用户添加平台指示器（桌面、Mobile、Web...）",
-        "platforms":{
-            "console":"安慰",
-            "desktop":"桌面",
-            "mobile":"Mobile",
-            "web":"网络"
+        "description": "向用户添加平台指示器（桌面、Mobile、Web...）",
+        "platforms": {
+            "console": "安慰",
+            "desktop": "桌面",
+            "mobile": "Mobile",
+            "web": "网络"
         },
-        "settings":{
-            "colorMobileIndicator":"是否使移动指示灯与用户状态的颜色相匹配。",
-            "consoleIcon":"使用什么控制台图标",
-            "list":"在成员列表中显示指标",
-            "messages":"显示消息内的指示器",
-            "profiles":"在用户个人资料中显示指标",
-            "showBots":"是否在机器人上显示平台指示器"
+        "settings": {
+            "colorMobileIndicator": "是否使移动指示灯与用户状态的颜色相匹配。",
+            "consoleIcon": "使用什么控制台图标",
+            "list": "在成员列表中显示指标",
+            "messages": "显示消息内的指示器",
+            "profiles": "在用户个人资料中显示指标",
+            "showBots": "是否在机器人上显示平台指示器"
         }
     },
-    "previewMessage":{
-        "description":"让您在发送消息之前预览消息。",
-        "name":"预览留言",
-        "previewMessage":"预览消息"
+    "previewMessage": {
+        "description": "让您在发送消息之前预览消息。",
+        "name": "预览留言",
+        "previewMessage": "预览消息"
     },
-    "quickActions":{
-        "editQuickCSS":"编辑 QuickCSS",
-        "notificationLog":"通知日志",
-        "openSettings":"打开设置文件夹",
-        "relaunchDiscord":"重新启动 Discord",
-        "title":"快速行动",
-        "viewSource":"查看源代码"
+    "quickActions": {
+        "editQuickCSS": "编辑 QuickCSS",
+        "notificationLog": "通知日志",
+        "openSettings": "打开设置文件夹",
+        "relaunchDiscord": "重新启动 Discord",
+        "title": "快速行动",
+        "viewSource": "查看源代码"
     },
-    "quickMention":{
-        "description":"在消息操作栏中添加快速提及按钮",
-        "label":"快速提及"
+    "quickMention": {
+        "description": "在消息操作栏中添加快速提及按钮",
+        "label": "快速提及"
     },
-    "quickReply":{
-        "description":"通过按键绑定回复（ctrl + 向上/向下）和编辑（ctrl + shift + 向上/向下）消息",
-        "settings":{
-            "ignoreBlockedAndIgnored":"导航时忽略被阻止/忽略的用户的消息",
-            "shouldMention":"默认 Ping 回复",
-            "shouldMentionOptions":{
-                "disabled":"关闭",
-                "enabled":"启用",
-                "followPlugin":"关注 NoReplyMention 插件（如果启用）"
+    "quickReply": {
+        "description": "通过按键绑定回复（ctrl + 向上/向下）和编辑（ctrl + shift + 向上/向下）消息",
+        "settings": {
+            "ignoreBlockedAndIgnored": "导航时忽略被阻止/忽略的用户的消息",
+            "shouldMention": "默认 Ping 回复",
+            "shouldMentionOptions": {
+                "disabled": "关闭",
+                "enabled": "启用",
+                "followPlugin": "关注 NoReplyMention 插件（如果启用）"
             }
         }
     },
-    "reactErrorDecoder":{
-        "description":"将“Minifed React Error”替换为实际错误。"
+    "reactErrorDecoder": {
+        "description": "将“Minifed React Error”替换为实际错误。"
     },
-    "readAllNotificationsButton":{
-        "description":"单击按钮即可阅读所有服务器通知！",
-        "name":"阅读所有通知按钮",
-        "readAll":"阅读全部"
+    "readAllNotificationsButton": {
+        "description": "单击按钮即可阅读所有服务器通知！",
+        "name": "阅读所有通知按钮",
+        "readAll": "阅读全部"
     },
-    "relationshipNotifier":{
-        "description":"当朋友、群聊或服务器删除您时通知您。",
-        "friendRemoved":"{username}删除了你的好友身份。",
-        "friendRequestRemoved":"来自 {username} 的好友请求已被删除。",
-        "groupRemoved":"您已从群组 {name} 中删除。",
-        "notificationTitle":"关系通知者",
-        "offlineFriendRemoved":"你不再是{username}的朋友。",
-        "offlineFriendRequestRevoked":"来自 {username} 的好友请求已被撤销。",
-        "offlineGroupRemoved":"您已不再属于 {name} 组。",
-        "offlineServerRemoved":"您不再在服务器{name}中。",
-        "serverRemoved":"您已从服务器 {name} 中删除。",
-        "settings":{
-            "friendRequestCancels":"当好友请求被取消时通知",
-            "friends":"当朋友删除您时通知",
-            "groups":"从群聊中删除时发出通知",
-            "notices":"删除时还会在屏幕顶部显示一条通知（如果您不想错过任何通知，请使用此通知）。",
-            "offlineRemovals":"如果您在离线状态下被删除，则在启动 Discord 时通知您。",
-            "servers":"从服务器删除时发出通知"
+    "relationshipNotifier": {
+        "description": "当朋友、群聊或服务器删除您时通知您。",
+        "friendRemoved": "{username}删除了你的好友身份。",
+        "friendRequestRemoved": "来自 {username} 的好友请求已被删除。",
+        "groupRemoved": "您已从群组 {name} 中删除。",
+        "notificationTitle": "关系通知者",
+        "offlineFriendRemoved": "你不再是{username}的朋友。",
+        "offlineFriendRequestRevoked": "来自 {username} 的好友请求已被撤销。",
+        "offlineGroupRemoved": "您已不再属于 {name} 组。",
+        "offlineServerRemoved": "您不再在服务器{name}中。",
+        "serverRemoved": "您已从服务器 {name} 中删除。",
+        "settings": {
+            "friendRequestCancels": "当好友请求被取消时通知",
+            "friends": "当朋友删除您时通知",
+            "groups": "从群聊中删除时发出通知",
+            "notices": "删除时还会在屏幕顶部显示一条通知（如果您不想错过任何通知，请使用此通知）。",
+            "offlineRemovals": "如果您在离线状态下被删除，则在启动 Discord 时通知您。",
+            "servers": "从服务器删除时发出通知"
         }
     },
-    "replaceGoogleSearch":{
-        "description":"用不同的引擎替换 Google 搜索",
-        "searchText":"搜索文本",
-        "searchWith":"使用 {engine} 搜索",
-        "settings":{
-            "customEngine":"定制引擎",
-            "customEngineName":"自定义搜索引擎的名称",
-            "customEngineURL":"您引擎的 URL",
-            "off":"关",
-            "replacementEngine":"替换为特定的搜索引擎而不是添加菜单"
+    "replaceGoogleSearch": {
+        "description": "用不同的引擎替换 Google 搜索",
+        "searchText": "搜索文本",
+        "searchWith": "使用 {engine} 搜索",
+        "settings": {
+            "customEngine": "定制引擎",
+            "customEngineName": "自定义搜索引擎的名称",
+            "customEngineURL": "您引擎的 URL",
+            "off": "关",
+            "replacementEngine": "替换为特定的搜索引擎而不是添加菜单"
         }
     },
-    "replyTimestamp":{
-        "description":"在回复消息预览上显示时间戳"
+    "replyTimestamp": {
+        "description": "在回复消息预览上显示时间戳"
     },
-    "revealAllSpoilers":{
-        "description":"通过 Ctrl-单击剧透，或在聊天中使用 Ctrl+Shift-单击，显示消息中的所有剧透"
+    "revealAllSpoilers": {
+        "description": "通过 Ctrl-单击剧透，或在聊天中使用 Ctrl+Shift-单击，显示消息中的所有剧透"
     },
-    "reverseImageSearch":{
-        "all":"全部",
-        "description":"将 ImageSearch 添加到图像上下文菜单",
-        "name":"反向图像搜索",
-        "searchImage":"搜索图片"
+    "reverseImageSearch": {
+        "all": "全部",
+        "description": "将 ImageSearch 添加到图像上下文菜单",
+        "name": "反向图像搜索",
+        "searchImage": "搜索图片"
     },
-    "reviewDB":{
-        "appeal":"上诉",
-        "areYouSure":"你确定吗？",
-        "block":"屏蔽",
-        "blockedUser":"您已屏蔽该用户",
-        "blockedUsers":"被阻止的用户",
-        "confirmBlock":"您真的要阻止该用户吗？他们将无法对您的个人资料留下进一步的评论。您可以在插件设置中取消阻止用户。",
-        "confirmDelete":"您真的要删除此评论吗？",
-        "confirmReport":"您真的要举报此评论吗？",
-        "delete":"删除",
-        "failedToFetchBlocks":"无法获取块：{error}",
-        "mustBeLoggedInBlock":"您必须登录才能阻止用户。",
-        "mustBeLoggedInDelete":"您必须登录才能删除评论。",
-        "mustBeLoggedInReport":"您必须登录才能报告评论。",
-        "nevermind":"呃，没事了～",
-        "newReviews":"您的个人资料上有新评论！",
-        "noBlockedUsers":"没有被阻止的用户。",
-        "notLoggedIn":"您还没有登录 ReviewDB！",
-        "ok":"好的",
-        "readMore":"阅读更多",
-        "report":"举报",
-        "settings":{
-            "authorize":"使用 ReviewDB 授权",
-            "hideBlockedUsers":{
-                "description":"隐藏被阻止用户的评论"
+    "reviewDB": {
+        "appeal": "上诉",
+        "areYouSure": "你确定吗？",
+        "block": "屏蔽",
+        "blockedUser": "您已屏蔽该用户",
+        "blockedUsers": "被阻止的用户",
+        "confirmBlock": "您真的要阻止该用户吗？他们将无法对您的个人资料留下进一步的评论。您可以在插件设置中取消阻止用户。",
+        "confirmDelete": "您真的要删除此评论吗？",
+        "confirmReport": "您真的要举报此评论吗？",
+        "delete": "删除",
+        "failedToFetchBlocks": "无法获取块：{error}",
+        "mustBeLoggedInBlock": "您必须登录才能阻止用户。",
+        "mustBeLoggedInDelete": "您必须登录才能删除评论。",
+        "mustBeLoggedInReport": "您必须登录才能报告评论。",
+        "nevermind": "呃，没事了～",
+        "newReviews": "您的个人资料上有新评论！",
+        "noBlockedUsers": "没有被阻止的用户。",
+        "notLoggedIn": "您还没有登录 ReviewDB！",
+        "ok": "好的",
+        "readMore": "阅读更多",
+        "report": "举报",
+        "settings": {
+            "authorize": "使用 ReviewDB 授权",
+            "hideBlockedUsers": {
+                "description": "隐藏被阻止用户的评论"
             },
-            "hideTimestamps":{
-                "description":"隐藏评论的时间戳"
+            "hideTimestamps": {
+                "description": "隐藏评论的时间戳"
             },
-            "manageBlockedUsers":"管理被阻止的用户",
-            "notifyReviews":{
-                "description":"启动时通知新评论"
+            "manageBlockedUsers": "管理被阻止的用户",
+            "notifyReviews": {
+                "description": "启动时通知新评论"
             },
-            "showWarning":{
-                "description":"在评论列表顶部显示尊重警告"
+            "showWarning": {
+                "description": "在评论列表顶部显示尊重警告"
             },
-            "supportDevelopment":"支持ReviewDB开发",
-            "supportServer":"ReviewDB 支持服务器",
-            "website":"评论数据库网站"
+            "supportDevelopment": "支持ReviewDB开发",
+            "supportServer": "ReviewDB 支持服务器",
+            "website": "评论数据库网站"
         },
-        "system":"系统",
-        "unblockUser":"解锁用户",
-        "viewReviews":"查看评论"
+        "system": "系统",
+        "unblockUser": "解锁用户",
+        "viewReviews": "查看评论"
     },
-    "roleColorEverywhere":{
-        "description":"在任何可能的地方添加顶级角色颜色",
-        "settings":{
-            "chatMentions":"在聊天提及中显示角色颜色（包括在消息框中）",
-            "colorChatMessages":"根据作者的角色颜色对聊天消息进行颜色设置",
-            "memberList":"在成员列表角色标题中显示角色颜色",
-            "messageSaturation":"消息着色的强度。",
-            "pollResults":"在投票结果中显示角色颜色",
-            "reactorsList":"在反应堆列表中显示角色颜色",
-            "voiceUsers":"显示语音聊天用户列表中的角色颜色"
+    "roleColorEverywhere": {
+        "description": "在任何可能的地方添加顶级角色颜色",
+        "settings": {
+            "chatMentions": "在聊天提及中显示角色颜色（包括在消息框中）",
+            "colorChatMessages": "根据作者的角色颜色对聊天消息进行颜色设置",
+            "memberList": "在成员列表角色标题中显示角色颜色",
+            "messageSaturation": "消息着色的强度。",
+            "pollResults": "在投票结果中显示角色颜色",
+            "reactorsList": "在反应堆列表中显示角色颜色",
+            "voiceUsers": "显示语音聊天用户列表中的角色颜色"
         }
     },
-    "secretRingTone":{
-        "description":"始终播放不和谐铃声的秘密版本（特殊铃声活动期间除外）",
-        "settings":{
-            "onlySnow":"只播放雪光晕主题"
+    "secretRingTone": {
+        "description": "始终播放不和谐铃声的秘密版本（特殊铃声活动期间除外）",
+        "settings": {
+            "onlySnow": "只播放雪光晕主题"
         }
     },
-    "seeSummaries":{
-        "description":"在每台服务器上启用 Discord 的实验性摘要功能，显示 AI 生成的对话摘要",
-        "name":"摘要",
-        "settings":{
-            "summaryExpiryThresholdDays":"删除摘要之前的时间（以天为单位）。请注意，每个通道最多仅保留 50 个摘要"
+    "seeSummaries": {
+        "description": "在每台服务器上启用 Discord 的实验性摘要功能，显示 AI 生成的对话摘要",
+        "name": "摘要",
+        "settings": {
+            "summaryExpiryThresholdDays": "删除摘要之前的时间（以天为单位）。请注意，每个通道最多仅保留 50 个摘要"
         }
     },
-    "sendTimestamps":{
-        "description":"通过聊天框按钮和文本快捷方式轻松发送时间戳。阅读扩展说明！",
-        "extendedDescription":{
-            "examples":"示例：",
-            "quickSend":"要快速发送仅时间时间戳，请在消息中包含格式为 `HH:MM` 的时间戳（包括反引号！）",
-            "seeBelow":"请参阅下面的示例。如果您需要更具体的信息，请使用聊天栏中的“日期”按钮！"
+    "sendTimestamps": {
+        "description": "通过聊天框按钮和文本快捷方式轻松发送时间戳。阅读扩展说明！",
+        "extendedDescription": {
+            "examples": "示例：",
+            "quickSend": "要快速发送仅时间时间戳，请在消息中包含格式为 `HH:MM` 的时间戳（包括反引号！）",
+            "seeBelow": "请参阅下面的示例。如果您需要更具体的信息，请使用聊天栏中的“日期”按钮！"
         },
-        "insert":"插入",
-        "insertTimestamp":"插入时间戳",
-        "preview":"预览",
-        "settings":{
-            "replaceMessageContents":"替换消息内容中的时间戳"
+        "insert": "插入",
+        "insertTimestamp": "插入时间戳",
+        "preview": "预览",
+        "settings": {
+            "replaceMessageContents": "替换消息内容中的时间戳"
         },
-        "timestampFormat":"时间戳格式",
-        "timestampPicker":"时间戳选择器"
+        "timestampFormat": "时间戳格式",
+        "timestampPicker": "时间戳选择器"
     },
-    "serverInfo":{
-        "description":"允许您查看有关服务器的信息",
-        "settings":{
-            "sorting":"用户名或显示名称（如果适用）",
-            "sortingOptions":{
-                "displayname":"显示名称",
-                "none":"不排序",
-                "username":"用户名"
+    "serverInfo": {
+        "description": "允许您查看有关服务器的信息",
+        "settings": {
+            "sorting": "用户名或显示名称（如果适用）",
+            "sortingOptions": {
+                "displayname": "显示名称",
+                "none": "不排序",
+                "username": "用户名"
             }
         },
-        "ui":{
-            "blockedUsers":"被阻止的用户",
-            "channels":"频道",
-            "createdAt":"创建于",
-            "friends":"好友",
-            "ignoredUsers":"被忽略的用户",
-            "joinedAt":"加入时间",
-            "mutualUsers":"共同用户",
-            "preferredLocale":"首选区域设置",
-            "roles":"角色",
-            "serverBoosts":"服务器提升",
-            "serverInfo":"服务器信息",
-            "serverOwner":"服务器所有者",
-            "vanityLink":"虚荣链接",
-            "verificationLevel":"验证级别"
+        "ui": {
+            "blockedUsers": "被阻止的用户",
+            "channels": "频道",
+            "createdAt": "创建于",
+            "friends": "好友",
+            "ignoredUsers": "被忽略的用户",
+            "joinedAt": "加入时间",
+            "mutualUsers": "共同用户",
+            "preferredLocale": "首选区域设置",
+            "roles": "角色",
+            "serverBoosts": "服务器提升",
+            "serverInfo": "服务器信息",
+            "serverOwner": "服务器所有者",
+            "vanityLink": "虚荣链接",
+            "verificationLevel": "验证级别"
         }
     },
-    "serverListAPI":{
-        "description":"修改服务器列表的插件需要 API"
+    "serverListAPI": {
+        "description": "修改服务器列表的插件需要 API"
     },
-    "serverListIndicators":{
-        "description":"在服务器列表中添加在线好友数或服务器数",
-        "friends":"好友",
-        "servers":"服务器",
-        "settings":{
-            "mode":"模式",
-            "modeBoth":"服务器和在线好友都算数",
-            "modeOnlyFriends":"仅在线好友计数",
-            "modeOnlyServers":"仅服务器计数",
-            "useCompact":"使指示器仅显示文本"
+    "serverListIndicators": {
+        "description": "在服务器列表中添加在线好友数或服务器数",
+        "friends": "好友",
+        "servers": "服务器",
+        "settings": {
+            "mode": "模式",
+            "modeBoth": "服务器和在线好友都算数",
+            "modeOnlyFriends": "仅在线好友计数",
+            "modeOnlyServers": "仅服务器计数",
+            "useCompact": "使指示器仅显示文本"
         },
-        "tooltipBoth":"{friends}朋友，{servers}服务器",
-        "tooltipFriends":"{count} 朋友",
-        "tooltipServers":"{count} 服务器"
+        "tooltipBoth": "{friends}朋友，{servers}服务器",
+        "tooltipFriends": "{count} 朋友",
+        "tooltipServers": "{count} 服务器"
     },
-    "settings":{
-        "changelog":{
-            "alreadyUpToDate":"已经与存储库保持同步",
-            "checkYourConnection":"无法连接到存储库。检查您的互联网连接",
-            "checkYourInternet":"确保您有互联网连接，然后重试",
-            "codeChanges_one":"代码更改（{count} 提交）",
-            "codeChanges_other":"代码更改（{count} 提交）",
-            "codeChanges_zero":"没有代码更改",
-            "emptyChangelog":"当前版本之前没有可用的提交。单击“从存储库获取”以检查新更改",
-            "failedToFetchRepo":"无法从存储库获取",
-            "failedToRetrieve":"检索失败 - 检查控制台",
-            "failedtoFetchCommits":"无法从存储库获取提交",
-            "fetchRepo":"从存储库中获取",
-            "foundCommits_one":"从存储库中找到 {count} 提交",
-            "foundCommits_other":"从存储库中找到 {count} 提交",
-            "foundCommits_zero":"没有新的提交",
-            "info":"检查存储库中是否有新的提交、插件更新和代码更改。这会将您当前的版本与最新的可用版本进行比较，并向您展示新功能",
-            "loggedCommits":"最新更新中记录的提交",
-            "manager":{
-                "days_one":"{count} 天前",
-                "days_other":"{count} 天前",
-                "hours_one":"{count} 小时前",
-                "hours_other":"{count} 小时前",
-                "minutes_one":"{count} 分钟前",
-                "minutes_other":"{count} 分钟前"
+    "settings": {
+        "changelog": {
+            "alreadyUpToDate": "已经与存储库保持同步",
+            "checkYourConnection": "无法连接到存储库。检查您的互联网连接",
+            "checkYourInternet": "确保您有互联网连接，然后重试",
+            "codeChanges_one": "代码更改（{count} 提交）",
+            "codeChanges_other": "代码更改（{count} 提交）",
+            "codeChanges_zero": "没有代码更改",
+            "emptyChangelog": "当前版本之前没有可用的提交。单击“从存储库获取”以检查新更改",
+            "failedToFetchRepo": "无法从存储库获取",
+            "failedToRetrieve": "检索失败 - 检查控制台",
+            "failedtoFetchCommits": "无法从存储库获取提交",
+            "fetchRepo": "从存储库中获取",
+            "foundCommits_one": "从存储库中找到 {count} 提交",
+            "foundCommits_other": "从存储库中找到 {count} 提交",
+            "foundCommits_zero": "没有新的提交",
+            "info": "检查存储库中是否有新的提交、插件更新和代码更改。这会将您当前的版本与最新的可用版本进行比较，并向您展示新功能",
+            "loggedCommits": "最新更新中记录的提交",
+            "manager": {
+                "days_one": "{count} 天前",
+                "days_other": "{count} 天前",
+                "hours_one": "{count} 小时前",
+                "hours_other": "{count} 小时前",
+                "minutes_one": "{count} 分钟前",
+                "minutes_other": "{count} 分钟前"
             },
-            "missingRepoInfo":"检索存储库信息失败",
-            "newPluginsSection":{
-                "newPluginsCount":"新插件（{count}）",
-                "numMorePlugins_one":"+{count}更多插件",
-                "numMorePlugins_other":"+{count}更多插件",
-                "recentlyAddedPlugins":"最近的更新中添加了以下插件："
+            "missingRepoInfo": "检索存储库信息失败",
+            "newPluginsSection": {
+                "newPluginsCount": "新插件（{count}）",
+                "numMorePlugins_one": "+{count}更多插件",
+                "numMorePlugins_other": "+{count}更多插件",
+                "recentlyAddedPlugins": "最近的更新中添加了以下插件："
             },
-            "previousSessions":"您之前的更新会话的历史记录及其提交历史记录和插件更改。单击日志将其展开并查看详细信息",
-            "recentChanges":"最近的变化",
-            "repository":"存储库",
-            "title":"变更日志",
-            "upToDate":"存储库是最新的",
-            "upToDateLocalCopy":"存储库与您的本地副本保持同步",
-            "updateCard":{
-                "commits_one":" • {count} 提交可用",
-                "commits_other":" • {count} 可用提交",
-                "commits_zero":" • 没有新的提交",
-                "newPluginsCount":" • {plugins}新插件",
-                "newSettingInPlugin":"{pluginName} 中的新设置",
-                "newSettings":"新设置",
-                "newSettingsCount":" • {settings}新设置",
-                "outOfDate":"存储库检查：{fromHash} → {toHash}",
-                "upToDate":"存储库检查：{fromHash}（最新）",
-                "update":"更新：{fromHash} → {toHash}",
-                "updatedPlugins":"更新的插件",
-                "updatedPluginsCount":" • {plugins} 更新的插件"
+            "previousSessions": "您之前的更新会话的历史记录及其提交历史记录和插件更改。单击日志将其展开并查看详细信息",
+            "recentChanges": "最近的变化",
+            "repository": "存储库",
+            "title": "变更日志",
+            "upToDate": "存储库是最新的",
+            "upToDateLocalCopy": "存储库与您的本地副本保持同步",
+            "updateCard": {
+                "commits_one": " • {count} 提交可用",
+                "commits_other": " • {count} 可用提交",
+                "commits_zero": " • 没有新的提交",
+                "newPluginsCount": " • {plugins}新插件",
+                "newSettingInPlugin": "{pluginName} 中的新设置",
+                "newSettings": "新设置",
+                "newSettingsCount": " • {settings}新设置",
+                "outOfDate": "存储库检查：{fromHash} → {toHash}",
+                "upToDate": "存储库检查：{fromHash}（最新）",
+                "update": "更新：{fromHash} → {toHash}",
+                "updatedPlugins": "更新的插件",
+                "updatedPluginsCount": " • {plugins} 更新的插件"
             },
-            "updateLogs_one":"更新日志（{count}日志）",
-            "updateLogs_other":"更新日志（{count} 日志）",
-            "updateLogs_zero":"无更新日志",
-            "updatedPluginsCount":"更新的插件（{plugins}）",
-            "viewRecentChanges":"这些是自上一个版本以来的新提交和插件更新。您可以查看添加了哪些功能、修复了哪些错误以及哪些插件收到了更新",
-            "whereUpdatesFetch":"这是 Equicord 从中获取更新的 GitHub 存储库"
+            "updateLogs_one": "更新日志（{count}日志）",
+            "updateLogs_other": "更新日志（{count} 日志）",
+            "updateLogs_zero": "无更新日志",
+            "updatedPluginsCount": "更新的插件（{plugins}）",
+            "viewRecentChanges": "这些是自上一个版本以来的新提交和插件更新。您可以查看添加了哪些功能、修复了哪些错误以及哪些插件收到了更新",
+            "whereUpdatesFetch": "这是 Equicord 从中获取更新的 GitHub 存储库"
         },
-        "disableMinSize":{
-            "description":"允许将 Discord 窗口的大小调整为小于其默认的最小大小。对于平铺窗口管理器或小屏幕很有用。",
-            "title":"禁用最小窗口大小"
+        "disableMinSize": {
+            "description": "允许将 Discord 窗口的大小调整为小于其默认的最小大小。对于平铺窗口管理器或小屏幕很有用。",
+            "title": "禁用最小窗口大小"
         },
-        "enableReactDevtools":{
-            "description":"启用 React Developer Tools 扩展来调试 Discord 的 React 组件。对于插件开发很有用。",
-            "title":"启用 React 开发者工具"
+        "enableReactDevtools": {
+            "description": "启用 React Developer Tools 扩展来调试 Discord 的 React 组件。对于插件开发很有用。",
+            "title": "启用 React 开发者工具"
         },
-        "frameless":{
-            "description":"移除原生窗框以获得更干净的外观。您仍然可以通过拖动标题栏区域来移动窗口。",
-            "title":"禁用窗框"
+        "frameless": {
+            "description": "移除原生窗框以获得更干净的外观。您仍然可以通过拖动标题栏区域来移动窗口。",
+            "title": "禁用窗框"
         },
-        "hint":"提示：您可以在<0>设置插件的设置</0>中更改此设置部分的位置！",
-        "macosVibrancyStyle":{
-            "placeholder":"窗户活力风格",
-            "title":"窗口活力风格（需要重新启动）"
+        "hint": "提示：您可以在<0>设置插件的设置</0>中更改此设置部分的位置！",
+        "macosVibrancyStyle": {
+            "placeholder": "窗户活力风格",
+            "title": "窗口活力风格（需要重新启动）"
         },
-        "notification":{
-            "logButton":"查看通知日志",
-            "settingsButton":"通知设定"
+        "notification": {
+            "logButton": "查看通知日志",
+            "settingsButton": "通知设定"
         },
-        "plugins":{
-            "contributorModal":{
-                "contributorInfo":{
-                    "noPlugins":"此人没有制作过任何插件。他们可能以其他方式<0>为</0>Equicord做出了贡献！",
-                    "plugins_one":"此人对 {count} 插件<0>做出了贡献</0>！",
-                    "plugins_other":"此人<0>贡献了</0> {count} 插件！"
+        "plugins": {
+            "contributorModal": {
+                "contributorInfo": {
+                    "noPlugins": "此人没有制作过任何插件。他们可能以其他方式<0>为</0>Equicord做出了贡献！",
+                    "plugins_one": "此人对 {count} 插件<0>做出了贡献</0>！",
+                    "plugins_other": "此人<0>贡献了</0> {count} 插件！"
                 }
             },
-            "noDescription":"无可用描述",
-            "pluginRequiredBy":"{pluginNames} 需要此插件",
-            "requiredToFunction":"Equicord 需要此插件才能运行"
+            "noDescription": "无可用描述",
+            "pluginRequiredBy": "{pluginNames} 需要此插件",
+            "requiredToFunction": "Equicord 需要此插件才能运行"
         },
-        "restartRequired":{
-            "body":"需要重新启动才能应用此更改",
-            "cancel":"之后！",
-            "confirm":"立即重新启动",
-            "plugins":"以下插件需要重新启动：",
-            "title":"需要重新启动"
+        "restartRequired": {
+            "body": "需要重新启动才能应用此更改",
+            "cancel": "之后！",
+            "confirm": "立即重新启动",
+            "plugins": "以下插件需要重新启动：",
+            "title": "需要重新启动"
         },
-        "title":"设置",
-        "transparent":{
-            "description":"使 Discord 窗口透明。需要一个支持透明度的主题，否则将不起作用。",
-            "note":"这将阻止窗口调整大小。",
-            "noteWindows":"这将阻止窗口调整大小并阻止您将窗口捕捉到屏幕边缘",
-            "title":"启用窗口透明度"
+        "title": "设置",
+        "transparent": {
+            "description": "使 Discord 窗口透明。需要一个支持透明度的主题，否则将不起作用。",
+            "note": "这将阻止窗口调整大小。",
+            "noteWindows": "这将阻止窗口调整大小并阻止您将窗口捕捉到屏幕边缘",
+            "title": "启用窗口透明度"
         },
-        "useQuickCss":{
-            "description":"从 QuickCSS 编辑器加载自定义 CSS。这允许您使用自己的样式自定义 Discord 的外观。",
-            "title":"启用自定义 CSS"
+        "useQuickCss": {
+            "description": "从 QuickCSS 编辑器加载自定义 CSS。这允许您使用自己的样式自定义 Discord 的外观。",
+            "title": "启用自定义 CSS"
         },
-        "winCtrlQ":{
-            "description":"添加 Ctrl+Q 作为关闭 Discord 的键盘快捷键。这提供了 Alt+F4 的替代方法来快速关闭应用程序。",
-            "title":"将Ctrl+Q注册为关闭Discord的快捷方式"
+        "winCtrlQ": {
+            "description": "添加 Ctrl+Q 作为关闭 Discord 的键盘快捷键。这提供了 Alt+F4 的替代方法来快速关闭应用程序。",
+            "title": "将Ctrl+Q注册为关闭Discord的快捷方式"
         },
-        "winNativeTitleBar":{
-            "description":"将 Discord 的自定义标题栏替换为标准 Windows 标题栏。这可能会提高与某些窗口管理工具的兼容性。",
-            "title":"使用 Windows 的本机标题栏而不是 Discord 的自定义标题栏"
+        "winNativeTitleBar": {
+            "description": "将 Discord 的自定义标题栏替换为标准 Windows 标题栏。这可能会提高与某些窗口管理工具的兼容性。",
+            "title": "使用 Windows 的本机标题栏而不是 Discord 的自定义标题栏"
         }
     },
-    "settingsSync":{
-        "failedToImport":"导入设置失败：{e}",
-        "imported":"设置已成功导入。重新启动以应用更改！"
+    "settingsSync": {
+        "failedToImport": "导入设置失败：{e}",
+        "imported": "设置已成功导入。重新启动以应用更改！"
     },
-    "shikiCodeblocks":{
-        "description":"将 vscode 风格的代码块引入 Discord，由 Shiki 提供支持",
-        "settings":{
-            "bgOpacity":"背景不透明度",
-            "customTheme":"自定义 vscode 主题的链接",
-            "theme":"默认主题",
-            "tryHljs":"使用更轻量级的默认 Discord 荧光笔和主题。",
-            "tryHljsOptions":{
-                "always":"总是",
-                "never":"永不",
-                "preferHljs":"更喜欢Highlight.js而不是Shiki",
-                "preferShiki":"更喜欢Shiki而不是Highlight.js"
+    "shikiCodeblocks": {
+        "description": "将 vscode 风格的代码块引入 Discord，由 Shiki 提供支持",
+        "settings": {
+            "bgOpacity": "背景不透明度",
+            "customTheme": "自定义 vscode 主题的链接",
+            "theme": "默认主题",
+            "tryHljs": "使用更轻量级的默认 Discord 荧光笔和主题。",
+            "tryHljsOptions": {
+                "always": "总是",
+                "never": "永不",
+                "preferHljs": "更喜欢Highlight.js而不是Shiki",
+                "preferShiki": "更喜欢Shiki而不是Highlight.js"
             },
-            "useDevIcon":"如何在代码块上显示语言图标",
-            "useDevIconOptions":{
-                "colored":"有色",
-                "colorless":"无色",
-                "disabled":"关闭"
+            "useDevIcon": "如何在代码块上显示语言图标",
+            "useDevIconOptions": {
+                "colored": "有色",
+                "colorless": "无色",
+                "disabled": "关闭"
             }
         }
     },
-    "showAllMessageButtons":{
-        "description":"无论您是否按住 Shift 键，始终显示所有消息按钮。",
-        "settings":{
-            "noShiftDelete":"删除删除消息时按住 Shift 的要求。",
-            "noShiftPin":"删除了按住 Shift 来固定消息的要求。"
+    "showAllMessageButtons": {
+        "description": "无论您是否按住 Shift 键，始终显示所有消息按钮。",
+        "settings": {
+            "noShiftDelete": "删除删除消息时按住 Shift 的要求。",
+            "noShiftPin": "删除了按住 Shift 来固定消息的要求。"
         }
     },
-    "showConnections":{
-        "description":"在用户弹出窗口中显示连接的帐户",
-        "settings":{
-            "compact":"袖珍的",
-            "cozy":"舒适",
-            "iconSize":"图标大小（像素）",
-            "iconSpacing":"图标边距",
-            "roomy":"宽敞"
+    "showConnections": {
+        "description": "在用户弹出窗口中显示连接的帐户",
+        "settings": {
+            "compact": "袖珍的",
+            "cozy": "舒适",
+            "iconSize": "图标大小（像素）",
+            "iconSpacing": "图标边距",
+            "roomy": "宽敞"
         }
     },
-    "showHiddenChannels":{
-        "allowedUsersAndRoles":"允许的用户和角色：",
-        "archiveDuration":"存档前的默认不活动持续时间 {type}: {duration}",
-        "availableTags":"可用标签：",
-        "bitrate":"比特率：{bitrate} 位",
-        "cannotSeeMessages":"您看不到该通道的{type}。",
-        "channelTypes":{
-            "announcement":"公告",
-            "forum":"论坛",
-            "message":"信息",
-            "messages":"消息",
-            "post":"邮政",
-            "posts":"帖子",
-            "stage":"阶段",
-            "text":"文本",
-            "thread":"线",
-            "threads":"线程",
-            "voice":"嗓音"
+    "showHiddenChannels": {
+        "allowedUsersAndRoles": "允许的用户和角色：",
+        "archiveDuration": "存档前的默认不活动持续时间 {type}: {duration}",
+        "availableTags": "可用标签：",
+        "bitrate": "比特率：{bitrate} 位",
+        "cannotSeeMessages": "您看不到该通道的{type}。",
+        "channelTypes": {
+            "announcement": "公告",
+            "forum": "论坛",
+            "message": "信息",
+            "messages": "消息",
+            "post": "邮政",
+            "posts": "帖子",
+            "stage": "阶段",
+            "text": "文本",
+            "thread": "线",
+            "threads": "线程",
+            "voice": "嗓音"
         },
-        "defaultLayout":"默认布局：{layout}",
-        "defaultReactionEmoji":"默认反应表情符号：",
-        "defaultSortOrder":"默认排序顺序：{order}",
-        "description":"显示您无权查看的频道。",
-        "forumLayouts":{
-            "gridView":"画廊视图",
-            "listView":"列表视图",
-            "notSet":"未设置"
+        "defaultLayout": "默认布局：{layout}",
+        "defaultReactionEmoji": "默认反应表情符号：",
+        "defaultSortOrder": "默认排序顺序：{order}",
+        "description": "显示您无权查看的频道。",
+        "forumLayouts": {
+            "gridView": "画廊视图",
+            "listView": "列表视图",
+            "notSet": "未设置"
         },
-        "hiddenChannel":"这是一个隐藏的 {type} 频道",
-        "hiddenChannelTooltip":"隐藏频道",
-        "hideAllowedUsersAndRoles":"隐藏允许的用户和角色",
-        "lastMessageCreated":"最后创建的 {type}：",
-        "lastMessagePin":"最后一条消息图钉：",
-        "lockedChannel":"这是一个锁定的 {type} 频道",
-        "nsfw":"上班别偷看",
-        "permissionDetails":"权限详情",
-        "region":"区域：{region}",
-        "regionAutomatic":"自动的",
-        "requireTag":"此论坛上的帖子需要设置标签。",
-        "seeGuidelines":" 但是您可能会看到它的指南：",
-        "settings":{
-            "channelStyle":{
-                "classic":"经典的",
-                "description":"用于显示隐藏通道的样式。",
-                "muted":"已静音",
-                "mutedAndShowUnreads":"静音并显示未读内容",
-                "showUnreads":"显示未读内容"
+        "hiddenChannel": "这是一个隐藏的 {type} 频道",
+        "hiddenChannelTooltip": "隐藏频道",
+        "hideAllowedUsersAndRoles": "隐藏允许的用户和角色",
+        "lastMessageCreated": "最后创建的 {type}：",
+        "lastMessagePin": "最后一条消息图钉：",
+        "lockedChannel": "这是一个锁定的 {type} 频道",
+        "nsfw": "上班别偷看",
+        "permissionDetails": "权限详情",
+        "region": "区域：{region}",
+        "regionAutomatic": "自动的",
+        "requireTag": "此论坛上的帖子需要设置标签。",
+        "seeGuidelines": " 但是您可能会看到它的指南：",
+        "settings": {
+            "channelStyle": {
+                "classic": "经典的",
+                "description": "用于显示隐藏通道的样式。",
+                "muted": "已静音",
+                "mutedAndShowUnreads": "静音并显示未读内容",
+                "showUnreads": "显示未读内容"
             },
-            "defaultAllowedUsersAndRolesDropdownState":{
-                "description":"默认情况下是否应打开隐藏频道上允许的用户和角色下拉列表"
+            "defaultAllowedUsersAndRolesDropdownState": {
+                "description": "默认情况下是否应打开隐藏频道上允许的用户和角色下拉列表"
             },
-            "showMode":{
-                "description":"用于显示隐藏通道的模式。",
-                "eyeIconRight":"右边的眼睛图标",
-                "lockIcon":"锁定图标替换频道图标",
-                "lockIconRight":"右侧的锁定图标"
+            "showMode": {
+                "description": "用于显示隐藏通道的模式。",
+                "eyeIconRight": "右边的眼睛图标",
+                "lockIcon": "锁定图标替换频道图标",
+                "lockIconRight": "右侧的锁定图标"
             }
         },
-        "slowmode":"慢速模式：{duration}",
-        "sortOrders":{
-            "creationDate":"创建日期",
-            "latestActivity":"最新活动"
+        "slowmode": "慢速模式：{duration}",
+        "sortOrders": {
+            "creationDate": "创建日期",
+            "latestActivity": "最新活动"
         },
-        "threadSlowmode":"默认线程慢速模式：{duration}",
-        "videoQuality":{
-            "720p":"720p",
-            "automatic":"自动的"
+        "threadSlowmode": "默认线程慢速模式：{duration}",
+        "videoQuality": {
+            "720p": "720p",
+            "automatic": "自动的"
         },
-        "videoQualityMode":"视频质量模式：{mode}",
-        "viewAllowedUsersAndRoles":"查看允许的用户和角色"
+        "videoQualityMode": "视频质量模式：{mode}",
+        "viewAllowedUsersAndRoles": "查看允许的用户和角色"
     },
-    "showHiddenThings":{
-        "description":"显示各种隐藏的和仅限主持人的内容，无论权限如何。",
-        "settings":{
-            "showInvitesPaused":"在服务器列表中显示邀请已暂停的工具提示。",
-            "showModView":"在所有服务器中显示成员 mod 视图上下文菜单项。",
-            "showTimeouts":"在聊天中显示成员超时图标。"
+    "showHiddenThings": {
+        "description": "显示各种隐藏的和仅限主持人的内容，无论权限如何。",
+        "settings": {
+            "showInvitesPaused": "在服务器列表中显示邀请已暂停的工具提示。",
+            "showModView": "在所有服务器中显示成员 mod 视图上下文菜单项。",
+            "showTimeouts": "在聊天中显示成员超时图标。"
         }
     },
-    "showMeYourName":{
-        "addNickname":"添加 SMYN 昵称",
-        "cancel":"取消",
-        "changeNickname":"更改 SMYN 昵称",
-        "modalDescription":"为此用户设置自定义 SMYN 昵称。通过在 SMYN 模板设置中指定 {custom} 来使用它。",
-        "nicknameLabel":"SMYN 昵称",
-        "resetNickname":"重置 SMYN 昵称",
-        "save":"保存",
-        "settings":{
-            "animateGradients":"对于非主要名称，如果角色有渐变，请为其设置动画。这可以通过“忽略渐变”和减少运动来禁用。",
-            "customNameColor":"用于分配给用户的自定义名称的颜色（如果不是第一次显示）。默认留空。接受 hex(a)、rgb(a) 或 hsl(a) 输入。使用“角色”来遵循用户的顶级角色颜色。使用“Role+-#”按该百分比调整亮度（例如：“Role+15”）",
-            "discriminators":"将鉴别符附加到机器人的用户名中。鉴别器已不再用于用户，但仍用于机器人。默认情况下，机器人的用户名相当于用户的全局名称，因此多个机器人可以具有相同的用户名。附加鉴别器使它们再次变得独一无二。",
-            "displayNameColor":"如果不是第一次显示，则用于显示名称的颜色。默认留空。接受 hex(a)、rgb(a) 或 hsl(a) 输入。使用“角色”来遵循用户的顶级角色颜色。使用“Role+-#”按该百分比调整亮度（例如：“Role+15”）",
-            "friendNameColor":"如果朋友的昵称不是第一次显示，则使用该颜色。默认留空。接受 hex(a)、rgb(a) 或 hsl(a) 输入。使用“角色”来遵循用户的顶级角色颜色。使用“Role+-#”按该百分比调整亮度（例如：“Role+15”）",
-            "hideDefaultAtSign":"隐藏提及和回复中姓名前的默认“@”符号。仅当任一功能启用时才适用。",
-            "ignoreFonts":"对于非主要名称，无论用户的自定义硝基字体如何，都使用 Discord 的默认字体。",
-            "ignoreGradients":"对于非主要名称，如果角色有渐变，请忽略它，而使用下面的颜色集。",
-            "includedNames":"显示用户名、显示名称、昵称、好友名称和自定义名称的顺序。使用以下占位符：{user}、{display}、{nick}、{friend}、{custom}。您可以提供多个名称选项以用作后备（如果某个名称选项不可用），方法是用逗号分隔它们，例如：{custom, friend, nick}。每个名称最多可以有三个前缀和三个后缀。",
-            "memberList":"显示成员列表中以自定义名称格式列出的第一个可用名称。",
-            "mentions":"在提及中显示自定义名称格式。",
-            "messages":"在消息中显示自定义名称格式。",
-            "nameSeparator":"名称之间使用的分隔符。默认为单个空格。",
-            "nicknameColor":"如果昵称不是第一次显示，则用于昵称的颜色。默认留空。接受 hex(a)、rgb(a) 或 hsl(a) 输入。使用“角色”来遵循用户的顶级角色颜色。使用“Role+-#”按该百分比调整亮度（例如：“Role+15”）",
-            "profilePopout":"在个人资料弹出窗口中显示以自定义名称格式列出的第一个可用名称。",
-            "reactions":"在反应工具提示中显示以自定义名称格式列出的第一个可用名称，并在反应弹出窗口中显示全名。",
-            "removeDuplicates":"如果任何名称相同，请将其删除，只保留唯一的名称。",
-            "replies":"在回复中显示自定义名称格式。",
-            "truncateAllNamesWithStreamerMode":"在流媒体模式下截断所有名称，而不仅仅是用户名。",
-            "usernameColor":"如果用户名不是第一次显示，则用于用户名的颜色。默认留空。接受 hex(a)、rgb(a) 或 hsl(a) 输入。使用“角色”来遵循用户的顶级角色颜色。使用“Role+-#”按该百分比调整亮度（例如：“Role+15”）",
-            "voiceChannels":"在语音通道中显示以自定义名称格式列出的第一个可用名称。"
+    "showMeYourName": {
+        "addNickname": "添加 SMYN 昵称",
+        "cancel": "取消",
+        "changeNickname": "更改 SMYN 昵称",
+        "modalDescription": "为此用户设置自定义 SMYN 昵称。通过在 SMYN 模板设置中指定 {custom} 来使用它。",
+        "nicknameLabel": "SMYN 昵称",
+        "resetNickname": "重置 SMYN 昵称",
+        "save": "保存",
+        "settings": {
+            "animateGradients": "对于非主要名称，如果角色有渐变，请为其设置动画。这可以通过“忽略渐变”和减少运动来禁用。",
+            "customNameColor": "用于分配给用户的自定义名称的颜色（如果不是第一次显示）。默认留空。接受 hex(a)、rgb(a) 或 hsl(a) 输入。使用“角色”来遵循用户的顶级角色颜色。使用“Role+-#”按该百分比调整亮度（例如：“Role+15”）",
+            "discriminators": "将鉴别符附加到机器人的用户名中。鉴别器已不再用于用户，但仍用于机器人。默认情况下，机器人的用户名相当于用户的全局名称，因此多个机器人可以具有相同的用户名。附加鉴别器使它们再次变得独一无二。",
+            "displayNameColor": "如果不是第一次显示，则用于显示名称的颜色。默认留空。接受 hex(a)、rgb(a) 或 hsl(a) 输入。使用“角色”来遵循用户的顶级角色颜色。使用“Role+-#”按该百分比调整亮度（例如：“Role+15”）",
+            "friendNameColor": "如果朋友的昵称不是第一次显示，则使用该颜色。默认留空。接受 hex(a)、rgb(a) 或 hsl(a) 输入。使用“角色”来遵循用户的顶级角色颜色。使用“Role+-#”按该百分比调整亮度（例如：“Role+15”）",
+            "hideDefaultAtSign": "隐藏提及和回复中姓名前的默认“@”符号。仅当任一功能启用时才适用。",
+            "ignoreFonts": "对于非主要名称，无论用户的自定义硝基字体如何，都使用 Discord 的默认字体。",
+            "ignoreGradients": "对于非主要名称，如果角色有渐变，请忽略它，而使用下面的颜色集。",
+            "includedNames": "显示用户名、显示名称、昵称、好友名称和自定义名称的顺序。使用以下占位符：{user}、{display}、{nick}、{friend}、{custom}。您可以提供多个名称选项以用作后备（如果某个名称选项不可用），方法是用逗号分隔它们，例如：{custom, friend, nick}。每个名称最多可以有三个前缀和三个后缀。",
+            "memberList": "显示成员列表中以自定义名称格式列出的第一个可用名称。",
+            "mentions": "在提及中显示自定义名称格式。",
+            "messages": "在消息中显示自定义名称格式。",
+            "nameSeparator": "名称之间使用的分隔符。默认为单个空格。",
+            "nicknameColor": "如果昵称不是第一次显示，则用于昵称的颜色。默认留空。接受 hex(a)、rgb(a) 或 hsl(a) 输入。使用“角色”来遵循用户的顶级角色颜色。使用“Role+-#”按该百分比调整亮度（例如：“Role+15”）",
+            "profilePopout": "在个人资料弹出窗口中显示以自定义名称格式列出的第一个可用名称。",
+            "reactions": "在反应工具提示中显示以自定义名称格式列出的第一个可用名称，并在反应弹出窗口中显示全名。",
+            "removeDuplicates": "如果任何名称相同，请将其删除，只保留唯一的名称。",
+            "replies": "在回复中显示自定义名称格式。",
+            "truncateAllNamesWithStreamerMode": "在流媒体模式下截断所有名称，而不仅仅是用户名。",
+            "usernameColor": "如果用户名不是第一次显示，则用于用户名的颜色。默认留空。接受 hex(a)、rgb(a) 或 hsl(a) 输入。使用“角色”来遵循用户的顶级角色颜色。使用“Role+-#”按该百分比调整亮度（例如：“Role+15”）",
+            "voiceChannels": "在语音通道中显示以自定义名称格式列出的第一个可用名称。"
         }
     },
-    "showTimeoutDuration":{
-        "description":"在超时图标工具提示中或其旁边显示用户的超时将持续多长时间",
-        "displayStyleDescription":"如何显示超时时长",
-        "inTooltip":"在工具提示中",
-        "nextToIcon":"超时图标旁边",
-        "timeoutRemaining":"剩余超时时间"
+    "showTimeoutDuration": {
+        "description": "在超时图标工具提示中或其旁边显示用户的超时将持续多长时间",
+        "displayStyleDescription": "如何显示超时时长",
+        "inTooltip": "在工具提示中",
+        "nextToIcon": "超时图标旁边",
+        "timeoutRemaining": "剩余超时时间"
     },
-    "silentMessageToggle":{
-        "description":"在聊天栏中添加一个按钮以切换发送无声消息。",
-        "disableSilentMessage":"禁用静默消息",
-        "enableSilentMessage":"启用静默消息",
-        "settings":{
-            "autoDisable":"发送一条消息后自动再次禁用静默消息切换",
-            "persistChannels":"在通道之间保持",
-            "persistNone":"不要坚持（频道更改时重置）",
-            "persistRestarts":"在通道之间保持并重新启动",
-            "persistState":"如何保持静默消息切换状态"
+    "silentMessageToggle": {
+        "description": "在聊天栏中添加一个按钮以切换发送无声消息。",
+        "disableSilentMessage": "禁用静默消息",
+        "enableSilentMessage": "启用静默消息",
+        "settings": {
+            "autoDisable": "发送一条消息后自动再次禁用静默消息切换",
+            "persistChannels": "在通道之间保持",
+            "persistNone": "不要坚持（频道更改时重置）",
+            "persistRestarts": "在通道之间保持并重新启动",
+            "persistState": "如何保持静默消息切换状态"
         }
     },
-    "silentTyping":{
-        "clickActions":{
-            "openPluginSettings":"打开插件设置",
-            "toggleTypingGlobally":"切换全局输入",
-            "toggleTypingInChannel":"Toggle 在频道中输入内容",
-            "toggleTypingInGuild":"在公会中切换输入"
+    "silentTyping": {
+        "clickActions": {
+            "openPluginSettings": "打开插件设置",
+            "toggleTypingGlobally": "切换全局输入",
+            "toggleTypingInChannel": "Toggle 在频道中输入内容",
+            "toggleTypingInGuild": "在公会中切换输入"
         },
-        "command":{
-            "chatBarIndicatorsOption":"从聊天栏上方隐藏其他用户的打字指示器。",
-            "chatContextMenuOption":"在聊天上下文菜单中显示下拉菜单，以便随时切换插件设置。",
-            "chatIconOption":"在聊天栏中显示一个图标，以便随时随地切换插件。",
-            "defaultHiddenOption":"默认情况下是否隐藏 DM/频道/公会中的输入。",
-            "description":"在聊天中隐藏您的打字指示器。",
-            "membersListIndicatorsOption":"从成员列表中隐藏其他用户的键入指示器。",
-            "toggleChannel":"频道",
-            "toggleGlobal":"全球的",
-            "toggleGuild":"公会",
-            "toggleOption":"全局切换频道或公会的功能。"
+        "command": {
+            "chatBarIndicatorsOption": "从聊天栏上方隐藏其他用户的打字指示器。",
+            "chatContextMenuOption": "在聊天上下文菜单中显示下拉菜单，以便随时切换插件设置。",
+            "chatIconOption": "在聊天栏中显示一个图标，以便随时随地切换插件。",
+            "defaultHiddenOption": "默认情况下是否隐藏 DM/频道/公会中的输入。",
+            "description": "在聊天中隐藏您的打字指示器。",
+            "membersListIndicatorsOption": "从成员列表中隐藏其他用户的键入指示器。",
+            "toggleChannel": "频道",
+            "toggleGlobal": "全球的",
+            "toggleGuild": "公会",
+            "toggleOption": "全局切换频道或公会的功能。"
         },
-        "contextMenu":{
-            "chatBarIndicators":"Chat 条形指示器",
-            "chatIcon":"Chat 图标",
-            "defaultHidden":"默认隐藏",
-            "enabled":"启用",
-            "membersListIndicators":"成员名单指标",
-            "silentTyping":"无声打字"
+        "contextMenu": {
+            "chatBarIndicators": "Chat 条形指示器",
+            "chatIcon": "Chat 图标",
+            "defaultHidden": "默认隐藏",
+            "enabled": "启用",
+            "membersListIndicators": "成员名单指标",
+            "silentTyping": "无声打字"
         },
-        "noChanges":"未对静默打字设置进行任何更改。",
-        "settings":{
-            "chatContextMenu":"在聊天上下文菜单中显示下拉菜单，以便随时修改插件设置。",
-            "chatIcon":"在聊天栏中显示一个图标，以便随时修改插件。",
-            "chatIconLeftClickAction":"左键单击聊天图标时该怎么做。",
-            "chatIconMiddleClickAction":"中键单击聊天图标时要执行的操作。",
-            "chatIconRightClickAction":"右键单击聊天图标时该怎么做。",
-            "defaultHidden":"如果启用，该插件将向下面“禁用位置”中未列出的任何 DM/频道/行会中的其他人隐藏您的输入内容。如果禁用，该插件将向其他人显示您在下面“启用位置”中未列出的任何 DM/频道/公会的输入内容。",
-            "disabledLocations":"禁用这些 ID 的功能。接受以逗号分隔的 DM ID、频道 ID 和行会 ID 列表。仅在启用“默认隐藏”时使用。",
-            "enabledGlobally":"全局切换您自己的打字指示器的功能。",
-            "enabledLocations":"启用这些 ID 的功能。接受以逗号分隔的 DM ID、频道 ID 和行会 ID 列表。仅在禁用“默认隐藏”时使用。",
-            "hideChatBoxTypingIndicators":"从聊天栏上方隐藏其他用户的打字指示器。",
-            "hideMembersListTypingIndicators":"从成员列表中隐藏其他用户的键入指示器。"
+        "noChanges": "未对静默打字设置进行任何更改。",
+        "settings": {
+            "chatContextMenu": "在聊天上下文菜单中显示下拉菜单，以便随时修改插件设置。",
+            "chatIcon": "在聊天栏中显示一个图标，以便随时修改插件。",
+            "chatIconLeftClickAction": "左键单击聊天图标时该怎么做。",
+            "chatIconMiddleClickAction": "中键单击聊天图标时要执行的操作。",
+            "chatIconRightClickAction": "右键单击聊天图标时该怎么做。",
+            "defaultHidden": "如果启用，该插件将向下面“禁用位置”中未列出的任何 DM/频道/行会中的其他人隐藏您的输入内容。如果禁用，该插件将向其他人显示您在下面“启用位置”中未列出的任何 DM/频道/公会的输入内容。",
+            "disabledLocations": "禁用这些 ID 的功能。接受以逗号分隔的 DM ID、频道 ID 和行会 ID 列表。仅在启用“默认隐藏”时使用。",
+            "enabledGlobally": "全局切换您自己的打字指示器的功能。",
+            "enabledLocations": "启用这些 ID 的功能。接受以逗号分隔的 DM ID、频道 ID 和行会 ID 列表。仅在禁用“默认隐藏”时使用。",
+            "hideChatBoxTypingIndicators": "从聊天栏上方隐藏其他用户的打字指示器。",
+            "hideMembersListTypingIndicators": "从成员列表中隐藏其他用户的键入指示器。"
         },
-        "settingsUpdated":"更新了无声打字设置。",
-        "typingHidden":"隐藏键入 ({location})",
-        "typingVisible":"键入可见 ({location})",
-        "typingVisibleGlobal":"键入可见（全局）"
+        "settingsUpdated": "更新了无声打字设置。",
+        "typingHidden": "隐藏键入 ({location})",
+        "typingVisible": "键入可见 ({location})",
+        "typingVisibleGlobal": "键入可见（全局）"
     },
-    "sortFriendRequests":{
-        "added":"额外",
-        "description":"按收到日期对好友请求进行排序",
-        "settings":{
-            "showDates":"显示好友请求的日期"
+    "sortFriendRequests": {
+        "added": "额外",
+        "description": "按收到日期对好友请求进行排序",
+        "settings": {
+            "showDates": "显示好友请求的日期"
         }
     },
-    "spotifyCrack":{
-        "description":"免费聆听，语音聊天不会自动暂停，并允许活动在空闲时继续播放",
-        "settings":{
-            "keepSpotifyActivityOnIdle":"闲置时保持 Spotify 活动播放",
-            "noSpotifyAutoPause":"禁用 Spotify 自动暂停"
+    "spotifyCrack": {
+        "description": "免费聆听，语音聊天不会自动暂停，并允许活动在空闲时继续播放",
+        "settings": {
+            "keepSpotifyActivityOnIdle": "闲置时保持 Spotify 活动播放",
+            "noSpotifyAutoPause": "禁用 Spotify 自动暂停"
         }
     },
-    "spotifyShareCommands":{
-        "commands":{
-            "notListening":"你没有在听任何音乐。",
-            "shareDescription":"在聊天中分享您当前的 Spotify {name}",
-            "trackNotFound":"在 Spotify 上找不到该曲目。"
+    "spotifyShareCommands": {
+        "commands": {
+            "notListening": "你没有在听任何音乐。",
+            "shareDescription": "在聊天中分享您当前的 Spotify {name}",
+            "trackNotFound": "在 Spotify 上找不到该曲目。"
         },
-        "description":"通过斜杠命令分享您当前的 Spotify 曲目、专辑或艺术家（/track、/album、/artist）"
+        "description": "通过斜杠命令分享您当前的 Spotify 曲目、专辑或艺术家（/track、/album、/artist）"
     },
-    "startupTimings":{
-        "description":"将启动时间添加到“设置”菜单",
-        "ui":{
-            "title":"启动所需时间"
+    "startupTimings": {
+        "description": "将启动时间添加到“设置”菜单",
+        "ui": {
+            "title": "启动所需时间"
         }
     },
-    "stickerPaste":{
-        "description":"使得在贴纸选择器中选择贴纸并将其插入聊天框中而不是立即发送"
+    "stickerPaste": {
+        "description": "使得在贴纸选择器中选择贴纸并将其插入聊天框中而不是立即发送"
     },
-    "streamerModeOnStream":{
-        "description":"当您在 Discord 中开始串流时，自动启用串流模式"
+    "streamerModeOnStream": {
+        "description": "当您在 Discord 中开始串流时，自动启用串流模式"
     },
-    "superReactionTweaks":{
-        "description":"自定义超级反应同时播放的限制，默认超级反应",
-        "settings":{
-            "superReactByDefault":"反应选择器将默认为超级反应",
-            "superReactionPlayingLimit":"立即播放最大超级反应。 0 禁用超级反应",
-            "unlimitedSuperReactionPlaying":"取消超级反应同时播放的限制"
+    "superReactionTweaks": {
+        "description": "自定义超级反应同时播放的限制，默认超级反应",
+        "settings": {
+            "superReactByDefault": "反应选择器将默认为超级反应",
+            "superReactionPlayingLimit": "立即播放最大超级反应。 0 禁用超级反应",
+            "unlimitedSuperReactionPlaying": "取消超级反应同时播放的限制"
         }
     },
-    "tabs":{
-        "settings":"Equicord 设置"
+    "tabs": {
+        "settings": "Equicord 设置"
     },
-    "textReplace":{
-        "find":"搜索",
-        "messageWithRules":"应用规则的消息",
-        "onlyIfIncludes":"仅当包含",
-        "replace":"代替",
-        "scope.allMessages":"Apply to all messages",
-        "scope.myMessages":"Apply to your messages (visible to everyone)",
-        "scope.othersMessages":"Apply to others' messages (only visible to you)",
-        "testRules":"测试规则",
-        "typeMessage":"输入消息",
-        "usingRegex":"使用正则表达式",
-        "usingString":"使用字符串"
+    "textReplace": {
+        "find": "搜索",
+        "messageWithRules": "应用规则的消息",
+        "onlyIfIncludes": "仅当包含",
+        "replace": "代替",
+        "scope.allMessages": "Apply to all messages",
+        "scope.myMessages": "Apply to your messages (visible to everyone)",
+        "scope.othersMessages": "Apply to others' messages (only visible to you)",
+        "testRules": "测试规则",
+        "typeMessage": "输入消息",
+        "usingRegex": "使用正则表达式",
+        "usingString": "使用字符串"
     },
-    "themeAttributes":{
-        "description":"出于主题目的向各种元素添加数据属性"
+    "themeAttributes": {
+        "description": "出于主题目的向各种元素添加数据属性"
     },
-    "translate":{
-        "autoTranslate":"自动翻译",
-        "autoTranslateEnabled":{
-            "body":"您刚刚启用了自动翻译！任何消息在发送之前都会<0>自动翻译</0>。",
-            "title":"Equicord 自动翻译已启用"
+    "translate": {
+        "autoTranslate": "自动翻译",
+        "autoTranslateEnabled": {
+            "body": "您刚刚启用了自动翻译！任何消息在发送之前都会<0>自动翻译</0>。",
+            "title": "Equicord 自动翻译已启用"
         },
-        "autoTranslateEnabledLabel":"自动翻译已启用",
-        "disableAutoTranslate":"禁用自动翻译",
-        "dontShowAgain":"不再显示",
-        "gotIt":"知道了",
-        "modalTitle":"翻译",
-        "openTranslateModal":"打开翻译模态",
-        "selectLanguage":"选择语言",
-        "translate":"翻译"
+        "autoTranslateEnabledLabel": "自动翻译已启用",
+        "disableAutoTranslate": "禁用自动翻译",
+        "dontShowAgain": "不再显示",
+        "gotIt": "知道了",
+        "modalTitle": "翻译",
+        "openTranslateModal": "打开翻译模态",
+        "selectLanguage": "选择语言",
+        "translate": "翻译"
     },
-    "typingIndicator":{
-        "description":"如果有人在频道上打字，则添加一个指示器。",
-        "settings":{
-            "animatedDots":"动画点",
-            "avatars":"头像",
-            "avatarsAndDots":"头像和动画点",
-            "includeBlockedUsers":"是否为被阻止的用户显示打字指示器。",
-            "includeCurrentChannel":"是否显示当前所选频道的打字指示",
-            "includeIgnoredUsers":"是否为被忽略的用户显示键入指示符。",
-            "includeMutedChannels":"是否显示静音通道的打字指示器。",
-            "indicatorMode":"指标应该如何显示？"
+    "typingIndicator": {
+        "description": "如果有人在频道上打字，则添加一个指示器。",
+        "settings": {
+            "animatedDots": "动画点",
+            "avatars": "头像",
+            "avatarsAndDots": "头像和动画点",
+            "includeBlockedUsers": "是否为被阻止的用户显示打字指示器。",
+            "includeCurrentChannel": "是否显示当前所选频道的打字指示",
+            "includeIgnoredUsers": "是否为被忽略的用户显示键入指示符。",
+            "includeMutedChannels": "是否显示静音通道的打字指示器。",
+            "indicatorMode": "指标应该如何显示？"
         }
     },
-    "typingTweaks":{
-        "andOthersTyping":"和 {count} 其他人正在输入...",
-        "description":"在打字指示器中显示头像和角色颜色",
-        "settings":{
-            "alternativeFormatting":"当多个用户打字时显示更有用的消息",
-            "amITyping":"显示其他人是否可以看到您正在打字",
-            "showAvatars":"在打字指示器中显示头像",
-            "showRoleColors":"在打字指示器中显示角色颜色"
+    "typingTweaks": {
+        "andOthersTyping": "和 {count} 其他人正在输入...",
+        "description": "在打字指示器中显示头像和角色颜色",
+        "settings": {
+            "alternativeFormatting": "当多个用户打字时显示更有用的消息",
+            "amITyping": "显示其他人是否可以看到您正在打字",
+            "showAvatars": "在打字指示器中显示头像",
+            "showRoleColors": "在打字指示器中显示角色颜色"
         }
     },
-    "unindent":{
-        "description":"修剪代码块的前导缩进"
+    "unindent": {
+        "description": "修剪代码块的前导缩进"
     },
-    "unlockedAvatarZoom":{
-        "description":"允许您在更改头像时进一步放大图像裁剪工具",
-        "settings":{
-            "zoomMultiplier":"变焦倍数"
+    "unlockedAvatarZoom": {
+        "description": "允许您在更改头像时进一步放大图像裁剪工具",
+        "settings": {
+            "zoomMultiplier": "变焦倍数"
         }
     },
-    "unsuppressEmbeds":{
-        "description":"允许您取消抑制消息中的嵌入",
-        "suppressEmbeds":"抑制嵌入",
-        "unsuppressEmbeds":"取消抑制嵌入"
+    "unsuppressEmbeds": {
+        "description": "允许您取消抑制消息中的嵌入",
+        "suppressEmbeds": "抑制嵌入",
+        "unsuppressEmbeds": "取消抑制嵌入"
     },
-    "userMessagesPronouns":{
-        "description":"在聊天用户消息中添加代词",
-        "settings":{
-            "pronounsFormat":"代词在聊天中出现的格式",
-            "pronounsFormatOptions":{
-                "capitalized":"大写",
-                "lowercase":"小写"
+    "userMessagesPronouns": {
+        "description": "在聊天用户消息中添加代词",
+        "settings": {
+            "pronounsFormat": "代词在聊天中出现的格式",
+            "pronounsFormatOptions": {
+                "capitalized": "大写",
+                "lowercase": "小写"
             },
-            "showSelf":"启用或禁用为自己显示代词"
+            "showSelf": "启用或禁用为自己显示代词"
         }
     },
-    "userSettingsAPI":{
-        "description":"修补 Discord 的 UserSettings 以公开他们的组和名称"
+    "userSettingsAPI": {
+        "description": "修补 Discord 的 UserSettings 以公开他们的组和名称"
     },
-    "userVoiceShow":{
-        "cannotJoinChannel":"您无法加入用户的语音频道",
-        "description":"当用户处于语音频道时显示指示器",
-        "inVoiceChat":"语音 Chat",
-        "settings":{
-            "showInMemberList":"在成员和 DM 列表中显示用户的语音通道指示器",
-            "showInMessages":"在消息中显示用户的语音通道指示器",
-            "showInUserProfileModal":"在用户个人资料中的姓名旁边显示用户的语音频道指示器"
+    "userVoiceShow": {
+        "cannotJoinChannel": "您无法加入用户的语音频道",
+        "description": "当用户处于语音频道时显示指示器",
+        "inVoiceChat": "语音 Chat",
+        "settings": {
+            "showInMemberList": "在成员和 DM 列表中显示用户的语音通道指示器",
+            "showInMessages": "在消息中显示用户的语音通道指示器",
+            "showInUserProfileModal": "在用户个人资料中的姓名旁边显示用户的语音频道指示器"
         }
     },
-    "usrbg":{
-        "description":"显示来自 USRBG 的用户横幅，允许任何人在没有 Nitro 的情况下获得横幅",
-        "getOwnBanner":"获得您自己的 USRBG 横幅",
-        "settings":{
-            "nitroBanner":"硝基横幅",
-            "nitroFirst":"如果同时存在 Nitro 和 USRBG 横幅，则使用横幅",
-            "usrbgBanner":"美国RBG横幅",
-            "voiceBackground":"使用 USRBG 横幅作为语音聊天背景"
+    "usrbg": {
+        "description": "显示来自 USRBG 的用户横幅，允许任何人在没有 Nitro 的情况下获得横幅",
+        "getOwnBanner": "获得您自己的 USRBG 横幅",
+        "settings": {
+            "nitroBanner": "硝基横幅",
+            "nitroFirst": "如果同时存在 Nitro 和 USRBG 横幅，则使用横幅",
+            "usrbgBanner": "美国RBG横幅",
+            "voiceBackground": "使用 USRBG 横幅作为语音聊天背景"
         }
     },
-    "validReply":{
-        "description":"修复了将鼠标悬停在回复上时“无法加载消息”的问题"
+    "validReply": {
+        "description": "修复了将鼠标悬停在回复上时“无法加载消息”的问题"
     },
-    "validUser":{
-        "description":"修复显示为“@unknown-user”的未知用户的提及（将鼠标悬停在提及上即可修复）"
+    "validUser": {
+        "description": "修复显示为“@unknown-user”的未知用户的提及（将鼠标悬停在提及上即可修复）"
     },
-    "vcDoubleClick":{
-        "description":"通过双击而不是单击加入语音聊天"
+    "vcDoubleClick": {
+        "description": "通过双击而不是单击加入语音聊天"
     },
-    "vcNarrator":{
-        "customiseMessages":"您可以自定义下面的语音消息。您可以通过将特定消息设置为空来禁用它们",
-        "defaults":{
-            "deafen":"{{USER}}震耳欲聋",
-            "join":"{{USER}} 已加入",
-            "leave":"{{USER}} 左",
-            "move":"{{USER}} 移至 {{CHANNEL}}",
-            "mute":"{{USER}}静音",
-            "undeafen":"{{USER}} 不聋",
-            "unmute":"{{USER}} 取消静音"
+    "vcNarrator": {
+        "customiseMessages": "您可以自定义下面的语音消息。您可以通过将特定消息设置为空来禁用它们",
+        "defaults": {
+            "deafen": "{{USER}}震耳欲聋",
+            "join": "{{USER}} 已加入",
+            "leave": "{{USER}} 左",
+            "move": "{{USER}} 移至 {{CHANNEL}}",
+            "mute": "{{USER}}静音",
+            "undeafen": "{{USER}} 不聋",
+            "unmute": "{{USER}} 取消静音"
         },
-        "description":"当用户加入、离开或移动语音频道时通过讲述人进行宣布",
-        "linuxVoicesHelp":"安装语音调度程序或 espeak 并使用 --enable-speech-dispatcher 标志运行 Discord",
-        "noEnglishVoices":"您没有安装任何英文语音，因此旁白可能听起来很奇怪",
-        "noVoices":"找不到旁白的声音。 ",
-        "osVoicesHelp":"尝试在操作系统的讲述人设置中安装一些",
-        "placeholdersHelp":"特殊占位符<0>{{USER}}</0>、<1>{{DISPLAY_NAME}}</1>、<2>{{NICKNAME}}</2>和<3>{{CHANNEL}}</3>将分别替换为用户名（如果是你自己则不填）、用户的显示名、用户在当前服务器上的昵称和频道名称",
-        "playExampleSounds":"播放示例声音",
-        "settings":{
-            "deafenMessage":"震耳欲聋的消息（目前只有自己）",
-            "joinMessage":"加盟留言",
-            "latinOnly":"在说出名字之前先从名字中去除非拉丁字符",
-            "leaveMessage":"留言",
-            "moveMessage":"移动留言",
-            "muteMessage":"静音消息（目前仅限自己）",
-            "sayOwnName":"说出自己的名字",
-            "speed":"讲述人速度",
-            "undeafenMessage":"不聋的消息（目前只有自己）",
-            "unmuteMessage":"取消消息静音（目前仅限自己）",
-            "volume":"旁白音量"
+        "description": "当用户加入、离开或移动语音频道时通过讲述人进行宣布",
+        "linuxVoicesHelp": "安装语音调度程序或 espeak 并使用 --enable-speech-dispatcher 标志运行 Discord",
+        "noEnglishVoices": "您没有安装任何英文语音，因此旁白可能听起来很奇怪",
+        "noVoices": "找不到旁白的声音。 ",
+        "osVoicesHelp": "尝试在操作系统的讲述人设置中安装一些",
+        "placeholdersHelp": "特殊占位符<0>{{USER}}</0>、<1>{{DISPLAY_NAME}}</1>、<2>{{NICKNAME}}</2>和<3>{{CHANNEL}}</3>将分别替换为用户名（如果是你自己则不填）、用户的显示名、用户在当前服务器上的昵称和频道名称",
+        "playExampleSounds": "播放示例声音",
+        "settings": {
+            "deafenMessage": "震耳欲聋的消息（目前只有自己）",
+            "joinMessage": "加盟留言",
+            "latinOnly": "在说出名字之前先从名字中去除非拉丁字符",
+            "leaveMessage": "留言",
+            "moveMessage": "移动留言",
+            "muteMessage": "静音消息（目前仅限自己）",
+            "sayOwnName": "说出自己的名字",
+            "speed": "讲述人速度",
+            "undeafenMessage": "不聋的消息（目前只有自己）",
+            "unmuteMessage": "取消消息静音（目前仅限自己）",
+            "volume": "旁白音量"
         },
-        "speechSynthesisNotSupported":"不支持 SpeechSynthesis 或未找到讲述人声音。因此，这个插件将无法工作。检查我的设置以获取更多信息"
+        "speechSynthesisNotSupported": "不支持 SpeechSynthesis 或未找到讲述人声音。因此，这个插件将无法工作。检查我的设置以获取更多信息"
     },
-    "viewIcons":{
-        "description":"使用户配置文件中的头像和横幅可点击，在用户、服务器和组通道上下文菜单中添加查看图标/横幅条目。",
-        "settings":{
-            "formatDescription":"选择用于非动画图像的图像格式。动画图像将始终使用 .gif",
-            "imgSizeDescription":"要使用的图像尺寸"
+    "viewIcons": {
+        "description": "使用户配置文件中的头像和横幅可点击，在用户、服务器和组通道上下文菜单中添加查看图标/横幅条目。",
+        "settings": {
+            "formatDescription": "选择用于非动画图像的图像格式。动画图像将始终使用 .gif",
+            "imgSizeDescription": "要使用的图像尺寸"
         },
-        "viewAvatar":"查看头像",
-        "viewBanner":"查看横幅",
-        "viewIcon":"查看图标",
-        "viewServerAvatar":"查看服务器头像"
+        "viewAvatar": "查看头像",
+        "viewBanner": "查看横幅",
+        "viewIcon": "查看图标",
+        "viewServerAvatar": "查看服务器头像"
     },
-    "viewRaw":{
-        "content":"内容",
-        "contentCopied":"内容已复制到剪贴板！",
-        "copyJson":"复制 {type} JSON",
-        "copyRawContent":"复制原始内容",
-        "copyRawLeftViewRawRight":"复制原始数据（左键单击）/查看原始数据（右键单击）",
-        "data":"数据",
-        "dataCopied":"{type}数据已复制到剪贴板！",
-        "description":"复制并查看任何消息、频道或公会的原始内容/数据",
-        "settings":{
-            "clickMethodDescription":"更改按钮以查看任何消息的原始内容/数据。",
-            "leftClick":"左键单击查看原始内容。",
-            "rightClick":"右键单击查看原始内容。"
+    "viewRaw": {
+        "content": "内容",
+        "contentCopied": "内容已复制到剪贴板！",
+        "copyJson": "复制 {type} JSON",
+        "copyRawContent": "复制原始内容",
+        "copyRawLeftViewRawRight": "复制原始数据（左键单击）/查看原始数据（右键单击）",
+        "data": "数据",
+        "dataCopied": "{type}数据已复制到剪贴板！",
+        "description": "复制并查看任何消息、频道或公会的原始内容/数据",
+        "settings": {
+            "clickMethodDescription": "更改按钮以查看任何消息的原始内容/数据。",
+            "leftClick": "左键单击查看原始内容。",
+            "rightClick": "右键单击查看原始内容。"
         },
-        "viewRaw":"查看原始数据",
-        "viewRawLeftCopyRawRight":"查看原始数据（左键单击）/复制原始数据（右键单击）"
+        "viewRaw": "查看原始数据",
+        "viewRawLeftCopyRawRight": "查看原始数据（左键单击）/复制原始数据（右键单击）"
     },
-    "voiceDownload":{
-        "description":"添加语音消息下载。 （打开新的浏览器选项卡）",
-        "downloadVoiceMessage":"下载语音留言"
+    "voiceDownload": {
+        "description": "添加语音消息下载。 （打开新的浏览器选项卡）",
+        "downloadVoiceMessage": "下载语音留言"
     },
-    "voiceMessages":{
-        "echoCancellation":"回音抵消",
-        "failedToParse":"无法解析所选音频文件：{error}",
-        "failedToUpload":"上传语音留言失败",
-        "iosFix":"要修复此问题，请首先将其转换为 OggOpus，例如使用 <0>convertio Web 转换器</0>",
-        "iosWarning":"语音消息必须是 OggOpus 才能在 iOS 上播放。该文件为 <0>{type}</0>，因此无法在 iOS 上播放。",
-        "missingPermissions":"（缺少权限）",
-        "noiseSuppression":"噪音抑制",
-        "preview":"预览",
-        "recordModal":"录制语音留言",
-        "send":"发送语音留言",
-        "sending":"正在发送语音消息...请耐心等待",
-        "uploadFile":"上传文件"
+    "voiceMessages": {
+        "echoCancellation": "回音抵消",
+        "failedToParse": "无法解析所选音频文件：{error}",
+        "failedToUpload": "上传语音留言失败",
+        "iosFix": "要修复此问题，请首先将其转换为 OggOpus，例如使用 <0>convertio Web 转换器</0>",
+        "iosWarning": "语音消息必须是 OggOpus 才能在 iOS 上播放。该文件为 <0>{type}</0>，因此无法在 iOS 上播放。",
+        "missingPermissions": "（缺少权限）",
+        "noiseSuppression": "噪音抑制",
+        "preview": "预览",
+        "recordModal": "录制语音留言",
+        "send": "发送语音留言",
+        "sending": "正在发送语音消息...请耐心等待",
+        "uploadFile": "上传文件"
     },
-    "volumeBooster":{
-        "description":"允许您将用户和流音量设置为高于默认最大值",
-        "settings":{
-            "multiplier":"音量倍增器"
+    "volumeBooster": {
+        "description": "允许您将用户和流音量设置为高于默认最大值",
+        "settings": {
+            "multiplier": "音量倍增器"
         }
     },
-    "webContextMenus":{
-        "description":"重新添加 Discord 网络版本中缺少的上下文菜单：链接和图像（复制/打开链接/图像）、文本（复制、剪切、粘贴、拼写检查）",
-        "settings":{
-            "addBack":"添加回图像、链接和聊天输入栏的 Discord 上下文菜单"
+    "webContextMenus": {
+        "description": "重新添加 Discord 网络版本中缺少的上下文菜单：链接和图像（复制/打开链接/图像）、文本（复制、剪切、粘贴、拼写检查）",
+        "settings": {
+            "addBack": "添加回图像、链接和聊天输入栏的 Discord 上下文菜单"
         }
     },
-    "webKeybinds":{
-        "description":"重新添加 Discord 网页版中缺少的按键绑定：ctrl+t、ctrl+shift+t、ctrl+tab、ctrl+shift+tab、ctrl+1-9、ctrl+,。只能在 Vesktop/Legcord 上完全运行，不能在浏览器中运行"
+    "webKeybinds": {
+        "description": "重新添加 Discord 网页版中缺少的按键绑定：ctrl+t、ctrl+shift+t、ctrl+tab、ctrl+shift+tab、ctrl+1-9、ctrl+,。只能在 Vesktop/Legcord 上完全运行，不能在浏览器中运行"
     },
-    "webScreenShareFixes":{
-        "description":"取消了 chromium 和 vesktop 客户端上 2500kbps 的比特率上限。"
+    "webScreenShareFixes": {
+        "description": "取消了 chromium 和 vesktop 客户端上 2500kbps 的比特率上限。"
     },
-    "whoReacted":{
-        "settings":{
-            "avatarClick":"切换点击反应中的头像"
+    "whoReacted": {
+        "settings": {
+            "avatarClick": "切换点击反应中的头像"
         }
     },
-    "xsOverlay":{
-        "attachment":"依恋",
-        "botNotifications":"允许机器人通知",
-        "callNotifications":"允许来电通知",
-        "channelPingColor":"频道提及颜色",
-        "description":"将不和谐通知转发到 XSOverlay，以便在 VR 中轻松查看",
-        "dmNotifications":"允许私信通知",
-        "embed":"嵌入",
-        "groupDmNotifications":"允许 Group DM 通知",
-        "helloFromVendor":"供应商您好！",
-        "image":"图片",
-        "incomingCall":"来电",
-        "isCallingYou":"正在呼唤你...",
-        "lengthBasedTimeout":"通过消息长度延长持续时间",
-        "opacity":"通知不透明度",
-        "pingColor":"用户提及颜色",
-        "preferUDPDescription":"如果您使用旧版本的 XSOverlay 无法通过 websockets 连接，请启用。此设置在网络上被忽略。",
-        "reply":"回复",
-        "sendTestNotification":"发送测试通知",
-        "sentEmbeds":"已发送消息嵌入",
-        "sentSticker":"发送了一张贴纸",
-        "serverNotifications":"允许服务器通知",
-        "soundPath":"通知声音（默认/警告/错误）",
-        "sticker":"贴纸",
-        "testNotification":"这是测试通知！爆炸",
-        "timeout":"通知持续时间（秒）",
-        "volume":"音量",
-        "webSocketPort":"Websocket端口"
+    "xsOverlay": {
+        "attachment": "依恋",
+        "botNotifications": "允许机器人通知",
+        "callNotifications": "允许来电通知",
+        "channelPingColor": "频道提及颜色",
+        "description": "将不和谐通知转发到 XSOverlay，以便在 VR 中轻松查看",
+        "dmNotifications": "允许私信通知",
+        "embed": "嵌入",
+        "groupDmNotifications": "允许 Group DM 通知",
+        "helloFromVendor": "供应商您好！",
+        "image": "图片",
+        "incomingCall": "来电",
+        "isCallingYou": "正在呼唤你...",
+        "lengthBasedTimeout": "通过消息长度延长持续时间",
+        "opacity": "通知不透明度",
+        "pingColor": "用户提及颜色",
+        "preferUDPDescription": "如果您使用旧版本的 XSOverlay 无法通过 websockets 连接，请启用。此设置在网络上被忽略。",
+        "reply": "回复",
+        "sendTestNotification": "发送测试通知",
+        "sentEmbeds": "已发送消息嵌入",
+        "sentSticker": "发送了一张贴纸",
+        "serverNotifications": "允许服务器通知",
+        "soundPath": "通知声音（默认/警告/错误）",
+        "sticker": "贴纸",
+        "testNotification": "这是测试通知！爆炸",
+        "timeout": "通知持续时间（秒）",
+        "volume": "音量",
+        "webSocketPort": "Websocket端口"
     },
-    "youtubeAdblock":{
-        "description":"通过 AdGuard 屏蔽 YouTube 嵌入广告和 WatchTogether 活动"
+    "youtubeAdblock": {
+        "description": "通过 AdGuard 屏蔽 YouTube 嵌入广告和 WatchTogether 活动"
     }
 }

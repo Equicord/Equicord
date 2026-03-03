@@ -51,7 +51,7 @@ export const Native = VencordNative.pluginHelpers.SongLink as PluginNative<typeo
 
 export default definePlugin({
     name: "SongLink",
-    description: t("songLink.description"),
+    description: t("equicord.songLink.description"),
     authors: [Devs.nin0dev],
     settings,
     Providers,

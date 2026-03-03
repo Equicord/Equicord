@@ -112,12 +112,12 @@ const aliasResultCache = new Map<string, EmojiResult | null>();
 const settings = definePluginSettings({
     aliases: {
         type: OptionType.COMPONENT,
-        description: t("favEmojiFirst.settings.aliases"),
+        description: t("vencord.favEmojiFirst.settings.aliases"),
         component: AliasListSetting
     },
     clearAll: {
         type: OptionType.COMPONENT,
-        description: t("favEmojiFirst.settings.clearAll"),
+        description: t("vencord.favEmojiFirst.settings.clearAll"),
         component: ClearAllAliasesSetting
     }
 });
@@ -150,8 +150,8 @@ function normalizeEmojiNameForCompare(input: string | undefined): string {
 
 function getAliasValidationError(input: string): string | null {
     const normalized = normalizeAlias(input);
-    if (!normalized.length) return t("favEmojiFirst.ui.aliasRequired");
-    if (!/^[a-z0-9_]{2,32}$/.test(normalized)) return t("favEmojiFirst.ui.aliasValidation");
+    if (!normalized.length) return t("vencord.favEmojiFirst.ui.aliasRequired");
+    if (!/^[a-z0-9_]{2,32}$/.test(normalized)) return t("vencord.favEmojiFirst.ui.aliasValidation");
     return null;
 }
 
@@ -662,7 +662,7 @@ async function saveAlias(aliasInput: string, ref: StoredEmojiRef): Promise<{ ok:
     const existing = aliasMap[alias];
 
     if (existing && !isSameEmoji(existing, ref)) {
-        return { ok: false, error: t("favEmojiFirst.ui.duplicateAlias") };
+        return { ok: false, error: t("vencord.favEmojiFirst.ui.duplicateAlias") };
     }
 
     const normalizedRef = ref.kind === "unicode"
@@ -686,12 +686,12 @@ async function saveAlias(aliasInput: string, ref: StoredEmojiRef): Promise<{ ok:
         return { ok: true };
     } catch (error) {
         logger.error("Failed to save emoji alias.", error);
-        return { ok: false, error: t("favEmojiFirst.ui.failedToSave") };
+        return { ok: false, error: t("vencord.favEmojiFirst.ui.failedToSave") };
     }
 }
 
 function getAliasMenuLabel(ref: StoredEmojiRef): string {
-    return getExistingAliasForEmoji(ref) ? t("favEmojiFirst.ui.editAlias") : t("favEmojiFirst.ui.setAlias");
+    return getExistingAliasForEmoji(ref) ? t("vencord.favEmojiFirst.ui.editAlias") : t("vencord.favEmojiFirst.ui.setAlias");
 }
 
 async function removeAlias(alias: string) {
@@ -711,7 +711,7 @@ async function removeAlias(alias: string) {
         logger.error("Failed to remove emoji alias.", error);
         Toasts.show({
             id: Toasts.genId(),
-            message: t("favEmojiFirst.ui.failedToRemove"),
+            message: t("vencord.favEmojiFirst.ui.failedToRemove"),
             type: Toasts.Type.FAILURE
         });
     }
@@ -724,14 +724,14 @@ async function clearAliases() {
         await persistAliases({});
         Toasts.show({
             id: Toasts.genId(),
-            message: t("favEmojiFirst.ui.deletedAllAliases"),
+            message: t("vencord.favEmojiFirst.ui.deletedAllAliases"),
             type: Toasts.Type.SUCCESS
         });
     } catch (error) {
         logger.error("Failed to clear emoji aliases.", error);
         Toasts.show({
             id: Toasts.genId(),
-            message: t("favEmojiFirst.ui.failedToDelete"),
+            message: t("vencord.favEmojiFirst.ui.failedToDelete"),
             type: Toasts.Type.FAILURE
         });
     }
@@ -1021,7 +1021,7 @@ function AliasRow({ alias, emojiRef }: { alias: string; emojiRef: StoredEmojiRef
                 >
                     <PencilIcon width={14} height={14} />
                 </Button>
-                <Button variant="dangerSecondary" size="small" onClick={() => removeAlias(alias)}>{t("favEmojiFirst.ui.remove")}</Button>
+                <Button variant="dangerSecondary" size="small" onClick={() => removeAlias(alias)}>{t("vencord.favEmojiFirst.ui.remove")}</Button>
             </div>
         </div>
     );
@@ -1035,7 +1035,7 @@ function AliasListSetting() {
     const entries = getAliasMapEntries();
 
     if (!entries.length) {
-        return <Paragraph>{t("favEmojiFirst.ui.noAliasesYet")}</Paragraph>;
+        return <Paragraph>{t("vencord.favEmojiFirst.ui.noAliasesYet")}</Paragraph>;
     }
 
     return (
@@ -1056,7 +1056,7 @@ function ClearAllAliasesSetting() {
 
     return (
         <Button variant="dangerPrimary" size="small" disabled={disabled} onClick={openClearAliasesConfirmModal}>
-            {t("favEmojiFirst.ui.deleteAllAliases")}
+            {t("vencord.favEmojiFirst.ui.deleteAllAliases")}
         </Button>
     );
 }
@@ -1103,7 +1103,7 @@ export default definePlugin({
     name: "FavoriteEmojiFirst",
     authors: [Devs.Aria, Devs.Ven, EquicordDevs.justjxke],
     tags: ["EmojiAlias"],
-    description: t("favEmojiFirst.description"),
+    description: t("vencord.favEmojiFirst.description"),
     settings,
     contextMenus: {
         "expression-picker": expressionPickerPatch,

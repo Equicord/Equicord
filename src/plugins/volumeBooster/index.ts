@@ -23,7 +23,7 @@ import { t } from "@utils/translation";
 
 const settings = definePluginSettings({
     multiplier: {
-        description: t("volumeBooster.settings.multiplier"),
+        description: t("vencord.volumeBooster.settings.multiplier"),
         type: OptionType.SLIDER,
         markers: makeRange(1, 5, 0.5),
         default: 2,
@@ -51,7 +51,7 @@ interface StreamData {
 export default definePlugin({
     name: "VolumeBooster",
     authors: [Devs.Nuckyz, Devs.sadan],
-    description: t("volumeBooster.description"),
+    description: t("vencord.volumeBooster.description"),
     settings,
 
     patches: [

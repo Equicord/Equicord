@@ -13,12 +13,12 @@ import { FluxDispatcher, UserStore } from "@webpack/common";
 
 const settings = definePluginSettings({
     autoFillArguments: {
-        description: t("betterCommands.settings.autoFillArguments"),
+        description: t("equicord.betterCommands.settings.autoFillArguments"),
         type: OptionType.BOOLEAN,
         default: true,
     },
     allowNewlinesInCommands: {
-        description: t("betterCommands.settings.allowNewlinesInCommands"),
+        description: t("equicord.betterCommands.settings.allowNewlinesInCommands"),
         type: OptionType.BOOLEAN,
         default: true,
     }
@@ -33,7 +33,7 @@ function fetchIndex(target: object) {
 
 export default definePlugin({
     name: "BetterCommands",
-    description: t("betterCommands.description"),
+    description: t("equicord.betterCommands.description"),
     authors: [Devs.thororen],
     settings,
     patches: [
@@ -71,11 +71,11 @@ export default definePlugin({
     commands: [
         {
             name: "refresh",
-            description: t("betterCommands.commands.refresh.description"),
+            description: t("equicord.betterCommands.commands.refresh.description"),
             options: [
                 {
                     name: "user",
-                    description: t("betterCommands.commands.refresh.userOption"),
+                    description: t("equicord.betterCommands.commands.refresh.userOption"),
                     type: ApplicationCommandOptionType.USER,
                 }
             ],
@@ -87,7 +87,7 @@ export default definePlugin({
                     const user = findOption(opts, "user") as string;
 
                     sendBotMessage(ctx.channel.id, {
-                        content: t("betterCommands.commands.refresh.refreshing"),
+                        content: t("equicord.betterCommands.commands.refresh.refreshing"),
                     });
 
                     fetchIndex({ type: "channel", channelId });
@@ -104,12 +104,12 @@ export default definePlugin({
                     }
 
                     sendBotMessage(ctx.channel.id, {
-                        content: t("betterCommands.commands.refresh.success"),
+                        content: t("equicord.betterCommands.commands.refresh.success"),
                     });
                 } catch (err) {
                     console.error("[Refresh Command] Error refreshing commands:", err);
                     sendBotMessage(ctx.channel.id, {
-                        content: t("betterCommands.commands.refresh.failed"),
+                        content: t("equicord.betterCommands.commands.refresh.failed"),
                     });
                 }
             },

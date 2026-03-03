@@ -20,7 +20,7 @@ export const cl = classNameFactory("vc-profile-presets-");
 export const settings = definePluginSettings({
     avatarSize: {
         type: OptionType.SLIDER,
-        description: t("profileSets.settings.avatarSize"),
+        description: t("equicord.profileSets.settings.avatarSize"),
         markers: [56, 64, 72, 80, 88, 96],
         default: 56,
         stickToMarkers: true
@@ -29,7 +29,7 @@ export const settings = definePluginSettings({
 
 export default definePlugin({
     name: "ProfileSets",
-    description: t("profileSets.description"),
+    description: t("equicord.profileSets.description"),
     authors: [EquicordDevs.omaw, EquicordDevs.justjxke],
     settings,
     patches: [

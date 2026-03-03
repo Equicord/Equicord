@@ -20,7 +20,7 @@ const MessageTypes = findByPropsLazy("REPLY", "STAGE_RAISE_HAND", "CHANNEL_NAME_
 
 export default definePlugin({
     name: "NotificationTitle",
-    description: t("notificationTitle.description"),
+    description: t("equicord.notificationTitle.description"),
     authors: [Devs.Kyuuhachi],
 
     patches: [

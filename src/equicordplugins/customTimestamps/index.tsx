@@ -75,7 +75,7 @@ const TimeRow = (props: TimeRowProps) => {
 const settings = definePluginSettings({
     formats: {
         type: OptionType.COMPONENT,
-        description: t("customTimestamps.settings.formats"),
+        description: t("equicord.customTimestamps.settings.formats"),
         component: componentProps => {
             const [settingsState, setSettingsState] = useState(useSettings().plugins?.CustomTimestamps?.formats ?? {});
 
@@ -93,9 +93,9 @@ const settings = definePluginSettings({
                             {key === "sameDayFormat" && (
                                 <div className={Margins.bottom20}>
                                     <Divider style={{ marginBottom: "10px" }} />
-                                    <Heading tag="h1">{t("customTimestamps.settings.calendarFormats")}</Heading>
+                                    <Heading tag="h1">{t("equicord.customTimestamps.settings.calendarFormats")}</Heading>
                                     <Paragraph>
-                                        {t("customTimestamps.settings.calendarFormatsDescription")}
+                                        {t("equicord.customTimestamps.settings.calendarFormatsDescription")}
                                     </Paragraph>
                                 </div>
                             )}
@@ -125,18 +125,18 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "CustomTimestamps",
-    description: t("customTimestamps.description"),
+    description: t("equicord.customTimestamps.description"),
     authors: [Devs.Rini, EquicordDevs.nvhhr, EquicordDevs.Suffocate, Devs.Obsidian],
     settings,
     settingsAboutComponent: () => (
         <div className={"vc-cmt-info-card"}>
-            <HeadingPrimary>{t("customTimestamps.about.title")}</HeadingPrimary>
+            <HeadingPrimary>{t("equicord.customTimestamps.about.title")}</HeadingPrimary>
             <Paragraph>
                 <Link href="https://momentjs.com/docs/#/displaying/format/">Moment.js formatting documentation</Link>
                 <div className={Margins.top8}>
-                    {t("customTimestamps.about.additional")}<br />
-                    <b>[calendar]</b> {t("customTimestamps.about.calendar")}<br />
-                    <b>[relative]</b> {t("customTimestamps.about.relative")}<br />
+                    {t("equicord.customTimestamps.about.additional")}<br />
+                    <b>[calendar]</b> {t("equicord.customTimestamps.about.calendar")}<br />
+                    <b>[relative]</b> {t("equicord.customTimestamps.about.relative")}<br />
                 </div>
             </Paragraph>
         </div>

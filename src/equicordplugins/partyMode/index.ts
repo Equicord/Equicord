@@ -30,12 +30,12 @@ const enum Intensity {
 
 const settings = definePluginSettings({
     superIntensePartyMode: {
-        description: t("partyMode.settings.superIntensePartyMode"),
+        description: t("equicord.partyMode.settings.superIntensePartyMode"),
         type: OptionType.SELECT,
         options: [
-            { label: t("partyMode.settings.intensityOptions.normal"), value: Intensity.Normal, default: true },
-            { label: t("partyMode.settings.intensityOptions.better"), value: Intensity.Better },
-            { label: t("partyMode.settings.intensityOptions.projectX"), value: Intensity.ProjectX },
+            { label: t("equicord.partyMode.settings.intensityOptions.normal"), value: Intensity.Normal, default: true },
+            { label: t("equicord.partyMode.settings.intensityOptions.better"), value: Intensity.Better },
+            { label: t("equicord.partyMode.settings.intensityOptions.projectX"), value: Intensity.ProjectX },
         ],
         restartNeeded: false,
         onChange: setSettings
@@ -44,7 +44,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "PartyMode",
-    description: t("partyMode.description"),
+    description: t("equicord.partyMode.description"),
     authors: [Devs.UwUDev],
     reporterTestable: ReporterTestable.None,
     settings,

@@ -41,44 +41,44 @@ function daysSince(dateString: string): number {
 const ranks: rankInfo[] =
     [
         {
-            title: t("friendshipRanks.ranks.sprout.title"),
-            description: t("friendshipRanks.ranks.sprout.description"),
+            title: t("equicord.friendshipRanks.ranks.sprout.title"),
+            description: t("equicord.friendshipRanks.ranks.sprout.description"),
             requirement: 0,
             iconSrc: "https://equicord.org/assets/plugins/friendshipRanks/sprout.png"
         },
         {
-            title: t("friendshipRanks.ranks.blooming.title"),
-            description: t("friendshipRanks.ranks.blooming.description"),
+            title: t("equicord.friendshipRanks.ranks.blooming.title"),
+            description: t("equicord.friendshipRanks.ranks.blooming.description"),
             requirement: 30,
             iconSrc: "https://equicord.org/assets/plugins/friendshipRanks/blooming.png"
         },
         {
-            title: t("friendshipRanks.ranks.burning.title"),
-            description: t("friendshipRanks.ranks.burning.description"),
+            title: t("equicord.friendshipRanks.ranks.burning.title"),
+            description: t("equicord.friendshipRanks.ranks.burning.description"),
             requirement: 90,
             iconSrc: "https://equicord.org/assets/plugins/friendshipRanks/burning.png"
         },
         {
-            title: t("friendshipRanks.ranks.fighter.title"),
-            description: t("friendshipRanks.ranks.fighter.description"),
+            title: t("equicord.friendshipRanks.ranks.fighter.title"),
+            description: t("equicord.friendshipRanks.ranks.fighter.description"),
             requirement: 182.5,
             iconSrc: "https://equicord.org/assets/plugins/friendshipRanks/fighter.png"
         },
         {
-            title: t("friendshipRanks.ranks.star.title"),
-            description: t("friendshipRanks.ranks.star.description"),
+            title: t("equicord.friendshipRanks.ranks.star.title"),
+            description: t("equicord.friendshipRanks.ranks.star.description"),
             requirement: 365,
             iconSrc: "https://equicord.org/assets/plugins/friendshipRanks/star.png"
         },
         {
-            title: t("friendshipRanks.ranks.royal.title"),
-            description: t("friendshipRanks.ranks.royal.description"),
+            title: t("equicord.friendshipRanks.ranks.royal.title"),
+            description: t("equicord.friendshipRanks.ranks.royal.description"),
             requirement: 730,
             iconSrc: "https://equicord.org/assets/plugins/friendshipRanks/royal.png"
         },
         {
-            title: t("friendshipRanks.ranks.besties.title"),
-            description: t("friendshipRanks.ranks.besties.description"),
+            title: t("equicord.friendshipRanks.ranks.besties.title"),
+            description: t("equicord.friendshipRanks.ranks.besties.description"),
             requirement: 1826.25,
             iconSrc: "https://equicord.org/assets/plugins/friendshipRanks/besties.png"
         }
@@ -143,7 +143,7 @@ function getBadgesToApply() {
 
 export default definePlugin({
     name: "FriendshipRanks",
-    description: t("friendshipRanks.description"),
+    description: t("equicord.friendshipRanks.description"),
     authors: [Devs.Samwich],
     start() {
         getBadgesToApply().forEach(b => Badges.addProfileBadge(b));

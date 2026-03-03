@@ -62,18 +62,18 @@ interface Instance {
 export const settings = definePluginSettings({
     searchOption: {
         type: OptionType.SELECT,
-        description: t("favGifSearch.settings.searchOption"),
+        description: t("vencord.favGifSearch.settings.searchOption"),
         options: [
             {
-                label: t("favGifSearch.searchOptions.entireUrl"),
+                label: t("vencord.favGifSearch.searchOptions.entireUrl"),
                 value: "url"
             },
             {
-                label: t("favGifSearch.searchOptions.pathOnly"),
+                label: t("vencord.favGifSearch.searchOptions.pathOnly"),
                 value: "path"
             },
             {
-                label: t("favGifSearch.searchOptions.hostAndPath"),
+                label: t("vencord.favGifSearch.searchOptions.hostAndPath"),
                 value: "hostandpath",
                 default: true
             }
@@ -84,7 +84,7 @@ export const settings = definePluginSettings({
 export default definePlugin({
     name: "FavoriteGifSearch",
     authors: [Devs.Aria],
-    description: t("favGifSearch.description"),
+    description: t("vencord.favGifSearch.description"),
 
     patches: [
         {
@@ -186,7 +186,7 @@ function SearchBar({ instance, SearchBarComponent }: { instance: Instance; Searc
                 }
             }}
             query={query}
-            placeholder={t("favGifSearch.searchPlaceholder")}
+            placeholder={t("vencord.favGifSearch.searchPlaceholder")}
         />
     );
 }

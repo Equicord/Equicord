@@ -23,7 +23,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "FullVCPFP",
-    description: t("fullVcPfp.description"),
+    description: t("equicord.fullVcPfp.description"),
     authors: [EquicordDevs.mochienya],
     settings,
     patches: [

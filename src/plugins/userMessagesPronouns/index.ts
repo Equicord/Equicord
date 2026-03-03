@@ -28,7 +28,7 @@ migratePluginSettings("UserMessagesPronouns", "PronounDB");
 export default definePlugin({
     name: "UserMessagesPronouns",
     authors: [Devs.Tyman, Devs.TheKodeToad, Devs.Ven, Devs.Elvyra],
-    description: t("userMessagesPronouns.description"),
+    description: t("vencord.userMessagesPronouns.description"),
     settings,
 
     patches: [

@@ -22,7 +22,7 @@ import definePlugin from "@utils/types";
 
 export default definePlugin({
     name: "ColorSighted",
-    description: t("colorSighted.description"),
+    description: t("vencord.colorSighted.description"),
     authors: [Devs.lewisakura],
     patches: [
         {

@@ -45,7 +45,7 @@ function disableInvites(guildId: string) {
 export default definePlugin({
     name: "PauseInvitesForever",
     tags: ["DisableInvitesForever"],
-    description: t("pauseInvitesForever.description"),
+    description: t("vencord.pauseInvitesForever.description"),
     authors: [Devs.Dolfies, Devs.amia],
 
     patches: [
@@ -72,7 +72,7 @@ export default definePlugin({
                 {showDisableInvites(guildId) && <a role="button" onClick={() => {
                     setChecked(true);
                     disableInvites(guildId);
-                }}> {t("pauseInvitesForever.pauseIndefinitely")}</a>}
+                }}> {t("vencord.pauseInvitesForever.pauseIndefinitely")}</a>}
             </div>
         );
     }, { noop: true })

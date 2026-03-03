@@ -39,7 +39,7 @@ function getCachedUsers(): User[] {
 export default definePlugin({
     name: "UniversalMention",
     authors: [EquicordDevs.justjxke],
-    description: t("universalMention.description"),
+    description: t("equicord.universalMention.description"),
     settings,
     settingsAboutComponent: () => (
         <Notice.Warning>

@@ -26,27 +26,27 @@ const settings = definePluginSettings({
     friends: {
         type: OptionType.BOOLEAN,
         default: false,
-        description: t("pingNotifications.settings.friends")
+        description: t("equicord.pingNotifications.settings.friends")
     },
     mentions: {
         type: OptionType.BOOLEAN,
         default: true,
-        description: t("pingNotifications.settings.mentions")
+        description: t("equicord.pingNotifications.settings.mentions")
     },
     dms: {
         type: OptionType.BOOLEAN,
         default: true,
-        description: t("pingNotifications.settings.dms")
+        description: t("equicord.pingNotifications.settings.dms")
     },
     showInActive: {
         type: OptionType.BOOLEAN,
         default: false,
-        description: t("pingNotifications.settings.showInActive")
+        description: t("equicord.pingNotifications.settings.showInActive")
     },
     ignoreMuted: {
         type: OptionType.BOOLEAN,
         default: true,
-        description: t("pingNotifications.settings.ignoreMuted")
+        description: t("equicord.pingNotifications.settings.ignoreMuted")
     }
 });
 
@@ -92,7 +92,7 @@ function isUserBlocked(userId) {
 
 export default definePlugin({
     name: "PingNotifications",
-    description: t("pingNotifications.description"),
+    description: t("equicord.pingNotifications.description"),
     authors: [EquicordDevs.smuki],
     settings,
 

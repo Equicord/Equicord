@@ -248,38 +248,38 @@ export default definePlugin({
                         className={classes(Margins.top16, Margins.bottom16)}
                         style={{ padding: "1em" }}
                     >
-                        <Heading>{t("customRPC.notice.title")}</Heading>
-                        <Paragraph>{t("customRPC.notice.body")}</Paragraph>
+                        <Heading>{t("vencord.customRPC.notice.title")}</Heading>
+                        <Paragraph>{t("vencord.customRPC.notice.body")}</Paragraph>
 
                         <Button
                             color={Button.Colors.TRANSPARENT}
                             className={Margins.top8}
                             onClick={() => ShowCurrentGame.updateSetting(true)}
                         >
-                            {t("customRPC.notice.enable")}
+                            {t("vencord.customRPC.notice.enable")}
                         </Button>
                     </ErrorCard>
                 )}
 
                 <Flex flexDirection="column" gap=".5em" className={Margins.top16}>
                     <Paragraph>
-                        <Translate i18nKey="customRPC.instructions.devPortal">
+                        <Translate i18nKey="vencord.customRPC.instructions.devPortal">
                             Go to the <Link href="https://discord.com/developers/applications">Discord Developer Portal</Link> to create an application and get the application ID.
                         </Translate>
                     </Paragraph>
                     <Paragraph>
-                        {t("customRPC.instructions.uploadImages")}
+                        {t("vencord.customRPC.instructions.uploadImages")}
                     </Paragraph>
                     <Paragraph>
-                        <Translate i18nKey="customRPC.instructions.imgur">
+                        <Translate i18nKey="vencord.customRPC.instructions.imgur">
                             If you want to use an image link, download your image and reupload the image to <Link href="https://imgur.com">Imgur</Link> and get the image link by right-clicking the image and selecting "Copy image address".
                         </Translate>
                     </Paragraph>
                     <Paragraph>
-                        {t("customRPC.instructions.buttons")}
+                        {t("vencord.customRPC.instructions.buttons")}
                     </Paragraph>
                     <Paragraph>
-                        {t("customRPC.instructions.unicode")}
+                        {t("vencord.customRPC.instructions.unicode")}
                     </Paragraph>
                 </Flex>
 

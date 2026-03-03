@@ -32,7 +32,7 @@ function renderBadge(id: number, title: string) {
 
 export default definePlugin({
     name: "ChannelBadges",
-    description: t("channelBadges.description"),
+    description: t("equicord.channelBadges.description"),
     authors: [EquicordDevs.creations, Devs.thororen],
     settings,
     patches: [
@@ -65,9 +65,9 @@ export default definePlugin({
         const guild = selectedGuildId ? GuildStore.getGuild(selectedGuildId) : null;
 
         const badgeConditions = [
-            { id: 6101, condition: isPrivate, title: t("channelBadges.tooltips.lockedChannel") },
-            { id: 6100, condition: isNSFW, title: t("channelBadges.tooltips.nsfwChannel") },
-            { id: 6102, condition: guild?.rulesChannelId === channel.id, title: t("channelBadges.tooltips.rulesChannel") },
+            { id: 6101, condition: isPrivate, title: t("equicord.channelBadges.tooltips.lockedChannel") },
+            { id: 6100, condition: isNSFW, title: t("equicord.channelBadges.tooltips.nsfwChannel") },
+            { id: 6102, condition: guild?.rulesChannelId === channel.id, title: t("equicord.channelBadges.tooltips.rulesChannel") },
         ];
 
         let badges: JSX.Element[] = [];

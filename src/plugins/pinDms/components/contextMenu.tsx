@@ -18,14 +18,14 @@ function createPinMenuItem(channelId: string) {
     return (
         <Menu.MenuItem
             id="pin-dm"
-            label={t("pinDms.pinDms")}
+            label={t("vencord.pinDms.pinDms")}
         >
 
             {!pinned && (
                 <>
                     <Menu.MenuItem
                         id="vc-add-category"
-                        label={t("pinDms.addCategory")}
+                        label={t("vencord.pinDms.addCategory")}
                         color="brand"
                         action={() => openCategoryModal(null, channelId)}
                     />
@@ -48,7 +48,7 @@ function createPinMenuItem(channelId: string) {
                 <>
                     <Menu.MenuItem
                         id="unpin-dm"
-                        label={t("pinDms.unpinDm")}
+                        label={t("vencord.pinDms.unpinDm")}
                         color="danger"
                         action={() => removeChannelFromCategory(channelId)}
                     />
@@ -57,7 +57,7 @@ function createPinMenuItem(channelId: string) {
                         settings.store.pinOrder === PinOrder.Custom && canMoveChannelInDirection(channelId, -1) && (
                             <Menu.MenuItem
                                 id="move-up"
-                                label={t("pinDms.moveUp")}
+                                label={t("vencord.pinDms.moveUp")}
                                 action={() => moveChannel(channelId, -1)}
                             />
                         )
@@ -67,7 +67,7 @@ function createPinMenuItem(channelId: string) {
                         settings.store.pinOrder === PinOrder.Custom && canMoveChannelInDirection(channelId, 1) && (
                             <Menu.MenuItem
                                 id="move-down"
-                                label={t("pinDms.moveDown")}
+                                label={t("vencord.pinDms.moveDown")}
                                 action={() => moveChannel(channelId, 1)}
                             />
                         )

@@ -28,7 +28,7 @@ function buildPluginMenu() {
     return (
         <Menu.MenuItem
             id="plugins"
-            label={t("equicordToolbox.ui.plugins")}
+            label={t("equicord.equicordToolbox.ui.plugins")}
             action={() => openSettingsTabModal(PluginsTab)}
         >
             {pluginEntries}
@@ -104,7 +104,7 @@ export function buildPluginMenuEntries(includeEmpty = false) {
                                         checked={s[key]}
                                         action={() => {
                                             s[key] = !s[key];
-                                            if (option.restartNeeded) showToast(t("equicordToolbox.ui.restartToApply"));
+                                            if (option.restartNeeded) showToast(t("equicord.equicordToolbox.ui.restartToApply"));
                                         }}
                                     />
                                 );
@@ -121,7 +121,7 @@ export function buildPluginMenuEntries(includeEmpty = false) {
                                                 checked={s[key] === opt.value}
                                                 action={() => {
                                                     s[key] = opt.value;
-                                                    if (option.restartNeeded) showToast(t("equicordToolbox.ui.restartToApply"));
+                                                    if (option.restartNeeded) showToast(t("equicord.equicordToolbox.ui.restartToApply"));
                                                 }}
                                             />
                                         ))}
@@ -189,7 +189,7 @@ export function buildThemeMenu() {
     return (
         <Menu.MenuItem
             id="themes"
-            label={t("equicordToolbox.ui.themes")}
+            label={t("equicord.equicordToolbox.ui.themes")}
             action={() => openSettingsTabModal(ThemesTab)}
         >
             {buildThemeMenuEntries()}
@@ -206,19 +206,19 @@ export function buildThemeMenuEntries() {
             <Menu.MenuCheckboxItem
                 id="toggle-quickcss"
                 checked={useQuickCss}
-                label={t("equicordToolbox.ui.enableQuickCss")}
+                label={t("equicord.equicordToolbox.ui.enableQuickCss")}
                 action={() => {
                     Settings.useQuickCss = !useQuickCss;
                 }}
             />
             <Menu.MenuItem
                 id="edit-quickcss"
-                label={t("equicordToolbox.ui.editQuickCss")}
+                label={t("equicord.equicordToolbox.ui.editQuickCss")}
                 action={() => VencordNative.quickCss.openEditor()}
             />
             <Menu.MenuItem
                 id="manage-themes"
-                label={t("equicordToolbox.ui.manageThemes")}
+                label={t("equicord.equicordToolbox.ui.manageThemes")}
                 action={() => openSettingsTabModal(ThemesTab)}
             />
             {!!themes?.length && (
@@ -305,7 +305,7 @@ export function renderPopout(onClose: () => void) {
         >
             <Menu.MenuItem
                 id="notifications"
-                label={t("equicordToolbox.ui.openNotificationLog")}
+                label={t("equicord.equicordToolbox.ui.openNotificationLog")}
                 action={openNotificationLogModal}
             />
 

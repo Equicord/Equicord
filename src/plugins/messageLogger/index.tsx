@@ -81,7 +81,7 @@ const patchMessageContextMenu: NavContextMenuPatchCallback = (
             <Menu.MenuItem
                 id={TOGGLE_DELETE_STYLE_ID}
                 key={TOGGLE_DELETE_STYLE_ID}
-                label={t("messageLogger.toggleDeletedHighlight")}
+                label={t("vencord.messageLogger.toggleDeletedHighlight")}
                 action={() => domElement.classList.toggle("messagelogger-deleted")}
             />,
         );
@@ -95,7 +95,7 @@ const patchMessageContextMenu: NavContextMenuPatchCallback = (
             <Menu.MenuItem
                 id={TOGGLE_DIFF_VIEW_ID}
                 key={TOGGLE_DIFF_VIEW_ID}
-                label={isDisabled ? t("messageLogger.enableDiffView") : t("messageLogger.disableDiffView")}
+                label={isDisabled ? t("vencord.messageLogger.enableDiffView") : t("vencord.messageLogger.disableDiffView")}
                 color="danger"
                 action={() => {
                     if (isDisabled) disabledDiffMessages.delete(id);
@@ -113,9 +113,9 @@ const patchMessageContextMenu: NavContextMenuPatchCallback = (
     let label;
 
     if (!isPluginEnabled("MessageLoggerEnhanced")) {
-        label = t("messageLogger.removeMessageHistory");
+        label = t("vencord.messageLogger.removeMessageHistory");
     } else {
-        label = t("messageLogger.removeMessageTemporary");
+        label = t("vencord.messageLogger.removeMessageTemporary");
     }
 
     children.push(
@@ -151,7 +151,7 @@ const patchChannelContextMenu: NavContextMenuPatchCallback = (
     group.push(
         <Menu.MenuItem
             id="vc-ml-clear-channel"
-            label={t("messageLogger.clearMessageLog")}
+            label={t("vencord.messageLogger.clearMessageLog")}
             color="danger"
             action={() => {
                 messages.forEach(msg => {
@@ -325,66 +325,66 @@ export function parseEditContent(content: string, message: Message, previousCont
 const settings = definePluginSettings({
     deleteStyle: {
         type: OptionType.SELECT,
-        description: t("messageLogger.settings.deleteStyleDescription"),
+        description: t("vencord.messageLogger.settings.deleteStyleDescription"),
         default: "text",
         options: [
-            { label: t("messageLogger.settings.deleteStyleRedText"), value: "text", default: true },
-            { label: t("messageLogger.settings.deleteStyleRedOverlay"), value: "overlay" },
+            { label: t("vencord.messageLogger.settings.deleteStyleRedText"), value: "text", default: true },
+            { label: t("vencord.messageLogger.settings.deleteStyleRedOverlay"), value: "overlay" },
         ],
         onChange: () => addDeleteStyle(),
     },
     logDeletes: {
         type: OptionType.BOOLEAN,
-        description: t("messageLogger.settings.logDeletesDescription"),
+        description: t("vencord.messageLogger.settings.logDeletesDescription"),
         default: true,
     },
     collapseDeleted: {
         type: OptionType.BOOLEAN,
-        description: t("messageLogger.settings.collapseDeletedDescription"),
+        description: t("vencord.messageLogger.settings.collapseDeletedDescription"),
         default: false,
         restartNeeded: true,
     },
     logEdits: {
         type: OptionType.BOOLEAN,
-        description: t("messageLogger.settings.logEditsDescription"),
+        description: t("vencord.messageLogger.settings.logEditsDescription"),
         default: true,
     },
     inlineEdits: {
         type: OptionType.BOOLEAN,
-        description: t("messageLogger.settings.inlineEditsDescription"),
+        description: t("vencord.messageLogger.settings.inlineEditsDescription"),
         default: true,
     },
     ignoreBots: {
         type: OptionType.BOOLEAN,
-        description: t("messageLogger.settings.ignoreBotsDescription"),
+        description: t("vencord.messageLogger.settings.ignoreBotsDescription"),
         default: false,
     },
     ignoreSelf: {
         type: OptionType.BOOLEAN,
-        description: t("messageLogger.settings.ignoreSelfDescription"),
+        description: t("vencord.messageLogger.settings.ignoreSelfDescription"),
         default: false,
     },
     ignoreUsers: {
         type: OptionType.STRING,
-        description: t("messageLogger.settings.ignoreUsersDescription"),
+        description: t("vencord.messageLogger.settings.ignoreUsersDescription"),
         default: "",
         multiline: true,
     },
     ignoreChannels: {
         type: OptionType.STRING,
-        description: t("messageLogger.settings.ignoreChannelsDescription"),
+        description: t("vencord.messageLogger.settings.ignoreChannelsDescription"),
         default: "",
         multiline: true,
     },
     ignoreGuilds: {
         type: OptionType.STRING,
-        description: t("messageLogger.settings.ignoreGuildsDescription"),
+        description: t("vencord.messageLogger.settings.ignoreGuildsDescription"),
         default: "",
         multiline: true,
     },
     showEditDiffs: {
         type: OptionType.BOOLEAN,
-        description: t("messageLogger.settings.showEditDiffsDescription"),
+        description: t("vencord.messageLogger.settings.showEditDiffsDescription"),
         default: false,
         onChange: value => {
             if (!value && settings.store.separatedDiffs) {
@@ -394,7 +394,7 @@ const settings = definePluginSettings({
     },
     separatedDiffs: {
         type: OptionType.BOOLEAN,
-        description: t("messageLogger.settings.separatedDiffsDescription"),
+        description: t("vencord.messageLogger.settings.separatedDiffsDescription"),
         default: false,
     },
 }, {
@@ -632,20 +632,20 @@ export default definePlugin({
             6,
             "count",
             {
-                "=0": [t("messageLogger.deletedMessages.none")],
+                "=0": [t("vencord.messageLogger.deletedMessages.none")],
                 one: [
                     [
                         1,
                         "count"
                     ],
-                    t("messageLogger.deletedMessages.one")
+                    t("vencord.messageLogger.deletedMessages.one")
                 ],
                 other: [
                     [
                         1,
                         "count"
                     ],
-                    t("messageLogger.deletedMessages.other")
+                    t("vencord.messageLogger.deletedMessages.other")
                 ]
             },
             0,

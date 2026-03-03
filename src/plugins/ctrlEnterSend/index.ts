@@ -12,29 +12,29 @@ import definePlugin, { OptionType } from "@utils/types";
 export default definePlugin({
     name: "CtrlEnterSend",
     authors: [Devs.UlyssesZhan],
-    description: t("ctrlEnterSend.description"),
+    description: t("vencord.ctrlEnterSend.description"),
     settings: definePluginSettings({
         submitRule: {
-            description: t("ctrlEnterSend.settings.submitRule"),
+            description: t("vencord.ctrlEnterSend.settings.submitRule"),
             type: OptionType.SELECT,
             options: [
                 {
-                    label: t("ctrlEnterSend.submitRuleOptions.ctrlEnter"),
+                    label: t("vencord.ctrlEnterSend.submitRuleOptions.ctrlEnter"),
                     value: "ctrl+enter"
                 },
                 {
-                    label: t("ctrlEnterSend.submitRuleOptions.shiftEnter"),
+                    label: t("vencord.ctrlEnterSend.submitRuleOptions.shiftEnter"),
                     value: "shift+enter"
                 },
                 {
-                    label: t("ctrlEnterSend.submitRuleOptions.enter"),
+                    label: t("vencord.ctrlEnterSend.submitRuleOptions.enter"),
                     value: "enter"
                 }
             ],
             default: "ctrl+enter"
         },
         sendMessageInTheMiddleOfACodeBlock: {
-            description: t("ctrlEnterSend.settings.sendMessageInTheMiddleOfACodeBlock"),
+            description: t("vencord.ctrlEnterSend.settings.sendMessageInTheMiddleOfACodeBlock"),
             type: OptionType.BOOLEAN,
             default: true,
         }

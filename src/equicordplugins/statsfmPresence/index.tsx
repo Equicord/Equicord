@@ -223,7 +223,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "StatsfmPresence",
-    description: t("statsfmPresence.description"),
+    description: t("equicord.statsfmPresence.description"),
     authors: [EquicordDevs.Crxa],
 
     settingsAboutComponent: () => (

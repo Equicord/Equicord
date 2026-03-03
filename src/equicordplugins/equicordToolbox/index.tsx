@@ -31,7 +31,7 @@ export const settings = definePluginSettings({
     showPluginMenu: {
         type: OptionType.BOOLEAN,
         default: true,
-        description: t("equicordToolbox.settings.showPluginMenu"),
+        description: t("equicord.equicordToolbox.settings.showPluginMenu"),
     }
 });
 
@@ -65,7 +65,7 @@ function VencordPopoutButton() {
                     ref={buttonRef}
                     className="vc-toolbox-btn"
                     onClick={() => setShow(v => !v)}
-                    tooltip={isShown ? null : t("equicordToolbox.ui.tooltip")}
+                    tooltip={isShown ? null : t("equicord.equicordToolbox.ui.tooltip")}
                     icon={Icon}
                     selected={isShown}
                 />
@@ -77,7 +77,7 @@ function VencordPopoutButton() {
 migratePluginSettings("EquicordToolbox", "VencordToolbox");
 export default definePlugin({
     name: "EquicordToolbox",
-    description: t("equicordToolbox.description"),
+    description: t("equicord.equicordToolbox.description"),
     authors: [Devs.Ven, Devs.AutumnVN],
     dependencies: ["HeaderBarAPI"],
 

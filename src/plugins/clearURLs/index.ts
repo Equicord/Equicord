@@ -50,7 +50,7 @@ interface RuleSet {
 
 export default definePlugin({
     name: "ClearURLs",
-    description: t("clearURLs.description"),
+    description: t("vencord.clearURLs.description"),
     authors: [Devs.adryd, Devs.thororen],
 
     rules: [] as RuleSet[],

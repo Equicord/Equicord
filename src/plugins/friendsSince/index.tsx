@@ -23,7 +23,7 @@ const Section = findComponentByCodeLazy("headingVariant:", '"section"', "heading
 
 export default definePlugin({
     name: "FriendsSince",
-    description: t("friendsSince.description"),
+    description: t("vencord.friendsSince.description"),
     authors: [Devs.Elvyra, Devs.Antti],
     patches: [
         // DM User Sidebar
@@ -61,7 +61,7 @@ export default definePlugin({
         if (isSidebar) {
             return (
                 <Section
-                    heading={t("friendsSince.heading")}
+                    heading={t("vencord.friendsSince.heading")}
                     headingVariant="text-xs/semibold"
                     headingColor="text-strong"
                 >
@@ -74,7 +74,7 @@ export default definePlugin({
 
         return (
             <Section
-                heading={t("friendsSince.heading")}
+                heading={t("vencord.friendsSince.heading")}
                 headingVariant="text-xs/medium"
                 headingColor="text-default"
                 className="vc-friendsSince-profile-section"

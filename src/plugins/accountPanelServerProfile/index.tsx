@@ -37,7 +37,7 @@ const AccountPanelContextMenu = ErrorBoundary.wrap(() => {
         >
             <Menu.MenuItem
                 id="vc-ap-view-alternate-popout"
-                label={prioritizeServerProfile ? t("accountPanelServerProfile.viewAccountProfile") : t("accountPanelServerProfile.viewServerProfile")}
+                label={prioritizeServerProfile ? t("vencord.accountPanelServerProfile.viewAccountProfile") : t("vencord.accountPanelServerProfile.viewServerProfile")}
                 disabled={getCurrentChannel()?.getGuildId() == null}
                 action={async e => {
                     if (isPluginEnabled(alwaysExpandProfiles.name)) {
@@ -52,7 +52,7 @@ const AccountPanelContextMenu = ErrorBoundary.wrap(() => {
             />
             <Menu.MenuCheckboxItem
                 id="vc-ap-prioritize-server-profile"
-                label={t("accountPanelServerProfile.prioritizeServerProfile")}
+                label={t("vencord.accountPanelServerProfile.prioritizeServerProfile")}
                 checked={prioritizeServerProfile}
                 action={() => settings.store.prioritizeServerProfile = !prioritizeServerProfile}
             />
@@ -63,14 +63,14 @@ const AccountPanelContextMenu = ErrorBoundary.wrap(() => {
 const settings = definePluginSettings({
     prioritizeServerProfile: {
         type: OptionType.BOOLEAN,
-        description: t("accountPanelServerProfile.prioritizeServerProfileDescription"),
+        description: t("vencord.accountPanelServerProfile.prioritizeServerProfileDescription"),
         default: false
     }
 });
 
 export default definePlugin({
     name: "AccountPanelServerProfile",
-    description: t("accountPanelServerProfile.description"),
+    description: t("vencord.accountPanelServerProfile.description"),
     authors: [Devs.Nuckyz, Devs.relitrix],
     settings,
 

@@ -238,7 +238,7 @@ function VoiceSettings() {
 
 export default definePlugin({
     name: "VCPanelSettings",
-    description: t("vcPanelSettings.description"),
+    description: t("equicord.vcPanelSettings.description"),
     authors: [Devs.nin0dev],
     settings,
     renderVoiceSettings() { return <VoiceSettings />; },

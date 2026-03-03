@@ -13,51 +13,51 @@ import { SelectedChannelStore, UserStore } from "@webpack/common";
 const settings = definePluginSettings({
     volume: {
         type: OptionType.SLIDER,
-        description: t("animalese.settings.volume"),
+        description: t("equicord.animalese.settings.volume"),
         default: 0.5,
         markers: [0, 0.1, 0.25, 0.5, 0.6, 0.75, 1],
     },
     speed: {
         type: OptionType.SLIDER,
-        description: t("animalese.settings.speed"),
+        description: t("equicord.animalese.settings.speed"),
         default: 1,
         markers: [0.5, 0.75, 1, 1.25, 1.5],
     },
     pitch: {
         type: OptionType.SLIDER,
-        description: t("animalese.settings.pitch"),
+        description: t("equicord.animalese.settings.pitch"),
         default: 1,
         markers: [0.75, 0.8, 0.85, 1, 1.15, 1.25, 1.35, 1.5],
     },
     messageLengthLimit: {
         type: OptionType.NUMBER,
-        description: t("animalese.settings.messageLengthLimit"),
+        description: t("equicord.animalese.settings.messageLengthLimit"),
         default: 50,
     },
     processOwnMessages: {
         type: OptionType.BOOLEAN,
-        description: t("animalese.settings.processOwnMessages"),
+        description: t("equicord.animalese.settings.processOwnMessages"),
         default: true,
     },
     soundQuality: {
         type: OptionType.SELECT,
-        description: t("animalese.settings.soundQuality"),
+        description: t("equicord.animalese.settings.soundQuality"),
         options: [
             {
-                label: t("animalese.quality.high"),
+                label: t("equicord.animalese.quality.high"),
                 value: "high",
                 default: true
             },
             {
-                label: t("animalese.quality.medium"),
+                label: t("equicord.animalese.quality.medium"),
                 value: "med"
             },
             {
-                label: t("animalese.quality.low"),
+                label: t("equicord.animalese.quality.low"),
                 value: "low"
             },
             {
-                label: t("animalese.quality.lowest"),
+                label: t("equicord.animalese.quality.lowest"),
                 value: "low"
             }
         ]
@@ -193,7 +193,7 @@ async function playSound(buffer: AudioBuffer, volume: number) {
 
 export default definePlugin({
     name: "Animalese",
-    description: t("animalese.description"),
+    description: t("equicord.animalese.description"),
     authors: [EquicordDevs.ryanamay, EquicordDevs.Mocha],
     settings,
 

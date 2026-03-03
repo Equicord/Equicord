@@ -1,37 +1,37 @@
 {
-    "commands":{
-        "errorExecuting":"Si è verificato un errore durante l'esecuzione del comando \"{name}\""
+    "commands": {
+        "errorExecuting": "Si è verificato un errore durante l'esecuzione del comando \"{name}\""
     },
-    "memberListDecorators":{
-        "fallback":"Impossibile eseguire il rendering del {key} Decoratore elenco membri"
+    "memberListDecorators": {
+        "fallback": "Impossibile eseguire il rendering del {key} Decoratore elenco membri"
     },
-    "messageAccessories":{
-        "fallback":"Impossibile eseguire il rendering dell'{key} Accessorio del messaggio"
+    "messageAccessories": {
+        "fallback": "Impossibile eseguire il rendering dell'{key} Accessorio del messaggio"
     },
-    "messageDecorations":{
-        "fallback":"Impossibile eseguire il rendering della {key} Decorazione del messaggio"
+    "messageDecorations": {
+        "fallback": "Impossibile eseguire il rendering della {key} Decorazione del messaggio"
     },
-    "notices":{
-        "fallback":"Errore visualizzazione avviso"
+    "notices": {
+        "fallback": "Errore visualizzazione avviso"
     },
-    "notifications":{
-        "dismissNotification":"Ignora la notifica",
-        "logs":{
-            "body_one":"Sarà rimossa permanentemente {count} notifica. Questa azione non può essere annullata.",
-            "body_other":"Saranno rimosse permanentemente {count} notifiche. Questa azione non può essere annullata.",
-            "body_zero":"Nessuna notifica selezionata.",
-            "cancel":"Lascia stare",
-            "clearNotificationLog":"Cancella il log delle notifiche",
-            "confirm":"Fallo!",
-            "title":"Sei sicuro?"
+    "notifications": {
+        "dismissNotification": "Ignora la notifica",
+        "logs": {
+            "body_one": "Sarà rimossa permanentemente {count} notifica. Questa azione non può essere annullata.",
+            "body_other": "Saranno rimosse permanentemente {count} notifiche. Questa azione non può essere annullata.",
+            "body_zero": "Nessuna notifica selezionata.",
+            "cancel": "Lascia stare",
+            "clearNotificationLog": "Cancella il log delle notifiche",
+            "confirm": "Fallo!",
+            "title": "Sei sicuro?"
         },
-        "missedNotifications":{
-            "body_one":"{count} notifica ricevuta",
-            "body_other":"{count} notifiche ricevute",
-            "title":"Mentre eri via"
+        "missedNotifications": {
+            "body_one": "{count} notifica ricevuta",
+            "body_other": "{count} notifiche ricevute",
+            "title": "Mentre eri via"
         },
-        "noNotifications":"Nessuna notifica al momento",
-        "notificationLog":"Log delle notifiche",
-        "notificationSettings":"Impostazioni notifiche"
+        "noNotifications": "Nessuna notifica al momento",
+        "notificationLog": "Log delle notifiche",
+        "notificationSettings": "Impostazioni notifiche"
     }
 }

@@ -70,115 +70,115 @@ function setActivity(activity: Activity | null) {
 
 const settings = definePluginSettings({
     apiKey: {
-        description: t("lastfmRichPresence.settings.apiKey"),
+        description: t("vencord.lastfmRichPresence.settings.apiKey"),
         type: OptionType.STRING,
     },
     username: {
-        description: t("lastfmRichPresence.settings.username"),
+        description: t("vencord.lastfmRichPresence.settings.username"),
         type: OptionType.STRING,
     },
     shareUsername: {
-        description: t("lastfmRichPresence.settings.shareUsername"),
+        description: t("vencord.lastfmRichPresence.settings.shareUsername"),
         type: OptionType.BOOLEAN,
         default: false,
     },
     clickableLinks: {
-        description: t("lastfmRichPresence.settings.clickableLinks"),
+        description: t("vencord.lastfmRichPresence.settings.clickableLinks"),
         type: OptionType.BOOLEAN,
         default: true,
     },
     hideWithSpotify: {
-        description: t("lastfmRichPresence.settings.hideWithSpotify"),
+        description: t("vencord.lastfmRichPresence.settings.hideWithSpotify"),
         type: OptionType.BOOLEAN,
         default: true,
     },
     hideWithActivity: {
-        description: t("lastfmRichPresence.settings.hideWithActivity"),
+        description: t("vencord.lastfmRichPresence.settings.hideWithActivity"),
         type: OptionType.BOOLEAN,
         default: false,
     },
     statusName: {
-        description: t("lastfmRichPresence.settings.statusName"),
+        description: t("vencord.lastfmRichPresence.settings.statusName"),
         type: OptionType.STRING,
         default: "some music",
     },
     statusDisplayType: {
-        description: t("lastfmRichPresence.settings.statusDisplayType"),
+        description: t("vencord.lastfmRichPresence.settings.statusDisplayType"),
         type: OptionType.SELECT,
         options: [
             {
-                label: t("lastfmRichPresence.statusDisplayType.off"),
+                label: t("vencord.lastfmRichPresence.statusDisplayType.off"),
                 value: "off"
             },
             {
-                label: t("lastfmRichPresence.statusDisplayType.artist"),
+                label: t("vencord.lastfmRichPresence.statusDisplayType.artist"),
                 value: "artist",
                 default: true
             },
             {
-                label: t("lastfmRichPresence.statusDisplayType.track"),
+                label: t("vencord.lastfmRichPresence.statusDisplayType.track"),
                 value: "track"
             }
         ]
     },
     nameFormat: {
-        description: t("lastfmRichPresence.settings.nameFormat"),
+        description: t("vencord.lastfmRichPresence.settings.nameFormat"),
         type: OptionType.SELECT,
         options: [
             {
-                label: t("lastfmRichPresence.nameFormat.statusName"),
+                label: t("vencord.lastfmRichPresence.nameFormat.statusName"),
                 value: NameFormat.StatusName,
                 default: true
             },
             {
-                label: t("lastfmRichPresence.nameFormat.artistFirst"),
+                label: t("vencord.lastfmRichPresence.nameFormat.artistFirst"),
                 value: NameFormat.ArtistFirst
             },
             {
-                label: t("lastfmRichPresence.nameFormat.songFirst"),
+                label: t("vencord.lastfmRichPresence.nameFormat.songFirst"),
                 value: NameFormat.SongFirst
             },
             {
-                label: t("lastfmRichPresence.nameFormat.artistOnly"),
+                label: t("vencord.lastfmRichPresence.nameFormat.artistOnly"),
                 value: NameFormat.ArtistOnly
             },
             {
-                label: t("lastfmRichPresence.nameFormat.songOnly"),
+                label: t("vencord.lastfmRichPresence.nameFormat.songOnly"),
                 value: NameFormat.SongOnly
             },
             {
-                label: t("lastfmRichPresence.nameFormat.albumName"),
+                label: t("vencord.lastfmRichPresence.nameFormat.albumName"),
                 value: NameFormat.AlbumName
             }
         ],
     },
     useListeningStatus: {
-        description: t("lastfmRichPresence.settings.useListeningStatus"),
+        description: t("vencord.lastfmRichPresence.settings.useListeningStatus"),
         type: OptionType.BOOLEAN,
         default: false,
     },
     missingArt: {
-        description: t("lastfmRichPresence.settings.missingArt"),
+        description: t("vencord.lastfmRichPresence.settings.missingArt"),
         type: OptionType.SELECT,
         options: [
             {
-                label: t("lastfmRichPresence.missingArt.lastfmLogo"),
+                label: t("vencord.lastfmRichPresence.missingArt.lastfmLogo"),
                 value: "lastfmLogo",
                 default: true
             },
             {
-                label: t("lastfmRichPresence.missingArt.placeholder"),
+                label: t("vencord.lastfmRichPresence.missingArt.placeholder"),
                 value: "placeholder"
             }
         ],
     },
     showLastFmLogo: {
-        description: t("lastfmRichPresence.settings.showLastFmLogo"),
+        description: t("vencord.lastfmRichPresence.settings.showLastFmLogo"),
         type: OptionType.BOOLEAN,
         default: true,
     },
     alwaysHideArt: {
-        description: t("lastfmRichPresence.settings.alwaysHideArt"),
+        description: t("vencord.lastfmRichPresence.settings.alwaysHideArt"),
         type: OptionType.BOOLEAN,
         default: false,
     },
@@ -186,7 +186,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "LastFMRichPresence",
-    description: t("lastfmRichPresence.description"),
+    description: t("vencord.lastfmRichPresence.description"),
     authors: [Devs.dzshn, Devs.RuiNtD, Devs.blahajZip, Devs.archeruwu],
 
     settings,
@@ -194,11 +194,11 @@ export default definePlugin({
     settingsAboutComponent() {
         return (
             <Card>
-                <Heading tag="h5">{t("lastfmRichPresence.howToCreateApiKey")}</Heading>
+                <Heading tag="h5">{t("vencord.lastfmRichPresence.howToCreateApiKey")}</Heading>
                 <Paragraph>
-                    <Translate i18nKey="lastfmRichPresence.apiKeyInstructions">Set <b>Application name</b> and <b>Application description</b> to anything and leave the rest blank.</Translate>
+                    <Translate i18nKey="vencord.lastfmRichPresence.apiKeyInstructions">Set <b>Application name</b> and <b>Application description</b> to anything and leave the rest blank.</Translate>
                 </Paragraph>
-                <LinkButton size="small" href="https://www.last.fm/api/account/create" className={Margins.top8}>{t("lastfmRichPresence.createApiKey")}</LinkButton>
+                <LinkButton size="small" href="https://www.last.fm/api/account/create" className={Margins.top8}>{t("vencord.lastfmRichPresence.createApiKey")}</LinkButton>
             </Card>
         );
     },
@@ -302,7 +302,7 @@ export default definePlugin({
 
         if (settings.store.shareUsername)
             buttons.push({
-                label: t("lastfmRichPresence.lastfmProfile"),
+                label: t("vencord.lastfmRichPresence.lastfmProfile"),
                 url: `https://www.last.fm/user/${settings.store.username}`,
             });
 

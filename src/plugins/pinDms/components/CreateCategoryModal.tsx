@@ -78,14 +78,14 @@ export function NewCategoryModal({ categoryId, modalProps, initialChannelId }: P
     return (
         <ModalRoot {...modalProps}>
             <ModalHeader>
-                <BaseText size="lg" weight="semibold" style={{ flexGrow: 1 }}>{categoryId ? t("pinDms.editCategoryTitle") : t("pinDms.newCategory")}</BaseText>
+                <BaseText size="lg" weight="semibold" style={{ flexGrow: 1 }}>{categoryId ? t("vencord.pinDms.editCategoryTitle") : t("vencord.pinDms.newCategory")}</BaseText>
             </ModalHeader>
 
             {/* form is here so when you press enter while in the text input it submits */}
             <form onSubmit={onSave}>
                 <ModalContent className={cl("content")}>
                     <section>
-                        <Heading>{t("pinDms.name")}</Heading>
+                        <Heading>{t("vencord.pinDms.name")}</Heading>
                         <TextInput
                             value={name}
                             onChange={e => setName(e)}
@@ -93,7 +93,7 @@ export function NewCategoryModal({ categoryId, modalProps, initialChannelId }: P
                     </section>
                     <Divider />
                     <section>
-                        <Heading>{t("pinDms.color")}</Heading>
+                        <Heading>{t("vencord.pinDms.color")}</Heading>
                         <ColorPickerWithSwatches
                             key={category.id}
                             defaultColor={DEFAULT_COLOR}
@@ -113,7 +113,7 @@ export function NewCategoryModal({ categoryId, modalProps, initialChannelId }: P
                     </section>
                 </ModalContent>
                 <ModalFooter>
-                    <Button type="submit" onClick={onSave} disabled={!name}>{categoryId ? t("pinDms.save") : t("pinDms.create")}</Button>
+                    <Button type="submit" onClick={onSave} disabled={!name}>{categoryId ? t("vencord.pinDms.save") : t("vencord.pinDms.create")}</Button>
                 </ModalFooter>
             </form>
         </ModalRoot>

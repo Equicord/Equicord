@@ -17,7 +17,7 @@ let updateFunc = (v: any) => { };
 
 export default definePlugin({
     name: "BetterBlockedUsers",
-    description: t("betterBlockedUsers.description"),
+    description: t("equicord.betterBlockedUsers.description"),
     authors: [EquicordDevs.TheArmagan],
     patches: [
         {
@@ -51,7 +51,7 @@ export default definePlugin({
         }, []);
 
         return <TextInput
-            placeholder={t("betterBlockedUsers.ui.searchPlaceholder")}
+            placeholder={t("equicord.betterBlockedUsers.ui.searchPlaceholder")}
             style={{ width: "200px" }}
             onInput={e => {
                 const search = (e.target as HTMLInputElement).value.toLowerCase().trim();

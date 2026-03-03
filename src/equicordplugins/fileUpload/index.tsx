@@ -68,7 +68,7 @@ const imageContextMenuPatch: NavContextMenuPatchCallback = (children, props) => 
 
 export default definePlugin({
     name: "FileUpload",
-    description: t("fileUpload.description"),
+    description: t("equicord.fileUpload.description"),
     authors: [EquicordDevs.creations, EquicordDevs.keircn],
     settings,
     contextMenus: {

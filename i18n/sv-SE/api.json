@@ -1,37 +1,37 @@
 {
-    "commands":{
-        "errorExecuting":"Ett fel uppstod när kommandot \"{name}\" kördes"
+    "commands": {
+        "errorExecuting": "Ett fel uppstod när kommandot \"{name}\" kördes"
     },
-    "memberListDecorators":{
-        "fallback":"Det gick inte att återge {key} Medlemslistadekoratör"
+    "memberListDecorators": {
+        "fallback": "Det gick inte att återge {key} Medlemslistadekoratör"
     },
-    "messageAccessories":{
-        "fallback":"Det gick inte att återge {key} meddelandetillbehör"
+    "messageAccessories": {
+        "fallback": "Det gick inte att återge {key} meddelandetillbehör"
     },
-    "messageDecorations":{
-        "fallback":"Det gick inte att återge {key} meddelandedekoration"
+    "messageDecorations": {
+        "fallback": "Det gick inte att återge {key} meddelandedekoration"
     },
-    "notices":{
-        "fallback":"Fel vid visning av meddelande"
+    "notices": {
+        "fallback": "Fel vid visning av meddelande"
     },
-    "notifications":{
-        "dismissNotification":"Avvisa meddelande",
-        "logs":{
-            "body_one":"Detta kommer att ta bort {count} avisering permanent. Denna åtgärd kan inte ångras.",
-            "body_other":"Detta kommer att ta bort {count} aviseringar permanent. Denna åtgärd kan inte ångras.",
-            "body_zero":"Ingen avisering har valts.",
-            "cancel":"Avbryt",
-            "clearNotificationLog":"Rensa aviseringslogg",
-            "confirm":"Gör det!",
-            "title":"Är du säker?"
+    "notifications": {
+        "dismissNotification": "Avvisa meddelande",
+        "logs": {
+            "body_one": "Detta kommer att ta bort {count} avisering permanent. Denna åtgärd kan inte ångras.",
+            "body_other": "Detta kommer att ta bort {count} aviseringar permanent. Denna åtgärd kan inte ångras.",
+            "body_zero": "Ingen avisering har valts.",
+            "cancel": "Avbryt",
+            "clearNotificationLog": "Rensa aviseringslogg",
+            "confirm": "Gör det!",
+            "title": "Är du säker?"
         },
-        "missedNotifications":{
-            "body_one":"{count} avisering mottogs",
-            "body_other":"{count} aviseringar har tagits emot",
-            "title":"Medan du var borta"
+        "missedNotifications": {
+            "body_one": "{count} avisering mottogs",
+            "body_other": "{count} aviseringar har tagits emot",
+            "title": "Medan du var borta"
         },
-        "noNotifications":"Inga aviseringar än",
-        "notificationLog":"Aviseringslogg",
-        "notificationSettings":"Aviseringsinställningar"
+        "noNotifications": "Inga aviseringar än",
+        "notificationLog": "Aviseringslogg",
+        "notificationSettings": "Aviseringsinställningar"
     }
 }

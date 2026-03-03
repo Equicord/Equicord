@@ -30,20 +30,20 @@ function setCss() {
 const settings = definePluginSettings({
     blurAmount: {
         type: OptionType.NUMBER,
-        description: t("blurNsfw.settings.blurAmount"),
+        description: t("vencord.blurNsfw.settings.blurAmount"),
         default: 10,
         onChange: setCss
     },
     blurAllChannels: {
         type: OptionType.BOOLEAN,
-        description: t("blurNsfw.settings.blurAllChannels"),
+        description: t("vencord.blurNsfw.settings.blurAllChannels"),
         default: false
     },
 });
 
 export default definePlugin({
     name: "BlurNSFW",
-    description: t("blurNsfw.description"),
+    description: t("vencord.blurNsfw.description"),
     authors: [Devs.Ven],
     isModified: true,
     settings,

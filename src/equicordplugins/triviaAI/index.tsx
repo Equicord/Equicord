@@ -28,7 +28,7 @@ const messageCtxPatch: NavContextMenuPatchCallback = (children, { message }: { m
     group.splice(group.findIndex(c => c?.props?.id === "copy-text") + 1, 0, (
         <Menu.MenuItem
             id="vc-trivia-ai"
-            label={t("triviaAI.ui.answerWithAI")}
+            label={t("equicord.triviaAI.ui.answerWithAI")}
             icon={RobotIcon}
             action={async () => {
                 const ans = await getResponse(payload);
@@ -40,7 +40,7 @@ const messageCtxPatch: NavContextMenuPatchCallback = (children, { message }: { m
 
 export default definePlugin({
     name: "TriviaAI",
-    description: t("triviaAI.description"),
+    description: t("equicord.triviaAI.description"),
     authors: [EquicordDevs.yash],
     settings,
     contextMenus: {
@@ -53,7 +53,7 @@ export default definePlugin({
             if (!payload) return null;
 
             return {
-                label: t("triviaAI.ui.answerWithAI"),
+                label: t("equicord.triviaAI.ui.answerWithAI"),
                 icon: RobotIcon,
                 message,
                 channel: ChannelStore.getChannel(message.channel_id),

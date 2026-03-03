@@ -1,37 +1,37 @@
 {
-    "commands":{
-        "errorExecuting":"\"{name}\" komutu yürütülürken bir hata oluştu"
+    "commands": {
+        "errorExecuting": "\"{name}\" komutu yürütülürken bir hata oluştu"
     },
-    "memberListDecorators":{
-        "fallback":"{key} Üye Listesi Dekoratörü oluşturulamadı"
+    "memberListDecorators": {
+        "fallback": "{key} Üye Listesi Dekoratörü oluşturulamadı"
     },
-    "messageAccessories":{
-        "fallback":"{key} Mesaj Aksesuarı oluşturulamadı"
+    "messageAccessories": {
+        "fallback": "{key} Mesaj Aksesuarı oluşturulamadı"
     },
-    "messageDecorations":{
-        "fallback":"{key} Mesaj Dekorasyonu oluşturulamadı"
+    "messageDecorations": {
+        "fallback": "{key} Mesaj Dekorasyonu oluşturulamadı"
     },
-    "notices":{
-        "fallback":"Bildirim Gösterilirken Hata oluştu"
+    "notices": {
+        "fallback": "Bildirim Gösterilirken Hata oluştu"
     },
-    "notifications":{
-        "dismissNotification":"Bildirimi Reddet",
-        "logs":{
-            "body_one":"Bu, {count} bildirimini kalıcı olarak kaldıracaktır. Bu eylem geri alınamaz.",
-            "body_other":"Bu, {count} bildirimlerini kalıcı olarak kaldıracaktır. Bu eylem geri alınamaz.",
-            "body_zero":"Hiçbir bildirim seçilmedi.",
-            "cancel":"Boşver",
-            "clearNotificationLog":"Bildirim Günlüğünü Temizle",
-            "confirm":"Yap!",
-            "title":"Emin misin?"
+    "notifications": {
+        "dismissNotification": "Bildirimi Reddet",
+        "logs": {
+            "body_one": "Bu, {count} bildirimini kalıcı olarak kaldıracaktır. Bu eylem geri alınamaz.",
+            "body_other": "Bu, {count} bildirimlerini kalıcı olarak kaldıracaktır. Bu eylem geri alınamaz.",
+            "body_zero": "Hiçbir bildirim seçilmedi.",
+            "cancel": "Boşver",
+            "clearNotificationLog": "Bildirim Günlüğünü Temizle",
+            "confirm": "Yap!",
+            "title": "Emin misin?"
         },
-        "missedNotifications":{
-            "body_one":"{count} bildirim alındı",
-            "body_other":"{count} bildirim alındı",
-            "title":"Sen uzaktayken"
+        "missedNotifications": {
+            "body_one": "{count} bildirim alındı",
+            "body_other": "{count} bildirim alındı",
+            "title": "Sen uzaktayken"
         },
-        "noNotifications":"Henüz bildirim yok",
-        "notificationLog":"Bildirim Günlüğü",
-        "notificationSettings":"Bildirim Ayarları"
+        "noNotifications": "Henüz bildirim yok",
+        "notificationLog": "Bildirim Günlüğü",
+        "notificationSettings": "Bildirim Ayarları"
     }
 }

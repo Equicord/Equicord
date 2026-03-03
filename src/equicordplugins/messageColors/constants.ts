@@ -23,26 +23,26 @@ export const enum BlockDisplayType {
 export const settings = definePluginSettings({
     renderType: {
         type: OptionType.SELECT,
-        description: t("messageColors.settings.renderType"),
+        description: t("equicord.messageColors.settings.renderType"),
         options: [
             {
-                label: t("messageColors.settings.renderTypeOptions.textColor"),
+                label: t("equicord.messageColors.settings.renderTypeOptions.textColor"),
                 value: RenderType.FOREGROUND,
                 default: true,
             },
             {
-                label: t("messageColors.settings.renderTypeOptions.blockNearby"),
+                label: t("equicord.messageColors.settings.renderTypeOptions.blockNearby"),
                 value: RenderType.BLOCK,
             },
             {
-                label: t("messageColors.settings.renderTypeOptions.backgroundColor"),
+                label: t("equicord.messageColors.settings.renderTypeOptions.backgroundColor"),
                 value: RenderType.BACKGROUND
             },
         ]
     },
     enableShortHexCodes: {
         type: OptionType.BOOLEAN,
-        description: t("messageColors.settings.enableShortHexCodes"),
+        description: t("equicord.messageColors.settings.enableShortHexCodes"),
         default: true,
         // Regex are created on the start, so without restart nothing would change
         restartNeeded: true
@@ -50,19 +50,19 @@ export const settings = definePluginSettings({
     blockView: {
         type: OptionType.SELECT,
         disabled: () => settings.store.renderType !== RenderType.BLOCK,
-        description: t("messageColors.settings.blockView"),
+        description: t("equicord.messageColors.settings.blockView"),
         options: [
             {
-                label: t("messageColors.settings.blockViewOptions.rightSide"),
+                label: t("equicord.messageColors.settings.blockViewOptions.rightSide"),
                 value: BlockDisplayType.RIGHT,
                 default: true
             },
             {
-                label: t("messageColors.settings.blockViewOptions.leftSide"),
+                label: t("equicord.messageColors.settings.blockViewOptions.leftSide"),
                 value: BlockDisplayType.LEFT
             },
             {
-                label: t("messageColors.settings.blockViewOptions.bothSides"),
+                label: t("equicord.messageColors.settings.blockViewOptions.bothSides"),
                 value: BlockDisplayType.BOTH
             }
         ]

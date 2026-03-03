@@ -27,7 +27,7 @@ export const settings = definePluginSettings({
 
 export default definePlugin({
     name: "ReplyPingControl",
-    description: t("replyPingControl.description"),
+    description: t("equicord.replyPingControl.description"),
     authors: [Devs.ant0n, EquicordDevs.MrDiamond],
     settings,
 

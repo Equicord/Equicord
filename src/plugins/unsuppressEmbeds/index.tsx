@@ -46,7 +46,7 @@ const messageContextMenuPatch: NavContextMenuPatchCallback = (
         <Menu.MenuItem
             id="unsuppress-embeds"
             key="unsuppress-embeds"
-            label={isEmbedSuppressed ? t("unsuppressEmbeds.unsuppressEmbeds") : t("unsuppressEmbeds.suppressEmbeds")}
+            label={isEmbedSuppressed ? t("vencord.unsuppressEmbeds.unsuppressEmbeds") : t("vencord.unsuppressEmbeds.suppressEmbeds")}
             color={isEmbedSuppressed ? undefined : "danger"}
             icon={isEmbedSuppressed ? ImageVisible : ImageInvisible}
             action={() =>
@@ -62,7 +62,7 @@ const messageContextMenuPatch: NavContextMenuPatchCallback = (
 export default definePlugin({
     name: "UnsuppressEmbeds",
     authors: [Devs.rad, Devs.HypedDomi],
-    description: t("unsuppressEmbeds.description"),
+    description: t("vencord.unsuppressEmbeds.description"),
     contextMenus: {
         "message": messageContextMenuPatch
     }

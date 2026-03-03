@@ -79,7 +79,7 @@ function handleClickAvatar(event: React.UIEvent<HTMLElement, Event>) {
 
 const settings = definePluginSettings({
     avatarClick: {
-        description: t("whoReacted.settings.avatarClick"),
+        description: t("vencord.whoReacted.settings.avatarClick"),
         type: OptionType.BOOLEAN,
         default: false,
         restartNeeded: true

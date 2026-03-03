@@ -31,20 +31,20 @@ function getMessage(opts, other) {
 const settings = definePluginSettings({
     pingOwnerChance: {
         type: OptionType.BOOLEAN,
-        description: t("gifRoulette.settings.pingOwnerChance"),
+        description: t("equicord.gifRoulette.settings.pingOwnerChance"),
         default: true
     }
 });
 
 export default definePlugin({
     name: "GifRoulette",
-    description: t("gifRoulette.description"),
+    description: t("equicord.gifRoulette.description"),
     authors: [Devs.Samwich],
     settings,
     commands: [
         {
             name: "gifroulette",
-            description: t("gifRoulette.commands.gifroulette"),
+            description: t("equicord.gifRoulette.commands.gifroulette"),
             execute: (opts, other) => ({
                 content: getMessage(opts, other)
             }),

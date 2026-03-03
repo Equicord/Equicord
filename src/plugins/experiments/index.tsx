@@ -29,7 +29,7 @@ const altKey = IS_MAC ? "opt" : "alt";
 const settings = definePluginSettings({
     toolbarDevMenu: {
         type: OptionType.BOOLEAN,
-        description: t("experiments.settings.toolbarDevMenu"),
+        description: t("vencord.experiments.settings.toolbarDevMenu"),
         default: false,
         restartNeeded: true
     }
@@ -37,7 +37,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "Experiments",
-    description: t("experiments.description"),
+    description: t("vencord.experiments.description"),
     authors: [
         Devs.Megu,
         Devs.Ven,
@@ -170,7 +170,7 @@ export default definePlugin({
         );
         return (
             <React.Fragment>
-                <HeadingSecondary>{t("experiments.moreInfo")}</HeadingSecondary>
+                <HeadingSecondary>{t("vencord.experiments.moreInfo")}</HeadingSecondary>
                 <BaseText size="md">
                     {t("experiments.devToolsInfo", { keyboardCombo })}
                 </BaseText>
@@ -180,18 +180,18 @@ export default definePlugin({
 
     WarningCard: ErrorBoundary.wrap(() => (
         <ErrorCard id="vc-experiments-warning-card" className={Margins.bottom16}>
-            <HeadingPrimary>{t("experiments.holdOn")}</HeadingPrimary>
+            <HeadingPrimary>{t("vencord.experiments.holdOn")}</HeadingPrimary>
 
             <Paragraph>
-                {t("experiments.warning1")}
+                {t("vencord.experiments.warning1")}
             </Paragraph>
 
             <Paragraph className={Margins.top8}>
-                {t("experiments.warning2")}
+                {t("vencord.experiments.warning2")}
             </Paragraph>
 
             <Paragraph className={Margins.top8}>
-                {t("experiments.warning3")}
+                {t("vencord.experiments.warning3")}
             </Paragraph>
         </ErrorCard>
     ), { noop: true })

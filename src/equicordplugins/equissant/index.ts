@@ -26,14 +26,14 @@ function play() {
 const settings = definePluginSettings({
     amount: {
         type: OptionType.NUMBER,
-        description: t("equissant.settings.amount"),
+        description: t("equicord.equissant.settings.amount"),
         default: 10,
     }
 });
 
 export default definePlugin({
     name: "Equissant",
-    description: t("equissant.description"),
+    description: t("equicord.equissant.description"),
     authors: [EquicordDevs.SomeAspy, Devs.thororen],
     dependencies: ["AudioPlayerAPI"],
     settings,

@@ -27,17 +27,17 @@ const channelTimings: Map<string, { time: number; timestamp: Date; }> = new Map(
 const settings = definePluginSettings({
     showIcon: {
         type: OptionType.BOOLEAN,
-        description: t("messageFetchTimer.settings.showIcon"),
+        description: t("equicord.messageFetchTimer.settings.showIcon"),
         default: true,
     },
     showMs: {
         type: OptionType.BOOLEAN,
-        description: t("messageFetchTimer.settings.showMs"),
+        description: t("equicord.messageFetchTimer.settings.showMs"),
         default: true,
     },
     iconColor: {
         type: OptionType.STRING,
-        description: t("messageFetchTimer.settings.iconColor"),
+        description: t("equicord.messageFetchTimer.settings.iconColor"),
         default: "#00d166",
     }
 });
@@ -147,7 +147,7 @@ function handleMessageLoad(data: any) {
 
 export default definePlugin({
     name: "MessageFetchTimer",
-    description: t("messageFetchTimer.description"),
+    description: t("equicord.messageFetchTimer.description"),
     authors: [EquicordDevs.GroupXyz],
     settings,
 

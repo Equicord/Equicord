@@ -142,7 +142,7 @@ function playSample(type: string) {
 
 export default definePlugin({
     name: "VcNarrator",
-    description: t("vcNarrator.description"),
+    description: t("vencord.vcNarrator.description"),
     authors: [Devs.Ven],
     reporterTestable: ReporterTestable.None,
 
@@ -202,7 +202,7 @@ export default definePlugin({
     start() {
         if (typeof speechSynthesis === "undefined" || speechSynthesis.getVoices().length === 0) {
             new Logger("VcNarrator").warn(
-                t("vcNarrator.speechSynthesisNotSupported")
+                t("vencord.vcNarrator.speechSynthesisNotSupported")
             );
             return;
         }
@@ -222,22 +222,22 @@ export default definePlugin({
 
         let errorComponent: ReactElement<any> | null = null;
         if (!hasVoices) {
-            let error = t("vcNarrator.noVoices");
+            let error = t("vencord.vcNarrator.noVoices");
             error += IS_LINUX
-                ? t("vcNarrator.linuxVoicesHelp")
-                : t("vcNarrator.osVoicesHelp");
+                ? t("vencord.vcNarrator.linuxVoicesHelp")
+                : t("vencord.vcNarrator.osVoicesHelp");
             errorComponent = <ErrorCard>{error}</ErrorCard>;
         } else if (!hasEnglishVoices) {
-            errorComponent = <ErrorCard>{t("vcNarrator.noEnglishVoices")}</ErrorCard>;
+            errorComponent = <ErrorCard>{t("vencord.vcNarrator.noEnglishVoices")}</ErrorCard>;
         }
 
         return (
             <section>
                 <Paragraph>
-                    {t("vcNarrator.customiseMessages")}
+                    {t("vencord.vcNarrator.customiseMessages")}
                 </Paragraph>
                 <Paragraph>
-                    <Translate i18nKey="vcNarrator.placeholdersHelp">
+                    <Translate i18nKey="vencord.vcNarrator.placeholdersHelp">
                         <code>{"{{USER}}"}</code>
                         <code>{"{{DISPLAY_NAME}}"}</code>
                         <code>{"{{NICKNAME}}"}</code>
@@ -246,7 +246,7 @@ export default definePlugin({
                 </Paragraph>
                 {hasEnglishVoices && (
                     <>
-                        <HeadingSecondary className={Margins.top20}>{t("vcNarrator.playExampleSounds")}</HeadingSecondary>
+                        <HeadingSecondary className={Margins.top20}>{t("vencord.vcNarrator.playExampleSounds")}</HeadingSecondary>
                         <div
                             style={{
                                 display: "grid",

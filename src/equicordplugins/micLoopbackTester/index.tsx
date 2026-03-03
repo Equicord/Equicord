@@ -115,7 +115,7 @@ const MicLoopbackUserAreaButton: UserAreaButtonFactory = props => <MicLoopbackBu
 
 export default definePlugin({
     name: "MicLoopbackTester",
-    description: t("micLoopbackTester.description"),
+    description: t("equicord.micLoopbackTester.description"),
     authors: [EquicordDevs.benjii],
     dependencies: ["UserSettingsAPI", "UserAreaAPI"],
     userAreaButton: {

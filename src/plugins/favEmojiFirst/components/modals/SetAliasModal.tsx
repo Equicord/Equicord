@@ -27,13 +27,13 @@ export function SetAliasModal({
 
     const validationError = getValidationError(input);
     const duplicateAlias = isDuplicateAlias(input);
-    const finalError = duplicateAlias ? t("favEmojiFirst.ui.duplicateAlias") : error ?? validationError;
+    const finalError = duplicateAlias ? t("vencord.favEmojiFirst.ui.duplicateAlias") : error ?? validationError;
     const canSave = !validationError && !duplicateAlias;
 
     return (
         <ModalRoot {...modalProps} size={ModalSize.SMALL}>
             <ModalHeader>
-                <Heading style={{ flexGrow: 1 }}>{t("favEmojiFirst.ui.modal.setTitle")}</Heading>
+                <Heading style={{ flexGrow: 1 }}>{t("vencord.favEmojiFirst.ui.modal.setTitle")}</Heading>
                 <ModalCloseButton onClick={modalProps.onClose} />
             </ModalHeader>
 
@@ -45,7 +45,7 @@ export function SetAliasModal({
                         setInput(value);
                         setError(null);
                     }}
-                    placeholder={t("favEmojiFirst.ui.modal.placeholder")}
+                    placeholder={t("vencord.favEmojiFirst.ui.modal.placeholder")}
                 />
                 {finalError && (
                     <BaseText style={{ color: "var(--text-feedback-critical)", marginTop: 8 }}>
@@ -67,7 +67,7 @@ export function SetAliasModal({
                         modalProps.onClose();
                     }}
                 >
-                    {t("favEmojiFirst.ui.modal.save")}
+                    {t("vencord.favEmojiFirst.ui.modal.save")}
                 </Button>
             </ModalFooter>
         </ModalRoot>

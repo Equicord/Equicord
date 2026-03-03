@@ -88,7 +88,7 @@ function RolesAndUsersPermissionsComponent({ permissions, guild, modalProps, hea
             <ModalContent className={cl("modal-content")}>
                 {!selectedItem && (
                     <div className={cl("modal-no-perms")}>
-                        <BaseText size="lg">{t("permissionsViewer.noPermissions")}</BaseText>
+                        <BaseText size="lg">{t("vencord.permissionsViewer.noPermissions")}</BaseText>
                     </div>
                 )}
 
@@ -149,12 +149,12 @@ function RolesAndUsersPermissionsComponent({ permissions, guild, modalProps, hea
                                             <BaseText size="md" className={cl("modal-list-item-text")}>
                                                 {
                                                     permission.type === PermissionOverwriteType.ROLE
-                                                        ? role?.name ?? t("permissionsViewer.unknownRole")
+                                                        ? role?.name ?? t("vencord.permissionsViewer.unknownRole")
                                                         : permission.type === PermissionOverwriteType.MEMBER
-                                                            ? (user != null && getUniqueUsername(user)) ?? t("permissionsViewer.unknownUser")
+                                                            ? (user != null && getUniqueUsername(user)) ?? t("vencord.permissionsViewer.unknownUser")
                                                             : (
                                                                 <Flex gap="0.2em">
-                                                                    @{t("permissionsViewer.owner")}
+                                                                    @{t("vencord.permissionsViewer.owner")}
                                                                     <OwnerCrownIcon height={18} width={18} aria-hidden="true" />
                                                                 </Flex>
                                                             )
@@ -211,7 +211,7 @@ function RoleContextMenu({ guild, roleId, onClose }: { guild: Guild; roleId: str
         <Menu.Menu
             navId={cl("role-context-menu")}
             onClose={ContextMenuApi.closeContextMenu}
-            aria-label={t("permissionsViewer.roleOptions")}
+            aria-label={t("vencord.permissionsViewer.roleOptions")}
         >
             <Menu.MenuItem
                 id={cl("copy-role-id")}
@@ -252,7 +252,7 @@ function UserContextMenu({ userId }: { userId: string; }) {
         <Menu.Menu
             navId={cl("user-context-menu")}
             onClose={ContextMenuApi.closeContextMenu}
-            aria-label={t("permissionsViewer.userOptions")}
+            aria-label={t("vencord.permissionsViewer.userOptions")}
         >
             <Menu.MenuItem
                 id={cl("copy-user-id")}

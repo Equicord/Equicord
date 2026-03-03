@@ -59,96 +59,96 @@ function setActivity(activity: Activity | null) {
 
 const settings = definePluginSettings({
     username: {
-        description: t("listenBrainzRPC.settings.username"),
+        description: t("equicord.listenBrainzRPC.settings.username"),
         type: OptionType.STRING,
     },
     mbContact: {
-        description: t("listenBrainzRPC.settings.mbContact"),
+        description: t("equicord.listenBrainzRPC.settings.mbContact"),
         type: OptionType.STRING,
     },
     shareUsername: {
-        description: t("listenBrainzRPC.settings.shareUsername"),
+        description: t("equicord.listenBrainzRPC.settings.shareUsername"),
         type: OptionType.BOOLEAN,
         default: false,
     },
     shareSong: {
-        description: t("listenBrainzRPC.settings.shareSong"),
+        description: t("equicord.listenBrainzRPC.settings.shareSong"),
         type: OptionType.BOOLEAN,
         default: true,
     },
     hideWithSpotify: {
-        description: t("listenBrainzRPC.settings.hideWithSpotify"),
+        description: t("equicord.listenBrainzRPC.settings.hideWithSpotify"),
         type: OptionType.BOOLEAN,
         default: true,
     },
     hideWithActivity: {
-        description: t("listenBrainzRPC.settings.hideWithActivity"),
+        description: t("equicord.listenBrainzRPC.settings.hideWithActivity"),
         type: OptionType.BOOLEAN,
         default: false,
     },
     useTimeBar: {
-        description: t("listenBrainzRPC.settings.useTimeBar"),
+        description: t("equicord.listenBrainzRPC.settings.useTimeBar"),
         type: OptionType.BOOLEAN,
         default: true,
     },
     statusName: {
-        description: t("listenBrainzRPC.settings.statusName"),
+        description: t("equicord.listenBrainzRPC.settings.statusName"),
         type: OptionType.STRING,
-        default: t("listenBrainzRPC.defaults.statusName"),
+        default: t("equicord.listenBrainzRPC.defaults.statusName"),
     },
     nameFormat: {
-        description: t("listenBrainzRPC.settings.nameFormat"),
+        description: t("equicord.listenBrainzRPC.settings.nameFormat"),
         type: OptionType.SELECT,
         options: [
             {
-                label: t("listenBrainzRPC.nameFormatOptions.customStatus"),
+                label: t("equicord.listenBrainzRPC.nameFormatOptions.customStatus"),
                 value: NameFormat.StatusName,
                 default: true,
             },
             {
-                label: t("listenBrainzRPC.nameFormatOptions.artistFirst"),
+                label: t("equicord.listenBrainzRPC.nameFormatOptions.artistFirst"),
                 value: NameFormat.ArtistFirst,
             },
             {
-                label: t("listenBrainzRPC.nameFormatOptions.songFirst"),
+                label: t("equicord.listenBrainzRPC.nameFormatOptions.songFirst"),
                 value: NameFormat.SongFirst,
             },
             {
-                label: t("listenBrainzRPC.nameFormatOptions.artistOnly"),
+                label: t("equicord.listenBrainzRPC.nameFormatOptions.artistOnly"),
                 value: NameFormat.ArtistOnly,
             },
             {
-                label: t("listenBrainzRPC.nameFormatOptions.songOnly"),
+                label: t("equicord.listenBrainzRPC.nameFormatOptions.songOnly"),
                 value: NameFormat.SongOnly,
             },
             {
-                label: t("listenBrainzRPC.nameFormatOptions.albumName"),
+                label: t("equicord.listenBrainzRPC.nameFormatOptions.albumName"),
                 value: NameFormat.AlbumName,
             },
         ],
     },
     useListeningStatus: {
-        description: t("listenBrainzRPC.settings.useListeningStatus"),
+        description: t("equicord.listenBrainzRPC.settings.useListeningStatus"),
         type: OptionType.BOOLEAN,
         default: true,
     },
     missingArt: {
-        description: t("listenBrainzRPC.settings.missingArt"),
+        description: t("equicord.listenBrainzRPC.settings.missingArt"),
         type: OptionType.SELECT,
         options: [
             {
-                label: t("listenBrainzRPC.missingArtOptions.listenbrainzLogo"),
+                label: t("equicord.listenBrainzRPC.missingArtOptions.listenbrainzLogo"),
                 value: "listenbrainzLogo",
                 default: true,
             },
             {
-                label: t("listenBrainzRPC.missingArtOptions.placeholder"),
+                label: t("equicord.listenBrainzRPC.missingArtOptions.placeholder"),
                 value: "placeholder",
             },
         ],
     },
     useLogo: {
-        description: t("listenBrainzRPC.settings.useLogo"),
+        description: t("equicord.listenBrainzRPC.settings.useLogo"),
         type: OptionType.BOOLEAN,
         default: true,
     },
@@ -159,17 +159,17 @@ var currentStart = 0;
 
 export default definePlugin({
     name: "ListenBrainzRPC",
-    description: t("listenBrainzRPC.description"),
+    description: t("equicord.listenBrainzRPC.description"),
     authors: [EquicordDevs.qouesm],
 
     settingsAboutComponent: () => (
         <>
-            <HeadingSecondary>{t("listenBrainzRPC.about.title")}</HeadingSecondary>
+            <HeadingSecondary>{t("equicord.listenBrainzRPC.about.title")}</HeadingSecondary>
             <Paragraph>
-                {t("listenBrainzRPC.about.description")}
+                {t("equicord.listenBrainzRPC.about.description")}
                 <Link href="https://musicbrainz.org/doc/MusicBrainz_API/Rate_Limiting#Provide_meaningful_User-Agent_strings">
                     {" "}
-                    {t("listenBrainzRPC.about.description").split("meaningful user-agent string")[1]?.trim() || ""}
+                    {t("equicord.listenBrainzRPC.about.description").split("meaningful user-agent string")[1]?.trim() || ""}
                 </Link>{" "}
                 . For most, an email address should suffice.
             </Paragraph>
@@ -313,13 +313,13 @@ export default definePlugin({
 
         if (settings.store.shareUsername)
             buttons.push({
-                label: t("listenBrainzRPC.buttons.profile"),
+                label: t("equicord.listenBrainzRPC.buttons.profile"),
                 url: `https://www.listenbrainz.org/user/${settings.store.username}`,
             });
 
         if (settings.store.shareSong)
             buttons.push({
-                label: t("listenBrainzRPC.buttons.viewSong"),
+                label: t("equicord.listenBrainzRPC.buttons.viewSong"),
                 url: trackData.url,
             });
 

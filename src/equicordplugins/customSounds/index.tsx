@@ -246,7 +246,7 @@ const settings = definePluginSettings({
                 });
                 dataUriCache.clear();
                 setResetTrigger(prev => prev + 1);
-                showToast(t("customSounds.toast.resetSuccess"));
+                showToast(t("equicord.customSounds.toast.resetSuccess"));
             };
 
             const triggerFileUpload = () => {
@@ -278,10 +278,10 @@ const settings = definePluginSettings({
                             }
 
                             setResetTrigger(prev => prev + 1);
-                            showToast(t("customSounds.toast.importSuccess"));
+                            showToast(t("equicord.customSounds.toast.importSuccess"));
                         } catch (error) {
                             console.error("Error importing settings:", error);
-                            showToast(t("customSounds.toast.importError"));
+                            showToast(t("equicord.customSounds.toast.importError"));
                         }
                     };
 
@@ -326,10 +326,10 @@ const settings = definePluginSettings({
             return (
                 <div>
                     <div className="vc-custom-sounds-buttons">
-                        <Button color={Button.Colors.BRAND} onClick={triggerFileUpload}>{t("customSounds.settings.import")}</Button>
-                        <Button color={Button.Colors.PRIMARY} onClick={downloadSettings}>{t("customSounds.settings.export")}</Button>
-                        <Button color={Button.Colors.RED} onClick={resetOverrides}>{t("customSounds.settings.resetAll")}</Button>
-                        <Button color={Button.Colors.WHITE} onClick={debugCustomSounds}>{t("customSounds.settings.debug")}</Button>
+                        <Button color={Button.Colors.BRAND} onClick={triggerFileUpload}>{t("equicord.customSounds.settings.import")}</Button>
+                        <Button color={Button.Colors.PRIMARY} onClick={downloadSettings}>{t("equicord.customSounds.settings.export")}</Button>
+                        <Button color={Button.Colors.RED} onClick={resetOverrides}>{t("equicord.customSounds.settings.resetAll")}</Button>
+                        <Button color={Button.Colors.WHITE} onClick={debugCustomSounds}>{t("equicord.customSounds.settings.debug")}</Button>
                         <input
                             ref={fileInputRef}
                             type="file"
@@ -340,11 +340,11 @@ const settings = definePluginSettings({
                     </div>
 
                     <div className={cl("search")}>
-                        <Heading>{t("customSounds.settings.searchSounds")}</Heading>
+                        <Heading>{t("equicord.customSounds.settings.searchSounds")}</Heading>
                         <TextInput
                             value={searchQuery}
                             onChange={e => setSearchQuery(e)}
-                            placeholder={t("customSounds.settings.searchPlaceholder")}
+                            placeholder={t("equicord.customSounds.settings.searchPlaceholder")}
                         />
                     </div>
 
@@ -366,7 +366,7 @@ const settings = definePluginSettings({
                                                 await ensureDataURICached(currentOverride.selectedFileId);
                                             } catch (error) {
                                                 console.error(`[CustomSounds] Failed to cache data URI for ${type.id}:`, error);
-                                                showToast(t("customSounds.toast.loadError"));
+                                                showToast(t("equicord.customSounds.toast.loadError"));
                                             }
                                         }
 
@@ -393,7 +393,7 @@ export function findOverride(id: string): SoundOverride | null {
 
 export default definePlugin({
     name: "CustomSounds",
-    description: t("customSounds.description"),
+    description: t("equicord.customSounds.description"),
     authors: [Devs.ScattrdBlade, Devs.TheKodeToad],
     settings,
     startAt: StartAt.Init,

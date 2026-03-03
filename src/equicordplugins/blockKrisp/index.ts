@@ -10,7 +10,7 @@ import definePlugin from "@utils/types";
 
 export default definePlugin({
     name: "BlockKrisp",
-    description: t("blockKrisp.description"),
+    description: t("equicord.blockKrisp.description"),
     authors: [Devs.D3SOX],
     patches: [
         // Block loading modules on Desktop

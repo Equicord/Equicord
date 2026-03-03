@@ -13,17 +13,17 @@ import { OverridePremiumTypeStore } from "@webpack/common";
 export const settings = definePluginSettings({
     superReactByDefault: {
         type: OptionType.BOOLEAN,
-        description: t("superReactionTweaks.settings.superReactByDefault"),
+        description: t("vencord.superReactionTweaks.settings.superReactByDefault"),
         default: true,
     },
     unlimitedSuperReactionPlaying: {
         type: OptionType.BOOLEAN,
-        description: t("superReactionTweaks.settings.unlimitedSuperReactionPlaying"),
+        description: t("vencord.superReactionTweaks.settings.unlimitedSuperReactionPlaying"),
         default: false,
     },
 
     superReactionPlayingLimit: {
-        description: t("superReactionTweaks.settings.superReactionPlayingLimit"),
+        description: t("vencord.superReactionTweaks.settings.superReactionPlayingLimit"),
         type: OptionType.SLIDER,
         default: 20,
         markers: [0, 5, 10, 20, 40, 60, 80, 100],
@@ -37,7 +37,7 @@ export const settings = definePluginSettings({
 
 export default definePlugin({
     name: "SuperReactionTweaks",
-    description: t("superReactionTweaks.description"),
+    description: t("vencord.superReactionTweaks.description"),
     authors: [Devs.FieryFlames, Devs.ant0n],
     patches: [
         {

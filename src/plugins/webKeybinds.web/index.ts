@@ -26,7 +26,7 @@ const KeyBinds = findByPropsLazy("JUMP_TO_GUILD", "SERVER_NEXT");
 
 export default definePlugin({
     name: "WebKeybinds",
-    description: t("webKeybinds.description"),
+    description: t("vencord.webKeybinds.description"),
     authors: [Devs.Ven],
     enabledByDefault: true,
 

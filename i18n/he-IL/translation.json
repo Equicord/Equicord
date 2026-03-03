@@ -1,10 +1,10 @@
 {
-    "description":"תעזור לתרגם את Equicord",
-    "settings":{
-        "forceLocale":{
-            "description":"תגרום לEquicord להשתמש בקוח מיקום שונה",
-            "followDiscord":"ברירת מחדל(תעקוב אחרי Discord)"
+    "description": "תעזור לתרגם את Equicord",
+    "settings": {
+        "forceLocale": {
+            "description": "תגרום לEquicord להשתמש בקוח מיקום שונה",
+            "followDiscord": "ברירת מחדל(תעקוב אחרי Discord)"
         },
-        "showMissingKeys":"אם המיקום הנוכחי לא נמצא,  תראה את המפתחות במקום לחזור לאנגלית."
+        "showMissingKeys": "אם המיקום הנוכחי לא נמצא,  תראה את המפתחות במקום לחזור לאנגלית."
     }
 }

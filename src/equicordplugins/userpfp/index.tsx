@@ -65,7 +65,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "UserPFP",
-    description: t("userpfp.description"),
+    description: t("equicord.userpfp.description"),
     authors: [EquicordDevs.nexpid, Devs.thororen, EquicordDevs.soapphia],
     settings,
     data,

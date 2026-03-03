@@ -15,7 +15,7 @@ import { Tooltip } from "@webpack/common";
 
 const settings = definePluginSettings({
     loop: {
-        description: t("pictureInPicture.settings.loop"),
+        description: t("vencord.pictureInPicture.settings.loop"),
         type: OptionType.BOOLEAN,
         default: true,
         restartNeeded: false
@@ -24,7 +24,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "PictureInPicture",
-    description: t("pictureInPicture.description"),
+    description: t("vencord.pictureInPicture.description"),
     authors: [Devs.Lumap],
     settings,
     patches: [
@@ -47,7 +47,7 @@ export default definePlugin({
 
     PictureInPictureButton: ErrorBoundary.wrap(() => {
         return (
-            <Tooltip text={t("pictureInPicture.togglePip")}>
+            <Tooltip text={t("vencord.pictureInPicture.togglePip")}>
                 {tooltipProps => (
                     <div
                         {...tooltipProps}

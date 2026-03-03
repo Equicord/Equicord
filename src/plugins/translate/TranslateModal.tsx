@@ -51,7 +51,7 @@ function LanguageSelect({ settingsKey, includeAuto }: { settingsKey: typeof Lang
             <SearchableSelect
                 options={options}
                 value={options.find(o => o.value === currentValue)}
-                placeholder={t("translate.selectLanguage")}
+                placeholder={t("vencord.translate.selectLanguage")}
                 maxVisibleItems={5}
                 closeOnSelect={true}
                 onChange={v => settings.store[settingsKey] = v}
@@ -65,7 +65,7 @@ function AutoTranslateToggle() {
 
     return (
         <FormSwitch
-            title={t("translate.autoTranslate")}
+            title={t("vencord.translate.autoTranslate")}
             description={settings.def.autoTranslate.description}
             value={value}
             onChange={v => settings.store.autoTranslate = v}
@@ -79,7 +79,7 @@ export function TranslateModal({ rootProps }: { rootProps: ModalProps; }) {
         <ModalRoot {...rootProps}>
             <ModalHeader className={cl("modal-header")}>
                 <HeadingPrimary className={cl("modal-title")}>
-                    {t("translate.modalTitle")}
+                    {t("vencord.translate.modalTitle")}
                 </HeadingPrimary>
                 <ModalCloseButton onClick={rootProps.onClose} />
             </ModalHeader>

@@ -41,7 +41,7 @@ function Icon({ height = 24, width = 24, className = "icon" }: { height?: number
 export default definePlugin({
     name: "QuickMention",
     authors: [Devs.kemo],
-    description: t("quickMention.description"),
+    description: t("vencord.quickMention.description"),
 
     messagePopoverButton: {
         icon: Icon,
@@ -50,7 +50,7 @@ export default definePlugin({
             if (channel.guild_id && !PermissionStore.can(PermissionsBits.SEND_MESSAGES, channel)) return null;
 
             return {
-                label: t("quickMention.label"),
+                label: t("vencord.quickMention.label"),
                 icon: Icon,
                 message: msg,
                 channel,

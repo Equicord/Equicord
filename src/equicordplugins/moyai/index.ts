@@ -57,32 +57,32 @@ const MOYAI_URL_HD = "https://github.com/Equicord/Equibored/raw/main/sounds/moya
 
 const settings = definePluginSettings({
     volume: {
-        description: t("moyai.settings.volume"),
+        description: t("equicord.moyai.settings.volume"),
         type: OptionType.SLIDER,
         markers: makeRange(0, 1, 0.1),
         default: 0.5,
         stickToMarkers: false
     },
     quality: {
-        description: t("moyai.settings.quality"),
+        description: t("equicord.moyai.settings.quality"),
         type: OptionType.SELECT,
         options: [
-            { label: t("moyai.settings.qualityOptions.normal"), value: "Normal", default: true },
-            { label: t("moyai.settings.qualityOptions.hd"), value: "HD" }
+            { label: t("equicord.moyai.settings.qualityOptions.normal"), value: "Normal", default: true },
+            { label: t("equicord.moyai.settings.qualityOptions.hd"), value: "HD" }
         ],
     },
     triggerWhenUnfocused: {
-        description: t("moyai.settings.triggerWhenUnfocused"),
+        description: t("equicord.moyai.settings.triggerWhenUnfocused"),
         type: OptionType.BOOLEAN,
         default: true
     },
     ignoreBots: {
-        description: t("moyai.settings.ignoreBots"),
+        description: t("equicord.moyai.settings.ignoreBots"),
         type: OptionType.BOOLEAN,
         default: true
     },
     ignoreBlocked: {
-        description: t("moyai.settings.ignoreBlocked"),
+        description: t("equicord.moyai.settings.ignoreBlocked"),
         type: OptionType.BOOLEAN,
         default: true
     }
@@ -91,7 +91,7 @@ const settings = definePluginSettings({
 export default definePlugin({
     name: "Moyai",
     authors: [Devs.Megu, Devs.Nuckyz],
-    description: t("moyai.description"),
+    description: t("equicord.moyai.description"),
     settings,
 
     flux: {

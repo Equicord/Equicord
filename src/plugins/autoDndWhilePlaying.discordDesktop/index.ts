@@ -17,30 +17,30 @@ const StatusSettings = getUserSettingLazy<string>("status", "status")!;
 const settings = definePluginSettings({
     statusToSet: {
         type: OptionType.SELECT,
-        description: t("autoDndWhilePlaying.settings.statusToSet"),
+        description: t("vencord.autoDndWhilePlaying.settings.statusToSet"),
         options: [
             {
-                label: t("autoDndWhilePlaying.statusOptions.online"),
+                label: t("vencord.autoDndWhilePlaying.statusOptions.online"),
                 value: "online",
             },
             {
-                label: t("autoDndWhilePlaying.statusOptions.idle"),
+                label: t("vencord.autoDndWhilePlaying.statusOptions.idle"),
                 value: "idle",
             },
             {
-                label: t("autoDndWhilePlaying.statusOptions.dnd"),
+                label: t("vencord.autoDndWhilePlaying.statusOptions.dnd"),
                 value: "dnd",
                 default: true
             },
             {
-                label: t("autoDndWhilePlaying.statusOptions.invisible"),
+                label: t("vencord.autoDndWhilePlaying.statusOptions.invisible"),
                 value: "invisible",
             }
         ]
     },
     excludeInvisible: {
         type: OptionType.BOOLEAN,
-        description: t("autoDndWhilePlaying.settings.excludeInvisible"),
+        description: t("vencord.autoDndWhilePlaying.settings.excludeInvisible"),
         default: false
     },
 });
@@ -48,7 +48,7 @@ const settings = definePluginSettings({
 migratePluginSettings("AutoDNDWhilePlaying", "StatusWhilePlaying");
 export default definePlugin({
     name: "AutoDNDWhilePlaying",
-    description: t("autoDndWhilePlaying.description"),
+    description: t("vencord.autoDndWhilePlaying.description"),
     authors: [Devs.thororen],
     isModified: true,
     settings,

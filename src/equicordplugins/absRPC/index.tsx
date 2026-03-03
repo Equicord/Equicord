@@ -52,15 +52,15 @@ interface MediaData {
 
 const settings = definePluginSettings({
     serverUrl: {
-        description: t("absRPC.settings.serverUrl"),
+        description: t("equicord.absRPC.settings.serverUrl"),
         type: OptionType.STRING,
     },
     username: {
-        description: t("absRPC.settings.username"),
+        description: t("equicord.absRPC.settings.username"),
         type: OptionType.STRING,
     },
     password: {
-        description: t("absRPC.settings.password"),
+        description: t("equicord.absRPC.settings.password"),
         type: OptionType.STRING,
     },
 });
@@ -86,16 +86,16 @@ function setActivity(activity: Activity | null) {
 
 export default definePlugin({
     name: "AudioBookShelfRichPresence",
-    description: t("absRPC.description"),
+    description: t("equicord.absRPC.description"),
     authors: [EquicordDevs.vmohammad],
 
     settingsAboutComponent: () => (
         <>
-            <HeadingSecondary>{t("absRPC.about.title")}</HeadingSecondary>
+            <HeadingSecondary>{t("equicord.absRPC.about.title")}</HeadingSecondary>
             <Paragraph>
-                {t("absRPC.about.description")}
+                {t("equicord.absRPC.about.description")}
                 <br /><br />
-                {t("absRPC.about.automaticAuth")}
+                {t("equicord.absRPC.about.automaticAuth")}
             </Paragraph>
         </>
     ),
@@ -115,7 +115,7 @@ export default definePlugin({
     async authenticate(): Promise<boolean> {
         if (!settings.store.serverUrl || !settings.store.username || !settings.store.password) {
             logger.warn("AudioBookShelf server URL, username, or password is not set in settings.");
-            showToast(t("absRPC.toasts.notConfigured"), "failure", {
+            showToast(t("equicord.absRPC.toasts.notConfigured"), "failure", {
                 duration: 15000,
             });
             return false;

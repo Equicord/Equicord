@@ -10,7 +10,7 @@ import definePlugin from "@utils/types";
 
 export default definePlugin({
     name: "ShowResourceChannels",
-    description: t("showResourceChannels.description"),
+    description: t("equicord.showResourceChannels.description"),
     authors: [EquicordDevs.VillainsRule],
     patches: [
         {

@@ -23,12 +23,12 @@ import { ContactsList } from "./types";
 const settings = definePluginSettings({
     openFileAfterExport: {
         type: OptionType.BOOLEAN,
-        description: t("exportMessages.settings.openFileAfterExport"),
+        description: t("equicord.exportMessages.settings.openFileAfterExport"),
         default: true
     },
     exportContacts: {
         type: OptionType.BOOLEAN,
-        description: t("exportMessages.settings.exportContacts"),
+        description: t("equicord.exportMessages.settings.exportContacts"),
         default: false
     }
 });
@@ -82,14 +82,14 @@ async function exportMessage(message: Message) {
         }
 
         showNotification({
-            title: t("exportMessages.notifications.title"),
+            title: t("equicord.exportMessages.notifications.title"),
             body: t("exportMessages.notifications.exportSuccess", { filename }),
             icon: "📄"
         });
     } catch (error) {
         showNotification({
-            title: t("exportMessages.notifications.title"),
-            body: t("exportMessages.notifications.exportFailed"),
+            title: t("equicord.exportMessages.notifications.title"),
+            body: t("equicord.exportMessages.notifications.exportFailed"),
             icon: "❌"
         });
     }
@@ -103,7 +103,7 @@ const messageContextMenuPatch = (children: Array<React.ReactElement<any> | null>
     children.push(
         <Menu.MenuItem
             id="export-message"
-            label={t("exportMessages.ui.exportMessage")}
+            label={t("equicord.exportMessages.ui.exportMessage")}
             icon={() => (
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z" />
@@ -129,7 +129,7 @@ function getUsernames(contacts: ContactsList[], type: number): string[] {
 
 export default definePlugin({
     name: "ExportMessages",
-    description: t("exportMessages.description"),
+    description: t("equicord.exportMessages.description"),
     authors: [EquicordDevs.veygax, EquicordDevs.dat_insanity],
     settings,
     contextMenus: {
@@ -166,14 +166,14 @@ export default definePlugin({
     },
     addExportButton() {
         return <ErrorBoundary noop key=".2">
-            <button className="export-contacts-button" onClick={() => { this.copyContactToClipboard(); console.log("clicked"); }}>{t("exportMessages.ui.export")}</button>
+            <button className="export-contacts-button" onClick={() => { this.copyContactToClipboard(); console.log("clicked"); }}>{t("equicord.exportMessages.ui.export")}</button>
         </ErrorBoundary>;
     },
     copyContactToClipboard() {
         if (this.contactList) {
             copyToClipboard(JSON.stringify(this.contactList));
             Toasts.show({
-                message: t("exportMessages.ui.contactsCopied"),
+                message: t("equicord.exportMessages.ui.contactsCopied"),
                 type: Toasts.Type.SUCCESS,
                 id: Toasts.genId(),
                 options: {
@@ -184,7 +184,7 @@ export default definePlugin({
             return;
         }
         Toasts.show({
-            message: t("exportMessages.ui.contactListUndefined"),
+            message: t("equicord.exportMessages.ui.contactListUndefined"),
             type: Toasts.Type.FAILURE,
             id: Toasts.genId(),
             options: {

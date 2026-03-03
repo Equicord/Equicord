@@ -22,7 +22,7 @@ import definePlugin from "@utils/types";
 
 export default definePlugin({
     name: "NoSystemBadge",
-    description: t("noSystemBadge.description"),
+    description: t("vencord.noSystemBadge.description"),
     authors: [Devs.rushii],
     patches: [
         {

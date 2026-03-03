@@ -29,7 +29,7 @@ let shouldReconnect = false;
 
 export default definePlugin({
     name: "TosuRPC",
-    description: t("tosuRPC.description"),
+    description: t("equicord.tosuRPC.description"),
     authors: [Devs.AutumnVN],
     start() {
         shouldReconnect = true;

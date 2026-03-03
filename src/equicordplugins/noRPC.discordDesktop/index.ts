@@ -10,7 +10,7 @@ import definePlugin from "@utils/types";
 
 export default definePlugin({
     name: "NoRPC",
-    description: t("noRPC.description"),
+    description: t("equicord.noRPC.description"),
     authors: [Devs.Cyn],
     patches: [
         {

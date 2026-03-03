@@ -257,7 +257,7 @@ const userContextMenuPatch: NavContextMenuPatchCallback = (children, { user }: {
 export default definePlugin({
     name: "Timezones",
     authors: [Devs.Aria, EquicordDevs.creations],
-    description: t("timezones.description"),
+    description: t("equicord.timezones.description"),
     contextMenus: {
         "user-context": userContextMenuPatch
     },

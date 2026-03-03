@@ -75,37 +75,37 @@ const EmojiUtils = findByPropsLazy("getURL", "getEmojiColors");
 
 const getChannelTypeName = (type: number) => {
     switch (type) {
-        case ChannelTypes.GUILD_TEXT: return t("showHiddenChannels.channelTypes.text");
-        case ChannelTypes.GUILD_ANNOUNCEMENT: return t("showHiddenChannels.channelTypes.announcement");
-        case ChannelTypes.GUILD_FORUM: return t("showHiddenChannels.channelTypes.forum");
-        case ChannelTypes.GUILD_VOICE: return t("showHiddenChannels.channelTypes.voice");
-        case ChannelTypes.GUILD_STAGE_VOICE: return t("showHiddenChannels.channelTypes.stage");
-        default: return t("showHiddenChannels.channelTypes.text");
+        case ChannelTypes.GUILD_TEXT: return t("vencord.showHiddenChannels.channelTypes.text");
+        case ChannelTypes.GUILD_ANNOUNCEMENT: return t("vencord.showHiddenChannels.channelTypes.announcement");
+        case ChannelTypes.GUILD_FORUM: return t("vencord.showHiddenChannels.channelTypes.forum");
+        case ChannelTypes.GUILD_VOICE: return t("vencord.showHiddenChannels.channelTypes.voice");
+        case ChannelTypes.GUILD_STAGE_VOICE: return t("vencord.showHiddenChannels.channelTypes.stage");
+        default: return t("vencord.showHiddenChannels.channelTypes.text");
     }
 };
 
 const getSortOrderName = (order: number) => {
     switch (order) {
-        case SortOrderTypes.LATEST_ACTIVITY: return t("showHiddenChannels.sortOrders.latestActivity");
-        case SortOrderTypes.CREATION_DATE: return t("showHiddenChannels.sortOrders.creationDate");
-        default: return t("showHiddenChannels.sortOrders.latestActivity");
+        case SortOrderTypes.LATEST_ACTIVITY: return t("vencord.showHiddenChannels.sortOrders.latestActivity");
+        case SortOrderTypes.CREATION_DATE: return t("vencord.showHiddenChannels.sortOrders.creationDate");
+        default: return t("vencord.showHiddenChannels.sortOrders.latestActivity");
     }
 };
 
 const getForumLayoutName = (layout: number) => {
     switch (layout) {
-        case ForumLayoutTypes.DEFAULT: return t("showHiddenChannels.forumLayouts.notSet");
-        case ForumLayoutTypes.LIST: return t("showHiddenChannels.forumLayouts.listView");
-        case ForumLayoutTypes.GRID: return t("showHiddenChannels.forumLayouts.galleryView");
-        default: return t("showHiddenChannels.forumLayouts.notSet");
+        case ForumLayoutTypes.DEFAULT: return t("vencord.showHiddenChannels.forumLayouts.notSet");
+        case ForumLayoutTypes.LIST: return t("vencord.showHiddenChannels.forumLayouts.listView");
+        case ForumLayoutTypes.GRID: return t("vencord.showHiddenChannels.forumLayouts.galleryView");
+        default: return t("vencord.showHiddenChannels.forumLayouts.notSet");
     }
 };
 
 const getVideoQualityModeName = (mode: number) => {
     switch (mode) {
-        case VideoQualityModes.AUTO: return t("showHiddenChannels.videoQuality.automatic");
-        case VideoQualityModes.FULL: return t("showHiddenChannels.videoQuality.720p");
-        default: return t("showHiddenChannels.videoQuality.automatic");
+        case VideoQualityModes.AUTO: return t("vencord.showHiddenChannels.videoQuality.automatic");
+        case VideoQualityModes.FULL: return t("vencord.showHiddenChannels.videoQuality.720p");
+        default: return t("vencord.showHiddenChannels.videoQuality.automatic");
     }
 };
 
@@ -174,7 +174,7 @@ function HiddenChannelLockScreen({ channel }: { channel: Channel; }) {
                 <div className={cl("heading-container")}>
                     <BaseText size="xxl" weight="bold">{!PermissionStore.can(PermissionsBits.VIEW_CHANNEL, channel) ? t("showHiddenChannels.hiddenChannel", { type: getChannelTypeName(type) }) : t("showHiddenChannels.lockedChannel", { type: getChannelTypeName(type) })}</BaseText>
                     {channel.isNSFW() &&
-                        <Tooltip text={t("showHiddenChannels.nsfw")}>
+                        <Tooltip text={t("vencord.showHiddenChannels.nsfw")}>
                             {({ onMouseLeave, onMouseEnter }) => (
                                 <svg
                                     onMouseLeave={onMouseLeave}
@@ -195,8 +195,8 @@ function HiddenChannelLockScreen({ channel }: { channel: Channel; }) {
 
                 {(!channel.isGuildVoice() && !channel.isGuildStageVoice()) && (
                     <BaseText size="lg">
-                        {t("showHiddenChannels.cannotSeeMessages", { type: channel.isForumChannel() ? t("showHiddenChannels.channelTypes.posts") : t("showHiddenChannels.channelTypes.messages") })}
-                        {channel.isForumChannel() && topic && topic.length > 0 && ` ${t("showHiddenChannels.seeGuidelines")}`}
+                        {t("showHiddenChannels.cannotSeeMessages", { type: channel.isForumChannel() ? t("vencord.showHiddenChannels.channelTypes.posts") : t("vencord.showHiddenChannels.channelTypes.messages") })}
+                        {channel.isForumChannel() && topic && topic.length > 0 && ` ${t("vencord.showHiddenChannels.seeGuidelines")}`}
                     </BaseText>
                 )}
 
@@ -208,13 +208,13 @@ function HiddenChannelLockScreen({ channel }: { channel: Channel; }) {
 
                 {lastMessageId &&
                     <BaseText size="md">
-                        {t("showHiddenChannels.lastMessageCreated", { type: channel.isForumChannel() ? t("showHiddenChannels.channelTypes.post") : t("showHiddenChannels.channelTypes.message") })}
+                        {t("showHiddenChannels.lastMessageCreated", { type: channel.isForumChannel() ? t("vencord.showHiddenChannels.channelTypes.post") : t("vencord.showHiddenChannels.channelTypes.message") })}
                         <Timestamp timestamp={new Date(SnowflakeUtils.extractTimestamp(lastMessageId))} />
                     </BaseText>
                 }
                 {lastPinTimestamp &&
                     <BaseText size="md">
-                        {t("showHiddenChannels.lastMessagePin")} <Timestamp timestamp={new Date(lastPinTimestamp)} />
+                        {t("vencord.showHiddenChannels.lastMessagePin")} <Timestamp timestamp={new Date(lastPinTimestamp)} />
                     </BaseText>
                 }
                 {(rateLimitPerUser ?? 0) > 0 &&
@@ -234,7 +234,7 @@ function HiddenChannelLockScreen({ channel }: { channel: Channel; }) {
                 }
                 {rtcRegion !== undefined &&
                     <BaseText size="md">
-                        {t("showHiddenChannels.region", { region: rtcRegion ?? t("showHiddenChannels.regionAutomatic") })}
+                        {t("showHiddenChannels.region", { region: rtcRegion ?? t("vencord.showHiddenChannels.regionAutomatic") })}
                     </BaseText>
                 }
                 {(channel.isGuildVoice() || channel.isGuildStageVoice()) &&
@@ -242,7 +242,7 @@ function HiddenChannelLockScreen({ channel }: { channel: Channel; }) {
                 }
                 {(defaultAutoArchiveDuration ?? 0) > 0 &&
                     <BaseText size="md">
-                        {t("showHiddenChannels.archiveDuration", { type: channel.isForumChannel() ? t("showHiddenChannels.channelTypes.posts") : t("showHiddenChannels.channelTypes.threads"), duration: formatDuration(defaultAutoArchiveDuration!, "minutes") })}
+                        {t("showHiddenChannels.archiveDuration", { type: channel.isForumChannel() ? t("vencord.showHiddenChannels.channelTypes.posts") : t("vencord.showHiddenChannels.channelTypes.threads"), duration: formatDuration(defaultAutoArchiveDuration!, "minutes") })}
                     </BaseText>
                 }
                 {defaultForumLayout != null &&
@@ -257,7 +257,7 @@ function HiddenChannelLockScreen({ channel }: { channel: Channel; }) {
                 }
                 {defaultReactionEmoji != null &&
                     <div className={cl("default-emoji-container")}>
-                        <BaseText size="md">{t("showHiddenChannels.defaultReactionEmoji")}</BaseText>
+                        <BaseText size="md">{t("vencord.showHiddenChannels.defaultReactionEmoji")}</BaseText>
                         {Parser.defaultRules[defaultReactionEmoji.emojiName ? "emoji" : "customEmoji"].react({
                             name: defaultReactionEmoji.emojiName
                                 ? EmojiParser.convertSurrogateToName(defaultReactionEmoji.emojiName)
@@ -271,11 +271,11 @@ function HiddenChannelLockScreen({ channel }: { channel: Channel; }) {
                     </div>
                 }
                 {channel.hasFlag(ChannelFlags.REQUIRE_TAG) &&
-                    <BaseText size="md">{t("showHiddenChannels.requireTag")}</BaseText>
+                    <BaseText size="md">{t("vencord.showHiddenChannels.requireTag")}</BaseText>
                 }
                 {availableTags && availableTags.length > 0 &&
                     <div className={cl("tags-container")}>
-                        <BaseText size="lg" weight="bold">{t("showHiddenChannels.availableTags")}</BaseText>
+                        <BaseText size="lg" weight="bold">{t("vencord.showHiddenChannels.availableTags")}</BaseText>
                         <div className={cl("tags")}>
                             {availableTags.map(tag => <TagComponent tag={tag} key={tag.id} />)}
                         </div>
@@ -284,7 +284,7 @@ function HiddenChannelLockScreen({ channel }: { channel: Channel; }) {
                 <div className={cl("allowed-users-and-roles-container")}>
                     <div className={cl("allowed-users-and-roles-container-title")}>
                         {isPluginEnabled(PermissionsViewerPlugin.name) && (
-                            <Tooltip text={t("showHiddenChannels.permissionDetails")}>
+                            <Tooltip text={t("vencord.showHiddenChannels.permissionDetails")}>
                                 {({ onMouseLeave, onMouseEnter }) => (
                                     <button
                                         onMouseLeave={onMouseLeave}
@@ -303,8 +303,8 @@ function HiddenChannelLockScreen({ channel }: { channel: Channel; }) {
                                 )}
                             </Tooltip>
                         )}
-                        <BaseText size="lg" weight="bold">{t("showHiddenChannels.allowedUsersAndRoles")}</BaseText>
-                        <Tooltip text={defaultAllowedUsersAndRolesDropdownState ? t("showHiddenChannels.hideAllowedUsersAndRoles") : t("showHiddenChannels.viewAllowedUsersAndRoles")}>
+                        <BaseText size="lg" weight="bold">{t("vencord.showHiddenChannels.allowedUsersAndRoles")}</BaseText>
+                        <Tooltip text={defaultAllowedUsersAndRolesDropdownState ? t("vencord.showHiddenChannels.hideAllowedUsersAndRoles") : t("vencord.showHiddenChannels.viewAllowedUsersAndRoles")}>
                             {({ onMouseLeave, onMouseEnter }) => (
                                 <button
                                     onMouseLeave={onMouseLeave}

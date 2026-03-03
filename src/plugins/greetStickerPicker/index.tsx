@@ -33,10 +33,10 @@ const settings = definePluginSettings({
     greetMode: {
         type: OptionType.SELECT,
         options: [
-            { label: t("greetStickerPicker.greetModeLabel"), value: GreetMode.Greet, default: true },
-            { label: t("greetStickerPicker.normalMessageLabel"), value: GreetMode.NormalMessage }
+            { label: t("vencord.greetStickerPicker.greetModeLabel"), value: GreetMode.Greet, default: true },
+            { label: t("vencord.greetStickerPicker.normalMessageLabel"), value: GreetMode.NormalMessage }
         ],
-        description: t("greetStickerPicker.greetModeDescription")
+        description: t("vencord.greetStickerPicker.greetModeDescription")
     }
 }).withPrivateSettings<{
     multiGreetChoices?: string[];
@@ -76,10 +76,10 @@ function GreetMenu({ channel, message }: { message: Message, channel: Channel; }
         <Menu.Menu
             navId="greet-sticker-picker"
             onClose={() => FluxDispatcher.dispatch({ type: "CONTEXT_MENU_CLOSE" })}
-            aria-label={t("greetStickerPicker.ariaLabel")}
+            aria-label={t("vencord.greetStickerPicker.ariaLabel")}
         >
             <Menu.MenuGroup
-                label={t("greetStickerPicker.greetMode")}
+                label={t("vencord.greetStickerPicker.greetMode")}
             >
                 {Object.values(GreetMode).map(mode => (
                     <Menu.MenuRadioItem
@@ -96,7 +96,7 @@ function GreetMenu({ channel, message }: { message: Message, channel: Channel; }
             <Menu.MenuSeparator />
 
             <Menu.MenuGroup
-                label={t("greetStickerPicker.greetStickers")}
+                label={t("vencord.greetStickerPicker.greetStickers")}
             >
                 {WELCOME_STICKERS.map(sticker => (
                     <Menu.MenuItem
@@ -113,7 +113,7 @@ function GreetMenu({ channel, message }: { message: Message, channel: Channel; }
                     <Menu.MenuSeparator />
 
                     <Menu.MenuItem
-                        label={t("greetStickerPicker.unholyMultiGreet")}
+                        label={t("vencord.greetStickerPicker.unholyMultiGreet")}
                         id="unholy-multi-greet"
                     >
                         {WELCOME_STICKERS.map(sticker => {
@@ -138,7 +138,7 @@ function GreetMenu({ channel, message }: { message: Message, channel: Channel; }
                         <Menu.MenuSeparator />
                         <Menu.MenuItem
                             id="multi-greet-submit"
-                            label={t("greetStickerPicker.sendGreets")}
+                            label={t("vencord.greetStickerPicker.sendGreets")}
                             action={() => greet(channel, message, multiGreetChoices!)}
                             disabled={multiGreetChoices.length === 0}
                         />
@@ -152,7 +152,7 @@ function GreetMenu({ channel, message }: { message: Message, channel: Channel; }
 
 export default definePlugin({
     name: "GreetStickerPicker",
-    description: t("greetStickerPicker.description"),
+    description: t("vencord.greetStickerPicker.description"),
     authors: [Devs.Ven],
 
     settings,

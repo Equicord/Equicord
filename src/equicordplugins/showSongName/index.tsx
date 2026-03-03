@@ -10,7 +10,7 @@ import definePlugin from "@utils/types";
 
 export default definePlugin({
     name: "ShowSongName",
-    description: t("showSongName.description"),
+    description: t("equicord.showSongName.description"),
     authors: [Devs.prism],
 
     patches: [

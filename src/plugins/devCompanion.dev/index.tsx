@@ -30,17 +30,17 @@ export const logger = new Logger("DevCompanion");
 
 export const settings = definePluginSettings({
     notifyOnAutoConnect: {
-        description: t("devCompanion.settings.notifyOnAutoConnect"),
+        description: t("vencord.devCompanion.settings.notifyOnAutoConnect"),
         type: OptionType.BOOLEAN,
         default: true
     },
     usePatchedModule: {
-        description: t("devCompanion.settings.usePatchedModule"),
+        description: t("vencord.devCompanion.settings.usePatchedModule"),
         default: true,
         type: OptionType.BOOLEAN,
     },
     reloadAfterToggle: {
-        description: t("devCompanion.settings.reloadAfterToggle"),
+        description: t("vencord.devCompanion.settings.reloadAfterToggle"),
         default: true,
         type: OptionType.BOOLEAN
     }
@@ -48,7 +48,7 @@ export const settings = definePluginSettings({
 
 export default definePlugin({
     name: "DevCompanion",
-    description: t("devCompanion.description"),
+    description: t("vencord.devCompanion.description"),
     authors: [Devs.Ven, Devs.sadan],
     reporterTestable: ReporterTestable.None,
     isModified: true,

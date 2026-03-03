@@ -37,15 +37,15 @@ interface UsrbgApiReturn {
 
 const settings = definePluginSettings({
     nitroFirst: {
-        description: t("usrbg.settings.nitroFirst"),
+        description: t("vencord.usrbg.settings.nitroFirst"),
         type: OptionType.SELECT,
         options: [
-            { label: t("usrbg.settings.nitroBanner"), value: true, default: true },
-            { label: t("usrbg.settings.usrbgBanner"), value: false },
+            { label: t("vencord.usrbg.settings.nitroBanner"), value: true, default: true },
+            { label: t("vencord.usrbg.settings.usrbgBanner"), value: false },
         ]
     },
     voiceBackground: {
-        description: t("usrbg.settings.voiceBackground"),
+        description: t("vencord.usrbg.settings.voiceBackground"),
         type: OptionType.BOOLEAN,
         default: true,
         restartNeeded: true
@@ -54,7 +54,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "USRBG",
-    description: t("usrbg.description"),
+    description: t("vencord.usrbg.description"),
     authors: [Devs.AutumnVN, Devs.katlyn, Devs.pylix, Devs.TheKodeToad],
     settings,
     patches: [
@@ -93,7 +93,7 @@ export default definePlugin({
             className={cl("settings-button")}
             onClick={() => VencordNative.native.openExternal("https://github.com/AutumnVN/usrbg#how-to-request-your-own-usrbg-banner")}
         >
-            {t("usrbg.getOwnBanner")}
+            {t("vencord.usrbg.getOwnBanner")}
         </Button>
     ),
 

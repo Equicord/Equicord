@@ -23,7 +23,7 @@ interface MessageCreatePayload {
 const settings = definePluginSettings({
     users: {
         type: OptionType.STRING,
-        description: t("messageNotifier.settings.users"),
+        description: t("equicord.messageNotifier.settings.users"),
         default: "",
         isValid(value: string) {
             if (value === "") return true;
@@ -38,7 +38,7 @@ const settings = definePluginSettings({
 export default definePlugin({
     authors: [EquicordDevs.cassie, EquicordDevs.mochienya],
     name: "MessageNotifier",
-    description: t("messageNotifier.description"),
+    description: t("equicord.messageNotifier.description"),
     settings,
     flux: {
         MESSAGE_CREATE({ message, channelId, guildId }: MessageCreatePayload) {

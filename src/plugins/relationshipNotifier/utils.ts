@@ -116,7 +116,7 @@ export function notify(text: string, icon?: string, onClick?: () => void) {
         showNotice(text, "OK", () => popNotice());
 
     showNotification({
-        title: t("relationshipNotifier.notificationTitle"),
+        title: t("vencord.relationshipNotifier.notificationTitle"),
         body: text,
         icon,
         onClick

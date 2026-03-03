@@ -92,7 +92,7 @@ function DearrowButton({ component }: { component: Component<Props>; }) {
     if (!embed?.dearrow) return null;
 
     return (
-        <Tooltip text={embed.dearrow.enabled ? t("dearrow.dearrowedClickRestore") : t("dearrow.clickToDearrow")}>
+        <Tooltip text={embed.dearrow.enabled ? t("vencord.dearrow.dearrowedClickRestore") : t("vencord.dearrow.clickToDearrow")}>
             {({ onMouseEnter, onMouseLeave }) => (
                 <button
                     onMouseEnter={onMouseEnter}
@@ -145,23 +145,23 @@ function DearrowButton({ component }: { component: Component<Props>; }) {
 
 const settings = definePluginSettings({
     hideButton: {
-        description: t("dearrow.hideButton"),
+        description: t("vencord.dearrow.hideButton"),
         type: OptionType.BOOLEAN,
         default: false,
         restartNeeded: true
     },
     replaceElements: {
-        description: t("dearrow.replaceElementsDescription"),
+        description: t("vencord.dearrow.replaceElementsDescription"),
         type: OptionType.SELECT,
         restartNeeded: true,
         options: [
-            { label: t("dearrow.everything"), value: ReplaceElements.ReplaceAllElements, default: true },
-            { label: t("dearrow.titles"), value: ReplaceElements.ReplaceTitlesOnly },
-            { label: t("dearrow.thumbnails"), value: ReplaceElements.ReplaceThumbnailsOnly },
+            { label: t("vencord.dearrow.everything"), value: ReplaceElements.ReplaceAllElements, default: true },
+            { label: t("vencord.dearrow.titles"), value: ReplaceElements.ReplaceTitlesOnly },
+            { label: t("vencord.dearrow.thumbnails"), value: ReplaceElements.ReplaceThumbnailsOnly },
         ],
     },
     dearrowByDefault: {
-        description: t("dearrow.dearrowByDefault"),
+        description: t("vencord.dearrow.dearrowByDefault"),
         type: OptionType.BOOLEAN,
         default: true,
         restartNeeded: false
@@ -170,7 +170,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "Dearrow",
-    description: t("dearrow.description"),
+    description: t("vencord.dearrow.description"),
     authors: [Devs.Ven],
     settings,
 

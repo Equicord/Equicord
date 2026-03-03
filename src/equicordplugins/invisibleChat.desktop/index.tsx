@@ -47,7 +47,7 @@ function PopOverIcon() {
 
 function Indicator() {
     return (
-        <Tooltip text={t("invisibleChat.ui.hiddenMessageIndicator")}>
+        <Tooltip text={t("equicord.invisibleChat.ui.hiddenMessageIndicator")}>
             {({ onMouseEnter, onMouseLeave }) => (
                 <img
                     aria-label="Hidden Message Indicator (InvisibleChat)"
@@ -70,7 +70,7 @@ const ChatBarRender: ChatBarButtonFactory = ({ isMainChat }) => {
 
     return (
         <ChatBarButton
-            tooltip={t("invisibleChat.ui.encryptMessage")}
+            tooltip={t("equicord.invisibleChat.ui.encryptMessage")}
             onClick={() => buildEncModal()}
             buttonProps={{
                 "aria-haspopup": "dialog",
@@ -100,7 +100,7 @@ const settings = definePluginSettings({
     savedPasswords: {
         type: OptionType.STRING,
         default: "password, Password",
-        description: t("invisibleChat.settings.savedPasswords")
+        description: t("equicord.invisibleChat.settings.savedPasswords")
     }
 });
 
@@ -149,7 +149,7 @@ export async function buildEmbed(message: any, revealed: string): Promise<void> 
 
 export default definePlugin({
     name: "InvisibleChat",
-    description: t("invisibleChat.description"),
+    description: t("equicord.invisibleChat.description"),
     authors: [Devs.SammCheese],
     dependencies: ["MessageUpdaterAPI"],
     reporterTestable: ReporterTestable.Patches,
@@ -181,7 +181,7 @@ export default definePlugin({
         render(message) {
             return INV_REGEX.test(message?.content)
                 ? {
-                    label: t("invisibleChat.ui.decryptMessage"),
+                    label: t("equicord.invisibleChat.ui.decryptMessage"),
                     icon: PopOverIcon,
                     message: message,
                     channel: ChannelStore.getChannel(message.channel_id),

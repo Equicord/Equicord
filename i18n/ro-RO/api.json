@@ -1,37 +1,37 @@
 {
-    "commands":{
-        "errorExecuting":"A apărut o eroare la executarea comenzii „{name}”"
+    "commands": {
+        "errorExecuting": "A apărut o eroare la executarea comenzii „{name}”"
     },
-    "memberListDecorators":{
-        "fallback":"Nu s-a redat {key} Decoratorul listei de membri"
+    "memberListDecorators": {
+        "fallback": "Nu s-a redat {key} Decoratorul listei de membri"
     },
-    "messageAccessories":{
-        "fallback":"Nu s-a putut randa {key} Accesoriu pentru mesaje"
+    "messageAccessories": {
+        "fallback": "Nu s-a putut randa {key} Accesoriu pentru mesaje"
     },
-    "messageDecorations":{
-        "fallback":"Nu s-a redat {key} Decorarea mesajului"
+    "messageDecorations": {
+        "fallback": "Nu s-a redat {key} Decorarea mesajului"
     },
-    "notices":{
-        "fallback":"Eroare la afișarea notificării"
+    "notices": {
+        "fallback": "Eroare la afișarea notificării"
     },
-    "notifications":{
-        "dismissNotification":"Respinge notificarea",
-        "logs":{
-            "body_one":"Aceasta va elimina definitiv notificarea {count}. Această acțiune nu poate fi anulată.",
-            "body_other":"Acest lucru va elimina definitiv notificările {count}. Această acțiune nu poate fi anulată.",
-            "body_zero":"Nicio notificare selectată.",
-            "cancel":"Nu mai contează",
-            "clearNotificationLog":"Ștergeți jurnalul de notificări",
-            "confirm":"Fă-o!",
-            "title":"esti sigur?"
+    "notifications": {
+        "dismissNotification": "Respinge notificarea",
+        "logs": {
+            "body_one": "Aceasta va elimina definitiv notificarea {count}. Această acțiune nu poate fi anulată.",
+            "body_other": "Acest lucru va elimina definitiv notificările {count}. Această acțiune nu poate fi anulată.",
+            "body_zero": "Nicio notificare selectată.",
+            "cancel": "Nu mai contează",
+            "clearNotificationLog": "Ștergeți jurnalul de notificări",
+            "confirm": "Fă-o!",
+            "title": "esti sigur?"
         },
-        "missedNotifications":{
-            "body_one":"[[PH0]]] a primit notificare",
-            "body_other":"[[PH0]]] notificări primite",
-            "title":"În timp ce erai plecat"
+        "missedNotifications": {
+            "body_one": "[[PH0]]] a primit notificare",
+            "body_other": "[[PH0]]] notificări primite",
+            "title": "În timp ce erai plecat"
         },
-        "noNotifications":"Nicio notificare încă",
-        "notificationLog":"Jurnal de notificare",
-        "notificationSettings":"Setări de notificare"
+        "noNotifications": "Nicio notificare încă",
+        "notificationLog": "Jurnal de notificare",
+        "notificationSettings": "Setări de notificare"
     }
 }

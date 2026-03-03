@@ -13,7 +13,7 @@ import definePlugin, { OptionType } from "@utils/types";
 const settings = definePluginSettings({
     replace: {
         type: OptionType.STRING,
-        description: t("questionMarkReplacement.settings.replace"),
+        description: t("equicord.questionMarkReplacement.settings.replace"),
         default: ":face_with_monocle:"
     },
 });
@@ -30,7 +30,7 @@ function replaceQuestionMarks(content: string): string {
 
 export default definePlugin({
     name: "QuestionMarkReplacement",
-    description: t("questionMarkReplacement.description"),
+    description: t("equicord.questionMarkReplacement.description"),
     authors: [Devs.nyx],
 
     settings,

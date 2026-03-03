@@ -34,7 +34,7 @@ const genTagTypes = () => {
 
 export default definePlugin({
     name: "MoreUserTags",
-    description: t("moreUserTags.description"),
+    description: t("equicord.moreUserTags.description"),
     authors: [Devs.Cyn, Devs.TheSun, Devs.RyanCaoDev, Devs.LordElias, Devs.AutumnVN, EquicordDevs.Hen],
     settings,
     patches: [

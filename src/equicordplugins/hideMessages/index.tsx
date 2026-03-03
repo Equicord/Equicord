@@ -32,7 +32,7 @@ const messageCtxPatch: NavContextMenuPatchCallback = (children, { message }: { m
     group.splice(group.findIndex(c => c?.props?.id === "copy-text") + 1, 0, (
         <Menu.MenuItem
             id="vc-hidemessages"
-            label={t("hideMessages.ui.hide")}
+            label={t("equicord.hideMessages.ui.hide")}
             icon={EyeIcon}
             action={() => hideMessage(message.id, message.channel_id)}
         />
@@ -42,14 +42,14 @@ const messageCtxPatch: NavContextMenuPatchCallback = (children, { message }: { m
 const settings = definePluginSettings({
     hidePopoverButton: {
         type: OptionType.BOOLEAN,
-        description: t("hideMessages.settings.hidePopoverButton"),
+        description: t("equicord.hideMessages.settings.hidePopoverButton"),
         default: false
     }
 });
 
 export default definePlugin({
     name: "HideMessages",
-    description: t("hideMessages.description"),
+    description: t("equicord.hideMessages.description"),
     authors: [EquicordDevs.yash],
     contextMenus: {
         "message": messageCtxPatch
@@ -60,7 +60,7 @@ export default definePlugin({
         render(message: Message) {
             if (settings.store.hidePopoverButton) return null;
             return {
-                label: t("hideMessages.ui.hide"),
+                label: t("equicord.hideMessages.ui.hide"),
                 icon: EyeIcon,
                 message,
                 channel: ChannelStore.getChannel(message.channel_id),

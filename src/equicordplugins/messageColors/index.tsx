@@ -27,7 +27,7 @@ const requiredFirstCharacters = ["r", "h", "#"].flatMap(v => [v, v.toUpperCase()
 export default definePlugin({
     authors: [EquicordDevs.Hen],
     name: "MessageColors",
-    description: t("messageColors.description"),
+    description: t("equicord.messageColors.description"),
     settings,
     patches: [
         // Create a new markdown rule, so it parses just like any other features

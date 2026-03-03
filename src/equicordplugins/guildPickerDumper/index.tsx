@@ -20,8 +20,8 @@ const Patch: NavContextMenuPatchCallback = (children, { guild }: { guild: Guild;
     if (group) {
         group.push(
             <>
-                <Menu.MenuItem id="emoji.download" label={t("guildPickerDumper.ui.downloadEmojis")} action={() => zipGuildAssets(guild, "emojis")}></Menu.MenuItem>
-                <Menu.MenuItem id="sticker.download" label={t("guildPickerDumper.ui.downloadStickers")} action={() => zipGuildAssets(guild, "stickers")}></Menu.MenuItem>
+                <Menu.MenuItem id="emoji.download" label={t("equicord.guildPickerDumper.ui.downloadEmojis")} action={() => zipGuildAssets(guild, "emojis")}></Menu.MenuItem>
+                <Menu.MenuItem id="sticker.download" label={t("equicord.guildPickerDumper.ui.downloadStickers")} action={() => zipGuildAssets(guild, "stickers")}></Menu.MenuItem>
             </>
         );
     }
@@ -34,7 +34,7 @@ async function zipGuildAssets(guild: Guild, type: "emojis" | "stickers") {
         : StickersStore.getStickersByGuildId(guild.id);
 
     if (!items) {
-        return console.log(t("guildPickerDumper.ui.serverNotFound"));
+        return console.log(t("equicord.guildPickerDumper.ui.serverNotFound"));
     }
 
     const getProxyEndpoint = () => {
@@ -94,7 +94,7 @@ async function zipGuildAssets(guild: Guild, type: "emojis" | "stickers") {
 
 export default definePlugin({
     name: "GuildPickerDumper",
-    description: t("guildPickerDumper.description"),
+    description: t("equicord.guildPickerDumper.description"),
     authors: [EquicordDevs.Cortex, Devs.Samwich, EquicordDevs.Synth, Devs.thororen],
     contextMenus: {
         "guild-context": Patch,

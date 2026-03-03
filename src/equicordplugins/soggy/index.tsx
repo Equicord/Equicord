@@ -137,7 +137,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "Soggy",
-    description: t("soggy.description"),
+    description: t("equicord.soggy.description"),
     authors: [EquicordDevs.sliwka],
     settings,
     dependencies: ["AudioPlayerAPI"],

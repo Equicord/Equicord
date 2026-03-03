@@ -31,7 +31,7 @@ export const settings = definePluginSettings({
 
 export default definePlugin({
     name: "WebpackTarball",
-    description: t("webpackTarball.description"),
+    description: t("equicord.webpackTarball.description"),
     authors: [Devs.Kyuuhachi],
     settings,
 

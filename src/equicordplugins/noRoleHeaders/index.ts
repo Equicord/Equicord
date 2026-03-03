@@ -10,7 +10,7 @@ import definePlugin from "@utils/types";
 
 export default definePlugin({
     name: "NoRoleHeaders",
-    description: t("noRoleHeaders.description"),
+    description: t("equicord.noRoleHeaders.description"),
     authors: [Devs.Samwich],
     patches: [
         {

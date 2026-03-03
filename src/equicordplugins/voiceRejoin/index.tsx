@@ -48,7 +48,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "VoiceRejoin",
-    description: t("voiceRejoin.description"),
+    description: t("equicord.voiceRejoin.description"),
     authors: [EquicordDevs.omaw],
     settings,
 

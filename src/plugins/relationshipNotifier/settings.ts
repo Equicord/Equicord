@@ -23,32 +23,32 @@ import { OptionType } from "@utils/types";
 export default definePluginSettings({
     notices: {
         type: OptionType.BOOLEAN,
-        description: t("relationshipNotifier.settings.notices"),
+        description: t("vencord.relationshipNotifier.settings.notices"),
         default: false
     },
     offlineRemovals: {
         type: OptionType.BOOLEAN,
-        description: t("relationshipNotifier.settings.offlineRemovals"),
+        description: t("vencord.relationshipNotifier.settings.offlineRemovals"),
         default: true
     },
     friends: {
         type: OptionType.BOOLEAN,
-        description: t("relationshipNotifier.settings.friends"),
+        description: t("vencord.relationshipNotifier.settings.friends"),
         default: true
     },
     friendRequestCancels: {
         type: OptionType.BOOLEAN,
-        description: t("relationshipNotifier.settings.friendRequestCancels"),
+        description: t("vencord.relationshipNotifier.settings.friendRequestCancels"),
         default: true
     },
     servers: {
         type: OptionType.BOOLEAN,
-        description: t("relationshipNotifier.settings.servers"),
+        description: t("vencord.relationshipNotifier.settings.servers"),
         default: true
     },
     groups: {
         type: OptionType.BOOLEAN,
-        description: t("relationshipNotifier.settings.groups"),
+        description: t("vencord.relationshipNotifier.settings.groups"),
         default: true
     }
 });

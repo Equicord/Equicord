@@ -28,7 +28,7 @@ const timers = {} as Record<string, {
 
 export default definePlugin({
     name: "VoiceChatDoubleClick",
-    description: t("vcDoubleClick.description"),
+    description: t("vencord.vcDoubleClick.description"),
     authors: [Devs.Ven, Devs.D3SOX, Devs.sadan],
     patches: [
         ...[

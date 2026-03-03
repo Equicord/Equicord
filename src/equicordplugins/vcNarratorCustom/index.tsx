@@ -924,7 +924,7 @@ const UserContextMenuPatch: NavContextMenuPatchCallback = (children, { user }: U
 
 export default definePlugin({
     name: "VcNarratorCustom",
-    description: t("vcNarratorCustom.description"),
+    description: t("equicord.vcNarratorCustom.description"),
     authors: [Devs.Ven, Devs.Nyako, EquicordDevs.Loukios, EquicordDevs.examplegit],
     settings,
     contextMenus: {

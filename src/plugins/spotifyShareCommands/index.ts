@@ -67,14 +67,14 @@ function makeCommand(name: string, formatUrl: (track: Track) => string): Command
             const track: Track | null = Spotify.getTrack();
             if (!track) {
                 return sendBotMessage(channel.id, {
-                    content: t("spotifyShareCommands.commands.notListening")
+                    content: t("vencord.spotifyShareCommands.commands.notListening")
                 });
             }
 
             // local tracks have an id of null
             if (track.id == null) {
                 return sendBotMessage(channel.id, {
-                    content: t("spotifyShareCommands.commands.trackNotFound")
+                    content: t("vencord.spotifyShareCommands.commands.trackNotFound")
                 });
             }
 
@@ -98,7 +98,7 @@ function makeCommand(name: string, formatUrl: (track: Track) => string): Command
 
 export default definePlugin({
     name: "SpotifyShareCommands",
-    description: t("spotifyShareCommands.description"),
+    description: t("vencord.spotifyShareCommands.description"),
     authors: [Devs.katlyn],
     commands: [
         makeCommand("track", track => `https://open.spotify.com/track/${track.id}`),

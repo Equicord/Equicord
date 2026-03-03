@@ -48,7 +48,7 @@ export const settings = definePluginSettings({
 
 export default definePlugin({
     name: "UnitConverter",
-    description: t("unitConverter.description"),
+    description: t("equicord.unitConverter.description"),
     authors: [Devs.sadan],
     messagePopoverButton: {
         icon: ConvertIcon,

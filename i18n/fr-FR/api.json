@@ -1,37 +1,37 @@
 {
-    "commands":{
-        "errorExecuting":"Une erreur s'est produite lors de l'exécution de la commande \"{name}\""
+    "commands": {
+        "errorExecuting": "Une erreur s'est produite lors de l'exécution de la commande \"{name}\""
     },
-    "memberListDecorators":{
-        "fallback":"Échec du rendu du décorateur de liste de membres {key}"
+    "memberListDecorators": {
+        "fallback": "Échec du rendu du décorateur de liste de membres {key}"
     },
-    "messageAccessories":{
-        "fallback":"Échec du rendu de l'accessoire de message {key}"
+    "messageAccessories": {
+        "fallback": "Échec du rendu de l'accessoire de message {key}"
     },
-    "messageDecorations":{
-        "fallback":"Échec du rendu de la décoration du message {key}"
+    "messageDecorations": {
+        "fallback": "Échec du rendu de la décoration du message {key}"
     },
-    "notices":{
-        "fallback":"Erreur d'affichage de la notification"
+    "notices": {
+        "fallback": "Erreur d'affichage de la notification"
     },
-    "notifications":{
-        "dismissNotification":"Ignorer la notification",
-        "logs":{
-            "body_one":"Cela supprimera définitivement {count} notifications. Cette action ne peut pas être annulée.",
-            "body_other":"Cela supprimera définitivement {count} notifications. Cette action ne peut pas être annulée.",
-            "body_zero":"Aucune notification sélectionnée.",
-            "cancel":"Tout compte fait, non.",
-            "clearNotificationLog":"Nettoyer le journal de notifications",
-            "confirm":"Fait le!",
-            "title":"Êtes-vous sûr ?"
+    "notifications": {
+        "dismissNotification": "Ignorer la notification",
+        "logs": {
+            "body_one": "Cela supprimera définitivement {count} notifications. Cette action ne peut pas être annulée.",
+            "body_other": "Cela supprimera définitivement {count} notifications. Cette action ne peut pas être annulée.",
+            "body_zero": "Aucune notification sélectionnée.",
+            "cancel": "Tout compte fait, non.",
+            "clearNotificationLog": "Nettoyer le journal de notifications",
+            "confirm": "Fait le!",
+            "title": "Êtes-vous sûr ?"
         },
-        "missedNotifications":{
-            "body_one":"{count} notifications reçues",
-            "body_other":"{count} notifications reçues",
-            "title":"Pendant ton absence"
+        "missedNotifications": {
+            "body_one": "{count} notifications reçues",
+            "body_other": "{count} notifications reçues",
+            "title": "Pendant ton absence"
         },
-        "noNotifications":"Aucune notification pour l'instant",
-        "notificationLog":"Journal des notifications",
-        "notificationSettings":"Paramètres de notification"
+        "noNotifications": "Aucune notification pour l'instant",
+        "notificationLog": "Journal des notifications",
+        "notificationSettings": "Paramètres de notification"
     }
 }

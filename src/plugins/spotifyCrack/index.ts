@@ -23,13 +23,13 @@ import { t } from "@utils/translation";
 
 const settings = definePluginSettings({
     noSpotifyAutoPause: {
-        description: t("spotifyCrack.settings.noSpotifyAutoPause"),
+        description: t("vencord.spotifyCrack.settings.noSpotifyAutoPause"),
         type: OptionType.BOOLEAN,
         default: true,
         restartNeeded: true
     },
     keepSpotifyActivityOnIdle: {
-        description: t("spotifyCrack.settings.keepSpotifyActivityOnIdle"),
+        description: t("vencord.spotifyCrack.settings.keepSpotifyActivityOnIdle"),
         type: OptionType.BOOLEAN,
         default: false,
         restartNeeded: true
@@ -38,7 +38,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "SpotifyCrack",
-    description: t("spotifyCrack.description"),
+    description: t("vencord.spotifyCrack.description"),
     authors: [Devs.Cyn, Devs.Nuckyz],
     settings,
 

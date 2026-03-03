@@ -96,7 +96,7 @@ const PreviewButton: ChatBarButtonFactory = ({ isAnyChat, isEmpty, type: { attac
 
     return (
         <ChatBarButton
-            tooltip={t("previewMessage.previewMessage")}
+            tooltip={t("vencord.previewMessage.previewMessage")}
             onClick={async () =>
                 sendBotMessage(
                     channelId,
@@ -120,7 +120,7 @@ const PreviewButton: ChatBarButtonFactory = ({ isAnyChat, isEmpty, type: { attac
 
 export default definePlugin({
     name: "PreviewMessage",
-    description: t("previewMessage.description"),
+    description: t("vencord.previewMessage.description"),
     authors: [Devs.Aria],
     // start early to ensure we're the first plugin to add our button
     // This makes the popping in less awkward

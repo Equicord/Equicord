@@ -33,7 +33,7 @@ const createMessageRecord = findByCodeLazy(".createFromServer(", ".isBlockedForM
 
 export default definePlugin({
     name: "ValidReply",
-    description: t("validReply.description"),
+    description: t("vencord.validReply.description"),
     authors: [Devs.newwares],
     patches: [
         {

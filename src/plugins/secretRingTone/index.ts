@@ -12,7 +12,7 @@ import { t } from "@utils/translation";
 const settings = definePluginSettings({
     onlySnow: {
         type: OptionType.BOOLEAN,
-        description: t("secretRingTone.settings.onlySnow"),
+        description: t("vencord.secretRingTone.settings.onlySnow"),
         default: false,
         restartNeeded: true
     }
@@ -20,7 +20,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "SecretRingToneEnabler",
-    description: t("secretRingTone.description"),
+    description: t("vencord.secretRingTone.description"),
     authors: [Devs.AndrewDLO, Devs.FieryFlames, Devs.RamziAH],
     settings,
     patches: [

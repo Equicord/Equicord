@@ -32,7 +32,7 @@ function GuildSelector() {
         <SearchableSelect
             options={options}
             value={options.find(o => o.value === soundGuildId)}
-            placeholder={t("exitSounds.ui.selectServer")}
+            placeholder={t("equicord.exitSounds.ui.selectServer")}
             maxVisibleItems={6}
             closeOnSelect={true}
             onChange={v => settings.store.soundGuildId = v}
@@ -59,7 +59,7 @@ function SoundIdInput() {
                 <TextInput
                     value={soundId}
                     onChange={v => settings.store.soundId = v}
-                    placeholder={t("exitSounds.ui.enterSoundId")}
+                    placeholder={t("equicord.exitSounds.ui.enterSoundId")}
                 />
             </div>
             <Button
@@ -75,12 +75,12 @@ function SoundIdInput() {
 const settings = definePluginSettings({
     soundGuildId: {
         type: OptionType.COMPONENT,
-        description: t("exitSounds.settings.soundGuildId"),
+        description: t("equicord.exitSounds.settings.soundGuildId"),
         component: GuildSelector
     },
     soundId: {
         type: OptionType.COMPONENT,
-        description: t("exitSounds.settings.soundId"),
+        description: t("equicord.exitSounds.settings.soundId"),
         component: SoundIdInput
     }
 });
@@ -90,7 +90,7 @@ const SoundButtonContext: NavContextMenuPatchCallback = (children, { sound }: { 
         <Menu.MenuGroup>
             <Menu.MenuItem
                 id="set-global-exit-sound"
-                label={t("exitSounds.ui.setGlobalExitSound")}
+                label={t("equicord.exitSounds.ui.setGlobalExitSound")}
                 action={() => {
                     settings.store.soundGuildId = sound.guildId;
                     settings.store.soundId = sound.soundId;
@@ -104,7 +104,7 @@ let original: typeof ChannelActions.selectVoiceChannel;
 
 export default definePlugin({
     name: "ExitSounds",
-    description: t("exitSounds.description"),
+    description: t("equicord.exitSounds.description"),
     authors: [Devs.prism],
     dependencies: ["AudioPlayerAPI"],
     settings,
@@ -131,7 +131,7 @@ export default definePlugin({
                     await new Promise(r => setTimeout(r, 500));
                 } catch {
                     Toasts.show({
-                        message: t("exitSounds.toasts.somethingWentWrong"),
+                        message: t("equicord.exitSounds.toasts.somethingWentWrong"),
                         id: Toasts.genId(),
                         type: Toasts.Type.FAILURE
                     });

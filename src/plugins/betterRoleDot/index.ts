@@ -25,13 +25,13 @@ import definePlugin, { OptionType } from "@utils/types";
 const settings = definePluginSettings({
     bothStyles: {
         type: OptionType.BOOLEAN,
-        description: t("betterRoleDot.settings.bothStyles"),
+        description: t("vencord.betterRoleDot.settings.bothStyles"),
         restartNeeded: true,
         default: false,
     },
     copyRoleColorInProfilePopout: {
         type: OptionType.BOOLEAN,
-        description: t("betterRoleDot.settings.copyRoleColorInProfilePopout"),
+        description: t("vencord.betterRoleDot.settings.copyRoleColorInProfilePopout"),
         restartNeeded: true,
         default: false
     },
@@ -40,7 +40,7 @@ const settings = definePluginSettings({
 export default definePlugin({
     name: "BetterRoleDot",
     authors: [Devs.Ven, Devs.AutumnVN],
-    description: t("betterRoleDot.description"),
+    description: t("vencord.betterRoleDot.description"),
     settings,
 
     patches: [

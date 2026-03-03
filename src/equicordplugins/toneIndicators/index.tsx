@@ -163,7 +163,7 @@ function patchChildrenTree(children: any): any {
 
 export default definePlugin({
     name: "ToneIndicators",
-    description: t("toneIndicators.description"),
+    description: t("equicord.toneIndicators.description"),
     authors: [EquicordDevs.justjxke],
     settings,
 

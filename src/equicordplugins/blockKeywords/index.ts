@@ -15,24 +15,24 @@ let blockedKeywords: Array<RegExp>;
 const settings = definePluginSettings({
     blockedWords: {
         type: OptionType.STRING,
-        description: t("blockKeywords.settings.blockedWords"),
+        description: t("equicord.blockKeywords.settings.blockedWords"),
         default: "",
         restartNeeded: true
     },
     useRegex: {
         type: OptionType.BOOLEAN,
-        description: t("blockKeywords.settings.useRegex"),
+        description: t("equicord.blockKeywords.settings.useRegex"),
         default: false,
         restartNeeded: true
     },
     caseSensitive: {
         type: OptionType.BOOLEAN,
-        description: t("blockKeywords.settings.caseSensitive"),
+        description: t("equicord.blockKeywords.settings.caseSensitive"),
         default: false,
         restartNeeded: true
     },
     ignoreBlockedMessages: {
-        description: t("blockKeywords.settings.ignoreBlockedMessages"),
+        description: t("equicord.blockKeywords.settings.ignoreBlockedMessages"),
         type: OptionType.BOOLEAN,
         default: true,
         restartNeeded: true,
@@ -70,7 +70,7 @@ export function containsBlockedKeywords(message: Message) {
 
 export default definePlugin({
     name: "BlockKeywords",
-    description: t("blockKeywords.description"),
+    description: t("equicord.blockKeywords.description"),
     authors: [EquicordDevs.catcraft],
     patches: [
         {

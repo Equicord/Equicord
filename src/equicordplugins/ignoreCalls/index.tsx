@@ -51,7 +51,7 @@ const ContextMenuPatch: NavContextMenuPatchCallback = (children, { channel }: { 
             <Menu.MenuSeparator />
             <Menu.MenuCheckboxItem
                 id="vc-ignore-calls-temp"
-                label={t("ignoreCalls.ui.temporarilyIgnore")}
+                label={t("equicord.ignoreCalls.ui.temporarilyIgnore")}
                 checked={tempChecked}
                 action={() => {
                     if (tempChecked)
@@ -64,7 +64,7 @@ const ContextMenuPatch: NavContextMenuPatchCallback = (children, { channel }: { 
             />
             <Menu.MenuCheckboxItem
                 id="vc-ignore-calls-perm"
-                label={t("ignoreCalls.ui.permanentlyIgnore")}
+                label={t("equicord.ignoreCalls.ui.permanentlyIgnore")}
                 checked={permChecked}
                 action={() => {
                     let updated = permanentlyIgnoredUsers.slice();
@@ -85,7 +85,7 @@ const ContextMenuPatch: NavContextMenuPatchCallback = (children, { channel }: { 
 const settings = definePluginSettings({
     permanentlyIgnoredUsers: {
         type: OptionType.STRING,
-        description: t("ignoreCalls.settings.permanentlyIgnoredUsers"),
+        description: t("equicord.ignoreCalls.settings.permanentlyIgnoredUsers"),
         restartNeeded: true,
         default: "",
     },
@@ -93,7 +93,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "IgnoreCalls",
-    description: t("ignoreCalls.description"),
+    description: t("equicord.ignoreCalls.description"),
     authors: [EquicordDevs.TheArmagan, Devs.thororen],
     settings,
     patches: [
@@ -134,7 +134,7 @@ export default definePlugin({
 
         return (
             <ErrorBoundary>
-                <Tooltip text={t("ignoreCalls.ui.ignore")}>
+                <Tooltip text={t("equicord.ignoreCalls.ui.ignore")}>
                     {({ onMouseEnter, onMouseLeave }) => (
                         <Button
                             className={cl("button")}

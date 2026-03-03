@@ -19,12 +19,12 @@ const NumberBadge = findComponentByCodeLazy("BADGE_NOTIFICATION_BACKGROUND", "le
 
 const settings = definePluginSettings({
     showOnMutedChannels: {
-        description: t("unreadBadgeCount.settings.showOnMutedChannels"),
+        description: t("equicord.unreadBadgeCount.settings.showOnMutedChannels"),
         type: OptionType.BOOLEAN,
         default: false,
     },
     notificationCountLimit: {
-        description: t("unreadBadgeCount.settings.notificationCountLimit"),
+        description: t("equicord.unreadBadgeCount.settings.notificationCountLimit"),
         type: OptionType.BOOLEAN,
         default: false,
     },
@@ -33,7 +33,7 @@ const settings = definePluginSettings({
 export default definePlugin({
     name: "UnreadCountBadge",
     authors: [Devs.Joona],
-    description: t("unreadBadgeCount.description"),
+    description: t("equicord.unreadBadgeCount.description"),
     settings,
 
     patches: [

@@ -22,40 +22,40 @@ const presendObject: MessageSendListener = (channelId, msg) => {
 const settings = definePluginSettings({
     quickDisable: {
         type: OptionType.BOOLEAN,
-        description: t("polishWording.settings.quickDisable"),
+        description: t("equicord.polishWording.settings.quickDisable"),
         default: false,
     },
 
     blockedWords: {
         type: OptionType.STRING,
-        description: t("polishWording.settings.blockedWords"),
+        description: t("equicord.polishWording.settings.blockedWords"),
         default: "",
     },
     // fixApostrophes is the only one that defaults to enabled because in the version before this one,
     //   the other features did not exist / had a bug making them not work.
     fixApostrophes: {
         type: OptionType.BOOLEAN,
-        description: t("polishWording.settings.fixApostrophes"),
+        description: t("equicord.polishWording.settings.fixApostrophes"),
         default: true,
     },
     expandContractions: {
         type: OptionType.BOOLEAN,
-        description: t("polishWording.settings.expandContractions"),
+        description: t("equicord.polishWording.settings.expandContractions"),
         default: false,
     },
     fixCapitalization: {
         type: OptionType.BOOLEAN,
-        description: t("polishWording.settings.fixCapitalization"),
+        description: t("equicord.polishWording.settings.fixCapitalization"),
         default: false,
     },
     fixPunctuation: {
         type: OptionType.BOOLEAN,
-        description: t("polishWording.settings.fixPunctuation"),
+        description: t("equicord.polishWording.settings.fixPunctuation"),
         default: false,
     },
     fixPunctuationFrequency: {
         type: OptionType.SLIDER,
-        description: t("polishWording.settings.fixPunctuationFrequency"),
+        description: t("equicord.polishWording.settings.fixPunctuationFrequency"),
         markers: makeRange(0, 100, 10),
         stickToMarkers: false,
         default: 100,
@@ -64,7 +64,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "PolishWording",
-    description: t("polishWording.description"),
+    description: t("equicord.polishWording.description"),
     authors: [Devs.Samwich, EquicordDevs.WKoA],
     onBeforeMessageSend: presendObject,
     settings,

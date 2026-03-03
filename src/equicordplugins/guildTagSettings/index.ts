@@ -27,7 +27,7 @@ import clanBadges from "./styles.css?managed";
 const settings = definePluginSettings({
     hideTags: {
         type: OptionType.BOOLEAN,
-        description: t("guildTagSettings.settings.hideTags"),
+        description: t("equicord.guildTagSettings.settings.hideTags"),
         default: false,
         onChange: value => {
             if (value) enableStyle(clanBadges);
@@ -36,7 +36,7 @@ const settings = definePluginSettings({
     },
     disableAdoptTagPrompt: {
         type: OptionType.BOOLEAN,
-        description: t("guildTagSettings.settings.disableAdoptTagPrompt"),
+        description: t("equicord.guildTagSettings.settings.disableAdoptTagPrompt"),
         default: true,
         restartNeeded: true
     }
@@ -44,7 +44,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "GuildTagSettings",
-    description: t("guildTagSettings.description"),
+    description: t("equicord.guildTagSettings.description"),
     authors: [Devs.thororen],
     settings,
     patches: [

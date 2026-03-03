@@ -15,52 +15,52 @@ import { ChannelStore, GuildMemberStore, GuildRoleStore, React, RelationshipStor
 const settings = definePluginSettings({
     hideVc: {
         type: OptionType.BOOLEAN,
-        description: t("clientSideBlock.settings.hideVc"),
+        description: t("equicord.clientSideBlock.settings.hideVc"),
         default: false,
         restartNeeded: true
     },
     usersToBlock: {
         type: OptionType.STRING,
-        description: t("clientSideBlock.settings.usersToBlock"),
+        description: t("equicord.clientSideBlock.settings.usersToBlock"),
         restartNeeded: true,
         default: ""
     },
     hideBlockedUsers: {
         type: OptionType.BOOLEAN,
-        description: t("clientSideBlock.settings.hideBlockedUsers"),
+        description: t("equicord.clientSideBlock.settings.hideBlockedUsers"),
         default: true,
         restartNeeded: true
     },
     hideBlockedMessages: {
         type: OptionType.BOOLEAN,
-        description: t("clientSideBlock.settings.hideBlockedMessages"),
+        description: t("equicord.clientSideBlock.settings.hideBlockedMessages"),
         default: true,
         restartNeeded: true
     },
     hideEmptyRoles: {
         type: OptionType.BOOLEAN,
-        description: t("clientSideBlock.settings.hideEmptyRoles"),
+        description: t("equicord.clientSideBlock.settings.hideEmptyRoles"),
         restartNeeded: true,
         default: true
     },
     blockedReplyDisplay: {
         type: OptionType.SELECT,
-        description: t("clientSideBlock.settings.blockedReplyDisplay"),
+        description: t("equicord.clientSideBlock.settings.blockedReplyDisplay"),
         restartNeeded: true,
         options: [
-            { value: "displayText", label: t("clientSideBlock.settings.blockedReplyDisplayOptions.displayText"), default: true },
-            { value: "hideReply", label: t("clientSideBlock.settings.blockedReplyDisplayOptions.hideReply") }
+            { value: "displayText", label: t("equicord.clientSideBlock.settings.blockedReplyDisplayOptions.displayText"), default: true },
+            { value: "hideReply", label: t("equicord.clientSideBlock.settings.blockedReplyDisplayOptions.hideReply") }
         ]
     },
     guildBlackList: {
         type: OptionType.STRING,
-        description: t("clientSideBlock.settings.guildBlackList"),
+        description: t("equicord.clientSideBlock.settings.guildBlackList"),
         restartNeeded: true,
         default: ""
     },
     guildWhiteList: {
         type: OptionType.STRING,
-        description: t("clientSideBlock.settings.guildWhiteList"),
+        description: t("equicord.clientSideBlock.settings.guildWhiteList"),
         restartNeeded: true,
         default: ""
     }
@@ -101,7 +101,7 @@ function hiddenReplyComponent() {
         case "displayText":
             return <Paragraph style={{ marginTop: "0px", marginBottom: "0px" }}>
                 <i>
-                    ↓ {t("clientSideBlock.reply.replyingToBlocked")}
+                    ↓ {t("equicord.clientSideBlock.reply.replyingToBlocked")}
                 </i>
             </Paragraph>;
         case "hideReply":
@@ -142,7 +142,7 @@ function activeNowView(cards) {
 
 export default definePlugin({
     name: "ClientSideBlock",
-    description: t("clientSideBlock.description"),
+    description: t("equicord.clientSideBlock.description"),
     tags: ["blocked", "block", "hide", "hidden", "noblockedmessages"],
     authors: [Devs.Samwich, EquicordDevs.KamiRu],
     settings,

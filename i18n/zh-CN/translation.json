@@ -1,10 +1,10 @@
 {
-    "description":"协助翻译 Equicord",
-    "settings":{
-        "forceLocale":{
-            "description":"强制 Equicord 使用不同的区域设置",
-            "followDiscord":"默认（遵循Discord）"
+    "description": "协助翻译 Equicord",
+    "settings": {
+        "forceLocale": {
+            "description": "强制 Equicord 使用不同的区域设置",
+            "followDiscord": "默认（遵循Discord）"
         },
-        "showMissingKeys":"如果当前语言环境缺少翻译，则显示按键而不是回退到英语"
+        "showMissingKeys": "如果当前语言环境缺少翻译，则显示按键而不是回退到英语"
     }
 }

@@ -12,7 +12,7 @@ import definePlugin from "@utils/types";
 
 export default definePlugin({
     name: "VoiceDownload",
-    description: t("voiceDownload.description"),
+    description: t("vencord.voiceDownload.description"),
     authors: [Devs.puv],
     patches: [
         {
@@ -30,7 +30,7 @@ export default definePlugin({
                 className="vc-voice-download"
                 href={src}
                 onClick={e => e.stopPropagation()}
-                aria-label={t("voiceDownload.downloadVoiceMessage")}
+                aria-label={t("vencord.voiceDownload.downloadVoiceMessage")}
                 {...IS_DISCORD_DESKTOP
                     ? { target: "_blank" } // open externally
                     : { download: "voice-message.ogg" } // download directly (not supported on discord desktop)

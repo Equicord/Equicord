@@ -17,7 +17,7 @@ const logger = new Logger("AutoZipper");
 const settings = definePluginSettings({
     extensions: {
         type: OptionType.STRING,
-        description: t("autoZipper.settings.extensions"),
+        description: t("equicord.autoZipper.settings.extensions"),
         default: ".psd,.blend,.exe,.dmg,.app,.apk,.iso",
         onChange: () => {
             extensionsToZip.clear();
@@ -209,7 +209,7 @@ function handlePaste(event: ClipboardEvent) {
 
 export default definePlugin({
     name: "AutoZipper",
-    description: t("autoZipper.description"),
+    description: t("equicord.autoZipper.description"),
     authors: [EquicordDevs.SSnowly],
     settings,
 

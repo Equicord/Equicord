@@ -19,7 +19,7 @@ migratePluginSettings("BetterActivities", "MemberListActivities");
 
 export default definePlugin({
     name: "BetterActivities",
-    description: t("betterActivities.description"),
+    description: t("equicord.betterActivities.description"),
     authors: [Devs.D3SOX, Devs.Arjix, Devs.AutumnVN, Devs.thororen],
     tags: ["activity"],
     settings,

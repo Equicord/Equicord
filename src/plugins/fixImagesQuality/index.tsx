@@ -17,14 +17,14 @@ import definePlugin, { OptionType } from "@utils/types";
 const settings = definePluginSettings({
     originalImagesInChat: {
         type: OptionType.BOOLEAN,
-        description: t("fixImagesQuality.settings.originalImagesInChat"),
+        description: t("vencord.fixImagesQuality.settings.originalImagesInChat"),
         default: false,
     }
 });
 
 export default definePlugin({
     name: "FixImagesQuality",
-    description: t("fixImagesQuality.description"),
+    description: t("vencord.fixImagesQuality.description"),
     authors: [Devs.Nuckyz, Devs.Ven],
     settings,
 
@@ -42,18 +42,18 @@ export default definePlugin({
         return (
             <Card variant="primary">
                 <Flex flexDirection="column" gap="4px">
-                    <Paragraph size="md" weight="semibold">{t("fixImagesQuality.defaultBehavior")}</Paragraph>
+                    <Paragraph size="md" weight="semibold">{t("vencord.fixImagesQuality.defaultBehavior")}</Paragraph>
                     <Paragraph>
                         <ul>
-                            <li>&mdash; {t("fixImagesQuality.inChatOptimised")}</li>
-                            <li>&mdash; {t("fixImagesQuality.inModalOriginal")}</li>
+                            <li>&mdash; {t("vencord.fixImagesQuality.inChatOptimised")}</li>
+                            <li>&mdash; {t("vencord.fixImagesQuality.inModalOriginal")}</li>
                         </ul>
                     </Paragraph>
-                    <Paragraph size="md" weight="semibold" className={Margins.top8}>{t("fixImagesQuality.enableOriginalCaveats")}</Paragraph>
+                    <Paragraph size="md" weight="semibold" className={Margins.top8}>{t("vencord.fixImagesQuality.enableOriginalCaveats")}</Paragraph>
                     <Paragraph>
                         <ul>
-                            <li>&mdash; {t("fixImagesQuality.animatedImagesAlways")}</li>
-                            <li>&mdash; {t("fixImagesQuality.mayCauseLag")}</li>
+                            <li>&mdash; {t("vencord.fixImagesQuality.animatedImagesAlways")}</li>
+                            <li>&mdash; {t("vencord.fixImagesQuality.mayCauseLag")}</li>
                         </ul>
                     </Paragraph>
                 </Flex>

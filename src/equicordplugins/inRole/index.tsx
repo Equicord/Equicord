@@ -34,7 +34,7 @@ function getMembersInRole(roleId: string, guildId: string) {
 
 export default definePlugin({
     name: "InRole",
-    description: t("inRole.description"),
+    description: t("equicord.inRole.description"),
     authors: [Devs.nin0dev],
     dependencies: ["UserSettingsAPI"],
     start() {
@@ -43,11 +43,11 @@ export default definePlugin({
     settingsAboutComponent: () => {
         return (
             <>
-                <Paragraph style={{ fontSize: "1.2rem", marginTop: "15px", fontWeight: "bold" }}>{Parser.parse(t("inRole.limitations.title"))}</Paragraph>
-                <Paragraph style={{ marginTop: "10px", fontWeight: "500" }} >{t("inRole.limitations.description")}</Paragraph>
-                <Paragraph>• {t("inRole.limitations.offlineNotListed")}</Paragraph>
-                <Paragraph>• {t("inRole.limitations.upTo100")}</Paragraph>
-                <Paragraph>• {t("inRole.limitations.friendsAlwaysShown")}</Paragraph>
+                <Paragraph style={{ fontSize: "1.2rem", marginTop: "15px", fontWeight: "bold" }}>{Parser.parse(t("equicord.inRole.limitations.title"))}</Paragraph>
+                <Paragraph style={{ marginTop: "10px", fontWeight: "500" }} >{t("equicord.inRole.limitations.description")}</Paragraph>
+                <Paragraph>• {t("equicord.inRole.limitations.offlineNotListed")}</Paragraph>
+                <Paragraph>• {t("equicord.inRole.limitations.upTo100")}</Paragraph>
+                <Paragraph>• {t("equicord.inRole.limitations.friendsAlwaysShown")}</Paragraph>
             </>
         );
     },
@@ -55,19 +55,19 @@ export default definePlugin({
     commands: [
         {
             name: "inrole",
-            description: t("inRole.commands.inrole"),
+            description: t("equicord.inRole.commands.inrole"),
             inputType: ApplicationCommandInputType.BUILT_IN,
             options: [
                 {
                     name: "role",
-                    description: t("inRole.commands.role"),
+                    description: t("equicord.inRole.commands.role"),
                     type: ApplicationCommandOptionType.ROLE,
                     required: true
                 },
             ],
             execute: (args, ctx) => {
                 if (!ctx.guild) {
-                    return sendBotMessage(ctx.channel.id, { content: t("inRole.errors.makeSureServer") });
+                    return sendBotMessage(ctx.channel.id, { content: t("equicord.inRole.errors.makeSureServer") });
                 }
                 const role = args[0].value;
                 showInRoleModal(getMembersInRole(role, ctx.guild.id), role, ctx.channel.id);
@@ -88,7 +88,7 @@ export default definePlugin({
             children.push(
                 <Menu.MenuItem
                     id="vc-view-inrole"
-                    label={t("inRole.ui.viewMembers")}
+                    label={t("equicord.inRole.ui.viewMembers")}
                     action={() => {
                         showInRoleModal(getMembersInRole(role.id, guild.id), role.id, channel.id);
                     }}
@@ -114,7 +114,7 @@ export default definePlugin({
             children.push(
                 <Menu.MenuItem
                     id="vc-view-inrole"
-                    label={t("inRole.ui.viewMembers")}
+                    label={t("equicord.inRole.ui.viewMembers")}
                     action={() => {
                         showInRoleModal(getMembersInRole(role.id, guild.id), role.id, channel.id);
                     }}

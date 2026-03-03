@@ -17,12 +17,12 @@ let intervalId: ReturnType<typeof setInterval> | null = null;
 
 const settings = definePluginSettings({
     isEnabled: {
-        description: t("idleAutoRestart.settings.isEnabled"),
+        description: t("equicord.idleAutoRestart.settings.isEnabled"),
         type: OptionType.BOOLEAN,
         default: true,
     },
     idleMinutes: {
-        description: t("idleAutoRestart.settings.idleMinutes"),
+        description: t("equicord.idleAutoRestart.settings.idleMinutes"),
         type: OptionType.SLIDER,
         markers: [5, 10, 15, 30, 60, 120],
         default: 30,
@@ -36,7 +36,7 @@ function onActivity() {
 
 export default definePlugin({
     name: "IdleAutoRestart",
-    description: t("idleAutoRestart.description"),
+    description: t("equicord.idleAutoRestart.description"),
     authors: [EquicordDevs.SteelTech],
     settings,
 
@@ -44,7 +44,7 @@ export default definePlugin({
         return (
             <Menu.MenuItem
                 id="auto-idle-restart-toggle-toolbox"
-                label={settings.store.isEnabled ? t("idleAutoRestart.ui.disableAutoIdle") : t("idleAutoRestart.ui.enableAutoIdle")}
+                label={settings.store.isEnabled ? t("equicord.idleAutoRestart.ui.disableAutoIdle") : t("equicord.idleAutoRestart.ui.enableAutoIdle")}
                 action={() => {
                     settings.store.isEnabled = !settings.store.isEnabled;
                 }}

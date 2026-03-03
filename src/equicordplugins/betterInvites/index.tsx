@@ -34,7 +34,7 @@ function lurk(id: string) {
 
 export default definePlugin({
     name: "BetterInvites",
-    description: t("betterInvites.description"),
+    description: t("equicord.betterInvites.description"),
     authors: [EquicordDevs.iamme, Devs.thororen],
     patches: [
         {
@@ -68,7 +68,7 @@ export default definePlugin({
         const tooltipText = (
             <>
                 {t("betterInvites.ui.expireTooltip", {
-                    expiry: expires_at ? <>{t("betterInvites.ui.expireWill")} {timestamp}</> : <>{t("betterInvites.ui.notExpire")}</>
+                    expiry: expires_at ? <>{t("equicord.betterInvites.ui.expireWill")} {timestamp}</> : <>{t("equicord.betterInvites.ui.notExpire")}</>
                 })}
             </>
         );

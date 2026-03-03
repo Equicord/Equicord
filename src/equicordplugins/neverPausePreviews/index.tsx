@@ -23,11 +23,11 @@ import definePlugin from "@utils/types";
 
 export default definePlugin({
     name: "NeverPausePreviews",
-    description: t("neverPausePreviews.description"),
+    description: t("equicord.neverPausePreviews.description"),
     authors: [EquicordDevs.vappstar],
     settingsAboutComponent: () => (
         <Notice.Warning>
-            {t("neverPausePreviews.warning")}
+            {t("equicord.neverPausePreviews.warning")}
         </Notice.Warning>
     ),
     patches: [

@@ -45,12 +45,12 @@ const { ModalStack, DraftManager } = proxyLazyWebpack(() => {
 const settings = definePluginSettings({
     attemptToPreventCrashes: {
         type: OptionType.BOOLEAN,
-        description: t("crashHandler.settings.attemptToPreventCrashes"),
+        description: t("vencord.crashHandler.settings.attemptToPreventCrashes"),
         default: true
     },
     attemptToNavigateToHome: {
         type: OptionType.BOOLEAN,
-        description: t("crashHandler.settings.attemptToNavigateToHome"),
+        description: t("vencord.crashHandler.settings.attemptToNavigateToHome"),
         default: false
     }
 });
@@ -61,7 +61,7 @@ let shouldAttemptRecover = true;
 
 export default definePlugin({
     name: "CrashHandler",
-    description: t("crashHandler.description"),
+    description: t("vencord.crashHandler.description"),
     authors: [Devs.Nuckyz],
     enabledByDefault: true,
 
@@ -99,11 +99,11 @@ export default definePlugin({
                     try {
                         showNotification({
                             color: "#eed202",
-                            title: t("crashHandler.notifications.crashedTitle"),
-                            body: t("crashHandler.notifications.crashedBody"),
+                            title: t("vencord.crashHandler.notifications.crashedTitle"),
+                            body: t("vencord.crashHandler.notifications.crashedBody"),
                             noPersist: true,
                             onClick: () => openInviteModal("wKgT9j2xfN").catch(() =>
-                                showToast(t("crashHandler.notifications.invalidInvite")),
+                                showToast(t("vencord.crashHandler.notifications.invalidInvite")),
                             )
                         });
                     } catch { }
@@ -119,7 +119,7 @@ export default definePlugin({
             try {
                 if (!hasCrashedOnce) {
                     hasCrashedOnce = true;
-                    maybePromptToUpdate(t("crashHandler.updatePrompt"), true);
+                    maybePromptToUpdate(t("vencord.crashHandler.updatePrompt"), true);
                 }
             } catch { }
 
@@ -137,11 +137,11 @@ export default definePlugin({
         try {
             showNotification({
                 color: "#eed202",
-                title: t("crashHandler.notifications.crashedTitle"),
-                body: t("crashHandler.notifications.recoveringBody"),
+                title: t("vencord.crashHandler.notifications.crashedTitle"),
+                body: t("vencord.crashHandler.notifications.recoveringBody"),
                 noPersist: true,
                 onClick: () => openInviteModal("wKgT9j2xfN").catch(() =>
-                    showToast(t("crashHandler.notifications.invalidInvite")),
+                    showToast(t("vencord.crashHandler.notifications.invalidInvite")),
                 )
             });
         } catch { }

@@ -14,32 +14,32 @@ import { UserStore } from "@webpack/common";
 const settings = definePluginSettings({
     platform: {
         type: OptionType.SELECT,
-        description: t("platformSpoofer.settings.platform"),
+        description: t("equicord.platformSpoofer.settings.platform"),
         restartNeeded: true,
         options: [
             {
-                label: t("platformSpoofer.settings.platformOptions.desktop"),
+                label: t("equicord.platformSpoofer.settings.platformOptions.desktop"),
                 value: "desktop",
                 default: true,
             },
             {
-                label: t("platformSpoofer.settings.platformOptions.web"),
+                label: t("equicord.platformSpoofer.settings.platformOptions.web"),
                 value: "web",
             },
             {
-                label: t("platformSpoofer.settings.platformOptions.android"),
+                label: t("equicord.platformSpoofer.settings.platformOptions.android"),
                 value: "android"
             },
             {
-                label: t("platformSpoofer.settings.platformOptions.ios"),
+                label: t("equicord.platformSpoofer.settings.platformOptions.ios"),
                 value: "ios"
             },
             {
-                label: t("platformSpoofer.settings.platformOptions.xbox"),
+                label: t("equicord.platformSpoofer.settings.platformOptions.xbox"),
                 value: "xbox",
             },
             {
-                label: t("platformSpoofer.settings.platformOptions.playstation"),
+                label: t("equicord.platformSpoofer.settings.platformOptions.playstation"),
                 value: "playstation",
             },
             {
@@ -52,11 +52,11 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "PlatformSpoofer",
-    description: t("platformSpoofer.description"),
+    description: t("equicord.platformSpoofer.description"),
     authors: [EquicordDevs.Drag, EquicordDevs.neoarz],
     settingsAboutComponent: () => (
         <Notice.Warning>
-            {t("platformSpoofer.warning")}
+            {t("equicord.platformSpoofer.warning")}
         </Notice.Warning>
     ),
     settings: settings,

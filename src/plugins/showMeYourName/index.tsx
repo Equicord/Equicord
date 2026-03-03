@@ -846,17 +846,17 @@ function CustomNicknameModal({ modalProps, user }: { modalProps: ModalProps; use
         <ModalRoot {...modalProps}>
             <ModalHeader>
                 <Heading tag="h1" style={{ flexGrow: 1, margin: 0 }}>
-                    {customNicknames[user.id] ? t("showMeYourName.changeNickname") : t("showMeYourName.addNickname")}
+                    {customNicknames[user.id] ? t("vencord.showMeYourName.changeNickname") : t("vencord.showMeYourName.addNickname")}
                 </Heading>
                 <ModalCloseButton onClick={modalProps.onClose} />
             </ModalHeader>
             <ModalContent>
                 <Heading tag="h3" style={{ marginBottom: 8, fontSize: "16px", fontWeight: "400", lineHeight: "1.25", color: "var(--text-subtle)" }}>
-                    {t("showMeYourName.modalDescription")}
+                    {t("vencord.showMeYourName.modalDescription")}
                 </Heading>
                 <div style={{ paddingTop: "10px", flexGrow: 0 }}></div>
                 <Heading tag="h3" style={{ marginBottom: 8, fontSize: "14px", fontWeight: 600 }}>
-                    {t("showMeYourName.nicknameLabel")}
+                    {t("vencord.showMeYourName.nicknameLabel")}
                 </Heading>
                 <TextInput
                     value={value}
@@ -874,7 +874,7 @@ function CustomNicknameModal({ modalProps, user }: { modalProps: ModalProps; use
                         settings.store.triggerNameRerender = !settings.store.triggerNameRerender;
                     }}
                 >
-                    {t("showMeYourName.resetNickname")}
+                    {t("vencord.showMeYourName.resetNickname")}
                 </TextButton>
                 <div style={{ paddingTop: "10px", flexGrow: 0 }}></div>
             </ModalContent>
@@ -895,14 +895,14 @@ function CustomNicknameModal({ modalProps, user }: { modalProps: ModalProps; use
                         modalProps.onClose();
                     }}
                 >
-                    {t("showMeYourName.save")}
+                    {t("vencord.showMeYourName.save")}
                 </Button>
                 <Button
                     variant="secondary"
                     style={{ marginRight: "8px" }}
                     onClick={modalProps.onClose}
                 >
-                    {t("showMeYourName.cancel")}
+                    {t("vencord.showMeYourName.cancel")}
                 </Button>
             </ModalFooter>
         </ModalRoot>
@@ -921,7 +921,7 @@ const userContextPatch: NavContextMenuPatchCallback = (children, { user }) => {
     (group || children).push(
         <Menu.MenuItem
             id="smyn-custom-nickname"
-            label={customNicknames[user.id] ? t("showMeYourName.changeNickname") : t("showMeYourName.addNickname")}
+            label={customNicknames[user.id] ? t("vencord.showMeYourName.changeNickname") : t("vencord.showMeYourName.addNickname")}
             action={() => openModal(props => (
                 <ErrorBoundary>
                     <CustomNicknameModal modalProps={props} user={user} />
@@ -935,17 +935,17 @@ const settings = definePluginSettings({
     messages: {
         type: OptionType.BOOLEAN,
         default: true,
-        description: t("showMeYourName.settings.messages"),
+        description: t("vencord.showMeYourName.settings.messages"),
     },
     replies: {
         type: OptionType.BOOLEAN,
         default: true,
-        description: t("showMeYourName.settings.replies"),
+        description: t("vencord.showMeYourName.settings.replies"),
     },
     mentions: {
         type: OptionType.BOOLEAN,
         default: true,
-        description: t("showMeYourName.settings.mentions"),
+        description: t("vencord.showMeYourName.settings.mentions"),
     },
     typingIndicator: {
         type: OptionType.BOOLEAN,
@@ -955,61 +955,61 @@ const settings = definePluginSettings({
     memberList: {
         type: OptionType.BOOLEAN,
         default: true,
-        description: t("showMeYourName.settings.memberList"),
+        description: t("vencord.showMeYourName.settings.memberList"),
     },
     profilePopout: {
         type: OptionType.BOOLEAN,
         default: true,
-        description: t("showMeYourName.settings.profilePopout"),
+        description: t("vencord.showMeYourName.settings.profilePopout"),
     },
     voiceChannels: {
         type: OptionType.BOOLEAN,
         default: true,
-        description: t("showMeYourName.settings.voiceChannels"),
+        description: t("vencord.showMeYourName.settings.voiceChannels"),
     },
     reactions: {
         type: OptionType.BOOLEAN,
         default: true,
-        description: t("showMeYourName.settings.reactions"),
+        description: t("vencord.showMeYourName.settings.reactions"),
     },
     discriminators: {
         type: OptionType.BOOLEAN,
         default: true,
-        description: t("showMeYourName.settings.discriminators"),
+        description: t("vencord.showMeYourName.settings.discriminators"),
     },
     hideDefaultAtSign: {
         type: OptionType.BOOLEAN,
         default: false,
-        description: t("showMeYourName.settings.hideDefaultAtSign"),
+        description: t("vencord.showMeYourName.settings.hideDefaultAtSign"),
     },
     truncateAllNamesWithStreamerMode: {
         type: OptionType.BOOLEAN,
         default: true,
-        description: t("showMeYourName.settings.truncateAllNamesWithStreamerMode"),
+        description: t("vencord.showMeYourName.settings.truncateAllNamesWithStreamerMode"),
     },
     removeDuplicates: {
         type: OptionType.BOOLEAN,
         default: true,
-        description: t("showMeYourName.settings.removeDuplicates"),
+        description: t("vencord.showMeYourName.settings.removeDuplicates"),
     },
     ignoreFonts: {
         type: OptionType.BOOLEAN,
         default: false,
-        description: t("showMeYourName.settings.ignoreFonts"),
+        description: t("vencord.showMeYourName.settings.ignoreFonts"),
     },
     ignoreGradients: {
         type: OptionType.BOOLEAN,
         default: true,
-        description: t("showMeYourName.settings.ignoreGradients"),
+        description: t("vencord.showMeYourName.settings.ignoreGradients"),
     },
     animateGradients: {
         type: OptionType.BOOLEAN,
         default: false,
-        description: t("showMeYourName.settings.animateGradients"),
+        description: t("vencord.showMeYourName.settings.animateGradients"),
     },
     nameSeparator: {
         type: OptionType.STRING,
-        description: t("showMeYourName.settings.nameSeparator"),
+        description: t("vencord.showMeYourName.settings.nameSeparator"),
         default: " ",
     },
     friendNameOnlyInDirectMessages: {
@@ -1024,37 +1024,37 @@ const settings = definePluginSettings({
     },
     includedNames: {
         type: OptionType.STRING,
-        description: t("showMeYourName.settings.includedNames"),
+        description: t("vencord.showMeYourName.settings.includedNames"),
         default: "{custom, friend, nick} [{display}] (@{user})",
         isValid: validTemplate,
     },
     customNameColor: {
         type: OptionType.STRING,
-        description: t("showMeYourName.settings.customNameColor"),
+        description: t("vencord.showMeYourName.settings.customNameColor"),
         default: "Role-25",
         isValid: validColor,
     },
     friendNameColor: {
         type: OptionType.STRING,
-        description: t("showMeYourName.settings.friendNameColor"),
+        description: t("vencord.showMeYourName.settings.friendNameColor"),
         default: "Role-25",
         isValid: validColor,
     },
     nicknameColor: {
         type: OptionType.STRING,
-        description: t("showMeYourName.settings.nicknameColor"),
+        description: t("vencord.showMeYourName.settings.nicknameColor"),
         default: "Role-25",
         isValid: validColor,
     },
     displayNameColor: {
         type: OptionType.STRING,
-        description: t("showMeYourName.settings.displayNameColor"),
+        description: t("vencord.showMeYourName.settings.displayNameColor"),
         default: "Role-25",
         isValid: validColor,
     },
     usernameColor: {
         type: OptionType.STRING,
-        description: t("showMeYourName.settings.usernameColor"),
+        description: t("vencord.showMeYourName.settings.usernameColor"),
         default: "Role-25",
         isValid: validColor,
     },

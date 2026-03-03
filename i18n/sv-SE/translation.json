@@ -1,10 +1,10 @@
 {
-    "description":"Hjälper till att översätta Equicord",
-    "settings":{
-        "forceLocale":{
-            "description":"Tvinga en annan plats för Equicord att använda",
-            "followDiscord":"Standard (följ Discord)"
+    "description": "Hjälper till att översätta Equicord",
+    "settings": {
+        "forceLocale": {
+            "description": "Tvinga en annan plats för Equicord att använda",
+            "followDiscord": "Standard (följ Discord)"
         },
-        "showMissingKeys":"Om den aktuella lokalen saknar översättningar, visa nycklarna istället för att gå tillbaka till engelska"
+        "showMissingKeys": "Om den aktuella lokalen saknar översättningar, visa nycklarna istället för att gå tillbaka till engelska"
     }
 }

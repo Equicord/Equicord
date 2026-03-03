@@ -10,7 +10,7 @@ import definePlugin from "@utils/types";
 
 export default definePlugin({
     name: "FixCodeblockGap",
-    description: t("fixCodeblockGap.description"),
+    description: t("vencord.fixCodeblockGap.description"),
     authors: [Devs.Grzesiek11],
     patches: [
         {

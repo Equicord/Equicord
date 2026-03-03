@@ -41,12 +41,12 @@ const BlobMask = findComponentByCodeLazy("!1,lowerBadgeSize:");
 const settings = definePluginSettings({
     backgroundCheck: {
         type: OptionType.BOOLEAN,
-        description: t("betterSessions.settings.backgroundCheck"),
+        description: t("vencord.betterSessions.settings.backgroundCheck"),
         default: false,
         restartNeeded: true
     },
     checkInterval: {
-        description: t("betterSessions.settings.checkInterval"),
+        description: t("vencord.betterSessions.settings.checkInterval"),
         type: OptionType.NUMBER,
         default: 20,
         restartNeeded: true
@@ -99,7 +99,7 @@ export default definePlugin({
                             marginLeft: "2px"
                         }}
                     >
-                        {t("betterSessions.newBadge")}
+                        {t("vencord.betterSessions.newBadge")}
                     </div>
                 )}
                 <RenameButton session={session} state={state} />
@@ -172,7 +172,7 @@ export default definePlugin({
             savedSessionsCache.set(session.id_hash, { name: "", isNew: true });
             showNotification({
                 title: "BetterSessions",
-                body: `${t("betterSessions.newSession")}\n${session.client_info.os} · ${session.client_info.platform} · ${session.client_info.location}`,
+                body: `${t("vencord.betterSessions.newSession")}\n${session.client_info.os} · ${session.client_info.platform} · ${session.client_info.location}`,
                 permanent: true,
                 onClick: () => SettingsRouter.openUserSettings("sessions_panel")
             });

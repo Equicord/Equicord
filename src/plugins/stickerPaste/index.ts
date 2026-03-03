@@ -10,7 +10,7 @@ import { t } from "@utils/translation";
 
 export default definePlugin({
     name: "StickerPaste",
-    description: t("stickerPaste.description"),
+    description: t("vencord.stickerPaste.description"),
     authors: [Devs.ImBanana],
 
     patches: [

@@ -22,7 +22,7 @@ const CheckMarkIcon = () => {
 
 export default definePlugin({
     name: "CopyFileContents",
-    description: t("copyFileContents.description"),
+    description: t("vencord.copyFileContents.description"),
     authors: [Devs.Obsidian, Devs.Nuckyz],
     patches: [
         {
@@ -38,7 +38,7 @@ export default definePlugin({
         const [recentlyCopied, setRecentlyCopied] = useState(false);
 
         return (
-            <Tooltip text={recentlyCopied ? t("copyFileContents.copied") : bytesLeft > 0 ? t("copyFileContents.fileTooLarge") : t("copyFileContents.copyFileContents")}>
+            <Tooltip text={recentlyCopied ? t("vencord.copyFileContents.copied") : bytesLeft > 0 ? t("vencord.copyFileContents.fileTooLarge") : t("vencord.copyFileContents.copyFileContents")}>
                 {tooltipProps => (
                     <div
                         {...tooltipProps}

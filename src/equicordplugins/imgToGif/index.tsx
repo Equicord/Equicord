@@ -54,7 +54,7 @@ async function resolveImage(options: CommandArgument[], ctx: CommandContext): Pr
                     if (upload) {
                     if (!upload.isImage) {
                         UploadManager.clearAll(ctx.channel.id, DraftType.SlashCommand);
-                        throw t("imgToGif.errors.notAnImage");
+                        throw t("equicord.imgToGif.errors.notAnImage");
                     }
                     image = upload.item.file;
                 }
@@ -74,34 +74,34 @@ async function resolveImage(options: CommandArgument[], ctx: CommandContext): Pr
 
 export default definePlugin({
     name: "ImgToGif",
-    description: t("imgToGif.description"),
+    description: t("equicord.imgToGif.description"),
     authors: [EquicordDevs.zyqunix],
     commands: [
         {
             inputType: ApplicationCommandInputType.BUILT_IN,
             name: "imgtogif",
-            description: t("imgToGif.commands.imgtogif"),
+            description: t("equicord.imgToGif.commands.imgtogif"),
             options: [
                 {
                     name: "image",
-                    description: t("imgToGif.commands.image"),
+                    description: t("equicord.imgToGif.commands.image"),
                     type: ApplicationCommandOptionType.ATTACHMENT
                 },
                 {
                     name: "width",
-                    description: t("imgToGif.commands.width"),
+                    description: t("equicord.imgToGif.commands.width"),
                     type: ApplicationCommandOptionType.INTEGER
                 },
                 {
                     name: "height",
-                    description: t("imgToGif.commands.height"),
+                    description: t("equicord.imgToGif.commands.height"),
                     type: ApplicationCommandOptionType.INTEGER
                 }
             ],
             execute: async (opts, cmdCtx) => {
                 try {
                     const { image, width, height } = await resolveImage(opts, cmdCtx);
-                    if (!image) throw t("imgToGif.errors.noImage");
+                    if (!image) throw t("equicord.imgToGif.errors.noImage");
 
                     const avatar = await loadImage(image);
 

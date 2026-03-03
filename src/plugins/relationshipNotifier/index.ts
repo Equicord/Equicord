@@ -26,7 +26,7 @@ import { syncAndRunChecks, syncFriends, syncGroups, syncGuilds } from "./utils";
 
 export default definePlugin({
     name: "RelationshipNotifier",
-    description: t("relationshipNotifier.description"),
+    description: t("vencord.relationshipNotifier.description"),
     authors: [Devs.nick],
     settings,
 

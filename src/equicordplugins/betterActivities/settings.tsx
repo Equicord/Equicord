@@ -12,32 +12,32 @@ import { React } from "@webpack/common";
 export const settings = definePluginSettings({
     memberList: {
         type: OptionType.BOOLEAN,
-        description: t("betterActivities.settings.memberList"),
+        description: t("equicord.betterActivities.settings.memberList"),
         default: true,
         restartNeeded: true,
     },
     iconSize: {
         type: OptionType.SLIDER,
-        description: t("betterActivities.settings.iconSize"),
+        description: t("equicord.betterActivities.settings.iconSize"),
         markers: [10, 15, 20],
         default: 15,
         stickToMarkers: false,
     },
     specialFirst: {
         type: OptionType.BOOLEAN,
-        description: t("betterActivities.settings.specialFirst"),
+        description: t("equicord.betterActivities.settings.specialFirst"),
         default: true,
         restartNeeded: false,
     },
     renderGifs: {
         type: OptionType.BOOLEAN,
-        description: t("betterActivities.settings.renderGifs"),
+        description: t("equicord.betterActivities.settings.renderGifs"),
         default: true,
         restartNeeded: false,
     },
     removeGameActivityStatus: {
         type: OptionType.BOOLEAN,
-        description: t("betterActivities.settings.removeGameActivityStatus"),
+        description: t("equicord.betterActivities.settings.removeGameActivityStatus"),
         default: false,
         restartNeeded: true,
     },
@@ -56,26 +56,26 @@ export const settings = definePluginSettings({
     },
     userPopout: {
         type: OptionType.BOOLEAN,
-        description: t("betterActivities.settings.userPopout"),
+        description: t("equicord.betterActivities.settings.userPopout"),
         default: true,
         restartNeeded: true,
     },
     hideTooltip: {
         type: OptionType.BOOLEAN,
-        description: t("betterActivities.settings.hideTooltip"),
+        description: t("equicord.betterActivities.settings.hideTooltip"),
         default: true,
     },
     allActivitiesStyle: {
         type: OptionType.SELECT,
-        description: t("betterActivities.settings.allActivitiesStyle"),
+        description: t("equicord.betterActivities.settings.allActivitiesStyle"),
         options: [
             {
                 default: true,
-                label: t("betterActivities.options.carousel"),
+                label: t("equicord.betterActivities.options.carousel"),
                 value: "carousel",
             },
             {
-                label: t("betterActivities.options.list"),
+                label: t("equicord.betterActivities.options.list"),
                 value: "list",
             },
         ]

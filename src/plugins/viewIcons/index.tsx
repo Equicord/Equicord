@@ -43,7 +43,7 @@ interface GroupDMContextProps {
 const settings = definePluginSettings({
     format: {
         type: OptionType.SELECT,
-        description: t("viewIcons.settings.formatDescription"),
+        description: t("vencord.viewIcons.settings.formatDescription"),
         options: [
             {
                 label: "webp",
@@ -62,7 +62,7 @@ const settings = definePluginSettings({
     },
     imgSize: {
         type: OptionType.SELECT,
-        description: t("viewIcons.settings.imgSizeDescription"),
+        description: t("vencord.viewIcons.settings.imgSizeDescription"),
         options: ["128", "256", "512", "1024", "2048", "4096"].map(n => ({ label: n, value: n, default: n === "1024" }))
     }
 });
@@ -102,14 +102,14 @@ const UserContext: NavContextMenuPatchCallback = (children, { user, guildId }: U
         <Menu.MenuGroup>
             <Menu.MenuItem
                 id="view-avatar"
-                label={t("viewIcons.viewAvatar")}
+                label={t("vencord.viewIcons.viewAvatar")}
                 action={() => openAvatar(IconUtils.getUserAvatarURL(user, true))}
                 icon={ImageIcon}
             />
             {memberAvatar && (
                 <Menu.MenuItem
                     id="view-server-avatar"
-                    label={t("viewIcons.viewServerAvatar")}
+                    label={t("vencord.viewIcons.viewServerAvatar")}
                     action={() => openAvatar(IconUtils.getGuildMemberAvatarURLSimple({
                         userId: user.id,
                         avatar: memberAvatar,
@@ -134,7 +134,7 @@ const GuildContext: NavContextMenuPatchCallback = (children, { guild }: GuildCon
             {icon ? (
                 <Menu.MenuItem
                     id="view-icon"
-                    label={t("viewIcons.viewIcon")}
+                    label={t("vencord.viewIcons.viewIcon")}
                     action={() =>
                         openAvatar(IconUtils.getGuildIconURL({
                             id,
@@ -148,7 +148,7 @@ const GuildContext: NavContextMenuPatchCallback = (children, { guild }: GuildCon
             {banner ? (
                 <Menu.MenuItem
                     id="view-banner"
-                    label={t("viewIcons.viewBanner")}
+                    label={t("vencord.viewIcons.viewBanner")}
                     action={() =>
                         openBanner(IconUtils.getGuildBannerURL(guild, true)!)
                     }
@@ -166,7 +166,7 @@ const GroupDMContext: NavContextMenuPatchCallback = (children, { channel }: Grou
         <Menu.MenuGroup>
             <Menu.MenuItem
                 id="view-group-channel-icon"
-                label={t("viewIcons.viewIcon")}
+                label={t("vencord.viewIcons.viewIcon")}
                 action={() =>
                     openAvatar(IconUtils.getChannelIconURL(channel)!)
                 }
@@ -179,7 +179,7 @@ const GroupDMContext: NavContextMenuPatchCallback = (children, { channel }: Grou
 export default definePlugin({
     name: "ViewIcons",
     authors: [Devs.Ven, Devs.TheKodeToad, Devs.Nuckyz, Devs.nyx],
-    description: t("viewIcons.description"),
+    description: t("vencord.viewIcons.description"),
     tags: ["ImageUtilities"],
     dependencies: ["DynamicImageModalAPI"],
 

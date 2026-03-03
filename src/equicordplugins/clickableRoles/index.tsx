@@ -96,13 +96,13 @@ function RoleMembersList({ roleId, guildId, closePopout, setPopoutRef }: { roleI
             <ScrollerThin className={cl("list")} fade>
                 {loading ? (
                     <div className={cl("empty")}>
-                        <Translate i18nKey="clickableRoles.loadingMembers">
+                        <Translate i18nKey="equicord.clickableRoles.loadingMembers">
                             Loading members...
                         </Translate>
                     </div>
                 ) : users.length === 0 ? (
                     <div className={cl("empty")}>
-                        <Translate i18nKey="clickableRoles.noMembers">
+                        <Translate i18nKey="equicord.clickableRoles.noMembers">
                             No members found.
                         </Translate>
                     </div>
@@ -121,7 +121,7 @@ function RoleMembersList({ roleId, guildId, closePopout, setPopoutRef }: { roleI
                 ))}
                 {totalCount > MAX_VISIBLE_MEMBERS && (
                     <div className={cl("overflow")}>
-                        <Translate i18nKey="clickableRoles.andNumMore" variables={{ count: totalCount - MAX_VISIBLE_MEMBERS }}>
+                        <Translate i18nKey="equicord.clickableRoles.andNumMore" variables={{ count: totalCount - MAX_VISIBLE_MEMBERS }}>
                             and {(totalCount - MAX_VISIBLE_MEMBERS).toString()} more
                         </Translate>
                     </div>
@@ -158,7 +158,7 @@ const WrappedClickableRole = ErrorBoundary.wrap(ClickableRole, { noop: true });
 
 export default definePlugin({
     name: "ClickableRoles",
-    description: t("clickableRoles.description"),
+    description: t("equicord.clickableRoles.description"),
     authors: [Devs.prism],
 
     patches: [

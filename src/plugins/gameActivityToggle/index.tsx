@@ -33,15 +33,15 @@ const ShowCurrentGame = getUserSettingLazy<boolean>("status", "showCurrentGame")
 const settings = definePluginSettings({
     oldIcon: {
         type: OptionType.BOOLEAN,
-        description: t("gameActivityToggle.settings.oldIcon"),
+        description: t("vencord.gameActivityToggle.settings.oldIcon"),
         default: false
     },
     location: {
         type: OptionType.SELECT,
-        description: t("gameActivityToggle.settings.location"),
+        description: t("vencord.gameActivityToggle.settings.location"),
         options: [
-            { label: t("gameActivityToggle.settings.locationPanel"), value: "PANEL", default: true },
-            { label: t("gameActivityToggle.settings.locationToolbox"), value: "TOOLBOX" }
+            { label: t("vencord.gameActivityToggle.settings.locationPanel"), value: "PANEL", default: true },
+            { label: t("vencord.gameActivityToggle.settings.locationToolbox"), value: "TOOLBOX" }
         ],
         get hidden() {
             return !isPluginEnabled(equicordToolbox.name);
@@ -87,7 +87,7 @@ function GameActivityToggleButton({ iconForeground, hideTooltips, nameplate }: U
 
     return (
         <UserAreaButton
-            tooltipText={hideTooltips ? void 0 : showCurrentGame ? t("gameActivityToggle.disableGameActivity") : t("gameActivityToggle.enableGameActivity")}
+            tooltipText={hideTooltips ? void 0 : showCurrentGame ? t("vencord.gameActivityToggle.disableGameActivity") : t("vencord.gameActivityToggle.enableGameActivity")}
             icon={<Icon className={iconForeground} />}
             role="switch"
             aria-checked={!showCurrentGame}
@@ -100,7 +100,7 @@ function GameActivityToggleButton({ iconForeground, hideTooltips, nameplate }: U
 
 export default definePlugin({
     name: "GameActivityToggle",
-    description: t("gameActivityToggle.description"),
+    description: t("vencord.gameActivityToggle.description"),
     authors: [Devs.Nuckyz, Devs.RuukuLada],
     dependencies: ["UserSettingsAPI"],
     settings,
@@ -119,7 +119,7 @@ export default definePlugin({
         return (
             <Menu.MenuCheckboxItem
                 id="game-activity-toggle-toolbox"
-                label={t("gameActivityToggle.enableGameActivity")}
+                label={t("vencord.gameActivityToggle.enableGameActivity")}
                 checked={showCurrentGame}
                 action={() => ShowCurrentGame.updateSetting(old => !old)}
             />

@@ -33,7 +33,7 @@ import { clearStyles } from "./utils/createStyle";
 
 export default definePlugin({
     name: "ShikiCodeblocks",
-    description: t("shikiCodeblocks.description"),
+    description: t("vencord.shikiCodeblocks.description"),
     authors: [Devs.Vap],
     reporterTestable: ReporterTestable.Patches,
     settings,

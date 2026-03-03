@@ -24,34 +24,34 @@ import definePlugin, { OptionType } from "@utils/types";
 const settings = definePluginSettings({
     icons: {
         type: OptionType.BOOLEAN,
-        description: t("alwaysAnimate.settings.icons"),
+        description: t("vencord.alwaysAnimate.settings.icons"),
         default: true,
     },
     statusEmojis: {
         type: OptionType.BOOLEAN,
-        description: t("alwaysAnimate.settings.statusEmojis"),
+        description: t("vencord.alwaysAnimate.settings.statusEmojis"),
         default: true,
     },
     serverBanners: {
         type: OptionType.BOOLEAN,
-        description: t("alwaysAnimate.settings.serverBanners"),
+        description: t("vencord.alwaysAnimate.settings.serverBanners"),
         default: true,
     },
     nameplates: {
         type: OptionType.BOOLEAN,
-        description: t("alwaysAnimate.settings.nameplates"),
+        description: t("vencord.alwaysAnimate.settings.nameplates"),
         default: true,
     },
     roleGradients: {
         type: OptionType.BOOLEAN,
-        description: t("alwaysAnimate.settings.roleGradients"),
+        description: t("vencord.alwaysAnimate.settings.roleGradients"),
         default: true,
     }
 });
 
 export default definePlugin({
     name: "AlwaysAnimate",
-    description: t("alwaysAnimate.description"),
+    description: t("vencord.alwaysAnimate.description"),
     authors: [Devs.FieryFlames],
     settings,
     patches: [

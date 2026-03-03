@@ -52,11 +52,11 @@ const settings = definePluginSettings({
             return (
                 <>
                     <TextReplace
-                        title={t("textReplace.usingString")}
+                        title={t("vencord.textReplace.usingString")}
                         rulesArray={stringRules}
                     />
                     <TextReplace
-                        title={t("textReplace.usingRegex")}
+                        title={t("vencord.textReplace.usingRegex")}
                         rulesArray={regexRules}
                     />
                     <TextReplaceTesting />
@@ -121,7 +121,7 @@ function Input({ initialValue, onChange, placeholder }: {
 }
 
 function TextReplace({ title, rulesArray }: TextReplaceProps) {
-    const isRegexRules = title === t("textReplace.usingRegex");
+    const isRegexRules = title === t("vencord.textReplace.usingRegex");
 
     async function onClickRemove(index: number) {
         if (index === rulesArray.length - 1) return;
@@ -141,9 +141,9 @@ function TextReplace({ title, rulesArray }: TextReplaceProps) {
     }
 
     const scopeOptions = [
-        { label: t("textReplace.scope.myMessages"), value: "myMessages" },
-        { label: t("textReplace.scope.othersMessages"), value: "othersMessages" },
-        { label: t("textReplace.scope.allMessages"), value: "allMessages" }
+        { label: t("vencord.textReplace.scope.myMessages"), value: "myMessages" },
+        { label: t("vencord.textReplace.scope.othersMessages"), value: "othersMessages" },
+        { label: t("vencord.textReplace.scope.allMessages"), value: "allMessages" }
     ];
 
     return (
@@ -155,17 +155,17 @@ function TextReplace({ title, rulesArray }: TextReplaceProps) {
                         <React.Fragment key={`${rule.find}-${index}`}>
                             <Flex gap="0.5em" flexDirection="row" style={{ flexGrow: 1 }}>
                                 <Input
-                                    placeholder={t("textReplace.find")}
+                                    placeholder={t("vencord.textReplace.find")}
                                     initialValue={rule.find}
                                     onChange={e => onChange(e, index, "find")}
                                 />
                                 <Input
-                                    placeholder={t("textReplace.replace")}
+                                    placeholder={t("vencord.textReplace.replace")}
                                     initialValue={rule.replace}
                                     onChange={e => onChange(e, index, "replace")}
                                 />
                                 <Input
-                                    placeholder={t("textReplace.onlyIfIncludes")}
+                                    placeholder={t("vencord.textReplace.onlyIfIncludes")}
                                     initialValue={rule.onlyIfIncludes}
                                     onChange={e => onChange(e, index, "onlyIfIncludes")}
                                 />
@@ -201,9 +201,9 @@ function TextReplaceTesting() {
     const [value, setValue] = useState("");
     return (
         <>
-            <HeadingTertiary>{t("textReplace.testRules")}</HeadingTertiary>
-            <TextInput placeholder={t("textReplace.typeMessage")} onChange={setValue} />
-            <TextInput placeholder={t("textReplace.messageWithRules")} editable={false} value={applyRules(value, "allMessages")} />
+            <HeadingTertiary>{t("vencord.textReplace.testRules")}</HeadingTertiary>
+            <TextInput placeholder={t("vencord.textReplace.typeMessage")} onChange={setValue} />
+            <TextInput placeholder={t("vencord.textReplace.messageWithRules")} editable={false} value={applyRules(value, "allMessages")} />
         </>
     );
 }

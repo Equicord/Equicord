@@ -130,7 +130,7 @@ const ChannelContextPatch: NavContextMenuPatchCallback = (children, args: { chan
 export default definePlugin({
     name: "SidebarChat",
     authors: [Devs.Joona],
-    description: t("sidebarChat.description"),
+    description: t("equicord.sidebarChat.description"),
     patches: [
         {
             find: 'case"pendingFriends":',

@@ -29,7 +29,7 @@ function SearchIcon() {
 export default definePlugin({
     name: "ServerSearch",
     authors: [EquicordDevs.camila314],
-    description: t("serverSearch.description"),
+    description: t("equicord.serverSearch.description"),
 
     renderButton() {
         return <ErrorBoundary noop>

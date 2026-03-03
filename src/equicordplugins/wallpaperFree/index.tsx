@@ -33,7 +33,7 @@ export const settings = definePluginSettings({
 export default definePlugin({
     name: "WallpaperFree",
     authors: [Devs.Joona],
-    description: t("wallpaperFree.description"),
+    description: t("equicord.wallpaperFree.description"),
     patches: [
         {
             find: ".handleSendMessage,onResize",

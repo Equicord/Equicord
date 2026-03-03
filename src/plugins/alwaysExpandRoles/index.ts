@@ -25,7 +25,7 @@ const settings = definePluginSettings({
     hideArrow: {
         type: OptionType.BOOLEAN,
         default: false,
-        description: t("alwaysExpandRoles.settings.hideArrow"),
+        description: t("vencord.alwaysExpandRoles.settings.hideArrow"),
         restartNeeded: true
     },
 });
@@ -33,7 +33,7 @@ const settings = definePluginSettings({
 migratePluginSettings("AlwaysExpandRoles", "ShowAllRoles");
 export default definePlugin({
     name: "AlwaysExpandRoles",
-    description: t("alwaysExpandRoles.description"),
+    description: t("vencord.alwaysExpandRoles.description"),
     authors: [Devs.surgedevs],
     isModified: true,
     settings,

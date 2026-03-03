@@ -129,7 +129,7 @@ function makeContextCallback(
 
 export default definePlugin({
     name: "ViewRawVariant",
-    description: t("viewRawVariant.description"),
+    description: t("equicord.viewRawVariant.description"),
     authors: [Devs.KingFish, Devs.Ven, Devs.rad, Devs.ImLvna, Devs.Kyuuhachi],
     contextMenus: {
         "guild-context": makeContextCallback("guild", val =>

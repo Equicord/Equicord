@@ -23,7 +23,7 @@ import definePlugin from "@utils/types";
 export default definePlugin({
     name: "BetterGifAltText",
     authors: [Devs.Ven],
-    description: t("betterGifAltText.description"),
+    description: t("vencord.betterGifAltText.description"),
     patches: [
         {
             find: ".modalContext})};",

@@ -1,37 +1,37 @@
 {
-    "commands":{
-        "errorExecuting":"执行命令“{name}”时发生错误"
+    "commands": {
+        "errorExecuting": "执行命令“{name}”时发生错误"
     },
-    "memberListDecorators":{
-        "fallback":"无法渲染 {key} 成员列表装饰器"
+    "memberListDecorators": {
+        "fallback": "无法渲染 {key} 成员列表装饰器"
     },
-    "messageAccessories":{
-        "fallback":"无法渲染 {key} 消息附件"
+    "messageAccessories": {
+        "fallback": "无法渲染 {key} 消息附件"
     },
-    "messageDecorations":{
-        "fallback":"无法渲染 {key} 消息装饰"
+    "messageDecorations": {
+        "fallback": "无法渲染 {key} 消息装饰"
     },
-    "notices":{
-        "fallback":"显示通知时出错"
+    "notices": {
+        "fallback": "显示通知时出错"
     },
-    "notifications":{
-        "dismissNotification":"关闭通知",
-        "logs":{
-            "body_one":"这将永久删除 {count} 通知。此操作无法撤消。",
-            "body_other":"这将永久删除 {count} 通知。此操作无法撤消。",
-            "body_zero":"未选择通知。",
-            "cancel":"呃，没事了～",
-            "clearNotificationLog":"清除通知日志",
-            "confirm":"做吧！",
-            "title":"你确定吗？"
+    "notifications": {
+        "dismissNotification": "关闭通知",
+        "logs": {
+            "body_one": "这将永久删除 {count} 通知。此操作无法撤消。",
+            "body_other": "这将永久删除 {count} 通知。此操作无法撤消。",
+            "body_zero": "未选择通知。",
+            "cancel": "呃，没事了～",
+            "clearNotificationLog": "清除通知日志",
+            "confirm": "做吧！",
+            "title": "你确定吗？"
         },
-        "missedNotifications":{
-            "body_one":"已收到 {count} 通知",
-            "body_other":"收到 {count} 通知",
-            "title":"当你不在的时候"
+        "missedNotifications": {
+            "body_one": "已收到 {count} 通知",
+            "body_other": "收到 {count} 通知",
+            "title": "当你不在的时候"
         },
-        "noNotifications":"还没有通知",
-        "notificationLog":"通知日志",
-        "notificationSettings":"通知设定"
+        "noNotifications": "还没有通知",
+        "notificationLog": "通知日志",
+        "notificationSettings": "通知设定"
     }
 }

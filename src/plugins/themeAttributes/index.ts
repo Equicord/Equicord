@@ -13,7 +13,7 @@ import { UserStore } from "@webpack/common";
 
 export default definePlugin({
     name: "ThemeAttributes",
-    description: t("themeAttributes.description"),
+    description: t("vencord.themeAttributes.description"),
     authors: [Devs.Ven, Devs.Board],
 
     patches: [

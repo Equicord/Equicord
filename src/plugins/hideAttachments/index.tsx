@@ -56,7 +56,7 @@ async function toggleHide(channelId: string, messageId: string) {
 
 export default definePlugin({
     name: "HideMedia",
-    description: t("hideAttachments.description"),
+    description: t("vencord.hideAttachments.description"),
     authors: [Devs.Ven],
     dependencies: ["MessageUpdaterAPI"],
 
@@ -76,7 +76,7 @@ export default definePlugin({
             const isHidden = hiddenMessages.has(msg.id);
 
             return {
-                label: isHidden ? t("hideAttachments.showMedia") : t("hideAttachments.hideMedia"),
+                label: isHidden ? t("vencord.hideAttachments.showMedia") : t("vencord.hideAttachments.hideMedia"),
                 icon: isHidden ? ImageVisible : ImageInvisible,
                 message: msg,
                 channel: ChannelStore.getChannel(msg.channel_id),
@@ -90,7 +90,7 @@ export default definePlugin({
 
         return (
             <span className={classes("vc-hideAttachments-accessory", !message.content && "vc-hideAttachments-no-content")}>
-                {t("hideAttachments.mediaHidden")}
+                {t("vencord.hideAttachments.mediaHidden")}
             </span>
         );
     },

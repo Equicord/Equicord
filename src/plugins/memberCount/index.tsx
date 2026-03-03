@@ -39,19 +39,19 @@ export const ThreadMemberListStore = findStoreLazy("ThreadMemberListStore") as F
 export const settings = definePluginSettings({
     toolTip: {
         type: OptionType.BOOLEAN,
-        description: t("memberCount.settings.toolTip"),
+        description: t("vencord.memberCount.settings.toolTip"),
         default: true,
         restartNeeded: true
     },
     memberList: {
         type: OptionType.BOOLEAN,
-        description: t("memberCount.settings.memberList"),
+        description: t("vencord.memberCount.settings.memberList"),
         default: true,
         restartNeeded: true
     },
     voiceActivity: {
         type: OptionType.BOOLEAN,
-        description: t("memberCount.settings.voiceActivity"),
+        description: t("vencord.memberCount.settings.voiceActivity"),
         default: true
     }
 });

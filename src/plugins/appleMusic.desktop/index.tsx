@@ -51,90 +51,90 @@ function setActivity(activity: Activity | null) {
 const settings = definePluginSettings({
     activityType: {
         type: OptionType.SELECT,
-        description: t("appleMusicRichPresence.settings.activityType"),
+        description: t("vencord.appleMusicRichPresence.settings.activityType"),
         options: [
-            { label: t("appleMusicRichPresence.activityTypes.playing"), value: ActivityType.PLAYING, default: true },
-            { label: t("appleMusicRichPresence.activityTypes.listening"), value: ActivityType.LISTENING }
+            { label: t("vencord.appleMusicRichPresence.activityTypes.playing"), value: ActivityType.PLAYING, default: true },
+            { label: t("vencord.appleMusicRichPresence.activityTypes.listening"), value: ActivityType.LISTENING }
         ],
     },
     statusDisplayType: {
-        description: t("appleMusicRichPresence.settings.statusDisplayType"),
+        description: t("vencord.appleMusicRichPresence.settings.statusDisplayType"),
         type: OptionType.SELECT,
         options: [
             {
-                label: t("appleMusicRichPresence.statusDisplayTypes.off"),
+                label: t("vencord.appleMusicRichPresence.statusDisplayTypes.off"),
                 value: "off",
                 default: true
             },
             {
-                label: t("appleMusicRichPresence.statusDisplayTypes.artist"),
+                label: t("vencord.appleMusicRichPresence.statusDisplayTypes.artist"),
                 value: "artist"
             },
             {
-                label: t("appleMusicRichPresence.statusDisplayTypes.track"),
+                label: t("vencord.appleMusicRichPresence.statusDisplayTypes.track"),
                 value: "track"
             }
         ]
     },
     refreshInterval: {
         type: OptionType.SLIDER,
-        description: t("appleMusicRichPresence.settings.refreshInterval"),
+        description: t("vencord.appleMusicRichPresence.settings.refreshInterval"),
         markers: [1, 2, 2.5, 3, 5, 10, 15],
         default: 5,
         restartNeeded: true,
     },
     enableTimestamps: {
         type: OptionType.BOOLEAN,
-        description: t("appleMusicRichPresence.settings.enableTimestamps"),
+        description: t("vencord.appleMusicRichPresence.settings.enableTimestamps"),
         default: true,
     },
     enableButtons: {
         type: OptionType.BOOLEAN,
-        description: t("appleMusicRichPresence.settings.enableButtons"),
+        description: t("vencord.appleMusicRichPresence.settings.enableButtons"),
         default: true,
     },
     nameString: {
         type: OptionType.STRING,
-        description: t("appleMusicRichPresence.settings.nameString"),
-        default: t("appleMusicRichPresence.defaultName")
+        description: t("vencord.appleMusicRichPresence.settings.nameString"),
+        default: t("vencord.appleMusicRichPresence.defaultName")
     },
     detailsString: {
         type: OptionType.STRING,
-        description: t("appleMusicRichPresence.settings.detailsString"),
-        default: t("appleMusicRichPresence.defaultDetails")
+        description: t("vencord.appleMusicRichPresence.settings.detailsString"),
+        default: t("vencord.appleMusicRichPresence.defaultDetails")
     },
     stateString: {
         type: OptionType.STRING,
-        description: t("appleMusicRichPresence.settings.stateString"),
-        default: t("appleMusicRichPresence.defaultState")
+        description: t("vencord.appleMusicRichPresence.settings.stateString"),
+        default: t("vencord.appleMusicRichPresence.defaultState")
     },
     largeImageType: {
         type: OptionType.SELECT,
-        description: t("appleMusicRichPresence.settings.largeImageType"),
+        description: t("vencord.appleMusicRichPresence.settings.largeImageType"),
         options: [
-            { label: t("appleMusicRichPresence.assetImageTypes.album"), value: AssetImageType.Album, default: true },
-            { label: t("appleMusicRichPresence.assetImageTypes.artist"), value: AssetImageType.Artist },
-            { label: t("appleMusicRichPresence.assetImageTypes.disabled"), value: AssetImageType.Disabled }
+            { label: t("vencord.appleMusicRichPresence.assetImageTypes.album"), value: AssetImageType.Album, default: true },
+            { label: t("vencord.appleMusicRichPresence.assetImageTypes.artist"), value: AssetImageType.Artist },
+            { label: t("vencord.appleMusicRichPresence.assetImageTypes.disabled"), value: AssetImageType.Disabled }
         ],
     },
     largeTextString: {
         type: OptionType.STRING,
-        description: t("appleMusicRichPresence.settings.largeTextString"),
-        default: t("appleMusicRichPresence.defaultLargeText")
+        description: t("vencord.appleMusicRichPresence.settings.largeTextString"),
+        default: t("vencord.appleMusicRichPresence.defaultLargeText")
     },
     smallImageType: {
         type: OptionType.SELECT,
-        description: t("appleMusicRichPresence.settings.smallImageType"),
+        description: t("vencord.appleMusicRichPresence.settings.smallImageType"),
         options: [
-            { label: t("appleMusicRichPresence.assetImageTypes.album"), value: AssetImageType.Album },
-            { label: t("appleMusicRichPresence.assetImageTypes.artist"), value: AssetImageType.Artist, default: true },
-            { label: t("appleMusicRichPresence.assetImageTypes.disabled"), value: AssetImageType.Disabled }
+            { label: t("vencord.appleMusicRichPresence.assetImageTypes.album"), value: AssetImageType.Album },
+            { label: t("vencord.appleMusicRichPresence.assetImageTypes.artist"), value: AssetImageType.Artist, default: true },
+            { label: t("vencord.appleMusicRichPresence.assetImageTypes.disabled"), value: AssetImageType.Disabled }
         ],
     },
     smallTextString: {
         type: OptionType.STRING,
-        description: t("appleMusicRichPresence.settings.smallTextString"),
-        default: t("appleMusicRichPresence.defaultSmallText")
+        description: t("vencord.appleMusicRichPresence.settings.smallTextString"),
+        default: t("vencord.appleMusicRichPresence.defaultSmallText")
     },
 });
 
@@ -157,7 +157,7 @@ function getImageAsset(type: AssetImageType, data: TrackData) {
 
 export default definePlugin({
     name: "AppleMusicRichPresence",
-    description: t("appleMusicRichPresence.description"),
+    description: t("vencord.appleMusicRichPresence.description"),
     authors: [Devs.RyanCaoDev],
     hidden: !IS_MAC,
     reporterTestable: ReporterTestable.None,
@@ -165,8 +165,8 @@ export default definePlugin({
     settingsAboutComponent() {
         return <>
             <Paragraph>
-                {t("appleMusicRichPresence.settingsAbout.intro")}{" "}
-                <code>{"{name}"}</code> {t("appleMusicRichPresence.settingsAbout.namePlaceholder")}; <code>{"{artist}"}</code> {t("appleMusicRichPresence.settingsAbout.artistPlaceholder")}; and <code>{"{album}"}</code> {t("appleMusicRichPresence.settingsAbout.albumPlaceholder")}
+                {t("vencord.appleMusicRichPresence.settingsAbout.intro")}{" "}
+                <code>{"{name}"}</code> {t("vencord.appleMusicRichPresence.settingsAbout.namePlaceholder")}; <code>{"{artist}"}</code> {t("vencord.appleMusicRichPresence.settingsAbout.artistPlaceholder")}; and <code>{"{album}"}</code> {t("vencord.appleMusicRichPresence.settingsAbout.albumPlaceholder")}
             </Paragraph>
         </>;
     },
@@ -216,13 +216,13 @@ export default definePlugin({
         if (settings.store.enableButtons) {
             if (trackData.appleMusicLink)
                 buttons.push({
-                    label: t("appleMusicRichPresence.buttons.listenOnAppleMusic"),
+                    label: t("vencord.appleMusicRichPresence.buttons.listenOnAppleMusic"),
                     url: trackData.appleMusicLink,
                 });
 
             if (trackData.songLink)
                 buttons.push({
-                    label: t("appleMusicRichPresence.buttons.viewOnSongLink"),
+                    label: t("vencord.appleMusicRichPresence.buttons.viewOnSongLink"),
                     url: trackData.songLink,
                 });
         }

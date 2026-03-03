@@ -12,7 +12,7 @@ import { t } from "@utils/translation";
 const settings = definePluginSettings({
     zoomMultiplier: {
         type: OptionType.SLIDER,
-        description: t("unlockedAvatarZoom.settings.zoomMultiplier"),
+        description: t("vencord.unlockedAvatarZoom.settings.zoomMultiplier"),
         markers: makeRange(2, 16),
         default: 4,
     },
@@ -20,7 +20,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "UnlockedAvatarZoom",
-    description: t("unlockedAvatarZoom.description"),
+    description: t("vencord.unlockedAvatarZoom.description"),
     authors: [Devs.nakoyasha],
     settings,
     patches: [

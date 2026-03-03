@@ -11,7 +11,7 @@ import { OverridePremiumTypeStore } from "@webpack/common";
 
 export default definePlugin({
     name: "NoNitroUpsell",
-    description: t("noNitroUpsell.description"),
+    description: t("equicord.noNitroUpsell.description"),
     authors: [Devs.thororen],
     flux: {
         CONNECTION_OPEN() {

@@ -106,7 +106,7 @@ function assignSounds(volume: number, pack: "operagx" | "osu") {
 
 const settings = definePluginSettings({
     volume: {
-        description: t("keyboardSounds.settings.volume"),
+        description: t("equicord.keyboardSounds.settings.volume"),
         type: OptionType.SLIDER,
         markers: [0, 25, 50, 75, 100],
         stickToMarkers: false,
@@ -114,11 +114,11 @@ const settings = definePluginSettings({
         onChange: value => { assignSounds(value, settings.store.soundPack); }
     },
     soundPack: {
-        description: t("keyboardSounds.settings.soundPack"),
+        description: t("equicord.keyboardSounds.settings.soundPack"),
         type: OptionType.SELECT,
         options: [
-            { label: t("keyboardSounds.options.operaGx"), value: "operagx" as "operagx", default: true },
-            { label: t("keyboardSounds.options.osu"), value: "osu" as "osu" }
+            { label: t("equicord.keyboardSounds.options.operaGx"), value: "operagx" as "operagx", default: true },
+            { label: t("equicord.keyboardSounds.options.osu"), value: "osu" as "osu" }
         ],
         onChange: value => { assignSounds(settings.store.volume, value); }
     }
@@ -126,7 +126,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "KeyboardSounds",
-    description: t("keyboardSounds.description"),
+    description: t("equicord.keyboardSounds.description"),
     authors: [Devs.HypedDomi, EquicordDevs.Etorix],
     dependencies: ["AudioPlayerAPI"],
     settings,

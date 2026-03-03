@@ -19,7 +19,7 @@ const createSummaryFromServer = findByCodeLazy(".people)),startId:", ".type}");
 const settings = definePluginSettings({
     summaryExpiryThresholdDays: {
         type: OptionType.SLIDER,
-        description: t("seeSummaries.settings.summaryExpiryThresholdDays"),
+        description: t("vencord.seeSummaries.settings.summaryExpiryThresholdDays"),
         markers: [1, 3, 5, 7, 10, 15, 20, 25, 30],
         stickToMarkers: false,
         default: 3,
@@ -52,7 +52,7 @@ interface ChannelSummaries {
 
 export default definePlugin({
     name: "Summaries",
-    description: t("seeSummaries.description"),
+    description: t("vencord.seeSummaries.description"),
     authors: [Devs.mantikafasi],
     settings,
     patches: [

@@ -44,14 +44,14 @@ function getEmojiMarkdown(target: Target, copyUnicode: boolean): string {
 const settings = definePluginSettings({
     copyUnicode: {
         type: OptionType.BOOLEAN,
-        description: t("copyEmojiMarkdown.copyUnicodeDescription"),
+        description: t("vencord.copyEmojiMarkdown.copyUnicodeDescription"),
         default: true,
     },
 });
 
 export default definePlugin({
     name: "CopyEmojiMarkdown",
-    description: t("copyEmojiMarkdown.description"),
+    description: t("vencord.copyEmojiMarkdown.description"),
     authors: [Devs.HappyEnderman, Devs.Vishnya],
     settings,
 
@@ -62,11 +62,11 @@ export default definePlugin({
             children.push(
                 <Menu.MenuItem
                     id="vc-copy-emoji-markdown"
-                    label={t("copyEmojiMarkdown.copyEmojiMarkdown")}
+                    label={t("vencord.copyEmojiMarkdown.copyEmojiMarkdown")}
                     action={() => {
                         copyWithToast(
                             getEmojiMarkdown(target, settings.store.copyUnicode),
-                            t("copyEmojiMarkdown.success")
+                            t("vencord.copyEmojiMarkdown.success")
                         );
                     }}
                 />

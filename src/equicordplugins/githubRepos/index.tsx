@@ -24,22 +24,22 @@ export const cl = classNameFactory("vc-github-repos-");
 export const settings = definePluginSettings({
     showStars: {
         type: OptionType.BOOLEAN,
-        description: t("githubRepos.settings.showStars"),
+        description: t("equicord.githubRepos.settings.showStars"),
         default: true
     },
     showLanguage: {
         type: OptionType.BOOLEAN,
-        description: t("githubRepos.settings.showLanguage"),
+        description: t("equicord.githubRepos.settings.showLanguage"),
         default: true
     },
     showInMiniProfile: {
         type: OptionType.BOOLEAN,
-        description: t("githubRepos.settings.showInMiniProfile"),
+        description: t("equicord.githubRepos.settings.showInMiniProfile"),
         default: true
     },
     showRepositoryTab: {
         type: OptionType.BOOLEAN,
-        description: t("githubRepos.settings.showRepositoryTab"),
+        description: t("equicord.githubRepos.settings.showRepositoryTab"),
         default: true
     },
 });
@@ -59,7 +59,7 @@ const ProfilePopoutComponent = ErrorBoundary.wrap(
     {
         noop: true,
         fallback: () => <BaseText size="xs" weight="semibold" className="vc-github-repos-error" style={{ color: "var(--text-feedback-critical)" }}>
-            {t("githubRepos.ui.error")}
+            {t("equicord.githubRepos.ui.error")}
         </BaseText>
     }
 );
@@ -80,7 +80,7 @@ const ProfileRepositoriesTab = ErrorBoundary.wrap(
 
 export default definePlugin({
     name: "GitHubRepos",
-    description: t("githubRepos.description"),
+    description: t("equicord.githubRepos.description"),
     authors: [EquicordDevs.talhakf, EquicordDevs.Panniku, EquicordDevs.benjii],
     settings,
 

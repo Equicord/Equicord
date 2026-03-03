@@ -23,7 +23,7 @@ interface UserMentionComponentProps {
 
 export default definePlugin({
     name: "FullUserInChatbox",
-    description: t("fullUserInChatbox.description"),
+    description: t("vencord.fullUserInChatbox.description"),
     authors: [Devs.sadan],
 
     patches: [

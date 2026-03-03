@@ -29,7 +29,7 @@ export const reverseExtensionMap = Object.entries(extensionMap).reduce((acc, [ta
 export default definePlugin({
     name: "FixFileExtensions",
     authors: [Devs.thororen],
-    description: t("fixFileExtensions.description"),
+    description: t("equicord.fixFileExtensions.description"),
     reporterTestable: ReporterTestable.None,
     patches: [
         // Taken from AnonymiseFileNames

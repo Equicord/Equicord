@@ -10,7 +10,7 @@ import definePlugin from "@utils/types";
 
 export default definePlugin({
     name: "DisableDeepLinks",
-    description: t("noDeepLinks.description"),
+    description: t("vencord.noDeepLinks.description"),
     authors: [Devs.Ven],
     required: true,
 

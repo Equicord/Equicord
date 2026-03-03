@@ -15,7 +15,7 @@ let recoder: MediaRecorder;
 
 export default definePlugin({
     name: "ScreenRecorder",
-    description: t("screenRecorder.description"),
+    description: t("equicord.screenRecorder.description"),
     authors: [Devs.AutumnVN],
     contextMenus: {
         "channel-attach": startRecording

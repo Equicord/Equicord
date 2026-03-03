@@ -21,18 +21,18 @@ interface IMessageCreate {
 const settings = definePluginSettings({
     regex: {
         type: OptionType.STRING,
-        description: t("hopOn.settings.regex"),
+        description: t("equicord.hopOn.settings.regex"),
         default: "hop on (?:fortnite|fn)"
     },
     url: {
         type: OptionType.STRING,
-        description: t("hopOn.settings.url"),
+        description: t("equicord.hopOn.settings.url"),
         default: "com.epicgames.launcher://apps/fn%3A4fe75bbc5a674f4f9b356b5c90567da5%3AFortnite?action=launch&silent=true"
     }
 });
 export default definePlugin({
     name: "HopOn",
-    description: t("hopOn.description"),
+    description: t("equicord.hopOn.description"),
     authors: [Devs.ImLvna],
     settings,
     flux: {

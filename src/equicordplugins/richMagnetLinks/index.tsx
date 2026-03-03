@@ -13,7 +13,7 @@ import definePlugin from "@utils/types";
 export default definePlugin({
     authors: [EquicordDevs.cassie, EquicordDevs.mochienya, EquicordDevs.secp192k1],
     name: "RichMagnetLinks",
-    description: t("richMagnetLinks.description"),
+    description: t("equicord.richMagnetLinks.description"),
     patches: [
         {
             find: "AUTO_MODERATION_SYSTEM_MESSAGE_RULES:",

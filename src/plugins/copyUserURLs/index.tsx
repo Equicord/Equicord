@@ -37,7 +37,7 @@ const UserContextMenuPatch: NavContextMenuPatchCallback = (children, { user }: U
     children.push(
         <Menu.MenuItem
             id="vc-copy-user-url"
-            label={t("copyUserURLs.copyUserURL")}
+            label={t("vencord.copyUserURLs.copyUserURL")}
             action={() => copyToClipboard(`<https://discord.com/users/${user.id}>`)}
             icon={LinkIcon}
         />
@@ -47,7 +47,7 @@ const UserContextMenuPatch: NavContextMenuPatchCallback = (children, { user }: U
 export default definePlugin({
     name: "CopyUserURLs",
     authors: [Devs.castdrian],
-    description: t("copyUserURLs.description"),
+    description: t("vencord.copyUserURLs.description"),
     contextMenus: {
         "user-context": UserContextMenuPatch
     }

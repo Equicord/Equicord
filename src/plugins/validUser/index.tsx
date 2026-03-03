@@ -177,7 +177,7 @@ function MentionWrapper({ data, UserMention, RoleMention, parse, props }: Mentio
 
 export default definePlugin({
     name: "ValidUser",
-    description: t("validUser.description"),
+    description: t("vencord.validUser.description"),
     authors: [Devs.Ven, Devs.Dolfies],
     tags: ["MentionCacheFix"],
 

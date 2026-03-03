@@ -37,7 +37,7 @@ function toggleStreamerMode({ streamKey }: StreamEvent, value: boolean) {
 
 export default definePlugin({
     name: "StreamerModeOn",
-    description: t("streamerModeOnStream.description"),
+    description: t("vencord.streamerModeOnStream.description"),
     authors: [Devs.IcedMarina],
     flux: {
         STREAM_CREATE: d => toggleStreamerMode(d, true),

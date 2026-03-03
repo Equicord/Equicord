@@ -27,30 +27,30 @@ export const cl = classNameFactory("vc-boo-");
 export const settings = definePluginSettings({
     showIndicator: {
         type: OptionType.BOOLEAN,
-        description: t("ghosted.settings.showIndicator"),
+        description: t("equicord.ghosted.settings.showIndicator"),
         default: true,
         restartNeeded: false
     },
     showDmIcons: {
         type: OptionType.BOOLEAN,
-        description: t("ghosted.settings.showDmIcons"),
+        description: t("equicord.ghosted.settings.showDmIcons"),
         default: true,
         restartNeeded: false
     },
     ignoreGroupDms: {
         type: OptionType.BOOLEAN,
-        description: t("ghosted.settings.ignoreGroupDms"),
+        description: t("equicord.ghosted.settings.ignoreGroupDms"),
         default: false
     },
     exemptedChannels: {
         type: OptionType.STRING,
-        description: t("ghosted.settings.exemptedChannels"),
+        description: t("equicord.ghosted.settings.exemptedChannels"),
         default: "",
         restartNeeded: false
     },
     ignoreBots: {
         type: OptionType.BOOLEAN,
-        description: t("ghosted.settings.ignoreBots"),
+        description: t("equicord.ghosted.settings.ignoreBots"),
         default: true,
         restartNeeded: false
     }
@@ -89,7 +89,7 @@ function BooIndicator() {
     const getTooltipText = () => {
         const ghostedChannels = getGhostedChannels();
         if (ghostedChannels.length === 0) {
-            return t("ghosted.ui.noGhostedUsers");
+            return t("equicord.ghosted.ui.noGhostedUsers");
         }
         if (ghostedChannels.length <= 5) {
             return ghostedChannels
@@ -126,7 +126,7 @@ function makeContextItem(props) {
     return <Menu.MenuItem
         id="ec-ghosted-clear"
         key="ec-ghosted-clear"
-        label={t("ghosted.ui.unghost")}
+        label={t("equicord.ghosted.ui.unghost")}
         action={() => {
             clearChannelFromGhost(props.channel.id);
         }}
@@ -135,7 +135,7 @@ function makeContextItem(props) {
 
 export default definePlugin({
     name: "Ghosted",
-    description: t("ghosted.description"),
+    description: t("equicord.ghosted.description"),
     authors: [EquicordDevs.vei, Devs.sadan, EquicordDevs.justjxke, EquicordDevs.iamme],
     settings,
     dependencies: ["AudioPlayerAPI", "ServerListAPI"],

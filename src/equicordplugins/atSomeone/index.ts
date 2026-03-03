@@ -13,7 +13,7 @@ import { ChannelStore, GuildMemberStore, SelectedChannelStore, SelectedGuildStor
 export default definePlugin({
     name: "AtSomeone",
     authors: [Devs.Joona],
-    description: t("atSomeone.description"),
+    description: t("equicord.atSomeone.description"),
     patches: [
         {
             find: ".LAUNCHABLE_APPLICATIONS;",
@@ -33,7 +33,7 @@ export default definePlugin({
         }
     ],
     getSomeoneDescription() {
-        return t("atSomeone.contextMenu.someone");
+        return t("equicord.atSomeone.contextMenu.someone");
     },
     start() {
         this.preSend = addMessagePreSendListener((_, msg) => {

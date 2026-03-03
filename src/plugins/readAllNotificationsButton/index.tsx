@@ -60,13 +60,13 @@ const ReadAllButton = () => (
         onClick={onClick}
         className="vc-ranb-button"
     >
-        {t("readAllNotificationsButton.readAll")}
+        {t("vencord.readAllNotificationsButton.readAll")}
     </TextButton>
 );
 
 export default definePlugin({
     name: "ReadAllNotificationsButton",
-    description: t("readAllNotificationsButton.description"),
+    description: t("vencord.readAllNotificationsButton.description"),
     authors: [Devs.kemo, EquicordDevs.KrystalSkull],
     dependencies: ["ServerListAPI"],
 

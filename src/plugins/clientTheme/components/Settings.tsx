@@ -70,8 +70,8 @@ export function ThemeSettingsComponent() {
         <div className={cl("settings")}>
             <div className={cl("container")}>
                 <div className={cl("settings-labels")}>
-                    <HeadingSecondary>{t("clientTheme.themeColor")}</HeadingSecondary>
-                    <Paragraph>{t("clientTheme.themeColorDescription")}</Paragraph>
+                    <HeadingSecondary>{t("vencord.clientTheme.themeColor")}</HeadingSecondary>
+                    <Paragraph>{t("vencord.clientTheme.themeColorDescription")}</Paragraph>
                 </div>
                 <ColorPicker
                     color={parseInt(settings.store.color, 16)}
@@ -82,14 +82,14 @@ export function ThemeSettingsComponent() {
             </div>
             {(contrastWarning || nitroThemeEnabled) && (<>
                 <ErrorCard className={Margins.top8}>
-                    <HeadingPrimary>{t("clientTheme.themeWontLookGood")}</HeadingPrimary>
+                    <HeadingPrimary>{t("vencord.clientTheme.themeWontLookGood")}</HeadingPrimary>
 
-                    {contrastWarning && <Paragraph>{">"} {t("clientTheme.contrastWarning")}</Paragraph>}
-                    {nitroThemeEnabled && <Paragraph>{">"} {t("clientTheme.nitroNotSupported")}</Paragraph>}
+                    {contrastWarning && <Paragraph>{">"} {t("vencord.clientTheme.contrastWarning")}</Paragraph>}
+                    {nitroThemeEnabled && <Paragraph>{">"} {t("vencord.clientTheme.nitroNotSupported")}</Paragraph>}
 
                     <div className={cl("buttons-container")}>
                         {(contrastWarning && fixableContrast) && <Button onClick={() => setDiscordTheme(oppositeTheme)} color={Button.Colors.RED}>{t("clientTheme.switchToMode", { mode: oppositeTheme })}</Button>}
-                        {(nitroThemeEnabled) && <Button onClick={() => setDiscordTheme(currentTheme)} color={Button.Colors.RED}>{t("clientTheme.disableNitroTheme")}</Button>}
+                        {(nitroThemeEnabled) && <Button onClick={() => setDiscordTheme(currentTheme)} color={Button.Colors.RED}>{t("vencord.clientTheme.disableNitroTheme")}</Button>}
                     </div>
                 </ErrorCard>
             </>)}
@@ -100,7 +100,7 @@ export function ThemeSettingsComponent() {
 export function ResetThemeColorComponent() {
     return (
         <Button onClick={() => onPickColor(0x313338)}>
-            {t("clientTheme.resetThemeColor")}
+            {t("vencord.clientTheme.resetThemeColor")}
         </Button>
     );
 }

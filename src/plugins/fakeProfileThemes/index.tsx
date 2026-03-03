@@ -82,8 +82,8 @@ const settings = definePluginSettings({
         description: "Default color source if both are present",
         type: OptionType.SELECT,
         options: [
-            { label: t("fakeProfileThemes.nitroColors"), value: true, default: true },
-            { label: t("fakeProfileThemes.fakeColors"), value: false },
+            { label: t("vencord.fakeProfileThemes.nitroColors"), value: true, default: true },
+            { label: t("vencord.fakeProfileThemes.fakeColors"), value: false },
         ]
     }
 });
@@ -120,21 +120,21 @@ function SettingsAboutComponent() {
 
     return (
         <section>
-            <HeadingSecondary>{t("fakeProfileThemes.usage")}</HeadingSecondary>
+            <HeadingSecondary>{t("vencord.fakeProfileThemes.usage")}</HeadingSecondary>
             <Paragraph>
-                {t("fakeProfileThemes.instructions")}
+                {t("vencord.fakeProfileThemes.instructions")}
             </Paragraph>
             <Paragraph className={Margins.top8}>
                 <strong>To set your own profile theme colors:</strong>
                 <ul>
                     <li>&mdash; use the color pickers below to choose your colors</li>
-                    <li>&mdash; click the "{t("fakeProfileThemes.copy3y3")}" button</li>
+                    <li>&mdash; click the "{t("vencord.fakeProfileThemes.copy3y3")}" button</li>
                     <li>&mdash; paste the invisible text anywhere in your bio</li>
                 </ul>
                 <Divider
                     className={classes(Margins.top8, Margins.bottom8)}
                 />
-                <Forms.FormTitle tag="h3">{t("fakeProfileThemes.colorPickers")}</Forms.FormTitle>
+                <Forms.FormTitle tag="h3">{t("vencord.fakeProfileThemes.colorPickers")}</Forms.FormTitle>
                 <Flex gap="1em">
                     <ColorPicker
                         color={color1}
@@ -143,7 +143,7 @@ function SettingsAboutComponent() {
                                 size="xs"
                                 style={{ marginTop: "4px" }}
                             >
-                                {t("fakeProfileThemes.primary")}
+                                {t("vencord.fakeProfileThemes.primary")}
                             </BaseText>
                         }
                         onChange={(color: number) => {
@@ -157,7 +157,7 @@ function SettingsAboutComponent() {
                                 size="xs"
                                 style={{ marginTop: "4px" }}
                             >
-                                {t("fakeProfileThemes.accent")}
+                                {t("vencord.fakeProfileThemes.accent")}
                             </BaseText>
                         }
                         onChange={(color: number) => {
@@ -173,13 +173,13 @@ function SettingsAboutComponent() {
                         size={Button.Sizes.XLARGE}
                         style={{ marginBottom: "auto" }}
                     >
-                        {t("fakeProfileThemes.copy3y3")}
+                        {t("vencord.fakeProfileThemes.copy3y3")}
                     </Button>
                 </Flex>
                 <Divider
                     className={classes(Margins.top8, Margins.bottom8)}
                 />
-                <HeadingSecondary>{t("fakeProfileThemes.preview")}</HeadingSecondary>
+                <HeadingSecondary>{t("vencord.fakeProfileThemes.preview")}</HeadingSecondary>
                 <div className="vc-fpt-preview">
                     <ProfileModal
                         user={UserStore.getCurrentUser()}
@@ -244,7 +244,7 @@ export default definePlugin({
             color={Button.Colors.PRIMARY}
             size={Button.Sizes.XLARGE}
             className={Margins.left16}
-        >{t("fakeProfileThemes.copy3y3")}
+        >{t("vencord.fakeProfileThemes.copy3y3")}
         </Button >;
     }, { noop: true }),
 });

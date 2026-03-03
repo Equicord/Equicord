@@ -100,12 +100,12 @@ function TagConfigCard(props) {
 
     return (
         <>
-            <BaseText size="md" tag="h5">{t("friendTags.ui.name")}</BaseText>
+            <BaseText size="md" tag="h5">{t("equicord.friendTags.ui.name")}</BaseText>
             <TextInput value={tagName} onChange={setTagName}></TextInput>
-            <BaseText size="md" tag="h5">{t("friendTags.ui.usersSeperated")}</BaseText>
+            <BaseText size="md" tag="h5">{t("equicord.friendTags.ui.usersSeperated")}</BaseText>
             <TextInput value={userIds} onChange={setUserIDs}></TextInput>
             <div className={"vc-friend-tags-user-header-container"}>
-                <BaseText>{t("friendTags.ui.userList")}</BaseText>
+                <BaseText>{t("equicord.friendTags.ui.userList")}</BaseText>
                 <div className={"vc-friend-tags-user-header-btns"}>
                     {
                         userIds.split(", ").map(user => {
@@ -129,7 +129,7 @@ function TagConfigCard(props) {
                 }}
                 color={Button.Colors.RED}
             >
-                {t("friendTags.ui.remove")}
+                {t("equicord.friendTags.ui.remove")}
             </Button>
         </>
     );
@@ -157,7 +157,7 @@ function TagConfigurationComponent() {
                     });
                 SetData();
                 update();
-            }}>{t("friendTags.ui.add")}</Button>
+            }}>{t("equicord.friendTags.ui.add")}</Button>
         </>
     );
 }
@@ -188,7 +188,7 @@ const userPatch: NavContextMenuPatchCallback = (children, { user }) => {
     const buttonElement =
         <Menu.MenuItem
             id="vc-tag-group"
-            label={t("friendTags.ui.tag")}
+            label={t("equicord.friendTags.ui.tag")}
         >
             {SavedData.map(tag => {
                 const isTagged = SavedData.filter(e => e.tagName === tag.tagName)[0].userIds.includes(user.id);
@@ -209,7 +209,7 @@ const userPatch: NavContextMenuPatchCallback = (children, { user }) => {
 
 export default definePlugin({
     name: "FriendTags",
-    description: t("friendTags.description"),
+    description: t("equicord.friendTags.description"),
     authors: [Devs.Samwich],
     settings,
     contextMenus: {

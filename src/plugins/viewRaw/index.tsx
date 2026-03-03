@@ -77,14 +77,14 @@ function openViewRawModal(json: string, type: string, msgContent?: string) {
         <ErrorBoundary>
             <ModalRoot {...props} size={ModalSize.LARGE}>
                 <ModalHeader>
-                    <BaseText size="lg" weight="semibold" style={{ flexGrow: 1 }}>{t("viewRaw.viewRaw")}</BaseText>
+                    <BaseText size="lg" weight="semibold" style={{ flexGrow: 1 }}>{t("vencord.viewRaw.viewRaw")}</BaseText>
                     <ModalCloseButton onClick={() => closeModal(key)} />
                 </ModalHeader>
                 <ModalContent>
                     <div style={{ padding: "16px 0" }}>
                         {!!msgContent && (
                             <>
-                                <Heading>{t("viewRaw.content")}</Heading>
+                                <Heading>{t("vencord.viewRaw.content")}</Heading>
                                 <CodeBlock content={msgContent} lang="" />
                                 <Divider className={Margins.bottom20} />
                             </>
@@ -100,8 +100,8 @@ function openViewRawModal(json: string, type: string, msgContent?: string) {
                             {t("viewRaw.copyJson", { type })}
                         </Button>
                         {!!msgContent && (
-                            <Button onClick={() => copyWithToast(msgContent, t("viewRaw.contentCopied"))}>
-                                {t("viewRaw.copyRawContent")}
+                            <Button onClick={() => copyWithToast(msgContent, t("vencord.viewRaw.contentCopied"))}>
+                                {t("vencord.viewRaw.copyRawContent")}
                             </Button>
                         )}
                     </Flex>
@@ -120,11 +120,11 @@ function openViewRawModalMessage(msg: Message) {
 
 const settings = definePluginSettings({
     clickMethod: {
-        description: t("viewRaw.settings.clickMethodDescription"),
+        description: t("vencord.viewRaw.settings.clickMethodDescription"),
         type: OptionType.SELECT,
         options: [
-            { label: t("viewRaw.settings.leftClick"), value: "Left", default: true },
-            { label: t("viewRaw.settings.rightClick"), value: "Right" }
+            { label: t("vencord.viewRaw.settings.leftClick"), value: "Left", default: true },
+            { label: t("vencord.viewRaw.settings.rightClick"), value: "Right" }
         ]
     }
 });
@@ -149,7 +149,7 @@ function MakeContextCallback(name: "Guild" | "Role" | "User" | "Channel"): NavCo
         children.splice(-1, 0,
             <Menu.MenuItem
                 id={id}
-                label={t("viewRaw.viewRaw")}
+                label={t("vencord.viewRaw.viewRaw")}
                 action={() => openViewRawModal(JSON.stringify(value, null, 4), name)}
                 icon={CopyIcon}
             />
@@ -167,7 +167,7 @@ const devContextCallback: NavContextMenuPatchCallback = (children, { id }: { id:
     children.push(
         <Menu.MenuItem
             id={"vc-view-role-raw"}
-            label={t("viewRaw.viewRaw")}
+            label={t("vencord.viewRaw.viewRaw")}
             action={() => openViewRawModal(JSON.stringify(role, null, 4), "Role")}
             icon={CopyIcon}
         />
@@ -176,7 +176,7 @@ const devContextCallback: NavContextMenuPatchCallback = (children, { id }: { id:
 
 export default definePlugin({
     name: "ViewRaw",
-    description: t("viewRaw.description"),
+    description: t("vencord.viewRaw.description"),
     authors: [Devs.KingFish, Devs.Ven, Devs.rad, Devs.ImLvna],
     settings,
 
@@ -214,8 +214,8 @@ export default definePlugin({
             };
 
             const label = settings.store.clickMethod === "Right"
-                ? t("viewRaw.copyRawLeftViewRawRight")
-                : t("viewRaw.viewRawLeftCopyRawRight");
+                ? t("vencord.viewRaw.copyRawLeftViewRawRight")
+                : t("vencord.viewRaw.viewRawLeftCopyRawRight");
 
             return {
                 label,

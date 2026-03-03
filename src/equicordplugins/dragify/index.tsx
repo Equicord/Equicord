@@ -75,61 +75,61 @@ function shouldIgnoreDrop(key: string): boolean {
 const settings = definePluginSettings({
     userOutput: {
         type: OptionType.SELECT,
-        description: t("dragify.settings.userOutput"),
+        description: t("equicord.dragify.settings.userOutput"),
         options: [
-            { label: t("dragify.settings.userOutputOptions.mention"), value: "mention", default: true },
-            { label: t("dragify.settings.userOutputOptions.id"), value: "id" },
+            { label: t("equicord.dragify.settings.userOutputOptions.mention"), value: "mention", default: true },
+            { label: t("equicord.dragify.settings.userOutputOptions.id"), value: "id" },
         ],
     },
     channelOutput: {
         type: OptionType.SELECT,
-        description: t("dragify.settings.channelOutput"),
+        description: t("equicord.dragify.settings.channelOutput"),
         options: [
-            { label: t("dragify.settings.channelOutputOptions.mention"), value: "mention", default: true },
-            { label: t("dragify.settings.channelOutputOptions.link"), value: "link" },
+            { label: t("equicord.dragify.settings.channelOutputOptions.mention"), value: "mention", default: true },
+            { label: t("equicord.dragify.settings.channelOutputOptions.link"), value: "link" },
         ],
     },
     inviteExpireAfter: {
         type: OptionType.SELECT,
-        description: t("dragify.settings.inviteExpireAfter"),
+        description: t("equicord.dragify.settings.inviteExpireAfter"),
         options: [
-            { label: t("dragify.settings.inviteExpireAfterOptions.30min"), value: 1800 },
-            { label: t("dragify.settings.inviteExpireAfterOptions.1hour"), value: 3600 },
-            { label: t("dragify.settings.inviteExpireAfterOptions.6hours"), value: 21600 },
-            { label: t("dragify.settings.inviteExpireAfterOptions.12hours"), value: 43200 },
-            { label: t("dragify.settings.inviteExpireAfterOptions.1day"), value: 86400 },
-            { label: t("dragify.settings.inviteExpireAfterOptions.7days"), value: 604800 },
-            { label: t("dragify.settings.inviteExpireAfterOptions.never"), value: 0, default: true },
+            { label: t("equicord.dragify.settings.inviteExpireAfterOptions.30min"), value: 1800 },
+            { label: t("equicord.dragify.settings.inviteExpireAfterOptions.1hour"), value: 3600 },
+            { label: t("equicord.dragify.settings.inviteExpireAfterOptions.6hours"), value: 21600 },
+            { label: t("equicord.dragify.settings.inviteExpireAfterOptions.12hours"), value: 43200 },
+            { label: t("equicord.dragify.settings.inviteExpireAfterOptions.1day"), value: 86400 },
+            { label: t("equicord.dragify.settings.inviteExpireAfterOptions.7days"), value: 604800 },
+            { label: t("equicord.dragify.settings.inviteExpireAfterOptions.never"), value: 0, default: true },
         ],
     },
     inviteMaxUses: {
         type: OptionType.SELECT,
-        description: t("dragify.settings.inviteMaxUses"),
+        description: t("equicord.dragify.settings.inviteMaxUses"),
         options: [
-            { label: t("dragify.settings.inviteMaxUsesOptions.noLimit"), value: 0, default: true },
-            { label: t("dragify.settings.inviteMaxUsesOptions.1use"), value: 1 },
-            { label: t("dragify.settings.inviteMaxUsesOptions.5uses"), value: 5 },
-            { label: t("dragify.settings.inviteMaxUsesOptions.10uses"), value: 10 },
-            { label: t("dragify.settings.inviteMaxUsesOptions.25uses"), value: 25 },
-            { label: t("dragify.settings.inviteMaxUsesOptions.50uses"), value: 50 },
-            { label: t("dragify.settings.inviteMaxUsesOptions.100uses"), value: 100 },
+            { label: t("equicord.dragify.settings.inviteMaxUsesOptions.noLimit"), value: 0, default: true },
+            { label: t("equicord.dragify.settings.inviteMaxUsesOptions.1use"), value: 1 },
+            { label: t("equicord.dragify.settings.inviteMaxUsesOptions.5uses"), value: 5 },
+            { label: t("equicord.dragify.settings.inviteMaxUsesOptions.10uses"), value: 10 },
+            { label: t("equicord.dragify.settings.inviteMaxUsesOptions.25uses"), value: 25 },
+            { label: t("equicord.dragify.settings.inviteMaxUsesOptions.50uses"), value: 50 },
+            { label: t("equicord.dragify.settings.inviteMaxUsesOptions.100uses"), value: 100 },
         ],
     },
     inviteTemporaryMembership: {
         type: OptionType.BOOLEAN,
         default: false,
-        description: t("dragify.settings.inviteTemporaryMembership"),
+        description: t("equicord.dragify.settings.inviteTemporaryMembership"),
     },
     reuseExistingInvites: {
         type: OptionType.BOOLEAN,
         default: false,
-        description: t("dragify.settings.reuseExistingInvites"),
+        description: t("equicord.dragify.settings.reuseExistingInvites"),
     },
     allowChatBodyDrop: {
         type: OptionType.BOOLEAN,
         default: false,
         restartNeeded: true,
-        description: t("dragify.settings.allowChatBodyDrop"),
+        description: t("equicord.dragify.settings.allowChatBodyDrop"),
     },
 });
 
@@ -160,7 +160,7 @@ const inviteCache = new Map<string, { code: string; expiresAt: number | null; ma
 
 export default definePlugin({
     name: "Dragify",
-    description: t("dragify.description"),
+    description: t("equicord.dragify.description"),
     authors: [EquicordDevs.justjxke],
     settings,
 
@@ -341,7 +341,7 @@ export default definePlugin({
             clearDragState();
         } catch (error) {
             logger.error("Failed handling drop", error);
-            showToast(t("dragify.toast.dropFailed"), Toasts.Type.FAILURE);
+            showToast(t("equicord.dragify.toast.dropFailed"), Toasts.Type.FAILURE);
         }
     },
 
@@ -386,11 +386,11 @@ export default definePlugin({
 
         const inviteChannelId = inviteChannel?.id ?? fallbackChannelId;
         if (!inviteChannelId) {
-            showToast(t("dragify.toast.noChannelForInvites"), Toasts.Type.FAILURE);
+            showToast(t("equicord.dragify.toast.noChannelForInvites"), Toasts.Type.FAILURE);
             return null;
         }
         if (inviteChannel && inviteChannel.guild_id !== guildId) {
-            showToast(t("dragify.toast.noChannelForInvites"), Toasts.Type.FAILURE);
+            showToast(t("equicord.dragify.toast.noChannelForInvites"), Toasts.Type.FAILURE);
             return null;
         }
 
@@ -414,11 +414,11 @@ export default definePlugin({
                 maxUses: maxUses === 0 ? null : maxUses,
                 uses: 0,
             });
-            showToast(t("dragify.toast.inviteCreated"), Toasts.Type.SUCCESS);
+            showToast(t("equicord.dragify.toast.inviteCreated"), Toasts.Type.SUCCESS);
             return `https://discord.gg/${code}`;
         } catch (error) {
             logger.error("Failed to create invite", error);
-            showToast(t("dragify.toast.inviteFailed"), Toasts.Type.FAILURE); // uh oh!
+            showToast(t("equicord.dragify.toast.inviteFailed"), Toasts.Type.FAILURE); // uh oh!
             return null;
         }
     },

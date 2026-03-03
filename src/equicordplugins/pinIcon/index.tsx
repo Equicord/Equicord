@@ -25,7 +25,7 @@ import { findComponentByCodeLazy } from "@webpack";
 const PinIcon = findComponentByCodeLazy("1-.06-.63L6.16");
 export default definePlugin({
     name: "PinIcon",
-    description: t("pinIcon.description"),
+    description: t("equicord.pinIcon.description"),
     authors: [EquicordDevs.iamme],
     patches: [
         {

@@ -144,7 +144,7 @@ const StatusSubMenuComponent = () => {
 
 export default definePlugin({
     name: "StatusPresets",
-    description: t("statusPresets.description"),
+    description: t("equicord.statusPresets.description"),
     authors: [EquicordDevs.iamme],
     settings: settings,
     dependencies: ["UserSettingsAPI"],

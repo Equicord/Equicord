@@ -35,22 +35,22 @@ export default definePlugin({
     settings: definePluginSettings({
         latency: {
             type: OptionType.NUMBER,
-            description: t("messageLatency.settings.latency"),
+            description: t("vencord.messageLatency.settings.latency"),
             default: 2
         },
         detectDiscordKotlin: {
             type: OptionType.BOOLEAN,
-            description: t("messageLatency.settings.detectDiscordKotlin"),
+            description: t("vencord.messageLatency.settings.detectDiscordKotlin"),
             default: true
         },
         showMillis: {
             type: OptionType.BOOLEAN,
-            description: t("messageLatency.settings.showMillis"),
+            description: t("vencord.messageLatency.settings.showMillis"),
             default: false
         },
         ignoreSelf: {
             type: OptionType.BOOLEAN,
-            description: t("messageLatency.settings.ignoreSelf"),
+            description: t("vencord.messageLatency.settings.ignoreSelf"),
             default: false
         }
     }),
@@ -96,7 +96,7 @@ export default definePlugin({
             );
         }, "");
 
-        return ts || `0 ${t("messageLatency.timeUnits.seconds")}`;
+        return ts || `0 ${t("vencord.messageLatency.timeUnits.seconds")}`;
     },
 
     latencyTooltipData(message: Message) {
@@ -157,12 +157,12 @@ export default definePlugin({
 
             let text: string;
             if (!d.delta) {
-                text = t("messageLatency.oldDiscordAndroid");
+                text = t("vencord.messageLatency.oldDiscordAndroid");
             } else {
                 const mainText = d.ahead
                     ? t("messageLatency.clockAhead", { delta: d.delta })
                     : t("messageLatency.messageDelayed", { delta: d.delta });
-                text = mainText + (d.isDiscordKotlin ? ` ${t("messageLatency.oldDiscordAndroid")}` : "");
+                text = mainText + (d.isDiscordKotlin ? ` ${t("vencord.messageLatency.oldDiscordAndroid")}` : "");
             }
 
             return <Tooltip
@@ -195,7 +195,7 @@ export default definePlugin({
             role="img"
             fill="none"
             style={{ marginRight: "8px", verticalAlign: -1 }}
-            aria-label={delta ?? t("messageLatency.oldAndroidClient")}
+            aria-label={delta ?? t("vencord.messageLatency.oldAndroidClient")}
             aria-hidden="false"
             {...props}
         >

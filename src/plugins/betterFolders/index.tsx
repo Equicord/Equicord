@@ -188,54 +188,54 @@ function areNestedRelated(firstId: string, secondId: string): boolean {
 export const settings = definePluginSettings({
     sidebar: {
         type: OptionType.BOOLEAN,
-        description: t("betterFolders.settings.sidebar"),
+        description: t("vencord.betterFolders.settings.sidebar"),
         restartNeeded: true,
         default: true
     },
     sidebarAnim: {
         type: OptionType.BOOLEAN,
-        description: t("betterFolders.settings.sidebarAnim"),
+        description: t("vencord.betterFolders.settings.sidebarAnim"),
         default: true
     },
     closeAllFolders: {
         type: OptionType.BOOLEAN,
-        description: t("betterFolders.settings.closeAllFolders"),
+        description: t("vencord.betterFolders.settings.closeAllFolders"),
         default: false
     },
     closeAllHomeButton: {
         type: OptionType.BOOLEAN,
-        description: t("betterFolders.settings.closeAllHomeButton"),
+        description: t("vencord.betterFolders.settings.closeAllHomeButton"),
         restartNeeded: true,
         default: false
     },
     closeOthers: {
         type: OptionType.BOOLEAN,
-        description: t("betterFolders.settings.closeOthers"),
+        description: t("vencord.betterFolders.settings.closeOthers"),
         default: false
     },
     closeServerFolder: {
         type: OptionType.BOOLEAN,
-        description: t("betterFolders.settings.closeServerFolder"),
+        description: t("vencord.betterFolders.settings.closeServerFolder"),
         default: false,
     },
     forceOpen: {
         type: OptionType.BOOLEAN,
-        description: t("betterFolders.settings.forceOpen"),
+        description: t("vencord.betterFolders.settings.forceOpen"),
         default: false
     },
     keepIcons: {
         type: OptionType.BOOLEAN,
-        description: t("betterFolders.settings.keepIcons"),
+        description: t("vencord.betterFolders.settings.keepIcons"),
         restartNeeded: true,
         default: false
     },
     showFolderIcon: {
         type: OptionType.SELECT,
-        description: t("betterFolders.settings.showFolderIcon"),
+        description: t("vencord.betterFolders.settings.showFolderIcon"),
         options: [
-            { label: t("betterFolders.settings.folderIconNever"), value: FolderIconDisplay.Never },
-            { label: t("betterFolders.settings.folderIconAlways"), value: FolderIconDisplay.Always, default: true },
-            { label: t("betterFolders.settings.folderIconMultipleExpanded"), value: FolderIconDisplay.MoreThanOneFolderExpanded }
+            { label: t("vencord.betterFolders.settings.folderIconNever"), value: FolderIconDisplay.Never },
+            { label: t("vencord.betterFolders.settings.folderIconAlways"), value: FolderIconDisplay.Always, default: true },
+            { label: t("vencord.betterFolders.settings.folderIconMultipleExpanded"), value: FolderIconDisplay.MoreThanOneFolderExpanded }
         ],
         restartNeeded: true
     },

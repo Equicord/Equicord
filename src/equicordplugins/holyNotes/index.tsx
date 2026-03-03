@@ -46,7 +46,7 @@ export const ChannelMessage = findComponentByCodeLazy("Message must not be a thr
 
 const messageContextMenuPatch: NavContextMenuPatchCallback = (children, { message }: { message: Message; }) => {
     children.push(
-        <Menu.MenuItem label={t("holyNotes.ui.noteMessage")} id="note-message">
+        <Menu.MenuItem label={t("equicord.holyNotes.ui.noteMessage")} id="note-message">
             {Object.keys(noteHandler.getAllNotes()).map(notebook => (
                 <Menu.MenuItem
                     key={notebook}
@@ -62,7 +62,7 @@ const messageContextMenuPatch: NavContextMenuPatchCallback = (children, { messag
 function ToolBarHeader() {
     return (
         <HeaderBarButton
-            tooltip={t("holyNotes.ui.holyNotes")}
+            tooltip={t("equicord.holyNotes.ui.holyNotes")}
             position="bottom"
             icon={BookmarkIcon}
             onClick={() => openModal(props => <NoteModal {...props} />)}
@@ -72,11 +72,11 @@ function ToolBarHeader() {
 
 export default definePlugin({
     name: "HolyNotes",
-    description: t("holyNotes.description"),
+    description: t("equicord.holyNotes.description"),
     authors: [EquicordDevs.Wolfie],
 
     toolboxActions: {
-        [t("holyNotes.ui.openNotes")]() {
+        [t("equicord.holyNotes.ui.openNotes")]() {
             openModal(props => <NoteModal {...props} />);
         }
     },
@@ -94,7 +94,7 @@ export default definePlugin({
         icon: BookmarkIcon,
         render(message) {
             return {
-                label: t("holyNotes.ui.saveNote"),
+                label: t("equicord.holyNotes.ui.saveNote"),
                 icon: BookmarkIcon,
                 message,
                 channel: ChannelStore.getChannel(message.channel_id),

@@ -31,11 +31,11 @@ export { lastState };
 const settings = definePluginSettings({
     persistState: {
         type: OptionType.SELECT,
-        description: t("silentMessageToggle.settings.persistState"),
+        description: t("vencord.silentMessageToggle.settings.persistState"),
         options: [
-            { label: t("silentMessageToggle.settings.persistNone"), value: "none", default: true },
-            { label: t("silentMessageToggle.settings.persistChannels"), value: "channels" },
-            { label: t("silentMessageToggle.settings.persistRestarts"), value: "restarts" }
+            { label: t("vencord.silentMessageToggle.settings.persistNone"), value: "none", default: true },
+            { label: t("vencord.silentMessageToggle.settings.persistChannels"), value: "channels" },
+            { label: t("vencord.silentMessageToggle.settings.persistRestarts"), value: "restarts" }
         ],
         onChange(newValue: string) {
             lastState = newValue !== "none" && lastState;
@@ -43,7 +43,7 @@ const settings = definePluginSettings({
     },
     autoDisable: {
         type: OptionType.BOOLEAN,
-        description: t("silentMessageToggle.settings.autoDisable"),
+        description: t("vencord.silentMessageToggle.settings.autoDisable"),
         default: true
     }
 });
@@ -99,7 +99,7 @@ const SilentMessageToggle: ChatBarButtonFactory = ({ isMainChat }) => {
 
     return (
         <ChatBarButton
-            tooltip={enabled ? t("silentMessageToggle.disableSilentMessage") : t("silentMessageToggle.enableSilentMessage")}
+            tooltip={enabled ? t("vencord.silentMessageToggle.disableSilentMessage") : t("vencord.silentMessageToggle.enableSilentMessage")}
             onClick={() => setEnabledValue(!enabled)}
         >
             {enabled ? <SilentMessageIcon /> : <SilentMessageDisabledIcon />}
@@ -110,7 +110,7 @@ const SilentMessageToggle: ChatBarButtonFactory = ({ isMainChat }) => {
 export default definePlugin({
     name: "SilentMessageToggle",
     authors: [Devs.Nuckyz, Devs.CatNoir, EquicordDevs.Z1xus],
-    description: t("silentMessageToggle.description"),
+    description: t("vencord.silentMessageToggle.description"),
     settings,
 
     chatBarButton: {

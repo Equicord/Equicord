@@ -32,7 +32,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "UnlimitedAccounts",
-    description: t("unlimitedAccounts.description"),
+    description: t("equicord.unlimitedAccounts.description"),
     authors: [Devs.thororen],
     settings,
     patches: [

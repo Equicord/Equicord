@@ -49,24 +49,24 @@ function shouldEdit(channel: Channel, message: Message, timePeriod: number, shou
 const settings = definePluginSettings({
     timePeriod: {
         type: OptionType.NUMBER,
-        description: t("messageBurst.settings.timePeriod"),
+        description: t("equicord.messageBurst.settings.timePeriod"),
         default: 3
     },
     shouldMergeWithAttachment: {
         type: OptionType.BOOLEAN,
-        description: t("messageBurst.settings.shouldMergeWithAttachment"),
+        description: t("equicord.messageBurst.settings.shouldMergeWithAttachment"),
         default: false
     },
     useSpace: {
         type: OptionType.BOOLEAN,
-        description: t("messageBurst.settings.useSpace"),
+        description: t("equicord.messageBurst.settings.useSpace"),
         default: false
     }
 });
 
 export default definePlugin({
     name: "MessageBurst",
-    description: t("messageBurst.description"),
+    description: t("equicord.messageBurst.description"),
     authors: [EquicordDevs.port22exposed],
     settings,
     onBeforeMessageSend(channelId, message) {

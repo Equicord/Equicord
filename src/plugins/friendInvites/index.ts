@@ -26,12 +26,12 @@ const FriendInvites = findByPropsLazy("createFriendInvite");
 
 export default definePlugin({
     name: "FriendInvites",
-    description: t("friendInvites.description"),
+    description: t("vencord.friendInvites.description"),
     authors: [Devs.afn, Devs.Dziurwa],
     commands: [
         {
             name: "create friend invite",
-            description: t("friendInvites.commands.createFriendInvite.description"),
+            description: t("vencord.friendInvites.commands.createFriendInvite.description"),
             inputType: ApplicationCommandInputType.BUILT_IN,
 
             execute: async (args, ctx) => {
@@ -40,40 +40,40 @@ export default definePlugin({
                 sendBotMessage(ctx.channel.id, {
                     content: `
                         discord.gg/${invite.code} ·
-                        ${t("friendInvites.ui.expires")} <t:${new Date(invite.expires_at).getTime() / 1000}:R> ·
-                        ${t("friendInvites.ui.maxUses")} \`${invite.max_uses}\`
+                        ${t("vencord.friendInvites.ui.expires")} <t:${new Date(invite.expires_at).getTime() / 1000}:R> ·
+                        ${t("vencord.friendInvites.ui.maxUses")} \`${invite.max_uses}\`
                     `.trim().replace(/\s+/g, " ")
                 });
             }
         },
         {
             name: "view friend invites",
-            description: t("friendInvites.commands.viewFriendInvites.description"),
+            description: t("vencord.friendInvites.commands.viewFriendInvites.description"),
             inputType: ApplicationCommandInputType.BUILT_IN,
             execute: async (_, ctx) => {
                 const invites = await FriendInvites.getAllFriendInvites();
                 const friendInviteList = invites.map(i =>
                     `
                     _discord.gg/${i.code}_ ·
-                    ${t("friendInvites.ui.expires")} <t:${new Date(i.expires_at).getTime() / 1000}:R> ·
-                    ${t("friendInvites.ui.timesUsed")} \`${i.uses}/${i.max_uses}\`
+                    ${t("vencord.friendInvites.ui.expires")} <t:${new Date(i.expires_at).getTime() / 1000}:R> ·
+                    ${t("vencord.friendInvites.ui.timesUsed")} \`${i.uses}/${i.max_uses}\`
                     `.trim().replace(/\s+/g, " ")
                 );
 
                 sendBotMessage(ctx.channel.id, {
-                    content: friendInviteList.join("\n") || t("friendInvites.ui.noActiveInvites")
+                    content: friendInviteList.join("\n") || t("vencord.friendInvites.ui.noActiveInvites")
                 });
             },
         },
         {
             name: "revoke friend invites",
-            description: t("friendInvites.commands.revokeFriendInvites.description"),
+            description: t("vencord.friendInvites.commands.revokeFriendInvites.description"),
             inputType: ApplicationCommandInputType.BUILT_IN,
             execute: async (_, ctx) => {
                 await FriendInvites.revokeFriendInvites();
 
                 sendBotMessage(ctx.channel.id, {
-                    content: t("friendInvites.ui.allRevoked")
+                    content: t("vencord.friendInvites.ui.allRevoked")
                 });
             },
         },

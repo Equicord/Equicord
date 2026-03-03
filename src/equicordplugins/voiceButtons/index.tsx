@@ -16,7 +16,7 @@ import { UserChatButton, UserDeafenButton, UserMuteButton } from "./utils";
 
 export default definePlugin({
     name: "VoiceButtons",
-    description: t("voiceButtons.description"),
+    description: t("equicord.voiceButtons.description"),
     authors: [EquicordDevs.nicola02nb, EquicordDevs.omaw],
     settings,
     patches: [

@@ -81,7 +81,7 @@ const contextMenuPatch: NavContextMenuPatchCallback = (children, props: MessageA
 migratePluginSettings("FullSearchContext", "SearchReply");
 export default definePlugin({
     name: "FullSearchContext",
-    description: t("fullSearchContext.description"),
+    description: t("vencord.fullSearchContext.description"),
     authors: [Devs.Ven, Devs.Aria],
 
     patches: [{

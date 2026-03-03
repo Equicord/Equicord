@@ -80,14 +80,14 @@ function KeybindRecorder() {
                 className={cl("keybind-button", isListening ? "listening" : "")}
                 onClick={() => setIsListening(true)}
             >
-                {isListening ? t("elementHighlighter.ui.recording") : <KeybindShortcut shortcut={currentKeybind.join("+")} />}
+                {isListening ? t("equicord.elementHighlighter.ui.recording") : <KeybindShortcut shortcut={currentKeybind.join("+")} />}
             </button>
             <Button
                 size="small"
                 variant="secondary"
                 onClick={() => { settings.store.keybind = DEFAULT_KEYBIND; }}
             >
-                {t("elementHighlighter.ui.reset")}
+                {t("equicord.elementHighlighter.ui.reset")}
             </Button>
         </div>
     );
@@ -95,48 +95,48 @@ function KeybindRecorder() {
 
 const settings = definePluginSettings({
     keybind: {
-        description: t("elementHighlighter.settings.keybind"),
+        description: t("equicord.elementHighlighter.settings.keybind"),
         type: OptionType.COMPONENT,
         default: DEFAULT_KEYBIND,
         component: KeybindRecorder
     },
     showClasses: {
-        description: t("elementHighlighter.settings.showClasses"),
+        description: t("equicord.elementHighlighter.settings.showClasses"),
         type: OptionType.BOOLEAN,
         default: false
     },
     showId: {
-        description: t("elementHighlighter.settings.showId"),
+        description: t("equicord.elementHighlighter.settings.showId"),
         type: OptionType.BOOLEAN,
         default: false
     },
     showFont: {
-        description: t("elementHighlighter.settings.showFont"),
+        description: t("equicord.elementHighlighter.settings.showFont"),
         type: OptionType.BOOLEAN,
         default: false
     },
     showPadding: {
-        description: t("elementHighlighter.settings.showPadding"),
+        description: t("equicord.elementHighlighter.settings.showPadding"),
         type: OptionType.BOOLEAN,
         default: false
     },
     showMargin: {
-        description: t("elementHighlighter.settings.showMargin"),
+        description: t("equicord.elementHighlighter.settings.showMargin"),
         type: OptionType.BOOLEAN,
         default: false
     },
     showBorderRadius: {
-        description: t("elementHighlighter.settings.showBorderRadius"),
+        description: t("equicord.elementHighlighter.settings.showBorderRadius"),
         type: OptionType.BOOLEAN,
         default: false
     },
     showPosition: {
-        description: t("elementHighlighter.settings.showPosition"),
+        description: t("equicord.elementHighlighter.settings.showPosition"),
         type: OptionType.BOOLEAN,
         default: false
     },
     showDisplay: {
-        description: t("elementHighlighter.settings.showDisplay"),
+        description: t("equicord.elementHighlighter.settings.showDisplay"),
         type: OptionType.BOOLEAN,
         default: false
     }
@@ -355,7 +355,7 @@ function onClick(e: MouseEvent) {
     if (!el || el === overlay || el === tooltip) return;
 
     const colorVar = getColorVar(el);
-    if (colorVar) copyWithToast(colorVar, t("elementHighlighter.ui.copiedColor"));
+    if (colorVar) copyWithToast(colorVar, t("equicord.elementHighlighter.ui.copiedColor"));
 }
 
 function onKeyDown(e: KeyboardEvent) {
@@ -449,7 +449,7 @@ function onToggle(e: KeyboardEvent) {
 
 export default definePlugin({
     name: "ElementHighlighter",
-    description: t("elementHighlighter.description"),
+    description: t("equicord.elementHighlighter.description"),
     authors: [Devs.prism],
     settings,
 

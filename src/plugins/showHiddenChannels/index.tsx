@@ -49,28 +49,28 @@ const CONNECT = 1n << 20n;
 
 export const settings = definePluginSettings({
     channelStyle: {
-        description: t("showHiddenChannels.settings.channelStyle.description"),
+        description: t("vencord.showHiddenChannels.settings.channelStyle.description"),
         type: OptionType.SELECT,
         options: [
-            { label: t("showHiddenChannels.settings.channelStyle.classic"), value: ChannelStyle.Classic, default: true },
-            { label: t("showHiddenChannels.settings.channelStyle.muted"), value: ChannelStyle.Muted },
-            { label: t("showHiddenChannels.settings.channelStyle.showUnreads"), value: ChannelStyle.Unread },
-            { label: t("showHiddenChannels.settings.channelStyle.mutedAndShowUnreads"), value: ChannelStyle.MutedUnread }
+            { label: t("vencord.showHiddenChannels.settings.channelStyle.classic"), value: ChannelStyle.Classic, default: true },
+            { label: t("vencord.showHiddenChannels.settings.channelStyle.muted"), value: ChannelStyle.Muted },
+            { label: t("vencord.showHiddenChannels.settings.channelStyle.showUnreads"), value: ChannelStyle.Unread },
+            { label: t("vencord.showHiddenChannels.settings.channelStyle.mutedAndShowUnreads"), value: ChannelStyle.MutedUnread }
         ],
         restartNeeded: true
     },
     showMode: {
-        description: t("showHiddenChannels.settings.showMode.description"),
+        description: t("vencord.showHiddenChannels.settings.showMode.description"),
         type: OptionType.SELECT,
         options: [
-            { label: t("showHiddenChannels.settings.showMode.lockIcon"), value: ShowMode.LockIcon, default: true },
-            { label: t("showHiddenChannels.settings.showMode.eyeIconRight"), value: ShowMode.EyeIconRight },
-            { label: t("showHiddenChannels.settings.showMode.lockIconRight"), value: ShowMode.LockIconRight }
+            { label: t("vencord.showHiddenChannels.settings.showMode.lockIcon"), value: ShowMode.LockIcon, default: true },
+            { label: t("vencord.showHiddenChannels.settings.showMode.eyeIconRight"), value: ShowMode.EyeIconRight },
+            { label: t("vencord.showHiddenChannels.settings.showMode.lockIconRight"), value: ShowMode.LockIconRight }
         ],
         restartNeeded: true
     },
     defaultAllowedUsersAndRolesDropdownState: {
-        description: t("showHiddenChannels.settings.defaultAllowedUsersAndRolesDropdownState.description"),
+        description: t("vencord.showHiddenChannels.settings.defaultAllowedUsersAndRolesDropdownState.description"),
         type: OptionType.BOOLEAN,
         default: true
     }
@@ -82,7 +82,7 @@ function isUncategorized(objChannel: { channel: Channel; comparator: number; }) 
 
 export default definePlugin({
     name: "ShowHiddenChannels",
-    description: t("showHiddenChannels.description"),
+    description: t("vencord.showHiddenChannels.description"),
     authors: [Devs.BigDuck, Devs.AverageReactEnjoyer, Devs.D3SOX, Devs.Ven, Devs.Nuckyz, Devs.Nickyux, Devs.dzshn, EquicordDevs.Oggetto],
     isModified: true,
     settings,
@@ -576,7 +576,7 @@ export default definePlugin({
     ), { noop: true }),
 
     EyeRightIcon: ErrorBoundary.wrap(() => (
-        <Tooltip text={t("showHiddenChannels.hiddenChannelTooltip")}>
+        <Tooltip text={t("vencord.showHiddenChannels.hiddenChannelTooltip")}>
             {({ onMouseLeave, onMouseEnter }) => (
                 <svg
                     onMouseLeave={onMouseLeave}
@@ -595,7 +595,7 @@ export default definePlugin({
     ), { noop: true }),
 
     LockRightIcon: ErrorBoundary.wrap(() => (
-        <Tooltip text={t("showHiddenChannels.hiddenChannelTooltip")}>
+        <Tooltip text={t("vencord.showHiddenChannels.hiddenChannelTooltip")}>
             {({ onMouseLeave, onMouseEnter }) => (
                 <svg
                     onMouseLeave={onMouseLeave}

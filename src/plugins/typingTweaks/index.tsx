@@ -35,23 +35,23 @@ const settings = definePluginSettings({
     showAvatars: {
         type: OptionType.BOOLEAN,
         default: true,
-        description: t("typingTweaks.settings.showAvatars")
+        description: t("vencord.typingTweaks.settings.showAvatars")
     },
     showRoleColors: {
         type: OptionType.BOOLEAN,
         default: true,
-        description: t("typingTweaks.settings.showRoleColors")
+        description: t("vencord.typingTweaks.settings.showRoleColors")
     },
     alternativeFormatting: {
         type: OptionType.BOOLEAN,
         default: true,
-        description: t("typingTweaks.settings.alternativeFormatting")
+        description: t("vencord.typingTweaks.settings.alternativeFormatting")
     },
     amITyping: {
         type: OptionType.BOOLEAN,
         default: false,
         restartNeeded: true,
-        description: t("typingTweaks.settings.amITyping")
+        description: t("vencord.typingTweaks.settings.amITyping")
     }
 });
 
@@ -114,7 +114,7 @@ const TypingUser = ErrorBoundary.wrap(function TypingUser({ user, guildId }: Typ
 migratePluginToSettings(true, "TypingTweaks", "AmITyping", "amITyping");
 export default definePlugin({
     name: "TypingTweaks",
-    description: t("typingTweaks.description"),
+    description: t("vencord.typingTweaks.description"),
     authors: [Devs.zt, Devs.sadan, EquicordDevs.MrDiamond],
     settings,
     isModified: true,

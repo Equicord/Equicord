@@ -1,10 +1,10 @@
 {
-    "description":"Equicord 번역에 도움",
-    "settings":{
-        "forceLocale":{
-            "description":"Equicord에 대해 다른 로케일을 강제로 사용",
-            "followDiscord":"기본값(Discord 따르기)"
+    "description": "Equicord 번역에 도움",
+    "settings": {
+        "forceLocale": {
+            "description": "Equicord에 대해 다른 로케일을 강제로 사용",
+            "followDiscord": "기본값(Discord 따르기)"
         },
-        "showMissingKeys":"현재 로캘에 번역이 누락된 경우 영어로 돌아가는 대신 키를 표시하세요."
+        "showMissingKeys": "현재 로캘에 번역이 누락된 경우 영어로 돌아가는 대신 키를 표시하세요."
     }
 }

@@ -33,7 +33,7 @@ const SekaiStickerChatButton: ChatBarButtonFactory = () => {
 let IS_FONTS_LOADED = false;
 export default definePlugin({
     name: "SekaiStickers",
-    description: t("sekaiStickers.description"),
+    description: t("equicord.sekaiStickers.description"),
     authors: [Devs.MaiKokain],
     settings,
     chatBarButton: {

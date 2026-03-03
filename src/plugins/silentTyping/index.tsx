@@ -31,72 +31,72 @@ import { ChannelStore, FluxDispatcher, Menu, React } from "@webpack/common";
 const settings = definePluginSettings({
     enabledGlobally: {
         type: OptionType.BOOLEAN,
-        description: t("silentTyping.settings.enabledGlobally"),
+        description: t("vencord.silentTyping.settings.enabledGlobally"),
         default: true,
     },
     hideChatBoxTypingIndicators: {
         type: OptionType.BOOLEAN,
-        description: t("silentTyping.settings.hideChatBoxTypingIndicators"),
+        description: t("vencord.silentTyping.settings.hideChatBoxTypingIndicators"),
         default: false,
     },
     hideMembersListTypingIndicators: {
         type: OptionType.BOOLEAN,
-        description: t("silentTyping.settings.hideMembersListTypingIndicators"),
+        description: t("vencord.silentTyping.settings.hideMembersListTypingIndicators"),
         default: false,
     },
     chatIcon: {
         type: OptionType.BOOLEAN,
-        description: t("silentTyping.settings.chatIcon"),
+        description: t("vencord.silentTyping.settings.chatIcon"),
         default: true,
     },
     chatIconLeftClickAction: {
         type: OptionType.SELECT,
-        description: t("silentTyping.settings.chatIconLeftClickAction"),
+        description: t("vencord.silentTyping.settings.chatIconLeftClickAction"),
         options: [
-            { label: t("silentTyping.clickActions.toggleTypingGlobally"), value: "global" },
-            { label: t("silentTyping.clickActions.toggleTypingInChannel"), value: "channel", default: true },
-            { label: t("silentTyping.clickActions.toggleTypingInGuild"), value: "guild" },
-            { label: t("silentTyping.clickActions.openPluginSettings"), value: "settings" }
+            { label: t("vencord.silentTyping.clickActions.toggleTypingGlobally"), value: "global" },
+            { label: t("vencord.silentTyping.clickActions.toggleTypingInChannel"), value: "channel", default: true },
+            { label: t("vencord.silentTyping.clickActions.toggleTypingInGuild"), value: "guild" },
+            { label: t("vencord.silentTyping.clickActions.openPluginSettings"), value: "settings" }
         ]
     },
     chatIconMiddleClickAction: {
         type: OptionType.SELECT,
-        description: t("silentTyping.settings.chatIconMiddleClickAction"),
+        description: t("vencord.silentTyping.settings.chatIconMiddleClickAction"),
         options: [
-            { label: t("silentTyping.clickActions.toggleTypingGlobally"), value: "global" },
-            { label: t("silentTyping.clickActions.toggleTypingInChannel"), value: "channel" },
-            { label: t("silentTyping.clickActions.toggleTypingInGuild"), value: "guild" },
-            { label: t("silentTyping.clickActions.openPluginSettings"), value: "settings", default: true }
+            { label: t("vencord.silentTyping.clickActions.toggleTypingGlobally"), value: "global" },
+            { label: t("vencord.silentTyping.clickActions.toggleTypingInChannel"), value: "channel" },
+            { label: t("vencord.silentTyping.clickActions.toggleTypingInGuild"), value: "guild" },
+            { label: t("vencord.silentTyping.clickActions.openPluginSettings"), value: "settings", default: true }
         ]
     },
     chatIconRightClickAction: {
         type: OptionType.SELECT,
-        description: t("silentTyping.settings.chatIconRightClickAction"),
+        description: t("vencord.silentTyping.settings.chatIconRightClickAction"),
         options: [
-            { label: t("silentTyping.clickActions.toggleTypingGlobally"), value: "global", default: true },
-            { label: t("silentTyping.clickActions.toggleTypingInChannel"), value: "channel" },
-            { label: t("silentTyping.clickActions.toggleTypingInGuild"), value: "guild" },
-            { label: t("silentTyping.clickActions.openPluginSettings"), value: "settings" }
+            { label: t("vencord.silentTyping.clickActions.toggleTypingGlobally"), value: "global", default: true },
+            { label: t("vencord.silentTyping.clickActions.toggleTypingInChannel"), value: "channel" },
+            { label: t("vencord.silentTyping.clickActions.toggleTypingInGuild"), value: "guild" },
+            { label: t("vencord.silentTyping.clickActions.openPluginSettings"), value: "settings" }
         ]
     },
     chatContextMenu: {
         type: OptionType.BOOLEAN,
-        description: t("silentTyping.settings.chatContextMenu"),
+        description: t("vencord.silentTyping.settings.chatContextMenu"),
         default: true
     },
     defaultHidden: {
         type: OptionType.BOOLEAN,
-        description: t("silentTyping.settings.defaultHidden"),
+        description: t("vencord.silentTyping.settings.defaultHidden"),
         default: true,
     },
     enabledLocations: {
         type: OptionType.STRING,
-        description: t("silentTyping.settings.enabledLocations"),
+        description: t("vencord.silentTyping.settings.enabledLocations"),
         default: "",
     },
     disabledLocations: {
         type: OptionType.STRING,
-        description: t("silentTyping.settings.disabledLocations"),
+        description: t("vencord.silentTyping.settings.disabledLocations"),
         default: "",
     },
 });
@@ -150,7 +150,7 @@ const SilentTypingChatToggle: ChatBarButtonFactory = ({ channel, type }) => {
 
     const tooltip = enabledGlobally ? (
         enabledLocally ? t("silentTyping.typingHidden", { location }) : t("silentTyping.typingVisible", { location })
-    ) : t("silentTyping.typingVisibleGlobal");
+    ) : t("vencord.silentTyping.typingVisibleGlobal");
 
     function performAction(action: string): void {
         switch (action) {
@@ -269,16 +269,16 @@ const ChatBarContextCheckbox: NavContextMenuPatchCallback = children => {
     const idx = group.findIndex(c => c?.props?.id === "submit-button");
 
     group.splice(idx >= 0 ? idx : 0, 0,
-        <Menu.MenuItem id="vc-silent-typing" label={t("silentTyping.contextMenu.silentTyping")}>
-            <Menu.MenuCheckboxItem id="vc-silent-typing-enabled" label={t("silentTyping.contextMenu.enabled")} checked={enabledGlobally}
+        <Menu.MenuItem id="vc-silent-typing" label={t("vencord.silentTyping.contextMenu.silentTyping")}>
+            <Menu.MenuCheckboxItem id="vc-silent-typing-enabled" label={t("vencord.silentTyping.contextMenu.enabled")} checked={enabledGlobally}
                 action={() => settings.store.enabledGlobally = !settings.store.enabledGlobally} />
-            <Menu.MenuCheckboxItem id="vc-silent-typing-chat-bar-indicators" label={t("silentTyping.contextMenu.chatBarIndicators")} checked={settings.store.hideChatBoxTypingIndicators}
+            <Menu.MenuCheckboxItem id="vc-silent-typing-chat-bar-indicators" label={t("vencord.silentTyping.contextMenu.chatBarIndicators")} checked={settings.store.hideChatBoxTypingIndicators}
                 action={() => settings.store.hideChatBoxTypingIndicators = !settings.store.hideChatBoxTypingIndicators} />
-            <Menu.MenuCheckboxItem id="vc-silent-typing-members-list-indicators" label={t("silentTyping.contextMenu.membersListIndicators")} checked={settings.store.hideMembersListTypingIndicators}
+            <Menu.MenuCheckboxItem id="vc-silent-typing-members-list-indicators" label={t("vencord.silentTyping.contextMenu.membersListIndicators")} checked={settings.store.hideMembersListTypingIndicators}
                 action={() => settings.store.hideMembersListTypingIndicators = !settings.store.hideMembersListTypingIndicators} />
-            <Menu.MenuCheckboxItem id="vc-silent-typing-chat-icon" label={t("silentTyping.contextMenu.chatIcon")} checked={chatIcon}
+            <Menu.MenuCheckboxItem id="vc-silent-typing-chat-icon" label={t("vencord.silentTyping.contextMenu.chatIcon")} checked={chatIcon}
                 action={() => settings.store.chatIcon = !settings.store.chatIcon} />
-            <Menu.MenuCheckboxItem id="vc-silent-typing-default" label={t("silentTyping.contextMenu.defaultHidden")} checked={defaultHidden}
+            <Menu.MenuCheckboxItem id="vc-silent-typing-default" label={t("vencord.silentTyping.contextMenu.defaultHidden")} checked={defaultHidden}
                 action={() => settings.store.defaultHidden = !settings.store.defaultHidden} />
         </Menu.MenuItem>
     );
@@ -346,48 +346,48 @@ export default definePlugin({
     commands: [
         {
             name: "silent-typing",
-            description: t("silentTyping.command.description"),
+            description: t("vencord.silentTyping.command.description"),
             inputType: ApplicationCommandInputType.BUILT_IN,
 
             options: [
                 {
                     name: "toggle",
-                    description: t("silentTyping.command.toggleOption"),
+                    description: t("vencord.silentTyping.command.toggleOption"),
                     required: false,
                     type: ApplicationCommandOptionType.STRING,
                     choices: [
-                        { name: "Global", label: t("silentTyping.command.toggleGlobal"), value: "global" },
-                        { name: "Channel", label: t("silentTyping.command.toggleChannel"), value: "channel" },
-                        { name: "Guild", label: t("silentTyping.command.toggleGuild"), value: "guild" },
+                        { name: "Global", label: t("vencord.silentTyping.command.toggleGlobal"), value: "global" },
+                        { name: "Channel", label: t("vencord.silentTyping.command.toggleChannel"), value: "channel" },
+                        { name: "Guild", label: t("vencord.silentTyping.command.toggleGuild"), value: "guild" },
                     ]
                 },
                 {
                     name: "chat-bar-indicators",
-                    description: t("silentTyping.command.chatBarIndicatorsOption"),
+                    description: t("vencord.silentTyping.command.chatBarIndicatorsOption"),
                     required: false,
                     type: ApplicationCommandOptionType.BOOLEAN,
                 },
                 {
                     name: "members-list-indicators",
-                    description: t("silentTyping.command.membersListIndicatorsOption"),
+                    description: t("vencord.silentTyping.command.membersListIndicatorsOption"),
                     required: false,
                     type: ApplicationCommandOptionType.BOOLEAN,
                 },
                 {
                     name: "chat-icon",
-                    description: t("silentTyping.command.chatIconOption"),
+                    description: t("vencord.silentTyping.command.chatIconOption"),
                     required: false,
                     type: ApplicationCommandOptionType.BOOLEAN,
                 },
                 {
                     name: "chat-context-menu",
-                    description: t("silentTyping.command.chatContextMenuOption"),
+                    description: t("vencord.silentTyping.command.chatContextMenuOption"),
                     required: false,
                     type: ApplicationCommandOptionType.BOOLEAN,
                 },
                 {
                     name: "default-hidden",
-                    description: t("silentTyping.command.defaultHiddenOption"),
+                    description: t("vencord.silentTyping.command.defaultHiddenOption"),
                     required: false,
                     type: ApplicationCommandOptionType.BOOLEAN,
                 }
@@ -430,7 +430,7 @@ export default definePlugin({
                 }
 
                 sendBotMessage(ctx.channel.id, {
-                    content: updated ? t("silentTyping.settingsUpdated") : t("silentTyping.noChanges"),
+                    content: updated ? t("vencord.silentTyping.settingsUpdated") : t("vencord.silentTyping.noChanges"),
                 });
             },
         }

@@ -10,7 +10,7 @@ import definePlugin from "@utils/types";
 
 export default definePlugin({
     name: "AltKrispSwitch",
-    description: t("altKrispSwitch.description"),
+    description: t("equicord.altKrispSwitch.description"),
     authors: [Devs.newwares],
     patches: [
         {

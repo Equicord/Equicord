@@ -135,13 +135,13 @@ function GoogleFontSearch({ onSelect }: { onSelect: (font: GoogleFontMetadata) =
 
     return (
         <section>
-            <HeadingSecondary>{t("fontLoader.ui.searchGoogleFonts")}</HeadingSecondary>
-            <Paragraph>{t("fontLoader.ui.clickToApply")}</Paragraph>
+            <HeadingSecondary>{t("equicord.fontLoader.ui.searchGoogleFonts")}</HeadingSecondary>
+            <Paragraph>{t("equicord.fontLoader.ui.clickToApply")}</Paragraph>
 
             <TextInput
                 value={query}
                 onChange={e => handleSearch(e)}
-                placeholder={t("fontLoader.ui.searchFonts")}
+                placeholder={t("equicord.fontLoader.ui.searchFonts")}
                 disabled={loading}
                 className={Margins.bottom16}
             />
@@ -193,14 +193,14 @@ const settings = definePluginSettings({
     },
     applyOnCodeBlocks: {
         type: OptionType.BOOLEAN,
-        description: t("fontLoader.settings.applyOnCodeBlocks"),
+        description: t("equicord.fontLoader.settings.applyOnCodeBlocks"),
         default: false
     }
 });
 
 export default definePlugin({
     name: "FontLoader",
-    description: t("fontLoader.description"),
+    description: t("equicord.fontLoader.description"),
     authors: [EquicordDevs.vmohammad],
     settings,
 

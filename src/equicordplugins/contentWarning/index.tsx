@@ -94,7 +94,7 @@ function FlaggedInput({ index, forceUpdate }) {
     return (<Flex flexDirection="row">
         <div style={{ flexGrow: 1 }}>
             <TextInput
-                placeholder={t("contentWarning.ui.placeholder")}
+                placeholder={t("equicord.contentWarning.ui.placeholder")}
                 spellCheck={false}
                 value={value}
                 onChange={updateValue}
@@ -131,7 +131,7 @@ function FlaggedWords() {
 
     return (
         <>
-            <HeadingTertiary>{t("contentWarning.ui.flaggedWords")}</HeadingTertiary>
+            <HeadingTertiary>{t("equicord.contentWarning.ui.flaggedWords")}</HeadingTertiary>
             {inputs}
         </>
     );
@@ -144,7 +144,7 @@ const settings = definePluginSettings({
     },
     onClick: {
         type: OptionType.BOOLEAN,
-        description: t("contentWarning.settings.onClick"),
+        description: t("equicord.contentWarning.settings.onClick"),
         default: false,
     }
 });
@@ -152,7 +152,7 @@ const settings = definePluginSettings({
 export default definePlugin({
     name: "ContentWarning",
     authors: [EquicordDevs.camila314],
-    description: t("contentWarning.description"),
+    description: t("equicord.contentWarning.description"),
     settings,
     patches: [
         {

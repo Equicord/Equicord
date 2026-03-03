@@ -42,16 +42,16 @@ let ws: WebSocket;
 migratePluginSettings("WebRichPresence", "WebRichPresence (arRPC)");
 export default definePlugin({
     name: "WebRichPresence",
-    description: t("arRPC.description"),
+    description: t("vencord.arRPC.description"),
     authors: [Devs.Ducko],
     reporterTestable: ReporterTestable.None,
     hidden: !IS_EQUIBOP && !IS_VESKTOP && !("legcord" in window),
 
     settingsAboutComponent: () => (
         <>
-            <HeadingSecondary>{t("arRPC.settingsAbout.title")}</HeadingSecondary>
+            <HeadingSecondary>{t("vencord.arRPC.settingsAbout.title")}</HeadingSecondary>
             <Paragraph>
-                <Link href="https://github.com/OpenAsar/arrpc/tree/main#server">{t("arRPC.settingsAbout.description")}</Link>
+                <Link href="https://github.com/OpenAsar/arrpc/tree/main#server">{t("vencord.arRPC.settingsAbout.description")}</Link>
             </Paragraph>
         </>
     ),
@@ -84,7 +84,7 @@ export default definePlugin({
 
         const connectionSuccessful = await new Promise(res => setTimeout(() => res(ws.readyState === WebSocket.OPEN), 5000));
         if (!connectionSuccessful) {
-            showNotice(t("arRPC.connectionFailed"), t("arRPC.retry"), () => {
+            showNotice(t("vencord.arRPC.connectionFailed"), t("vencord.arRPC.retry"), () => {
                 popNotice();
                 this.start();
             });
@@ -92,7 +92,7 @@ export default definePlugin({
         }
 
         Toasts.show({
-            message: t("arRPC.connected"),
+            message: t("vencord.arRPC.connected"),
             type: Toasts.Type.SUCCESS,
             id: Toasts.genId(),
             options: {

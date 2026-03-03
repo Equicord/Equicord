@@ -11,7 +11,7 @@ import { t } from "@utils/translation";
 export default definePlugin({
     name: "WebScreenShareFixes",
     authors: [Devs.Kaitlyn],
-    description: t("webScreenShareFixes.description"),
+    description: t("vencord.webScreenShareFixes.description"),
     enabledByDefault: true,
 
     patches: [

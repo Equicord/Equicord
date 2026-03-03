@@ -32,21 +32,21 @@ const enum ReplacementEngineValue {
 
 const settings = definePluginSettings({
     customEngineName: {
-        description: t("replaceGoogleSearch.settings.customEngineName"),
+        description: t("vencord.replaceGoogleSearch.settings.customEngineName"),
         type: OptionType.STRING,
         placeholder: "Google"
     },
     customEngineURL: {
-        description: t("replaceGoogleSearch.settings.customEngineURL"),
+        description: t("vencord.replaceGoogleSearch.settings.customEngineURL"),
         type: OptionType.STRING,
         placeholder: "https://google.com/search?q="
     },
     replacementEngine: {
-        description: t("replaceGoogleSearch.settings.replacementEngine"),
+        description: t("vencord.replaceGoogleSearch.settings.replacementEngine"),
         type: OptionType.SELECT,
         options: [
-            { label: t("replaceGoogleSearch.settings.off"), value: ReplacementEngineValue.OFF, default: true },
-            { label: t("replaceGoogleSearch.settings.customEngine"), value: ReplacementEngineValue.CUSTOM },
+            { label: t("vencord.replaceGoogleSearch.settings.off"), value: ReplacementEngineValue.OFF, default: true },
+            { label: t("vencord.replaceGoogleSearch.settings.customEngine"), value: ReplacementEngineValue.CUSTOM },
             ...Object.keys(DefaultEngines).map(engine => ({ label: engine, value: engine }))
         ]
     }
@@ -85,7 +85,7 @@ function makeSearchItem(src: string) {
 
     return (
         <Menu.MenuItem
-            label={t("replaceGoogleSearch.searchText")}
+            label={t("vencord.replaceGoogleSearch.searchText")}
             key="search-text"
             id="vc-search-text"
         >
@@ -131,7 +131,7 @@ const messageContextMenuPatch: NavContextMenuPatchCallback = (children, _props) 
 migratePluginSettings("ReplaceGoogleSearch", "Search");
 export default definePlugin({
     name: "ReplaceGoogleSearch",
-    description: t("replaceGoogleSearch.description"),
+    description: t("vencord.replaceGoogleSearch.description"),
     authors: [Devs.Moxxie, Devs.Ethan],
 
     settings,

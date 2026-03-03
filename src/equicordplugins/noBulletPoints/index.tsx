@@ -9,7 +9,7 @@ import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 export default definePlugin({
     name: "NoBulletPoints",
-    description: t("noBulletPoints.description"),
+    description: t("equicord.noBulletPoints.description"),
     authors: [Devs.Samwich],
     onBeforeMessageSend(channelId, msg) {
         msg.content = textProcessing(msg.content);

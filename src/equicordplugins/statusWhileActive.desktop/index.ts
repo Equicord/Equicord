@@ -56,7 +56,7 @@ function setStatus(preq, status) {
 
 export default definePlugin({
     name: "StatusWhileActive",
-    description: t("statusWhileActive.description"),
+    description: t("equicord.statusWhileActive.description"),
     authors: [EquicordDevs.smuki],
     settings,
     flux: {

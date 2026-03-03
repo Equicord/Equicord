@@ -43,7 +43,7 @@ const guildPopoutPatch: NavContextMenuPatchCallback = (children, { guild }: { gu
     if (!guild) return;
     children.push(
         <Menu.MenuItem
-            label={t("reviewDB.viewReviews")}
+            label={t("vencord.reviewDB.viewReviews")}
             id="vc-rdb-server-reviews"
             icon={OpenExternalIcon}
             action={() => openReviewsModal(guild.id, guild.name, ReviewType.Server)}
@@ -55,7 +55,7 @@ const userContextPatch: NavContextMenuPatchCallback = (children, { user }: { use
     if (!user) return;
     children.push(
         <Menu.MenuItem
-            label={t("reviewDB.viewReviews")}
+            label={t("vencord.reviewDB.viewReviews")}
             id="vc-rdb-user-reviews"
             icon={OpenExternalIcon}
             action={() => openReviewsModal(user.id, user.username, ReviewType.User)}
@@ -116,14 +116,14 @@ export default definePlugin({
                 if (lastReviewId && lastReviewId < user.lastReviewID) {
                     s.lastReviewId = user.lastReviewID;
                     if (user.lastReviewID !== 0)
-                        showToast(t("reviewDB.newReviews"));
+                        showToast(t("vencord.reviewDB.newReviews"));
                 }
             }
 
             if (user.notification) {
                 const props = user.notification.type === NotificationType.Ban ? {
-                    cancelText: t("reviewDB.appeal"),
-                    confirmText: t("reviewDB.ok"),
+                    cancelText: t("vencord.reviewDB.appeal"),
+                    confirmText: t("vencord.reviewDB.ok"),
                     onCancel: async () =>
                         VencordNative.native.openExternal(
                             "https://reviewdb.mantikafasi.dev/api/redirect?"
@@ -152,7 +152,7 @@ export default definePlugin({
 
     BiteSizeReviewsButton: ErrorBoundary.wrap(({ user }: { user: User; }) => {
         return (
-            <TooltipContainer text={t("reviewDB.viewReviews")}>
+            <TooltipContainer text={t("vencord.reviewDB.viewReviews")}>
                 <Clickable
                     onClick={() => openReviewsModal(user.id, user.username, ReviewType.User)}
                     className={BannerButtonClasses.bannerButton}

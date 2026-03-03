@@ -1,10 +1,10 @@
 {
-    "description":"Equicord çevirisine yardımcı olur",
-    "settings":{
-        "forceLocale":{
-            "description":"Equicord için farklı bir yerel ayarı kullanmaya zorla",
-            "followDiscord":"Varsayılan (Discord izleyin)"
+    "description": "Equicord çevirisine yardımcı olur",
+    "settings": {
+        "forceLocale": {
+            "description": "Equicord için farklı bir yerel ayarı kullanmaya zorla",
+            "followDiscord": "Varsayılan (Discord izleyin)"
         },
-        "showMissingKeys":"Geçerli yerel ayarda çeviriler eksikse İngilizceye geri dönmek yerine anahtarları gösterin"
+        "showMissingKeys": "Geçerli yerel ayarda çeviriler eksikse İngilizceye geri dönmek yerine anahtarları gösterin"
     }
 }

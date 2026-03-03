@@ -41,7 +41,7 @@ export function HistoryModal({ modalProps, message }: { modalProps: ModalProps; 
     return (
         <ModalRoot {...modalProps} size={ModalSize.LARGE}>
             <ModalHeader className={cl("head")}>
-                <BaseText size="lg" weight="semibold" style={{ flexGrow: 1 }}>{t("messageLogger.editHistory")}</BaseText>
+                <BaseText size="lg" weight="semibold" style={{ flexGrow: 1 }}>{t("vencord.messageLogger.editHistory")}</BaseText>
                 <ModalCloseButton onClick={modalProps.onClose} />
             </ModalHeader>
 
@@ -54,7 +54,7 @@ export function HistoryModal({ modalProps, message }: { modalProps: ModalProps; 
                     onItemSelect={setCurrentTab}
                 >
                     {message.firstEditTimestamp.getTime() !== message.timestamp.getTime() && (
-                        <TooltipContainer text={t("messageLogger.notLoggedTooltip")}>
+                        <TooltipContainer text={t("vencord.messageLogger.notLoggedTooltip")}>
                             <TabBar.Item
                                 className="vc-settings-tab-bar-item"
                                 id={-1}

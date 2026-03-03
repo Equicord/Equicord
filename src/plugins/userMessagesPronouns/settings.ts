@@ -28,22 +28,22 @@ export const enum PronounsFormat {
 export const settings = definePluginSettings({
     pronounsFormat: {
         type: OptionType.SELECT,
-        description: t("userMessagesPronouns.settings.pronounsFormat"),
+        description: t("vencord.userMessagesPronouns.settings.pronounsFormat"),
         options: [
             {
-                label: t("userMessagesPronouns.settings.pronounsFormatOptions.lowercase"),
+                label: t("vencord.userMessagesPronouns.settings.pronounsFormatOptions.lowercase"),
                 value: PronounsFormat.Lowercase,
                 default: true
             },
             {
-                label: t("userMessagesPronouns.settings.pronounsFormatOptions.capitalized"),
+                label: t("vencord.userMessagesPronouns.settings.pronounsFormatOptions.capitalized"),
                 value: PronounsFormat.Capitalized
             }
         ]
     },
     showSelf: {
         type: OptionType.BOOLEAN,
-        description: t("userMessagesPronouns.settings.showSelf"),
+        description: t("vencord.userMessagesPronouns.settings.showSelf"),
         default: true
     }
 });

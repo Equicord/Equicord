@@ -31,35 +31,35 @@ export const settings = definePluginSettings({
         type: OptionType.COMPONENT,
         component: () => (
             <Button onClick={() => authorize()}>
-                {t("reviewDB.settings.authorize")}
+                {t("vencord.reviewDB.settings.authorize")}
             </Button>
         )
     },
     notifyReviews: {
         type: OptionType.BOOLEAN,
-        description: t("reviewDB.settings.notifyReviews"),
+        description: t("vencord.reviewDB.settings.notifyReviews"),
         default: true,
     },
     showWarning: {
         type: OptionType.BOOLEAN,
-        description: t("reviewDB.settings.showWarning"),
+        description: t("vencord.reviewDB.settings.showWarning"),
         default: true,
     },
     hideTimestamps: {
         type: OptionType.BOOLEAN,
-        description: t("reviewDB.settings.hideTimestamps"),
+        description: t("vencord.reviewDB.settings.hideTimestamps"),
         default: false,
     },
     hideBlockedUsers: {
         type: OptionType.BOOLEAN,
-        description: t("reviewDB.settings.hideBlockedUsers"),
+        description: t("vencord.reviewDB.settings.hideBlockedUsers"),
         default: true,
     },
     buttons: {
         type: OptionType.COMPONENT,
         component: () => (
             <div className={cl("button-grid")} >
-                <Button onClick={openBlockModal}>{t("reviewDB.settings.manageBlockedUsers")}</Button>
+                <Button onClick={openBlockModal}>{t("vencord.reviewDB.settings.manageBlockedUsers")}</Button>
 
                 <Button
                     variant="positive"
@@ -67,7 +67,7 @@ export const settings = definePluginSettings({
                         VencordNative.native.openExternal("https://github.com/sponsors/mantikafasi");
                     }}
                 >
-                    {t("reviewDB.settings.supportDevelopment")}
+                    {t("vencord.reviewDB.settings.supportDevelopment")}
                 </Button>
 
                 <Button variant="link" onClick={async () => {
@@ -78,11 +78,11 @@ export const settings = definePluginSettings({
 
                     VencordNative.native.openExternal(url);
                 }}>
-                    {t("reviewDB.settings.website")}
+                    {t("vencord.reviewDB.settings.website")}
                 </Button>
 
                 <Button variant="link" onClick={() => openInviteModal("eWPBSbvznt")}>
-                    {t("reviewDB.settings.supportServer")}
+                    {t("vencord.reviewDB.settings.supportServer")}
                 </Button>
             </div >
         )

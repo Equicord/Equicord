@@ -50,23 +50,23 @@ function showIcon() {
 // TY ToggleVideoBind
 const settings = definePluginSettings({
     keyBind: {
-        description: t("fastDeleteChannels.settings.keyBind"),
+        description: t("equicord.fastDeleteChannels.settings.keyBind"),
         type: OptionType.STRING,
         default: "KeyZ",
         isValid: (value: string) => validKeycodes.includes(value),
     },
     reqCtrl: {
-        description: t("fastDeleteChannels.settings.reqCtrl"),
+        description: t("equicord.fastDeleteChannels.settings.reqCtrl"),
         type: OptionType.BOOLEAN,
         default: true,
     },
     reqShift: {
-        description: t("fastDeleteChannels.settings.reqShift"),
+        description: t("equicord.fastDeleteChannels.settings.reqShift"),
         type: OptionType.BOOLEAN,
         default: true,
     },
     reqAlt: {
-        description: t("fastDeleteChannels.settings.reqAlt"),
+        description: t("equicord.fastDeleteChannels.settings.reqAlt"),
         type: OptionType.BOOLEAN,
         default: false,
     },
@@ -74,7 +74,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "FastDeleteChannels",
-    description: t("fastDeleteChannels.description"),
+    description: t("equicord.fastDeleteChannels.description"),
     authors: [Devs.thororen],
     settings,
     patches: [

@@ -23,7 +23,7 @@ import { t } from "@utils/translation";
 export default definePlugin({
     name: "ServerListAPI",
     authors: [Devs.kemo],
-    description: t("serverListAPI.description"),
+    description: t("vencord.serverListAPI.description"),
     patches: [
         {
             find: "#{intl::DISCODO_DISABLED}",

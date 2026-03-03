@@ -211,7 +211,7 @@ async function processQueue() {
 
 export default definePlugin({
     name: "TiktokTTS",
-    description: t("tiktokTTS.description"),
+    description: t("equicord.tiktokTTS.description"),
     authors: [EquicordDevs.VillainsRule, EquicordDevs.examplegit],
     dependencies: ["AudioPlayerAPI"],
     settings,

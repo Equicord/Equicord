@@ -17,7 +17,7 @@ import { Forms, Tooltip, useState } from "@webpack/common";
 
 function UnblockButton(props: { onClick?(): void; }) {
     return (
-        <Tooltip text={t("reviewDB.unblockUser")}>
+        <Tooltip text={t("vencord.reviewDB.unblockUser")}>
             {tooltipProps => (
                 <div
                     {...tooltipProps}
@@ -69,7 +69,7 @@ function Modal() {
     if (error)
         return <Paragraph>{t("reviewDB.failedToFetchBlocks", { error: String(error) })}</Paragraph>;
     if (!blocks.length)
-        return <Paragraph>{t("reviewDB.noBlockedUsers")}</Paragraph>;
+        return <Paragraph>{t("vencord.reviewDB.noBlockedUsers")}</Paragraph>;
 
     return (
         <>
@@ -89,11 +89,11 @@ export function openBlockModal() {
     openModal(modalProps => (
         <ModalRoot {...modalProps}>
             <ModalHeader className={cl("block-modal-header")}>
-                <Forms.FormTitle style={{ margin: 0 }}>{t("reviewDB.blockedUsers")}</Forms.FormTitle>
+                <Forms.FormTitle style={{ margin: 0 }}>{t("vencord.reviewDB.blockedUsers")}</Forms.FormTitle>
                 <ModalCloseButton onClick={modalProps.onClose} />
             </ModalHeader>
             <ModalContent className={cl("block-modal")}>
-                {Auth.token ? <Modal /> : <Paragraph>{t("reviewDB.notLoggedIn")}</Paragraph>}
+                {Auth.token ? <Modal /> : <Paragraph>{t("vencord.reviewDB.notLoggedIn")}</Paragraph>}
             </ModalContent>
         </ModalRoot>
     ));

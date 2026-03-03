@@ -23,7 +23,7 @@ async function findLastMessageFromUser(guildId: string, channelId: string, userI
 
         Toasts.show({
             type: Toasts.Type.FAILURE,
-            message: t("lastActive.errors.noRecentMessages"),
+            message: t("equicord.lastActive.errors.noRecentMessages"),
             id: Toasts.genId()
         });
         return null;
@@ -31,7 +31,7 @@ async function findLastMessageFromUser(guildId: string, channelId: string, userI
         console.error("Error finding last message:", error);
         Toasts.show({
             type: Toasts.Type.FAILURE,
-            message: t("lastActive.errors.findFailed"),
+            message: t("equicord.lastActive.errors.findFailed"),
             id: Toasts.genId()
         });
         return null;
@@ -43,7 +43,7 @@ async function jumpToLastActive(channel: any, targetUserId?: string) {
         if (!channel) {
             Toasts.show({
                 type: Toasts.Type.FAILURE,
-                message: t("lastActive.errors.channelNotAvailable"),
+                message: t("equicord.lastActive.errors.channelNotAvailable"),
                 id: Toasts.genId()
             });
             return;
@@ -67,7 +67,7 @@ async function jumpToLastActive(channel: any, targetUserId?: string) {
         console.error("Error in jumpToLastActive:", error);
         Toasts.show({
             type: Toasts.Type.FAILURE,
-            message: t("lastActive.errors.jumpFailed"),
+            message: t("equicord.lastActive.errors.jumpFailed"),
             id: Toasts.genId()
         });
     }
@@ -76,7 +76,7 @@ const ChannelContextMenuPatch: NavContextMenuPatchCallback = (children, { channe
     children.push(
         <Menu.MenuItem
             id="LastActive"
-            label={<span style={{ color: "#aa6746" }}>{t("jumpTo.ui.yourLastMessage")}</span>}
+            label={<span style={{ color: "#aa6746" }}>{t("equicord.jumpTo.ui.yourLastMessage")}</span>}
             icon={LastActiveIcon}
             action={() => {
                 jumpToLastActive(channel);
@@ -90,7 +90,7 @@ const UserContextMenuPatch: NavContextMenuPatchCallback = (children, { user, cha
     children.push(
         <Menu.MenuItem
             id="LastActive"
-            label={<span style={{ color: "#aa6746" }}>{t("jumpTo.ui.usersLastMessage")}</span>}
+            label={<span style={{ color: "#aa6746" }}>{t("equicord.jumpTo.ui.usersLastMessage")}</span>}
             icon={UserLastActiveIcon}
             action={() => {
                 jumpToLastActive(channel, user.id);
@@ -135,7 +135,7 @@ export function LastActiveIcon() {
 
 export default definePlugin({
     name: "LastActive",
-    description: t("lastActive.description"),
+    description: t("equicord.lastActive.description"),
     authors: [EquicordDevs.Crxa],
     contextMenus: {
         "channel-context": ChannelContextMenuPatch,

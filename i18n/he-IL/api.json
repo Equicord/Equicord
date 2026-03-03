@@ -1,37 +1,37 @@
 {
-    "commands":{
-        "errorExecuting":"היה שגיעה בזמן הפקודה \"{name}\""
+    "commands": {
+        "errorExecuting": "היה שגיעה בזמן הפקודה \"{name}\""
     },
-    "memberListDecorators":{
-        "fallback":"לא הצלחנו לראנדר את {key} קישוט רשימת החברים"
+    "memberListDecorators": {
+        "fallback": "לא הצלחנו לראנדר את {key} קישוט רשימת החברים"
     },
-    "messageAccessories":{
-        "fallback":"לא ניתן לראנדר {key} קישוט של ההודעה"
+    "messageAccessories": {
+        "fallback": "לא ניתן לראנדר {key} קישוט של ההודעה"
     },
-    "messageDecorations":{
-        "fallback":"לא הצלחנו לראנדר את {key} קישוט הודעות"
+    "messageDecorations": {
+        "fallback": "לא הצלחנו לראנדר את {key} קישוט הודעות"
     },
-    "notices":{
-        "fallback":"שגיאה בהצגת הודעה"
+    "notices": {
+        "fallback": "שגיאה בהצגת הודעה"
     },
-    "notifications":{
-        "dismissNotification":"להתעלם מההודעה",
-        "logs":{
-            "body_one":"זה הימחוק לתמיד את ה {count} של הודעות. הפעולה הזאות לא ניתנה לביטול.",
-            "body_other":"זה הימחוק לתמיד את ה {count} של הודעות. הפעולה הזאות לא ניתנה לביטול.",
-            "body_zero":"אף הודעות נבחרו",
-            "cancel":"לא משנה",
-            "clearNotificationLog":"לנקות את יומן ההודעות",
-            "confirm":"תעשה את זה!",
-            "title":"אתה בטוח?"
+    "notifications": {
+        "dismissNotification": "להתעלם מההודעה",
+        "logs": {
+            "body_one": "זה הימחוק לתמיד את ה {count} של הודעות. הפעולה הזאות לא ניתנה לביטול.",
+            "body_other": "זה הימחוק לתמיד את ה {count} של הודעות. הפעולה הזאות לא ניתנה לביטול.",
+            "body_zero": "אף הודעות נבחרו",
+            "cancel": "לא משנה",
+            "clearNotificationLog": "לנקות את יומן ההודעות",
+            "confirm": "תעשה את זה!",
+            "title": "אתה בטוח?"
         },
-        "missedNotifications":{
-            "body_one":"{count} ההודעות שהתקבלו",
-            "body_other":"{count} הודעות ‎התקבלו",
-            "title":"בזמן שלא הייתה פה"
+        "missedNotifications": {
+            "body_one": "{count} ההודעות שהתקבלו",
+            "body_other": "{count} הודעות ‎התקבלו",
+            "title": "בזמן שלא הייתה פה"
         },
-        "noNotifications":"אין הודעת כרגע",
-        "notificationLog":"יומן הודעות",
-        "notificationSettings":"הגדרות הודעות"
+        "noNotifications": "אין הודעת כרגע",
+        "notificationLog": "יומן הודעות",
+        "notificationSettings": "הגדרות הודעות"
     }
 }

@@ -96,24 +96,24 @@ function SettingsComponent() {
 
 export const settings = definePluginSettings({
     dontShowForBots: {
-        description: t("moreUserTags.settings.dontShowForBots"),
+        description: t("equicord.moreUserTags.settings.dontShowForBots"),
         type: OptionType.BOOLEAN,
         default: false
     },
     dontShowBotTag: {
-        description: t("moreUserTags.settings.dontShowBotTag"),
+        description: t("equicord.moreUserTags.settings.dontShowBotTag"),
         type: OptionType.BOOLEAN,
         default: false,
         restartNeeded: true
     },
     showWebhookTagFully: {
-        description: t("moreUserTags.settings.showWebhookTagFully"),
+        description: t("equicord.moreUserTags.settings.showWebhookTagFully"),
         type: OptionType.BOOLEAN,
         default: false
     },
     tagSettings: {
         type: OptionType.COMPONENT,
         component: SettingsComponent,
-        description: t("moreUserTags.settings.tagSettings")
+        description: t("equicord.moreUserTags.settings.tagSettings")
     },
 });

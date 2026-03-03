@@ -1,37 +1,37 @@
 {
-    "commands":{
-        "errorExecuting":"Παρουσιάστηκε σφάλμα κατά την εκτέλεση της εντολής \"{name}\""
+    "commands": {
+        "errorExecuting": "Παρουσιάστηκε σφάλμα κατά την εκτέλεση της εντολής \"{name}\""
     },
-    "memberListDecorators":{
-        "fallback":"Αποτυχία απόδοσης {key} Διακοσμητής λίστας μελών"
+    "memberListDecorators": {
+        "fallback": "Αποτυχία απόδοσης {key} Διακοσμητής λίστας μελών"
     },
-    "messageAccessories":{
-        "fallback":"Απέτυχε η απόδοση του {key} Αξεσουάρ μηνύματος"
+    "messageAccessories": {
+        "fallback": "Απέτυχε η απόδοση του {key} Αξεσουάρ μηνύματος"
     },
-    "messageDecorations":{
-        "fallback":"Αποτυχία απόδοσης {key} Διακόσμησης μηνύματος"
+    "messageDecorations": {
+        "fallback": "Αποτυχία απόδοσης {key} Διακόσμησης μηνύματος"
     },
-    "notices":{
-        "fallback":"Σφάλμα εμφάνισης ειδοποίησης"
+    "notices": {
+        "fallback": "Σφάλμα εμφάνισης ειδοποίησης"
     },
-    "notifications":{
-        "dismissNotification":"Παράβλεψη ειδοποίησης",
-        "logs":{
-            "body_one":"Αυτό θα καταργήσει οριστικά την ειδοποίηση {count}. Αυτή η ενέργεια δεν μπορεί να αναιρεθεί.",
-            "body_other":"Αυτό θα καταργήσει οριστικά τις ειδοποιήσεις {count}. Αυτή η ενέργεια δεν μπορεί να αναιρεθεί.",
-            "body_zero":"Δεν έχει επιλεγεί ειδοποίηση.",
-            "cancel":"Δεν πειράζει",
-            "clearNotificationLog":"Εκκαθάριση αρχείου καταγραφής ειδοποιήσεων",
-            "confirm":"Κάντο!",
-            "title":"Είσαι σίγουρος;"
+    "notifications": {
+        "dismissNotification": "Παράβλεψη ειδοποίησης",
+        "logs": {
+            "body_one": "Αυτό θα καταργήσει οριστικά την ειδοποίηση {count}. Αυτή η ενέργεια δεν μπορεί να αναιρεθεί.",
+            "body_other": "Αυτό θα καταργήσει οριστικά τις ειδοποιήσεις {count}. Αυτή η ενέργεια δεν μπορεί να αναιρεθεί.",
+            "body_zero": "Δεν έχει επιλεγεί ειδοποίηση.",
+            "cancel": "Δεν πειράζει",
+            "clearNotificationLog": "Εκκαθάριση αρχείου καταγραφής ειδοποιήσεων",
+            "confirm": "Κάντο!",
+            "title": "Είσαι σίγουρος;"
         },
-        "missedNotifications":{
-            "body_one":"{count} ειδοποίηση ελήφθη",
-            "body_other":"{count} ειδοποιήσεις ελήφθησαν",
-            "title":"Όσο ήσουν μακριά"
+        "missedNotifications": {
+            "body_one": "{count} ειδοποίηση ελήφθη",
+            "body_other": "{count} ειδοποιήσεις ελήφθησαν",
+            "title": "Όσο ήσουν μακριά"
         },
-        "noNotifications":"Δεν υπάρχουν ακόμη ειδοποιήσεις",
-        "notificationLog":"Μητρώο ειδοποιήσεων",
-        "notificationSettings":"Ρυθμίσεις ειδοποιήσεων"
+        "noNotifications": "Δεν υπάρχουν ακόμη ειδοποιήσεις",
+        "notificationLog": "Μητρώο ειδοποιήσεων",
+        "notificationSettings": "Ρυθμίσεις ειδοποιήσεων"
     }
 }

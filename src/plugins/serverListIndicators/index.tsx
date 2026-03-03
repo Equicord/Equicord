@@ -79,7 +79,7 @@ function FriendsIndicator() {
                 size="xs"
                 id="vc-friendcount-text">{onlineFriendsCount}
             </BaseText>
-            {!!settings.store.useCompact && <BaseText size="xs" id="vc-friendcount-text-compact">{t("serverListIndicators.friends")}</BaseText>}
+            {!!settings.store.useCompact && <BaseText size="xs" id="vc-friendcount-text-compact">{t("vencord.serverListIndicators.friends")}</BaseText>}
         </div>
     );
 }
@@ -115,24 +115,24 @@ function ServersIndicator() {
                 size="xs"
                 id="vc-guildcount-text">{guildCount}
             </BaseText>
-            {!!settings.store.useCompact && <BaseText size="xs" id="vc-guildcount-text-compact">{t("serverListIndicators.servers")}</BaseText>}
+            {!!settings.store.useCompact && <BaseText size="xs" id="vc-guildcount-text-compact">{t("vencord.serverListIndicators.servers")}</BaseText>}
         </div>
     );
 }
 
 export const settings = definePluginSettings({
     mode: {
-        description: t("serverListIndicators.settings.mode"),
+        description: t("vencord.serverListIndicators.settings.mode"),
         type: OptionType.SELECT,
         options: [
-            { label: t("serverListIndicators.settings.modeOnlyFriends"), value: IndicatorType.FRIEND, default: true },
-            { label: t("serverListIndicators.settings.modeOnlyServers"), value: IndicatorType.SERVER },
-            { label: t("serverListIndicators.settings.modeBoth"), value: IndicatorType.BOTH },
+            { label: t("vencord.serverListIndicators.settings.modeOnlyFriends"), value: IndicatorType.FRIEND, default: true },
+            { label: t("vencord.serverListIndicators.settings.modeOnlyServers"), value: IndicatorType.SERVER },
+            { label: t("vencord.serverListIndicators.settings.modeBoth"), value: IndicatorType.BOTH },
         ],
         restartNeeded: true
     },
     useCompact: {
-        description: t("serverListIndicators.settings.useCompact"),
+        description: t("vencord.serverListIndicators.settings.useCompact"),
         type: OptionType.BOOLEAN,
         default: false,
         restartNeeded: true
@@ -141,7 +141,7 @@ export const settings = definePluginSettings({
 
 export default definePlugin({
     name: "ServerListIndicators",
-    description: t("serverListIndicators.description"),
+    description: t("vencord.serverListIndicators.description"),
     authors: [Devs.dzshn, EquicordDevs.Panniku],
     dependencies: ["ServerListAPI"],
     settings,

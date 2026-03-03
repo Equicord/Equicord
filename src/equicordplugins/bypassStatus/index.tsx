@@ -80,7 +80,7 @@ function ContextCallback(name: "guild" | "user" | "channel"): NavContextMenuPatc
             <Menu.MenuGroup>
                 <Menu.MenuItem
                     id={`status-${name}-bypass`}
-                    label={enabled ? t("bypassStatus.contextMenu.removeStatusBypass") : t("bypassStatus.contextMenu.addStatusBypass")}
+                    label={enabled ? t("equicord.bypassStatus.contextMenu.removeStatusBypass") : t("equicord.bypassStatus.contextMenu.addStatusBypass")}
                     icon={() => Icon(enabled)}
                     action={() => {
                         let bypasses: string[] = settings.store[`${name}s`].split(", ");
@@ -97,58 +97,58 @@ function ContextCallback(name: "guild" | "user" | "channel"): NavContextMenuPatc
 const settings = definePluginSettings({
     guilds: {
         type: OptionType.STRING,
-        description: t("bypassStatus.settings.guilds"),
+        description: t("equicord.bypassStatus.settings.guilds"),
         default: "",
-        placeholder: t("bypassStatus.placeholder.separateWithCommas"),
+        placeholder: t("equicord.bypassStatus.placeholder.separateWithCommas"),
         onChange: value => settings.store.guilds = processIds(value)
     },
     channels: {
         type: OptionType.STRING,
-        description: t("bypassStatus.settings.channels"),
+        description: t("equicord.bypassStatus.settings.channels"),
         default: "",
-        placeholder: t("bypassStatus.placeholder.separateWithCommas"),
+        placeholder: t("equicord.bypassStatus.placeholder.separateWithCommas"),
         onChange: value => settings.store.channels = processIds(value)
     },
     users: {
         type: OptionType.STRING,
-        description: t("bypassStatus.settings.users"),
+        description: t("equicord.bypassStatus.settings.users"),
         default: "",
-        placeholder: t("bypassStatus.placeholder.separateWithCommas"),
+        placeholder: t("equicord.bypassStatus.placeholder.separateWithCommas"),
         onChange: value => settings.store.users = processIds(value)
     },
     allowOutsideOfDms: {
         type: OptionType.BOOLEAN,
-        description: t("bypassStatus.settings.allowOutsideOfDms")
+        description: t("equicord.bypassStatus.settings.allowOutsideOfDms")
     },
     notificationSound: {
         type: OptionType.BOOLEAN,
-        description: t("bypassStatus.settings.notificationSound"),
+        description: t("equicord.bypassStatus.settings.notificationSound"),
         default: true,
     },
     respectSilentPings: {
         type: OptionType.BOOLEAN,
-        description: t("bypassStatus.settings.respectSilentPings"),
+        description: t("equicord.bypassStatus.settings.respectSilentPings"),
         default: true
     },
     statusToUse: {
         type: OptionType.SELECT,
-        description: t("bypassStatus.settings.statusToUse"),
+        description: t("equicord.bypassStatus.settings.statusToUse"),
         options: [
             {
-                label: t("bypassStatus.statusOptions.online"),
+                label: t("equicord.bypassStatus.statusOptions.online"),
                 value: "online",
             },
             {
-                label: t("bypassStatus.statusOptions.idle"),
+                label: t("equicord.bypassStatus.statusOptions.idle"),
                 value: "idle",
             },
             {
-                label: t("bypassStatus.statusOptions.dnd"),
+                label: t("equicord.bypassStatus.statusOptions.dnd"),
                 value: "dnd",
                 default: true
             },
             {
-                label: t("bypassStatus.statusOptions.invisible"),
+                label: t("equicord.bypassStatus.statusOptions.invisible"),
                 value: "invisible",
             }
         ]
@@ -157,7 +157,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "BypassStatus",
-    description: t("bypassStatus.description"),
+    description: t("equicord.bypassStatus.description"),
     authors: [Devs.Inbestigator],
     dependencies: ["AudioPlayerAPI"],
     flux: {

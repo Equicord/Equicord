@@ -35,7 +35,7 @@ function copyProfileColors(userId) {
     if (!colors) {
         Toasts.show({
             type: Toasts.Type.FAILURE,
-            message: t("copyProfileColors.toast.noColorsFound"),
+            message: t("equicord.copyProfileColors.toast.noColorsFound"),
             id: Toasts.genId()
         });
         return;
@@ -50,14 +50,14 @@ function copyProfileColors(userId) {
         copyToClipboard(formattedColors);
         Toasts.show({
             type: Toasts.Type.SUCCESS,
-            message: t("copyProfileColors.toast.copied"),
+            message: t("equicord.copyProfileColors.toast.copied"),
             id: Toasts.genId()
         });
     } catch (e) {
         console.error("Failed to copy to clipboard:", e);
         Toasts.show({
             type: Toasts.Type.FAILURE,
-            message: t("copyProfileColors.toast.error"),
+            message: t("equicord.copyProfileColors.toast.error"),
             id: Toasts.genId()
         });
     }
@@ -82,7 +82,7 @@ const userContextMenuPatch: NavContextMenuPatchCallback = (children, { user }) =
         <Menu.MenuItem
             id="CopyProfileColors"
             icon={ColorIcon}
-            label={t("copyProfileColors.contextMenu.copyProfileColors")}
+            label={t("equicord.copyProfileColors.contextMenu.copyProfileColors")}
             action={() => copyProfileColors(user.id)}
         />
     );
@@ -90,7 +90,7 @@ const userContextMenuPatch: NavContextMenuPatchCallback = (children, { user }) =
 
 export default definePlugin({
     name: "CopyProfileColors",
-    description: t("copyProfileColors.description"),
+    description: t("equicord.copyProfileColors.description"),
     authors: [EquicordDevs.Crxa, EquicordDevs.Cortex],
     contextMenus: {
         "user-context": userContextMenuPatch,

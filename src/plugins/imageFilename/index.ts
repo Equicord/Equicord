@@ -14,7 +14,7 @@ const GifHostRegex = /^(.+?\.)?(tenor|giphy|imgur)\.com$/i;
 
 const settings = definePluginSettings({
     showFullUrl: {
-        description: t("imageFilename.settings.showFullUrl"),
+        description: t("vencord.imageFilename.settings.showFullUrl"),
         type: OptionType.BOOLEAN,
         default: false,
     },
@@ -23,7 +23,7 @@ const settings = definePluginSettings({
 export default definePlugin({
     name: "ImageFilename",
     authors: [Devs.Ven],
-    description: t("imageFilename.description"),
+    description: t("vencord.imageFilename.description"),
     settings,
 
     patches: [

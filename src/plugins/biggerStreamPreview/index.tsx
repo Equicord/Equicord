@@ -71,7 +71,7 @@ export const addViewStreamContext: NavContextMenuPatchCallback = (children, { us
 
     const streamPreviewItem = (
         <Menu.MenuItem
-            label={t("biggerStreamPreview.viewStreamPreview")}
+            label={t("vencord.biggerStreamPreview.viewStreamPreview")}
             id="view-stream-preview"
             icon={ScreenshareIcon}
             action={() => stream && handleViewPreview(stream)}
@@ -92,7 +92,7 @@ export const userContextPatch: NavContextMenuPatchCallback = (children, { user }
 
 export default definePlugin({
     name: "BiggerStreamPreview",
-    description: t("biggerStreamPreview.description"),
+    description: t("vencord.biggerStreamPreview.description"),
     authors: [Devs.phil],
     contextMenus: {
         "user-context": userContextPatch,

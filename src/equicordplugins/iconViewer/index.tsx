@@ -19,12 +19,12 @@ import { SettingsAbout } from "./components/Modals";
 
 export default definePlugin({
     name: "IconViewer",
-    description: t("iconViewer.description"),
+    description: t("equicord.iconViewer.description"),
     authors: [EquicordDevs.iamme],
     dependencies: ["Settings"],
     startAt: StartAt.WebpackReady,
     toolboxActions: {
-        [t("iconViewer.ui.openIconsTab")]() {
+        [t("equicord.iconViewer.ui.openIconsTab")]() {
             SettingsRouter.openUserSettings("equicord_icon_viewer_panel");
         },
     },
@@ -32,7 +32,7 @@ export default definePlugin({
     start() {
         SettingsPlugin.customEntries.push({
             key: "equicord_icon_viewer",
-            title: t("iconViewer.ui.iconFinder"),
+            title: t("equicord.iconViewer.ui.iconFinder"),
             Component: IconsTab,
             Icon: MagnifyingGlassIcon
         });

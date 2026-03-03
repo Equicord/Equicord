@@ -34,7 +34,7 @@ export type ShikiSettings = typeof settings.store;
 export const settings = definePluginSettings({
     theme: {
         type: OptionType.SELECT,
-        description: t("shikiCodeblocks.settings.theme"),
+        description: t("vencord.shikiCodeblocks.settings.theme"),
         options: themeNames.map(themeName => ({
             label: wordsToTitle(wordsFromPascal(themeName)),
             value: themes[themeName],
@@ -44,7 +44,7 @@ export const settings = definePluginSettings({
     },
     customTheme: {
         type: OptionType.STRING,
-        description: t("shikiCodeblocks.settings.customTheme"),
+        description: t("vencord.shikiCodeblocks.settings.customTheme"),
         placeholder: themes.MaterialCandy,
         onChange: value => {
             shiki.setTheme(value || settings.store.theme);
@@ -52,42 +52,42 @@ export const settings = definePluginSettings({
     },
     tryHljs: {
         type: OptionType.SELECT,
-        description: t("shikiCodeblocks.settings.tryHljs"),
+        description: t("vencord.shikiCodeblocks.settings.tryHljs"),
         options: [
             {
-                label: t("shikiCodeblocks.settings.tryHljsOptions.never"),
+                label: t("vencord.shikiCodeblocks.settings.tryHljsOptions.never"),
                 value: HljsSetting.Never,
             },
             {
-                label: t("shikiCodeblocks.settings.tryHljsOptions.preferShiki"),
+                label: t("vencord.shikiCodeblocks.settings.tryHljsOptions.preferShiki"),
                 value: HljsSetting.Secondary,
                 default: true,
             },
             {
-                label: t("shikiCodeblocks.settings.tryHljsOptions.preferHljs"),
+                label: t("vencord.shikiCodeblocks.settings.tryHljsOptions.preferHljs"),
                 value: HljsSetting.Primary,
             },
             {
-                label: t("shikiCodeblocks.settings.tryHljsOptions.always"),
+                label: t("vencord.shikiCodeblocks.settings.tryHljsOptions.always"),
                 value: HljsSetting.Always,
             },
         ],
     },
     useDevIcon: {
         type: OptionType.SELECT,
-        description: t("shikiCodeblocks.settings.useDevIcon"),
+        description: t("vencord.shikiCodeblocks.settings.useDevIcon"),
         options: [
             {
-                label: t("shikiCodeblocks.settings.useDevIconOptions.disabled"),
+                label: t("vencord.shikiCodeblocks.settings.useDevIconOptions.disabled"),
                 value: DeviconSetting.Disabled,
             },
             {
-                label: t("shikiCodeblocks.settings.useDevIconOptions.colorless"),
+                label: t("vencord.shikiCodeblocks.settings.useDevIconOptions.colorless"),
                 value: DeviconSetting.Greyscale,
                 default: true,
             },
             {
-                label: t("shikiCodeblocks.settings.useDevIconOptions.colored"),
+                label: t("vencord.shikiCodeblocks.settings.useDevIconOptions.colored"),
                 value: DeviconSetting.Color,
             },
         ],
@@ -98,7 +98,7 @@ export const settings = definePluginSettings({
     },
     bgOpacity: {
         type: OptionType.SLIDER,
-        description: t("shikiCodeblocks.settings.bgOpacity"),
+        description: t("vencord.shikiCodeblocks.settings.bgOpacity"),
         markers: [0, 20, 40, 60, 80, 100],
         default: 100,
         stickToMarkers: false,

@@ -10,7 +10,7 @@ import definePlugin from "@utils/types";
 
 export default definePlugin({
     name: "TidalEmbeds",
-    description: t("tidalEmbeds.description"),
+    description: t("equicord.tidalEmbeds.description"),
     authors: [EquicordDevs.vmohammad],
     dependencies: ["MessageUpdaterAPI"],
     patches: [
