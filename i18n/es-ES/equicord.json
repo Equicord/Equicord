@@ -8,7 +8,7 @@
         "description": "Rich presence para el servidor multimedia de AudioBookShelf",
         "settings": {
             "password": "Contraseña de AudioBookShelf",
-            "serverUrl": "URL del servidor AudioBookShelf (p. ej. https://abs.example.com)",
+            "serverUrl": "URL del servidor AudioBookShelf  (p. ej. https://abs.example.com)",
             "username": "Usuario de AudioBookShelf"
         },
         "toasts": {
