@@ -1,1 +1,11 @@
-{}
+{
+	"notifications":{
+		"logs":{
+			"cancel":"Nevermind",
+			"clearNotificationLog":"Notification Log",
+			"title":"Are you sure?"
+		},
+		"notificationLog":"Notification Log",
+		"notificationSettings":"Notification Settings"
+	}
+}
