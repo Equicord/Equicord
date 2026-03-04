@@ -10,7 +10,7 @@ import { EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 import type { Channel } from "@vencord/discord-types";
 import { findByPropsLazy } from "@webpack";
-import { ChannelActions, ChannelStore, Menu, PermissionsBits, PermissionStore, React } from "@webpack/common";
+import { ChannelStore, Menu, PermissionsBits, PermissionStore, React } from "@webpack/common";
 
 const ActiveThreadsStore = findByPropsLazy("getActiveUnjoinedThreadsForParent") as {
     getActiveUnjoinedThreadsForParent?: (guildId: string, parentId: string) => Record<string, unknown>;
