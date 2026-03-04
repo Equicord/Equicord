@@ -1084,6 +1084,10 @@ export const EquicordDevs = Object.freeze({
         name: "omaw",
         id: 1155026301791514655n
     },
+    g: {
+        name: "g",
+        id: 279448683672502274n
+    },
     WKoA: {
         name: "WKoA",
         id: 724416180097384498n
