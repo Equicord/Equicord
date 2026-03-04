@@ -109,7 +109,7 @@ export default definePlugin({
             find: "isAccessibleChannelOrThreadPath",
             replacement: {
                 match: /(\(0,\i\.\i\)\((\i)\)\|\|\i\.\i\.isChannelGatedAndVisible\(\i,\i\))/,
-                replace: "($self.shouldRevealThread($2)&&$self.isHiddenChannel($2,true))||$1"
+                replace: "($self.shouldRevealThread($2)&&$self.isHiddenChannel($2))||$1"
             }
         }
     ],
@@ -124,57 +124,52 @@ export default definePlugin({
     },
 
     mergeThreadEntries(baseEntries: Record<string, unknown>, channel: Channel) {
-        const categoryId = channel.parent_id;
-        if (categoryId == null || settings.store.hiddenCategories[categoryId] === true) return baseEntries;
-        if (channel.guild_id == null) return baseEntries;
+        if (channel.guild_id == null || channel.parent_id == null || settings.store.hiddenCategories[channel.parent_id] === true) return baseEntries;
 
-        const unjoinedEntries = ActiveThreadsStore?.getActiveUnjoinedThreadsForParent?.(channel.guild_id, channel.id) ?? {};
-        const mergedEntries = { ...baseEntries, ...unjoinedEntries };
-        return Object.fromEntries(
-            Object.entries(mergedEntries).filter(([, entry]) => {
-                const threadEntry = entry as { id?: string; joinTimestamp?: number; channel?: Channel & { id?: string; }; } | null | undefined;
-                if (threadEntry?.id == null && threadEntry?.channel?.id == null) return false;
-                const threadChannel = threadEntry.channel ?? (threadEntry.id != null ? ChannelStore.getChannel(threadEntry.id) : null);
-                return this.isThreadRecentEnough(threadChannel ?? undefined, threadEntry?.joinTimestamp);
-            })
-        );
+        const mergedEntries = {
+            ...baseEntries,
+            ...(ActiveThreadsStore?.getActiveUnjoinedThreadsForParent?.(channel.guild_id, channel.id) ?? {})
+        };
+
+        return Object.fromEntries(Object.entries(mergedEntries).filter(([, entry]) => {
+            const threadEntry = entry as { id?: string; joinTimestamp?: number; channel?: Channel & { id?: string; }; } | null | undefined;
+            const threadId = threadEntry?.channel?.id ?? threadEntry?.id;
+            if (threadId == null) return false;
+            return this.isThreadRecentEnough(threadEntry?.channel ?? ChannelStore.getChannel(threadId) ?? undefined, threadEntry?.joinTimestamp);
+        }));
     },
 
     isThreadRecentEnough(channel?: Channel, joinTimestamp?: number) {
         if (!settings.store.onlyRecentActiveThreads) return true;
 
-        const nowMs = Date.now();
-        const thresholdMs = nowMs - settings.store.recentActiveHours * 60 * 60 * 1000;
+        const thresholdMs = Date.now() - settings.store.recentActiveHours * 60 * 60 * 1000;
+        const isRecent = (timestampMs?: number) => timestampMs != null && timestampMs > thresholdMs;
 
-        if (joinTimestamp != null) {
-            const normalizedJoinMs = joinTimestamp > 10_000_000_000 ? joinTimestamp : joinTimestamp * 1000;
-            if (normalizedJoinMs > thresholdMs) return true;
-        }
+        if (joinTimestamp != null && isRecent(joinTimestamp > 10_000_000_000 ? joinTimestamp : joinTimestamp * 1000)) return true;
         if (channel == null) return false;
 
         if (channel.lastMessageId != null) {
             try {
-                const lastMessageMs = Number((BigInt(channel.lastMessageId) >> 22n) + 1420070400000n);
-                if (lastMessageMs > thresholdMs) return true;
+                if (isRecent(Number((BigInt(channel.lastMessageId) >> 22n) + 1420070400000n))) return true;
             } catch { }
         }
 
         const metadata = (channel as Channel & { threadMetadata?: { archiveTimestamp?: string; createTimestamp?: string; }; }).threadMetadata;
-        if (metadata?.archiveTimestamp != null && Date.parse(metadata.archiveTimestamp) > thresholdMs) return true;
-        if (metadata?.createTimestamp != null && Date.parse(metadata.createTimestamp) > thresholdMs) return true;
+        if (metadata?.archiveTimestamp != null && isRecent(Date.parse(metadata.archiveTimestamp))) return true;
+        if (metadata?.createTimestamp != null && isRecent(Date.parse(metadata.createTimestamp))) return true;
 
         return false;
     },
 
-    isHiddenChannel(channel: Channel & { channelId?: string; }, checkConnect = false) {
+    isHiddenChannel(channel: Channel & { channelId?: string; }) {
+        const targetChannel = channel?.channelId != null
+            ? ChannelStore.getChannel(channel.channelId)
+            : channel;
+
+        if (targetChannel == null || targetChannel.guild_id == null) return false;
+
         try {
-            if (channel == null || Object.hasOwn(channel, "channelId") && channel.channelId == null) return false;
-
-            if (channel.channelId != null) channel = ChannelStore.getChannel(channel.channelId);
-            if (channel == null || channel.isDM() || channel.isGroupDM() || channel.isMultiUserDM()) return false;
-            if (["browse", "customize", "guide"].includes(channel.id)) return false;
-
-            return !PermissionStore.can(PermissionsBits.VIEW_CHANNEL, channel) || checkConnect && !PermissionStore.can(PermissionsBits.CONNECT, channel);
+            return !PermissionStore.can(PermissionsBits.VIEW_CHANNEL, targetChannel);
         } catch {
             return false;
         }
