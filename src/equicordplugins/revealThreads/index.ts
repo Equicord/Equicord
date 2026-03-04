@@ -12,9 +12,7 @@ import type { Channel } from "@vencord/discord-types";
 import { findByPropsLazy } from "@webpack";
 import { ChannelStore, Menu, PermissionsBits, PermissionStore, React } from "@webpack/common";
 
-const ActiveThreadsStore = findByPropsLazy("getActiveUnjoinedThreadsForParent") as {
-    getActiveUnjoinedThreadsForParent?: (guildId: string, parentId: string) => Record<string, unknown>;
-};
+const ActiveThreadsStore = findByPropsLazy("getActiveUnjoinedThreadsForParent");
 
 const settings = definePluginSettings({
     hiddenCategories: {
@@ -70,7 +68,6 @@ export default definePlugin({
     contextMenus: {
         "channel-context": CategoryContextMenuPatch
     },
-
     patches: [
         {
             find: '"placeholder-channel-id"',
@@ -135,7 +132,7 @@ export default definePlugin({
             const threadEntry = entry as { id?: string; joinTimestamp?: number; channel?: Channel & { id?: string; }; } | null | undefined;
             const threadId = threadEntry?.channel?.id ?? threadEntry?.id;
             if (threadId == null) return false;
-            return this.isThreadRecentEnough(threadEntry?.channel ?? ChannelStore.getChannel(threadId) ?? undefined, threadEntry?.joinTimestamp);
+            return this.isThreadRecentEnough(threadEntry?.channel ?? ChannelStore.getChannel(threadId), threadEntry?.joinTimestamp);
         }));
     },
 
