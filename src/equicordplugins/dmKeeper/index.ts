@@ -1,3 +1,9 @@
+/*
+ * Vencord, a Discord client mod
+ * Copyright (c) 2026 Vendicated and contributors
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
 import { get, set } from "@api/DataStore";
 import { EquicordDevs } from "@utils/constants";
 import definePlugin from "@utils/types";
@@ -12,7 +18,7 @@ let storedChannels: Record<string, Channel> = {};
 
 const interceptor = (action: { type: string; channel?: Channel; private_channels?: Channel[]; }) => {
     if (action.type === "CHANNEL_DELETE" && action.channel && isDM(action.channel))
-        return true;
+        return true; // Bloque la suppression
 
     if (action.type === "CHANNEL_CREATE" && action.channel && isDM(action.channel)) {
         storedChannels[action.channel.id] = action.channel;
@@ -21,9 +27,11 @@ const interceptor = (action: { type: string; channel?: Channel; private_channels
 
     if (action.type === "READY" && action.private_channels) {
         const existing = new Set(action.private_channels.map(c => c.id));
-        for (const channel of Object.values(storedChannels))
-            if (!existing.has(channel.id))
+        for (const channel of Object.values(storedChannels)) {
+            if (!existing.has(channel.id)) {
                 action.private_channels.push(channel);
+            }
+        }
     }
 };
 
@@ -38,7 +46,14 @@ export default definePlugin({
     },
 
     stop() {
-        FluxDispatcher.removeInterceptor(interceptor);
+        // @ts-ignore
+        const index = FluxDispatcher._interceptors?.indexOf(interceptor);
+        // @ts-ignore
+        if (index !== undefined && index > -1) {
+            // @ts-ignore
+            FluxDispatcher._interceptors.splice(index, 1);
+        }
+
         storedChannels = {};
     },
 });
