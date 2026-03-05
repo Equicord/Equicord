@@ -91,7 +91,7 @@
             "activityType": "Que tipo de atividade",
             "detailsString": "String de formato dos detalhes da atividade",
             "enableButtons": "Habilitar ou não botões",
-            "enableTimestamps": "Habilitar data/hora",
+            "enableTimestamps": "Habilitar timestamps",
             "largeImageType": "Imagem grande dos assets da atividade",
             "largeTextString": "String de formato do texto grande dos assets de atividade",
             "nameString": "String de formato do nome da atividade",
@@ -213,7 +213,7 @@
         "description": "Faça upload com um único clique, abra o menu com o botão direito"
     },
     "biggerStreamPreview": {
-        "description": "Este plugin permite ampliar as visualizações do stream",
+        "description": "Este plugin permite ampliar as pré-visualizações de transmissões",
         "name": "BiggerStreamPreview",
         "viewStreamPreview": "Ver prévia de transmissão"
     },
@@ -344,7 +344,7 @@
             "attemptToNavigateToHome": "Define se deve tentar voltar para a tela inicial ao evitar travamentos do Discord.",
             "attemptToPreventCrashes": "Define se deve tentar evitar travamentos do Discord."
         },
-        "updatePrompt": "Oh não, o Discord acabou de dar pau... mas noticia boa, tem uma atualização do Equicord que talvez resolva esse problema! Gostaria de atualizar agora?"
+        "updatePrompt": "Oh não, o Discord acabou de travar... mas notícia boa, tem uma atualização do Equicord que talvez resolva esse problema! Gostaria de atualizar agora?"
     },
     "ctrlEnterSend": {
         "description": "Use Ctrl+Enter para enviar mensagens (customizável)",
@@ -365,7 +365,7 @@
             "remainInIdle": "Ao retornar ao Discord, permaneça inativo até confirmar que deseja ficar online"
         },
         "ui": {
-            "backOnlineMessage": "Bem vindo de volta! Clique no botão para ficar online. Clique no X para ficar ocioso até recarregar.",
+            "backOnlineMessage": "Bem vindo de volta! Clique no botão para ficar online. Clique no X para ficar inativo até recarregar.",
             "exitIdle": "Sair inativo"
         }
     },
@@ -439,12 +439,12 @@
     "dearrow": {
         "clickToDearrow": "Clique para dearrow",
         "dearrowByDefault": "Dearrow vídeos automaticamente",
-        "dearrowedClickRestore": "Este embed foi desativado, clique para restaurar",
+        "dearrowedClickRestore": "Este embed foi desativado com Dearrow, clique para restaurar",
         "description": "Torna os títulos e miniaturas de embeds do YouTube menos sensacionalistas, desenvolvido pela Dearrow",
         "everything": "Tudo (títulos e Thumbnails)",
         "hideButton": "Oculta o botão Dearrow dos embeds do YouTube",
         "replaceElementsDescription": "Escolha quais elementos do embed serão substituídos",
-        "thumbnails": "Miniaturas",
+        "thumbnails": "Thumbnails",
         "titles": "Títulos"
     },
     "decor": {
@@ -687,7 +687,7 @@
         "greetStickers": "Figurinhas de saudação",
         "normalMessageLabel": "Mensagem normal (você pode cumprimentar spam)",
         "sendGreets": "Enviar saudações",
-        "unholyMultiGreet": "Multi-cumprimento profano"
+        "unholyMultiGreet": "Multi-cumprimento Profano"
     },
     "hideAttachments": {
         "description": "Ocultar anexos e embeds para mensagens individuais através de um botão ao passar o mouse",
@@ -736,7 +736,7 @@
         "nearestNeighbour": "Vizinho mais próximo",
         "settings": {
             "invertScroll": "Inverter rolagem",
-            "nearestNeighbour": "Use a interpolação do vizinho mais próximo ao dimensionar imagens",
+            "nearestNeighbour": "Usar Interpolação por Vizinho Mais Próximo ao redimensionar imagens",
             "saveZoomValues": "Define se os valores de zoom e do tamanho da lente devem ser salvos",
             "size": "Raio / Tamanho da lente",
             "square": "Faça a lente quadrada",
@@ -778,7 +778,7 @@
         "lastfmProfile": "Perfil Last.fm",
         "missingArt": {
             "lastfmLogo": "Usar logo grande do Last.fm",
-            "placeholder": "Use espaço reservado genérico"
+            "placeholder": "Usar marcador genérico"
         },
         "nameFormat": {
             "albumName": "Use o nome do álbum (volta para o texto de status personalizado se a música não tiver álbum)",
@@ -977,7 +977,7 @@
             "embeds_only_other": "[sem conteúdo, {count} embed]"
         },
         "settings": {
-            "automodEmbeds": "Use embeds de automod em vez de embeds ricos (menores, mas com menos informações)",
+            "automodEmbeds": "Use embeds de automod em vez de rich embeds (menores, mas com menos informações)",
             "clearMessageCache": "Limpe o cache de mensagens vinculadas(linked)",
             "idList": "IDs de servidor/canal/usuário para lista negra ou lista branca (separados por vírgula)",
             "listMode": "Define se a lista de IDs será tratada como lista negra ou lista branca",
@@ -1271,9 +1271,9 @@
     "pictureInPicture": {
         "description": "Adiciona picture-in-picture aos vídeos (ao lado do botão de Download)",
         "settings": {
-            "loop": "Quer fazer o loop de vídeo PiP ou não"
+            "loop": "Se deseja fazer o loop de vídeo PiP ou não"
         },
-        "togglePip": "Alternar imagem em imagem"
+        "togglePip": "Alternar Picture in Picture"
     },
     "pinDms": {
         "addCategory": "Adicionar Categoria",
@@ -1316,7 +1316,7 @@
         },
         "settings": {
             "colorMobileIndicator": "Se o indicador mobile deve corresponder à cor do status do usuário.",
-            "consoleIcon": "Qual ícone do console usar",
+            "consoleIcon": "Qual ícone de console usar",
             "list": "Mostrar indicadores na lista de membros",
             "messages": "Mostrar indicadores dentro das mensagens",
             "profiles": "Mostrar indicadores em perfis de usuário",
@@ -1477,7 +1477,7 @@
         "description": "Envie timestamps facilmente pelo botão da caixa de chat e por atalhos de texto. Leia a descrição estendida!",
         "extendedDescription": {
             "examples": "Exemplos:",
-            "quickSend": "Para enviar rapidamente apenas data/hora, inclua data/hora formatada como `HH:MM` (incluindo os crases!) na sua mensagem",
+            "quickSend": "Para enviar rapidamente apenas timestamps, inclua data/hora formatada como `HH:MM` (incluindo os crases!) na sua mensagem",
             "seeBelow": "Veja abaixo exemplos. Se precisar de algo mais específico, use o botão Data na barra de chat!"
         },
         "insert": "Inserir",
@@ -1487,7 +1487,7 @@
             "replaceMessageContents": "Substituir data/hora no conteúdo da mensagem"
         },
         "timestampFormat": "Formato de data/hora",
-        "timestampPicker": "Seletor de data/hora"
+        "timestampPicker": "Seletor de timestamp"
     },
     "serverInfo": {
         "description": "Permite visualizar informações sobre um servidor",
@@ -1792,7 +1792,7 @@
             "hideDefaultAtSign": "Oculte o símbolo padrão “@” antes do nome em menções e respostas. Aplicado apenas se um dos recursos estiver ativado.",
             "ignoreFonts": "Para nomes não primários, use as fontes padrão do Discord, independentemente da fonte nitro personalizada do usuário.",
             "ignoreGradients": "Para os nomes não primários, se o cargo tiver gradiente, ignore-o em favor da cor definida abaixo.",
-            "includedNames": "A ordem para exibir nomes de usuário, apelidos de exibição, apelidos, nomes de amigos e nomes personalizados. Use os seguintes espaços reservados: {user}, {display}, {nick}, {friend}, {custom}. Você pode fornecer várias opções de nome para usar como substitutos se algum estiver indisponível, separando-os com vírgulas como: {custom, friend, nick}. Você pode ter até três prefixos e três sufixos por nome.",
+            "includedNames": "A ordem para exibir nomes de usuário, nomes de exibição, apelidos, nomes de amigos e nomes personalizados. Use os seguintes espaços reservados: {user}, {display}, {nick}, {friend}, {custom}. Você pode fornecer várias opções de nome para usar como substitutos se algum estiver indisponível, separando-os com vírgulas como: {custom, friend, nick}. Você pode ter até três prefixos e três sufixos por nome.",
             "memberList": "Exibir o primeiro nome disponível listado em seu formato de nome personalizado na lista de membros.",
             "mentions": "Exibir formato de nome personalizado nas menções.",
             "messages": "Exibir formato de nome personalizado em mensagens.",
@@ -1802,7 +1802,7 @@
             "reactions": "Exibir o primeiro nome disponível listado em seu formato de nome personalizado nas dicas de reação, e o nome completo nos popouts de reação.",
             "removeDuplicates": "Se algum dos nomes for equivalente, remova-o, deixando apenas os nomes exclusivos.",
             "replies": "Exibir formato de nome personalizado nas respostas.",
-            "truncateAllNamesWithStreamerMode": "Trunque todos os nomes, não apenas os nomes de usuário, no modo Streamer.",
+            "truncateAllNamesWithStreamerMode": "Truncar todos os nomes, não apenas nomes de usuário, enquanto estiver no Modo Streamer.",
             "usernameColor": "A cor a ser usada para o nome de usuário, caso não seja a primeira exibida. Deixe em branco por padrão. Aceita entrada hex(a), rgb(a) ou hsl(a). Use \"Role\" para seguir a cor do cargo principal do usuário. Use \"Role+-#\" para ajustar o brilho por essa porcentagem (ex: \"Role+15\")",
             "voiceChannels": "Exibir o primeiro nome disponível listado em seu formato de nome personalizado em canais de voz."
         }
@@ -1812,7 +1812,7 @@
         "displayStyleDescription": "Como exibir a duração do tempo limite",
         "inTooltip": "Na dica de ferramenta",
         "nextToIcon": "Ao lado do ícone de castigo",
-        "timeoutRemaining": "tempo limite restante"
+        "timeoutRemaining": "castigo restante"
     },
     "silentMessageToggle": {
         "description": "Adiciona um botão à barra de bate-papo para alternar o envio de uma mensagem silenciosa.",
@@ -2016,7 +2016,7 @@
             "nitroBanner": "banner Nitro",
             "nitroFirst": "Banner a ser usado se os banners Nitro e USRBG estiverem presentes",
             "usrbgBanner": "banner USRBG",
-            "voiceBackground": "Use banners USRBG como plano de fundo de chat por voz"
+            "voiceBackground": "Use banners USRBG como plano de fundo de chat de voz"
         }
     },
     "validReply": {
@@ -2127,7 +2127,7 @@
     },
     "whoReacted": {
         "settings": {
-            "avatarClick": "Alternar clique em avatares nas reações"
+            "avatarClick": "Alternar clicar em avatares nas reações"
         }
     },
     "xsOverlay": {
@@ -2154,7 +2154,7 @@
         "serverNotifications": "Permitir notificações do servidor",
         "soundPath": "Som de notificação (padrão/aviso/erro)",
         "sticker": "figurinha",
-        "testNotification": "Esta é uma notificação de teste! explodir",
+        "testNotification": "Esta é uma notificação de teste! exploda",
         "timeout": "Duração da notificação (secs)",
         "volume": "Volume",
         "webSocketPort": "porta Websocket"
