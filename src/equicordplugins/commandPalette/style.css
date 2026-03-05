@@ -221,8 +221,7 @@
 .vc-command-palette-dropdown-list {
     max-height: 280px;
     min-height: 0;
-    overflow-x: hidden;
-    overflow-y: auto;
+    overflow: hidden auto;
     overscroll-behavior: contain;
     padding: 8px;
     display: flex;
