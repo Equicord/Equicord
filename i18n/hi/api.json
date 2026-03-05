@@ -28,10 +28,10 @@
         "missedNotifications": {
             "body_one": "{count} अधिसूचना प्राप्त हुई",
             "body_other": "{count} सूचनाएं प्राप्त हुईं",
-            "title": "जब तुम दूर थे"
+            "title": "जब आप दूर थे"
         },
         "noNotifications": "अभी तक कोई सूचना नहीं",
-        "notificationLog": "अधिसूचना लॉग",
-        "notificationSettings": "अधिसूचना सेटिंग्स"
+        "notificationLog": "अधिसूचना Log",
+        "notificationSettings": "अधिसूचना Settings"
     }
 }
