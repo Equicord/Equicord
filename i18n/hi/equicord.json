@@ -78,12 +78,12 @@
             }
         },
         "ui": {
-            "copiedToast": "डिकोड की गई सामग्री को क्लिपबोर्ड पर कॉपी किया गया!",
+            "copiedToast": "Decode किया गया content clipboard पर copy हो गया है !",
             "copyDecoded": "Decoded Content को कॉपी करें",
             "decodedContent": "Decoded Content",
             "modalTitle": "Decoded Base64 Content",
-            "tooltipLeft": "कॉपी डिकोडेड (बायाँ क्लिक) / डिकोड बेस64 (राइट क्लिक)",
-            "tooltipRight": "डिकोड बेस64 (बायाँ क्लिक) / कॉपी डिकोडेड (दायाँ क्लिक)"
+            "tooltipLeft": "Copy Decoded (Left Click) / Decode Base64 (Right Click)",
+            "tooltipRight": "Decode Base64 (Left Click) / Copy Decoded (Right Click)"
         }
     },
     "betterActivities": {
