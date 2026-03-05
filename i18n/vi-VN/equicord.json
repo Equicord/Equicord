@@ -539,75 +539,75 @@
             "keybind": "Chuyển đổi công cụ đánh dấu",
             "showBorderRadius": "Hiển thị giá trị bán kính đường viền của phần tử",
             "showClasses": "Hiển thị tên lớp CSS của phần tử trong chú giải công cụ",
-            "showDisplay": "Hiển thị kiểu hiển thị của phần tử cùng với thuộc tính flex hoặc lưới",
+            "showDisplay": "Hiển thị kiểu hiển thị của phần tử cùng với thuộc tính flex hoặc grid",
             "showFont": "Hiển thị họ phông chữ và kích thước phông chữ được tính toán",
-            "showId": "Hiển thị thuộc tính ID của phần tử trong chú giải công cụ",
+            "showId": "Hiển thị ID thuộc tính của phần tử trong chú giải công cụ",
             "showMargin": "Hiển thị giá trị lề của phần tử",
             "showPadding": "Hiển thị giá trị đệm của phần tử",
             "showPosition": "Hiển thị loại vị trí CSS và chỉ mục z của phần tử"
         },
         "ui": {
-            "copiedColor": "Đã sao chép màu vào clipboard!",
+            "copiedColor": "Đã sao chép màu vào bảng nhớ tạm!",
             "recording": "Đang ghi...",
             "reset": "Đặt lại"
         }
     },
     "equicordHelper": {
         "alerts": {
-            "equicordSupport": "Equicord Hỗ trợ",
-            "okayContinue": "Được rồi tiếp tục",
+            "equicordSupport": "Hỗ trợ Equicord",
+            "okayContinue": "Được rồi, tiếp tục",
             "supportWarningBody": "Trước khi yêu cầu giúp đỡ. Hãy kiểm tra các bản cập nhật và xem liệu sự cố này có thực sự do Equicord gây ra hay không!",
-            "supportWarningTitle": "Vencord Cảnh báo kênh hỗ trợ"
+            "supportWarningTitle": "Cảnh báo Kênh Hỗ trợ Vencord"
         },
         "commands": {
-            "refreshCommands": "Làm mới các lệnh gạch chéo",
-            "refreshFailed": "Không thể làm mới lệnh. Kiểm tra bảng điều khiển để biết chi tiết.",
-            "refreshSuccess": "Lệnh gạch chéo được làm mới thành công."
+            "refreshCommands": "Làm mới các lệnh",
+            "refreshFailed": "Không thể làm mới lệnh. Kiểm tra console để biết chi tiết.",
+            "refreshSuccess": "Lệnh được làm mới thành công."
         },
-        "description": "Được sử dụng để cung cấp hỗ trợ, khắc phục sự cố do bất hòa và các tính năng linh tinh khác.",
+        "description": "Được sử dụng để cung cấp hỗ trợ, khắc phục sự cố discord và các tính năng linh tinh khác.",
         "settings": {
             "accountStandingButton": "Hiển thị nút trạng thái tài khoản trên thanh tiêu đề",
-            "forceRoleIcon": "Buộc các biểu tượng vai trò hiển thị bên cạnh tin nhắn ở chế độ thu gọn",
+            "forceRoleIcon": "Buộc các biểu tượng vai trò hiển thị bên cạnh tin nhắn ở chế độ tối giản",
             "noDefaultHangStatus": "Tắt trạng thái treo mặc định khi tham gia các kênh thoại",
-            "noMirroredCamera": "Ngăn không cho máy ảnh được phản chiếu trên màn hình của bạn",
-            "refreshSlashCommands": "Làm mới Lệnh gạch chéo để hiển thị các lệnh mới được thêm mà không cần khởi động lại máy khách của bạn.",
+            "noMirroredCamera": "Ngăn không cho camera bị lật ngược trên màn hình của bạn",
+            "refreshSlashCommands": "Làm mới Lệnh để hiển thị các lệnh mới được thêm mà không cần khởi động lại ứng dụng của bạn.",
             "removeActivitySection": "Xóa phần hoạt động phía trên danh sách thành viên",
             "restoreFileDownloadButton": "Thêm lại nút Tải xuống ở góc trên cùng bên phải của tệp",
             "showYourOwnActivityButtons": "Discord ẩn các nút hoạt động của chính bạn vì lý do nào đó"
         },
         "standing": {
-            "allGood": "Tất cả đều tốt!",
-            "atRisk": "Có nguy cơ",
-            "limited": "Giới hạn",
-            "suspended": "Cấm",
-            "veryLimited": "Rất hạn chế"
+            "allGood": "Hoàn toàn ổn!",
+            "atRisk": "Rủi ro cao",
+            "limited": "Bị giới hạn",
+            "suspended": "Bị đình chỉ",
+            "veryLimited": "Giới hạn ở mức độ nghiêm trọng"
         }
     },
     "equicordToolbox": {
-        "description": "Thêm một nút bên cạnh nút hộp thư đến trong tiêu đề kênh chứa các thao tác nhanh Equicord",
+        "description": "Thêm một nút bên cạnh nút hộp thư ở thanh tiêu đề kênh chứa các thao tác nhanh của Equicord",
         "settings": {
             "showPluginMenu": "Hiển thị menu plugin trong hộp công cụ"
         },
         "ui": {
             "editQuickCss": "Chỉnh sửa QuickCSS",
-            "enableQuickCss": "Kích hoạt QuickCSS",
+            "enableQuickCss": "Bật QuickCSS",
             "manageThemes": "Quản lý chủ đề",
             "openNotificationLog": "Mở nhật ký thông báo",
             "openSettings": "Mở Cài Đặt",
             "plugins": "Plugin",
             "restartToApply": "Khởi động lại để áp dụng thay đổi",
             "themes": "Chủ đề",
-            "tooltip": "Equicord Hộp công cụ"
+            "tooltip": "Hộp công cụ Equicord"
         }
     },
     "equissant": {
-        "description": "Bánh sừng bò theo số lượng nhấp chuột được chỉ định :trolley:",
+        "description": "Crossant sau mỗi số lần nhấp chuột nhất định :trolley:",
         "settings": {
-            "amount": "Số lần nhấp chuột để kích hoạt bánh sừng bò"
+            "amount": "Số lần nhấp chuột để kích hoạt crossant"
         }
     },
     "exitSounds": {
-        "description": "Phát âm thanh soundboard khi bạn ngắt kết nối với giọng nói.",
+        "description": "Phát âm thanh biểu cảm tiếng khi bạn ngắt kết nối với giọng nói.",
         "settings": {
             "soundGuildId": "Chọn máy chủ chứa âm thanh.",
             "soundId": "Nhập ID của âm thanh bạn muốn phát."
@@ -629,13 +629,13 @@
             "title": "Xuất tin nhắn"
         },
         "settings": {
-            "exportContacts": "Xuất danh sách bạn bè vào clipboard của bạn. Thêm nút mới vào thanh menu cho tab bạn bè.",
-            "openFileAfterExport": "Mở tệp đã xuất trong trình xử lý tệp mặc định sau khi xuất"
+            "exportContacts": "Xuất danh sách bạn bè vào bảng nhớ tạm của bạn. Thêm nút mới vào thanh menu cho tab bạn bè.",
+            "openFileAfterExport": "Mở tệp đã xuất bằng ứng dụng mặc định"
         },
         "ui": {
             "contactListUndefined": "Danh sách liên hệ không được xác định. Nhấp vào tab \"Tất cả\" trước khi xuất.",
-            "contactsCopied": "Đã sao chép danh bạ vào clipboard thành công.",
-            "export": "Xuất khẩu",
+            "contactsCopied": "Đã sao chép liên hệ vào bảng nhớ tạm thành công.",
+            "export": "Xuất",
             "exportMessage": "Xuất tin nhắn"
         }
     },
@@ -643,9 +643,9 @@
         "description": "Thêm biểu tượng thùng rác để xóa kênh",
         "settings": {
             "keyBind": "Phím chuyển đổi thùng rác khi nhấn.",
-            "reqAlt": "Yêu cầu giữ alt.",
-            "reqCtrl": "Yêu cầu phải giữ quyền kiểm soát.",
-            "reqShift": "Yêu cầu phải giữ ca."
+            "reqAlt": "Yêu cầu giữ phím alt.",
+            "reqCtrl": "Yêu cầu giữ phím control.",
+            "reqShift": "Yêu cầu giữ phím shift."
         }
     },
     "favouriteAnything": {
@@ -658,29 +658,29 @@
         }
     },
     "findReply": {
-        "description": "Chuyển tới câu trả lời sớm nhất cho tin nhắn trong một kênh (cho phép bạn theo dõi các cuộc hội thoại trước đây dễ dàng hơn).",
+        "description": "Chuyển tới câu trả lời sớm nhất cho tin nhắn trong một kênh (cho phép bạn theo dõi các cuộc hội thoại trước đó dễ dàng hơn).",
         "settings": {
             "hideButtonIfNoReply": "Ẩn nút nếu không có phản hồi cho tin nhắn",
             "includeAuthor": "Cũng sẽ tìm kiếm những tin nhắn trả lời tác giả nói chung chứ không chỉ chính xác tin nhắn đó",
             "includePings": "Cũng sẽ tìm kiếm các tin nhắn mà @ tác giả trực tiếp"
         },
         "toasts": {
-            "containerNotFound": "Không thể tìm thấy phần tử vùng chứa.",
+            "containerNotFound": "Không thể tìm thấy phần tử chứa.",
             "noReplyFound": "Không thể tìm thấy câu trả lời.",
-            "useBottomPanel": "Sử dụng bảng điều khiển phía dưới để điều hướng giữa các câu trả lời."
+            "useBottomPanel": "Sử dụng bảng phía dưới để điều hướng giữa các câu trả lời."
         },
         "ui": {
-            "jumpToReply": "Chuyển đến Trả lời"
+            "jumpToReply": "Nhảy đến Trả lời"
         }
     },
     "fixFileExtensions": {
         "description": "Sửa các phần mở rộng tệp bằng cách đổi tên chúng thành định dạng được hỗ trợ tương thích nếu có thể"
     },
     "followVoiceUser": {
-        "description": "Theo dõi một người bạn trong trò chuyện thoại.",
-        "info": "Plugin này được sử dụng để theo dõi Bạn bè/Bạn bè tham gia trò chuyện thoại.",
+        "description": "Theo dõi một người bạn trong kênh thoại.",
+        "info": "Plugin này được sử dụng để theo dõi Bạn bè/Bạn bè ở kênh thoại.",
         "settings": {
-            "leaveWhenUserLeaves": "Rời khỏi kênh thoại khi người dùng rời đi. (Điều đó có thể khiến bạn đôi khi phải vào vòng lặp rời/tham gia vô hạn)",
+            "leaveWhenUserLeaves": "Rời khỏi kênh thoại khi người dùng rời đi. (Điều đó có thể khiến bạn đôi khi rơi vào vòng lặp rời/tham gia vô hạn)",
             "onlyWhenInVoice": "Chỉ theo dõi người dùng khi bạn đang ở trong kênh thoại"
         },
         "ui": {
@@ -696,33 +696,33 @@
             "by": "bởi {authors}",
             "clickToApply": "Bấm vào bất kỳ phông chữ nào để áp dụng nó.",
             "searchFonts": "Tìm kiếm phông chữ...",
-            "searchGoogleFonts": "Tìm kiếm phông chữ của Google"
+            "searchGoogleFonts": "Tìm kiếm trên Google Fonts"
         }
     },
     "forwardAnywhere": {
-        "description": "Nếu chuyển tiếp không thành công, hãy gửi nó dưới dạng tin nhắn bình thường cũng cho phép chuyển tiếp nsfw",
+        "description": "Nếu chuyển tiếp không thành công, hãy gửi nó dưới dạng tin nhắn bình thường, đồng thời cho phép chuyển tiếp nsfw",
         "options": {
             "greaterThan": ">",
             "hash": "-#"
         },
         "settings": {
-            "forwardPreface": "Những gì nên được chuyển tiếp từ được mở đầu bằng"
+            "forwardPreface": "Tiền tố cho nội dung tin nhắn được chuyển tiếp"
         }
     },
     "frequentQuickSwitcher": {
-        "description": "Viết lại và lọc kết quả chuyển đổi nhanh để trở thành kênh thường xuyên nhất của bạn"
+        "description": "Viết lại và lọc kết quả chuyển đổi nhanh để thành kênh thường xuyên nhất của bạn"
     },
     "friendCloud": {
         "commands": {
-            "count": "Số lượng người dùng hiển thị",
-            "friendcloud": "Hiển thị người dùng mà bạn tương tác nhiều nhất trên đám mây"
+            "count": "Số lượng người dùng để hiển thị",
+            "friendcloud": "Hiển thị người dùng mà bạn tương tác nhiều nhất trong một đám mây"
         },
         "description": "Thêm lệnh /friendcloud để trực quan hóa những người dùng mà bạn tương tác nhiều nhất",
         "errors": {
             "couldntGenerate": "Không tạo được ảnh :c",
-            "countMustBeHigher": "Số lượng phải là 1 hoặc cao hơn!",
-            "noAffinities": "Không tìm thấy mối quan hệ nào. Kiểm tra cài đặt quyền riêng tư của bạn.",
-            "noValidUsers": "Không tìm thấy người dùng hợp lệ nào trong mối quan hệ. Kiểm tra cài đặt quyền riêng tư của bạn."
+            "countMustBeHigher": "Số lượng phải là 1 hoặc lớn hơn!",
+            "noAffinities": "Không tìm thấy mức độ thân thiết nào. Kiểm tra cài đặt quyền riêng tư của bạn.",
+            "noValidUsers": "Không tìm thấy người dùng hợp lệ nào theo mức độ thân thiết. Kiểm tra cài đặt quyền riêng tư của bạn."
         }
     },
     "friendCodes": {
@@ -731,19 +731,19 @@
             "copyCode": "Sao chép mã",
             "currentCode": "Mã bạn bè hiện tại",
             "error": "Lỗi: {error}",
-            "refresh": "Làm cho khỏe lại",
+            "refresh": "Làm mới",
             "sendToServer": "Gửi tới máy chủ",
             "sent": "Đã gửi!",
             "title": "Mã bạn bè"
         },
         "settings": {
-            "autoCopy": "Tự động sao chép mã bạn bè vào clipboard khi nó thay đổi",
+            "autoCopy": "Tự động sao chép mã bạn bè vào bảng nhớ tạm khi nó thay đổi",
             "sendToServer": "Tự động gửi mã bạn bè đến máy chủ khi nó thay đổi",
-            "webhookUrl": "Webhook URL để gửi mã kết bạn tới"
+            "webhookUrl": "URL webhook để gửi mã kết bạn tới"
         }
     },
     "friendTags": {
-        "description": "Cho phép bạn lọc theo thẻ tùy chỉnh trong trình chuyển đổi nhanh bằng cách bắt đầu tìm kiếm với &",
+        "description": "Cho phép bạn lọc theo thẻ tùy chỉnh trong trình chuyển đổi nhanh bằng cách bắt đầu tìm kiếm với ký tự &",
         "ui": {
             "add": "Thêm",
             "addTo": "Thêm vào {tagName}",
@@ -752,27 +752,27 @@
             "removeFrom": "Xóa khỏi {tagName}",
             "tag": "Nhãn",
             "userList": "Danh sách người dùng (Nhấp vào Người dùng để xóa)",
-            "usersSeperated": "Người dùng (Cách nhau bằng dấu phẩy)"
+            "usersSeperated": "Người dùng (Phân tách bằng dấu phẩy)"
         }
     },
     "friendshipRanks": {
         "description": "Thêm huy hiệu cho biết bạn đã làm bạn với người dùng được bao lâu",
         "ranks": {
             "besties": {
-                "description": "Làm thế nào để bạn thậm chí quản lý điều này ??? (5 Năm)",
+                "description": "Làm thế nào để bạn đạt đến điều này ??? (5 Năm)",
                 "title": "Bạn thân"
             },
             "blooming": {
-                "description": "Tình bạn của bạn đang đến đó! (1 tháng)",
-                "title": "nở hoa"
+                "description": "Tình bạn của hai bạn đang thăng tiến đấy! (1 Tháng)",
+                "title": "Nở hoa"
             },
             "burning": {
-                "description": "Tình bạn của bạn đã đạt đến tốc độ cuối cùng (3 tháng)",
-                "title": "Đốt cháy"
+                "description": "Tình bạn của hai bạn đã đạt đến vận tốc tối đa! (3 Tháng)",
+                "title": "Bùng cháy"
             },
             "fighter": {
-                "description": "Tình bạn của bạn rất bền chặt (6 tháng)",
-                "title": "máy bay chiến đấu"
+                "description": "Tình bạn của bạn rất bền chặt (6 Tháng)",
+                "title": "Kỵ sĩ"
             },
             "royal": {
                 "description": "Tình bạn của bạn đã trải qua nhiều thăng trầm - suốt 2 năm!",
@@ -780,20 +780,20 @@
             },
             "sprout": {
                 "description": "Tình bạn của bạn chỉ mới bắt đầu",
-                "title": "Mầm"
+                "title": "Nảy mầm"
             },
             "star": {
-                "description": "Tình bạn của bạn đã kéo dài được một thời gian (1 năm)",
+                "description": "Tình bạn của bạn đã kéo dài được một KHOẢNG THỜI GIAN (1 Năm)",
                 "title": "Ngôi sao"
             }
         }
     },
     "fullVcPfp": {
-        "description": "Làm cho hình đại diện chiếm toàn bộ ô vc"
+        "description": "Làm cho hình đại diện chiếm toàn bộ ô kênh thoại"
     },
     "gensokyoRadioRPC": {
-        "description": "Discord sự hiện diện phong phú của Đài Gensokyo!",
-        "info": "Discord sự hiện diện phong phú của Đài Gensokyo!",
+        "description": "Discord rich presence của Gensokyo Radio!",
+        "info": "Discord rich presence của Gensokyo Radio!",
         "settings": {
             "refreshInterval": "Khoảng thời gian giữa các lần làm mới hoạt động (giây)"
         }
@@ -801,20 +801,20 @@
     "ghosted": {
         "description": "Một con ma dễ thương sẽ xuất hiện nếu bạn không trả lời DM của họ",
         "settings": {
-            "exemptedChannels": "Danh sách ID kênh được phân tách bằng dấu phẩy để tránh hiện tượng bóng ma (nhấp chuột phải vào kênh DM để sao chép ID của kênh đó)",
+            "exemptedChannels": "Danh sách ID kênh được phân tách bằng dấu phẩy để tránh bị gán bị \"bơ\"(nhấp chuột phải vào kênh DM để sao chép ID của kênh đó)",
             "ignoreBots": "Bỏ qua DM từ bot",
-            "ignoreGroupDms": "Loại trừ tất cả dms nhóm khỏi bóng ma",
-            "showDmIcons": "Hiển thị biểu tượng ma bên cạnh từng DM riêng lẻ",
-            "showIndicator": "Hiển thị bộ đếm ghost ở đầu danh sách máy chủ"
+            "ignoreGroupDms": "Loại trừ tất cả nhóm dm khỏi bị \"bơ\"",
+            "showDmIcons": "Hiển thị biểu tượng con ma bên cạnh từng DM riêng lẻ",
+            "showIndicator": "Hiển thị bộ đếm bị \"bơ\" ở đầu danh sách máy chủ"
         },
         "ui": {
-            "ghostedUsers": "{count} Người dùng bị ma",
-            "noGhostedUsers": "Không có người dùng bị ma",
-            "unghost": "không lưu trữ"
+            "ghostedUsers": "{count} người dùng bị \"bơ\"",
+            "noGhostedUsers": "Không có người dùng nào bị \"bơ\"",
+            "unghost": "bỏ \"bơ\""
         }
     },
     "gifCollections": {
-        "description": "Cho phép bạn tạo bộ sưu tập gifs",
+        "description": "Cho phép bạn tạo bộ sưu tập gif",
         "settings": {
             "collectionPrefix": "Tiền tố cho bộ sưu tập",
             "collectionsSortOrder": "Thứ tự sắp xếp của các bộ sưu tập",
@@ -835,13 +835,13 @@
             "areYouSure": "Bạn có chắc không?",
             "ascending": "Tăng dần",
             "cannotRefresh": "Không thể làm mới: GIF thiếu siêu dữ liệu (thêm lại vào bộ sưu tập)",
-            "close": "Tắt",
-            "collectionInformation": "Thông tin thu thập",
+            "close": "Đóng",
+            "collectionInformation": "Thông tin bô sưu tập",
             "collectionName": "Tên bộ sưu tập",
             "copyImageLink": "Sao chép liên kết hình ảnh",
             "copyUrl": "Sao chép URL",
             "createCollection": "Tạo bộ sưu tập",
-            "createdAt": "Được tạo tại",
+            "createdAt": "Được tạo vào",
             "creationDate": "Ngày tạo",
             "deleteAction": "xóa bộ sưu tập này",
             "deleteCollection": "Xóa bộ sưu tập",
@@ -851,7 +851,7 @@
             "gifs": "Gif",
             "height": "Chiều cao",
             "imageLinkCopied": "Đã sao chép liên kết hình ảnh vào bảng nhớ tạm",
-            "import": "Nhập khẩu",
+            "import": "Nhập",
             "importCollections": "Nhập bộ sưu tập",
             "importOverwrite": "Nhập bộ sưu tập sẽ ghi đè bộ sưu tập hiện tại của bạn.",
             "information": "Thông tin",
@@ -860,7 +860,7 @@
             "moveToCollection": "Di chuyển đến bộ sưu tập",
             "name": "Tên",
             "nevermind": "Không có gì",
-            "order": "Đặt hàng",
+            "order": "Thứ tự",
             "refreshFailed": "Không làm mới được URL",
             "refreshSuccess": "URL được làm mới thành công",
             "refreshUrl": "Làm mới URL",
@@ -883,25 +883,25 @@
         "commands": {
             "gifroulette": "Cám dỗ số phận và gửi một gif"
         },
-        "description": "Thêm lệnh gửi một ảnh gif ngẫu nhiên từ mục yêu thích của bạn và một phần mười cơ hội để ping chủ sở hữu máy chủ",
+        "description": "Thêm lệnh gửi một ảnh gif ngẫu nhiên từ mục yêu thích của bạn và có cơ hội một phần mười để ping chủ sở hữu máy chủ",
         "settings": {
-            "pingOwnerChance": "Nếu có 1 trong 10 thay đổi ping chủ hội (ồ không)"
+            "pingOwnerChance": "Tỉ lệ 1/10 sẽ ping chủ máy chủ (ồ không)"
         }
     },
     "githubRepos": {
-        "description": "Hiển thị kho GitHub công khai của người dùng trong hồ sơ của họ",
+        "description": "Hiển thị kho lưu trữ GitHub công khai của người dùng trong hồ sơ của họ",
         "settings": {
             "showInMiniProfile": "Hiển thị giao diện người dùng đầy đủ trong hồ sơ mini thay vì chỉ một nút",
-            "showLanguage": "Hiển thị ngôn ngữ kho lưu trữ",
-            "showRepositoryTab": "Hiển thị tab kho lưu trữ trong chế độ hồ sơ (ẩn nút trong các kết nối khi được bật)",
-            "showStars": "Hiển thị sao kho lưu trữ"
+            "showLanguage": "Hiển thị ngôn ngữ của kho lưu trữ",
+            "showRepositoryTab": "Hiển thị tab kho lưu trữ trong chế độ hồ sơ (ẩn nút trong Kết nối khi được bật)",
+            "showStars": "Hiển thị số sao của kho lưu trữ"
         },
         "ui": {
             "error": "Lỗi, Không thể hiển thị GithubRepos"
         }
     },
     "globalBadges": {
-        "description": "Thêm huy hiệu toàn cầu từ các mod khách hàng khác",
+        "description": "Thêm huy hiệu toàn cầu từ các mod khác",
         "ui": {
             "joinServer": "Tham gia máy chủ GlobalBadges",
             "refetchSuccess": "Đã tải lại thành công huy hiệu toàn cầu!"
@@ -912,16 +912,16 @@
             "googlethat": "Gửi liên kết công cụ tìm kiếm",
             "input": "Truy vấn tìm kiếm"
         },
-        "description": "Thêm lệnh gửi liên kết tìm kiếm trên internet",
+        "description": "Thêm lệnh để gửi liên kết tìm kiếm trên internet",
         "settings": {
-            "customEngineURL": "URL của Engine bạn muốn sử dụng",
+            "customEngineURL": "URL của công cụ bạn muốn sử dụng",
             "defaultEngine": "Công cụ tìm kiếm sẽ sử dụng",
-            "embed": "Nếu liên kết đã gửi sẽ hiển thị phần nhúng",
-            "hyperlink": "Nếu liên kết đã gửi phải siêu liên kết với truy vấn dưới dạng nhãn"
+            "embed": "Nếu liên kết đã gửi sẽ hiển thị nhúng",
+            "hyperlink": "Sử dụng từ khóa tìm kiếm làm nhãn hiển thị cho liên kết"
         }
     },
     "guildPickerDumper": {
-        "description": "Menu ngữ cảnh để kết xuất và tải xuống biểu tượng cảm xúc và nhãn dán của máy chủ.",
+        "description": "Thêm menu ngữ cảnh để trích xuất và tải về các biểu tượng cảm xúc và nhãn dán của máy chủ.",
         "ui": {
             "downloadEmojis": "Tải xuống biểu tượng cảm xúc",
             "downloadStickers": "Tải xuống nhãn dán",
@@ -929,20 +929,20 @@
         }
     },
     "guildTagSettings": {
-        "description": "Thêm một số cài đặt cho thẻ bang hội, chẳng hạn như ẩn chúng hoặc tắt lời nhắc chấp nhận chúng.",
+        "description": "Thêm một số cài đặt cho tag máy chủ, chẳng hạn như ẩn chúng hoặc tắt lời nhắc sử dụng chúng.",
         "settings": {
-            "disableAdoptTagPrompt": "Tắt lời nhắc chấp nhận thẻ",
+            "disableAdoptTagPrompt": "Tắt lời nhắc sử dụng tag",
             "hideTags": "Ẩn thẻ"
         }
     },
     "hideChatButtons": {
-        "description": "Có thể ẩn các nút trò chuyện",
+        "description": "Ẩn các nút trong thanh trò chuyện",
         "settings": {
-            "color": "Tô màu đỏ khi mở",
+            "color": "Tô màu đỏ khi bật",
             "open": "Được mở theo mặc định"
         },
         "ui": {
-            "close": "Tắt",
+            "close": "Đóng",
             "open": "Mở"
         }
     },
@@ -956,7 +956,7 @@
         }
     },
     "hideServers": {
-        "description": "Cho phép bạn ẩn máy chủ khỏi danh sách bang hội và trình chuyển đổi nhanh bằng cách nhấp chuột phải vào chúng",
+        "description": "Cho phép bạn ẩn máy chủ khỏi danh sách máy chủ và trình chuyển đổi nhanh bằng cách nhấp chuột phải vào chúng",
         "ui": {
             "hideFolder": "Ẩn thư mục",
             "hideServer": "Ẩn máy chủ",
@@ -967,17 +967,17 @@
     "holyNotes": {
         "description": "Lưu tin nhắn dưới dạng ghi chú để xem lại sau",
         "ui": {
-            "holyNotes": "Thánh ghi chú",
-            "noteMessage": "Tin nhắn ghi chú",
+            "holyNotes": "Ghi Chú Thần Thánh",
+            "noteMessage": "Ghi chú tin nhắn",
             "openNotes": "Mở ghi chú",
             "saveNote": "Lưu ghi chú"
         }
     },
     "homeTyping": {
-        "description": "Thay đổi nút home thành chỉ báo đang gõ nếu ai đó trong dms của bạn đang gõ"
+        "description": "Thay đổi nút home thành chỉ báo đang soạn thảo nếu ai đó trong dm của bạn đang soạn tin nhắn"
     },
     "hopOn": {
-        "description": "Nhảy lên Fortnite hoặc Nhảy lên bloons :3",
+        "description": "Vào Fortnite hay bloons đi :3",
         "settings": {
             "regex": "Regex để kích hoạt",
             "url": "URL để mở"
@@ -986,16 +986,16 @@
     "husk": {
         "description": "Thêm nút Husk (kiểm tra cài đặt để thay đổi biểu tượng cảm xúc đã sử dụng)",
         "settings": {
-            "emojiID": "ID biểu tượng cảm xúc (mặc định (từ Vencord Máy chủ): 1026532993923293184)",
-            "emojiName": "Tên biểu tượng cảm xúc (mặc định (từ Vencord Máy chủ): husk)",
+            "emojiID": "ID biểu tượng cảm xúc (mặc định (từ máy chủ Vencord): 1026532993923293184)",
+            "emojiName": "Tên biểu tượng cảm xúc (mặc định (từ máy chủ Vencord): husk)",
             "findInServer": "Cố gắng tìm biểu tượng cảm xúc cùng tên trong máy chủ trước khi sử dụng ID trong cài đặt (hữu ích nếu không có nitro)"
         },
         "ui": {
-            "husk": "vỏ trấu"
+            "husk": "Husk"
         }
     },
     "iRememberYou": {
-        "description": "Lưu cục bộ tất cả những người bạn đã liên lạc (bao gồm cả máy chủ), trong trường hợp bị mất",
+        "description": "Lưu cục bộ tất cả những người bạn đã liên lạc (bao gồm cả máy chủ), phòng trường hợp bạn quên",
         "ui": {
             "iRememberYou": "Tôi nhớ bạn"
         }
@@ -1004,24 +1004,24 @@
         "description": "Thêm tab mới vào cài đặt để xem trước tất cả các biểu tượng.",
         "ui": {
             "iconFinder": "Trình tìm biểu tượng",
-            "openIconsTab": "Mở tab biểu tượng"
+            "openIconsTab": "Mở tab Biểu tượng"
         }
     },
     "idleAutoRestart": {
-        "description": "Tự động khởi động lại máy khách sau khi không hoạt động trong một khoảng thời gian có thể định cấu hình nhưng tránh khởi động lại khi bạn đang ở trong VC.",
+        "description": "Tự động khởi động lại ứng dụng sau khi không hoạt động trong một khoảng thời gian được đặt trước, nhưng tránh khởi động lại khi bạn đang ở trong VC.",
         "settings": {
             "idleMinutes": "Số phút không hoạt động trước khi khởi động lại (khi không ở trong VC)",
             "isEnabled": "Bật tự động khởi động lại sau khi không hoạt động"
         },
         "ui": {
-            "disableAutoIdle": "Vô hiệu hóa Tự động khởi động lại khi không hoạt động",
+            "disableAutoIdle": "Tắt Tự động khởi động lại khi không hoạt động",
             "enableAutoIdle": "Bật Tự động khởi động lại khi không hoạt động"
         }
     },
     "ignoreCalls": {
         "description": "Cho phép bạn bỏ qua cuộc gọi từ người dùng hoặc nhóm dm cụ thể.",
         "settings": {
-            "permanentlyIgnoredUsers": "ID người dùng (dấu phẩy + dấu cách) sẽ bị bỏ qua vĩnh viễn"
+            "permanentlyIgnoredUsers": "ID người dùng (phân tách bởi dấu phẩy + dấu cách) sẽ bị bỏ qua vĩnh viễn"
         },
         "ui": {
             "ignore": "Bỏ qua",
@@ -1319,8 +1319,8 @@
     "mediaPlaybackSpeed": {
         "description": "Kiểm soát tốc độ phát lại phương tiện cho tin nhắn thoại, video và tệp đính kèm âm thanh",
         "settings": {
-            "defaultAudioSpeed": "Tốc độ phát lại mặc định cho tệp âm thanh",
-            "defaultVideoSpeed": "Tốc độ phát lại mặc định cho video",
+            "defaultAudioSpeed": "Tốc độ phát mặc định cho tệp âm thanh",
+            "defaultVideoSpeed": "Tốc độ phát mặc định cho video",
             "defaultVoiceMessageSpeed": "Tốc độ phát lại mặc định cho tin nhắn thoại"
         }
     },
@@ -1333,15 +1333,15 @@
         }
     },
     "messageColors": {
-        "description": "Hiển thị mã màu (hex, rgb, hsl) trong tin nhắn có bản xem trước màu",
+        "description": "Hiển thị mã màu (hex, rgb, hsl) trong tin nhắn bằng việc xem trước màu",
         "settings": {
             "blockView": "Vị trí của khối màu",
             "blockViewOptions": {
-                "bothSides": "Cả hai mặt của văn bản",
+                "bothSides": "Cả hai bên của văn bản",
                 "leftSide": "Bên trái văn bản",
                 "rightSide": "Bên phải văn bản"
             },
-            "enableShortHexCodes": "Kích hoạt mã màu hex ngắn (3 ký tự)",
+            "enableShortHexCodes": "Bật mã màu hex ngắn (3 ký tự)",
             "renderType": "Cách hiển thị màu trong tin nhắn",
             "renderTypeOptions": {
                 "backgroundColor": "Thay đổi màu nền",
@@ -1359,12 +1359,12 @@
         }
     },
     "messageLinkTooltip": {
-        "description": "Hiển thị bản xem trước tin nhắn khi di chuột qua các liên kết tin nhắn, thư trả lời và tin nhắn được chuyển tiếp",
+        "description": "Hiển thị bản xem trước tin nhắn khi di chuột qua các liên kết tin nhắn, trả lời và tin nhắn được chuyển tiếp",
         "settings": {
-            "display": "Kiểu hiển thị để xem trước tin nhắn",
+            "display": "Kiểu hiển thị khi xem trước tin nhắn",
             "onForward": "Hiển thị chú giải công cụ khi di chuột qua các tin nhắn được chuyển tiếp",
             "onLink": "Hiển thị chú giải công cụ khi di chuột qua liên kết tin nhắn",
-            "onReply": "Hiển thị chú giải công cụ khi di chuột qua thư trả lời"
+            "onReply": "Hiển thị chú giải công cụ khi di chuột qua trả lời"
         }
     },
     "messageLoggerEnhanced": {
@@ -1372,7 +1372,7 @@
             "exportLogs": "Xuất nhật ký",
             "exporting": "Đang xuất...",
             "importLogs": "Nhập nhật ký",
-            "importing": "Đang nhập khẩu..."
+            "importing": "Đang nhập..."
         },
         "modal": {
             "clearAllLogs": "Xóa tất cả nhật ký",
@@ -1385,15 +1385,15 @@
             "deleteLog": "Xóa nhật ký",
             "deleted": "Đã xóa",
             "edited": "Đã chỉnh sửa",
-            "emptyLogs": "trống rỗng à",
+            "emptyLogs": "Trống trơn nhỉ",
             "filterMessages": "Lọc tin nhắn",
             "fromChannel": "Từ {channel} trong {guild}",
             "fromDms": "Từ DM của {username}",
-            "fromGroupDm": "Từ {name} Group DM",
+            "fromGroupDm": "Từ nhóm DM {name}",
             "ghostPinged": "Ghost Ping",
             "importLogs": "Nhập nhật ký",
-            "importLogsTooltip": "ML Nâng cao hiện lưu trữ nhật ký trong indexeddb. Bạn cần nhập nhật ký cũ của mình từ thư mục nhật ký. Nhập sẽ không ghi đè lên nhật ký hiện có",
-            "jumpToMessage": "Chuyển đến tin nhắn",
+            "importLogsTooltip": "ML Enhanced hiện lưu trữ nhật ký trong indexeddb. Bạn cần nhập nhật ký cũ của mình từ thư mục nhật ký. Nhập sẽ không ghi đè lên nhật ký hiện có",
+            "jumpToMessage": "Nhảy đến tin nhắn",
             "loadMore": "Tải Thêm",
             "maybeTry": "Có thể thử {nextTab} hoặc {lastTab}",
             "noResultsIn": "Không có kết quả nào trong {tab}.",
@@ -1453,7 +1453,7 @@
         }
     },
     "micLoopbackTester": {
-        "description": "Kiểm tra micrô của bạn bằng nút lặp lại trong khu vực người dùng"
+        "description": "Kiểm tra micrô của bạn bằng nút phát lại trong khu vực người dùng"
     },
     "middleClickTweaks": {
         "description": "Nhiều chỉnh sửa nhấp chuột giữa khác nhau, chẳng hạn như dán và mở liên kết.",
@@ -1470,15 +1470,15 @@
         }
     },
     "moreCommands": {
-        "description": "Các lệnh gạch chéo bổ sung bao gồm thông tin hệ thống, tung xúc xắc, lật đồng xu, v.v.",
+        "description": "Các lệnh bổ sung bao gồm thông tin hệ thống, tung xúc xắc, lật đồng xu, v.v.",
         "settings": {
-            "addFreakyEnding": "Thêm 👅 hoặc ❤️ vào cuối lệnh quái đản",
-            "uwuEveryMessage": "Làm cho mọi tin nhắn trở nên hữu ích",
-            "uwuEverything": "Làm cho tất cả văn bản trở nên uwuified - ý tưởng thực sự tồi tệ"
+            "addFreakyEnding": "Thêm 👅 hoặc ❤️ vào cuối trong lệnh freaky",
+            "uwuEveryMessage": "Làm cho mọi tin nhắn trở nên uwu hóa",
+            "uwuEverything": "Làm cho tất cả văn bản trở nên uwu hóa - ý tưởng thực sự tồi tệ"
         }
     },
     "moreKaomoji": {
-        "description": "Thêm lệnh gạch chéo kaomoji để thể hiện cảm xúc"
+        "description": "Thêm lệnh kaomoji để thể hiện cảm xúc"
     },
     "moreStickers": {
         "description": "Thêm nhiều gói nhãn dán từ nguồn bên ngoài",
@@ -1488,16 +1488,16 @@
         }
     },
     "moreUserTags": {
-        "description": "Hiển thị thẻ người dùng bổ sung dựa trên quyền và vai trò",
+        "description": "Hiển thị tag người dùng bổ sung dựa trên quyền và vai trò",
         "settings": {
-            "dontShowBotTag": "Ẩn thẻ BOT mặc định",
-            "dontShowForBots": "Không hiển thị thẻ cho người dùng bot",
-            "showWebhookTagFully": "Hiển thị đầy đủ thẻ webhook",
-            "tagSettings": "Định cấu hình cài đặt thẻ riêng lẻ"
+            "dontShowBotTag": "Ẩn tag BOT mặc định",
+            "dontShowForBots": "Không hiển thị tag cho người dùng bot",
+            "showWebhookTagFully": "Hiển thị đầy đủ tag webhook",
+            "tagSettings": "Định cấu hình cài đặt tag riêng lẻ"
         }
     },
     "moyai": {
-        "description": "Phát hiệu ứng âm thanh moyai khi sử dụng 🗿 biểu tượng cảm xúc",
+        "description": "Phát hiệu ứng âm thanh moyai khi sử dụng emoji 🗿",
         "settings": {
             "ignoreBlocked": "Bỏ qua tin nhắn từ người dùng bị chặn",
             "ignoreBots": "Bỏ qua tin nhắn từ bot",
@@ -1506,26 +1506,26 @@
                 "hd": "HD",
                 "normal": "Bình thường"
             },
-            "triggerWhenUnfocused": "Kích hoạt âm thanh ngay cả khi cửa sổ không được lấy nét",
+            "triggerWhenUnfocused": "Kích hoạt âm thanh ngay cả khi cửa sổ không được tập trung",
             "volume": "Âm lượng của âm thanh moyai"
         }
     },
     "musicControls": {
         "description": "Hiển thị các nút điều khiển trình phát nhạc cho Spotify, Tidal và YouTube Music",
         "settings": {
-            "FallbackProvider": "Sử dụng nhà cung cấp dự phòng khi lỗi chính",
-            "LyricDelay": "Bù độ trễ lời bài hát",
-            "LyricsConversion": "Tự động dịch lời bài hát được La Mã hóa",
+            "FallbackProvider": "Sử dụng nhà cung cấp dự phòng khi nhà cung cấp chính lỗi",
+            "LyricDelay": "Độ trễ lời bài hát",
+            "LyricsConversion": "Tự động dịch hoặc phiên âm lời bài hát",
             "LyricsPosition": "Vị trí của lời bài hát so với trình phát",
             "LyricsProvider": "Nguồn lời bài hát",
             "ShowFailedToasts": "Hiển thị lỗi khi tải lời bài hát không tải được",
             "TranslateTo": "Dịch lời bài hát sang",
-            "YoutubeMusicApiUrl": "Âm nhạc tùy chỉnh trên YouTube API URL",
+            "YoutubeMusicApiUrl": "URL API YouTube Music tùy chỉnh",
             "hoverControls": "Chỉ hiển thị các điều khiển khi di chuột",
-            "previousButtonRestartsTrack": "Khởi động lại bài hát khi nhấn nút trước đó",
+            "previousButtonRestartsTrack": "Chạy lại bài hát khi nhấn nút quay lại",
             "showSpotifyControls": "Hiển thị các điều khiển Spotify",
             "showSpotifyLyrics": "Hiển thị lời bài hát Spotify",
-            "showTidalControls": "Hiển thị điều khiển thủy triều",
+            "showTidalControls": "Hiển thị điều khiển Tidal",
             "showTidalLyrics": "Hiển thị lời bài hát Tidal",
             "showYoutubeMusicControls": "Hiển thị các nút điều khiển YouTube Music",
             "useSpotifyUris": "Mở URI Spotify thay vì URL"
@@ -1539,22 +1539,22 @@
         "description": "Quản lý và khám phá các plugin mới bằng trình quản lý plugin"
     },
     "noAppsAllowed": {
-        "description": "Chặn ứng dụng/danh mục hiển thị trong trình khởi chạy ứng dụng"
+        "description": "Chặn ứng dụng/danh mục khỏi việc hiển thị trong trình khởi chạy ứng dụng"
     },
     "noBulletPoints": {
         "description": "Xóa dấu đầu dòng khỏi tin nhắn bằng cách thoát chúng"
     },
     "noModalAnimation": {
-        "description": "Tắt hoạt ảnh phương thức để tương tác UI nhanh hơn"
+        "description": "Tắt hiệu ứng chuyển động của các hộp thoại để tương tác giao diện nhanh hơn"
     },
     "noNitroUpsell": {
-        "description": "Loại bỏ các sản phẩm bán thêm của Nitro bằng cách ghi đè loại cao cấp của bạn"
+        "description": "Loại bỏ các quảng cáo nâng cấp Nitro bằng cách ghi đè gói đăng kí của bạn"
     },
     "noPushToTalk": {
-        "description": "Bỏ qua yêu cầu nhấn để nói đối với hoạt động bằng giọng nói trong các kênh thực thi yêu cầu đó."
+        "description": "Bỏ qua yêu cầu Nhấn để nói trong các kênh bắt buộc sử dụng tính năng này"
     },
     "noRPC": {
-        "description": "Tắt tính năng Hiện diện phong phú (RPC) của Discord"
+        "description": "Tắt tính năng Rich Presence (RPC) của Discord"
     },
     "noRoleHeaders": {
         "description": "Xóa tiêu đề vai trò khỏi danh sách thành viên, tạo giao diện rõ ràng hơn"
