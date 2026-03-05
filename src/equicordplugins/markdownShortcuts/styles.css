@@ -1,0 +1,115 @@
+.vc-mdshortcuts-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 28px;
+    min-height: 28px;
+    width: 28px;
+    height: 28px;
+    flex-shrink: 0;
+    border: none;
+    border-radius: 4px;
+    background: transparent;
+    padding: 0;
+    cursor: pointer;
+    color: var(--interactive-normal);
+    transition: color 0.1s ease-in-out, background-color 0.1s ease-in-out;
+}
+
+.vc-mdshortcuts-btn:hover {
+    color: var(--white-500, #fff);
+    background-color: var(--background-modifier-selected, rgb(255 255 255 / 8%));
+}
+
+.vc-mdshortcuts-btn svg {
+    width: 20px;
+    height: 20px;
+    display: block;
+}
+
+.vc-mdshortcuts-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    gap: 4px;
+}
+
+#slate-toolbar:has(#vc-mdshortcuts-container) {
+    transform: translateY(-36px);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.vc-mdshortcuts-keybind-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--background-modifier-accent);
+}
+
+.vc-mdshortcuts-keybind-row:last-child {
+    border-bottom: none;
+}
+
+.vc-mdshortcuts-keybind-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.vc-mdshortcuts-keybind-label {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--header-primary, #fff) !important;
+}
+
+.vc-mdshortcuts-keybind-conflict {
+    font-size: 12px;
+    color: var(--text-danger, #f04747) !important;
+    font-weight: 500;
+}
+
+.vc-mdshortcuts-keybind-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.vc-mdshortcuts-keybind-button {
+    min-width: 120px;
+    padding: 6px 12px;
+    border: 1px solid var(--background-modifier-accent);
+    border-radius: 4px;
+    background: var(--background-secondary);
+    color: var(--interactive-normal, #b9bbbe) !important;
+    font-size: 14px;
+    font-weight: 500;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.vc-mdshortcuts-keybind-button:hover {
+    border-color: var(--interactive-hover);
+    background: var(--background-secondary-alt);
+    color: var(--interactive-hover, #dcddde) !important;
+}
+
+.vc-mdshortcuts-keybind-button.vc-mdshortcuts-listening {
+    border-color: var(--brand-500, #5865f2) !important;
+    background: var(--background-secondary-alt) !important;
+    color: var(--brand-500, #5865f2) !important;
+    box-shadow: 0 0 0 1px var(--brand-500, #5865f2);
+    animation: vc-mdshortcuts-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes vc-mdshortcuts-pulse {
+    0%, 100% { box-shadow: 0 0 0 1px var(--brand-500, #5865f2); }
+    50% { box-shadow: 0 0 0 3px color-mix(in srgb, var(--brand-500, #5865f2) 40%, transparent); }
+}
