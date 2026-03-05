@@ -1135,12 +1135,12 @@
     "noReplyMention": {
         "description": "Tắt ping trả lời theo mặc định",
         "settings": {
-            "doNotPingListed": "Không ping người dùng/vai trò được liệt kê",
-            "inverseShiftReply": "Đảo ngược hành vi trả lời theo ca của Discord (cho phép người dùng đề cập đến trả lời theo ca)",
-            "onlyPingListed": "Chỉ ping người dùng/vai trò được liệt kê",
+            "doNotPingListed": "Không ping người dùng / vai trò được liệt kê",
+            "inverseShiftReply": "Đảo ngược hành vi của phím Shift của Discord khi phản hồi (bật để làm phím Shift mặc định nhắc tên người dùng)",
+            "onlyPingListed": "Chỉ ping người dùng / vai trò được liệt kê",
             "roleList": "Danh sách các vai trò cho phép hoặc miễn ping (phân tách bằng dấu phẩy hoặc dấu cách)",
             "shouldPingListed": "Hành vi",
-            "userList": "Danh sách người dùng được phép hoặc miễn ping (cách nhau bằng dấu phẩy hoặc dấu cách)"
+            "userList": "Danh sách người dùng được phép hoặc miễn ping (phân tách bằng dấu phẩy hoặc dấu cách)"
         }
     },
     "noServerEmojis": {
@@ -1149,7 +1149,7 @@
             "shownEmojis": "Các loại biểu tượng cảm xúc sẽ hiển thị trong menu tự động hoàn thành.",
             "shownEmojisOptions": {
                 "all": "Biểu tượng cảm xúc Unicode và tất cả biểu tượng cảm xúc của máy chủ (mặc định Discord)",
-                "currentServer": "Biểu tượng cảm xúc Unicode và biểu tượng cảm xúc máy chủ từ máy chủ hiện tại",
+                "currentServer": "Biểu tượng cảm xúc Unicode và biểu tượng cảm xúc từ máy chủ hiện tại",
                 "onlyUnicode": "Chỉ biểu tượng cảm xúc unicode"
             }
         }
@@ -1158,39 +1158,39 @@
         "description": "Vô hiệu hóa biểu tượng số lượng chưa đọc trên thanh tác vụ và khay hệ thống."
     },
     "noTypingAnimation": {
-        "description": "Vô hiệu hóa hoạt ảnh dấu chấm gõ sử dụng nhiều CPU"
+        "description": "Vô hiệu hóa hoạt ảnh dấu chấm soạn tin nhắn sử dụng nhiều CPU"
     },
     "noUnblockToJump": {
-        "description": "Cho phép bạn chuyển tới tin nhắn của người dùng bị chặn hoặc bị bỏ qua và có thể là người gửi thư rác mà không cần bỏ chặn họ"
+        "description": "Cho phép bạn nhảy tới tin nhắn của người dùng bị chặn hoặc bị bỏ qua và có thể là người gửi thư rác mà không cần bỏ chặn họ"
     },
     "noticesAPI": {
         "description": "Sửa lỗi thông báo tự động bị loại bỏ"
     },
     "notificationVolume": {
-        "description": "Tiết kiệm đôi tai của bạn và đặt âm lượng riêng cho thông báo và âm thanh trong ứng dụng",
+        "description": "Bảo vệ đôi tai của bạn và đặt âm lượng riêng cho thông báo và âm thanh trong ứng dụng",
         "settings": {
-            "notificationVolume": "Khối lượng thông báo"
+            "notificationVolume": "Âm lượng thông báo"
         }
     },
     "onePingPerDM": {
-        "description": "Nếu tin nhắn chưa đọc được người dùng gửi trong DM nhiều lần, bạn sẽ chỉ nhận được một ping âm thanh.",
+        "description": "Nếu tin nhắn chưa đọc được người dùng gửi trong DM nhiều lần, bạn sẽ chỉ nhận được một âm thanh ping.",
         "settings": {
-            "allowEveryone": "Nhận ping âm thanh cho @everyone và @here trong DM nhóm",
-            "allowMentions": "Nhận ping âm thanh cho @đề cập",
+            "allowEveryone": "Nhận âm thanh ping cho @everyone và @here trong nhóm DM",
+            "allowMentions": "Nhận âm thanh ping cho @mentions",
             "alwaysPlaySound": "Phát âm thanh thông báo tin nhắn ngay cả khi nó bị tắt",
-            "channelToAffect": "Chọn loại DM để plugin tác động",
+            "channelToAffect": "Chọn loại DM để plugin hoạt động",
             "channelToAffectOptions": {
                 "both": "Cả hai",
-                "groupDm": "Group DM",
-                "userDm": "DM của người dùng"
+                "groupDm": "Nhóm DM",
+                "userDm": "DM Người Dùng"
             },
-            "ignoreUsers": "ID người dùng (dấu phẩy + dấu cách) có ping KHÔNG BAO GIỜ được điều chỉnh"
+            "ignoreUsers": "ID người dùng (phân tách bởi dấu phẩy + dấu cách) có ping KHÔNG BAO GIỜ được điều chỉnh"
         }
     },
     "openInApp": {
         "description": "Mở liên kết trong ứng dụng tương ứng thay vì trình duyệt của bạn",
         "settings": {
-            "epic": "Mở liên kết Epic Games trong Trình khởi chạy Epic Games",
+            "epic": "Mở liên kết Epic Games trong Epic Games Launcher",
             "itunes": "Mở liên kết Apple Music trong ứng dụng iTunes",
             "spotify": "Mở liên kết Spotify trong ứng dụng Spotify",
             "steam": "Mở liên kết Steam trong ứng dụng Steam",
@@ -1198,16 +1198,16 @@
             "vrcx": "Mở liên kết VRChat trong ứng dụng VRCX"
         },
         "ui": {
-            "openedInApp": "Đã mở liên kết trong ứng dụng gốc"
+            "openedInApp": "Đã mở liên kết trong ứng dụng hệ thống"
         }
     },
     "overrideForumDefaults": {
         "description": "Cho phép bạn ghi đè thứ tự sắp xếp/bố cục diễn đàn mặc định. bạn vẫn có thể thay đổi tùy theo từng kênh",
         "layouts": {
-            "gallery": "Phòng trưng bày",
+            "gallery": "Bô sưu tập",
             "list": "Danh sách"
         },
-        "name": "Ghi đè Diễn đànMặc định",
+        "name": "OverrideForumDefaults",
         "settings": {
             "defaultLayout": "Bố cục nào sẽ được sử dụng làm mặc định",
             "defaultSortOrder": "Thứ tự sắp xếp nào sẽ được sử dụng làm mặc định"
@@ -1219,21 +1219,21 @@
     },
     "pauseInvitesForever": {
         "description": "Mang lại tùy chọn tạm dừng lời mời vô thời hạn mà Discord ngu ngốc đã xóa.",
-        "name": "Tạm dừngLời mờiMãi mãi",
+        "name": "PauseInvitesForever",
         "pauseIndefinitely": "Tạm dừng vô thời hạn."
     },
     "permissionFreeWill": {
-        "description": "Vô hiệu hóa các hạn chế phía máy khách đối với việc quản lý quyền của kênh.",
+        "description": "Vô hiệu hóa các hạn chế phía ứng dụng đối với việc quản lý quyền hạn của kênh.",
         "settings": {
             "lockout": "Bỏ qua việc ngăn chặn khóa quyền (\"Chắc chắn bạn không muốn làm điều này\")",
-            "onboarding": "Bỏ qua các yêu cầu tích hợp (\"Thực hiện thay đổi này sẽ khiến máy chủ của bạn không tương thích […]\")"
+            "onboarding": "Bỏ qua các yêu cầu Hướng Dẫn Làm Quen (\"Thực hiện thay đổi này sẽ khiến máy chủ của bạn không tương thích […]\")"
         }
     },
     "permissionsViewer": {
-        "noPermissions": "Không có quyền hiển thị!",
+        "noPermissions": "Không có quyền để hiển thị!",
         "owner": "người sở hữu",
         "permissions": "Quyền hạn",
-        "permissionsTitle": "{header} Quyền",
+        "permissionsTitle": "Quyền hạn cho {header}",
         "roleOptions": "Tùy chọn vai trò",
         "settings": {
             "highestRole": "Vai trò cao nhất",
@@ -1248,45 +1248,45 @@
     "petpet": {
         "commands": {
             "petpet": {
-                "description": "Tạo một gif thú cưng. Bạn chỉ có thể chỉ định một trong các tùy chọn hình ảnh",
-                "name": "thú cưng",
+                "description": "Tạo một gif petpet. Bạn chỉ có thể chỉ định một trong các tùy chọn hình ảnh",
+                "name": "petpet",
                 "options": {
-                    "delay": "Độ trễ giữa mỗi khung hình tính bằng ms. Làm tròn đến 10ms gần nhất. Mặc định có giá trị tối thiểu là 20.",
-                    "image": "Đính kèm hình ảnh để sử dụng",
+                    "delay": "Độ trễ giữa mỗi khung hình tính bằng mili giây. Làm tròn đến 10ms gần nhất. Mặc định về giá trị tối thiểu là 20.",
+                    "image": "Hình ảnh đính kèm để sử dụng",
                     "noServerPfp": "Sử dụng hình đại diện bình thường thay vì hình đại diện cụ thể của máy chủ khi sử dụng tùy chọn 'người dùng'",
-                    "resolution": "Độ phân giải cho gif. Mặc định là 120. Nếu bạn nhập một số điên rồ và nó đứng yên Discord thì đó là lỗi của bạn.",
+                    "resolution": "Độ phân giải cho gif. Mặc định là 120. Nếu bạn nhập một số điên rồ và nó làm đơ Discord thì đó là lỗi của bạn.",
                     "url": "URL để lấy hình ảnh từ",
                     "user": "Người dùng có hình đại diện được sử dụng làm hình ảnh"
                 }
             }
         },
-        "description": "Thêm lệnh gạch chéo /petpet để tạo ảnh gif headpet từ bất kỳ hình ảnh nào",
+        "description": "Thêm lệnh /petpet để tạo ảnh gif headpet từ bất kỳ hình ảnh nào",
         "errors": {
             "delayMinimum": "Độ trễ phải ít nhất là 20.",
-            "failedToFetchUser": "Không tìm nạp được người dùng. Kiểm tra bảng điều khiển để biết thêm thông tin.",
+            "failedToFetchUser": "Không tìm nạp được người dùng. Kiểm tra console để biết thêm thông tin.",
             "noImage": "Không có hình ảnh được chỉ định!",
-            "uploadNotImage": "Tải lên không phải là hình ảnh"
+            "uploadNotImage": "Tập tin bạn tải lên không phải là hình ảnh"
         }
     },
     "pictureInPicture": {
-        "description": "Thêm hình ảnh vào video (bên cạnh nút Tải xuống)",
+        "description": "Thêm tính năng Ảnh trong ảnh (PiP) vào video (cạnh nút Tải xuống)",
         "settings": {
-            "loop": "Có nên tạo vòng lặp video PiP hay không"
+            "loop": "Có nên tự động lặp lại video trong chế độ PiP"
         },
-        "togglePip": "Chuyển đổi hình ảnh trong hình ảnh"
+        "togglePip": "Bật/Tắt Ảnh trong ảnh"
     },
     "pinDms": {
         "addCategory": "Thêm danh mục",
         "color": "Màu sắc",
         "create": "Tạo",
-        "deleteCategory": "Xóa mục",
+        "deleteCategory": "Xóa Danh Mục",
         "editCategory": "Chỉnh Sửa Danh Mục",
         "editCategoryTitle": "Chỉnh Sửa Danh Mục",
-        "moveDown": "Di chuyển xuống",
+        "moveDown": "Chuyển xuống",
         "moveUp": "Chuyển lên",
         "name": "Tên",
-        "newCategory": "Danh mục mới",
-        "pinCategory": "Ghim loại {index}",
+        "newCategory": "Danh Mục Mới",
+        "pinCategory": "Ghim Danh Mục {index}",
         "pinDms": "Ghim DM",
         "save": "Lưu",
         "settings": {
@@ -1299,7 +1299,7 @@
         "unpinDm": "Bỏ ghim DM"
     },
     "plainFolderIcon": {
-        "description": "Không hiển thị các biểu tượng bang hội nhỏ trong thư mục"
+        "description": "Không hiển thị các biểu tượng máy chủ nhỏ trong thư mục"
     },
     "platformIndicators": {
         "consoleIcons": {
@@ -1307,25 +1307,25 @@
             "suncord": "Suncord",
             "vencord": "Vencord"
         },
-        "description": "Thêm chỉ báo nền tảng (Desktop, Mobile, Web...) cho người dùng",
+        "description": "Thêm chỉ báo nền tảng (Máy tính, Điện thoại, Web...) cho người dùng",
         "platforms": {
-            "console": "Bảng điều khiển",
-            "desktop": "Máy bàn",
-            "mobile": "Mobile",
+            "console": "Máy chơi game",
+            "desktop": "Máy tính",
+            "mobile": "Điện thoại",
             "web": "Web"
         },
         "settings": {
-            "colorMobileIndicator": "Có làm cho chỉ báo trên thiết bị di động khớp với màu của trạng thái người dùng hay không.",
-            "consoleIcon": "Sử dụng biểu tượng bảng điều khiển nào",
-            "list": "Hiển thị các chỉ số trong danh sách thành viên",
+            "colorMobileIndicator": "Có làm cho chỉ báo điện thoại khớp với màu của trạng thái người dùng hay không.",
+            "consoleIcon": "Sử dụng biểu tượng máy chơi game nào",
+            "list": "Hiển thị các chỉ báo trong danh sách thành viên",
             "messages": "Hiển thị các chỉ báo bên trong tin nhắn",
-            "profiles": "Hiển thị các chỉ số trong hồ sơ người dùng",
-            "showBots": "Có hiển thị chỉ báo nền tảng trên bot hay không"
+            "profiles": "Hiển thị các chỉ báo trong hồ sơ người dùng",
+            "showBots": "Có hiển thị chỉ báo nền tảng của bot hay không"
         }
     },
     "previewMessage": {
         "description": "Cho phép bạn xem trước tin nhắn của mình trước khi gửi nó.",
-        "name": "Xem trướcTin nhắn",
+        "name": "PreviewMessage",
         "previewMessage": "Xem trước tin nhắn"
     },
     "quickActions": {
@@ -1341,23 +1341,23 @@
         "label": "Đề cập nhanh"
     },
     "quickReply": {
-        "description": "Trả lời tin nhắn (ctrl + up/down) và chỉnh sửa (ctrl + shift + up/down) thông qua tổ hợp phím",
+        "description": "Trả lời (ctrl + mũi tên lên/xuống) và chỉnh sửa (ctrl + shift + mũi tên lên/xuống) tin nhắn thông qua tổ hợp phím",
         "settings": {
             "ignoreBlockedAndIgnored": "Bỏ qua tin nhắn của người dùng bị chặn/bỏ qua khi điều hướng",
             "shouldMention": "Ping trả lời theo mặc định",
             "shouldMentionOptions": {
                 "disabled": "Tắt",
-                "enabled": "Đã bật",
-                "followPlugin": "Theo dõi plugin NoReplyMention (nếu được bật)"
+                "enabled": "Bật",
+                "followPlugin": "Theo plugin NoReplyMention (nếu được bật)"
             }
         }
     },
     "reactErrorDecoder": {
-        "description": "Thay thế \"Lỗi phản ứng rút gọn\" bằng lỗi thực tế."
+        "description": "Thay thế \"Minifed React Error\" bằng lỗi thực tế."
     },
     "readAllNotificationsButton": {
         "description": "Đọc tất cả các thông báo máy chủ chỉ bằng một nút bấm!",
-        "name": "Nút đọc tất cả thông báo",
+        "name": "ReadAllNotificationsButton",
         "readAll": "Đọc tất cả"
     },
     "relationshipNotifier": {
@@ -1368,7 +1368,7 @@
         "notificationTitle": "Trình thông báo mối quan hệ",
         "offlineFriendRemoved": "Bạn không còn là bạn với {username}.",
         "offlineFriendRequestRevoked": "Yêu cầu kết bạn từ {username} đã bị thu hồi.",
-        "offlineGroupRemoved": "Bạn không còn thuộc nhóm {name}.",
+        "offlineGroupRemoved": "Bạn không còn trong nhóm {name}.",
         "offlineServerRemoved": "Bạn không còn ở máy chủ {name}.",
         "serverRemoved": "Bạn đã bị xóa khỏi máy chủ {name}.",
         "settings": {
@@ -1376,36 +1376,36 @@
             "friends": "Thông báo khi một người bạn loại bỏ bạn",
             "groups": "Thông báo khi bị xóa khỏi cuộc trò chuyện nhóm",
             "notices": "Đồng thời hiển thị thông báo ở đầu màn hình của bạn khi bị xóa (sử dụng thông báo này nếu bạn không muốn bỏ lỡ bất kỳ thông báo nào).",
-            "offlineRemovals": "Thông báo cho bạn khi bắt đầu bất hòa nếu bạn bị xóa khi ngoại tuyến.",
+            "offlineRemovals": "Thông báo cho bạn khi mở discord nếu bạn bị xóa khi ngoại tuyến.",
             "servers": "Thông báo khi bị xóa khỏi máy chủ"
         }
     },
     "replaceGoogleSearch": {
-        "description": "Thay thế tìm kiếm Google bằng (các) Công cụ khác",
+        "description": "Thay thế Google tìm kiếm bằng (các) công cụ khác",
         "searchText": "Tìm kiếm văn bản",
         "searchWith": "Tìm kiếm với {engine}",
         "settings": {
             "customEngine": "Công cụ tùy chỉnh",
             "customEngineName": "Tên của công cụ tìm kiếm tùy chỉnh",
-            "customEngineURL": "URL của Động cơ của bạn",
+            "customEngineURL": "URL của công cụ của bạn",
             "off": "Tắt",
-            "replacementEngine": "Thay thế bằng một công cụ tìm kiếm cụ thể thay vì thêm menu"
+            "replacementEngine": "Thay thế bằng một công cụ tìm kiếm cụ thể thay vì thêm một menu"
         }
     },
     "replyTimestamp": {
         "description": "Hiển thị dấu thời gian trên bản xem trước tin nhắn đã trả lời"
     },
     "revealAllSpoilers": {
-        "description": "Tiết lộ tất cả phần tiết lộ nội dung trong tin nhắn bằng cách Ctrl-nhấp vào phần tiết lộ nội dung hoặc trong cuộc trò chuyện bằng Ctrl+Shift-nhấp"
+        "description": "Hiện tất cả nội dung ẩn (spoiler) trong một tin nhắn bằng cách nhấn Ctrl+Click vào spoiler, hoặc hiện toàn bộ trong chat bằng Ctrl+Shift+Click"
     },
     "reverseImageSearch": {
         "all": "Tất cả",
         "description": "Thêm ImageSearch vào menu ngữ cảnh hình ảnh",
-        "name": "Tìm kiếm hình ảnh ngược",
+        "name": "ReverseImageSearch",
         "searchImage": "Tìm kiếm hình ảnh"
     },
     "reviewDB": {
-        "appeal": "Bắt mắt",
+        "appeal": "Kháng Cáo",
         "areYouSure": "Bạn có chắc không?",
         "block": "Chặn",
         "blockedUser": "Bạn đã chặn người dùng này",
@@ -1422,7 +1422,7 @@
         "newReviews": "Bạn có đánh giá mới trên hồ sơ của bạn!",
         "noBlockedUsers": "Không có người dùng bị chặn.",
         "notLoggedIn": "Bạn chưa đăng nhập vào ReviewDB!",
-        "ok": "Được rồi",
+        "ok": "Ok",
         "readMore": "Đọc thêm",
         "report": "Báo cáo",
         "settings": {
@@ -1441,43 +1441,43 @@
                 "description": "Hiển thị cảnh báo tôn trọng ở đầu danh sách đánh giá"
             },
             "supportDevelopment": "Hỗ trợ phát triển ReviewDB",
-            "supportServer": "Máy chủ hỗ trợ ReviewDB",
+            "supportServer": "Máy chủ Hỗ trợ ReviewDB",
             "website": "Trang web ReviewDB"
         },
-        "system": "Hệ thống",
+        "system": "Hệ Thống",
         "unblockUser": "Bỏ chặn người dùng",
         "viewReviews": "Xem đánh giá"
     },
     "roleColorEverywhere": {
-        "description": "Thêm màu vai trò hàng đầu bất cứ nơi nào có thể",
+        "description": "Áp dụng màu của vai trò cao nhất vào mọi vị trí có thể",
         "settings": {
-            "chatMentions": "Hiển thị màu sắc vai trò trong đề cập trò chuyện (bao gồm cả trong hộp tin nhắn)",
+            "chatMentions": "Hiển thị màu sắc vai trò trong đề cập trò chuyện (bao gồm cả trong ô nhắn tin)",
             "colorChatMessages": "Màu tin nhắn trò chuyện dựa trên màu vai trò của tác giả",
             "memberList": "Hiển thị màu vai trò trong tiêu đề vai trò của danh sách thành viên",
             "messageSaturation": "Cường độ tô màu của tin nhắn.",
             "pollResults": "Hiển thị màu sắc vai trò trong kết quả thăm dò ý kiến",
-            "reactorsList": "Hiển thị màu vai trò trong danh sách lò phản ứng",
+            "reactorsList": "Hiển thị màu vai trò trong danh sách biểu cảm",
             "voiceUsers": "Hiển thị màu vai trò trong danh sách người dùng trò chuyện thoại"
         }
     },
     "secretRingTone": {
-        "description": "Luôn phát phiên bản bí mật của nhạc chuông bất hòa (ngoại trừ trong các sự kiện nhạc chuông đặc biệt)",
+        "description": "Luôn phát phiên bản bí mật của nhạc chuông discord (ngoại trừ trong các sự kiện nhạc chuông đặc biệt)",
         "settings": {
             "onlySnow": "Chỉ chơi chủ đề Snow Halation"
         }
     },
     "seeSummaries": {
-        "description": "Bật tính năng Tóm tắt thử nghiệm của Discord trên mọi máy chủ, hiển thị tóm tắt các cuộc hội thoại do AI tạo",
+        "description": "Bật tính năng thử nghiệm Tóm Tắt của Discord trên mọi máy chủ, hiển thị tóm tắt các cuộc hội thoại do AI tạo",
         "name": "Tóm tắt",
         "settings": {
             "summaryExpiryThresholdDays": "Thời gian tính bằng ngày trước khi bản tóm tắt bị xóa. Lưu ý rằng chỉ có tối đa 50 bản tóm tắt được lưu giữ trên mỗi kênh"
         }
     },
     "sendTimestamps": {
-        "description": "Gửi dấu thời gian dễ dàng thông qua nút hộp trò chuyện và phím tắt văn bản. Đọc mô tả mở rộng!",
+        "description": "Gửi dấu thời gian dễ dàng thông qua nút trong ô trò chuyện và phím tắt văn bản. Đọc mô tả mở rộng!",
         "extendedDescription": {
             "examples": "Ví dụ:",
-            "quickSend": "Để nhanh chóng gửi dấu thời gian chỉ có thời gian, hãy đưa dấu thời gian được định dạng là `HH:MM` (bao gồm cả dấu ngược!) vào tin nhắn của bạn",
+            "quickSend": "Để gửi nhanh mốc thời gian chỉ có giờ, hãy kèm theo mốc thời gian định dạng `HH:MM` (bao gồm cả các dấu nháy ngược!) vào tin nhắn của bạn",
             "seeBelow": "Xem bên dưới để biết ví dụ. Nếu bạn cần bất cứ điều gì cụ thể hơn, hãy sử dụng nút Ngày trong thanh trò chuyện!"
         },
         "insert": "Chèn",
@@ -1492,7 +1492,7 @@
     "serverInfo": {
         "description": "Cho phép bạn xem thông tin về máy chủ",
         "settings": {
-            "sorting": "Tên người dùng hoặc Tên hiển thị nếu có",
+            "sorting": "Tên đăng nhập hoặc Tên hiển thị nếu có",
             "sortingOptions": {
                 "displayname": "Tên hiển thị",
                 "none": "Đừng sắp xếp",
@@ -1505,14 +1505,14 @@
             "createdAt": "Được tạo tại",
             "friends": "Bạn bè",
             "ignoredUsers": "Người dùng bị bỏ qua",
-            "joinedAt": "Đã tham gia tại",
+            "joinedAt": "Đã tham gia vào",
             "mutualUsers": "Người dùng chung",
-            "preferredLocale": "Ngôn ngữ ưa thích",
+            "preferredLocale": "Ngôn ngữ chính",
             "roles": "Vai trò",
-            "serverBoosts": "Tăng cường máy chủ",
+            "serverBoosts": "Nâng cấp máy chủ",
             "serverInfo": "Thông tin máy chủ",
             "serverOwner": "Người Sở Hữu Máy Chủ",
-            "vanityLink": "Liên kết phù phiếm",
+            "vanityLink": "Liên kết mời tùy chỉnh",
             "verificationLevel": "Mức xác minh"
         }
     },
@@ -1524,10 +1524,10 @@
         "friends": "Bạn bè",
         "servers": "Máy chủ",
         "settings": {
-            "mode": "Cách thức",
-            "modeBoth": "Cả máy chủ và số bạn bè trực tuyến đều được tính",
-            "modeOnlyFriends": "Chỉ tính bạn bè trực tuyến",
-            "modeOnlyServers": "Chỉ tính máy chủ",
+            "mode": "Chế độ",
+            "modeBoth": "Hiển thị cả số lượng máy chủ và số bạn bè đang trực tuyến",
+            "modeOnlyFriends": "Chỉ hiển thị số bạn bè đang trực tuyến",
+            "modeOnlyServers": "Chỉ hiển thị số lượng máy chủ",
             "useCompact": "Làm cho chỉ báo chỉ xuất hiện với văn bản"
         },
         "tooltipBoth": "{friends} Bạn bè, {servers} Máy chủ",
@@ -1539,19 +1539,19 @@
             "alreadyUpToDate": "Đã cập nhật với kho lưu trữ",
             "checkYourConnection": "Không thể kết nối với kho lưu trữ. Kiểm tra kết nối internet của bạn",
             "checkYourInternet": "Hãy đảm bảo bạn có kết nối Internet và thử lại",
-            "codeChanges_one": "Thay đổi mã (xác nhận {count})",
-            "codeChanges_other": "Thay đổi mã ({count} cam kết)",
-            "codeChanges_zero": "Không thay đổi mã",
-            "emptyChangelog": "Không có cam kết nào trước phiên bản hiện tại của bạn. Nhấp vào \"Tìm nạp từ Kho lưu trữ\" để kiểm tra các thay đổi mới",
+            "codeChanges_one": "Thay đổi mã nguồn ({count} commit)",
+            "codeChanges_other": "Thay đổi mã nguồn ({count} commit)",
+            "codeChanges_zero": "Không thay đổi mã nguồn",
+            "emptyChangelog": "Không có commit nào trước phiên bản hiện tại của bạn. Nhấp vào \"Tìm nạp từ Kho lưu trữ\" để kiểm tra các thay đổi mới",
             "failedToFetchRepo": "Không thể tìm nạp từ kho lưu trữ",
-            "failedToRetrieve": "Không truy xuất được - hãy kiểm tra bảng điều khiển",
-            "failedtoFetchCommits": "Không thể tìm nạp các cam kết từ kho lưu trữ",
+            "failedToRetrieve": "Không truy xuất được - hãy kiểm tra console",
+            "failedtoFetchCommits": "Không thể tìm nạp các commit từ kho lưu trữ",
             "fetchRepo": "Tìm nạp từ kho lưu trữ",
-            "foundCommits_one": "Đã tìm thấy cam kết {count} từ kho lưu trữ",
-            "foundCommits_other": "Đã tìm thấy cam kết {count} từ kho lưu trữ",
-            "foundCommits_zero": "Không có cam kết mới",
-            "info": "Kiểm tra kho lưu trữ để biết các cam kết mới, cập nhật plugin và thay đổi mã. Điều này sẽ so sánh phiên bản hiện tại của bạn với phiên bản mới nhất hiện có và hiển thị cho bạn những tính năng mới",
-            "loggedCommits": "Cam kết đã ghi từ bản cập nhật mới nhất của bạn",
+            "foundCommits_one": "Đã tìm thấy {count} commit từ kho lưu trữ",
+            "foundCommits_other": "Đã tìm thấy {count} commit từ kho lưu trữ",
+            "foundCommits_zero": "Không có commit mới",
+            "info": "Kiểm tra kho lưu trữ để biết các commit mới, cập nhật plugin và thay đổi mã nguồn. Điều này sẽ so sánh phiên bản hiện tại của bạn với phiên bản mới nhất hiện có và hiển thị cho bạn những cái gì mới",
+            "loggedCommits": "Commit đã ghi từ bản cập nhật mới nhất của bạn",
             "manager": {
                 "days_one": "{count} ngày trước",
                 "days_other": "{count} ngày trước",
@@ -1567,16 +1567,16 @@
                 "numMorePlugins_other": "+{count} plugin khác",
                 "recentlyAddedPlugins": "Các plugin sau đã được thêm vào trong các bản cập nhật gần đây:"
             },
-            "previousSessions": "Lịch sử các phiên cập nhật trước đó của bạn cùng với lịch sử cam kết và các thay đổi về plugin. Nhấp vào nhật ký để mở rộng và xem chi tiết",
+            "previousSessions": "Lịch sử các phiên cập nhật trước đó của bạn cùng với lịch sử commit và các thay đổi về plugin. Nhấp vào nhật ký để mở rộng và xem chi tiết",
             "recentChanges": "Những thay đổi gần đây",
             "repository": "Kho lưu trữ",
             "title": "Nhật ký thay đổi",
-            "upToDate": "Kho lưu trữ cập nhật",
+            "upToDate": "Kho lưu trữ đã được cập nhật",
             "upToDateLocalCopy": "Kho lưu trữ được cập nhật với bản sao cục bộ của bạn",
             "updateCard": {
-                "commits_one": " • Có sẵn cam kết {count}",
-                "commits_other": " • {count} cam kết có sẵn",
-                "commits_zero": " • Không có cam kết mới",
+                "commits_one": " • Hiện có {count} commit",
+                "commits_other": " • Hiện có {count} commit",
+                "commits_zero": " • Không có commit mới",
                 "newPluginsCount": " • {plugins} plugin mới",
                 "newSettingInPlugin": "Cài đặt mới trong {pluginName}",
                 "newSettings": "Cài đặt mới",
