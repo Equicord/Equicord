@@ -34,9 +34,9 @@
             "noDeleteSafety": "किसी server को हटाते समय enter server name की आवश्यकता को हटा देता है"
         },
         "ui": {
-            "deleteServerBody": "यह स्थायी है, यदि यह स्पष्ट न हो।",
-            "deleteServerConfirm": "मिटाना",
-            "deleteServerTitle": "सर्वर हटाएं?"
+            "deleteServerBody": "यह स्थायी है, अगर यह पहले से स्पष्ट नहीं था।",
+            "deleteServerConfirm": "मिटाए",
+            "deleteServerTitle": "सर्वर हटाएं ?"
         }
     },
     "anonymiseFileNames": {
