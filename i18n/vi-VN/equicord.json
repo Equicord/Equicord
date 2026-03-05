@@ -1036,7 +1036,7 @@
             "imgtogif": "Cho phép bạn biến hình ảnh thành gif",
             "width": "Chiều rộng của gif"
         },
-        "description": "Thêm lệnh gạch chéo /imgtogif để tạo ảnh gif từ bất kỳ hình ảnh nào",
+        "description": "Thêm lệnh /imgtogif để tạo ảnh gif từ bất kỳ hình ảnh nào",
         "errors": {
             "noImage": "Không có hình ảnh được chỉ định!",
             "notAnImage": "Tải lên không phải là hình ảnh"
