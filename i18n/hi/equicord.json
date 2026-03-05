@@ -74,14 +74,14 @@
             "clickMethod": "किसी भी संदेश की base64 content को decode करने वाला button बदलें।",
             "clickMethodOptions": {
                 "left": "बेस64 सामग्री को डीकोड करने के लिए बायाँ-क्लिक करें।",
-                "right": "बेस64 सामग्री को डीकोड करने के लिए राइट क्लिक करें।"
+                "right": "base64 content को decode करने के लिए दायाँ क्लिक करें।"
             }
         },
         "ui": {
             "copiedToast": "डिकोड की गई सामग्री को क्लिपबोर्ड पर कॉपी किया गया!",
-            "copyDecoded": "डिकोड की गई सामग्री की प्रतिलिपि बनाएँ",
-            "decodedContent": "डिकोड की गई सामग्री",
-            "modalTitle": "डीकोडेड बेस64 सामग्री",
+            "copyDecoded": "Decoded Content को कॉपी करें",
+            "decodedContent": "Decoded Content",
+            "modalTitle": "Decoded Base64 Content",
             "tooltipLeft": "कॉपी डिकोडेड (बायाँ क्लिक) / डिकोड बेस64 (राइट क्लिक)",
             "tooltipRight": "डिकोड बेस64 (बायाँ क्लिक) / कॉपी डिकोडेड (दायाँ क्लिक)"
         }
