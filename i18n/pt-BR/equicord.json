@@ -291,7 +291,7 @@
     },
     "clickableRoles": {
         "andNumMore": "e {count} mais",
-        "description": "Clique nas funções nos perfis dos usuários e na lista de membros para ver quais membros as possuem.",
+        "description": "Clique nos cargos em perfis de usuário e na lista de membros para ver quais membros os possuem.",
         "loadingMembers": "Carregando membros...",
         "noMembers": "Nenhum membro encontrado."
     },
@@ -801,16 +801,16 @@
     "ghosted": {
         "description": "Um fantasma fofo aparecerá se você não responder às DMs dele",
         "settings": {
-            "exemptedChannels": "Lista de IDs de canal separada por vírgulas para isentar do Ghosted (clique com o botão direito em um DM para copiar o ID)",
+            "exemptedChannels": "Lista de IDs de canais, separados por vírgula, para isentar de ghosting (clique com o botão direito em um canal de DM para copiar o seu ID)",
             "ignoreBots": "Ignorar DMs de bots",
-            "ignoreGroupDms": "Excluir todos os DMs do grupo do fantasma",
+            "ignoreGroupDms": "Excluir todas as DMs de grupo do ghosting",
             "showDmIcons": "Mostrar ícones fantasma ao lado de DMs individuais",
             "showIndicator": "Mostrar o contador de fantasmas no topo da lista de servidores"
         },
         "ui": {
-            "ghostedUsers": "Usuários fantasmas {count}",
-            "noGhostedUsers": "Nenhum usuário fantasma",
-            "unghost": "exorcizar"
+            "ghostedUsers": "{count} usuários no vácuo",
+            "noGhostedUsers": "Nenhum usuário no vácuo",
+            "unghost": "unghost (tirar do vácuo)"
         }
     },
     "gifCollections": {
@@ -938,7 +938,7 @@
     "hideChatButtons": {
         "description": "Capaz de ocultar os botões de chat",
         "settings": {
-            "color": "Pinte-o de vermelho ao abrir",
+            "color": "Colore em vermelho ao abrir",
             "open": "Aberto por padrão"
         },
         "ui": {
@@ -974,7 +974,7 @@
         }
     },
     "homeTyping": {
-        "description": "Muda o botão home para um indicador de digitação se alguém em seu dms estiver digitando"
+        "description": "Muda o botão home para um indicador de digitação se alguém em sua dm estiver digitando"
     },
     "hopOn": {
         "description": "Entre no Fortnite ou entre no Bloons:3",
@@ -1159,7 +1159,7 @@
             "coverType": "Escolha qual capa exibir ao assistir a um programa de TV",
             "customName": "Nome de presença avançada personalizada (usado somente se 'Personalizado' estiver selecionado). Opções: {name}, {series}, {season}, {episode}, {artist}, {album}, {year}",
             "episodeFormat": "Formato do número do episódio",
-            "nameDisplay": "Escolha como o nome do aplicativo deve aparecer no Rich Presence",
+            "nameDisplay": "Escolha como o nome do aplicativo deve aparecer na Rich Presence",
             "overrideRichPresenceType": "Substituir o tipo de presença avançada",
             "privacyMode": "Modo de privacidade (ocultar detalhes da mídia, como nome do episódio/música)",
             "serverUrl": "URL do servidor Jellyfin (ex: https://jellyfin.examplo.com)",
@@ -1624,7 +1624,7 @@
     "polishWording": {
         "description": "Melhore automaticamente o texto da mensagem com melhor gramática, letras maiúsculas e pontuação",
         "settings": {
-            "blockedWords": "Lista de palavras separadas por vírgula a serem excluídas das correções de capitalização",
+            "blockedWords": "Lista de palavras, separadas por vírgula, para excluir das correções de capitalização",
             "expandContractions": "Expandir contrações (ex: 'don't' → 'do not')",
             "fixApostrophes": "Corrigir apóstrofos ausentes em contrações (ex: 'dont' → 'don't')",
             "fixCapitalization": "Corrigir capitalização de frases",
@@ -1770,7 +1770,7 @@
         "description": "Controle se você receberá um ping quando alguém responder às suas mensagens",
         "settings": {
             "alwaysPingOnReply": "Sempre receba um ping quando alguém responder às suas mensagens",
-            "replyPingWhitelist": "Lista separada por vírgulas de IDs de usuário para sempre receber pings de resposta"
+            "replyPingWhitelist": "Lista de IDs de usuário, separados por vírgula, para sempre receber menções de resposta de"
         }
     },
     "richMagnetLinks": {
@@ -2224,7 +2224,7 @@
             "rate": "Velocidade do narrador",
             "sayOwnName": "Diga o próprio nome",
             "stateChangeCooldownMs": "Tempo de espera do anúncio de mudança de estado (ms)",
-            "stateChangeFilterList": "IDs de usuário separados por vírgula para lista branca/lista negra. Clique com o botão direito nos usuários para adicionar/remover.",
+            "stateChangeFilterList": "Lista de IDs de usuário, separados por vírgula, para a lista branca/lista negra. Clique com o botão direito nos usuários para adicionar/remover.",
             "stateChangeFilterMode": "Filtre quais usuários acionam anúncios de mudança de estado",
             "userVoiceMap": "Substituições de voz por usuário (formato: userId:voiceId,userId2:voiceId2). Clique com o botão direito nos usuários para definir.",
             "volume": "Volume do Narrador"
@@ -2336,7 +2336,7 @@
     "voiceJoinMessages": {
         "description": "Receba notificações quando amigos entrarem em canais de voz",
         "settings": {
-            "allowedFriends": "Lista separada por vírgulas ou espaços de IDs de usuários dos amigos dos quais você deseja receber mensagens",
+            "allowedFriends": "Lista de IDs de usuário de amigos, separados por vírgula ou espaço, dos quais você deseja receber mensagens de entrada",
             "friendDirectMessages": "Receba notificações no DMs dos seus amigos quando eles entrarem em um canal de voz",
             "friendDirectMessagesSelf": "Receber notificações nas DMs dos seus amigos mesmo se você estiver no mesmo canal de voz que eles",
             "friendDirectMessagesShowMemberCount": "Exibe a contagem de outros membros no canal de voz ao receber uma notificação de DM",
