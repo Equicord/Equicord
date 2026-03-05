@@ -1032,19 +1032,19 @@
     "imgToGif": {
         "commands": {
             "height": "Chiều cao của gif",
-            "image": "Đính kèm hình ảnh để sử dụng",
+            "image": "Hình ảnh đính kèm để sử dụng",
             "imgtogif": "Cho phép bạn biến hình ảnh thành gif",
             "width": "Chiều rộng của gif"
         },
         "description": "Thêm lệnh /imgtogif để tạo ảnh gif từ bất kỳ hình ảnh nào",
         "errors": {
             "noImage": "Không có hình ảnh được chỉ định!",
-            "notAnImage": "Tải lên không phải là hình ảnh"
+            "notAnImage": "Tập tin bạn tải lên không phải là hình ảnh"
         }
     },
     "inRole": {
         "commands": {
-            "inrole": "Biết ai đang đóng một vai trò nào đó",
+            "inrole": "Biết ai đang có một vai trò nào đó",
             "role": "Vai trò"
         },
         "description": "Biết ai có vai trò bằng menu ngữ cảnh vai trò hoặc lệnh /inrole (đọc thông tin plugin!)",
@@ -1052,10 +1052,10 @@
             "makeSureServer": "Hãy chắc chắn rằng bạn đang ở trong một máy chủ."
         },
         "limitations": {
-            "description": "Nếu bạn không có quyền mod trên máy chủ và máy chủ đó lớn (trên 100 thành viên), plugin có thể bị hạn chế theo những cách sau:",
+            "description": "Nếu bạn không có quyền điều phối trên máy chủ và máy chủ đó lớn (trên 100 thành viên), plugin có thể bị hạn chế theo những cách sau:",
             "friendsAlwaysShown": "Tuy nhiên, bạn bè sẽ luôn được hiển thị bất kể trạng thái của họ.",
             "offlineNotListed": "Thành viên ngoại tuyến sẽ không được liệt kê",
-            "title": ":cảnh báo: Hạn chế",
+            "title": ":warning: Hạn chế",
             "upTo100": "Tối đa 100 thành viên sẽ được liệt kê theo mặc định. Để có thêm, hãy cuộn xuống danh sách thành viên để tải thêm thành viên."
         },
         "ui": {
@@ -1063,26 +1063,26 @@
         }
     },
     "ingtoninator": {
-        "description": "Thêm 'ington' vào một từ ngẫu nhiên trong tin nhắn của bạn",
+        "description": "Thêm hậu tố 'ington' vào một từ ngẫu nhiên trong tin nhắn của bạn",
         "settings": {
-            "isEnabled": "Bật hoặc tắt Intoninator",
-            "showIcon": "Hiển thị nút để chuyển đổi plugin Intoninator"
+            "isEnabled": "Bật hoặc tắt Ingtoninator",
+            "showIcon": "Hiển thị nút để bật/tắt plugin Ingtoninator"
         },
         "ui": {
-            "disabled": "Bộ kích hoạt bị vô hiệu hóa",
-            "enabled": "Kích hoạt bộ kích hoạt"
+            "disabled": "Ingtoninator bị tắt",
+            "enabled": "Ingtoninator được bật"
         }
     },
     "instantScreenshare": {
-        "description": "Chia sẻ màn hình ngay lập tức khi tham gia kênh thoại có hỗ trợ nguồn máy tính để bàn, cửa sổ và thiết bị đầu vào video (máy ảnh, thẻ chụp)",
+        "description": "Tự động chia sẻ màn hình ngay khi tham gia kênh thoại, hỗ trợ các nguồn từ màn hình máy tính, cửa sổ ứng dụng và các thiết bị quay video (camera, thẻ ghi hình)",
         "info": {
-            "linux": "Dành cho Linux",
-            "soundPreview": "Về cài đặt âm thanh và xem trước",
-            "soundPreviewInfo": "Chúng tôi sử dụng cài đặt do Discord thiết lập và sử dụng để quyết định xem có nên bật âm thanh và xem trước luồng hay không",
+            "linux": "Với Linux",
+            "soundPreview": "Về Cài đặt Âm Thanh và Xem Trước",
+            "soundPreviewInfo": "Chúng tôi sử dụng cài đặt do Discord thiết lập và sử dụng để quyết định xem có nên bật âm thanh và xem trước stream hay không",
             "videoDevices": "Thiết bị Video",
-            "videoDevicesInfo": "Hỗ trợ máy ảnh và thẻ chụp (như Elgato HD60X) khi được bật trong cài đặt",
+            "videoDevicesInfo": "Hỗ trợ máy ảnh và thẻ ghi hình (như Elgato HD60X) khi được bật trong cài đặt",
             "wayland": "Đối với Wayland, nó chỉ bật lên phần chọn chia sẻ màn hình",
-            "x11": "Đối với X11 nó có thể hoạt động hoặc không :srug:"
+            "x11": "Đối với X11 nó có thể hoạt động hoặc không :shrug:"
         },
         "ui": {
             "instantScreenshare": "Chia sẻ màn hình tức thì",
@@ -1098,17 +1098,17 @@
         "ui": {
             "decryptMessage": "Giải mã tin nhắn",
             "encryptMessage": "Mã hóa tin nhắn",
-            "hiddenMessageIndicator": "Tin nhắn này có một tin nhắn ẩn! (Trò chuyện vô hình)"
+            "hiddenMessageIndicator": "Tin nhắn này có một tin nhắn ẩn! (InvisibleChat)"
         }
     },
     "inviteDefaults": {
         "description": "Cho phép bạn chỉnh sửa các giá trị mặc định khi tạo lời mời máy chủ.",
         "options": {
-            "forever": "Mãi mãi",
-            "infinite": "vô hạn"
+            "forever": "Vĩnh viễn",
+            "infinite": "Không giới hạn"
         },
         "settings": {
-            "inviteDuration": "Thời lượng mời",
+            "inviteDuration": "Thời hạn mời",
             "maxUses": "Số lượt sử dụng mời",
             "temporaryMembership": "Thành Viên Tạm Thời"
         }
@@ -1116,86 +1116,86 @@
     "jellyfinRichPresence": {
         "coverTypeOptions": {
             "episodeCover": "Bìa tập",
-            "seriesCover": "Bìa bộ truyện"
+            "seriesCover": "Bìa bộ"
         },
-        "description": "Sự hiện diện phong phú của máy chủ media Jellyfin",
+        "description": "Rich presence của máy chủ media Jellyfin",
         "episodeFormatOptions": {
-            "fulltext": "Phần 1 Tập 1",
+            "fulltext": "Mùa 1 Tập 1",
             "s01e01": "S01E01",
             "short": "1x01"
         },
         "howToGetApiKey": {
-            "description": "Mã thông báo xác thực có thể được tìm thấy bằng cách làm theo các bước sau:",
+            "description": "Token xác thực có thể được tìm thấy bằng cách làm theo các bước sau:",
             "title": "Cách lấy khóa API",
             "userIdInfo": "Bạn cũng sẽ cần ID người dùng của mình, có thể tìm thấy ID này trong url của trang hồ sơ người dùng của bạn."
         },
         "nameFormatOptions": {
-            "custom": "Tùy biến",
-            "seriesEpisodeName": "Sê-ri - Tên tập/Bài hát/Phim",
+            "custom": "Tùy chỉnh",
+            "seriesEpisodeName": "Sê-ri - Tên Tập/Bài hát/Phim",
             "seriesMovieName": "Tên phim/bộ phim"
         },
         "overrideTypeOptions": {
-            "listening": "Nghe",
+            "listening": "Đang nghe",
             "off": "Tắt",
             "playing": "Đang chơi",
             "streaming": "Đang stream",
             "watching": "Đang xem"
         },
         "privacyMode": {
-            "albumHidden": "[Album bị ẩn]",
+            "albumHidden": "[Album ẩn]",
             "artistHidden": "[Nghệ sĩ ẩn]",
             "episodeHidden": "[Tập ẩn]",
-            "listeningToMusic": "Nghe nhạc",
-            "mediaHidden": "[Phương tiện bị ẩn]",
+            "listeningToMusic": "Đang nghe nhạc",
+            "mediaHidden": "[Phương tiện ẩn]",
             "movieHidden": "[Phim ẩn]",
-            "seriesHidden": "[Loạt phim ẩn]",
-            "titleHidden": "[Tiêu đề bị ẩn]",
-            "trackHidden": "[Theo dõi ẩn]",
-            "watchingSomething": "Xem cái gì đó",
-            "watchingTvShow": "Xem một chương trình truyền hình"
+            "seriesHidden": "[Bộ phim ẩn]",
+            "titleHidden": "[Tiêu đề ẩn]",
+            "trackHidden": "[Bài hát ẩn]",
+            "watchingSomething": "Đang xem cái gì đó",
+            "watchingTvShow": "Đang xem một chương trình truyền hình"
         },
         "settings": {
-            "apiKey": "Khóa Jellyfin API lấy được từ bảng điều khiển quản trị Jellyfin của bạn",
+            "apiKey": "Khóa API Jellyfin lấy được từ bảng điều khiển quản trị Jellyfin của bạn",
             "coverType": "Chọn bìa nào sẽ hiển thị khi xem chương trình truyền hình",
-            "customName": "Tên Hiện diện phong phú tùy chỉnh (chỉ được sử dụng nếu 'Tùy chỉnh' được chọn). Tùy chọn: {name}, {series}, {season}, {episode}, {artist}, {album}, {year}",
+            "customName": "Tên Rich Presence tùy chỉnh (chỉ được sử dụng nếu 'Tùy chỉnh' được chọn). Tùy chọn: {name}, {series}, {season}, {episode}, {artist}, {album}, {year}",
             "episodeFormat": "Định dạng số tập",
             "nameDisplay": "Chọn cách tên ứng dụng sẽ xuất hiện trong Rich Presence",
-            "overrideRichPresenceType": "Ghi đè loại hiện diện phong phú",
-            "privacyMode": "Chế độ riêng tư (Ẩn chi tiết phương tiện như Tập/Tên bài hát)",
-            "serverUrl": "Máy chủ Jellyfin URL (ví dụ: https://jellyfin.example.com)",
-            "showEpisodeName": "Hiển thị tên tập sau thông tin phần/tập",
-            "showPausedState": "Hiển thị sự hiện diện phong phú khi phương tiện bị tạm dừng",
-            "userId": "ID người dùng Jellyfin được lấy từ hồ sơ người dùng của bạn URL"
+            "overrideRichPresenceType": "Ghi đè loại rich presence",
+            "privacyMode": "Chế độ riêng tư (Ẩn chi tiết phương tiện như tên Tập/Bài Hát)",
+            "serverUrl": "URL máy chủ Jellyfin (ví dụ: https://jellyfin.example.com)",
+            "showEpisodeName": "Hiển thị tên tập sau thông tin mùa/tập",
+            "showPausedState": "Hiển thị Rich Presence khi phương tiện bị tạm dừng",
+            "userId": "ID người dùng Jellyfin được lấy từ URL hồ sơ người dùng của bạn"
         },
         "state": {
             "episode": "Tập {episode}",
-            "paused": "Đã dừng",
-            "season": "Phần {season}"
+            "paused": "Tạm dừng",
+            "season": "Mùa {season}"
         },
         "toasts": {
-            "notConfigured": "JellyfinRPC không được cấu hình."
+            "notConfigured": "JellyfinRPC chưa được cấu hình."
         }
     },
     "jumpTo": {
-        "description": "Thêm tùy chọn menu ngữ cảnh để chuyển về đầu hoặc cuối kênh/DM.",
+        "description": "Thêm tùy chọn menu ngữ cảnh để nhảy về đầu hoặc cuối kênh/DM.",
         "errors": {
             "channelNotAvailable": "Thông tin kênh không có sẵn.",
-            "failedJump": "Không thể chuyển tới tin nhắn. Kiểm tra bảng điều khiển để biết chi tiết.",
+            "failedJump": "Không thể nhảy tới tin nhắn. Kiểm tra console để biết chi tiết.",
             "failedSearch": "Không thể tìm kiếm tin nhắn.",
             "noMessagesFound": "Không tìm thấy tin nhắn từ người dùng này trong kênh này."
         },
         "ui": {
-            "jumpToFirst": "Chuyển đến tin nhắn đầu tiên",
-            "jumpToLast": "Chuyển đến tin nhắn cuối cùng",
+            "jumpToFirst": "Nhảy đến tin nhắn đầu tiên",
+            "jumpToLast": "Nhảy đến tin nhắn cuối cùng",
             "usersLastMessage": "Tin nhắn cuối cùng của người dùng",
             "yourLastMessage": "Tin nhắn cuối cùng của bạn"
         }
     },
     "jumpscare": {
-        "description": "Thêm một cơ hội có thể định cấu hình để khiến bạn sợ hãi bất cứ khi nào bạn mở một kênh. Lấy cảm hứng từ Geometry Dash Mega Hack",
+        "description": "Thêm tỉ lệ xuất hiện màn hù dọa (jumpscare) mỗi khi bạn mở một kênh chat. Lấy cảm hứng từ Geometry Dash Mega Hack.",
         "settings": {
             "audioSource": "Đặt url âm thanh của jumpscare",
-            "chance": "Khả năng xảy ra jumpscare (1 trong X nên: 100 = 1/100 hoặc 1%, 50 = 1/50 hoặc 2%, v.v.)",
+            "chance": "Tỉ lệ xuất hiện jumpscare (1 trên X: 100 = 1/100 hay 1%, 50 = 1/50 hay 2%, v.v.)",
             "imageSource": "Đặt url hình ảnh của jumpscare"
         }
     },
@@ -1203,21 +1203,21 @@
         "commands": {
             "openDevSettings": "Mở tab Nhà phát triển"
         },
-        "description": "Cho phép bạn điều hướng UI bằng bàn phím.",
+        "description": "Cho phép bạn điều hướng giao diện bằng bàn phím.",
         "settings": {
             "allowMouseControl": "Cho phép chuột điều khiển bảng lệnh.",
-            "hotkey": "Phím nóng để mở bảng lệnh."
+            "hotkey": "Phím tắt để mở bảng lệnh."
         },
         "ui": {
-            "recordKeybind": "Ghi lại liên kết phím",
+            "recordKeybind": "Ghi phím tắt",
             "recording": "Đang ghi..."
         }
     },
     "keyboardSounds": {
-        "description": "Thêm OperaGX hoặc osu! hiệu ứng âm thanh khi gõ trên bàn phím của bạn.",
+        "description": "Thêm hiệu ứng âm thanh OperaGX hoặc osu! khi gõ trên bàn phím của bạn.",
         "options": {
-            "operaGx": "Opera GX",
-            "osu": "ôi!"
+            "operaGx": "OperaGX",
+            "osu": "osu!"
         },
         "settings": {
             "soundPack": "Gói âm thanh để sử dụng.",
@@ -1225,7 +1225,7 @@
         }
     },
     "keywordNotify": {
-        "description": "Gửi thông báo nếu một tin nhắn nhất định khớp với các từ khóa hoặc biểu thức chính quy nhất định",
+        "description": "Gửi thông báo nếu một tin nhắn nhất định khớp với các từ khóa hoặc biểu thức chính quy (Rexex)",
         "options": {
             "blacklist": "Danh sách đen",
             "whitelist": "Danh sách trắng"
@@ -1236,21 +1236,21 @@
             "keywords": "Quản lý từ khóa"
         },
         "ui": {
-            "addId": "Thêm giấy tờ tùy thân",
-            "addKeywordEntry": "Thêm mục nhập từ khóa",
+            "addId": "Thêm ID",
+            "addKeywordEntry": "Thêm từ khóa",
             "clearAll": "Xóa tất cả",
-            "ignoreCase": "Bỏ qua trường hợp",
-            "keywordEntry": "Nhập từ khóa {index}",
+            "ignoreCase": "Bỏ qua kiểu chữ",
+            "keywordEntry": "Từ khóa {index}",
             "keywords": "Từ khóa",
             "whitelistBlacklist": "Danh sách trắng/Danh sách đen"
         }
     },
     "lastActive": {
-        "description": "Một plugin để chuyển tới tin nhắn hoạt động cuối cùng từ chính bạn hoặc người dùng khác trong kênh/máy chủ.",
+        "description": "Một plugin để nhảy tới tin nhắn hoạt động cuối cùng từ chính bạn hoặc người dùng khác trong kênh/máy chủ.",
         "errors": {
             "channelNotAvailable": "Thông tin kênh không có sẵn.",
-            "findFailed": "Không tìm thấy tin nhắn. Kiểm tra bảng điều khiển để biết chi tiết.",
-            "jumpFailed": "Không thể chuyển tới tin nhắn. Kiểm tra bảng điều khiển để biết chi tiết.",
+            "findFailed": "Không tìm thấy tin nhắn. Kiểm tra console để biết chi tiết.",
+            "jumpFailed": "Không thể nhảy tới tin nhắn. Kiểm tra console để biết chi tiết.",
             "noRecentMessages": "Không thể tìm thấy bất kỳ tin nhắn gần đây từ người dùng này."
         }
     },
@@ -1268,23 +1268,23 @@
     },
     "listenBrainzRPC": {
         "about": {
-            "description": "MusicBrainz API không yêu cầu khóa API nhưng yêu cầu chuỗi tác nhân người dùng có ý nghĩa. Đối với hầu hết, một địa chỉ email là đủ.",
-            "title": "Giới thiệu về MusicBrainz API"
+            "description": "API MusicBrainz không yêu cầu khóa API nhưng yêu cầu chuỗi tác nhân người dùng (user-agent) có ý nghĩa. Đối với hầu hết, một địa chỉ email là đủ.",
+            "title": "Giới thiệu về API MusicBrainz"
         },
         "buttons": {
             "profile": "Hồ sơ ListenBrainz",
             "viewSong": "Xem bài hát"
         },
         "defaults": {
-            "statusName": "một số âm nhạc"
+            "statusName": "một số bài hát"
         },
-        "description": "Plugin nhỏ cho sự hiện diện phong phú của ListenBrainz",
+        "description": "Plugin nhỏ cho rich presence của ListenBrainz",
         "missingArtOptions": {
             "listenbrainzLogo": "Sử dụng logo ListenBrainz lớn",
             "placeholder": "Sử dụng trình giữ chỗ chung"
         },
         "nameFormatOptions": {
-            "albumName": "Sử dụng tên album (quay lại văn bản trạng thái tùy chỉnh nếu bài hát không có album)",
+            "albumName": "Sử dụng tên album (quay về văn bản trạng thái tùy chỉnh nếu bài hát không có album)",
             "artistFirst": "Sử dụng định dạng 'nghệ sĩ - bài hát'",
             "artistOnly": "Chỉ sử dụng tên nghệ sĩ",
             "customStatus": "Sử dụng tên trạng thái tùy chỉnh",
@@ -1292,17 +1292,17 @@
             "songOnly": "Chỉ sử dụng tên bài hát"
         },
         "settings": {
-            "hideWithActivity": "Ẩn sự hiện diện ListenBrainz nếu bạn có bất kỳ sự hiện diện nào khác",
-            "hideWithSpotify": "Ẩn sự hiện diện của ListenBrainz nếu Spotify đang chạy",
-            "mbContact": "ListenBrainz liên hệ",
+            "hideWithActivity": "Ẩn presence ListenBrainz nếu bạn có bất kỳ presence khác",
+            "hideWithSpotify": "Ẩn presense của ListenBrainz nếu Spotify đang chạy",
+            "mbContact": "Liên hệ ListenBrainz",
             "missingArt": "Khi album hoặc ảnh bìa album bị thiếu",
             "nameFormat": "Hiển thị tên bài hát và nghệ sĩ ở tên trạng thái",
             "shareSong": "Hiển thị liên kết tới bài hát trên ListenBrainz (chỉ người dùng khác mới có thể nhìn thấy)",
             "shareUsername": "Hiển thị liên kết tới hồ sơ ListenBrainz (chỉ có thể hiển thị với những người dùng khác)",
             "statusName": "Văn bản trạng thái tùy chỉnh",
-            "useListeningStatus": "Hiển thị trạng thái \"Đang nghe\" thay vì \"Đang phát\"",
+            "useListeningStatus": "Hiển thị trạng thái \"Đang nghe\" thay vì \"Đang chơi\"",
             "useLogo": "Hiển thị logo ListenBrainz trên ảnh bìa album",
-            "useTimeBar": "Sử dụng thời lượng bản nhạc để hiển thị thanh thời gian (phải sử dụng trạng thái Nghe)",
+            "useTimeBar": "Sử dụng thời lượng bản nhạc để hiển thị thanh thời gian (phải sử dụng trạng thái Đang nghe)",
             "username": "Tên người dùng ListenBrainz"
         }
     },
@@ -1312,8 +1312,8 @@
             "scanQr": "Quét mã QR"
         },
         "ui": {
-            "enableAndRestart": "Kích hoạt plugin và khởi động lại ứng dụng khách của bạn để quét mã QR đăng nhập",
-            "scanQrCode": "Quét mã QR"
+            "enableAndRestart": "Kích hoạt plugin và khởi động lại ứng dụng của bạn để quét mã QR đăng nhập",
+            "scanQrCode": "Quét Mã QR"
         }
     },
     "mediaPlaybackSpeed": {
@@ -1458,15 +1458,15 @@
     "middleClickTweaks": {
         "description": "Nhiều chỉnh sửa nhấp chuột giữa khác nhau, chẳng hạn như dán và mở liên kết.",
         "settings": {
-            "always": "Luôn ngăn chặn việc dán nhấp chuột giữa",
+            "always": "Luôn ngăn chặn việc dán khi nhấp chuột giữa",
             "both": "Liên kết & Phương tiện",
             "focus": "Chỉ ngăn chặn khi vùng văn bản không được tập trung",
             "links": "Liên kết",
-            "media": "Phương tiện truyền thông",
+            "media": "Phương tiện",
             "none": "Không",
             "openScope": "Ngăn chặn việc nhấp chuột giữa vào các loại nội dung này để mở chúng.",
-            "pasteScope": "Ngăn chặn nhấp chuột giữa dán trong những tình huống này.",
-            "pasteThreshold": "Một phần nghìn giây cho đến khi tính năng dán được bật lại sau lần nhấp chuột giữa."
+            "pasteScope": "Ngăn chặn nhấp chuột giữa để dán trong những tình huống này.",
+            "pasteThreshold": "Mili giây cho đến khi tính năng dán được bật lại sau lần nhấp chuột giữa."
         }
     },
     "moreCommands": {
@@ -1583,14 +1583,14 @@
         }
     },
     "partyMode": {
-        "description": "Kích hoạt hiệu ứng chế độ bữa tiệc với hoa giấy và rung màn hình",
+        "description": "Kích hoạt hiệu ứng chế độ tiệc tùng với hoa giấy và rung màn hình",
         "settings": {
             "intensityOptions": {
                 "better": "Tốt hơn - Nhiều hoa giấy hơn",
-                "normal": "Bình thường - Hiệu ứng tinh tế",
+                "normal": "Bình thường - Hiệu ứng nhẹ nhàng",
                 "projectX": "Dự án X - Cường độ tối đa"
             },
-            "superIntensePartyMode": "Mức cường độ của chế độ nhóm"
+            "superIntensePartyMode": "Cường độ của chế độ tiệc tùng"
         }
     },
     "pinIcon": {
@@ -1599,20 +1599,20 @@
     "pingNotifications": {
         "description": "Cài đặt thông báo tùy chỉnh cho ping, DM và tin nhắn bạn bè",
         "settings": {
-            "dms": "Thông báo tin nhắn DM và tin nhắn DM nhóm",
+            "dms": "Thông báo cho tin nhắn DM và tin nhắn nhóm DM",
             "friends": "Thông báo khi bạn bè gửi tin nhắn trên máy chủ",
-            "ignoreMuted": "Bỏ qua các kênh, bang hội và người dùng bị chặn",
+            "ignoreMuted": "Bỏ qua thông báo các kênh, máy chủ và người dùng bị chặn",
             "mentions": "Thông báo khi được nhắc đến (@username)",
             "showInActive": "Hiển thị thông báo ngay cả khi kênh đang hoạt động"
         }
     },
     "platformSpoofer": {
-        "description": "Giả mạo trạng thái nền tảng của bạn (di động, máy tính để bàn, web, bảng điều khiển)",
+        "description": "Giả mạo trạng thái nền tảng của bạn (di động, máy tính, web, máy chơi game)",
         "settings": {
             "platform": "Nền tảng để giả mạo như",
             "platformOptions": {
                 "android": "Android",
-                "desktop": "Máy tính để bàn (Discord Máy khách)",
+                "desktop": "Máy tính (Ứng dụng Discord)",
                 "ios": "iOS",
                 "playstation": "PlayStation",
                 "web": "Web (Discord Web)",
@@ -1625,8 +1625,8 @@
         "description": "Tự động cải thiện văn bản tin nhắn với ngữ pháp, cách viết hoa và dấu câu tốt hơn",
         "settings": {
             "blockedWords": "Danh sách các từ được phân tách bằng dấu phẩy để loại trừ khỏi việc sửa lỗi viết hoa",
-            "expandContractions": "Mở rộng các cơn co thắt (ví dụ: 'don't' → 'do not')",
-            "fixApostrophes": "Sửa các dấu nháy đơn bị thiếu trong cách viết tắt (ví dụ: 'dont' → 'don't')",
+            "expandContractions": "Viết đầy đủ các từ viết tắt (ví dụ: 'don't' → 'do not')",
+            "fixApostrophes": "Tự động thêm dấu nháy đơn còn thiếu trong các từ viết tắt (ví dụ: 'dont' → 'don't')",
             "fixCapitalization": "Sửa lỗi viết hoa câu",
             "fixPunctuation": "Thêm dấu chấm vào cuối câu",
             "fixPunctuationFrequency": "Tần suất tự động thêm dấu chấm (0-100%)",
@@ -1634,27 +1634,27 @@
         }
     },
     "profileSets": {
-        "description": "Lưu và quản lý các cài đặt trước tùy chỉnh hồ sơ",
+        "description": "Lưu và quản lý các mẫu tùy chỉnh hồ sơ cá nhân",
         "settings": {
-            "avatarSize": "Kích thước hình đại diện trong trình quản lý đặt trước"
+            "avatarSize": "Kích thước hình đại diện trong trình quản lý mẫu"
         }
     },
     "questify": {
         "buttonActions": {
             "contextMenu": "Hiển thị menu ngữ cảnh",
-            "openQuests": "Mở trang Nhiệm vụ",
+            "openQuests": "Mở trang Nhiệm Vụ",
             "pluginSettings": "Mở cài đặt plugin"
         },
-        "description": "Nâng cao trải nghiệm Quest của bạn với một bộ tính năng hoặc tắt chúng hoàn toàn nếu chúng không phù hợp với bạn.",
+        "description": "Nâng cao trải nghiệm Nhiệm Vụ của bạn với một bộ tính năng, hoặc tắt chúng hoàn toàn nếu chúng không phù hợp với bạn.",
         "gradientOptions": {
             "black": "Đen",
             "default": "Mặc định",
             "hide": "Ẩn",
-            "intense": "Mãnh liệt"
+            "intense": "Rực rỡ"
         },
         "sortOptions": {
-            "claimedAsc": "Đã xác nhận quyền sở hữu (Cũ nhất xếp trước)",
-            "claimedDesc": "Đã xác nhận quyền sở hữu (Mới nhất trước tiên)",
+            "claimedAsc": "Đã nhận (Cũ nhất xếp trước)",
+            "claimedDesc": "Đã nhận (Mới nhất trước tiên)",
             "expiringAsc": "Hết hạn (Sớm nhất trước tiên)",
             "expiringDesc": "Hết hạn (Mới nhất trước)",
             "recentAsc": "Gần đây (Cũ nhất xếp trước)",
@@ -1671,7 +1671,7 @@
         "description": "Chuyển nhanh qua các chủ đề bằng phím tắt",
         "settings": {
             "autoRefresh": "Tự động làm mới danh sách chủ đề khi phát hiện thay đổi",
-            "includeLocal": "Bao gồm các chủ đề địa phương trong chu trình",
+            "includeLocal": "Bao gồm các chủ đề cục bộ trong chu trình",
             "includeOnline": "Bao gồm các chủ đề trực tuyến trong chu trình",
             "showNotifications": "Hiển thị thông báo khi chủ đề được thêm hoặc xóa",
             "sortOptions": {
@@ -1683,21 +1683,21 @@
         }
     },
     "quoter": {
-        "description": "Tạo hình ảnh trích dẫn cách điệu từ tin nhắn",
+        "description": "Tạo ảnh trích dẫn nghệ thuật từ các tin nhắn",
         "settings": {
-            "grayscale": "Áp dụng bộ lọc thang độ xám",
+            "grayscale": "Áp dụng bộ lọc ảnh đen trắng",
             "quoteFont": "Font chữ cho hình ảnh trích dẫn",
             "saveAsGif": "Lưu dưới dạng GIF thay vì PNG",
-            "showWatermark": "Hiển thị hình mờ trên dấu ngoặc kép",
-            "watermark": "Văn bản hình mờ"
+            "showWatermark": "Hiển thị hình mờ trên câu trích dẫn",
+            "watermark": "Văn bản mờ"
         }
     },
     "randomVoice": {
         "description": "Tham gia các kênh thoại ngẫu nhiên dựa trên các bộ lọc có thể tùy chỉnh",
         "operations": {
-            "equalTo": "bằng với",
+            "equalTo": "Bằng với",
             "lessThan": "Ít hơn",
-            "moreThan": "Hơn"
+            "moreThan": "Nhiều hơn"
         },
         "settings": {
             "Servers": "ID máy chủ cần bao gồm (được phân tách bằng dấu phẩy)",
@@ -1705,19 +1705,19 @@
             "UserAmountOperation": "Toán tử so sánh số lượng người dùng",
             "autoCamera": "Tự động bật máy ảnh",
             "autoNavigate": "Tự động điều hướng đến kênh thoại",
-            "autoStream": "Tự động bắt đầu truyền phát",
+            "autoStream": "Tự động bắt đầu stream",
             "avoidAfk": "Tránh các kênh AFK",
             "avoidStages": "Tránh các kênh sân khấu",
             "avoidStates": "Tránh người dùng khớp với bộ lọc trạng thái",
-            "deafen": "Tìm kiếm người dùng bị điếc",
-            "includeStates": "Bao gồm những người dùng phù hợp với bộ lọc trạng thái",
+            "deafen": "Tìm kiếm người dùng bị tắt tiếng",
+            "includeStates": "Bao gồm những người dùng khớp với bộ lọc trạng thái",
             "leaveEmpty": "Rời đi khi kênh trở nên trống",
-            "mute": "Tìm kiếm người dùng bị tắt tiếng",
-            "selfDeafen": "Tự động điếc khi tham gia",
+            "mute": "Tìm kiếm người dùng bị tắt âm",
+            "selfDeafen": "Tự động tắt tiếng khi tham gia",
             "selfMute": "Tự động tắt tiếng khi tham gia",
             "spacesLeft": "Khoảng trống tối thiểu còn lại trong kênh",
-            "spacesLeftOperation": "Toán tử so sánh còn lại dấu cách",
-            "stream": "Tìm kiếm các kênh có luồng",
+            "spacesLeftOperation": "Toán tử so sánh số chỗ còn trống",
+            "stream": "Tìm kiếm các kênh có stream",
             "vcLimit": "Giới hạn người dùng kênh thoại",
             "vcLimitOperation": "Toán tử so sánh giới hạn kênh",
             "video": "Tìm kiếm các kênh đã bật video"
@@ -1731,17 +1731,17 @@
         },
         "settings": {
             "amountOfUsers": "Số lượng người dùng cần theo dõi",
-            "clearRdms": "Xóa lịch sử RDMS",
-            "overlayMode": "Chế độ nội dung lớp phủ",
-            "overlayRowLength": "Số lượng DM hiển thị trong hàng lớp phủ",
-            "overlayShowAvatars": "Hiển thị hình đại diện trong lớp phủ",
-            "toastDurationMs": "Thời lượng thông báo bánh mì nướng (ms)",
-            "visualStyle": "Kiểu chỉ báo trực quan khi đạp xe"
+            "clearRdms": "Xóa lịch sử RDM",
+            "overlayMode": "Chế độ nội dung overlay",
+            "overlayRowLength": "Số lượng DM hiển thị trong hàng overlay",
+            "overlayShowAvatars": "Hiển thị hình đại diện trong overlay",
+            "toastDurationMs": "Thời gian hiển thị thông báo Toast (mili giây)",
+            "visualStyle": "Kiểu chỉ báo trực quan khi chuyển"
         },
         "visualStyles": {
             "off": "Không có chỉ báo trực quan",
-            "overlay": "Lớp phủ (kiểu Alt+Tab)",
-            "toast": "Thông báo bánh mì nướng"
+            "overlay": "Overlay (kiểu Alt+Tab)",
+            "toast": "Thông báo Toast"
         }
     },
     "remix": {
@@ -1758,30 +1758,30 @@
         }
     },
     "richMagnetLinks": {
-        "description": "Hiển thị các bản xem trước phong phú cho các liên kết nam châm với tính năng trích xuất tên tệp"
+        "description": "Hiển thị xem trước chi tiết cho các liên kết magnet và tự động trích xuất tên tệp"
     },
     "rpcEditor": {
-        "description": "Chỉnh sửa và tùy chỉnh màn hình Hiện diện phong phú (RPC) của bạn cho bất kỳ ứng dụng nào",
+        "description": "Chỉnh sửa và tùy chỉnh hiển thị Rich Presence (RPC) của bạn cho bất kỳ ứng dụng nào",
         "placeholders": {
             "details": "Văn bản chi tiết hiện tại",
-            "largeImage": "Hình ảnh lớn URL",
+            "largeImage": "URL hình ảnh lớn",
             "largeText": "Văn bản chú giải công cụ hình ảnh lớn",
             "name": "Tên ứng dụng",
-            "smallImage": "Hình ảnh nhỏ URL",
+            "smallImage": "URL hình ảnh nhỏ",
             "smallText": "Văn bản chú giải công cụ hình ảnh nhỏ",
             "state": "Văn bản trạng thái hiện tại"
         },
         "settings": {
-            "replacedAppIds": "Quản lý ghi đè RPC dành riêng cho ứng dụng"
+            "replacedAppIds": "Quản lý ghi đè RPC cho từng ứng dụng"
         }
     },
     "rpcStats": {
-        "description": "Hiển thị số liệu thống kê tùy chỉnh trong Sự hiện diện phong phú của bạn (tin nhắn đã gửi, album hàng đầu của Last.fm)",
+        "description": "Hiển thị số liệu thống kê tùy chỉnh trong Rich Presence của bạn (tin nhắn đã gửi, album hàng đầu của Last.fm)",
         "settings": {
             "RPCTitle": "Văn bản tiêu đề cho RPC",
             "albumCoverImage": "Sử dụng bìa album làm hình ảnh RPC (chế độ Last.fm)",
-            "assetURL": "Hình ảnh tùy chỉnh URL cho RPC (mặc định: hình đại diện của bạn)",
-            "lastFMApiKey": "Khóa Last.fm API (lấy từ Last.fm/api)",
+            "assetURL": "URL hình ảnh tùy chỉnh cho RPC (mặc định: hình đại diện của bạn)",
+            "lastFMApiKey": "Khóa API Last.fm(lấy từ Last.fm/api)",
             "lastFMStatFormat": "Định dạng cho chỉ số Last.fm ($album, $nghệ sĩ)",
             "lastFMUsername": "tên người dùng Last.fm",
             "statDisplay": "Thống kê để hiển thị"
