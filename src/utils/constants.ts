@@ -648,6 +648,10 @@ export const Devs = /* #__PURE__*/ Object.freeze({
         name: "prism",
         id: 390884143749136386n,
     },
+    playfairs: {
+        name: "playfairs",
+        id: 1426711359059394662n,
+    },
 } satisfies Record<string, Dev>);
 
 export const EquicordDevs = Object.freeze({
@@ -1271,6 +1275,10 @@ export const EquicordDevs = Object.freeze({
     mshl: {
         name: "m.shl",
         id: 1025245410224263258n,
+    },
+    playfairs: { // Didn't know which list to put it in, so I just did both, remove comment when merging.
+        name: "playfairs",
+        id: 1426711359059394662n,
     },
 } satisfies Record<string, Dev>);
 
