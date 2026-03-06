@@ -8,6 +8,8 @@
 // This is a best-effort preprocessor — it handles common LaTeX patterns
 // but doesn't aim to be a full LaTeX parser.
 
+const MAX_LATEX_PASSES = 5;
+
 const LATEX_REPLACEMENTS: [RegExp, string | ((...args: string[]) => string)][] = [
     // Fractions: \frac{a}{b} → (a)/(b)
     [/\\frac\{([^{}]*)\}\{([^{}]*)\}/g, "($1)/($2)"],
@@ -86,7 +88,7 @@ export function latexToExpr(latex: string): string {
     let expr = latex.trim();
 
     // Handle nested \frac and \sqrt by running replacements multiple times
-    for (let pass = 0; pass < 5; pass++) {
+    for (let pass = 0; pass < MAX_LATEX_PASSES; pass++) {
         const before = expr;
         for (const [pattern, replacement] of LATEX_REPLACEMENTS)
             expr = typeof replacement === "string"

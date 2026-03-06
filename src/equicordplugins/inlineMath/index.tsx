@@ -10,7 +10,7 @@ import definePlugin, { OptionType } from "@utils/types";
 import { ChannelStore, ComponentDispatch, DraftType, Forms, PermissionsBits, PermissionStore, showToast, Toasts, UploadHandler, UserStore } from "@webpack/common";
 
 import { latexToExpr } from "./latex";
-import { calculate, calculateWithSteps, createEvaluationState, evaluateExpression, formatResult } from "./parser";
+import { createEvaluationState, evaluateExpressionWithOutputs } from "./parser";
 import { canvasToBlob, renderMathToCanvas } from "./renderer";
 import { tryConvertUnits } from "./units";
 
@@ -93,9 +93,10 @@ export default definePlugin({
     async onBeforeMessageSend(channelId, msg) {
         const maxLen = (UserStore.getCurrentUser().premiumType ?? 0) === 2 ? 4000 : 2000;
         const evalState = createEvaluationState();
+        const replacements: { detailed: string; simple: string; }[] = [];
 
         // Collect expressions for potential image rendering
-        const exprs: { raw: string; expr: string; result: number; steps?: string; }[] = [];
+        const exprs: { raw: string; detailed?: string; simple: string; }[] = [];
         let hasMatch = false;
 
         let replaced = msg.content.replace(/\{([^{}]+)\}/g, (match, rawExpr) => {
@@ -104,33 +105,41 @@ export default definePlugin({
                 const conversion = tryConvertUnits(rawExpr);
                 if (conversion) {
                     hasMatch = true;
+                    replacements.push({ detailed: conversion, simple: conversion });
                     return conversion;
                 }
 
                 const expr = resolveExpr(rawExpr);
-                const { result, statementKind } = evaluateExpression(expr, evalState);
+                const { statementKind, simpleText, detailedText } = evaluateExpressionWithOutputs(expr, evalState);
                 hasMatch = true;
 
                 if (statementKind === "function_def") {
+                    replacements.push({ detailed: "", simple: "" });
                     return "";
                 }
 
                 if (settings.store.imageOutput) {
-                    const steps = settings.store.showSteps ? calculateWithSteps(expr) : undefined;
-                    exprs.push({ raw: rawExpr, expr, result, steps });
-                    return formatResult(result);
+                    exprs.push({
+                        raw: rawExpr,
+                        detailed: settings.store.showSteps ? detailedText : undefined,
+                        simple: simpleText,
+                    });
+                    replacements.push({ detailed: simpleText, simple: simpleText });
+                    return simpleText;
                 }
 
-                if (settings.store.showSteps) {
-                    return calculateWithSteps(expr);
-                }
-                return formatResult(result);
+                replacements.push({ detailed: detailedText, simple: simpleText });
+                return settings.store.showSteps ? detailedText : simpleText;
             } catch {
+                replacements.push({ detailed: match, simple: match });
                 return match;
             }
         });
 
         if (!hasMatch) return;
+
+        let replacementIndex = 0;
+        const simpleReplaced = msg.content.replace(/\{([^{}]+)\}/g, () => replacements[replacementIndex++]?.simple ?? "");
 
         // Image output mode: send text normally, then prompt image upload
         const channel = canUploadInChannel(channelId);
@@ -138,8 +147,8 @@ export default definePlugin({
             replaced = msg.content.replace(/\{([^{}]+)\}/g, "");
 
             const imageLines = exprs.map(e => {
-                if (e.steps) return e.steps.replace(/\s*;\s*/g, "\n");
-                return `${e.raw} = ${formatResult(e.result)}`.replace(/\s*;\s*/g, "\n");
+                if (e.detailed) return e.detailed.replace(/\s*;\s*/g, "\n");
+                return `${e.raw} = ${e.simple}`.replace(/\s*;\s*/g, "\n");
             });
 
             const canvas = renderMathToCanvas(
@@ -175,15 +184,7 @@ export default definePlugin({
 
         // If steps made it too long, fall back to just the result
         if (msg.content.length > maxLen && settings.store.showSteps) {
-            msg.content = msg.content.replace(/\{([^{}]+)\}/g, (match, rawExpr) => {
-                try {
-                    const expr = resolveExpr(rawExpr);
-                    return formatResult(calculate(expr));
-                } catch {
-                    console.warn(`[InlineMath] Failed to calculate expression for fallback: ${rawExpr}`);
-                    return match;
-                }
-            });
+            msg.content = simpleReplaced;
         }
 
         if (msg.content.length > maxLen) {

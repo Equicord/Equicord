@@ -1,10 +1,12 @@
 /*
  * Vencord, a Discord client mod
- * Copyright (c) 2024 Vendicated and contributors
+ * Copyright (c) 2026 Vendicated and contributors
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 // ── Token types ──────────────────────────────────────────────
+
+const MAX_REDUCTION_STEPS = 100;
 
 const enum TokenType {
     Number,
@@ -420,7 +422,23 @@ interface EvalContext {
 }
 
 const MAX_CALL_DEPTH = 32;
-const STEP_EVAL_CONTEXT: EvalContext = { vars: {}, funcs: {}, callDepth: 0 };
+
+function cloneEvaluationState(state: EvaluationState): EvaluationState {
+    return {
+        vars: { ...state.vars },
+        funcs: Object.fromEntries(
+            Object.entries(state.funcs).map(([name, fn]) => [name, { ...fn, params: [...fn.params] }])
+        )
+    };
+}
+
+function createEvalContext(state: EvaluationState): EvalContext {
+    return {
+        vars: state.vars,
+        funcs: state.funcs,
+        callDepth: 0,
+    };
+}
 
 function assertAvailableName(name: string, kind: "variable" | "function") {
     if (name in CONSTANTS)
@@ -513,11 +531,7 @@ function evaluate(node: ASTNode, ctx: EvalContext): number {
 }
 
 function evaluateProgram(program: ProgramNode, state: EvaluationState = createEvaluationState()): { result: number; statementKind: StatementKind; } {
-    const ctx: EvalContext = {
-        vars: state.vars,
-        funcs: state.funcs,
-        callDepth: 0,
-    };
+    const ctx = createEvalContext(state);
 
     let lastValue = 0;
     let statementKind: StatementKind = "expr_stmt";
@@ -603,56 +617,61 @@ function stringify(node: ASTNode): string {
 
 // ── Step-by-step reducer ─────────────────────────────────────
 
-function isValue(node: ASTNode): boolean {
-    return node.kind === "number" || (node.kind === "ident" && node.name in CONSTANTS);
+function isEvaluableValue(node: ASTNode, ctx: EvalContext): boolean {
+    return node.kind === "number"
+        || (node.kind === "ident" && (node.name in ctx.vars || node.name in CONSTANTS));
 }
 
-function reduceOneStep(node: ASTNode): ASTNode | null {
-    if (isValue(node)) return null;
+function reduceOneStep(node: ASTNode, ctx: EvalContext): ASTNode | null {
+    if (node.kind === "ident" && node.name in ctx.vars)
+        return { kind: "number", value: ctx.vars[node.name] };
+
+    if (node.kind === "number" || (node.kind === "ident" && node.name in CONSTANTS))
+        return null;
 
     switch (node.kind) {
-        case "number": return null;
+        case "ident":
+            return null;
 
         case "unary": {
-            if (isValue(node.operand)) return { kind: "number", value: evaluate(node, STEP_EVAL_CONTEXT) };
-            const r = reduceOneStep(node.operand);
-            return r ? { kind: "unary", op: node.op, operand: r } : null;
+            const r = reduceOneStep(node.operand, ctx);
+            if (r) return { kind: "unary", op: node.op, operand: r };
+            if (isEvaluableValue(node.operand, ctx)) return { kind: "number", value: evaluate(node, ctx) };
+            return null;
         }
 
         case "binary": {
-            if (!isValue(node.left)) {
-                const r = reduceOneStep(node.left);
-                if (r) return { kind: "binary", op: node.op, left: r, right: node.right };
-            }
-            if (!isValue(node.right)) {
-                const r = reduceOneStep(node.right);
-                if (r) return { kind: "binary", op: node.op, left: node.left, right: r };
-            }
-            if (isValue(node.left) && isValue(node.right))
-                return { kind: "number", value: evaluate(node, STEP_EVAL_CONTEXT) };
+            const left = reduceOneStep(node.left, ctx);
+            if (left) return { kind: "binary", op: node.op, left, right: node.right };
+
+            const right = reduceOneStep(node.right, ctx);
+            if (right) return { kind: "binary", op: node.op, left: node.left, right };
+
+            if (isEvaluableValue(node.left, ctx) && isEvaluableValue(node.right, ctx))
+                return { kind: "number", value: evaluate(node, ctx) };
             return null;
         }
 
         case "call": {
             for (let i = 0; i < node.args.length; i++) {
-                if (!isValue(node.args[i])) {
-                    const r = reduceOneStep(node.args[i]);
-                    if (r) {
-                        const newArgs = [...node.args];
-                        newArgs[i] = r;
-                        return { kind: "call", name: node.name, args: newArgs };
-                    }
+                const reducedArg = reduceOneStep(node.args[i], ctx);
+                if (reducedArg) {
+                    const newArgs = [...node.args];
+                    newArgs[i] = reducedArg;
+                    return { kind: "call", name: node.name, args: newArgs };
                 }
             }
-            if (node.args.every(isValue))
-                return { kind: "number", value: evaluate(node, STEP_EVAL_CONTEXT) };
+
+            if (node.args.every(arg => isEvaluableValue(arg, ctx)))
+                return { kind: "number", value: evaluate(node, ctx) };
             return null;
         }
 
         case "factorial": {
-            if (isValue(node.operand)) return { kind: "number", value: evaluate(node, STEP_EVAL_CONTEXT) };
-            const r = reduceOneStep(node.operand);
-            return r ? { kind: "factorial", operand: r } : null;
+            const r = reduceOneStep(node.operand, ctx);
+            if (r) return { kind: "factorial", operand: r };
+            if (isEvaluableValue(node.operand, ctx)) return { kind: "number", value: evaluate(node, ctx) };
+            return null;
         }
     }
 
@@ -682,30 +701,54 @@ export function evaluateExpression(expression: string, state: EvaluationState): 
     return evaluateProgram(program, state);
 }
 
+export function evaluateExpressionWithOutputs(expression: string, state: EvaluationState): {
+    result: number;
+    statementKind: StatementKind;
+    simpleText: string;
+    detailedText: string;
+} {
+    const tokens = tokenize(expression);
+    const parser = new Parser(tokens);
+    const program = parser.parse();
+    const initialState = cloneEvaluationState(state);
+    const { result, statementKind } = evaluateProgram(program, state);
+    const simpleText = formatResult(result);
+
+    if (program.statements.length !== 1 || program.statements[0].kind !== "expr_stmt") {
+        return {
+            result,
+            statementKind,
+            simpleText,
+            detailedText: `${expression.trim()} = ${simpleText}`,
+        };
+    }
+
+    let ast = program.statements[0].expr;
+    const steps: string[] = [expression.trim()];
+    const stepContext = createEvalContext(initialState);
+
+    for (let i = 0; i < MAX_REDUCTION_STEPS; i++) {
+        const reduced = reduceOneStep(ast, stepContext);
+        if (!reduced) break;
+        ast = reduced;
+        const step = stringify(ast);
+        if (step !== steps[steps.length - 1]) steps.push(step);
+    }
+
+    if (steps[steps.length - 1] !== simpleText) steps.push(simpleText);
+
+    return {
+        result,
+        statementKind,
+        simpleText,
+        detailedText: steps.join(" = "),
+    };
+}
+
 export function formatResult(result: number): string {
     return Number.isInteger(result) ? result.toString() : result.toPrecision(15).replace(/\.?0+$/, "");
 }
 
 export function calculateWithSteps(expression: string): string {
-    const tokens = tokenize(expression);
-    const parser = new Parser(tokens);
-    const program = parser.parse();
-
-    if (program.statements.length !== 1 || program.statements[0].kind !== "expr_stmt")
-        return `${expression.trim()} = ${formatResult(evaluateProgram(program).result)}`;
-
-    let ast = program.statements[0].expr;
-
-    const steps: string[] = [expression.trim()];
-
-    for (let i = 0; i < 100; i++) {
-        const reduced = reduceOneStep(ast);
-        if (!reduced) break;
-        ast = reduced;
-        const step = stringify(ast);
-        // Avoid duplicate steps
-        if (step !== steps[steps.length - 1]) steps.push(step);
-    }
-
-    return steps.join(" = ");
+    return evaluateExpressionWithOutputs(expression, createEvaluationState()).detailedText;
 }

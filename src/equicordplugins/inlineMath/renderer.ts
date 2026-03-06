@@ -37,9 +37,9 @@ interface TextSegment {
 
 function getRenderColors(colors?: RenderColors) {
     return {
-        text: colors?.text?.trim() || TEXT_COLOR,
-        operator: colors?.operator?.trim() || OP_COLOR,
-        equals: colors?.equals?.trim() || EQ_COLOR,
+        text: colors?.text?.trim() ?? TEXT_COLOR,
+        operator: colors?.operator?.trim() ?? OP_COLOR,
+        equals: colors?.equals?.trim() ?? EQ_COLOR,
     };
 }
 
