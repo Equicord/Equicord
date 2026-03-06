@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { CogWheel, ColorPaletteIcon, CopyIcon, FolderIcon, LinkIcon, MagnifyingGlassIcon, MainSettingsIcon, Microphone, NotesIcon, OpenExternalIcon, PluginIcon, RestartIcon, SafetyIcon, UpdaterIcon, WarningIcon } from "@components/Icons";
+import { BellDismiss, CogWheel, ColorPaletteIcon, CopyIcon, FolderIcon, LinkIcon, MagnifyingGlassIcon, MainSettingsIcon, Microphone, NotesIcon, OpenExternalIcon, PluginIcon, RestartIcon, SafetyIcon, UpdaterIcon, WarningIcon } from "@components/Icons";
 import { classNameFactory } from "@utils/css";
 import { classes } from "@utils/misc";
 
@@ -48,6 +48,15 @@ export function CommandPaletteRow({ item, selected, onClick, onDoubleClick, onHo
         if (category.includes("discord-settings") || metadata.includes("settings")) return MainSettingsIcon;
         if (metadata.includes("update") || metadata.includes("changelog")) return UpdaterIcon;
         if (metadata.includes("reload") || metadata.includes("restart")) return RestartIcon;
+        if ((metadata.includes("notification") || metadata.includes("equicord"))
+            && metadata.includes("mute")
+            && !metadata.includes("voice")
+            && !metadata.includes("deafen")
+            && !metadata.includes("microphone")
+            && !metadata.includes("mic")) return BellDismiss;
+        if (metadata.includes("mute")
+            && (metadata.includes("channel") || metadata.includes("guild") || metadata.includes("server")))
+            return BellDismiss;
         if (metadata.includes("voice") || metadata.includes("mute") || metadata.includes("deafen")) return Microphone;
         if (metadata.includes("copy")) return CopyIcon;
         if (metadata.includes("link")) return LinkIcon;

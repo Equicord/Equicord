@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { parseAdvancedMathQuery } from "./advancedMath";
 import { resolveTimezone } from "./timezones";
 import type { CalculatorIntent } from "./types";
 
@@ -352,31 +353,6 @@ function parseWeekdayInWeeks(query: string): CalculatorIntent | null {
     };
 }
 
-function parseMath(query: string): CalculatorIntent | null {
-    const lowered = query.toLowerCase();
-    let expression = lowered
-        .replace(/\$/g, "")
-        .replace(/\bsquare root of\s+(-?\d+(?:\.\d+)?)\b/g, "sqrt($1)")
-        .replace(/\b(-?\d+(?:\.\d+)?)\s+power\s+(-?\d+(?:\.\d+)?)\b/g, "($1^$2)")
-        .replace(/\b(-?\d+(?:\.\d+)?)\s*%\s+of\s+(-?\d+(?:\.\d+)?(?:[kmb])?)\b/g, "(($1/100)*$2)")
-        .replace(/\b(-?\d+(?:\.\d+)?)\s*([kmb])\b/g, (_, value: string, suffix: string) => {
-            const parsed = parseNumber(`${value}${suffix}`);
-            return String(parsed ?? value);
-        });
-
-    expression = expression.replace(/([0-9.)])\s*[x×]\s*([0-9(])/g, "$1*$2");
-    expression = expression.replace(/\^/g, "**");
-
-    if (!/[0-9]/.test(expression)) return null;
-    if (!/^[0-9+\-*/().\s%*sqrt]+$/.test(expression.replace(/\bsqrt\b/g, "sqrt"))) return null;
-
-    return {
-        kind: "math",
-        expression,
-        displayInput: query
-    };
-}
-
 export function parseCalculatorQuery(rawQuery: string): CalculatorIntent | null {
     const query = normalizeQuery(rawQuery);
     if (!query) return null;
@@ -394,5 +370,5 @@ export function parseCalculatorQuery(rawQuery: string): CalculatorIntent | null 
         ?? parseDaysUntil(query)
         ?? parseUnitConversion(query)
         ?? parseSingleTime(query)
-        ?? parseMath(query);
+        ?? parseAdvancedMathQuery(query);
 }

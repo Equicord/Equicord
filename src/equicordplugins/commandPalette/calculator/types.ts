@@ -16,11 +16,17 @@ export interface CalculatorResult {
     displayInput: string;
     displayAnswer: string;
     rawAnswer: string;
+    normalizedInput?: string;
     secondaryText?: string;
     tertiaryText?: string;
 }
 
 export type CalculatorIntent =
+    | {
+        kind: "advanced_math";
+        displayInput: string;
+        normalizedInput: string;
+    }
     | {
         kind: "math";
         expression: string;

@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { IS_MAC } from "@utils/constants";
 import type { ComponentType } from "react";
 
 import type { CommandActionDefinition } from "../../registry";
@@ -14,6 +15,22 @@ interface CreateExecuteSecondaryActionInput {
     chord: string;
     handler: () => void | Promise<void>;
     icon?: ComponentType<{ className?: string; size?: string; }>;
+}
+
+function normalizePlatformChord(chord: string): string {
+    if (IS_MAC) return chord;
+
+    return chord
+        .split("+")
+        .map(token => {
+            const normalized = token.trim().toLowerCase();
+            if (normalized === "meta" || normalized === "cmd" || normalized === "command" || normalized === "⌘") {
+                return "ctrl";
+            }
+
+            return token;
+        })
+        .join("+");
 }
 
 function formatActionChordToken(token: string): string {
@@ -35,7 +52,7 @@ function formatActionChordToken(token: string): string {
 }
 
 export function formatActionChordLabel(chord: string): string {
-    return chord
+    return normalizePlatformChord(chord)
         .split("+")
         .map(formatActionChordToken)
         .filter(Boolean)
@@ -54,7 +71,7 @@ export function createExecuteSecondaryAction({
         label,
         shortcut: formatActionChordLabel(chord),
         icon,
-        intent: { type: "execute-secondary", actionKey: chord },
+        intent: { type: "execute-secondary", actionKey: normalizePlatformChord(chord) },
         handler
     };
 }

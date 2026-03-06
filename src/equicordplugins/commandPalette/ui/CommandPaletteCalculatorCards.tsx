@@ -47,6 +47,10 @@ function toSuperscript(value: string): string {
 function formatMathDisplayInput(value: string): string {
     return value
         .replace(/\*\*/g, "^")
+        .replace(/\bpi\b/g, "π")
+        .replace(/\btau\b/g, "τ")
+        .replace(/\binfinity\b/g, "∞")
+        .replace(/\*/g, "×")
         .replace(/\^([+-]?\d+)/g, (_, exponent: string) => toSuperscript(exponent));
 }
 
@@ -104,10 +108,10 @@ export function CommandPaletteCalculatorCards({ result }: CommandPaletteCalculat
         year: "numeric"
     }).format(new Date());
     const leftLabel = result.tertiaryText
-        ?? (result.kind === "number" ? "Sum" : result.kind === "unit" ? "Input" : today);
+        ?? (result.kind === "number" ? "Expression" : result.kind === "unit" ? "Input" : today);
     const rightLabel = result.secondaryText ?? "Answer";
     const displayInput = result.kind === "number"
-        ? formatMathDisplayInput(result.displayInput)
+        ? formatMathDisplayInput(result.normalizedInput ?? result.displayInput)
         : result.displayInput;
 
     return (
@@ -115,12 +119,12 @@ export function CommandPaletteCalculatorCards({ result }: CommandPaletteCalculat
             <h3 className={cl("calculator-title")}>Calculator</h3>
             <div className={cl("calculator-card")}>
                 <div className={classes(cl("calculator-section"), cl("calculator-section-left"))}>
-                    <AutoFitLine text={displayInput} className={cl("calculator-value")} maxSize={44} minSize={18} />
+                    <AutoFitLine text={displayInput} className={cl("calculator-value")} maxSize={38} minSize={18} />
                     <span className={cl("calculator-label")}>{leftLabel}</span>
                 </div>
                 <div className={cl("calculator-arrow")}>→</div>
                 <div className={classes(cl("calculator-section"), cl("calculator-section-right"))}>
-                    <AutoFitLine text={result.displayAnswer} className={cl("calculator-value")} maxSize={44} minSize={18} />
+                    <AutoFitLine text={result.displayAnswer} className={cl("calculator-value")} maxSize={38} minSize={18} />
                     <span className={cl("calculator-label")}>{rightLabel}</span>
                 </div>
             </div>

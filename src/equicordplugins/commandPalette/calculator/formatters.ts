@@ -56,14 +56,18 @@ export function numberToWords(value: number): string {
 }
 
 export function formatNumber(value: number): string {
-    if (!Number.isFinite(value)) return "";
+    if (Number.isNaN(value)) return "NaN";
+    if (value === Number.POSITIVE_INFINITY) return "Infinity";
+    if (value === Number.NEGATIVE_INFINITY) return "-Infinity";
     return new Intl.NumberFormat("en-US", {
         maximumFractionDigits: 12
     }).format(value);
 }
 
 export function formatRawNumber(value: number): string {
-    if (!Number.isFinite(value)) return "";
+    if (Number.isNaN(value)) return "NaN";
+    if (value === Number.POSITIVE_INFINITY) return "Infinity";
+    if (value === Number.NEGATIVE_INFINITY) return "-Infinity";
     const normalized = Number(value.toFixed(12));
     return String(normalized);
 }

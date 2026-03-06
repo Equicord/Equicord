@@ -6,6 +6,7 @@
 
 import "../style.css";
 
+import { IS_MAC } from "@utils/constants";
 import { classNameFactory, classNameToSelector } from "@utils/css";
 import { copyWithToast } from "@utils/discord";
 import { Logger } from "@utils/Logger";
@@ -90,6 +91,10 @@ const promptChipWidthCache = new Map<string, number>();
 const queryPreviewWidthCache = new Map<string, number>();
 let promptChipCanvasContext: CanvasRenderingContext2D | null = null;
 let queryPreviewCanvasContext: CanvasRenderingContext2D | null = null;
+
+function hasPrimaryModifier(event: ReactKeyboardEvent<HTMLElement>): boolean {
+    return IS_MAC ? event.metaKey && !event.ctrlKey : event.ctrlKey && !event.metaKey;
+}
 
 function getCommandBadge(command: CommandEntry, fallback: "Command" | "Recent" | "Pinned"): string {
     const defaultBadge = fallback === "Recent" ? "Command" : fallback;
@@ -1045,7 +1050,7 @@ export function CommandPaletteModal({ modalProps, instanceKey }: { modalProps: M
         const isMainInputTarget = Boolean(target?.closest(mainInputSelectorClass)) && !isPromptInputTarget;
         const isPageTarget = Boolean(target?.closest(pageSelector));
 
-        if (event.key === "Escape" && event.metaKey) {
+        if (event.key === "Escape" && hasPrimaryModifier(event) && !event.altKey && !event.shiftKey) {
             event.preventDefault();
             event.stopPropagation();
             clearPersistedNavigation();
@@ -1053,7 +1058,7 @@ export function CommandPaletteModal({ modalProps, instanceKey }: { modalProps: M
             return;
         }
 
-        if (event.key === "l" && event.metaKey && !event.altKey && !event.ctrlKey && !event.shiftKey) {
+        if (event.key.toLowerCase() === "l" && hasPrimaryModifier(event) && !event.altKey && !event.shiftKey) {
             event.preventDefault();
             event.stopPropagation();
             if (isActionsMenuOpen || isActionsMenuClosing) {
@@ -1071,7 +1076,7 @@ export function CommandPaletteModal({ modalProps, instanceKey }: { modalProps: M
         }
 
         if (isPageOpen && isPageTarget) {
-            if (event.key === "Enter" && event.metaKey && !event.altKey && !event.ctrlKey && !event.shiftKey) {
+            if (event.key === "Enter" && hasPrimaryModifier(event) && !event.altKey && !event.shiftKey) {
                 event.preventDefault();
                 await submitActivePage();
                 return;
@@ -1094,12 +1099,12 @@ export function CommandPaletteModal({ modalProps, instanceKey }: { modalProps: M
 
         if (!isPromptInputTarget && calculatorResult && event.key === "Enter") {
             event.preventDefault();
-            if (event.metaKey && event.shiftKey) {
+            if (hasPrimaryModifier(event) && event.shiftKey) {
                 await copyCalculatorResult("qa");
                 return;
             }
 
-            if (event.metaKey) {
+            if (hasPrimaryModifier(event)) {
                 await copyCalculatorResult("raw");
                 return;
             }

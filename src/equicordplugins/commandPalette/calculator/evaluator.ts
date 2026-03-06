@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { evaluateAdvancedMath } from "./advancedMath";
 import {
     formatDateMedium,
     formatDurationMinutes,
@@ -65,223 +66,6 @@ const UNITS: Record<string, UnitDefinition> = {
     day: { kind: "duration", toBase: v => v * 86400, fromBase: v => v / 86400, label: "d" },
     days: { kind: "duration", toBase: v => v * 86400, fromBase: v => v / 86400, label: "d" }
 };
-
-type MathToken =
-    | { type: "number"; value: number; }
-    | { type: "operator"; value: "+" | "-" | "*" | "/" | "%" | "^"; }
-    | { type: "leftParen"; }
-    | { type: "rightParen"; }
-    | { type: "sqrt"; };
-
-function tokenizeMathExpression(expression: string): MathToken[] | null {
-    const compact = expression
-        .replace(/\s+/g, "")
-        .replace(/math\.sqrt\(/gi, "sqrt(")
-        .replace(/\*\*/g, "^")
-        .replace(/[x×]/gi, "*");
-    if (!compact) return null;
-
-    const tokens: MathToken[] = [];
-    let index = 0;
-
-    while (index < compact.length) {
-        const char = compact[index];
-
-        if (/[0-9.]/.test(char)) {
-            let end = index + 1;
-            while (end < compact.length && /[0-9.]/.test(compact[end])) end += 1;
-            const literal = compact.slice(index, end);
-            if ((literal.match(/\./g)?.length ?? 0) > 1) return null;
-            const parsed = Number.parseFloat(literal);
-            if (!Number.isFinite(parsed)) return null;
-            tokens.push({ type: "number", value: parsed });
-            index = end;
-            continue;
-        }
-
-        if (char === "(") {
-            tokens.push({ type: "leftParen" });
-            index += 1;
-            continue;
-        }
-
-        if (char === ")") {
-            tokens.push({ type: "rightParen" });
-            index += 1;
-            continue;
-        }
-
-        if (char === "+" || char === "-" || char === "*" || char === "/" || char === "%" || char === "^") {
-            tokens.push({ type: "operator", value: char });
-            index += 1;
-            continue;
-        }
-
-        if (compact.slice(index, index + 4).toLowerCase() === "sqrt") {
-            tokens.push({ type: "sqrt" });
-            index += 4;
-            continue;
-        }
-
-        return null;
-    }
-
-    return tokens;
-}
-
-function evaluateMathExpression(expression: string): number | null {
-    const tokens = tokenizeMathExpression(expression);
-    if (!tokens || tokens.length === 0) return null;
-
-    let index = 0;
-
-    const parseExpression = (): number | null => {
-        let left = parseTerm();
-        if (left == null) return null;
-
-        while (index < tokens.length) {
-            const token = tokens[index];
-            if (token.type !== "operator" || (token.value !== "+" && token.value !== "-")) break;
-            index += 1;
-            const right = parseTerm();
-            if (right == null) return null;
-            left = token.value === "+" ? left + right : left - right;
-        }
-
-        return left;
-    };
-
-    const parseTerm = (): number | null => {
-        let left = parsePower();
-        if (left == null) return null;
-
-        while (index < tokens.length) {
-            const token = tokens[index];
-            if (token.type !== "operator" || (token.value !== "*" && token.value !== "/")) break;
-            index += 1;
-            const right = parsePower();
-            if (right == null) return null;
-            if (token.value === "/" && right === 0) return null;
-            if (token.value === "*") left *= right;
-            else left /= right;
-        }
-
-        return left;
-    };
-
-    const parsePower = (): number | null => {
-        const left = parseUnary();
-        if (left == null) return null;
-
-        const token = tokens[index];
-        if (token?.type === "operator" && token.value === "^") {
-            index += 1;
-            const right = parsePower();
-            if (right == null) return null;
-            return left ** right;
-        }
-
-        return left;
-    };
-
-    const parseUnary = (): number | null => {
-        const token = tokens[index];
-        if (!token) return null;
-
-        if (token.type === "operator" && token.value === "+") {
-            index += 1;
-            return parseUnary();
-        }
-
-        if (token.type === "operator" && token.value === "-") {
-            index += 1;
-            const value = parseUnary();
-            return value == null ? null : -value;
-        }
-
-        if (token.type === "sqrt") {
-            index += 1;
-            const value = parseUnary();
-            if (value == null || value < 0) return null;
-            return Math.sqrt(value);
-        }
-
-        return parsePrimary();
-    };
-
-    const parsePrimary = (): number | null => {
-        const token = tokens[index];
-        if (!token) return null;
-
-        if (token.type === "number") {
-            index += 1;
-            let { value } = token;
-            while (true) {
-                const nextToken = tokens[index];
-                if (nextToken?.type !== "operator" || nextToken.value !== "%") break;
-                value /= 100;
-                index += 1;
-            }
-            return value;
-        }
-
-        if (token.type === "leftParen") {
-            index += 1;
-            const value = parseExpression();
-            if (value == null) return null;
-            const closing = tokens[index];
-            if (!closing || closing.type !== "rightParen") return null;
-            index += 1;
-            let normalized = value;
-            while (true) {
-                const nextToken = tokens[index];
-                if (nextToken?.type !== "operator" || nextToken.value !== "%") break;
-                normalized /= 100;
-                index += 1;
-            }
-            return normalized;
-        }
-
-        return null;
-    };
-
-    const result = parseExpression();
-    if (result == null || index !== tokens.length || !Number.isFinite(result)) return null;
-    return result;
-}
-
-function getMathOperationLabel(expression: string): string {
-    const compact = expression.replace(/\s+/g, "");
-    const operations = new Set<"add" | "subtract" | "multiply" | "divide" | "power">();
-
-    const isBinary = (index: number, width = 1) => {
-        const prev = compact[index - 1];
-        const next = compact[index + width];
-        return /[0-9.)]/.test(prev ?? "") && /[0-9.(s]/.test(next ?? "");
-    };
-
-    for (let i = 0; i < compact.length; i++) {
-        const current = compact[i];
-
-        if (current === "*" && compact[i + 1] === "*") {
-            if (isBinary(i, 2)) operations.add("power");
-            i += 1;
-            continue;
-        }
-
-        if (current === "+" && isBinary(i)) operations.add("add");
-        if (current === "-" && isBinary(i)) operations.add("subtract");
-        if (current === "*" && isBinary(i)) operations.add("multiply");
-        if (current === "/" && isBinary(i)) operations.add("divide");
-    }
-
-    if (operations.size > 1) return "Expression";
-    if (operations.has("power")) return "Power";
-    if (operations.has("multiply")) return "Product";
-    if (operations.has("divide")) return "Divide";
-    if (operations.has("subtract")) return "Difference";
-    return "Sum";
-}
 
 function positiveModulo(value: number, divisor: number): number {
     return ((value % divisor) + divisor) % divisor;
@@ -347,17 +131,12 @@ function durationToMinutes(value: number, unit: string): number | null {
 export function evaluateCalculatorIntent(intent: CalculatorIntent): CalculatorResult | null {
     if (intent.kind === "unsupported_rate") return null;
 
+    if (intent.kind === "advanced_math") {
+        return evaluateAdvancedMath(intent.displayInput, intent.normalizedInput);
+    }
+
     if (intent.kind === "math") {
-        const value = evaluateMathExpression(intent.expression);
-        if (value == null) return null;
-        return {
-            kind: "number",
-            displayInput: intent.displayInput,
-            displayAnswer: formatNumber(value),
-            rawAnswer: formatRawNumber(value),
-            secondaryText: "Answer",
-            tertiaryText: getMathOperationLabel(intent.expression)
-        };
+        return evaluateAdvancedMath(intent.displayInput, intent.expression);
     }
 
     if (intent.kind === "time_convert") {

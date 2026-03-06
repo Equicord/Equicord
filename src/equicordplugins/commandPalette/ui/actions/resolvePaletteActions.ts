@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { IS_MAC } from "@utils/constants";
+
 import type {
     CommandActionContext,
     CommandActionDefinition,
@@ -19,6 +21,12 @@ interface ResolvePaletteActionsInput {
     canGoBack: boolean;
     canDrillDown: boolean;
     drilldownCategoryId: string | null;
+}
+
+function formatPrimaryShortcutLabel(shortcut: string): string {
+    if (IS_MAC) return shortcut;
+
+    return shortcut.replaceAll("⌘", "Ctrl+");
 }
 
 function mapCommandActions(
@@ -58,7 +66,7 @@ export function resolvePaletteActions({
         actions.push({
             id: `page-submit-${activePage.id}`,
             label: activePage.submitLabel,
-            shortcut: "⌘↵",
+            shortcut: formatPrimaryShortcutLabel("⌘↵"),
             intent: { type: "submit-active-page" }
         });
         actions.push({
@@ -80,13 +88,13 @@ export function resolvePaletteActions({
         actions.push({
             id: "copy-raw",
             label: "Copy Raw",
-            shortcut: "⌘↵",
+            shortcut: formatPrimaryShortcutLabel("⌘↵"),
             intent: { type: "copy-calculator", mode: "raw" }
         });
         actions.push({
             id: "copy-qa",
             label: "Copy Q+A",
-            shortcut: "⌘⇧↵",
+            shortcut: formatPrimaryShortcutLabel("⌘⇧↵"),
             intent: { type: "copy-calculator", mode: "qa" }
         });
     } else if (selectedCommand) {
@@ -121,7 +129,7 @@ export function resolvePaletteActions({
         actions.push({
             id: selectedCommandPinned ? "unpin-command" : "pin-command",
             label: selectedCommandPinned ? "Unpin Command" : "Pin Command",
-            shortcut: "⌘P",
+            shortcut: formatPrimaryShortcutLabel("⌘P"),
             intent: { type: "toggle-pin", commandId: selectedCommand.id }
         });
     }

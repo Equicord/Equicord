@@ -5,6 +5,7 @@
  */
 
 import { EquicordIcon } from "@equicordplugins/components.dev/components/icons/EquicordIcon";
+import { IS_MAC } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
 import { classes } from "@utils/misc";
 
@@ -18,6 +19,8 @@ interface CommandPaletteActionBarProps {
 }
 
 export function CommandPaletteActionBar({ selectedLabel, onOpenActions, compact, onExpand }: CommandPaletteActionBarProps) {
+    const actionsShortcutLabel = IS_MAC ? "⌘L" : "Ctrl+L";
+
     if (compact) {
         return (
             <div className={cl("action-bar")}>
@@ -51,7 +54,7 @@ export function CommandPaletteActionBar({ selectedLabel, onOpenActions, compact,
                 onClick={onOpenActions}
             >
                 <span className={cl("action-bar-actions-label")}>Actions</span>
-                <span className={cl("action-bar-key")}>⌘L</span>
+                <span className={cl("action-bar-key")}>{actionsShortcutLabel}</span>
             </button>
         </div>
     );
