@@ -51,7 +51,7 @@ export default definePlugin({
     settings,
     settingsAboutComponent: () => (
         <Notice.Warning>
-            We can't guarantee this plugin won't get you warned or banned, you will probably also be assumed a selfbot.
+            We can't guarantee this plugin won't get you warned or banned, bare that in mind.
         </Notice.Warning>
     ),
 
@@ -134,22 +134,67 @@ export default definePlugin({
                             reactionAdded = true;
                             delayAccumulator += 2000;
                         }
+                    } else if (reaction.startsWith("<:") && reaction.endsWith(">")) {
+                        const match = reaction.match(/<:(\w+):(\d+)>/);
+                        if (match) {
+                            const [, name, id] = match;
+                            const emoji = `${name}:${id}`;
+
+                            setTimeout(() => {
+                                RestAPI.put({
+                                    url: `/channels/${message.channel_id}/messages/${message.id}/reactions/${encodeURIComponent(emoji)}/@me`,
+                                    body: {}
+                                }).then(() => {
+                                    logger.info("Custom emoji reaction added successfully", { emoji });
+                                }).catch(err => {
+                                    logger.error("Failed to add custom emoji reaction", err);
+                                });
+                            }, delayAccumulator);
+                            reactionAdded = true;
+                            delayAccumulator += 2000;
+                        }
+                    } else if (reaction.startsWith("<a:") && reaction.endsWith(">")) {
+                        // Custom emojis are weird and need to use a specific URL and format otherwise discord returns a 10014 error.
+                        const match = reaction.match(/<a:(\w+):(\d+)>/);
+                        if (match) {
+                            const [, name, id] = match;
+                            const emoji = `${name}:${id}`;
+
+                            setTimeout(() => {
+                                RestAPI.put({
+                                    url: `/channels/${message.channel_id}/messages/${message.id}/reactions/${encodeURIComponent(emoji)}/@me`,
+                                    body: {}
+                                }).then(() => {
+                                    logger.info("Animated custom emoji reaction added successfully", { emoji });
+                                }).catch(err => {
+                                    logger.error("Failed to add animated custom emoji reaction", err);
+                                });
+                            }, delayAccumulator);
+                            delayAccumulator += 2000;
+                        }
                     } else if (reaction.startsWith(":") && reaction.endsWith(":")) {
-                        const emojiMap: { [key: string]: string; } = { // There's 100% a better way to do this,
-                            // I couldn't get custom emojis to work for some reason
-                            // If someone can assist with this, thanks. I'm not that fond of TypeScript.
-                            // -----
-                            // TODO: Add support for custom emojis and default emojis using their ID,
-                            // since when I do try to (I did try to implement it) it just returns '"Unknown Emoji" (400)', or just completely refusing to accept the format.
+                        const emojiName = reaction.slice(1, -1).toLowerCase();
+                        const essentialEmojis: { [key: string]: string; } = {
+                            // TODO: Remove need for emojiMap | allow for any emoji, without hardcoding it.
                             "skull": "💀",
+                            "skull_with_crossbones": "☠️",
+                            "v": "✌️",
+                            "peace": "✌️",
                             "sob": "😭",
-                            "skull_with_crossbones": "☠️", // Never seen a selfreact user use anything other than these 3, will need to just allow any emojis though.
+                            "heart": "❤️",
+                            "fire": "🔥",
+                            "100": "💯",
+                            "clown": "🤡",
+                            "thumbsup": "👍",
+                            "thumbsdown": "👎",
+                            "ok_hand": "👌",
+                            "thinking": "🤔",
+                            "joy": "😂",
+                            "wave": "👋",
+                            "pray": "🙏"
                         };
 
-                        const emojiName = reaction.slice(1, -1);
-                        const emoji = emojiMap[emojiName.toLowerCase()] || emojiName; // for some reason discord won't let me use UNI, somehow doing this fixes it
-
-                        // logger.info("Adding :emoji: reaction", { emojiName, emoji, messageId: message.id });
+                        const emoji = essentialEmojis[emojiName] || emojiName;
 
                         setTimeout(() => {
                             RestAPI.put({
