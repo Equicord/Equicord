@@ -27,6 +27,7 @@ const GRAPH_WIDTH = 760;
 const GRAPH_HEIGHT = 320;
 const GRAPH_PADDING_X = 34;
 const GRAPH_PADDING_Y = 24;
+const GRAPH_INNER_WIDTH = GRAPH_WIDTH - GRAPH_PADDING_X * 2;
 
 const SUPERSCRIPT_MAP: Record<string, string> = {
     "0": "⁰",
@@ -119,9 +120,8 @@ function clamp(value: number, min: number, max: number): number {
 
 function toSvgX(value: number, domain: [number, number]): number {
     const [min, max] = domain;
-    const innerWidth = GRAPH_WIDTH - GRAPH_PADDING_X * 2;
-    if (max === min) return GRAPH_PADDING_X + innerWidth / 2;
-    return GRAPH_PADDING_X + ((value - min) / (max - min)) * innerWidth;
+    if (max === min) return GRAPH_PADDING_X + GRAPH_INNER_WIDTH / 2;
+    return GRAPH_PADDING_X + ((value - min) / (max - min)) * GRAPH_INNER_WIDTH;
 }
 
 function toSvgY(value: number, range: [number, number]): number {
@@ -216,8 +216,10 @@ function GraphView({ result }: { result: CalculatorResult; }) {
                         onMouseMove={event => {
                             const bounds = svgRef.current?.getBoundingClientRect();
                             if (!bounds) return;
-                            const ratio = (event.clientX - bounds.left) / bounds.width;
-                            const clampedRatio = clamp(ratio, 0, 1);
+                            const scaleX = bounds.width / GRAPH_WIDTH;
+                            const localX = (event.clientX - bounds.left) / scaleX;
+                            const innerX = clamp(localX - GRAPH_PADDING_X, 0, GRAPH_INNER_WIDTH);
+                            const clampedRatio = innerX / GRAPH_INNER_WIDTH;
                             const nextX = graph.domain[0] + (graph.domain[1] - graph.domain[0]) * clampedRatio;
                             setHoverX(nextX);
                         }}
