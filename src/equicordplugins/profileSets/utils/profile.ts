@@ -281,7 +281,7 @@ function resolvePendingAvatar(pendingChanges: PendingChanges | null): ImageInput
 function normalizeImageValue(value: unknown): string | null {
     if (typeof value === "string") return value;
     if (value && typeof value === "object" && "imageUri" in value) {
-        const { imageUri } = value as { imageUri: unknown };
+        const { imageUri } = value as { imageUri: unknown; };
         return typeof imageUri === "string" ? imageUri : null;
     }
     return null;

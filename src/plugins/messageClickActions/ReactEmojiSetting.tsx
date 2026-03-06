@@ -4,13 +4,14 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import "./styles.css";
+
 import { Heading } from "@components/Heading";
 import type { IPluginOptionComponentProps } from "@utils/types";
 import { findComponentByCodeLazy } from "@webpack";
 import { TextInput, useState } from "@webpack/common";
 
 import { settings } from ".";
-import "./styles.css";
 
 type EmojiData = {
     id?: string | null;

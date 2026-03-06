@@ -62,8 +62,8 @@
 
 ## Anti-Patterns
 
-- `value !== null && value !== undefined` ⟹ `value`
-- `array && array.length > 0` ⟹ `array.length`
+- `value !== null && value !== undefined` ⟹ `value != null`
+- `array && array.length > 0` ⟹ `array.length` (only when array is guaranteed to exist)
 - `settings?.store?.value` ⟹ `settings.store.value`
 - `value || defaultValue` ⟹ `value ?? defaultValue`
 
@@ -102,6 +102,7 @@
 ### Patch Examples
 
 **Clean replacement:**
+
 ```js
 find: "#{intl::PIN_MESSAGE}),icon:"
 match: /#{intl::PIN_MESSAGE}\)/
@@ -109,6 +110,7 @@ replace: "$self.getPinLabel(arguments[0]))"
 ```
 
 **Appending:**
+
 ```js
 find: "#{intl::VIEW_AS_ROLES_MENTIONS_WARNING}"
 match: /#{intl::VIEW_AS_ROLES_MENTIONS_WARNING}.{0,100}(?=])/
@@ -116,8 +118,9 @@ replace: "$&,$self.renderTooltip(arguments[0].guild)"
 ```
 
 **Wrapping:**
+
 ```js
-find: "#{intl::THREE_USERS_TYPING}"
+find: "#{intl::SEVERAL_USERS_TYPING_STRONG}"
 match: /(?<="aria-atomic":!0,children:)\i/
 replace: "$self.renderTypingUsers({ children: $& })"
 ```
@@ -208,4 +211,3 @@ From `@webpack/common`. **NEVER** hardcode `cdn.discordapp.com` URLs.
 - `"/api/v9"`, `"/users/@me"` ⟹ `Constants.Endpoints` or `RestAPI`
 - `console.log/warn/error` ⟹ `Logger` from `@utils/Logger`
 - `` `${a} ${b}` `` for class names ⟹ `classes(a, b)` from `@utils/misc`
-- `"/assets/*.png"` for default avatars ⟹ `IconUtils.getDefaultAvatarURL(id)`

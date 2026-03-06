@@ -7,28 +7,15 @@
 import { definePluginSettings } from "@api/Settings";
 import { disableStyle, enableStyle } from "@api/Styles";
 import { buildPluginMenuEntries, buildThemeMenuEntries } from "@equicordplugins/equicordToolbox/menu";
-import SettingsPlugin from "@plugins/_core/settings";
 import { Devs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
 import { Logger } from "@utils/Logger";
 import definePlugin, { OptionType } from "@utils/types";
 import { findCssClassesLazy } from "@webpack";
 import { ComponentDispatch, FocusLock, Menu, useEffect, useRef } from "@webpack/common";
-import type { HTMLAttributes, ReactElement } from "react";
+import type { HTMLAttributes } from "react";
 
 import fullHeightStyle from "./fullHeightContext.css?managed";
-
-type SettingsEntry = {
-    ariaLabel?: string;
-    element?: any;
-    label?: string;
-    newIndicator?: any;
-    newIndicatorDismissibleContentTypes?: number[];
-    predicate?: () => boolean;
-    searchableTitles?: string[];
-    section: string,
-    tabPredicate?: () => boolean;
-};
 
 const cl = classNameFactory("");
 const Classes = findCssClassesLazy("animating", "baseLayer", "bg", "layer", "layers");
@@ -53,11 +40,6 @@ const settings = definePluginSettings({
         restartNeeded: true
     }
 });
-
-interface TransformedSettingsEntry {
-    section: string;
-    items: SettingsEntry[];
-}
 
 interface LayerProps extends HTMLAttributes<HTMLDivElement> {
     mode: "SHOWN" | "HIDDEN";
@@ -137,6 +119,28 @@ export default definePlugin({
             ],
             predicate: () => settings.store.disableFade
         },
+        { // Disable fade animations for settings menu
+            find: '"data-mana-component":"layer-modal"',
+            replacement: [
+                {
+                    match: /(\i)\.animated\.div(?=,\{"data-mana-component":"layer-modal")/,
+                    replace: '"div"'
+                },
+                {
+                    match: /(?<="data-mana-component":"layer-modal"[^}]*?)style:\i,/,
+                    replace: "style:{},"
+                }
+            ],
+            predicate: () => settings.store.disableFade
+        },
+        { // Disable initial and exit delay for settings menu
+            find: "headerId:void 0,headerIdIsManaged:!1",
+            replacement: {
+                match: /let (\i)=300/,
+                replace: "let $1=0"
+            },
+            predicate: () => settings.store.disableFade
+        },
         { // Load menu TOC eagerly
             find: "handleOpenSettingsContextMenu=",
             replacement: {
@@ -145,19 +149,14 @@ export default definePlugin({
             },
             predicate: () => settings.store.eagerLoad
         },
-        {
-            // Settings cog context menu
+        { // Settings cog context menu
             find: "#{intl::USER_SETTINGS_ACTIONS_MENU_LABEL}",
+            predicate: () => settings.store.organizeMenu,
             replacement: [
                 {
-                    match: /=\[\];(\i)(?=\.forEach.{0,200}?"logout"===\i.{0,100}?(\i)\.get\(\i\))/,
-                    replace: "=$self.wrapMap([]);$self.transformSettingsEntries($1,$2)",
-                    predicate: () => settings.store.organizeMenu
+                    match: /(\i)=(.{0,20}openUserSettings\)\(\i\)\));/,
+                    replace: "$1=$self.transformSettingsElements($2);",
                 },
-                {
-                    match: /case \i\.\i\.DEVELOPER_OPTIONS:return \i;/,
-                    replace: "$&case 'EquicordPlugins':return $self.buildPluginMenuEntries(true);case 'EquicordThemes':return $self.buildThemeMenuEntries();"
-                }
             ]
         },
     ],
@@ -180,68 +179,34 @@ export default definePlugin({
         return <Layer {...props} />;
     },
 
-    transformSettingsEntries(list: SettingsEntry[], keyMap: Map<string, string>) {
-        const items = [] as TransformedSettingsEntry[];
+    transformSettingsElements(list) {
+        const items: any[] = [];
 
         for (const item of list) {
-            if (!item.label || item.predicate != null && !item.predicate()) continue;
+            const { key, props } = item;
+            if (!props) continue;
 
-            if (item.section === "HEADER") {
-                keyMap.set(item.label, item.label);
-                items.push({ section: item.label, items: [] });
-            } else if (item.section !== "DIVIDER" && keyMap.has(item.section)) {
-                items.at(-1)?.items.push(item);
+            if (key === "equicord_plugins" || key === "equicord_themes") {
+                const children = key === "equicord_plugins"
+                    ? buildPluginMenuEntries()
+                    : buildThemeMenuEntries();
+
+                items.push(
+                    <Menu.MenuItem key={key} label={props.label} id={props.label} {...props}>
+                        {children}
+                    </Menu.MenuItem>
+                );
+            } else if (key.endsWith("_section") && props.label) {
+                items.push(
+                    <Menu.MenuItem key={key} label={props.label} id={props.label}>
+                        {this.transformSettingsElements(props.children)}
+                    </Menu.MenuItem>
+                );
+            } else {
+                items.push(item);
             }
         }
 
-        keyMap.set("Equicord", "Equicord");
-        const equicordItems: SettingsEntry[] = [
-            { section: "EquicordSettings", label: "Settings" },
-            { section: "EquicordPlugins", label: "Plugins" },
-            { section: "EquicordThemes", label: "Themes" },
-            { section: "EquicordUpdater", label: "Updater" },
-            { section: "EquicordChangelog", label: "Changelog" },
-            { section: "EquicordCloud", label: "Cloud" },
-            { section: "EquicordBackupAndRestore", label: "Backup & Restore" },
-            { section: "EquicordPatchHelper", label: "Patch Helper" },
-        ];
-
-        for (const [section, key] of SettingsPlugin.settingsSectionMap) {
-            const entry = SettingsPlugin.customEntries.find(e => key.endsWith(e.key));
-            if (entry) equicordItems.push({ section, label: entry.title });
-        }
-
-        items.push({
-            section: "Equicord",
-            items: equicordItems
-        });
-
         return items;
-    },
-
-    wrapMap(toWrap: TransformedSettingsEntry[]) {
-        // @ts-expect-error
-        toWrap.map = function (render: (item: SettingsEntry) => ReactElement<any>) {
-            return this
-                .filter(a => a.items.length > 0)
-                .map(({ section, items }) => {
-                    const children = items.map(render);
-                    if (section) {
-                        return (
-                            <Menu.MenuItem
-                                key={section}
-                                id={section.replace(/\W/, "_")}
-                                label={section}
-                            >
-                                {children}
-                            </Menu.MenuItem>
-                        );
-                    } else {
-                        return children;
-                    }
-                });
-        };
-
-        return toWrap;
     }
 });

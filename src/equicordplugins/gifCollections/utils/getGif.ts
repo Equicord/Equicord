@@ -63,7 +63,7 @@ export function getGifByMessageAndUrl(url: string, message: Message): Gif | null
                 id: uuidv4(settings.store.itemPrefix),
                 height: embed.image.height,
                 width: embed.image.width,
-                src: embed.image.proxyURL,
+                src: embed.image.proxyURL!,
                 url: embed.image.url,
             };
         // Tennor

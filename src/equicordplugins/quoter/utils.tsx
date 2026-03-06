@@ -21,12 +21,6 @@ interface CustomEmojiToken {
     animated: boolean;
 }
 
-export function sizeUpgrade(url: string): string {
-    const u = new URL(url);
-    u.searchParams.set("size", "512");
-    return u.toString();
-}
-
 export function canvasToBlob(canvas: HTMLCanvasElement): Promise<Blob> {
     return new Promise<Blob>((resolve, reject) => {
         canvas.toBlob(blob => {

@@ -139,6 +139,5 @@ window.VencordNative = {
         setUpdateState: NOOP,
         onCheckUpdates: NOOP,
         onRepair: NOOP,
-        onAbout: NOOP,
     },
 };

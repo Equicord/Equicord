@@ -41,6 +41,10 @@ const settings = definePluginSettings({
                 label: "Playstation",
                 value: "playstation",
             },
+            {
+                label: "VR",
+                value: "vr",
+            },
         ]
     }
 });
@@ -48,7 +52,7 @@ const settings = definePluginSettings({
 export default definePlugin({
     name: "PlatformSpoofer",
     description: "Spoof what platform or device you're on",
-    authors: [EquicordDevs.Drag],
+    authors: [EquicordDevs.Drag, EquicordDevs.neoarz],
     settingsAboutComponent: () => (
         <Notice.Warning>
             We can't guarantee this plugin won't get you warned or banned.
@@ -61,13 +65,6 @@ export default definePlugin({
             replacement: {
                 match: /(\[IDENTIFY\].*let.{0,5}=\{.*properties:)(.*),presence/,
                 replace: "$1{...$2,...$self.getPlatform(true)},presence"
-            }
-        },
-        {
-            find: "#{intl::POPOUT_STAY_ON_TOP}),icon:",
-            replacement: {
-                match: /(?<=CallTile.{0,15}\.memo\((\i)=>\{)/,
-                replace: "$1.platform = $self.getPlatform(false, $1?.participantUserId)?.vcIcon || $1?.platform;"
             }
         },
         {
@@ -84,17 +81,19 @@ export default definePlugin({
         if (bypass || userId === UserStore.getCurrentUser().id) {
             switch (platform) {
                 case "desktop":
-                    return { browser: "Discord Client", vcIcon: 0 };
+                    return { browser: "Discord Client" };
                 case "web":
-                    return { browser: "Discord Web", vcIcon: 0 };
+                    return { browser: "Discord Web" };
                 case "ios":
-                    return { browser: "Discord iOS", vcIcon: 1 };
+                    return { browser: "Discord iOS" };
                 case "android":
-                    return { browser: "Discord Android", vcIcon: 1 };
+                    return { browser: "Discord Android" };
                 case "xbox":
-                    return { browser: "Discord Embedded", vcIcon: 2 };
+                    return { browser: "Discord Embedded" };
                 case "playstation":
-                    return { browser: "Discord Embedded", vcIcon: 3 };
+                    return { browser: "Discord Embedded" };
+                case "vr":
+                    return { browser: "Discord VR" };
                 default:
                     return null;
             }
