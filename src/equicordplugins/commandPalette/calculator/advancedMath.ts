@@ -87,6 +87,29 @@ const CONSTANTS: Record<string, number> = {
     pi: Math.PI,
     tau: Math.PI * 2
 };
+const LATEX_SPACING_COMMANDS = new Set(["!", ",", ":", ";", "quad", "qquad"]);
+const LATEX_WRAPPER_COMMANDS = new Set(["big", "bigl", "bigr", "bigg", "biggl", "biggr", "bigg", "bigg", "bigg", "bigg", "bigg", "bigg", "bigg", "bigg", "Big", "Bigl", "Bigr", "Bigg", "Biggl", "Biggr"]);
+const LATEX_FUNCTION_COMMANDS = new Set([
+    "abs",
+    "acos",
+    "asin",
+    "atan",
+    "ceil",
+    "cos",
+    "cosh",
+    "exp",
+    "floor",
+    "ln",
+    "log",
+    "max",
+    "min",
+    "round",
+    "sin",
+    "sinh",
+    "sqrt",
+    "tan",
+    "tanh"
+]);
 
 const BUILT_INS: Record<string, (...args: number[]) => number> = {
     abs: value => Math.abs(value),
@@ -95,6 +118,7 @@ const BUILT_INS: Record<string, (...args: number[]) => number> = {
     atan: value => Math.atan(value),
     ceil: value => Math.ceil(value),
     cos: value => Math.cos(value),
+    cosh: value => Math.cosh(value),
     exp: value => Math.exp(value),
     floor: value => Math.floor(value),
     ln: value => Math.log(value),
@@ -107,8 +131,10 @@ const BUILT_INS: Record<string, (...args: number[]) => number> = {
         return Math.round(value * factor) / factor;
     },
     sin: value => Math.sin(value),
+    sinh: value => Math.sinh(value),
     sqrt: value => Math.sqrt(value),
-    tan: value => Math.tan(value)
+    tan: value => Math.tan(value),
+    tanh: value => Math.tanh(value)
 };
 
 function normalizeMathWhitespace(input: string): string {
@@ -227,6 +253,23 @@ function convertLatexFragments(input: string): string {
         if (remainder.startsWith("\\left") || remainder.startsWith("\\right")) {
             index += remainder.startsWith("\\left") ? 5 : 6;
             continue;
+        }
+
+        if (remainder.startsWith("\\")) {
+            const commandMatch = remainder.match(/^\\([A-Za-z]+|[!,:;])/);
+            if (commandMatch) {
+                const command = commandMatch[1];
+                if (LATEX_SPACING_COMMANDS.has(command) || LATEX_WRAPPER_COMMANDS.has(command)) {
+                    index += commandMatch[0].length;
+                    continue;
+                }
+
+                if (LATEX_FUNCTION_COMMANDS.has(command)) {
+                    output += command.toLowerCase();
+                    index += commandMatch[0].length;
+                    continue;
+                }
+            }
         }
 
         output += input[index];
