@@ -1582,34 +1582,34 @@
                 "newSettings": "Cài đặt mới",
                 "newSettingsCount": " • {settings} cài đặt mới",
                 "outOfDate": "Kiểm tra kho lưu trữ: {fromHash} → {toHash}",
-                "upToDate": "Kiểm tra kho lưu trữ: {fromHash} (cập nhật)",
+                "upToDate": "Kiểm tra kho lưu trữ: {fromHash} (mới nhất)",
                 "update": "Cập nhật: {fromHash} → {toHash}",
                 "updatedPlugins": "Plugin được cập nhật",
                 "updatedPluginsCount": " • {plugins} plugin được cập nhật"
             },
-            "updateLogs_one": "Nhật ký cập nhật (nhật ký {count})",
-            "updateLogs_other": "Nhật ký cập nhật (nhật ký {count})",
+            "updateLogs_one": "Nhật ký cập nhật ({count} nhật ký)",
+            "updateLogs_other": "Nhật ký cập nhật ({count} nhật ký)",
             "updateLogs_zero": "Không có nhật ký cập nhật",
             "updatedPluginsCount": "Các plugin đã cập nhật ({plugins})",
-            "viewRecentChanges": "Đây là các cam kết và cập nhật plugin mới kể từ phiên bản trước của bạn. Bạn có thể xem những tính năng nào đã được thêm vào, các lỗi đã được sửa và plugin nào đã nhận được bản cập nhật",
+            "viewRecentChanges": "Đây là các commit và cập nhật plugin mới kể từ phiên bản trước của bạn. Bạn có thể xem những tính năng nào đã được thêm vào, các lỗi đã được sửa và plugin nào đã nhận được bản cập nhật",
             "whereUpdatesFetch": "Đây là kho lưu trữ GitHub nơi Equicord tìm nạp các bản cập nhật từ"
         },
         "disableMinSize": {
-            "description": "Cho phép thay đổi kích thước cửa sổ Discord nhỏ hơn kích thước tối thiểu mặc định của nó. Hữu ích cho việc sắp xếp các trình quản lý cửa sổ hoặc màn hình nhỏ.",
+            "description": "Cho phép thay đổi kích thước cửa sổ Discord nhỏ hơn mức tối thiểu mặc định. Hữu ích cho các tiling window manager hoặc màn hình nhỏ.",
             "title": "Vô hiệu hóa kích thước cửa sổ tối thiểu"
         },
         "enableReactDevtools": {
-            "description": "Bật tiện ích mở rộng Công cụ dành cho nhà phát triển React để gỡ lỗi các thành phần React của Discord. Hữu ích cho việc phát triển plugin.",
-            "title": "Kích hoạt công cụ dành cho nhà phát triển React"
+            "description": "Bật tiện ích mở rộng React Developer Tools để gỡ lỗi các thành phần React của Discord. Hữu ích cho việc phát triển plugin.",
+            "title": "Kích hoạt React Developer Tools"
         },
         "frameless": {
-            "description": "Loại bỏ khung cửa sổ gốc để có cái nhìn rõ ràng hơn. Bạn vẫn có thể di chuyển cửa sổ bằng cách kéo vùng thanh tiêu đề.",
+            "description": "Loại bỏ khung cửa sổ mặc định để có giao diện gọn gàng hơn. Bạn vẫn có thể di chuyển cửa sổ bằng cách kéo vùng thanh tiêu đề.",
             "title": "Tắt khung cửa sổ"
         },
         "hint": "Gợi ý: Bạn có thể thay đổi vị trí của phần cài đặt này trong <0>cài đặt của plugin Cài đặt</0>!",
         "macosVibrancyStyle": {
-            "placeholder": "Phong cách sống động của cửa sổ",
-            "title": "Kiểu sống động của cửa sổ (yêu cầu khởi động lại)"
+            "placeholder": "Hiệu ứng mờ của cửa sổ",
+            "title": "Kiểu hiệu ứng làm mờ cửa sổ (yêu cầu khởi động lại)"
         },
         "notification": {
             "logButton": "Xem nhật ký thông báo",
@@ -1619,7 +1619,7 @@
             "contributorModal": {
                 "contributorInfo": {
                     "noPlugins": "Người này chưa tạo bất kỳ plugin nào. Họ có thể <0>đã đóng góp</0> cho Equicord theo những cách khác!",
-                    "plugins_one": "Người này đã <0>đóng góp</0> cho plugin {count}!",
+                    "plugins_one": "Người này đã <0>đóng góp</0> cho {count} plugin!",
                     "plugins_other": "Người này đã <0>đóng góp</0> cho {count} plugin!"
                 }
             },
@@ -1629,25 +1629,25 @@
         },
         "restartRequired": {
             "body": "Cần phải khởi động lại để áp dụng thay đổi này",
-            "cancel": "Sau đó!",
+            "cancel": "Để sau!",
             "confirm": "Khởi động lại ngay bây giờ",
             "plugins": "Các plugin sau yêu cầu khởi động lại:",
             "title": "Yêu cầu khởi động lại"
         },
         "title": "Cài đặt",
         "transparent": {
-            "description": "Làm cho cửa sổ Discord trong suốt. Cần phải có một chủ đề hỗ trợ tính minh bạch, nếu không điều này sẽ không có tác dụng gì.",
-            "note": "Điều này sẽ ngăn cửa sổ thay đổi kích thước.",
-            "noteWindows": "Điều này sẽ ngăn không cho cửa sổ có thể thay đổi kích thước và ngăn bạn chụp cửa sổ vào các cạnh màn hình",
-            "title": "Kích hoạt độ trong suốt của cửa sổ"
+            "description": "Làm cho cửa sổ Discord trong suốt. Cần phải có một chủ đề hỗ trợ trong suốt, nếu không điều này sẽ không có tác dụng gì.",
+            "note": "Điều này sẽ khiến bạn không thể thay đổi kích thước cửa sổ.",
+            "noteWindows": "Điều này sẽ khiến bạn không thể thay đổi kích thước cửa sổ và không thể đưa cửa sổ vào các cạnh màn hình",
+            "title": "Kích hoạt cửa sổ trong suốt"
         },
         "useQuickCss": {
             "description": "Tải CSS tùy chỉnh từ trình chỉnh sửa QuickCSS. Điều này cho phép bạn tùy chỉnh giao diện của Discord theo phong cách của riêng bạn.",
             "title": "Bật CSS tùy chỉnh"
         },
         "winCtrlQ": {
-            "description": "Thêm Ctrl+Q làm phím tắt để đóng Discord. Điều này cung cấp một giải pháp thay thế cho Alt+F4 để đóng ứng dụng nhanh chóng.",
-            "title": "Đăng ký Ctrl+Q làm phím tắt để đóng Discord"
+            "description": "Thêm Ctrl+Q làm phím tắt để đóng Discord. Đây là phương pháp thay thế cho Alt+F4 giúp đóng ứng dụng nhanh chóng.",
+            "title": "Thiết lập Ctrl+Q làm phím tắt để đóng Discord"
         },
         "winNativeTitleBar": {
             "description": "Thay thế thanh tiêu đề tùy chỉnh của Discord bằng thanh tiêu đề chuẩn của Windows. Điều này có thể cải thiện khả năng tương thích với một số công cụ quản lý cửa sổ.",
@@ -1664,23 +1664,23 @@
             "bgOpacity": "Độ mờ nền",
             "customTheme": "Liên kết đến chủ đề vscode tùy chỉnh",
             "theme": "Chủ đề mặc định",
-            "tryHljs": "Sử dụng công cụ tô sáng và chủ đề Discord mặc định nhẹ hơn.",
+            "tryHljs": "Sử dụng bộ làm nổi bật cú pháp và giao diện mặc định và nhẹ hơn của Discord",
             "tryHljsOptions": {
                 "always": "Luôn luôn",
                 "never": "Không bao giờ",
-                "preferHljs": "Thích Highlight.js thay vì Shiki",
-                "preferShiki": "Thích Shiki thay vì Highlight.js"
+                "preferHljs": "Ưu tiên Highlight.js thay vì Shiki",
+                "preferShiki": "Ưu tiên Shiki thay vì Highlight.js"
             },
-            "useDevIcon": "Cách hiển thị biểu tượng ngôn ngữ trên codeblocks",
+            "useDevIcon": "Cách hiển thị biểu tượng ngôn ngữ trên codeblock",
             "useDevIconOptions": {
-                "colored": "màu",
-                "colorless": "không màu",
+                "colored": "Có màu",
+                "colorless": "Không màu",
                 "disabled": "Tắt"
             }
         }
     },
     "showAllMessageButtons": {
-        "description": "Luôn hiển thị tất cả các nút tin nhắn cho dù bạn có đang giữ phím shift hay không.",
+        "description": "Luôn hiển thị tất cả các nút trong tin nhắn cho dù bạn có đang giữ phím shift hay không.",
         "settings": {
             "noShiftDelete": "Loại bỏ yêu cầu giữ shift để xóa tin nhắn.",
             "noShiftPin": "Loại bỏ yêu cầu giữ phím shift để ghim tin nhắn."
@@ -1690,10 +1690,10 @@
         "description": "Hiển thị các tài khoản được kết nối trong cửa sổ bật lên của người dùng",
         "settings": {
             "compact": "Nhỏ gọn",
-            "cozy": "Ấm áp",
+            "cozy": "Dễ nhìn",
             "iconSize": "Kích thước biểu tượng (px)",
             "iconSpacing": "Lề biểu tượng",
-            "roomy": "rộng rãi"
+            "roomy": "Rộng rãi"
         }
     },
     "showHiddenChannels": {
@@ -1703,49 +1703,49 @@
         "bitrate": "Tốc độ bit: {bitrate} bit",
         "cannotSeeMessages": "Bạn không thể xem {type} của kênh này.",
         "channelTypes": {
-            "announcement": "thông báo",
-            "forum": "diễn đàn",
-            "message": "tin nhắn",
+            "announcement": "kênh thông báo",
+            "forum": "kênh diễn đàn",
+            "message": "kênh văn bản",
             "messages": "tin nhắn",
-            "post": "bưu kiện",
-            "posts": "bài viết",
-            "stage": "sân khấu",
-            "text": "chữ",
+            "post": "bài đăng",
+            "posts": "bài đăng",
+            "stage": "kênh sân khấu",
+            "text": "kênh văn bản",
             "thread": "chủ đề",
             "threads": "chủ đề",
-            "voice": "tiếng nói"
+            "voice": "kênh thoại"
         },
         "defaultLayout": "Bố cục mặc định: {layout}",
-        "defaultReactionEmoji": "Biểu tượng cảm xúc phản ứng mặc định:",
+        "defaultReactionEmoji": "Tương tác mặc định:",
         "defaultSortOrder": "Thứ tự sắp xếp mặc định: {order}",
         "description": "Hiển thị các kênh mà bạn không có quyền truy cập để xem.",
         "forumLayouts": {
-            "gridView": "Chế độ xem thư viện",
-            "listView": "Chế độ xem danh sách",
+            "gridView": "Hiển thị dạng bộ sưu tập",
+            "listView": "Hiển thị dạng danh sách",
             "notSet": "Chưa đặt"
         },
         "hiddenChannel": "Đây là kênh {type} ẩn",
-        "hiddenChannelTooltip": "Kênh ẩn",
+        "hiddenChannelTooltip": "Kênh Ẩn",
         "hideAllowedUsersAndRoles": "Ẩn người dùng và vai trò được phép",
         "lastMessageCreated": "{type} được tạo lần cuối:",
-        "lastMessagePin": "Mã pin tin nhắn cuối cùng:",
+        "lastMessagePin": "Tin nhắn ghim gần nhất:",
         "lockedChannel": "Đây là kênh {type} bị khóa",
         "nsfw": "NSFW",
         "permissionDetails": "Chi tiết quyền",
         "region": "Khu vực: {region}",
         "regionAutomatic": "Tự động",
         "requireTag": "Bài viết trên diễn đàn này yêu cầu phải đặt thẻ.",
-        "seeGuidelines": " Tuy nhiên bạn có thể thấy hướng dẫn của nó:",
+        "seeGuidelines": " Tuy nhiên bạn có thể thấy hướng dẫn đăng bài của nó:",
         "settings": {
             "channelStyle": {
                 "classic": "Cổ điển",
                 "description": "Kiểu được sử dụng để hiển thị các kênh ẩn.",
-                "muted": "Đã tắt âm",
-                "mutedAndShowUnreads": "Tắt tiếng và hiển thị nội dung chưa đọc",
-                "showUnreads": "Hiển thị bài chưa đọc"
+                "muted": "Tắt thông báo",
+                "mutedAndShowUnreads": "Tắt thông báo và Hiển thị Chưa đọc",
+                "showUnreads": "Hiển thị Chưa đọc"
             },
             "defaultAllowedUsersAndRolesDropdownState": {
-                "description": "Theo mặc định, danh sách thả xuống vai trò và người dùng được phép trên các kênh ẩn có được mở hay không"
+                "description": "Luôn mở mặc định danh sách người dùng và vai trò có quyền truy cập"
             },
             "showMode": {
                 "description": "Chế độ được sử dụng để hiển thị các kênh ẩn.",
@@ -1759,7 +1759,7 @@
             "creationDate": "Ngày tạo",
             "latestActivity": "Hoạt động mới nhất"
         },
-        "threadSlowmode": "Chế độ chậm của chuỗi mặc định: {duration}",
+        "threadSlowmode": "Chế độ chậm của chủ đề mặc định: {duration}",
         "videoQuality": {
             "720p": "720p",
             "automatic": "Tự động"
@@ -1768,27 +1768,27 @@
         "viewAllowedUsersAndRoles": "Xem người dùng và vai trò được phép"
     },
     "showHiddenThings": {
-        "description": "Hiển thị nhiều thứ ẩn và chỉ dành cho người kiểm duyệt bất kể quyền.",
+        "description": "Hiển thị nhiều thứ ẩn và chỉ dành cho người kiểm duyệt bất kể quyền hạn.",
         "settings": {
             "showInvitesPaused": "Hiển thị chú giải công cụ lời mời bị tạm dừng trong danh sách máy chủ.",
-            "showModView": "Hiển thị mục menu ngữ cảnh chế độ xem mod thành viên trong tất cả các máy chủ.",
-            "showTimeouts": "Hiển thị biểu tượng thời gian chờ của thành viên trong cuộc trò chuyện."
+            "showModView": "Hiển thị mục menu ngữ cảnh Chế độ Hiển thị Mod cho thành viên trong tất cả các máy chủ.",
+            "showTimeouts": "Hiển thị biểu tượng thời gian hạn chế của thành viên trong cuộc trò chuyện."
         }
     },
     "showMeYourName": {
-        "addNickname": "Thêm biệt hiệu SMYN",
+        "addNickname": "Thêm biệt danh SMYN",
         "cancel": "Hủy bỏ",
         "changeNickname": "Thay đổi biệt danh SMYN",
-        "modalDescription": "Đặt biệt hiệu SMYN tùy chỉnh cho người dùng này. Hãy tận dụng nó bằng cách chỉ định {custom} trong cài đặt mẫu SMYN.",
+        "modalDescription": "Đặt biệt danh SMYN tùy chỉnh cho người dùng này. Sử dụng bằng cách xác định {custom} trong phần cài đặt mẫu của SMYN.",
         "nicknameLabel": "Biệt danh SMYN",
         "resetNickname": "Đặt lại biệt danh SMYN",
         "save": "Lưu",
         "settings": {
             "animateGradients": "Đối với các tên không chính, nếu vai trò có độ chuyển màu, hãy tạo hiệu ứng cho nó. Tính năng này bị vô hiệu hóa bởi \"Bỏ qua độ dốc\" và giảm chuyển động.",
-            "customNameColor": "Màu sử dụng cho tên tùy chỉnh mà bạn đã gán cho người dùng nếu nó không phải là tên được hiển thị đầu tiên. Để trống theo mặc định. Chấp nhận đầu vào hex(a), rgb(a) hoặc hsl(a). Sử dụng \"Vai trò\" để theo màu vai trò hàng đầu của người dùng. Sử dụng \"Role+-#\" để điều chỉnh độ sáng theo tỷ lệ phần trăm đó (ví dụ: \"Role+15\")",
-            "discriminators": "Thêm các yếu tố phân biệt đối xử vào tên người dùng cho bot. Trình phân biệt đối xử không được dùng nữa đối với người dùng nhưng vẫn được sử dụng cho bot. Theo mặc định, tên người dùng của bot tương đương với tên chung của người dùng, do đó nhiều bot có thể có cùng tên người dùng. Việc bổ sung các yếu tố phân biệt đối xử làm cho chúng trở nên độc đáo trở lại.",
+            "customNameColor": "Màu sắc cho tên tùy chỉnh nếu không hiển thị đầu tiên. Để trống nếu muốn dùng mặc định. Chấp nhận hex(a), rgb(a), hoặc hsl(a). Nhập \"Role\" để dùng màu của vai trò cao nhất. Nhập \"Role+-#\" để điều chỉnh độ sáng theo phần trăm (ví dụ: \"Role+15\")",
+            "discriminators": "Thêm số định danh vào sau tên đăng nhập của bot. Số định danh đã bị loại bỏ đối với người dùng nhưng vẫn được sử dụng cho bot. Theo mặc định, tên đăng nhập của bot tương đương với tên hiển thị, do đó nhiều bot có thể có cùng tên. Việc thêm số định danh sẽ giúp tên của chúng trở nên duy nhất.",
             "displayNameColor": "Màu sử dụng cho tên hiển thị nếu nó không phải là màu được hiển thị đầu tiên. Để trống theo mặc định. Chấp nhận đầu vào hex(a), rgb(a) hoặc hsl(a). Sử dụng \"Vai trò\" để theo màu vai trò hàng đầu của người dùng. Sử dụng \"Role+-#\" để điều chỉnh độ sáng theo tỷ lệ phần trăm đó (ví dụ: \"Role+15\")",
-            "friendNameColor": "Màu dùng cho biệt hiệu của bạn bè nếu đó không phải là màu được hiển thị đầu tiên. Để trống theo mặc định. Chấp nhận đầu vào hex(a), rgb(a) hoặc hsl(a). Sử dụng \"Vai trò\" để theo màu vai trò hàng đầu của người dùng. Sử dụng \"Role+-#\" để điều chỉnh độ sáng theo tỷ lệ phần trăm đó (ví dụ: \"Role+15\")",
+            "friendNameColor": "Màu sắc sử dụng cho biệt danh của bạn bè nếu nó không hiển thị lần đầu. Để trống nếu muốn dùng mặc định. Chấp nhận hex(a), rgb(a), hoặc hsl(a). Nhập \"Role\" để dùng màu của vai trò cao nhất. Nhập \"Role+-#\" để điều chỉnh độ sáng theo phần trăm (ví dụ: \"Role+15\")",
             "hideDefaultAtSign": "Ẩn ký hiệu \"@\" mặc định trước tên trong đề cập và trả lời. Chỉ áp dụng nếu một trong hai tính năng được bật.",
             "ignoreFonts": "Đối với các tên không chính, hãy sử dụng phông chữ mặc định của Discord bất kể phông chữ nitro tùy chỉnh của người dùng.",
             "ignoreGradients": "Đối với các tên không chính, nếu vai trò có độ dốc, hãy bỏ qua nó và chọn màu được đặt bên dưới.",
