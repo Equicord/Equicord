@@ -4,13 +4,36 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { BellDismiss, CogWheel, ColorPaletteIcon, CopyIcon, FolderIcon, LinkIcon, MagnifyingGlassIcon, MainSettingsIcon, Microphone, NotesIcon, OpenExternalIcon, PluginIcon, RestartIcon, SafetyIcon, UpdaterIcon, WarningIcon } from "@components/Icons";
+import { CogWheel, ColorPaletteIcon, CopyIcon, FolderIcon, LinkIcon, MagnifyingGlassIcon, MainSettingsIcon, Microphone, NotesIcon, OpenExternalIcon, PluginIcon, RestartIcon, SafetyIcon, UpdaterIcon, WarningIcon } from "@components/Icons";
 import { classNameFactory } from "@utils/css";
 import { classes } from "@utils/misc";
+import type { JSX } from "react";
 
 import type { PaletteCandidate } from "./types";
 
 const cl = classNameFactory("vc-command-palette-");
+
+type IconProps = JSX.IntrinsicElements["svg"];
+
+function BellDismiss(props: IconProps) {
+    return (
+        <svg
+            {...props}
+            className={classes(props.className, "vc-bell-dismiss")}
+            role="img"
+            viewBox="0 0 24 24"
+        >
+            <path
+                fill="currentColor"
+                d="M12 2a6 6 0 0 0-6 6v3.7c0 .72-.25 1.42-.72 1.97L3.4 15.87A1 1 0 0 0 4.17 17h10.84l-1.9-1.9H6.44l.36-.42A4.98 4.98 0 0 0 8 11.7V8a4 4 0 0 1 7.8-1.26 1 1 0 1 0 1.9-.62A6 6 0 0 0 12 2Zm0 20a3 3 0 0 0 2.82-2H9.18A3 3 0 0 0 12 22Z"
+            />
+            <path
+                fill="currentColor"
+                d="M19.78 21.2 2.8 4.22l1.42-1.42L21.2 19.78l-1.42 1.42Z"
+            />
+        </svg>
+    );
+}
 
 interface CommandPaletteRowProps {
     item: PaletteCandidate;
