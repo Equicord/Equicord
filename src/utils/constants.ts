@@ -659,8 +659,8 @@ export const EquicordDevs = Object.freeze({
         name: "thororen",
         id: 848339671629299742n
     },
-    Bratic: {
-        name: "Bratic",
+    bratic: {
+        name: "bratic",
         id: 1113241245364535416n
     },
     dotdas: {
