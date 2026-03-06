@@ -88,7 +88,7 @@ const exampleStyle = {
 } as const;
 
 export default definePlugin({
-    name: "Inline Calculator",
+    name: "InlineMath",
     description: "Evaluate inline {math expressions} in messages.",
     authors: [EquicordDevs.ape],
     tags: ["math", "calculate", "calculator", "latex"],
