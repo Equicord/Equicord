@@ -17,6 +17,7 @@ import type { KeyboardEvent as ReactKeyboardEvent } from "react";
 
 import { buildQueryResolution } from "../actions/executors";
 import { resolveCalculatorQuery } from "../calculator";
+import type { CalculatorViewMode } from "../calculator/types";
 import { settings } from "../index";
 import { getRecentCommandEntries } from "../providers/recentProvider";
 import type { QueryActionCandidate } from "../query/types";
@@ -307,6 +308,7 @@ export function CommandPaletteModal({ modalProps, instanceKey }: { modalProps: M
     const [pageStack, setPageStack] = useState<PalettePageStackItem[]>([]);
     const [isActionsMenuOpen, setIsActionsMenuOpen] = useState(false);
     const [isActionsMenuClosing, setIsActionsMenuClosing] = useState(false);
+    const [calculatorViewMode, setCalculatorViewMode] = useState<CalculatorViewMode>("result");
     const activePromptCommandIdRef = useRef<string | null>(null);
     const promptContainerRef = useRef<HTMLDivElement | null>(null);
     const suggestionSeedRef = useRef((Math.random() * 0xffffffff) >>> 0);
@@ -519,6 +521,16 @@ export function CommandPaletteModal({ modalProps, instanceKey }: { modalProps: M
         if (activePromptCommand) return null;
         return resolveCalculatorQuery(trimmedQuery);
     }, [activePromptCommand, trimmedQuery]);
+    const calculatorCanGraph = Boolean(calculatorResult?.graph?.series.length);
+
+    useEffect(() => {
+        if (!calculatorResult?.graph) {
+            setCalculatorViewMode("result");
+            return;
+        }
+
+        setCalculatorViewMode(calculatorResult.graph.defaultViewMode);
+    }, [calculatorResult]);
 
     const queryCandidates = useMemo(() => {
         if (!activePromptCommand?.queryTemplate) return [];
@@ -1071,6 +1083,13 @@ export function CommandPaletteModal({ modalProps, instanceKey }: { modalProps: M
             return;
         }
 
+        if (event.key.toLowerCase() === "g" && hasPrimaryModifier(event) && !event.altKey && !event.shiftKey && calculatorCanGraph) {
+            event.preventDefault();
+            event.stopPropagation();
+            setCalculatorViewMode(current => current === "graph" ? "result" : "graph");
+            return;
+        }
+
         if (isActionsMenuOpen && !isActionsMenuClosing) {
             return;
         }
@@ -1305,6 +1324,7 @@ export function CommandPaletteModal({ modalProps, instanceKey }: { modalProps: M
                 openDrilldown: openDrilldownCategory,
                 submitActivePage,
                 goBack,
+                setCalculatorViewMode,
                 copyCalculatorResult
             });
             return;
@@ -1345,13 +1365,15 @@ export function CommandPaletteModal({ modalProps, instanceKey }: { modalProps: M
                 ? { id: activePageSpec.id, submitLabel: activePageSpec.submitLabel }
                 : null,
             hasCalculatorResult: Boolean(calculatorResult),
+            calculatorCanGraph,
+            calculatorViewMode,
             selectedCommand,
             selectedCommandPinned: selectedCommand ? isCommandPinned(selectedCommand.id) : false,
             canGoBack,
             canDrillDown,
             drilldownCategoryId: selectedDrilldownCategoryId
         });
-    }, [activePageSpec, calculatorResult, selectedCommand, canGoBack, canDrillDown, selectedDrilldownCategoryId, pinnedIds]);
+    }, [activePageSpec, calculatorCanGraph, calculatorResult, calculatorViewMode, selectedCommand, canGoBack, canDrillDown, selectedDrilldownCategoryId, pinnedIds]);
 
     const handleActionIntent = async (intent: CommandActionIntent) => {
         await dispatchPaletteActionIntent({
@@ -1363,6 +1385,7 @@ export function CommandPaletteModal({ modalProps, instanceKey }: { modalProps: M
             openDrilldown: openDrilldownCategory,
             submitActivePage,
             goBack,
+            setCalculatorViewMode,
             copyCalculatorResult
         });
     };
@@ -1533,7 +1556,7 @@ export function CommandPaletteModal({ modalProps, instanceKey }: { modalProps: M
                 )}
 
                 {!compact && !isPageOpen && calculatorResult && (
-                    <CommandPaletteCalculatorCards result={calculatorResult} />
+                    <CommandPaletteCalculatorCards result={calculatorResult} mode={calculatorViewMode} />
                 )}
 
                 {!compact && !isPageOpen && (

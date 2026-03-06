@@ -8,7 +8,12 @@ import { evaluateCalculatorIntent } from "./evaluator";
 import { parseCalculatorQuery } from "./parser";
 import type { CalculatorResult } from "./types";
 
-export type { CalculatorResult, CalculatorResultKind } from "./types";
+export type {
+    CalculatorGraphSeries,
+    CalculatorResult,
+    CalculatorResultKind,
+    CalculatorViewMode
+} from "./types";
 
 export function resolveCalculatorQuery(query: string): CalculatorResult | null {
     const intent = parseCalculatorQuery(query);

@@ -5,7 +5,7 @@
  */
 
 import { formatNumber, formatRawNumber } from "./formatters";
-import type { CalculatorIntent, CalculatorResult } from "./types";
+import type { CalculatorGraphData, CalculatorGraphSeries, CalculatorIntent, CalculatorResult, CalculatorViewMode } from "./types";
 
 type Token =
     | { type: "number"; value: number; }
@@ -29,11 +29,28 @@ interface FunctionDefinition {
     name: string;
     parameter: string;
     body: ExpressionNode;
+    source: string;
+}
+
+interface ExpressionStatement {
+    expression: ExpressionNode;
+    source: string;
 }
 
 interface ParsedAdvancedMathProgram {
     normalizedInput: string;
     definitions: FunctionDefinition[];
+    statements: ExpressionStatement[];
+}
+
+interface EvaluationScope {
+    values: Map<string, number>;
+    functions: Map<string, FunctionDefinition>;
+}
+
+interface GraphSeriesDefinition {
+    id: string;
+    label: string;
     expression: ExpressionNode;
 }
 
@@ -51,6 +68,16 @@ const SUPERSCRIPT_DIGITS: Record<string, string> = {
     "⁺": "+",
     "⁻": "-"
 };
+
+const GRAPH_COLORS = [
+    "#7dd3fc",
+    "#fda4af",
+    "#86efac",
+    "#fcd34d",
+    "#c4b5fd",
+    "#fb7185"
+];
+const MAX_GRAPH_MAGNITUDE = 10000;
 
 const CONSTANTS: Record<string, number> = {
     e: Math.E,
@@ -83,10 +110,6 @@ const BUILT_INS: Record<string, (...args: number[]) => number> = {
     sqrt: value => Math.sqrt(value),
     tan: value => Math.tan(value)
 };
-
-function isIdentifierChar(char: string | undefined): boolean {
-    return Boolean(char && /[a-z0-9_]/i.test(char));
-}
 
 function normalizeMathWhitespace(input: string): string {
     return input.trim().replace(/\s+/g, " ");
@@ -263,7 +286,7 @@ function normalizeAdvancedMathInput(rawInput: string): string | null {
 
     if (!normalized) return null;
     if (/\\[a-z]+/i.test(normalized)) return null;
-    if (!/[0-9a-z∞π\tau+\-*/%^()=;,]/i.test(normalized)) return null;
+    if (!/[0-9a-z+\-*/%^()=;,]/i.test(normalized)) return null;
 
     return normalized;
 }
@@ -357,6 +380,29 @@ function splitStatements(tokens: Token[]): Token[][] {
     }
 
     return statements.filter(statement => statement.length > 0);
+}
+
+function tokensToSource(tokens: Token[]): string {
+    return tokens.map(token => {
+        switch (token.type) {
+            case "number":
+                return formatRawNumber(token.value);
+            case "identifier":
+                return token.value;
+            case "operator":
+                return token.value;
+            case "leftParen":
+                return "(";
+            case "rightParen":
+                return ")";
+            case "comma":
+                return ",";
+            case "equals":
+                return "=";
+            case "semicolon":
+                return ";";
+        }
+    }).join("");
 }
 
 class ExpressionParser {
@@ -525,7 +571,8 @@ function parseFunctionDefinition(tokens: Token[]): FunctionDefinition | null {
     return {
         name: tokens[0].value,
         parameter: tokens[2].value,
-        body
+        body,
+        source: tokensToSource(tokens)
     };
 }
 
@@ -540,45 +587,36 @@ function parseAdvancedMathProgram(query: string): ParsedAdvancedMathProgram | nu
     if (statements.length === 0) return null;
 
     const definitions: FunctionDefinition[] = [];
-    let expression: ExpressionNode | null = null;
+    const expressionStatements: ExpressionStatement[] = [];
 
-    for (let index = 0; index < statements.length; index++) {
-        const statement = statements[index];
+    for (const statement of statements) {
         const definition = parseFunctionDefinition(statement);
         if (definition) {
-            if (expression) return null;
             definitions.push(definition);
             continue;
         }
 
-        if (index !== statements.length - 1) return null;
-
         const parser = new ExpressionParser(statement);
-        expression = parser.parse();
+        const expression = parser.parse();
         if (!expression) return null;
+        expressionStatements.push({
+            expression,
+            source: tokensToSource(statement)
+        });
     }
 
-    if (!expression) return null;
+    if (definitions.length === 0 && expressionStatements.length === 0) return null;
 
     return {
         normalizedInput,
         definitions,
-        expression
+        statements: expressionStatements
     };
-}
-
-function isTrivialNumericLiteral(expression: ExpressionNode): boolean {
-    return expression.type === "number";
 }
 
 function isPlainNumericLiteral(query: string): boolean {
     return /^-?(?:\d+\.\d+|\d+|\.\d+)$/.test(query.trim());
 }
-
-type EvaluationScope = {
-    values: Map<string, number>;
-    functions: Map<string, FunctionDefinition>;
-};
 
 function evaluateExpression(expression: ExpressionNode, scope: EvaluationScope): number | null {
     switch (expression.type) {
@@ -639,6 +677,147 @@ function evaluateExpression(expression: ExpressionNode, scope: EvaluationScope):
     }
 }
 
+function expressionReferencesVariable(expression: ExpressionNode, variable: string, functions: Map<string, FunctionDefinition>): boolean {
+    switch (expression.type) {
+        case "number":
+            return false;
+        case "identifier":
+            return expression.name === variable;
+        case "unary":
+        case "percent":
+            return expressionReferencesVariable(expression.argument, variable, functions);
+        case "binary":
+            return expressionReferencesVariable(expression.left, variable, functions)
+                || expressionReferencesVariable(expression.right, variable, functions);
+        case "call": {
+            const builtIn = Boolean(BUILT_INS[expression.callee]);
+            if (builtIn) {
+                return expression.arguments.some(argument => expressionReferencesVariable(argument, variable, functions));
+            }
+
+            const userDefined = functions.get(expression.callee);
+            if (!userDefined || expression.arguments.length !== 1) {
+                return false;
+            }
+
+            return expressionReferencesVariable(expression.arguments[0], variable, functions);
+        }
+    }
+}
+
+function buildGraphSeriesDefinitions(program: ParsedAdvancedMathProgram): GraphSeriesDefinition[] {
+    const definitions = new Map<string, FunctionDefinition>();
+    for (const definition of program.definitions) {
+        definitions.set(definition.name, definition);
+    }
+
+    const graphSeries: GraphSeriesDefinition[] = [];
+    for (const definition of program.definitions) {
+        if (definition.parameter !== "x") continue;
+        if (!expressionReferencesVariable(definition.body, "x", definitions)) continue;
+        graphSeries.push({
+            id: definition.name,
+            label: `${definition.name}(x)`,
+            expression: definition.body
+        });
+    }
+
+    for (let index = 0; index < program.statements.length; index++) {
+        const statement = program.statements[index];
+        if (!expressionReferencesVariable(statement.expression, "x", definitions)) continue;
+        graphSeries.push({
+            id: `expr-${index}`,
+            label: statement.source,
+            expression: statement.expression
+        });
+    }
+
+    const unique = new Map<string, GraphSeriesDefinition>();
+    for (const series of graphSeries) {
+        unique.set(series.id, series);
+    }
+
+    return Array.from(unique.values());
+}
+
+function sampleGraphSeries(
+    definitions: GraphSeriesDefinition[],
+    functions: Map<string, FunctionDefinition>,
+    domain: [number, number]
+): CalculatorGraphSeries[] {
+    const [minX, maxX] = domain;
+    const samples = 160;
+    const step = (maxX - minX) / samples;
+
+    return definitions.map((definition, index) => {
+        const points = Array.from({ length: samples + 1 }, (_, sampleIndex) => {
+            const x = minX + step * sampleIndex;
+            const y = evaluateExpression(definition.expression, {
+                values: new Map([["x", x]]),
+                functions
+            });
+
+            return {
+                x,
+                y: y == null || !Number.isFinite(y) || Number.isNaN(y) || Math.abs(y) > MAX_GRAPH_MAGNITUDE ? null : y
+            };
+        });
+
+        return {
+            id: definition.id,
+            label: definition.label,
+            color: GRAPH_COLORS[index % GRAPH_COLORS.length],
+            points
+        };
+    });
+}
+
+function resolveGraphRange(series: CalculatorGraphSeries[]): [number, number] {
+    const values = series
+        .flatMap(entry => entry.points.map(point => point.y))
+        .filter((value): value is number => value != null && Number.isFinite(value));
+
+    if (!values.length) return [-10, 10];
+
+    let min = Math.min(...values);
+    let max = Math.max(...values);
+
+    if (min === max) {
+        const padding = Math.abs(min || 1);
+        min -= padding;
+        max += padding;
+    } else {
+        const padding = Math.max((max - min) * 0.12, 1);
+        min -= padding;
+        max += padding;
+    }
+
+    return [min, max];
+}
+
+function buildGraphData(program: ParsedAdvancedMathProgram, functions: Map<string, FunctionDefinition>, defaultViewMode: CalculatorViewMode): CalculatorGraphData | undefined {
+    const definitions = buildGraphSeriesDefinitions(program);
+    if (!definitions.length) return undefined;
+
+    const domain: [number, number] = [-10, 10];
+    const series = sampleGraphSeries(definitions, functions, domain);
+    const range = resolveGraphRange(series);
+
+    return {
+        defaultViewMode,
+        domain,
+        range,
+        series
+    };
+}
+
+function formatSpecialValue(value: number): string {
+    if (Number.isNaN(value)) return "NaN";
+    if (value === Number.POSITIVE_INFINITY) return "Infinity";
+    if (value === Number.NEGATIVE_INFINITY) return "-Infinity";
+    return formatNumber(value);
+}
+
 function classifyMathResult(program: ParsedAdvancedMathProgram, value: number): { secondaryText: string; tertiaryText?: string; } {
     if (!Number.isFinite(value) || Number.isNaN(value)) {
         return {
@@ -654,17 +833,18 @@ function classifyMathResult(program: ParsedAdvancedMathProgram, value: number): 
         };
     }
 
-    if (program.expression.type === "identifier") {
+    const finalStatement = program.statements[program.statements.length - 1];
+    if (finalStatement?.expression.type === "identifier") {
         return {
             secondaryText: "Constant",
-            tertiaryText: program.expression.name
+            tertiaryText: finalStatement.expression.name
         };
     }
 
-    if (program.expression.type === "call") {
+    if (finalStatement?.expression.type === "call") {
         return {
             secondaryText: "Function",
-            tertiaryText: program.expression.callee
+            tertiaryText: finalStatement.expression.callee
         };
     }
 
@@ -674,17 +854,21 @@ function classifyMathResult(program: ParsedAdvancedMathProgram, value: number): 
     };
 }
 
-function formatSpecialValue(value: number): string {
-    if (Number.isNaN(value)) return "NaN";
-    if (value === Number.POSITIVE_INFINITY) return "Infinity";
-    if (value === Number.NEGATIVE_INFINITY) return "-Infinity";
-    return formatNumber(value);
+function getProgramEvaluationExpression(program: ParsedAdvancedMathProgram): ExpressionNode | null {
+    const lastStatement = program.statements[program.statements.length - 1];
+    return lastStatement?.expression ?? null;
 }
 
 export function parseAdvancedMathQuery(query: string): CalculatorIntent | null {
     const program = parseAdvancedMathProgram(query);
     if (!program) return null;
-    if (program.definitions.length === 0 && isTrivialNumericLiteral(program.expression) && isPlainNumericLiteral(query)) return null;
+
+    const graphDefinitions = buildGraphSeriesDefinitions(program);
+    const evaluationExpression = getProgramEvaluationExpression(program);
+    if (!evaluationExpression && graphDefinitions.length === 0) return null;
+    if (evaluationExpression && program.definitions.length === 0 && program.statements.length === 1 && evaluationExpression.type === "number" && isPlainNumericLiteral(query)) {
+        return null;
+    }
 
     return {
         kind: "advanced_math",
@@ -702,21 +886,42 @@ export function evaluateAdvancedMath(displayInput: string, normalizedInput: stri
         functions.set(definition.name, definition);
     }
 
-    const value = evaluateExpression(program.expression, {
-        values: new Map(),
-        functions
-    });
-    if (value == null) return null;
+    const graphDefinitions = buildGraphSeriesDefinitions(program);
+    const hasGraph = graphDefinitions.length > 0;
+    const evaluationExpression = getProgramEvaluationExpression(program);
+    const value = evaluationExpression
+        ? evaluateExpression(evaluationExpression, {
+            values: new Map(),
+            functions
+        })
+        : null;
 
-    const meta = classifyMathResult(program, value);
-    const displayAnswer = formatSpecialValue(value);
+    if (value == null && !hasGraph) return null;
+
+    const defaultViewMode: CalculatorViewMode = value == null ? "graph" : "result";
+    const graph = hasGraph
+        ? buildGraphData(program, functions, defaultViewMode)
+        : undefined;
+
+    const meta = value == null
+        ? {
+            secondaryText: "Graph",
+            tertiaryText: graphDefinitions.length === 1 ? graphDefinitions[0].label : `${graphDefinitions.length} functions`
+        }
+        : classifyMathResult(program, value);
+    const displayAnswer = value == null
+        ? graphDefinitions.length === 1 ? graphDefinitions[0].label : `${graphDefinitions.length} functions`
+        : formatSpecialValue(value);
 
     return {
         kind: "number",
         displayInput,
         normalizedInput,
         displayAnswer,
-        rawAnswer: Number.isFinite(value) ? formatRawNumber(value) : displayAnswer,
+        rawAnswer: value == null
+            ? displayAnswer
+            : Number.isFinite(value) ? formatRawNumber(value) : displayAnswer,
+        graph,
         secondaryText: meta.secondaryText,
         tertiaryText: meta.tertiaryText
     };

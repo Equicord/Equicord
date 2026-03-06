@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import type { CalculatorViewMode } from "../../calculator/types";
 import type { CommandActionIntent } from "../../registry";
 import type { PalettePageRef } from "../pages/types";
 
@@ -16,6 +17,7 @@ interface DispatchPaletteActionIntentInput {
     openDrilldown(categoryId: string): void;
     submitActivePage(): Promise<void>;
     goBack(): void;
+    setCalculatorViewMode(mode: CalculatorViewMode): void;
     copyCalculatorResult(mode: "formatted" | "raw" | "qa"): Promise<void>;
 }
 
@@ -28,6 +30,7 @@ export async function dispatchPaletteActionIntent({
     openDrilldown,
     submitActivePage,
     goBack,
+    setCalculatorViewMode,
     copyCalculatorResult
 }: DispatchPaletteActionIntentInput): Promise<void> {
     switch (intent.type) {
@@ -51,6 +54,9 @@ export async function dispatchPaletteActionIntent({
             return;
         case "go-back":
             goBack();
+            return;
+        case "toggle-calculator-view":
+            setCalculatorViewMode(intent.mode);
             return;
         case "copy-calculator":
             await copyCalculatorResult(intent.mode);

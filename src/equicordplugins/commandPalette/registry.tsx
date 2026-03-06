@@ -92,6 +92,7 @@ export type CommandActionIntent =
     | { type: "open-drilldown"; categoryId: string; }
     | { type: "submit-active-page"; }
     | { type: "go-back"; }
+    | { type: "toggle-calculator-view"; mode: "result" | "graph"; }
     | { type: "copy-calculator"; mode: "formatted" | "raw" | "qa"; };
 
 export interface CommandActionContext {

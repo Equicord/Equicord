@@ -6,6 +6,7 @@
 
 import { IS_MAC } from "@utils/constants";
 
+import type { CalculatorViewMode } from "../../calculator/types";
 import type {
     CommandActionContext,
     CommandActionDefinition,
@@ -16,6 +17,8 @@ import type { PaletteActionItem } from "../CommandPaletteActionsMenu";
 interface ResolvePaletteActionsInput {
     activePage: { id: string; submitLabel: string; } | null;
     hasCalculatorResult: boolean;
+    calculatorCanGraph: boolean;
+    calculatorViewMode: CalculatorViewMode;
     selectedCommand: CommandEntry | null;
     selectedCommandPinned: boolean;
     canGoBack: boolean;
@@ -54,6 +57,8 @@ function mapCommandActions(
 export function resolvePaletteActions({
     activePage,
     hasCalculatorResult,
+    calculatorCanGraph,
+    calculatorViewMode,
     selectedCommand,
     selectedCommandPinned,
     canGoBack,
@@ -79,6 +84,14 @@ export function resolvePaletteActions({
     }
 
     if (hasCalculatorResult) {
+        if (calculatorCanGraph) {
+            actions.push({
+                id: calculatorViewMode === "graph" ? "calculator-show-result" : "calculator-show-graph",
+                label: calculatorViewMode === "graph" ? "Show Result" : "Show Graph",
+                shortcut: formatPrimaryShortcutLabel("⌘G"),
+                intent: { type: "toggle-calculator-view", mode: calculatorViewMode === "graph" ? "result" : "graph" }
+            });
+        }
         actions.push({
             id: "copy-answer",
             label: "Copy Answer",

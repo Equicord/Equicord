@@ -11,12 +11,34 @@ export type CalculatorResultKind =
     | "date"
     | "unit";
 
+export type CalculatorViewMode = "result" | "graph";
+
+export interface CalculatorGraphPoint {
+    x: number;
+    y: number | null;
+}
+
+export interface CalculatorGraphSeries {
+    id: string;
+    label: string;
+    color: string;
+    points: CalculatorGraphPoint[];
+}
+
+export interface CalculatorGraphData {
+    defaultViewMode: CalculatorViewMode;
+    domain: [number, number];
+    range: [number, number];
+    series: CalculatorGraphSeries[];
+}
+
 export interface CalculatorResult {
     kind: CalculatorResultKind;
     displayInput: string;
     displayAnswer: string;
     rawAnswer: string;
     normalizedInput?: string;
+    graph?: CalculatorGraphData;
     secondaryText?: string;
     tertiaryText?: string;
 }

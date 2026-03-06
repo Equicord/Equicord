@@ -583,6 +583,91 @@
     white-space: nowrap;
 }
 
+.vc-command-palette-calculator-graph-card {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 20px 22px 18px;
+}
+
+.vc-command-palette-calculator-graph-header {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.vc-command-palette-calculator-graph-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--cp-text-primary);
+    line-height: 1.25;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.vc-command-palette-calculator-graph-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 16px;
+}
+
+.vc-command-palette-calculator-graph-readout {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+    font-size: 13px;
+    color: var(--cp-text-secondary);
+}
+
+.vc-command-palette-calculator-graph-readout-value {
+    color: var(--cp-text-primary);
+    white-space: nowrap;
+}
+
+.vc-command-palette-calculator-graph-swatch {
+    width: 10px;
+    height: 10px;
+    border-radius: 999px;
+    flex-shrink: 0;
+}
+
+.vc-command-palette-calculator-graph-surface {
+    width: 100%;
+}
+
+.vc-command-palette-calculator-graph-svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: 300px;
+}
+
+.vc-command-palette-calculator-graph-bg {
+    fill: rgb(255 255 255 / 2%);
+    stroke: rgb(255 255 255 / 8%);
+}
+
+.vc-command-palette-calculator-graph-axis {
+    stroke: rgb(255 255 255 / 14%);
+    stroke-width: 1.5;
+}
+
+.vc-command-palette-calculator-graph-crosshair {
+    stroke: rgb(255 255 255 / 20%);
+    stroke-width: 1.5;
+    stroke-dasharray: 6 6;
+}
+
+.vc-command-palette-calculator-graph-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    color: var(--cp-text-secondary);
+    font-size: 13px;
+}
+
 /* Page Platform */
 .vc-command-palette-page {
     flex: 1 1 auto;
