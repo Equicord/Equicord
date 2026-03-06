@@ -32,6 +32,12 @@ interface FunctionDefinition {
     source: string;
 }
 
+interface VariableDefinition {
+    name: string;
+    body: ExpressionNode;
+    source: string;
+}
+
 interface ExpressionStatement {
     expression: ExpressionNode;
     source: string;
@@ -39,6 +45,7 @@ interface ExpressionStatement {
 
 interface ParsedAdvancedMathProgram {
     normalizedInput: string;
+    variables: VariableDefinition[];
     definitions: FunctionDefinition[];
     statements: ExpressionStatement[];
 }
@@ -46,6 +53,7 @@ interface ParsedAdvancedMathProgram {
 interface EvaluationScope {
     values: Map<string, number>;
     functions: Map<string, FunctionDefinition>;
+    variables: Map<string, VariableDefinition>;
 }
 
 interface GraphSeriesDefinition {
@@ -619,6 +627,22 @@ function parseFunctionDefinition(tokens: Token[]): FunctionDefinition | null {
     };
 }
 
+function parseVariableDefinition(tokens: Token[]): VariableDefinition | null {
+    if (tokens.length < 3) return null;
+    if (tokens[0]?.type !== "identifier") return null;
+    if (tokens[1]?.type !== "equals") return null;
+
+    const parser = new ExpressionParser(tokens.slice(2));
+    const body = parser.parse();
+    if (!body) return null;
+
+    return {
+        name: tokens[0].value,
+        body,
+        source: tokensToSource(tokens)
+    };
+}
+
 function parseAdvancedMathProgram(query: string): ParsedAdvancedMathProgram | null {
     const normalizedInput = normalizeAdvancedMathInput(query);
     if (!normalizedInput) return null;
@@ -629,6 +653,7 @@ function parseAdvancedMathProgram(query: string): ParsedAdvancedMathProgram | nu
     const statements = splitStatements(tokens);
     if (statements.length === 0) return null;
 
+    const variables: VariableDefinition[] = [];
     const definitions: FunctionDefinition[] = [];
     const expressionStatements: ExpressionStatement[] = [];
 
@@ -636,6 +661,12 @@ function parseAdvancedMathProgram(query: string): ParsedAdvancedMathProgram | nu
         const definition = parseFunctionDefinition(statement);
         if (definition) {
             definitions.push(definition);
+            continue;
+        }
+
+        const variable = parseVariableDefinition(statement);
+        if (variable) {
+            variables.push(variable);
             continue;
         }
 
@@ -648,10 +679,11 @@ function parseAdvancedMathProgram(query: string): ParsedAdvancedMathProgram | nu
         });
     }
 
-    if (definitions.length === 0 && expressionStatements.length === 0) return null;
+    if (variables.length === 0 && definitions.length === 0 && expressionStatements.length === 0) return null;
 
     return {
         normalizedInput,
+        variables,
         definitions,
         statements: expressionStatements
     };
@@ -668,6 +700,13 @@ function evaluateExpression(expression: ExpressionNode, scope: EvaluationScope):
         case "identifier": {
             const scoped = scope.values.get(expression.name);
             if (scoped != null) return scoped;
+            const variable = scope.variables.get(expression.name);
+            if (variable) {
+                const value = evaluateExpression(variable.body, scope);
+                if (value == null) return null;
+                scope.values.set(expression.name, value);
+                return value;
+            }
             if (Object.prototype.hasOwnProperty.call(CONSTANTS, expression.name)) {
                 return CONSTANTS[expression.name];
             }
@@ -714,28 +753,39 @@ function evaluateExpression(expression: ExpressionNode, scope: EvaluationScope):
             nestedValues.set(userDefined.parameter, args[0]);
             return evaluateExpression(userDefined.body, {
                 values: nestedValues,
-                functions: scope.functions
+                functions: scope.functions,
+                variables: scope.variables
             });
         }
     }
 }
 
-function expressionReferencesVariable(expression: ExpressionNode, variable: string, functions: Map<string, FunctionDefinition>): boolean {
+function expressionReferencesVariable(
+    expression: ExpressionNode,
+    variable: string,
+    functions: Map<string, FunctionDefinition>,
+    variables: Map<string, VariableDefinition>,
+    seenVariables = new Set<string>()
+): boolean {
     switch (expression.type) {
         case "number":
             return false;
         case "identifier":
-            return expression.name === variable;
+            if (expression.name === variable) return true;
+            if (seenVariables.has(expression.name)) return false;
+            if (!variables.has(expression.name)) return false;
+            seenVariables.add(expression.name);
+            return expressionReferencesVariable(variables.get(expression.name)!.body, variable, functions, variables, seenVariables);
         case "unary":
         case "percent":
-            return expressionReferencesVariable(expression.argument, variable, functions);
+            return expressionReferencesVariable(expression.argument, variable, functions, variables, seenVariables);
         case "binary":
-            return expressionReferencesVariable(expression.left, variable, functions)
-                || expressionReferencesVariable(expression.right, variable, functions);
+            return expressionReferencesVariable(expression.left, variable, functions, variables, new Set(seenVariables))
+                || expressionReferencesVariable(expression.right, variable, functions, variables, new Set(seenVariables));
         case "call": {
             const builtIn = Boolean(BUILT_INS[expression.callee]);
             if (builtIn) {
-                return expression.arguments.some(argument => expressionReferencesVariable(argument, variable, functions));
+                return expression.arguments.some(argument => expressionReferencesVariable(argument, variable, functions, variables, new Set(seenVariables)));
             }
 
             const userDefined = functions.get(expression.callee);
@@ -743,13 +793,17 @@ function expressionReferencesVariable(expression: ExpressionNode, variable: stri
                 return false;
             }
 
-            return expressionReferencesVariable(expression.arguments[0], variable, functions);
+            return expressionReferencesVariable(expression.arguments[0], variable, functions, variables, new Set(seenVariables));
         }
     }
 }
 
 function buildGraphSeriesDefinitions(program: ParsedAdvancedMathProgram): GraphSeriesDefinition[] {
     const definitions = new Map<string, FunctionDefinition>();
+    const variables = new Map<string, VariableDefinition>();
+    for (const variable of program.variables) {
+        variables.set(variable.name, variable);
+    }
     for (const definition of program.definitions) {
         definitions.set(definition.name, definition);
     }
@@ -757,7 +811,7 @@ function buildGraphSeriesDefinitions(program: ParsedAdvancedMathProgram): GraphS
     const graphSeries: GraphSeriesDefinition[] = [];
     for (const definition of program.definitions) {
         if (definition.parameter !== "x") continue;
-        if (!expressionReferencesVariable(definition.body, "x", definitions)) continue;
+        if (!expressionReferencesVariable(definition.body, "x", definitions, variables)) continue;
         graphSeries.push({
             id: definition.name,
             label: `${definition.name}(x)`,
@@ -767,7 +821,7 @@ function buildGraphSeriesDefinitions(program: ParsedAdvancedMathProgram): GraphS
 
     for (let index = 0; index < program.statements.length; index++) {
         const statement = program.statements[index];
-        if (!expressionReferencesVariable(statement.expression, "x", definitions)) continue;
+        if (!expressionReferencesVariable(statement.expression, "x", definitions, variables)) continue;
         graphSeries.push({
             id: `expr-${index}`,
             label: statement.source,
@@ -783,8 +837,31 @@ function buildGraphSeriesDefinitions(program: ParsedAdvancedMathProgram): GraphS
     return Array.from(unique.values());
 }
 
+function resolveVariableValues(
+    variables: Map<string, VariableDefinition>,
+    functions: Map<string, FunctionDefinition>,
+    seed?: Map<string, number>
+): Map<string, number> {
+    const values = seed ? new Map(seed) : new Map<string, number>();
+
+    for (const [name, variable] of variables) {
+        if (values.has(name)) continue;
+        const value = evaluateExpression(variable.body, {
+            values,
+            functions,
+            variables
+        });
+        if (value != null) {
+            values.set(name, value);
+        }
+    }
+
+    return values;
+}
+
 function sampleGraphSeries(
     definitions: GraphSeriesDefinition[],
+    variables: Map<string, VariableDefinition>,
     functions: Map<string, FunctionDefinition>,
     domain: [number, number]
 ): CalculatorGraphSeries[] {
@@ -795,9 +872,11 @@ function sampleGraphSeries(
     return definitions.map((definition, index) => {
         const points = Array.from({ length: samples + 1 }, (_, sampleIndex) => {
             const x = minX + step * sampleIndex;
+            const values = resolveVariableValues(variables, functions, new Map([["x", x]]));
             const y = evaluateExpression(definition.expression, {
-                values: new Map([["x", x]]),
-                functions
+                values,
+                functions,
+                variables
             });
 
             return {
@@ -841,9 +920,13 @@ function resolveGraphRange(series: CalculatorGraphSeries[]): [number, number] {
 function buildGraphData(program: ParsedAdvancedMathProgram, functions: Map<string, FunctionDefinition>, defaultViewMode: CalculatorViewMode): CalculatorGraphData | undefined {
     const definitions = buildGraphSeriesDefinitions(program);
     if (!definitions.length) return undefined;
+    const variables = new Map<string, VariableDefinition>();
+    for (const variable of program.variables) {
+        variables.set(variable.name, variable);
+    }
 
     const domain: [number, number] = [-10, 10];
-    const series = sampleGraphSeries(definitions, functions, domain);
+    const series = sampleGraphSeries(definitions, variables, functions, domain);
     const range = resolveGraphRange(series);
 
     return {
@@ -873,6 +956,13 @@ function classifyMathResult(program: ParsedAdvancedMathProgram, value: number): 
         return {
             secondaryText: "Function result",
             tertiaryText: `${program.definitions.length} definition${program.definitions.length === 1 ? "" : "s"}`
+        };
+    }
+
+    if (program.variables.length > 0) {
+        return {
+            secondaryText: "Variable result",
+            tertiaryText: `${program.variables.length} variable${program.variables.length === 1 ? "" : "s"}`
         };
     }
 
@@ -924,6 +1014,10 @@ export function evaluateAdvancedMath(displayInput: string, normalizedInput: stri
     const program = parseAdvancedMathProgram(normalizedInput);
     if (!program) return null;
 
+    const variables = new Map<string, VariableDefinition>();
+    for (const variable of program.variables) {
+        variables.set(variable.name, variable);
+    }
     const functions = new Map<string, FunctionDefinition>();
     for (const definition of program.definitions) {
         functions.set(definition.name, definition);
@@ -934,8 +1028,9 @@ export function evaluateAdvancedMath(displayInput: string, normalizedInput: stri
     const evaluationExpression = getProgramEvaluationExpression(program);
     const value = evaluationExpression
         ? evaluateExpression(evaluationExpression, {
-            values: new Map(),
-            functions
+            values: resolveVariableValues(variables, functions),
+            functions,
+            variables
         })
         : null;
 
