@@ -19,7 +19,7 @@ const logger = new Logger("MarkdownShortcuts");
 
 export function createKeybindRecorderComponent(
     format: MarkdownFormat,
-    FORMATS: MarkdownFormat[],
+    formats: MarkdownFormat[],
     getStore: () => MarkdownShortcutsSettingsStore
 ) {
     return function KeybindRecorderForFormat() {
@@ -36,8 +36,9 @@ export function createKeybindRecorderComponent(
         }
 
         useEffect(() => {
-            if (!isListening) return;
-            recordButtonRef.current?.focus();
+            if (!isListening) return () => { };
+            const raf = requestAnimationFrame(() => recordButtonRef.current?.focus());
+            return () => cancelAnimationFrame(raf);
         }, [isListening]);
 
         const handleRecord = (event: ReactKeyboardEvent<HTMLButtonElement>) => {
@@ -63,7 +64,7 @@ export function createKeybindRecorderComponent(
             const normalized = normalizeKeybindForComparison(keys);
             const currentStore = getStore();
 
-            for (const otherFormat of FORMATS) {
+            for (const otherFormat of formats) {
                 if (otherFormat.settingKey === format.settingKey) continue;
                 const maybeOtherKeys = currentStore[otherFormat.settingKey];
                 const otherKeys = Array.isArray(maybeOtherKeys) ? maybeOtherKeys : [];

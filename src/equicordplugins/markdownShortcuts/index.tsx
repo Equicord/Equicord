@@ -66,77 +66,74 @@ const FORMATS: MarkdownFormat[] = [
 const TOOLBAR_ORDER = ["Underline", "Subtext", "Header 1", "Header 2", "Header 3", "Block Quote Multi", "Code Block"];
 const TOOLBAR_FORMATS = TOOLBAR_ORDER.map(name => FORMATS.find(f => f.name === name)!).filter(Boolean);
 
-const settingsDefinition: Record<string, any> = {};
+const getSettingsStore = () => settings.store as MarkdownShortcutsSettingsStore;
 
-settingsDefinition.enableToolbarButtons = {
-    type: OptionType.BOOLEAN,
-    description: "Add extra formatting buttons to the text selection toolbar.",
-    default: true,
-};
-
-settingsDefinition.enableShortcuts = {
-    type: OptionType.BOOLEAN,
-    description: "Enable custom markdown keyboard shortcuts.",
-    default: true,
-};
-
-settingsDefinition.shortcutControls = {
+const shortcutSettings = Object.fromEntries(FORMATS.map(format => [format.settingKey, {
     type: OptionType.COMPONENT,
-    description: "Bulk actions for all keyboard shortcuts.",
-    component: () => {
-        const isShortcutsEnabled = settings.store.enableShortcuts;
+    description: `Keyboard shortcut for ${format.name}. Click to record, Clear to disable.`,
+    default: format.defaultKeybind || [],
+    component: createKeybindRecorderComponent(format, FORMATS, getSettingsStore),
+}]));
 
-        const handleDisableAll = () => {
-            const store = settings.store as MarkdownShortcutsSettingsStore;
-            for (const format of FORMATS) {
-                store[format.settingKey] = [];
-            }
-        };
-
-        const handleResetAll = () => {
-            const store = settings.store as MarkdownShortcutsSettingsStore;
-            for (const format of FORMATS) {
-                store[format.settingKey] = format.defaultKeybind || [];
-            }
-        };
-
-        return (
-            <div style={{
-                display: "flex", gap: "10px", marginTop: "4px", marginBottom: "8px",
-                paddingBottom: "12px", borderBottom: "1px solid var(--background-modifier-accent)",
-                opacity: isShortcutsEnabled ? 1 : 0.4,
-                pointerEvents: isShortcutsEnabled ? "auto" : "none"
-            }}>
-                <button
-                    type="button"
-                    className={cl("keybind-button")}
-                    style={{ color: "var(--text-danger)" }}
-                    onClick={handleDisableAll}
-                >
-                    Disable All Shortcuts
-                </button>
-                <button
-                    type="button"
-                    className={cl("keybind-button")}
-                    onClick={handleResetAll}
-                >
-                    Reset to Defaults
-                </button>
-            </div>
-        );
-    }
-};
-
-for (const format of FORMATS) {
-    settingsDefinition[format.settingKey] = {
+const settings = definePluginSettings({
+    enableToolbarButtons: {
+        type: OptionType.BOOLEAN,
+        description: "Add extra formatting buttons to the text selection toolbar.",
+        default: true,
+    },
+    enableShortcuts: {
+        type: OptionType.BOOLEAN,
+        description: "Enable custom markdown keyboard shortcuts.",
+        default: true,
+    },
+    shortcutControls: {
         type: OptionType.COMPONENT,
-        description: `Keyboard shortcut for ${format.name}. Click to record, Clear to disable.`,
-        default: format.defaultKeybind || [],
-        component: createKeybindRecorderComponent(format, FORMATS, () => settings.store as MarkdownShortcutsSettingsStore),
-    };
-}
+        description: "Bulk actions for all keyboard shortcuts.",
+        component: () => {
+            const isShortcutsEnabled = settings.store.enableShortcuts;
 
-const settings = definePluginSettings(settingsDefinition);
+            const handleDisableAll = () => {
+                const store = getSettingsStore();
+                for (const format of FORMATS) {
+                    store[format.settingKey] = [];
+                }
+            };
+
+            const handleResetAll = () => {
+                const store = getSettingsStore();
+                for (const format of FORMATS) {
+                    store[format.settingKey] = format.defaultKeybind || [];
+                }
+            };
+
+            return (
+                <div style={{
+                    display: "flex", gap: "10px", marginTop: "4px", marginBottom: "8px",
+                    paddingBottom: "12px", borderBottom: "1px solid var(--background-modifier-accent)",
+                    opacity: isShortcutsEnabled ? 1 : 0.4,
+                    pointerEvents: isShortcutsEnabled ? "auto" : "none"
+                }}>
+                    <button
+                        type="button"
+                        className={cl("keybind-button")}
+                        style={{ color: "var(--text-danger)" }}
+                        onClick={handleDisableAll}
+                    >
+                        Disable All Shortcuts
+                    </button>
+                    <button
+                        type="button"
+                        className={cl("keybind-button")}
+                        onClick={handleResetAll}
+                    >
+                        Reset to Defaults
+                    </button>
+                </div>
+            );
+        }
+    },
+    ...shortcutSettings
+});
 
 function isKeyEventLike(value: unknown): value is KeyEventLike {
     if (!value || typeof value !== "object") return false;
@@ -151,7 +148,7 @@ function isKeyEventLike(value: unknown): value is KeyEventLike {
 function handleKeyDown(e: KeyEventLike) {
     if (!isEditableTarget(e.target)) return;
 
-    const store = settings.store as MarkdownShortcutsSettingsStore;
+    const store = getSettingsStore();
     if (!store.enableShortcuts) return;
 
     for (const format of FORMATS) {
@@ -201,12 +198,12 @@ export default definePlugin({
                 },
                 {
                     match: /(?<=onKeyDown:(\i)=>\{)/,
-                    replace: "$self.handlePatchedKeyDown($1);",
+                    replace: "$self.handlePatchedKeyDown($1);if($1.defaultPrevented)return;",
                     noWarn: true
                 },
                 {
                     match: /(?<=onKeyDown:function\((\i)\)\{)/,
-                    replace: "$self.handlePatchedKeyDown($1);",
+                    replace: "$self.handlePatchedKeyDown($1);if($1.defaultPrevented)return;",
                     noWarn: true
                 }
             ]
@@ -222,6 +219,7 @@ export default definePlugin({
     wrapChatInputKeyDown(handler: ((event: unknown) => void) | undefined) {
         return (event: unknown) => {
             this.handlePatchedKeyDown(event);
+            if ((event as KeyEventLike).defaultPrevented) return;
             handler?.(event);
         };
     },

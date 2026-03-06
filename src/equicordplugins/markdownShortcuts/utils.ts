@@ -14,7 +14,7 @@ const logger = new Logger("MarkdownShortcuts");
 
 export const MODIFIER_KEYS = new Set(["Control", "Shift", "Alt", "Meta"]);
 export const DISCORD_BUILTIN_SHORTCUTS = ["ctrl+b", "ctrl+i", "ctrl+u", "ctrl+shift+x", "ctrl+e"];
-export type KeyEventLike = Pick<KeyboardEvent, "altKey" | "code" | "ctrlKey" | "key" | "metaKey" | "preventDefault" | "shiftKey" | "stopPropagation" | "target">;
+export type KeyEventLike = Pick<KeyboardEvent, "altKey" | "code" | "ctrlKey" | "defaultPrevented" | "key" | "metaKey" | "preventDefault" | "shiftKey" | "stopPropagation" | "target">;
 
 export function normalizeKeybindForComparison(keys: string[]): string {
     return keys.map(k => k.toLowerCase()).sort().join("+");
