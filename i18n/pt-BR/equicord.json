@@ -1014,8 +1014,8 @@
             "isEnabled": "Habilitar reinicialização automática após inatividade"
         },
         "ui": {
-            "disableAutoIdle": "Desativar reinicialização automática ociosa",
-            "enableAutoIdle": "Ativar reinicialização automática ociosa"
+            "disableAutoIdle": "Desativar reinicialização automática por inatividade",
+            "enableAutoIdle": "Ativar reinicialização automática por inatividade"
         }
     },
     "ignoreCalls": {
@@ -1053,9 +1053,9 @@
         },
         "limitations": {
             "description": "Se você não tiver permissões de mod no servidor e esse servidor for grande (mais de 100 membros), o plugin pode ser limitado das seguintes maneiras:",
-            "friendsAlwaysShown": "No entanto, os amigos sempre serão mostrados, independentemente do seu status.",
-            "offlineNotListed": "Membros off-line não serão listados",
-            "title": ": aviso: Limitações",
+            "friendsAlwaysShown": "No entanto, os amigos sempre serão exibidos, independentemente de seus status.",
+            "offlineNotListed": "Membros offline não serão listados",
+            "title": ":warning: Limitações",
             "upTo100": "Até 100 membros serão listados por padrão. Para obter mais, role para baixo na lista de membros para carregar mais membros."
         },
         "ui": {
@@ -1066,7 +1066,7 @@
         "description": "Sufixa 'ington' em uma palavra aleatória em sua mensagem",
         "settings": {
             "isEnabled": "Habilite ou desabilite o Ingtoninator",
-            "showIcon": "Mostrar um botão para alternar o plugin Ingtoninator"
+            "showIcon": "Mostrar um botão para ativar/desativar o plugin Ingtoninator"
         },
         "ui": {
             "disabled": "Ingtoninator Desativado",
@@ -1077,8 +1077,8 @@
         "description": "Compartilha tela instantaneamente ao entrar em um canal de voz com suporte para fontes de desktop, janelas e dispositivos de entrada de vídeo (câmeras, placas de captura)",
         "info": {
             "linux": "Para Linux",
-            "soundPreview": "Em relação às configurações de som e visualização",
-            "soundPreviewInfo": "Usamos as configurações definidas e usadas pelo discord para decidir se a visualização e o som do stream devem ser ativados ou não",
+            "soundPreview": "Em relação às configurações de som e pré-visualização",
+            "soundPreviewInfo": "Usamos as configurações definidas e utilizadas pelo Discord para decidir se a pré-visualização e o som da transmissão devem ser ativados ou não",
             "videoDevices": "Dispositivos de vídeo",
             "videoDevicesInfo": "Suporta câmeras e placas de captura (como Elgato HD60X) quando habilitado nas configurações",
             "wayland": "Para Wayland, apenas aparece a seleção de compartilhamento de tela",
@@ -1093,7 +1093,7 @@
     "invisibleChat": {
         "description": "Criptografe suas mensagens de maneira não suspeita!",
         "settings": {
-            "savedPasswords": "Senhas salvas (separadas por, )"
+            "savedPasswords": "Senhas salvas (separadas por , )"
         },
         "ui": {
             "decryptMessage": "Descriptografar mensagem",
@@ -1110,7 +1110,7 @@
         "settings": {
             "inviteDuration": "Duração do convite",
             "maxUses": "Contagem de Usos do Convite",
-            "temporaryMembership": "Associação Temporária"
+            "temporaryMembership": "Assinatura de Servidor Temporária"
         }
     },
     "jellyfinRichPresence": {
@@ -1118,10 +1118,10 @@
             "episodeCover": "Capa do episódio",
             "seriesCover": "Capa da série"
         },
-        "description": "Presença rica para servidor de mídia Jellyfin",
+        "description": "Rich presence para servidor de mídia Jellyfin",
         "episodeFormatOptions": {
             "fulltext": "Temporada 1, episódio 1",
-            "s01e01": "S01E01",
+            "s01e01": "T01E01",
             "short": "1x01"
         },
         "howToGetApiKey": {
@@ -1157,11 +1157,11 @@
         "settings": {
             "apiKey": "Chave de API do Jellyfin obtida no seu painel de administração do Jellyfin",
             "coverType": "Escolha qual capa exibir ao assistir a um programa de TV",
-            "customName": "Nome de presença avançada personalizada (usado somente se 'Personalizado' estiver selecionado). Opções: {name}, {series}, {season}, {episode}, {artist}, {album}, {year}",
+            "customName": "Nome de Rich Presence personalizado (usado apenas se 'Personalizado' estiver selecionado). Opções: {name}, {series}, {season}, {episode}, {artist}, {album}, {year}",
             "episodeFormat": "Formato do número do episódio",
             "nameDisplay": "Escolha como o nome do aplicativo deve aparecer na Rich Presence",
-            "overrideRichPresenceType": "Substituir o tipo de presença avançada",
-            "privacyMode": "Modo de privacidade (ocultar detalhes da mídia, como nome do episódio/música)",
+            "overrideRichPresenceType": "Substituir o tipo de rich presence",
+            "privacyMode": "Modo de privacidade (oculta detalhes da mídia, como nome do episódio/música)",
             "serverUrl": "URL do servidor Jellyfin (ex: https://jellyfin.examplo.com)",
             "showEpisodeName": "Mostrar o nome do episódio após as informações da temporada/episódio",
             "showPausedState": "Mostrar atividade quando a mídia estiver pausada",
