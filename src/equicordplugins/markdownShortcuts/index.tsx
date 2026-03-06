@@ -8,13 +8,13 @@ import { definePluginSettings } from "@api/Settings";
 import { EquicordDevs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
 import { Logger } from "@utils/Logger";
+import { classes } from "@utils/misc";
 import definePlugin, { OptionType } from "@utils/types";
 
 import { createKeybindRecorderComponent } from "./components/KeybindRecorder";
 import managedStyle from "./styles.css?managed";
-import { ToolbarManager } from "./toolbar";
-import { MarkdownFormat } from "./types";
-import { applyFormatToSelection, isEditableTarget, matchesKeybind } from "./utils";
+import { MarkdownFormat, MarkdownShortcutsSettingsStore } from "./types";
+import { applyFormatToSelection, isEditableTarget, KeyEventLike, matchesKeybind } from "./utils";
 
 const cl = classNameFactory("vc-mdshortcuts-");
 const logger = new Logger("MarkdownShortcuts");
@@ -24,7 +24,7 @@ const FORMATS: MarkdownFormat[] = [
     { name: "Italic", prefix: "*", suffix: "*", settingKey: "italicShortcut", lineLevel: false, toolbarIcon: null, toolbarLabel: "Italic", defaultKeybind: ["ctrl", "i"] },
     {
         name: "Underline", prefix: "__", suffix: "__", settingKey: "underlineShortcut", lineLevel: false, toolbarLabel: "Underline",
-        toolbarIcon: '<svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M12 17c3.31 0 6-2.69 6-6V3h-2.5v8c0 1.93-1.57 3.5-3.5 3.5S8.5 12.93 8.5 11V3H6v8c0 3.31 2.69 6 6 6zm-7 2v2h14v-2H5z"/></svg>',
+        toolbarIcon: "U",
         defaultKeybind: ["ctrl", "u"]
     },
     { name: "Strikethrough", prefix: "~~", suffix: "~~", settingKey: "strikethroughShortcut", lineLevel: false, toolbarIcon: null, toolbarLabel: "Strikethrough", defaultKeybind: ["ctrl", "shift", "x"] },
@@ -32,33 +32,33 @@ const FORMATS: MarkdownFormat[] = [
     { name: "Inline Code", prefix: "`", suffix: "`", settingKey: "inlineCodeShortcut", lineLevel: false, toolbarIcon: null, toolbarLabel: "Inline Code", defaultKeybind: ["ctrl", "e"] },
     {
         name: "Code Block", prefix: "```\n", suffix: "\n```", settingKey: "codeBlockShortcut", lineLevel: false, toolbarLabel: "Code Block",
-        toolbarIcon: '<svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><text x="12" y="17" text-anchor="middle" font-size="14" font-weight="bold" font-family="monospace">{/}</text></svg>',
+        toolbarIcon: "{/}",
         defaultKeybind: ["ctrl", "shift", "e"]
     },
     {
         name: "Header 1", prefix: "# ", suffix: "", settingKey: "header1Shortcut", lineLevel: true, toolbarLabel: "Header 1",
-        toolbarIcon: '<svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><text x="12" y="17" text-anchor="middle" font-size="16" font-weight="bold" font-family="sans-serif">H1</text></svg>',
+        toolbarIcon: "H1",
         defaultKeybind: ["ctrl", "shift", "1"]
     },
     {
         name: "Header 2", prefix: "## ", suffix: "", settingKey: "header2Shortcut", lineLevel: true, toolbarLabel: "Header 2",
-        toolbarIcon: '<svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><text x="12" y="17" text-anchor="middle" font-size="16" font-weight="bold" font-family="sans-serif">H2</text></svg>',
+        toolbarIcon: "H2",
         defaultKeybind: ["ctrl", "shift", "2"]
     },
     {
         name: "Header 3", prefix: "### ", suffix: "", settingKey: "header3Shortcut", lineLevel: true, toolbarLabel: "Header 3",
-        toolbarIcon: '<svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><text x="12" y="17" text-anchor="middle" font-size="16" font-weight="bold" font-family="sans-serif">H3</text></svg>',
+        toolbarIcon: "H3",
         defaultKeybind: ["ctrl", "shift", "3"]
     },
     {
         name: "Subtext", prefix: "-# ", suffix: "", settingKey: "subtextShortcut", lineLevel: true, toolbarLabel: "Subtext",
-        toolbarIcon: '<svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><text x="12" y="17" text-anchor="middle" font-size="14" font-weight="bold" font-family="sans-serif">-#</text></svg>',
+        toolbarIcon: "-#",
         defaultKeybind: ["ctrl", "shift", "t"]
     },
     { name: "Block Quote", prefix: "> ", suffix: "", settingKey: "blockQuoteShortcut", lineLevel: true, toolbarIcon: null, toolbarLabel: "Block Quote", defaultKeybind: ["ctrl", "shift", "q"] },
     {
         name: "Block Quote Multi", prefix: ">>> ", suffix: "", settingKey: "blockQuoteMultiShortcut", lineLevel: true, toolbarLabel: "Block Quote (Multi-line)",
-        toolbarIcon: '<svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M6 17h3l2-4V7H5v6h3zm8 0h3l2-4V7h-6v6h3z"/></svg>',
+        toolbarIcon: ">>",
         defaultKeybind: ["ctrl", "alt", "q"]
     },
 ];
@@ -82,19 +82,19 @@ settingsDefinition.enableShortcuts = {
 
 settingsDefinition.shortcutControls = {
     type: OptionType.COMPONENT,
-    description: "Bulk actions for all keyboard shortcuts:",
+    description: "Bulk actions for all keyboard shortcuts.",
     component: () => {
         const isShortcutsEnabled = settings.store.enableShortcuts;
 
         const handleDisableAll = () => {
-            const store = settings.store as Record<string, any>;
+            const store = settings.store as MarkdownShortcutsSettingsStore;
             for (const format of FORMATS) {
                 store[format.settingKey] = [];
             }
         };
 
         const handleResetAll = () => {
-            const store = settings.store as Record<string, any>;
+            const store = settings.store as MarkdownShortcutsSettingsStore;
             for (const format of FORMATS) {
                 store[format.settingKey] = format.defaultKeybind || [];
             }
@@ -132,21 +132,32 @@ for (const format of FORMATS) {
         type: OptionType.COMPONENT,
         description: `Keyboard shortcut for ${format.name}. Click to record, Clear to disable.`,
         default: format.defaultKeybind || [],
-        component: createKeybindRecorderComponent(format, FORMATS, () => settings.store),
+        component: createKeybindRecorderComponent(format, FORMATS, () => settings.store as MarkdownShortcutsSettingsStore),
     };
 }
 
 const settings = definePluginSettings(settingsDefinition);
 
-function handleKeyDown(e: KeyboardEvent) {
+function isKeyEventLike(value: unknown): value is KeyEventLike {
+    if (!value || typeof value !== "object") return false;
+
+    const event = value as Partial<KeyEventLike>;
+    return typeof event.key === "string"
+        && typeof event.code === "string"
+        && typeof event.preventDefault === "function"
+        && typeof event.stopPropagation === "function";
+}
+
+function handleKeyDown(e: KeyEventLike) {
     if (!isEditableTarget(e.target)) return;
 
-    const store = settings.store as Record<string, any>;
+    const store = settings.store as MarkdownShortcutsSettingsStore;
     if (!store.enableShortcuts) return;
 
     for (const format of FORMATS) {
-        let keybind: string[] = store[format.settingKey];
-        if (!Array.isArray(keybind)) {
+        const rawKeybind = store[format.settingKey];
+        let keybind = Array.isArray(rawKeybind) ? rawKeybind : undefined;
+        if (!keybind) {
             keybind = format.defaultKeybind || [];
         }
 
@@ -173,20 +184,88 @@ export default definePlugin({
     authors: [EquicordDevs.feniks],
     settings,
     managedStyle,
+    patches: [
+        {
+            find: 'id:"slate-toolbar"',
+            replacement: {
+                match: /(children:)\(0,(\i)\.jsx\)\((\i),\{editorRef:(\i),options:(\i)\}\)/,
+                replace: '$1(0,$2.jsxs)("div",{className:$self.toolbarRowsClass,children:[(0,$2.jsx)($3,{editorRef:$4,options:$5}),$self.renderToolbarButtons()]})'
+            }
+        },
+        {
+            find: ".SLASH_COMMAND_SUGGESTIONS_TOGGLED,{",
+            replacement: [
+                {
+                    match: /onKeyDown:(\i)(?=,)/,
+                    replace: "onKeyDown:$self.wrapChatInputKeyDown($1)"
+                },
+                {
+                    match: /(?<=onKeyDown:(\i)=>\{)/,
+                    replace: "$self.handlePatchedKeyDown($1);",
+                    noWarn: true
+                },
+                {
+                    match: /(?<=onKeyDown:function\((\i)\)\{)/,
+                    replace: "$self.handlePatchedKeyDown($1);",
+                    noWarn: true
+                }
+            ]
+        }
+    ],
+    toolbarRowsClass: cl("rows"),
+
+    handlePatchedKeyDown(event: unknown) {
+        if (!isKeyEventLike(event)) return;
+        handleKeyDown(event);
+    },
+
+    wrapChatInputKeyDown(handler: ((event: unknown) => void) | undefined) {
+        return (event: unknown) => {
+            this.handlePatchedKeyDown(event);
+            handler?.(event);
+        };
+    },
+
+    renderToolbarButtons() {
+        if (!settings.store.enableToolbarButtons) return null;
+
+        return (
+            <span key="vc-mdshortcuts-container" className={cl("container")}>
+                {TOOLBAR_FORMATS.map(format => (
+                    <button
+                        key={format.name}
+                        type="button"
+                        className={cl("btn")}
+                        aria-label={format.toolbarLabel}
+                        title={format.toolbarLabel}
+                        onMouseDown={e => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                        }}
+                        onClick={e => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            applyFormatToSelection(format);
+                        }}
+                    >
+                        <span
+                            className={format.name === "Underline"
+                                ? classes(cl("toolbar-icon"), cl("toolbar-icon-underline"))
+                                : cl("toolbar-icon")}
+                        >
+                            {format.toolbarIcon ?? format.name[0]}
+                        </span>
+                    </button>
+                ))}
+            </span>
+        );
+    },
 
     start() {
-        document.addEventListener("keydown", handleKeyDown, true);
-
-        if (settings.store.enableToolbarButtons) {
-            ToolbarManager.start(TOOLBAR_FORMATS);
-        }
-
         logger.info("Started");
     },
 
     stop() {
-        document.removeEventListener("keydown", handleKeyDown, true);
-        ToolbarManager.stop();
         logger.info("Stopped");
     },
 });

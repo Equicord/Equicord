@@ -21,26 +21,48 @@
     background-color: var(--background-modifier-selected, rgb(255 255 255 / 8%));
 }
 
-.vc-mdshortcuts-btn svg {
-    width: 20px;
-    height: 20px;
-    display: block;
-}
-
 .vc-mdshortcuts-container {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 100%;
     gap: 4px;
 }
 
-#slate-toolbar:has(#vc-mdshortcuts-container) {
-    transform: translateY(-36px);
+.vc-mdshortcuts-rows {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
+    gap: 4px;
+    box-sizing: border-box;
+    padding: 2px 8px 6px;
+}
+
+.vc-mdshortcuts-rows > * {
+    width: max-content;
+    margin: 0 auto;
+}
+
+#slate-toolbar {
+    height: auto !important;
+    overflow: visible !important;
+}
+
+.vc-mdshortcuts-toolbar-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 16px;
+    min-height: 16px;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1;
+    text-transform: uppercase;
+}
+
+.vc-mdshortcuts-toolbar-icon-underline {
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 2px;
 }
 
 .vc-mdshortcuts-keybind-row {

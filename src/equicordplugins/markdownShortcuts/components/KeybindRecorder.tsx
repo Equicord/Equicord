@@ -8,9 +8,10 @@ import { Button } from "@components/Button";
 import { IS_MAC } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
 import { Logger } from "@utils/Logger";
-import { useEffect, useState } from "@webpack/common";
+import { useEffect, useRef, useState } from "@webpack/common";
+import { KeyboardEvent as ReactKeyboardEvent } from "react";
 
-import { MarkdownFormat } from "../types";
+import { MarkdownFormat, MarkdownShortcutsSettingsStore } from "../types";
 import { DISCORD_BUILTIN_SHORTCUTS, formatKeybindDisplay, MODIFIER_KEYS, normalizeKeybindForComparison } from "../utils";
 
 const cl = classNameFactory("vc-mdshortcuts-");
@@ -19,72 +20,69 @@ const logger = new Logger("MarkdownShortcuts");
 export function createKeybindRecorderComponent(
     format: MarkdownFormat,
     FORMATS: MarkdownFormat[],
-    getStore: () => Record<string, any>
+    getStore: () => MarkdownShortcutsSettingsStore
 ) {
     return function KeybindRecorderForFormat() {
         const [isListening, setIsListening] = useState(false);
         const [error, setError] = useState<string | null>(null);
+        const recordButtonRef = useRef<HTMLButtonElement>(null);
         const store = getStore();
         const isShortcutsEnabled = store.enableShortcuts;
 
-        let currentKeybind: string[] = store[format.settingKey];
-        if (!Array.isArray(currentKeybind)) {
+        const rawCurrentKeybind = store[format.settingKey];
+        let currentKeybind = Array.isArray(rawCurrentKeybind) ? rawCurrentKeybind : undefined;
+        if (!currentKeybind) {
             currentKeybind = format.defaultKeybind || [];
         }
 
         useEffect(() => {
             if (!isListening) return;
-
-            const handleKeyDown = (event: KeyboardEvent) => {
-                event.preventDefault();
-                event.stopPropagation();
-
-                if (MODIFIER_KEYS.has(event.key)) return;
-
-                const keys: string[] = [];
-                if (event.metaKey) keys.push("META");
-                if (event.ctrlKey) keys.push(IS_MAC ? "CONTROL" : "CTRL");
-                if (event.shiftKey) keys.push("SHIFT");
-                if (event.altKey) keys.push("ALT");
-
-                let mainKey = event.key.toUpperCase();
-                if (mainKey === " ") mainKey = "SPACE";
-                if (mainKey === "ESCAPE") mainKey = "ESC";
-                keys.push(mainKey);
-
-                const normalized = normalizeKeybindForComparison(keys);
-                const currentStore = getStore();
-
-                for (const otherFormat of FORMATS) {
-                    if (otherFormat.settingKey === format.settingKey) continue;
-                    const otherKeys: string[] = currentStore[otherFormat.settingKey] ?? [];
-                    if (otherKeys.length && normalizeKeybindForComparison(otherKeys) === normalized) {
-                        setError(`Already used by: ${otherFormat.name}`);
-                        setTimeout(() => setError(null), 3000);
-                        setIsListening(false);
-                        return;
-                    }
-                }
-
-                if (DISCORD_BUILTIN_SHORTCUTS.includes(normalized)) {
-                    logger.warn(`Shortcut for ${format.name} may conflict with a Discord built-in shortcut.`);
-                }
-
-                currentStore[format.settingKey] = keys;
-                setError(null);
-                setIsListening(false);
-            };
-
-            const handleBlur = () => setIsListening(false);
-
-            document.addEventListener("keydown", handleKeyDown, true);
-            window.addEventListener("blur", handleBlur);
-
-            return () => {
-                document.removeEventListener("keydown", handleKeyDown, true);
-                window.removeEventListener("blur", handleBlur);
-            };
+            recordButtonRef.current?.focus();
         }, [isListening]);
+
+        const handleRecord = (event: ReactKeyboardEvent<HTMLButtonElement>) => {
+            if (!isListening) return;
+
+            event.preventDefault();
+            event.stopPropagation();
+
+            const { nativeEvent: { altKey, ctrlKey, key, metaKey, shiftKey } } = event;
+            if (MODIFIER_KEYS.has(key)) return;
+
+            const keys: string[] = [];
+            if (metaKey) keys.push("META");
+            if (ctrlKey) keys.push(IS_MAC ? "CONTROL" : "CTRL");
+            if (shiftKey) keys.push("SHIFT");
+            if (altKey) keys.push("ALT");
+
+            let mainKey = key.toUpperCase();
+            if (mainKey === " ") mainKey = "SPACE";
+            if (mainKey === "ESCAPE") mainKey = "ESC";
+            keys.push(mainKey);
+
+            const normalized = normalizeKeybindForComparison(keys);
+            const currentStore = getStore();
+
+            for (const otherFormat of FORMATS) {
+                if (otherFormat.settingKey === format.settingKey) continue;
+                const maybeOtherKeys = currentStore[otherFormat.settingKey];
+                const otherKeys = Array.isArray(maybeOtherKeys) ? maybeOtherKeys : [];
+                if (otherKeys.length && normalizeKeybindForComparison(otherKeys) === normalized) {
+                    setError(`Already used by: ${otherFormat.name}`);
+                    setTimeout(() => setError(null), 3000);
+                    setIsListening(false);
+                    return;
+                }
+            }
+
+            if (DISCORD_BUILTIN_SHORTCUTS.includes(normalized)) {
+                logger.warn(`Shortcut for ${format.name} may conflict with a Discord built-in shortcut.`);
+            }
+
+            currentStore[format.settingKey] = keys;
+            setError(null);
+            setIsListening(false);
+        };
 
         const handleClear = () => {
             getStore()[format.settingKey] = [];
@@ -107,9 +105,12 @@ export function createKeybindRecorderComponent(
                 </div>
                 <div className={cl("keybind-controls")}>
                     <button
+                        ref={recordButtonRef}
                         type="button"
                         className={cl("keybind-button", isListening ? "listening" : "")}
                         onClick={() => setIsListening(true)}
+                        onKeyDown={handleRecord}
+                        onBlur={() => setIsListening(false)}
                     >
                         {isListening ? "Press a key..." : formatKeybindDisplay(currentKeybind)}
                     </button>

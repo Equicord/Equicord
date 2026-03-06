@@ -14,3 +14,9 @@ export interface MarkdownFormat {
     toolbarLabel: string;
     defaultKeybind: string[];
 }
+
+export interface MarkdownShortcutsSettingsStore {
+    enableToolbarButtons: boolean;
+    enableShortcuts: boolean;
+    [key: string]: boolean | string[];
+}

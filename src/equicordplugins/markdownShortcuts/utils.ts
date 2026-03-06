@@ -5,6 +5,7 @@
  */
 
 import { IS_MAC } from "@utils/constants";
+import { insertTextIntoChatInputBox } from "@utils/discord";
 import { Logger } from "@utils/Logger";
 
 import { MarkdownFormat } from "./types";
@@ -13,6 +14,7 @@ const logger = new Logger("MarkdownShortcuts");
 
 export const MODIFIER_KEYS = new Set(["Control", "Shift", "Alt", "Meta"]);
 export const DISCORD_BUILTIN_SHORTCUTS = ["ctrl+b", "ctrl+i", "ctrl+u", "ctrl+shift+x", "ctrl+e"];
+export type KeyEventLike = Pick<KeyboardEvent, "altKey" | "code" | "ctrlKey" | "key" | "metaKey" | "preventDefault" | "shiftKey" | "stopPropagation" | "target">;
 
 export function normalizeKeybindForComparison(keys: string[]): string {
     return keys.map(k => k.toLowerCase()).sort().join("+");
@@ -21,11 +23,9 @@ export function normalizeKeybindForComparison(keys: string[]): string {
 export function formatKeybindDisplay(keys: string[]): string {
     if (!keys.length) return "Not set";
 
-    const isMac = navigator.platform.toUpperCase().includes("MAC");
-
     return keys.map(k => {
         const upper = k.toUpperCase();
-        if (isMac) {
+        if (IS_MAC) {
             if (upper === "CTRL" || upper === "MOD") return "⌘";
             if (upper === "CONTROL") return "⌃";
             if (upper === "META") return "⌘";
@@ -36,7 +36,7 @@ export function formatKeybindDisplay(keys: string[]): string {
     }).join(" + ");
 }
 
-export function matchesKeybind(e: KeyboardEvent, keybind: string[]): boolean {
+export function matchesKeybind(e: KeyEventLike, keybind: string[]): boolean {
     if (!keybind.length) return false;
 
     const pressed = e.key.toLowerCase();
@@ -76,10 +76,7 @@ export function matchesKeybind(e: KeyboardEvent, keybind: string[]): boolean {
 
 export function applyFormatToSelection(format: MarkdownFormat) {
     try {
-        const sel = window.getSelection();
-        if (!sel || sel.rangeCount === 0) return;
-
-        const selectedText = sel.toString();
+        const selectedText = window.getSelection()?.toString() ?? "";
         const hasSelection = selectedText.length > 0;
 
         let replacement: string;
@@ -91,14 +88,7 @@ export function applyFormatToSelection(format: MarkdownFormat) {
                 : format.prefix + format.suffix;
         }
 
-        const dt = new DataTransfer();
-        dt.setData("text/plain", replacement);
-
-        document.dispatchEvent(
-            new ClipboardEvent("paste", {
-                clipboardData: dt,
-            })
-        );
+        insertTextIntoChatInputBox(replacement);
     } catch (err) {
         logger.error("Failed to apply format", format.name, err);
     }
@@ -108,9 +98,7 @@ export function isEditableTarget(el: EventTarget | null): boolean {
     if (!el || !(el instanceof HTMLElement)) return false;
     return (
         el instanceof HTMLTextAreaElement ||
-        el.getAttribute("contenteditable") === "true" ||
-        el.getAttribute("role") === "textbox" ||
-        el.closest('[contenteditable="true"]') != null ||
-        el.closest('[role="textbox"]') != null
+        el.contentEditable === "true" ||
+        el.getAttribute("role") === "textbox"
     );
 }
