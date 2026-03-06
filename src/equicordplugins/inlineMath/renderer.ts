@@ -53,7 +53,7 @@ function segmentExpression(text: string, colors?: RenderColors): TextSegment[] {
         if (match[1]) {
             segments.push({ text: " = ", color: resolvedColors.equals });
         } else if (match[2]) {
-            segments.push({ text: match[2], color: resolvedColors.operator });
+            segments.push({ text: ` ${match[2]} `, color: resolvedColors.operator });
         } else if (match[3]) {
             segments.push({ text: match[3], color: resolvedColors.text });
         }
