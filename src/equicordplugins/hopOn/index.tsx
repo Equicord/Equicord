@@ -31,7 +31,7 @@ const settings = definePluginSettings({
 });
 export default definePlugin({
     name: "HopOn",
-    description: "Hop on Fortnite or Hop on bloons :3",
+    description: "Hop on Fortnite/Bloons! Automatically opens a configurable app or URL when a message matching a custom regex is sent in the current channel",
     authors: [Devs.ImLvna],
     settings,
     flux: {
