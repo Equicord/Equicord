@@ -406,6 +406,13 @@ interface UserFunction {
     body: ASTNode;
 }
 
+export interface EvaluationState {
+    vars: Record<string, number>;
+    funcs: Record<string, UserFunction>;
+}
+
+export type StatementKind = StatementNode["kind"];
+
 interface EvalContext {
     vars: Record<string, number>;
     funcs: Record<string, UserFunction>;
@@ -505,16 +512,18 @@ function evaluate(node: ASTNode, ctx: EvalContext): number {
     }
 }
 
-function evaluateProgram(program: ProgramNode): number {
+function evaluateProgram(program: ProgramNode, state: EvaluationState = createEvaluationState()): { result: number; statementKind: StatementKind; } {
     const ctx: EvalContext = {
-        vars: {},
-        funcs: {},
+        vars: state.vars,
+        funcs: state.funcs,
         callDepth: 0,
     };
 
     let lastValue = 0;
+    let statementKind: StatementKind = "expr_stmt";
 
     for (const statement of program.statements) {
+        statementKind = statement.kind;
         switch (statement.kind) {
             case "expr_stmt":
                 lastValue = evaluate(statement.expr, ctx);
@@ -541,7 +550,7 @@ function evaluateProgram(program: ProgramNode): number {
         }
     }
 
-    return lastValue;
+    return { result: lastValue, statementKind };
 }
 
 // ── Stringify (AST → string) ─────────────────────────────────
@@ -656,7 +665,21 @@ export function calculate(expression: string): number {
     const tokens = tokenize(expression);
     const parser = new Parser(tokens);
     const program = parser.parse();
-    return evaluateProgram(program);
+    return evaluateProgram(program).result;
+}
+
+export function createEvaluationState(): EvaluationState {
+    return {
+        vars: {},
+        funcs: {},
+    };
+}
+
+export function evaluateExpression(expression: string, state: EvaluationState): { result: number; statementKind: StatementKind; } {
+    const tokens = tokenize(expression);
+    const parser = new Parser(tokens);
+    const program = parser.parse();
+    return evaluateProgram(program, state);
 }
 
 export function formatResult(result: number): string {
@@ -669,7 +692,7 @@ export function calculateWithSteps(expression: string): string {
     const program = parser.parse();
 
     if (program.statements.length !== 1 || program.statements[0].kind !== "expr_stmt")
-        return `${expression.trim()} = ${formatResult(evaluateProgram(program))}`;
+        return `${expression.trim()} = ${formatResult(evaluateProgram(program).result)}`;
 
     let ast = program.statements[0].expr;
 
