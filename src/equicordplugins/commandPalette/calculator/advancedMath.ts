@@ -813,7 +813,7 @@ function buildGraphSeriesDefinitions(program: ParsedAdvancedMathProgram): GraphS
         if (definition.parameter !== "x") continue;
         if (!expressionReferencesVariable(definition.body, "x", definitions, variables)) continue;
         graphSeries.push({
-            id: definition.name,
+            id: `definition-${definition.name}-${graphSeries.length}`,
             label: `${definition.name}(x)`,
             expression: definition.body
         });
@@ -829,12 +829,7 @@ function buildGraphSeriesDefinitions(program: ParsedAdvancedMathProgram): GraphS
         });
     }
 
-    const unique = new Map<string, GraphSeriesDefinition>();
-    for (const series of graphSeries) {
-        unique.set(series.id, series);
-    }
-
-    return Array.from(unique.values());
+    return graphSeries;
 }
 
 function resolveVariableValues(

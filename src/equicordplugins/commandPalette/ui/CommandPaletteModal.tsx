@@ -1230,6 +1230,10 @@ export function CommandPaletteModal({ modalProps, instanceKey }: { modalProps: M
             return;
         }
 
+        if (isMainInputTarget && (event.key === "ArrowLeft" || event.key === "ArrowRight")) {
+            return;
+        }
+
         if (isMainInputTarget && event.key === "ArrowDown") {
             event.preventDefault();
             if (compact) {
