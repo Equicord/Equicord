@@ -1790,7 +1790,7 @@
             "displayNameColor": "Màu sử dụng cho tên hiển thị nếu nó không phải là màu được hiển thị đầu tiên. Để trống theo mặc định. Chấp nhận đầu vào hex(a), rgb(a) hoặc hsl(a). Sử dụng \"Vai trò\" để theo màu vai trò hàng đầu của người dùng. Sử dụng \"Role+-#\" để điều chỉnh độ sáng theo tỷ lệ phần trăm đó (ví dụ: \"Role+15\")",
             "friendNameColor": "Màu sắc sử dụng cho biệt danh của bạn bè nếu nó không hiển thị lần đầu. Để trống nếu muốn dùng mặc định. Chấp nhận hex(a), rgb(a), hoặc hsl(a). Nhập \"Role\" để dùng màu của vai trò cao nhất. Nhập \"Role+-#\" để điều chỉnh độ sáng theo phần trăm (ví dụ: \"Role+15\")",
             "hideDefaultAtSign": "Ẩn ký hiệu \"@\" mặc định trước tên trong đề cập và trả lời. Chỉ áp dụng nếu một trong hai tính năng được bật.",
-            "ignoreFonts": "Đối với các tên không chính, hãy sử dụng phông chữ mặc định của Discord bất kể phông chữ nitro tùy chỉnh của người dùng.",
+            "ignoreFonts": "Đối với các tên phụ, sử dụng phông chữ mặc định của Discord thay vì bất kể phông chữ nitro tùy chỉnh của người dùng.",
             "ignoreGradients": "Đối với các tên không chính, nếu vai trò có độ dốc, hãy bỏ qua nó và chọn màu được đặt bên dưới.",
             "includedNames": "Thứ tự hiển thị tên người dùng, tên hiển thị, biệt hiệu, tên bạn bè và tên tùy chỉnh. Sử dụng các phần giữ chỗ sau: {user}, {display}, {nick}, {friend}, {custom}. Bạn có thể cung cấp nhiều tùy chọn tên để sử dụng làm tên dự phòng nếu không có tên nào bằng cách phân tách chúng bằng dấu phẩy, chẳng hạn như: {custom, friend, nick}. Bạn có thể có tối đa ba tiền tố và ba hậu tố cho mỗi tên.",
             "memberList": "Hiển thị tên khả dụng đầu tiên được liệt kê ở định dạng tên tùy chỉnh của bạn trong danh sách thành viên.",
