@@ -1278,7 +1278,7 @@
         "defaults": {
             "statusName": "alguma música"
         },
-        "description": "Pequeno plugin para rica presença do ListenBrainz",
+        "description": "Pequeno plugin para atividade do ListenBrainz",
         "missingArtOptions": {
             "listenbrainzLogo": "Usar logo grande do ListenBrainz",
             "placeholder": "Use espaço reservado genérico"
@@ -1300,7 +1300,7 @@
             "shareSong": "Mostrar link para música no ListenBrainz (pode ser visível apenas para outros usuários)",
             "shareUsername": "Mostrar link para o perfil ListenBrainz (pode ser visível apenas para outros usuários)",
             "statusName": "Texto de status personalizado",
-            "useListeningStatus": "Mostrar o status \"Ouvindo\" em vez de \"Reproduzindo\"",
+            "useListeningStatus": "Mostrar o status \"Ouvindo\" em vez de \"Jogando\"",
             "useLogo": "Mostrar logo do ListenBrainz na arte do álbum",
             "useTimeBar": "Use a duração da faixa para exibir uma barra de tempo (deve estar usando o status de escuta)",
             "username": "Nome de usuário ListenBrainz"
