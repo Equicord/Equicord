@@ -93,58 +93,79 @@ export default definePlugin({
     async onBeforeMessageSend(channelId, msg) {
         const maxLen = (UserStore.getCurrentUser().premiumType ?? 0) === 2 ? 4000 : 2000;
         const evalState = createEvaluationState();
-        const replacements: { detailed: string; simple: string; }[] = [];
 
         // Collect expressions for potential image rendering
         const exprs: { raw: string; detailed?: string; simple: string; }[] = [];
-        let hasMatch = false;
+        const matches = Array.from(msg.content.matchAll(/\{([^{}]+)\}/g));
+        if (matches.length === 0) return;
 
-        let replaced = msg.content.replace(/\{([^{}]+)\}/g, (match, rawExpr) => {
+        let hasMatch = false;
+        let lastIndex = 0;
+        let replaced = "";
+        let simpleReplaced = "";
+        let imageReplaced = "";
+
+        for (const match of matches) {
+            const fullMatch = match[0];
+            const rawExpr = match[1];
+            const matchIndex = match.index ?? 0;
+            const plainText = msg.content.slice(lastIndex, matchIndex);
+
+            replaced += plainText;
+            simpleReplaced += plainText;
+            imageReplaced += plainText;
+
+            let detailedReplacement = fullMatch;
+            let simpleReplacement = fullMatch;
+
             try {
                 // Try unit conversion first (e.g. "5 km to miles")
                 const conversion = tryConvertUnits(rawExpr);
                 if (conversion) {
                     hasMatch = true;
-                    replacements.push({ detailed: conversion, simple: conversion });
-                    return conversion;
+                    detailedReplacement = conversion;
+                    simpleReplacement = conversion;
+                } else {
+                    const expr = resolveExpr(rawExpr);
+                    const { statementKind, simpleText, detailedText } = evaluateExpressionWithOutputs(expr, evalState);
+                    hasMatch = true;
+
+                    if (statementKind === "function_def") {
+                        detailedReplacement = "";
+                        simpleReplacement = "";
+                    } else if (settings.store.imageOutput) {
+                        exprs.push({
+                            raw: rawExpr,
+                            detailed: settings.store.showSteps ? detailedText : undefined,
+                            simple: simpleText,
+                        });
+                        detailedReplacement = simpleText;
+                        simpleReplacement = simpleText;
+                    } else {
+                        detailedReplacement = settings.store.showSteps ? detailedText : simpleText;
+                        simpleReplacement = simpleText;
+                    }
                 }
-
-                const expr = resolveExpr(rawExpr);
-                const { statementKind, simpleText, detailedText } = evaluateExpressionWithOutputs(expr, evalState);
-                hasMatch = true;
-
-                if (statementKind === "function_def") {
-                    replacements.push({ detailed: "", simple: "" });
-                    return "";
-                }
-
-                if (settings.store.imageOutput) {
-                    exprs.push({
-                        raw: rawExpr,
-                        detailed: settings.store.showSteps ? detailedText : undefined,
-                        simple: simpleText,
-                    });
-                    replacements.push({ detailed: simpleText, simple: simpleText });
-                    return simpleText;
-                }
-
-                replacements.push({ detailed: detailedText, simple: simpleText });
-                return settings.store.showSteps ? detailedText : simpleText;
             } catch {
-                replacements.push({ detailed: match, simple: match });
-                return match;
+                detailedReplacement = fullMatch;
+                simpleReplacement = fullMatch;
             }
-        });
+
+            replaced += detailedReplacement;
+            simpleReplaced += simpleReplacement;
+            lastIndex = matchIndex + fullMatch.length;
+        }
 
         if (!hasMatch) return;
 
-        let replacementIndex = 0;
-        const simpleReplaced = msg.content.replace(/\{([^{}]+)\}/g, () => replacements[replacementIndex++]?.simple ?? "");
+        replaced += msg.content.slice(lastIndex);
+        simpleReplaced += msg.content.slice(lastIndex);
+        imageReplaced += msg.content.slice(lastIndex);
 
         // Image output mode: send text normally, then prompt image upload
         const channel = canUploadInChannel(channelId);
         if (settings.store.imageOutput && exprs.length > 0 && channel) {
-            replaced = msg.content.replace(/\{([^{}]+)\}/g, "");
+            replaced = imageReplaced;
 
             const imageLines = exprs.map(e => {
                 if (e.detailed) return e.detailed.replace(/\s*;\s*/g, "\n");
