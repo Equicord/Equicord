@@ -7,7 +7,7 @@
 import { definePluginSettings } from "@api/Settings";
 import { EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
-import { ChannelStore, ComponentDispatch, DraftType, Forms, UploadHandler, UserStore } from "@webpack/common";
+import { ChannelStore, ComponentDispatch, DraftType, Forms, PermissionStore, UploadHandler, UserStore } from "@webpack/common";
 
 import { latexToExpr } from "./latex";
 import { calculate, calculateWithSteps, formatResult } from "./parser";
@@ -158,7 +158,7 @@ export default definePlugin({
         if (!hasMatch) return;
 
         // Image output mode: send text normally, then prompt image upload
-        if (settings.store.imageOutput && exprs.length > 0) {
+        if (settings.store.imageOutput && exprs.length > 0 && PermissionStore.can(PermissionStore.getChannelPermissions(channelId), "attachFiles")) {
             replaced = msg.content.replace(/\{([^{}]+)\}/g, "");
 
             const imageLines = exprs.map(e => {
