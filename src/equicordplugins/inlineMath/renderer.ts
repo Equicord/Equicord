@@ -16,6 +16,12 @@ const TEXT_COLOR = "#e0e0e0";
 const OP_COLOR = "#7289da";
 const EQ_COLOR = "#57f287";
 
+export interface RenderColors {
+    text?: string;
+    operator?: string;
+    equals?: string;
+}
+
 type RenderSurface = OffscreenCanvas;
 type RenderContext = CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D;
 
@@ -29,25 +35,34 @@ interface TextSegment {
     color: string;
 }
 
-function segmentExpression(text: string): TextSegment[] {
+function getRenderColors(colors?: RenderColors) {
+    return {
+        text: colors?.text?.trim() || TEXT_COLOR,
+        operator: colors?.operator?.trim() || OP_COLOR,
+        equals: colors?.equals?.trim() || EQ_COLOR,
+    };
+}
+
+function segmentExpression(text: string, colors?: RenderColors): TextSegment[] {
+    const resolvedColors = getRenderColors(colors);
     const segments: TextSegment[] = [];
-    const regex = /(=)|([+\-\\\*\/%\^])|([^=+\-\\\*\/%\^]+)/g;
+    const regex = /(=)|([-+*/%^])|([^=+*/%^-]+)/g;
     let match: RegExpExecArray | null;
 
     while ((match = regex.exec(text)) !== null) {
         if (match[1]) {
-            segments.push({ text: " = ", color: EQ_COLOR });
+            segments.push({ text: " = ", color: resolvedColors.equals });
         } else if (match[2]) {
-            segments.push({ text: match[2], color: OP_COLOR });
+            segments.push({ text: match[2], color: resolvedColors.operator });
         } else if (match[3]) {
-            segments.push({ text: match[3], color: TEXT_COLOR });
+            segments.push({ text: match[3], color: resolvedColors.text });
         }
     }
 
     return segments;
 }
 
-export function renderMathToCanvas(expression: string, steps?: string): RenderSurface {
+export function renderMathToCanvas(expression: string, steps?: string, colors?: RenderColors): RenderSurface {
     // Determine content
     const displayText = steps || expression;
     const lines = displayText.split("\n");
@@ -90,7 +105,7 @@ export function renderMathToCanvas(expression: string, steps?: string): RenderSu
     for (let i = 0; i < lines.length; i++) {
         const y = PADDING + i * LINE_HEIGHT + LINE_HEIGHT / 2;
         const line = lines[i].replace(/\\\*/g, "*");
-        const segments = segmentExpression(line);
+        const segments = segmentExpression(line, colors);
 
         let x = PADDING;
         for (const seg of segments) {

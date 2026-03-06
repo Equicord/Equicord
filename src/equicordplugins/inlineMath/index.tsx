@@ -7,7 +7,7 @@
 import { definePluginSettings } from "@api/Settings";
 import { EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
-import { ChannelStore, ComponentDispatch, DraftType, Forms, PermissionsBits, PermissionStore, UploadHandler, UserStore } from "@webpack/common";
+import { ChannelStore, ComponentDispatch, DraftType, Forms, PermissionsBits, PermissionStore, showToast, Toasts, UploadHandler, UserStore } from "@webpack/common";
 
 import { latexToExpr } from "./latex";
 import { calculate, calculateWithSteps, createEvaluationState, evaluateExpression, formatResult } from "./parser";
@@ -29,6 +29,21 @@ const settings = definePluginSettings({
         type: OptionType.BOOLEAN,
         description: "Render calculation result as an image instead of text.",
         default: false
+    },
+    textColor: {
+        type: OptionType.STRING,
+        description: "Text color for rendered images.",
+        default: "#e0e0e0"
+    },
+    operatorColor: {
+        type: OptionType.STRING,
+        description: "Operator color for rendered images.",
+        default: "#7289da"
+    },
+    equalsColor: {
+        type: OptionType.STRING,
+        description: "Equals sign color for rendered images.",
+        default: "#57f287"
     }
 });
 
@@ -129,11 +144,19 @@ export default definePlugin({
 
             const canvas = renderMathToCanvas(
                 imageLines.join("\n"),
+                undefined,
+                {
+                    text: settings.store.textColor,
+                    operator: settings.store.operatorColor,
+                    equals: settings.store.equalsColor
+                }
             );
 
             canvasToBlob(canvas).then(blob => {
                 const file = new File([blob], "calculation.png", { type: "image/png" });
                 UploadHandler.promptToUpload([file], channel, DraftType.ChannelMessage);
+            }).catch(() => {
+                showToast("[InlineMath] Failed to render calculation image.", Toasts.Type.FAILURE);
             });
 
             ComponentDispatch.dispatchToLastSubscribed("CLEAR_TEXT");
@@ -157,6 +180,7 @@ export default definePlugin({
                     const expr = resolveExpr(rawExpr);
                     return formatResult(calculate(expr));
                 } catch {
+                    console.warn(`[InlineMath] Failed to calculate expression for fallback: ${rawExpr}`);
                     return match;
                 }
             });

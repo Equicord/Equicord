@@ -88,13 +88,11 @@ export function latexToExpr(latex: string): string {
     // Handle nested \frac and \sqrt by running replacements multiple times
     for (let pass = 0; pass < 5; pass++) {
         const before = expr;
-        for (const [pattern, replacement] of LATEX_REPLACEMENTS) {
-            if (typeof replacement === "string") {
-                expr = expr.replace(pattern, replacement);
-            } else {
-                expr = expr.replace(pattern, replacement);
-            }
-        }
+        for (const [pattern, replacement] of LATEX_REPLACEMENTS)
+            expr = typeof replacement === "string"
+                ? expr.replace(pattern, replacement)
+                : expr.replace(pattern, replacement);
+
         if (expr === before) break;
     }
 
