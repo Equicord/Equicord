@@ -49,6 +49,7 @@ import {
     GUILD_CATEGORY_ID,
     MENTION_PROVIDER_ID,
     MENTIONS_CATEGORY_ID,
+    PINNED_CATEGORY_ID,
     PLUGIN_MANAGER_DISABLE_COMMAND_ID,
     PLUGIN_MANAGER_ENABLE_COMMAND_ID,
     PLUGIN_MANAGER_ROOT_COMMAND_ID,
@@ -77,7 +78,7 @@ import { makeIconFromUrl } from "./ui/iconFromUrl";
 import { createCommandPageCommand } from "./ui/pages/createCommandPageCommand";
 import type { PalettePageRef } from "./ui/pages/types";
 
-export { DEFAULT_CATEGORY_ID, normalizeTag };
+export { DEFAULT_CATEGORY_ID, normalizeTag, PINNED_CATEGORY_ID };
 export { normalizeActionKey } from "./actions/actionRouting";
 
 type CommandHandler = () => void | Promise<void>;
@@ -3298,6 +3299,17 @@ function registerCommandPaletteUtilities() {
             if (openDevToolsWindow()) return;
             showToast("DevTools is unavailable in this environment.", Toasts.Type.FAILURE);
         }
+    });
+
+    registerCommand({
+        id: "command-palette-show-pins",
+        label: "Pinned Commands",
+        description: "Browse and run your pinned commands.",
+        keywords: ["pinned", "pins", "favorites", "starred"],
+        categoryId: DEFAULT_CATEGORY_ID,
+        tags: [TAG_CORE, TAG_UTILITY],
+        drilldownCategoryId: PINNED_CATEGORY_ID,
+        handler: () => undefined
     });
 
     registerCommand({

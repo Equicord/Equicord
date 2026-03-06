@@ -36,6 +36,7 @@ import {
     listChildCategories,
     listCommands,
     markCommandAsRecent,
+    PINNED_CATEGORY_ID,
     refreshAllContextProviders,
     resolveCommandActionIntentByActionKey,
     subscribePinned,
@@ -384,6 +385,12 @@ export function CommandPaletteModal({ modalProps, instanceKey }: { modalProps: M
 
     const currentCommands = useMemo(() => {
         if (navigationLevel.type === "root") return allCommands;
+        if (navigationLevel.categoryId === PINNED_CATEGORY_ID) {
+            return Array.from(pinnedIds)
+                .map(id => allCommands.find(command => command.id === id) ?? null)
+                .filter((command): command is CommandEntry => Boolean(command && !command.hiddenInSearch))
+                .sort((left, right) => left.label.localeCompare(right.label));
+        }
         if (navigationLevel.categoryId === RECENTS_CATEGORY_ID) {
             return getRecentCommandEntries(30);
         }
@@ -392,7 +399,7 @@ export function CommandPaletteModal({ modalProps, instanceKey }: { modalProps: M
             if (snapshot.length > 0) return snapshot;
         }
         return getCategoryCommands(navigationLevel.categoryId, allCommands);
-    }, [allCommands, navigationLevel]);
+    }, [allCommands, navigationLevel, pinnedIds]);
 
     const includeHiddenInCurrentLevel = navigationLevel.type === "category";
     const searchableCommands = useMemo(
@@ -1092,6 +1099,21 @@ export function CommandPaletteModal({ modalProps, instanceKey }: { modalProps: M
                 setIsActionsMenuOpen(true);
                 setIsActionsMenuClosing(false);
             }
+            return;
+        }
+
+        if (event.key.toLowerCase() === "p" && hasPrimaryModifier(event) && !event.altKey) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            if (event.shiftKey) {
+                if (selectedCommand) {
+                    await handleTogglePin(selectedCommand.id);
+                }
+                return;
+            }
+
+            openDrilldownCategory(PINNED_CATEGORY_ID);
             return;
         }
 

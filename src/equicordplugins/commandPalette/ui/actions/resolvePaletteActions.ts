@@ -142,7 +142,7 @@ export function resolvePaletteActions({
         actions.push({
             id: selectedCommandPinned ? "unpin-command" : "pin-command",
             label: selectedCommandPinned ? "Unpin Command" : "Pin Command",
-            shortcut: formatPrimaryShortcutLabel("⌘P"),
+            shortcut: formatPrimaryShortcutLabel("⌘⇧P"),
             intent: { type: "toggle-pin", commandId: selectedCommand.id }
         });
     }

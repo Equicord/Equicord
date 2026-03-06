@@ -44,6 +44,7 @@ export const PLUGIN_MANAGER_SETTINGS_COMMAND_ID = "plugins-manager-settings";
 export const MENTION_PROVIDER_ID = "mentions-provider";
 export const MENTIONS_CATEGORY_ID = "mentions-actions";
 export const RECENTS_CATEGORY_ID = "recent-actions";
+export const PINNED_CATEGORY_ID = "pinned-actions";
 
 export const CATEGORY_WEIGHTS = new Map<string, number>([
     [DEFAULT_CATEGORY_ID, 100],
@@ -57,6 +58,7 @@ export const CATEGORY_WEIGHTS = new Map<string, number>([
     ["plugins-disable", 45],
     ["plugins-settings", 45],
     [MENTIONS_CATEGORY_ID, 55],
+    [PINNED_CATEGORY_ID, 72],
     [RECENTS_CATEGORY_ID, 70],
     [EXTENSIONS_ROOT_CATEGORY_ID, 60],
     [EXTENSIONS_CATALOG_CATEGORY_ID, 60],
@@ -81,6 +83,7 @@ export const CATEGORY_GROUP_LABELS = new Map<string | undefined, string>([
     ["plugins-disable", "Plugin Controls"],
     ["plugins-settings", "Plugin Controls"],
     [MENTIONS_CATEGORY_ID, "Mentions"],
+    [PINNED_CATEGORY_ID, "Core Actions"],
     [RECENTS_CATEGORY_ID, "Core Actions"],
     [EXTENSIONS_ROOT_CATEGORY_ID, "Extensions"],
     [EXTENSIONS_CATALOG_CATEGORY_ID, "Extensions"],
@@ -107,6 +110,7 @@ export const CATEGORY_DEFAULT_TAGS = new Map<string, string[]>([
     ["plugins-disable", [TAG_PLUGINS]],
     ["plugins-settings", [TAG_PLUGINS, TAG_UTILITY]],
     [MENTIONS_CATEGORY_ID, [TAG_NAVIGATION]],
+    [PINNED_CATEGORY_ID, [TAG_CORE, TAG_UTILITY]],
     [RECENTS_CATEGORY_ID, [TAG_CORE, TAG_UTILITY]],
     [EXTENSIONS_ROOT_CATEGORY_ID, [TAG_PLUGINS, TAG_UTILITY]],
     [EXTENSIONS_CATALOG_CATEGORY_ID, [TAG_PLUGINS, TAG_UTILITY]],
@@ -179,6 +183,11 @@ export const BUILT_IN_CATEGORIES: CommandCategory[] = [
         id: FRIENDS_CATEGORY_ID,
         label: "Friends",
         description: "Quickly DM your friends"
+    },
+    {
+        id: PINNED_CATEGORY_ID,
+        label: "Pinned Commands",
+        description: "Commands you pinned for quick access"
     },
     {
         id: MENTIONS_CATEGORY_ID,
