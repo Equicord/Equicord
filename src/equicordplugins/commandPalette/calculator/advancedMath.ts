@@ -54,6 +54,8 @@ interface EvaluationScope {
     values: Map<string, number>;
     functions: Map<string, FunctionDefinition>;
     variables: Map<string, VariableDefinition>;
+    functionStack: Set<string>;
+    variableStack: Set<string>;
 }
 
 interface GraphSeriesDefinition {
@@ -702,7 +704,10 @@ function evaluateExpression(expression: ExpressionNode, scope: EvaluationScope):
             if (scoped != null) return scoped;
             const variable = scope.variables.get(expression.name);
             if (variable) {
+                if (scope.variableStack.has(expression.name)) return null;
+                scope.variableStack.add(expression.name);
                 const value = evaluateExpression(variable.body, scope);
+                scope.variableStack.delete(expression.name);
                 if (value == null) return null;
                 scope.values.set(expression.name, value);
                 return value;
@@ -748,13 +753,18 @@ function evaluateExpression(expression: ExpressionNode, scope: EvaluationScope):
 
             const userDefined = scope.functions.get(expression.callee);
             if (!userDefined || args.length !== 1) return null;
+            if (scope.functionStack.has(expression.callee)) return null;
 
             const nestedValues = new Map(scope.values);
             nestedValues.set(userDefined.parameter, args[0]);
+            const nestedFunctionStack = new Set(scope.functionStack);
+            nestedFunctionStack.add(expression.callee);
             return evaluateExpression(userDefined.body, {
                 values: nestedValues,
                 functions: scope.functions,
-                variables: scope.variables
+                variables: scope.variables,
+                functionStack: nestedFunctionStack,
+                variableStack: new Set(scope.variableStack)
             });
         }
     }
@@ -844,7 +854,9 @@ function resolveVariableValues(
         const value = evaluateExpression(variable.body, {
             values,
             functions,
-            variables
+            variables,
+            functionStack: new Set(),
+            variableStack: new Set([name])
         });
         if (value != null) {
             values.set(name, value);
@@ -871,7 +883,9 @@ function sampleGraphSeries(
             const y = evaluateExpression(definition.expression, {
                 values,
                 functions,
-                variables
+                variables,
+                functionStack: new Set(),
+                variableStack: new Set()
             });
 
             return {
@@ -886,7 +900,7 @@ function sampleGraphSeries(
             color: GRAPH_COLORS[index % GRAPH_COLORS.length],
             points
         };
-    });
+    }).filter(series => series.points.some(point => point.y != null));
 }
 
 function resolveGraphRange(series: CalculatorGraphSeries[]): [number, number] {
@@ -922,6 +936,7 @@ function buildGraphData(program: ParsedAdvancedMathProgram, functions: Map<strin
 
     const domain: [number, number] = [-10, 10];
     const series = sampleGraphSeries(definitions, variables, functions, domain);
+    if (!series.length) return undefined;
     const range = resolveGraphRange(series);
 
     return {
@@ -1019,22 +1034,22 @@ export function evaluateAdvancedMath(displayInput: string, normalizedInput: stri
     }
 
     const graphDefinitions = buildGraphSeriesDefinitions(program);
-    const hasGraph = graphDefinitions.length > 0;
     const evaluationExpression = getProgramEvaluationExpression(program);
     const value = evaluationExpression
         ? evaluateExpression(evaluationExpression, {
             values: resolveVariableValues(variables, functions),
             functions,
-            variables
+            variables,
+            functionStack: new Set(),
+            variableStack: new Set()
         })
         : null;
 
-    if (value == null && !hasGraph) return null;
-
     const defaultViewMode: CalculatorViewMode = value == null ? "graph" : "result";
-    const graph = hasGraph
+    const graph = graphDefinitions.length > 0
         ? buildGraphData(program, functions, defaultViewMode)
         : undefined;
+    if (value == null && !graph) return null;
 
     const meta = value == null
         ? {
