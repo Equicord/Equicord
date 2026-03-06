@@ -56,11 +56,11 @@ export function renderMathToCanvas(expression: string, steps?: string): HTMLCanv
     ctx.font = FONT;
     let maxWidth = 0;
     for (const line of lines) {
-        const w = measureText(ctx, line.replace(/\\\*/g, "*"));
+        const w = measureText(ctx, line.replace(/\\\*/g, "*")) + PADDING * 2;
         if (w > maxWidth) maxWidth = w;
     }
 
-    canvas.width = maxWidth + PADDING * 2;
+    canvas.width = maxWidth + PADDING;
     canvas.height = lines.length * LINE_HEIGHT + PADDING * 2;
 
     // Background

@@ -127,7 +127,7 @@ export default definePlugin({
         const exprs: { raw: string; expr: string; result: number; steps?: string; }[] = [];
         let hasMatch = false;
 
-        const replaced = msg.content.replace(/\{([^{}]+)\}/g, (match, rawExpr) => {
+        var replaced = msg.content.replace(/\{([^{}]+)\}/g, (match, rawExpr) => {
             try {
                 // Try unit conversion first (e.g. "5 km to miles")
                 const conversion = tryConvertUnits(rawExpr);
@@ -157,9 +157,9 @@ export default definePlugin({
 
         if (!hasMatch) return;
 
-        // Image output mode: render and upload
+        // Image output mode: send text normally, then prompt image upload
         if (settings.store.imageOutput && exprs.length > 0) {
-            msg.content = replaced;
+            replaced = msg.content.replace(/\{([^{}]+)\}/g, "");
 
             const imageLines = exprs.map(e => {
                 if (e.steps) return e.steps;
@@ -169,24 +169,23 @@ export default definePlugin({
             const canvas = renderMathToCanvas(
                 imageLines.join("\n"),
             );
-            const blob = await canvasToBlob(canvas);
-            const file = new File([blob], "calculation.png", { type: "image/png" });
 
             const channel = ChannelStore.getChannel(channelId);
             if (channel) {
-                const textToKeep = replaced;
-                setTimeout(() => {
-                    ComponentDispatch.dispatchToLastSubscribed("CLEAR_TEXT");
-                    if (textToKeep) {
-                        ComponentDispatch.dispatchToLastSubscribed("INSERT_TEXT", {
-                            rawText: textToKeep,
-                            plainText: textToKeep
-                        });
-                    }
+                // Fire-and-forget: convert to blob then open upload dialog
+                canvasToBlob(canvas).then(blob => {
+                    const file = new File([blob], "calculation.png", { type: "image/png" });
                     UploadHandler.promptToUpload([file], channel, DraftType.ChannelMessage);
-                }, 50);
+                });
             }
 
+            ComponentDispatch.dispatchToLastSubscribed("CLEAR_TEXT");
+            setTimeout(() => {
+                ComponentDispatch.dispatchToLastSubscribed("INSERT_TEXT", {
+                    rawText: replaced,
+                    plainText: replaced
+                }, 50);
+            });
             return { cancel: true };
         }
 
