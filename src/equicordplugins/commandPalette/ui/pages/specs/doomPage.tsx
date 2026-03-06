@@ -7,7 +7,7 @@
 import { classNameFactory } from "@utils/css";
 import { useEffect, useRef, useState } from "@webpack/common";
 
-import { doomZipBase64, jsDosV3Base64 } from "../../../doom/runtimeAssets";
+import { doomWasmBase64, doomWasmScriptSource, freedoomWadGzipBase64 } from "../../../doom/runtimeAssets";
 import { getDoomBootstrapScript, getDoomRuntimeHtml } from "../../../doom/runtimeHtml";
 import type { PalettePageSpec } from "../types";
 
@@ -28,14 +28,18 @@ function base64ToBlobUrl(base64: string, type: string): string {
 
 function DoomRuntime() {
     const iframeRef = useRef<HTMLIFrameElement | null>(null);
-    const jsDosUrlRef = useRef<string | null>(null);
-    const doomZipUrlRef = useRef<string | null>(null);
+    const doomWasmScriptUrlRef = useRef<string | null>(null);
+    const doomWasmUrlRef = useRef<string | null>(null);
+    const wadGzipUrlRef = useRef<string | null>(null);
     const bootstrapUrlRef = useRef<string | null>(null);
     const [iframeSrcDoc, setIframeSrcDoc] = useState("");
 
     useEffect(() => {
-        jsDosUrlRef.current = base64ToBlobUrl(jsDosV3Base64, "text/javascript");
-        doomZipUrlRef.current = base64ToBlobUrl(doomZipBase64, "application/zip");
+        doomWasmScriptUrlRef.current = URL.createObjectURL(new Blob([
+            doomWasmScriptSource
+        ], { type: "text/javascript" }));
+        doomWasmUrlRef.current = base64ToBlobUrl(doomWasmBase64, "application/wasm");
+        wadGzipUrlRef.current = base64ToBlobUrl(freedoomWadGzipBase64, "application/gzip");
         bootstrapUrlRef.current = URL.createObjectURL(new Blob([
             getDoomBootstrapScript()
         ], { type: "text/javascript" }));
@@ -53,11 +57,12 @@ function DoomRuntime() {
         };
 
         const onLoad = () => {
-            if (!iframeRef.current?.contentWindow || !jsDosUrlRef.current || !doomZipUrlRef.current) return;
+            if (!iframeRef.current?.contentWindow || !doomWasmScriptUrlRef.current || !doomWasmUrlRef.current || !wadGzipUrlRef.current) return;
             iframeRef.current.contentWindow.postMessage({
                 type: "command-palette-doom-init",
-                jsDosV3Url: jsDosUrlRef.current,
-                doomZipUrl: doomZipUrlRef.current
+                doomWasmScriptUrl: doomWasmScriptUrlRef.current,
+                doomWasmUrl: doomWasmUrlRef.current,
+                wadGzipUrl: wadGzipUrlRef.current
             }, "*");
         };
 
@@ -74,8 +79,9 @@ function DoomRuntime() {
                 focusDoomRuntime = null;
             }
             if (bootstrapUrlRef.current) URL.revokeObjectURL(bootstrapUrlRef.current);
-            if (jsDosUrlRef.current) URL.revokeObjectURL(jsDosUrlRef.current);
-            if (doomZipUrlRef.current) URL.revokeObjectURL(doomZipUrlRef.current);
+            if (doomWasmScriptUrlRef.current) URL.revokeObjectURL(doomWasmScriptUrlRef.current);
+            if (doomWasmUrlRef.current) URL.revokeObjectURL(doomWasmUrlRef.current);
+            if (wadGzipUrlRef.current) URL.revokeObjectURL(wadGzipUrlRef.current);
         };
     }, []);
 

@@ -4,13 +4,8 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import doomZipBase64 from "file://./assets/DOOM-@evilution.zip?base64";
-import jsDosApiSource from "file://./assets/js-dos-api.js";
-import jsDosV3Base64 from "file://./assets/js-dos-v3.js?base64";
+import freedoomWadGzipBase64 from "file://./assets/freedoom1.wad.gz?base64";
+import doomWasmScriptSource from "file://./assets/websockets-doom.js";
+import doomWasmBase64 from "file://./assets/websockets-doom.wasm?base64";
 
-const sanitizedJsDosApiSource = jsDosApiSource.replace(
-    'oncontextmenu="event.preventDefault()"',
-    ""
-);
-
-export { doomZipBase64, jsDosV3Base64, sanitizedJsDosApiSource as jsDosApiSource };
+export { doomWasmBase64, doomWasmScriptSource, freedoomWadGzipBase64 };

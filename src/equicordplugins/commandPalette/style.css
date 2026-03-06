@@ -565,7 +565,6 @@
 .vc-command-palette-calculator-value-wrapped {
     white-space: normal;
     overflow-wrap: anywhere;
-    word-break: break-word;
 }
 
 .vc-command-palette-calculator-arrow {
