@@ -866,7 +866,7 @@
             "refreshUrl": "Atualizar URL",
             "refreshing": "Atualizando URL...",
             "remove": "Remover",
-            "removeAction": "remova este item",
+            "removeAction": "remover este item",
             "rename": "Renomear",
             "reset": "Redefinir",
             "resetCollections": "Redefinir Coleções",
@@ -916,8 +916,8 @@
         "settings": {
             "customEngineURL": "A URL do mecanismo que você deseja usar",
             "defaultEngine": "O mecanismo de pesquisa a ser usado",
-            "embed": "Se o link enviado renderizar um embed",
-            "hyperlink": "Se o link enviado tiver um hiperlink com a consulta como rótulo"
+            "embed": "Se o link enviado deve renderizar um embed",
+            "hyperlink": "Se o link enviado deve ser um hiperlink com a consulta como rótulo"
         }
     },
     "guildPickerDumper": {
@@ -967,7 +967,7 @@
     "holyNotes": {
         "description": "Salve mensagens como notas para revisitar mais tarde",
         "ui": {
-            "holyNotes": "holynotes",
+            "holyNotes": "Holy Notes",
             "noteMessage": "Mensagem de nota",
             "openNotes": "Notas abertas",
             "saveNote": "Salvar nota"
@@ -987,11 +987,11 @@
         "description": "Adiciona o botão Husk (verifique as configurações para alterar o emoji usado)",
         "settings": {
             "emojiID": "ID Emoji (padrão (do servidor Vencord): 1026532993923293184)",
-            "emojiName": "Nome do emoji (padrão (do servidor Vencord): casca)",
+            "emojiName": "Nome do emoji (padrão (do servidor Vencord): husk)",
             "findInServer": "Tente encontrar emoji de mesmo nome no servidor antes de usar o ID nas configurações (útil se não houver nitro)"
         },
         "ui": {
-            "husk": "Casca"
+            "husk": "Husk"
         }
     },
     "iRememberYou": {
@@ -1010,7 +1010,7 @@
     "idleAutoRestart": {
         "description": "Reinicia automaticamente o cliente após ficar ausente por um período de tempo configurável, mas evita reiniciar enquanto você estiver em um canal de voz.",
         "settings": {
-            "idleMinutes": "Minutos de inatividade antes de reiniciar (quando não estiver no VC)",
+            "idleMinutes": "Minutos de inatividade antes de reiniciar (quando não estiver no chat de voz)",
             "isEnabled": "Habilitar reinicialização automática após inatividade"
         },
         "ui": {
