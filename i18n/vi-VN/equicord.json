@@ -1781,29 +1781,29 @@
             "RPCTitle": "Văn bản tiêu đề cho RPC",
             "albumCoverImage": "Sử dụng bìa album làm hình ảnh RPC (chế độ Last.fm)",
             "assetURL": "URL hình ảnh tùy chỉnh cho RPC (mặc định: hình đại diện của bạn)",
-            "lastFMApiKey": "Khóa API Last.fm(lấy từ Last.fm/api)",
-            "lastFMStatFormat": "Định dạng cho chỉ số Last.fm ($album, $nghệ sĩ)",
-            "lastFMUsername": "tên người dùng Last.fm",
+            "lastFMApiKey": "Khóa API Last.fm (lấy từ Last.fm/api)",
+            "lastFMStatFormat": "Định dạng thống kê Last.fm ($album, $artist)",
+            "lastFMUsername": "Tên người dùng Last.fm",
             "statDisplay": "Thống kê để hiển thị"
         },
         "statOptions": {
-            "messagesAllTime": "Tin nhắn được gửi mọi lúc",
-            "messagesToday": "Tin nhắn được gửi hôm nay",
+            "messagesAllTime": "Tổng số tin nhắn đã gửi từ trước đến nay",
+            "messagesToday": "Tổng số tin nhắn được gửi hôm nay",
             "mostListenedAlbum": "Album được nghe nhiều nhất tuần này (Last.fm)"
         }
     },
     "saveFavoriteGIFs": {
         "description": "Lưu tất cả các url GIF yêu thích vào một tệp văn bản",
         "settings": {
-            "showToolboxButton": "Hiển thị nút 'Lưu ảnh GIF yêu thích' trong Hộp công cụ Equicord (Yêu cầu tải lại)"
+            "showToolboxButton": "Hiển thị nút 'Lưu ảnh GIF yêu thích' trong Hộp công cụ Equicord (Yêu cầu khởi động lại)"
         }
     },
     "scheduledMessages": {
         "description": "Lên lịch gửi tin nhắn sau",
         "settings": {
             "checkIntervalSeconds": "Tần suất kiểm tra tin nhắn sẽ gửi (giây)",
-            "maxMessagesPerMinute": "Số tin nhắn được lên lịch tối đa trên mỗi kênh có thể kích hoạt trong cùng một phút",
-            "showNotifications": "Hiển thị thông báo chúc mừng khi tin nhắn được gửi",
+            "maxMessagesPerMinute": "Số tin nhắn được lên lịch tối đa trong mỗi kênh có thể kích hoạt trong cùng một phút",
+            "showNotifications": "Hiển thị thông báo khi tin nhắn được gửi",
             "showPhantomMessages": "Hiển thị tin nhắn đã lên lịch dưới dạng tin nhắn ảo trong cuộc trò chuyện"
         }
     },
@@ -1811,12 +1811,12 @@
         "description": "Chức năng ghi màn hình cho Equibop"
     },
     "searchFix": {
-        "description": "Khắc phục chức năng tìm kiếm bằng cách xử lý giới hạn bù trừ 5000 tin nhắn của Discord"
+        "description": "Khắc phục chức năng tìm kiếm bằng cách vượt qua giới hạn bù trừ 5000 tin nhắn của Discord"
     },
     "sekaiStickers": {
         "description": "Tích hợp nhãn dán Sekai",
         "settings": {
-            "AutoCloseModal": "Tự động đóng chế độ khi hoàn tất"
+            "AutoCloseModal": "Tự động đóng cửa sổ khi hoàn tất"
         }
     },
     "selfForward": {
@@ -1828,19 +1828,19 @@
     "showBadgesInChat": {
         "description": "Hiển thị huy hiệu người dùng trong tin nhắn trò chuyện",
         "settings": {
-            "DiscordNitroPosition": "Vị trí huy hiệu Nitro Discord",
+            "DiscordNitroPosition": "Vị trí huy hiệu Discord Nitro",
             "DiscordProfilePosition": "Vị trí của huy hiệu hồ sơ Discord",
-            "EquicordContributorPosition": "Vị trí của huy hiệu Cộng tác viên Equicord",
+            "EquicordContributorPosition": "Vị trí của huy hiệu Người đóng góp Equicord",
             "EquicordDonorPosition": "Vị trí của huy hiệu Nhà tài trợ Equicord",
-            "VencordContributorPosition": "Vị trí của huy hiệu Cộng tác viên Vencord",
+            "VencordContributorPosition": "Vị trí của huy hiệu Người đóng góp Vencord",
             "VencordDonorPosition": "Vị trí của huy hiệu Nhà tài trợ Vencord",
-            "badgeSettings": "Thiết lập bố cục huy hiệu và khả năng hiển thị",
-            "showDiscordNitro": "Bật để hiển thị huy hiệu Nitro Discord trong cuộc trò chuyện",
+            "badgeSettings": "Thiết lập bố cục và hiển thị huy hiệu",
+            "showDiscordNitro": "Bật để hiển thị huy hiệu Discord Nitro trong cuộc trò chuyện",
             "showDiscordProfile": "Bật hiển thị huy hiệu hồ sơ Discord trong cuộc trò chuyện",
-            "showEquicordContributor": "Cho phép hiển thị Equicord huy hiệu cộng tác viên trong cuộc trò chuyện",
-            "showEquicordDonor": "Cho phép hiển thị Equicord huy hiệu nhà tài trợ trong cuộc trò chuyện",
-            "showVencordContributor": "Cho phép hiển thị huy hiệu cộng tác viên Vencord trong cuộc trò chuyện",
-            "showVencordDonor": "Cho phép hiển thị huy hiệu nhà tài trợ Vencord trong cuộc trò chuyện"
+            "showEquicordContributor": "Cho phép hiển thị huy Người đóng góp Equicord trong cuộc trò chuyện",
+            "showEquicordDonor": "Cho phép hiển thị huy hiệu nhà tài trợ Equicord trong cuộc trò chuyện",
+            "showVencordContributor": "Cho phép hiển thị huy hiệu Người đóng góp Vencord trong cuộc trò chuyện",
+            "showVencordDonor": "Cho phép hiển thị huy hiệu Nhà tài trợ Vencord trong cuộc trò chuyện"
         }
     },
     "showMessageEmbeds": {
@@ -1853,38 +1853,38 @@
         "description": "Hiển thị tên bài hát đang phát trong trạng thái"
     },
     "sidebarChat": {
-        "description": "Giao diện chat sidebar để xem nhiều kênh",
+        "description": "Giao diện thanh bên để xem nhiều kênh chat cùng lúc",
         "settings": {
-            "patchCommunity": "Vá những thứ như tab Trình duyệt kênh hoặc Thành viên mà máy chủ cộng đồng có",
+            "patchCommunity": "Vá lỗi hiển thị cho tab Duyệt các Kênh hoặc Thành viên trong các máy chủ cộng đồng",
             "persistSidebar": "Giữ cuộc trò chuyện ở thanh bên luôn mở khi Discord khởi động lại"
         }
     },
     "signature": {
         "description": "Thêm chữ ký vào tin nhắn",
         "settings": {
-            "contextMenu": "Thêm tùy chọn chuyển đổi chức năng trong menu ngữ cảnh nhập trò chuyện",
-            "isEnabled": "Chuyển đổi chức năng",
+            "contextMenu": "Thêm tùy chọn chuyển đổi chức năng trong menu ngữ cảnh thanh trò chuyện",
+            "isEnabled": "Bật/Tắt chức năng",
             "name": "Chữ ký sẽ được thêm vào cuối tin nhắn của bạn",
-            "showIcon": "Hiển thị biểu tượng để chuyển đổi plugin trong thanh trò chuyện",
+            "showIcon": "Hiển thị biểu tượng để bật/tắt plugin trong thanh trò chuyện",
             "textHeader": "Tiêu đề nào để mở đầu văn bản"
         }
     },
     "snowfall": {
         "description": "Thêm hiệu ứng tuyết rơi Giáng sinh lên trên giao diện của Discord",
         "settings": {
-            "flakesPerSecond": "Bông tuyết mỗi giây (cao hơn = tuyết rơi dày đặc hơn)",
+            "flakesPerSecond": "Số bông tuyết mỗi giây (giá trị càng cao = tuyết rơi càng dày)",
             "maxSize": "Kích thước bông tuyết tối đa",
-            "speed": "Tốc độ tuyết rơi (cao hơn = rơi nhanh hơn)",
+            "speed": "Tốc độ tuyết rơi (giá trị càng cao = rơi càng nhanh)",
             "typeOfSnow": "Thay đổi loại tuyết hiển thị (Ảnh hưởng đến hiệu suất)"
         }
     },
     "soggy": {
         "description": "Plugin Soggy với hiệu ứng hình ảnh và âm thanh có thể nhấp",
         "settings": {
-            "boopLink": "URL cho âm thanh boop",
+            "boopLink": "URL âm thanh boop",
             "boopVolume": "Âm lượng của âm thanh boop",
-            "imageLink": "URL cho hình ảnh (nút và phương thức)",
-            "songLink": "URL để phát bài hát",
+            "imageLink": "URL hình ảnh (nút và hộp thoại)",
+            "songLink": "URL bài hát để phát",
             "songVolume": "Âm lượng của bài hát. 0 để vô hiệu hóa",
             "tooltipText": "Văn bản hiển thị khi di chuột qua nút"
         }
@@ -1893,7 +1893,7 @@
         "description": "Tích hợp Song.link để chia sẻ nhạc trên các nền tảng",
         "settings": {
             "servicesSettings": "Cài đặt cho dịch vụ",
-            "userCountry": "Quốc gia được sử dụng để tra cứu (Mã quốc gia gồm hai chữ cái)"
+            "userCountry": "Quốc gia được sử dụng để tra cứu (Mã quốc gia hai chữ cái)"
         }
     },
     "soundBoardLogger": {
@@ -1901,13 +1901,13 @@
         "settings": {
             "FileType": "Định dạng mà bạn muốn lưu tệp của mình",
             "SavedIds": "Số lượng id soundboard bạn muốn lưu tại một thời điểm (0 cho phép bạn lưu vô hạn)",
-            "soundVolume": "Âm thanh chuyển đổi lớn đến mức nào (0 để tắt)"
+            "soundVolume": "Âm lượng âm thanh thông báo (0 để tắt)"
         }
     },
     "splitLargeMessages": {
         "description": "Tự động chia tin nhắn lớn thành nhiều phần",
         "settings": {
-            "disableFileConversion": "Nếu đúng, hãy tắt tính năng chuyển đổi tệp cho các tin nhắn lớn",
+            "disableFileConversion": "Nếu bật, hãy tắt tính năng chuyển đổi tệp cho các tin nhắn lớn",
             "hardSplit": "Nếu đúng, tách ký tự cuối cùng thay vì dấu cách/dòng mới cuối cùng",
             "maxLength": "Độ dài tối đa của tin nhắn trước khi được chia nhỏ. Đặt thành 0 để tự động phát hiện",
             "sendDelay": "Độ trễ giữa mỗi đoạn tính bằng giây",
@@ -1918,27 +1918,27 @@
     "spotifyActivityToggle": {
         "description": "Bật và tắt chia sẻ hoạt động Spotify",
         "settings": {
-            "location": "Nơi hiển thị nút chuyển đổi Spotify"
+            "location": "Nơi hiển thị nút bật/tắt Spotify"
         }
     },
     "statsfmPresence": {
-        "description": "Tích hợp hiện diện Stats.fm",
+        "description": "Tích hợp presence Stats.fm",
         "settings": {
             "alwaysHideArt": "Tắt tải ảnh bìa album xuống",
-            "hideWithExternalRPC": "Ẩn sự hiện diện stats.fm nếu RPC bên ngoài đang chạy",
-            "hideWithSpotify": "Ẩn sự hiện diện của stats.fm nếu Spotify đang chạy",
+            "hideWithExternalRPC": "Ẩn presence của stats.fm nếu RPC ngoài đang chạy",
+            "hideWithSpotify": "Ẩn presence của stats.fm nếu Spotify đang chạy",
             "missingArt": "Khi album hoặc ảnh bìa album bị thiếu",
             "nameFormat": "Hiển thị tên bài hát và nghệ sĩ ở tên trạng thái",
             "shareSong": "Hiển thị liên kết tới bài hát trên stats.fm",
             "shareUsername": "Hiển thị liên kết tới hồ sơ stats.fm",
             "showStatsFmLogo": "Hiển thị Stats.fm bên cạnh bìa album",
             "statusName": "Văn bản trạng thái tùy chỉnh",
-            "useListeningStatus": "Hiển thị trạng thái 'Đang nghe' thay vì 'Đang phát'",
-            "username": "tên người dùng Stats.fm"
+            "useListeningStatus": "Hiển thị trạng thái 'Đang nghe' thay vì 'Đang chơi'",
+            "username": "Tên người dùng Stats.fm"
         }
     },
     "statusPresets": {
-        "description": "Lưu và tải cài đặt trước trạng thái"
+        "description": "Lưu và tải các mẫu trạng thái"
     },
     "statusWhileActive": {
         "description": "Tự động đặt trạng thái khi hoạt động trong các kênh thoại",
@@ -1953,7 +1953,7 @@
             "goInvisibleIfActivityIsHidden": "Luôn ở chế độ ẩn nếu ẩn hoạt động trò chơi trên Discord",
             "idleStatus": "Trạng thái Steam khi ở chế độ Chờ",
             "invisibleStatus": "Trạng thái Steam khi ở chế độ Vô hình",
-            "onlineStatus": "Trạng thái Steam khi trực tuyến"
+            "onlineStatus": "Trạng thái Steam khi Trực tuyến"
         }
     },
     "stickerBlocker": {
@@ -1961,18 +1961,18 @@
         "settings": {
             "blockedStickers": "Danh sách ID nhãn dán bị chặn (không chỉnh sửa trừ khi bạn biết mình đang làm gì)",
             "showButton": "Có hiển thị nút để bỏ chặn gif không",
-            "showGif": "Có nên hiển thị ảnh gif mèo hấp dẫn hay không",
-            "showMessage": "Có hiển thị thông báo nêu chi tiết id nào đã bị chặn hay không"
+            "showGif": "Hiển thị ảnh GIF mèo cực ngầu",
+            "showMessage": "Có hiển thị chi tiết tin nhắn nêu id nào đã bị chặn hay không"
         }
     },
     "streamingCodecDisabler": {
-        "description": "Tắt codec phát trực tuyến để phát trực tuyến Discord",
+        "description": "Tắt bộ giải mã stream khi stream trên Discord",
         "settings": {
-            "disableAv1Codec": "Yêu cầu Discord không cân nhắc việc sử dụng AV1 để phát trực tuyến",
-            "disableH264Codec": "Yêu cầu Discord không cân nhắc việc sử dụng H264 để phát trực tuyến",
-            "disableH265Codec": "Yêu cầu Discord không cân nhắc việc sử dụng H265 để phát trực tuyến",
-            "disableVP8Codec": "Yêu cầu Discord không cân nhắc việc sử dụng VP8 để phát trực tuyến",
-            "disableVP9Codec": "Yêu cầu Discord không cân nhắc việc sử dụng VP9 để phát trực tuyến"
+            "disableAv1Codec": "Ngăn Discord sử dụng bộ giải mã AV1 khi stream",
+            "disableH264Codec": "Ngăn Discord sử dụng bộ giải mã H264 khi stream",
+            "disableH265Codec": "Ngăn Discord sử dụng bộ giải mã H265 khi stream",
+            "disableVP8Codec": "Ngăn Discord sử dụng bộ giải mã VP8 khi stream",
+            "disableVP9Codec": "Ngăn Discord sử dụng bộ giải mã VP9 khi stream"
         }
     },
     "talkInReverse": {
@@ -1981,7 +1981,7 @@
     "themeLibrary": {
         "description": "Duyệt và quản lý chủ đề từ thư viện chủ đề Equicord",
         "toolbox": {
-            "openThemeLibrary": "Mở thư viện chủ đề"
+            "openThemeLibrary": "Mở Thư viện Chủ đề"
         }
     },
     "tidalEmbeds": {
@@ -1989,9 +1989,9 @@
     },
     "tiktokTTS": {
         "contextMenu": {
-            "playTikTokTTS": "Chơi TikTok TTS"
+            "playTikTokTTS": "Phát TTS TikTok"
         },
-        "description": "Chơi tính năng chuyển văn bản thành giọng nói của TikTok cho tin nhắn",
+        "description": "Sử dụng giọng đọc văn bản của TikTok cho tin nhắn",
         "settings": {
             "volume": "Âm lượng phát lại"
         }
@@ -2003,22 +2003,22 @@
         "description": "Hiển thị múi giờ của người dùng trong hồ sơ và tiêu đề tin nhắn",
         "settings": {
             "24hTime": "Hiển thị thời gian ở định dạng 24h",
-            "databaseUrl": "Cơ sở dữ liệu URL để lưu trữ múi giờ",
+            "databaseUrl": "URL cơ sở dữ liệu để lưu trữ múi giờ",
             "preferDatabaseOverLocal": "Ưu tiên cơ sở dữ liệu hơn bộ nhớ cục bộ cho các múi giờ",
             "resetDatabaseTimezone": "Đặt lại múi giờ của bạn trên cơ sở dữ liệu",
             "setDatabaseTimezone": "Đặt múi giờ của bạn trên cơ sở dữ liệu",
             "showMessageHeaderTime": "Hiển thị thời gian trong tiêu đề tin nhắn",
-            "showOwnTimezone": "Hiển thị múi giờ của riêng bạn trong hồ sơ và tiêu đề thư",
+            "showOwnTimezone": "Hiển thị múi giờ của riêng bạn trong hồ sơ và tiêu đề tin nhắn",
             "showProfileTime": "Hiển thị thời gian trong hồ sơ",
             "showTimezoneInfo": "Hiển thị thông tin múi giờ bên cạnh thời gian",
-            "useDatabase": "Kích hoạt cơ sở dữ liệu để nhận múi giờ của người dùng"
+            "useDatabase": "Bật cơ sở dữ liệu để nhận múi giờ của người dùng"
         },
         "toasts": {
-            "failed": "Múi giờ không thể làm mới!",
-            "refreshed": "Đã làm mới múi giờ thành công!"
+            "failed": "Không thể làm mới múi giờ!",
+            "refreshed": "Làm mới thành công múi giờ!"
         },
         "toolbox": {
-            "refreshDatabaseTimezones": "Làm mới múi giờ cơ sở dữ liệu",
+            "refreshDatabaseTimezones": "Làm mới cơ sở dữ liệu múi giờ",
             "setDatabaseTimezone": "Đặt múi giờ cơ sở dữ liệu"
         }
     },
@@ -2089,15 +2089,15 @@
         }
     },
     "triviaAI": {
-        "description": "Một plugin giúp bạn trả lời các câu hỏi đố bằng AI.",
+        "description": "Một plugin giúp bạn trả lời các câu đố bằng AI.",
         "settings": {
-            "apiKey": "API Khóa.",
+            "apiKey": "Khóa API.",
             "autoRespond": "Tự động trả lời tin nhắn khi nhận được phản hồi.",
             "endpoint": "Điểm cuối AI tương thích OpenAI.",
-            "maxTokens": "Số lượng mã thông báo tối đa trong phản hồi.",
+            "maxTokens": "Số lượng token tối đa trong phản hồi.",
             "model": "Mô hình AI để sử dụng.",
-            "supportImages": "Truyền hình ảnh cho AI để biết ngữ cảnh (nếu có). Điều này không được hỗ trợ bởi tất cả các mô hình.",
-            "systemPrompt": "Lời nhắc hệ thống cho AI."
+            "supportImages": "Đưa hình ảnh cho AI để biết ngữ cảnh (nếu có). Điều này không được hỗ trợ bởi tất cả các mô hình.",
+            "systemPrompt": "Lời nhắc Hệ thống cho AI."
         },
         "ui": {
             "answerWithAI": "Trả lời bằng AI"
