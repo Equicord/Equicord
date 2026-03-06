@@ -63,6 +63,7 @@ function formatMathDisplayInput(value: string): string {
 function AutoFitLine({ text, className, maxSize, minSize }: AutoFitLineProps) {
     const ref = useRef<HTMLDivElement | null>(null);
     const [fontSize, setFontSize] = useState(maxSize);
+    const [wrapped, setWrapped] = useState(false);
 
     useEffect(() => {
         const node = ref.current;
@@ -73,6 +74,8 @@ function AutoFitLine({ text, className, maxSize, minSize }: AutoFitLineProps) {
             cancelAnimationFrame(frame);
             frame = requestAnimationFrame(() => {
                 let next = maxSize;
+                let nextWrapped = false;
+                node.classList.remove(cl("calculator-value-wrapped"));
                 node.style.fontSize = `${next}px`;
 
                 while (next > minSize && node.scrollWidth > node.clientWidth) {
@@ -80,7 +83,13 @@ function AutoFitLine({ text, className, maxSize, minSize }: AutoFitLineProps) {
                     node.style.fontSize = `${next}px`;
                 }
 
+                if (node.scrollWidth > node.clientWidth) {
+                    nextWrapped = true;
+                    node.classList.add(cl("calculator-value-wrapped"));
+                }
+
                 setFontSize(next);
+                setWrapped(nextWrapped);
             });
         };
 
@@ -100,7 +109,11 @@ function AutoFitLine({ text, className, maxSize, minSize }: AutoFitLineProps) {
     }, [maxSize, minSize, text]);
 
     return (
-        <div ref={ref} className={className} style={{ fontSize }}>
+        <div
+            ref={ref}
+            className={classes(className, wrapped && cl("calculator-value-wrapped"))}
+            style={{ fontSize }}
+        >
             {text}
         </div>
     );

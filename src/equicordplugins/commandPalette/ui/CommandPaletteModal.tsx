@@ -590,8 +590,8 @@ export function CommandPaletteModal({ modalProps, instanceKey }: { modalProps: M
     const shouldShowPromptCommandLabel = Boolean(promptCommand && !hasMainInputText);
     const showPromptCommandPreview = Boolean(promptCommand && !hasMainInputText && !hasPromptInProgress);
     const mainInputPlaceholder = showPromptCommandPreview
-        ? (promptCommand?.label ?? "")
-        : "";
+        ? promptCommand?.label
+        : undefined;
     const promptChipPlaceholderText = promptCommand?.queryPlaceholder ?? "Action";
     const promptChipWidthPx = useMemo(() => measurePromptChipWidth(promptChipPlaceholderText), [promptChipPlaceholderText]);
     const promptChipStyle = { width: `${promptChipWidthPx}px` };

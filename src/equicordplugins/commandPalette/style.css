@@ -562,6 +562,12 @@
     line-height: 1.15;
 }
 
+.vc-command-palette-calculator-value-wrapped {
+    white-space: normal;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+}
+
 .vc-command-palette-calculator-arrow {
     font-size: 48px;
     color: var(--cp-text-primary);

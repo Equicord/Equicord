@@ -43,11 +43,18 @@ interface ExpressionStatement {
     source: string;
 }
 
+interface EquationStatement {
+    left: ExpressionNode;
+    right: ExpressionNode;
+    source: string;
+}
+
 interface ParsedAdvancedMathProgram {
     normalizedInput: string;
     variables: VariableDefinition[];
     definitions: FunctionDefinition[];
     statements: ExpressionStatement[];
+    equations: EquationStatement[];
 }
 
 interface EvaluationScope {
@@ -62,6 +69,10 @@ interface GraphSeriesDefinition {
     id: string;
     label: string;
     expression: ExpressionNode;
+}
+
+interface SolvedEquation {
+    roots: number[];
 }
 
 const SUPERSCRIPT_DIGITS: Record<string, string> = {
@@ -88,6 +99,10 @@ const GRAPH_COLORS = [
     "#fb7185"
 ];
 const MAX_GRAPH_MAGNITUDE = 10000;
+const EQUATION_SOLVE_DOMAIN: [number, number] = [-100, 100];
+const EQUATION_SOLVE_SAMPLES = 4096;
+const EQUATION_ROOT_TOLERANCE = 1e-7;
+const EQUATION_ROOT_DEDUPE_EPSILON = 1e-5;
 
 const CONSTANTS: Record<string, number> = {
     e: Math.E,
@@ -645,6 +660,32 @@ function parseVariableDefinition(tokens: Token[]): VariableDefinition | null {
     };
 }
 
+function parseEquationStatement(tokens: Token[]): EquationStatement | null {
+    let depth = 0;
+    let equalsIndex = -1;
+
+    for (let index = 0; index < tokens.length; index++) {
+        const token = tokens[index];
+        if (token.type === "leftParen") depth += 1;
+        if (token.type === "rightParen") depth -= 1;
+        if (token.type !== "equals" || depth !== 0) continue;
+        if (equalsIndex !== -1) return null;
+        equalsIndex = index;
+    }
+
+    if (equalsIndex <= 0 || equalsIndex >= tokens.length - 1) return null;
+
+    const left = new ExpressionParser(tokens.slice(0, equalsIndex)).parse();
+    const right = new ExpressionParser(tokens.slice(equalsIndex + 1)).parse();
+    if (!left || !right) return null;
+
+    return {
+        left,
+        right,
+        source: tokensToSource(tokens)
+    };
+}
+
 function parseAdvancedMathProgram(query: string): ParsedAdvancedMathProgram | null {
     const normalizedInput = normalizeAdvancedMathInput(query);
     if (!normalizedInput) return null;
@@ -658,6 +699,7 @@ function parseAdvancedMathProgram(query: string): ParsedAdvancedMathProgram | nu
     const variables: VariableDefinition[] = [];
     const definitions: FunctionDefinition[] = [];
     const expressionStatements: ExpressionStatement[] = [];
+    const equations: EquationStatement[] = [];
 
     for (const statement of statements) {
         const definition = parseFunctionDefinition(statement);
@@ -672,6 +714,12 @@ function parseAdvancedMathProgram(query: string): ParsedAdvancedMathProgram | nu
             continue;
         }
 
+        const equation = parseEquationStatement(statement);
+        if (equation) {
+            equations.push(equation);
+            continue;
+        }
+
         const parser = new ExpressionParser(statement);
         const expression = parser.parse();
         if (!expression) return null;
@@ -681,13 +729,14 @@ function parseAdvancedMathProgram(query: string): ParsedAdvancedMathProgram | nu
         });
     }
 
-    if (variables.length === 0 && definitions.length === 0 && expressionStatements.length === 0) return null;
+    if (variables.length === 0 && definitions.length === 0 && expressionStatements.length === 0 && equations.length === 0) return null;
 
     return {
         normalizedInput,
         variables,
         definitions,
-        statements: expressionStatements
+        statements: expressionStatements,
+        equations
     };
 }
 
@@ -947,6 +996,171 @@ function buildGraphData(program: ParsedAdvancedMathProgram, functions: Map<strin
     };
 }
 
+function evaluateEquationResidual(
+    equation: EquationStatement,
+    x: number,
+    variables: Map<string, VariableDefinition>,
+    functions: Map<string, FunctionDefinition>
+): number | null {
+    const values = resolveVariableValues(variables, functions, new Map([["x", x]]));
+    const left = evaluateExpression(equation.left, {
+        values,
+        functions,
+        variables,
+        functionStack: new Set(),
+        variableStack: new Set()
+    });
+    const right = evaluateExpression(equation.right, {
+        values,
+        functions,
+        variables,
+        functionStack: new Set(),
+        variableStack: new Set()
+    });
+
+    if (left == null || right == null) return null;
+
+    const residual = left - right;
+    if (!Number.isFinite(residual) || Number.isNaN(residual)) return null;
+    return residual;
+}
+
+function dedupeRoots(values: number[]): number[] {
+    return values
+        .sort((left, right) => left - right)
+        .filter((value, index, roots) => index === 0 || Math.abs(value - roots[index - 1]) > EQUATION_ROOT_DEDUPE_EPSILON);
+}
+
+function refineRootByBisection(
+    equation: EquationStatement,
+    left: number,
+    right: number,
+    leftValue: number,
+    rightValue: number,
+    variables: Map<string, VariableDefinition>,
+    functions: Map<string, FunctionDefinition>
+): number | null {
+    let min = left;
+    let max = right;
+    let minValue = leftValue;
+    let maxValue = rightValue;
+
+    for (let iteration = 0; iteration < 80; iteration++) {
+        const midpoint = (min + max) / 2;
+        const midpointValue = evaluateEquationResidual(equation, midpoint, variables, functions);
+        if (midpointValue == null) return null;
+        if (Math.abs(midpointValue) <= EQUATION_ROOT_TOLERANCE) return midpoint;
+
+        if (minValue === 0) return min;
+        if (maxValue === 0) return max;
+
+        if (Math.sign(minValue) === Math.sign(midpointValue)) {
+            min = midpoint;
+            minValue = midpointValue;
+        } else {
+            max = midpoint;
+            maxValue = midpointValue;
+        }
+    }
+
+    const midpoint = (min + max) / 2;
+    const midpointValue = evaluateEquationResidual(equation, midpoint, variables, functions);
+    return midpointValue != null && Math.abs(midpointValue) <= 1e-5 ? midpoint : null;
+}
+
+function refineRootByNewton(
+    equation: EquationStatement,
+    initialGuess: number,
+    variables: Map<string, VariableDefinition>,
+    functions: Map<string, FunctionDefinition>
+): number | null {
+    let x = initialGuess;
+
+    for (let iteration = 0; iteration < 14; iteration++) {
+        const value = evaluateEquationResidual(equation, x, variables, functions);
+        if (value == null) return null;
+        if (Math.abs(value) <= EQUATION_ROOT_TOLERANCE) return x;
+
+        const step = Math.max(1e-6, Math.abs(x) * 1e-5);
+        const left = evaluateEquationResidual(equation, x - step, variables, functions);
+        const right = evaluateEquationResidual(equation, x + step, variables, functions);
+        if (left == null || right == null) return null;
+
+        const derivative = (right - left) / (step * 2);
+        if (!Number.isFinite(derivative) || Math.abs(derivative) < 1e-9) return null;
+
+        x -= value / derivative;
+        if (!Number.isFinite(x)) return null;
+        if (x < EQUATION_SOLVE_DOMAIN[0] - 1 || x > EQUATION_SOLVE_DOMAIN[1] + 1) return null;
+    }
+
+    const residual = evaluateEquationResidual(equation, x, variables, functions);
+    return residual != null && Math.abs(residual) <= 1e-5 ? x : null;
+}
+
+function solveEquation(
+    equation: EquationStatement,
+    variables: Map<string, VariableDefinition>,
+    functions: Map<string, FunctionDefinition>
+): number[] {
+    const [minX, maxX] = EQUATION_SOLVE_DOMAIN;
+    const step = (maxX - minX) / EQUATION_SOLVE_SAMPLES;
+    const samples: Array<{ x: number; value: number | null; }> = [];
+
+    for (let index = 0; index <= EQUATION_SOLVE_SAMPLES; index++) {
+        const x = minX + step * index;
+        samples.push({
+            x,
+            value: evaluateEquationResidual(equation, x, variables, functions)
+        });
+    }
+
+    const roots: number[] = [];
+    for (let index = 0; index < samples.length; index++) {
+        const current = samples[index];
+        const currentValue = current.value;
+        if (currentValue == null) continue;
+
+        if (Math.abs(currentValue) <= 1e-6) {
+            roots.push(current.x);
+            continue;
+        }
+
+        const next = samples[index + 1];
+        if (next?.value != null && Math.sign(currentValue) !== Math.sign(next.value)) {
+            const root = refineRootByBisection(equation, current.x, next.x, currentValue, next.value, variables, functions);
+            if (root != null) roots.push(root);
+        }
+
+        const previous = samples[index - 1];
+        if (previous?.value == null || next?.value == null) continue;
+        const absoluteCurrent = Math.abs(currentValue);
+        if (absoluteCurrent >= Math.abs(previous.value) || absoluteCurrent > Math.abs(next.value) || absoluteCurrent > 1e-2) continue;
+
+        const root = refineRootByNewton(equation, current.x, variables, functions);
+        if (root != null) roots.push(root);
+    }
+
+    return dedupeRoots(roots);
+}
+
+function solveProgramEquation(
+    program: ParsedAdvancedMathProgram,
+    variables: Map<string, VariableDefinition>,
+    functions: Map<string, FunctionDefinition>
+): SolvedEquation | null {
+    const equation = program.equations[program.equations.length - 1];
+    if (!equation) return null;
+
+    const referencesX = expressionReferencesVariable(equation.left, "x", functions, variables)
+        || expressionReferencesVariable(equation.right, "x", functions, variables);
+    if (!referencesX) return null;
+
+    return {
+        roots: solveEquation(equation, variables, functions)
+    };
+}
+
 function formatSpecialValue(value: number): string {
     if (Number.isNaN(value)) return "NaN";
     if (value === Number.POSITIVE_INFINITY) return "Infinity";
@@ -955,6 +1169,13 @@ function formatSpecialValue(value: number): string {
 }
 
 function classifyMathResult(program: ParsedAdvancedMathProgram, value: number): { secondaryText: string; tertiaryText?: string; } {
+    if (program.equations.length > 0) {
+        return {
+            secondaryText: "Equation",
+            tertiaryText: "Single value"
+        };
+    }
+
     if (!Number.isFinite(value) || Number.isNaN(value)) {
         return {
             secondaryText: "Special value",
@@ -997,6 +1218,49 @@ function classifyMathResult(program: ParsedAdvancedMathProgram, value: number): 
     };
 }
 
+function classifyEquationResult(roots: number[]): { secondaryText: string; tertiaryText: string; } {
+    return {
+        secondaryText: roots.length === 0 ? "Equation" : "Solutions",
+        tertiaryText: roots.length === 0
+            ? "No real solutions"
+            : `${roots.length} real solution${roots.length === 1 ? "" : "s"}`
+    };
+}
+
+function normalizeRootValue(value: number): number {
+    if (!Number.isFinite(value)) return value;
+    if (Math.abs(value) < 1e-9) return 0;
+
+    const roundedInteger = Math.round(value);
+    if (Math.abs(value - roundedInteger) < 1e-8) return roundedInteger;
+
+    const roundedDecimal = Number(value.toFixed(10));
+    return Object.is(roundedDecimal, -0) ? 0 : roundedDecimal;
+}
+
+function formatEquationRoots(roots: number[]): { displayAnswer: string; rawAnswer: string; } {
+    if (roots.length === 0) {
+        return {
+            displayAnswer: "No real solutions",
+            rawAnswer: "No real solutions"
+        };
+    }
+
+    const normalizedRoots = roots.map(normalizeRootValue);
+
+    if (normalizedRoots.length === 1) {
+        return {
+            displayAnswer: `x = ${formatSpecialValue(normalizedRoots[0])}`,
+            rawAnswer: `x=${formatRawNumber(normalizedRoots[0])}`
+        };
+    }
+
+    return {
+        displayAnswer: normalizedRoots.map(root => `x = ${formatSpecialValue(root)}`).join(", "),
+        rawAnswer: normalizedRoots.map(root => formatRawNumber(root)).join(",")
+    };
+}
+
 function getProgramEvaluationExpression(program: ParsedAdvancedMathProgram): ExpressionNode | null {
     const lastStatement = program.statements[program.statements.length - 1];
     return lastStatement?.expression ?? null;
@@ -1008,7 +1272,7 @@ export function parseAdvancedMathQuery(query: string): CalculatorIntent | null {
 
     const graphDefinitions = buildGraphSeriesDefinitions(program);
     const evaluationExpression = getProgramEvaluationExpression(program);
-    if (!evaluationExpression && graphDefinitions.length === 0) return null;
+    if (!evaluationExpression && graphDefinitions.length === 0 && program.equations.length === 0) return null;
     if (evaluationExpression && program.definitions.length === 0 && program.statements.length === 1 && evaluationExpression.type === "number" && isPlainNumericLiteral(query)) {
         return null;
     }
@@ -1035,6 +1299,7 @@ export function evaluateAdvancedMath(displayInput: string, normalizedInput: stri
 
     const graphDefinitions = buildGraphSeriesDefinitions(program);
     const evaluationExpression = getProgramEvaluationExpression(program);
+    const solvedEquation = !evaluationExpression ? solveProgramEquation(program, variables, functions) : null;
     const value = evaluationExpression
         ? evaluateExpression(evaluationExpression, {
             values: resolveVariableValues(variables, functions),
@@ -1045,11 +1310,26 @@ export function evaluateAdvancedMath(displayInput: string, normalizedInput: stri
         })
         : null;
 
-    const defaultViewMode: CalculatorViewMode = value == null ? "graph" : "result";
+    const defaultViewMode: CalculatorViewMode = value == null && !solvedEquation ? "graph" : "result";
     const graph = graphDefinitions.length > 0
         ? buildGraphData(program, functions, defaultViewMode)
         : undefined;
-    if (value == null && !graph) return null;
+    if (value == null && !graph && !solvedEquation) return null;
+
+    if (solvedEquation) {
+        const formattedRoots = formatEquationRoots(solvedEquation.roots);
+        const meta = classifyEquationResult(solvedEquation.roots);
+
+        return {
+            kind: "number",
+            displayInput,
+            normalizedInput,
+            displayAnswer: formattedRoots.displayAnswer,
+            rawAnswer: formattedRoots.rawAnswer,
+            secondaryText: meta.secondaryText,
+            tertiaryText: meta.tertiaryText
+        };
+    }
 
     const meta = value == null
         ? {
