@@ -9,6 +9,8 @@
 const enum TokenType {
     Number,
     Ident,
+    Equals,
+    Semicolon,
     Plus,
     Minus,
     Star,
@@ -25,6 +27,26 @@ const enum TokenType {
 interface Token {
     type: TokenType;
     value: string;
+}
+
+function tokenTypeName(type: TokenType): string {
+    switch (type) {
+        case TokenType.Number: return "number";
+        case TokenType.Ident: return "identifier";
+        case TokenType.Equals: return "=";
+        case TokenType.Semicolon: return ";";
+        case TokenType.Plus: return "+";
+        case TokenType.Minus: return "-";
+        case TokenType.Star: return "*";
+        case TokenType.Slash: return "/";
+        case TokenType.Percent: return "%";
+        case TokenType.Caret: return "^";
+        case TokenType.LParen: return "(";
+        case TokenType.RParen: return ")";
+        case TokenType.Comma: return ",";
+        case TokenType.Excl: return "!";
+        case TokenType.EOF: return "end of input";
+    }
 }
 
 // ── Tokenizer ────────────────────────────────────────────────
@@ -49,6 +71,8 @@ function tokenize(input: string): Token[] {
         if (ch === "/") { tokens.push({ type: TokenType.Slash, value: "/" }); i++; continue; }
         if (ch === "%") { tokens.push({ type: TokenType.Percent, value: "%" }); i++; continue; }
         if (ch === "^") { tokens.push({ type: TokenType.Caret, value: "^" }); i++; continue; }
+        if (ch === "=") { tokens.push({ type: TokenType.Equals, value: "=" }); i++; continue; }
+        if (ch === ";") { tokens.push({ type: TokenType.Semicolon, value: ";" }); i++; continue; }
         if (ch === "(") { tokens.push({ type: TokenType.LParen, value: "(" }); i++; continue; }
         if (ch === ")") { tokens.push({ type: TokenType.RParen, value: ")" }); i++; continue; }
         if (ch === ",") { tokens.push({ type: TokenType.Comma, value: "," }); i++; continue; }
@@ -89,10 +113,21 @@ function tokenize(input: string): Token[] {
 
 type ASTNode =
     | { kind: "number"; value: number; }
+    | { kind: "ident"; name: string; }
     | { kind: "unary"; op: "+" | "-"; operand: ASTNode; }
     | { kind: "binary"; op: "+" | "-" | "*" | "/" | "%" | "^"; left: ASTNode; right: ASTNode; }
     | { kind: "call"; name: string; args: ASTNode[]; }
     | { kind: "factorial"; operand: ASTNode; };
+
+type StatementNode =
+    | { kind: "expr_stmt"; expr: ASTNode; }
+    | { kind: "assign"; name: string; expr: ASTNode; }
+    | { kind: "function_def"; name: string; params: string[]; body: ASTNode; };
+
+interface ProgramNode {
+    kind: "program";
+    statements: StatementNode[];
+}
 
 // ── Recursive-descent parser ─────────────────────────────────
 
@@ -115,10 +150,14 @@ class Parser {
         return this.tokens[this.pos++];
     }
 
+    private peekAt(offset: number): Token {
+        return this.tokens[this.pos + offset] ?? this.tokens[this.tokens.length - 1];
+    }
+
     private expect(type: TokenType): Token {
         const tok = this.advance();
         if (tok.type !== type)
-            throw new Error(`Expected ${TokenType[type]} but got '${tok.value}'`);
+            throw new Error(`Expected ${tokenTypeName(type)} but got '${tok.value}'`);
         return tok;
     }
 
@@ -131,11 +170,77 @@ class Parser {
         this.depth--;
     }
 
-    parse(): ASTNode {
-        const node = this.parseExpr();
-        if (this.peek().type !== TokenType.EOF)
-            throw new Error(`Unexpected token: '${this.peek().value}'`);
-        return node;
+    parse(): ProgramNode {
+        const statements: StatementNode[] = [];
+
+        while (this.peek().type !== TokenType.EOF) {
+            statements.push(this.parseStatement());
+            if (this.peek().type === TokenType.Semicolon) {
+                this.advance();
+                continue;
+            }
+            if (this.peek().type !== TokenType.EOF)
+                throw new Error(`Unexpected token: '${this.peek().value}'`);
+        }
+
+        if (statements.length === 0)
+            throw new Error("Empty expression");
+
+        return { kind: "program", statements };
+    }
+
+    private parseStatement(): StatementNode {
+        if (this.isFunctionDefinition()) {
+            const name = this.expect(TokenType.Ident).value.toLowerCase();
+            this.expect(TokenType.LParen);
+
+            const params: string[] = [];
+            if (this.peek().type !== TokenType.RParen) {
+                params.push(this.expect(TokenType.Ident).value.toLowerCase());
+                while (this.peek().type === TokenType.Comma) {
+                    this.advance();
+                    params.push(this.expect(TokenType.Ident).value.toLowerCase());
+                }
+            }
+
+            this.expect(TokenType.RParen);
+            this.expect(TokenType.Equals);
+            return { kind: "function_def", name, params, body: this.parseExpr() };
+        }
+
+        if (this.peek().type === TokenType.Ident && this.peekAt(1).type === TokenType.Equals) {
+            const name = this.advance().value.toLowerCase();
+            this.advance();
+            return { kind: "assign", name, expr: this.parseExpr() };
+        }
+
+        return { kind: "expr_stmt", expr: this.parseExpr() };
+    }
+
+    private isFunctionDefinition(): boolean {
+        if (this.peek().type !== TokenType.Ident || this.peekAt(1).type !== TokenType.LParen)
+            return false;
+
+        let offset = 2;
+        let expectParam = true;
+
+        while (true) {
+            const tok = this.peekAt(offset);
+            if (tok.type === TokenType.RParen)
+                return this.peekAt(offset + 1).type === TokenType.Equals;
+
+            if (expectParam) {
+                if (tok.type !== TokenType.Ident)
+                    return false;
+                expectParam = false;
+            } else {
+                if (tok.type !== TokenType.Comma)
+                    return false;
+                expectParam = true;
+            }
+
+            offset++;
+        }
     }
 
     // expr = term (('+' | '-') term)*
@@ -231,8 +336,7 @@ class Parser {
                 this.expect(TokenType.RParen);
                 node = { kind: "call", name: tok.value.toLowerCase(), args };
             } else {
-                // Constant reference — treat as zero-arg call to resolve in evaluator
-                node = { kind: "call", name: tok.value.toLowerCase(), args: [] };
+                node = { kind: "ident", name: tok.value.toLowerCase() };
             }
         } else if (tok.type === TokenType.LParen) {
             this.advance();
@@ -297,6 +401,31 @@ const CONSTANTS: Record<string, number> = {
     sqrt2: Math.SQRT2,
 };
 
+interface UserFunction {
+    params: string[];
+    body: ASTNode;
+}
+
+interface EvalContext {
+    vars: Record<string, number>;
+    funcs: Record<string, UserFunction>;
+    callDepth: number;
+}
+
+const MAX_CALL_DEPTH = 32;
+const STEP_EVAL_CONTEXT: EvalContext = { vars: {}, funcs: {}, callDepth: 0 };
+
+function assertAvailableName(name: string, kind: "variable" | "function") {
+    if (name in CONSTANTS)
+        throw new Error(`Cannot redefine constant '${name}'`);
+
+    if (name in FUNCTIONS)
+        throw new Error(`Cannot redefine built-in function '${name}'`);
+
+    if (kind === "function" && name === "random")
+        throw new Error(`Cannot redefine built-in function '${name}'`);
+}
+
 // ── Evaluator ────────────────────────────────────────────────
 
 function factorial(n: number): number {
@@ -307,17 +436,25 @@ function factorial(n: number): number {
     return result;
 }
 
-function evaluate(node: ASTNode): number {
+function evaluate(node: ASTNode, ctx: EvalContext): number {
     switch (node.kind) {
         case "number":
             return node.value;
 
+        case "ident": {
+            if (node.name in ctx.vars)
+                return ctx.vars[node.name];
+            if (node.name in CONSTANTS)
+                return CONSTANTS[node.name];
+            throw new Error(`Unknown variable: '${node.name}'`);
+        }
+
         case "unary":
-            return node.op === "-" ? -evaluate(node.operand) : evaluate(node.operand);
+            return node.op === "-" ? -evaluate(node.operand, ctx) : evaluate(node.operand, ctx);
 
         case "binary": {
-            const left = evaluate(node.left);
-            const right = evaluate(node.right);
+            const left = evaluate(node.left, ctx);
+            const right = evaluate(node.right, ctx);
             switch (node.op) {
                 case "+": return left + right;
                 case "-": return left - right;
@@ -334,24 +471,77 @@ function evaluate(node: ASTNode): number {
         }
 
         case "call": {
-            // Check constants (zero-arg "calls")
-            if (node.args.length === 0 && node.name in CONSTANTS)
-                return CONSTANTS[node.name];
-
             const fn = FUNCTIONS[node.name];
-            if (!fn) {
+            const args = node.args.map(arg => evaluate(arg, ctx));
+            if (fn)
+                return fn(...args);
+
+            const userFn = ctx.funcs[node.name];
+            if (!userFn) {
                 if (node.name in CONSTANTS)
                     throw new Error(`'${node.name}' is a constant — don't use parentheses`);
                 throw new Error(`Unknown function: '${node.name}'`);
             }
 
-            const args = node.args.map(evaluate);
-            return fn(...args);
+            if (ctx.callDepth >= MAX_CALL_DEPTH)
+                throw new Error("Function call depth exceeded");
+
+            if (args.length !== userFn.params.length)
+                throw new Error(`Function '${node.name}' expects ${userFn.params.length} argument(s)`);
+
+            const localVars = { ...ctx.vars };
+            for (let i = 0; i < userFn.params.length; i++)
+                localVars[userFn.params[i]] = args[i];
+
+            return evaluate(userFn.body, {
+                vars: localVars,
+                funcs: ctx.funcs,
+                callDepth: ctx.callDepth + 1,
+            });
         }
 
         case "factorial":
-            return factorial(evaluate(node.operand));
+            return factorial(evaluate(node.operand, ctx));
     }
+}
+
+function evaluateProgram(program: ProgramNode): number {
+    const ctx: EvalContext = {
+        vars: {},
+        funcs: {},
+        callDepth: 0,
+    };
+
+    let lastValue = 0;
+
+    for (const statement of program.statements) {
+        switch (statement.kind) {
+            case "expr_stmt":
+                lastValue = evaluate(statement.expr, ctx);
+                break;
+
+            case "assign":
+                assertAvailableName(statement.name, "variable");
+                lastValue = evaluate(statement.expr, ctx);
+                ctx.vars[statement.name] = lastValue;
+                break;
+
+            case "function_def":
+                assertAvailableName(statement.name, "function");
+                if (new Set(statement.params).size !== statement.params.length)
+                    throw new Error(`Function '${statement.name}' has duplicate parameter names`);
+                for (const param of statement.params)
+                    assertAvailableName(param, "variable");
+                ctx.funcs[statement.name] = {
+                    params: statement.params,
+                    body: statement.body,
+                };
+                lastValue = 0;
+                break;
+        }
+    }
+
+    return lastValue;
 }
 
 // ── Stringify (AST → string) ─────────────────────────────────
@@ -381,6 +571,8 @@ function stringify(node: ASTNode): string {
     switch (node.kind) {
         case "number":
             return formatResult(node.value);
+        case "ident":
+            return node.name;
         case "unary": {
             const inner = stringify(node.operand);
             return node.operand.kind === "binary" ? `${node.op}(${inner})` : `${node.op}${inner}`;
@@ -392,7 +584,6 @@ function stringify(node: ASTNode): string {
             return `${l} ${op} ${r}`;
         }
         case "call":
-            if (node.args.length === 0 && node.name in CONSTANTS) return node.name;
             return `${node.name}(${node.args.map(a => stringify(a)).join(", ")})`;
         case "factorial": {
             const inner = stringify(node.operand);
@@ -404,7 +595,7 @@ function stringify(node: ASTNode): string {
 // ── Step-by-step reducer ─────────────────────────────────────
 
 function isValue(node: ASTNode): boolean {
-    return node.kind === "number" || (node.kind === "call" && node.args.length === 0 && node.name in CONSTANTS);
+    return node.kind === "number" || (node.kind === "ident" && node.name in CONSTANTS);
 }
 
 function reduceOneStep(node: ASTNode): ASTNode | null {
@@ -414,7 +605,7 @@ function reduceOneStep(node: ASTNode): ASTNode | null {
         case "number": return null;
 
         case "unary": {
-            if (isValue(node.operand)) return { kind: "number", value: evaluate(node) };
+            if (isValue(node.operand)) return { kind: "number", value: evaluate(node, STEP_EVAL_CONTEXT) };
             const r = reduceOneStep(node.operand);
             return r ? { kind: "unary", op: node.op, operand: r } : null;
         }
@@ -429,7 +620,7 @@ function reduceOneStep(node: ASTNode): ASTNode | null {
                 if (r) return { kind: "binary", op: node.op, left: node.left, right: r };
             }
             if (isValue(node.left) && isValue(node.right))
-                return { kind: "number", value: evaluate(node) };
+                return { kind: "number", value: evaluate(node, STEP_EVAL_CONTEXT) };
             return null;
         }
 
@@ -445,16 +636,18 @@ function reduceOneStep(node: ASTNode): ASTNode | null {
                 }
             }
             if (node.args.every(isValue))
-                return { kind: "number", value: evaluate(node) };
+                return { kind: "number", value: evaluate(node, STEP_EVAL_CONTEXT) };
             return null;
         }
 
         case "factorial": {
-            if (isValue(node.operand)) return { kind: "number", value: evaluate(node) };
+            if (isValue(node.operand)) return { kind: "number", value: evaluate(node, STEP_EVAL_CONTEXT) };
             const r = reduceOneStep(node.operand);
             return r ? { kind: "factorial", operand: r } : null;
         }
     }
+
+    return null;
 }
 
 // ── Public API ───────────────────────────────────────────────
@@ -462,8 +655,8 @@ function reduceOneStep(node: ASTNode): ASTNode | null {
 export function calculate(expression: string): number {
     const tokens = tokenize(expression);
     const parser = new Parser(tokens);
-    const ast = parser.parse();
-    return evaluate(ast);
+    const program = parser.parse();
+    return evaluateProgram(program);
 }
 
 export function formatResult(result: number): string {
@@ -473,7 +666,12 @@ export function formatResult(result: number): string {
 export function calculateWithSteps(expression: string): string {
     const tokens = tokenize(expression);
     const parser = new Parser(tokens);
-    let ast = parser.parse();
+    const program = parser.parse();
+
+    if (program.statements.length !== 1 || program.statements[0].kind !== "expr_stmt")
+        return `${expression.trim()} = ${formatResult(evaluateProgram(program))}`;
+
+    let ast = program.statements[0].expr;
 
     const steps: string[] = [expression.trim()];
 

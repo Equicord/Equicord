@@ -16,7 +16,10 @@ const TEXT_COLOR = "#e0e0e0";
 const OP_COLOR = "#7289da";
 const EQ_COLOR = "#57f287";
 
-function measureText(ctx: CanvasRenderingContext2D, text: string): number {
+type RenderSurface = OffscreenCanvas;
+type RenderContext = CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D;
+
+function measureText(ctx: RenderContext, text: string): number {
     ctx.font = FONT;
     return ctx.measureText(text).width;
 }
@@ -44,21 +47,25 @@ function segmentExpression(text: string): TextSegment[] {
     return segments;
 }
 
-export function renderMathToCanvas(expression: string, steps?: string): HTMLCanvasElement {
-    const canvas = document.createElement("canvas");
-    const ctx = canvas.getContext("2d")!;
-
+export function renderMathToCanvas(expression: string, steps?: string): RenderSurface {
     // Determine content
     const displayText = steps || expression;
     const lines = displayText.split("\n");
 
+    const measureCanvas = new OffscreenCanvas(1, 1);
+    const measureCtx = measureCanvas.getContext("2d");
+    if (!measureCtx) throw new Error("Failed to create canvas context");
+
     // Measure
-    ctx.font = FONT;
     let maxWidth = 0;
     for (const line of lines) {
-        const w = measureText(ctx, line.replace(/\\\*/g, "*")) + PADDING * 2;
+        const w = measureText(measureCtx, line.replace(/\\\*/g, "*")) + PADDING * 2;
         if (w > maxWidth) maxWidth = w;
     }
+
+    const canvas = new OffscreenCanvas(maxWidth + PADDING, lines.length * LINE_HEIGHT + PADDING * 2);
+    const ctx = canvas.getContext("2d");
+    if (!ctx) throw new Error("Failed to create canvas context");
 
     canvas.width = maxWidth + PADDING;
     canvas.height = lines.length * LINE_HEIGHT + PADDING * 2;
@@ -97,11 +104,6 @@ export function renderMathToCanvas(expression: string, steps?: string): HTMLCanv
     return canvas;
 }
 
-export async function canvasToBlob(canvas: HTMLCanvasElement): Promise<Blob> {
-    return new Promise((resolve, reject) => {
-        canvas.toBlob(blob => {
-            if (blob) resolve(blob);
-            else reject(new Error("Failed to create image"));
-        }, "image/png");
-    });
+export async function canvasToBlob(canvas: RenderSurface): Promise<Blob> {
+    return canvas.convertToBlob({ type: "image/png" });
 }
