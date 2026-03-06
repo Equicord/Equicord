@@ -2029,7 +2029,7 @@
         }
     },
     "toastNotifications": {
-        "description": "Hiển thị thông báo chúc mừng cho tin nhắn và sự kiện",
+        "description": "Hiển thị thông báo cho tin nhắn và sự kiện",
         "positionOptions": {
             "bottomLeft": "Dưới Cùng Bên Trái",
             "bottomRight": "Dưới Cùng Bên Phải",
@@ -2048,7 +2048,7 @@
             "maxNotifications": "Số lượng thông báo tối đa được hiển thị cùng một lúc",
             "notifyFor": "Tạo danh sách id kênh để nhận thông báo (phân tách bằng dấu phẩy)",
             "opacity": "Độ mờ của thông báo",
-            "position": "Vị trí của thông báo bánh mì nướng",
+            "position": "Vị trí của thông báo",
             "renderImages": "Hiển thị hình ảnh trong thông báo",
             "streamingTreatment": "Cách xử lý thông báo khi chia sẻ màn hình của bạn",
             "timeout": "Thông báo thời gian tính bằng giây sẽ được hiển thị cho"
