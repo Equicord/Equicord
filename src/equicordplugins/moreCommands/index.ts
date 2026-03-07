@@ -28,6 +28,9 @@ import { applyPalette, GIFEncoder, quantize } from "gifenc";
 import {
     calculateAffinityScore,
     calculateCanvasSize,
+    fetchCatImage,
+    fetchDogImage,
+    fetchFoxImage,
     FRAMES,
     fromMorse,
     generatePoissonDiskPosition,
@@ -65,7 +68,8 @@ export default definePlugin({
         Devs.Samwich,
         EquicordDevs.Fafa,
         Devs.JacobTm,
-        EquicordDevs.voidbbg
+        EquicordDevs.voidbbg,
+        EquicordDevs.playfairs
     ],
     settings,
     commands: [
@@ -669,6 +673,48 @@ export default definePlugin({
                 } catch (err) {
                     UploadManager.clearAll(cmdCtx.channel.id, DraftType.SlashCommand);
                     sendBotMessage(cmdCtx.channel.id, { content: String(err) });
+                }
+            },
+        },
+        {
+            name: "cat",
+            description: "Get a random cat image",
+            inputType: ApplicationCommandInputType.BUILT_IN,
+            options: [],
+            execute: async (opts, ctx) => {
+                try {
+                    const catData = await fetchCatImage();
+                    sendMessage(ctx.channel.id, { content: catData.url });
+                } catch (error) {
+                    sendMessage(ctx.channel.id, { content: `Failed to fetch cat image: ${error}` });
+                }
+            },
+        },
+        {
+            name: "dog",
+            description: "Get a random dog image",
+            inputType: ApplicationCommandInputType.BUILT_IN,
+            options: [],
+            execute: async (opts, ctx) => {
+                try {
+                    const dogData = await fetchDogImage();
+                    sendMessage(ctx.channel.id, { content: dogData.url });
+                } catch (error) {
+                    sendMessage(ctx.channel.id, { content: `Failed to fetch dog image: ${error}` });
+                }
+            },
+        },
+        {
+            name: "fox",
+            description: "Get a random fox image",
+            inputType: ApplicationCommandInputType.BUILT_IN,
+            options: [],
+            execute: async (opts, ctx) => {
+                try {
+                    const foxData = await fetchFoxImage();
+                    sendMessage(ctx.channel.id, { content: foxData.image });
+                } catch (error) {
+                    sendMessage(ctx.channel.id, { content: `Failed to fetch fox image: ${error}` });
                 }
             },
         },

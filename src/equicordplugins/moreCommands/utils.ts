@@ -52,6 +52,32 @@ export async function getCutePats(): Promise<string> {
     return url ?? "";
 }
 
+export async function fetchCatImage() {
+    const response = await fetch("https://api.thecatapi.com/v1/images/search");
+    if (!response.ok) {
+        throw new Error(`Failed to fetch cat image: ${response.statusText}`);
+    }
+    const data = await response.json();
+    return data[0];
+}
+
+export async function fetchDogImage() {
+    const response = await fetch("https://api.thedogapi.com/v1/images/search");
+    if (!response.ok) {
+        throw new Error(`Failed to fetch dog image: ${response.statusText}`);
+    }
+    const data = await response.json();
+    return data[0];
+}
+
+export async function fetchFoxImage() {
+    const response = await fetch("https://randomfox.ca/floof/");
+    if (!response.ok) {
+        throw new Error(`Failed to fetch fox image: ${response.statusText}`);
+    }
+    return await response.json();
+}
+
 export function mock(input: string): string {
     let output = "";
     for (let i = 0; i < input.length; i++) {
