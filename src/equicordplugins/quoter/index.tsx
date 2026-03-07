@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { ApplicationCommandInputType, ApplicationCommandOptionType, findOption } from "@api/Commands";
 import { definePluginSettings } from "@api/Settings";
 import { BaseText } from "@components/BaseText";
 import { FormSwitch } from "@components/FormSwitch";
@@ -12,7 +13,7 @@ import { getCurrentChannel } from "@utils/discord";
 import { ModalCloseButton, ModalContent, ModalHeader, ModalProps, ModalRoot, ModalSize, openModal } from "@utils/modal";
 import definePlugin, { OptionType } from "@utils/types";
 import { Message } from "@vencord/discord-types";
-import { Button, IconUtils, Menu, TextInput, UploadHandler, useEffect, useState } from "@webpack/common";
+import { Button, DraftType, IconUtils, Menu, TextInput, UploadHandler, UploadManager, UserStore, useEffect, useState } from "@webpack/common";
 
 import { QuoteIcon } from "./components/QuoteIcon";
 import { QuoteFont } from "./types";
@@ -60,6 +61,68 @@ export default definePlugin({
     description: "Adds the ability to create an inspirational quote image from a message.",
     authors: [Devs.Samwich, Devs.thororen, EquicordDevs.neoarz, Devs.prism],
     settings,
+    commands: [
+        {
+            name: "quote",
+            description: "Create a quote image with custom text attributed to a user",
+            inputType: ApplicationCommandInputType.BUILT_IN,
+            options: [
+                {
+                    name: "user",
+                    description: "User to attribute the quote to",
+                    type: ApplicationCommandOptionType.USER,
+                    required: true
+                },
+                {
+                    name: "text",
+                    description: "The quote text",
+                    type: ApplicationCommandOptionType.STRING,
+                    required: true
+                }
+            ],
+            execute: async (opts, ctx) => {
+                const userId = findOption<string>(opts, "user");
+                const text = findOption<string>(opts, "text");
+
+                if (!userId || !text) {
+                    return;
+                }
+
+                const user = UserStore.getUser(userId);
+                if (!user) {
+                    return;
+                }
+
+                try {
+                    const { quoteFont, grayscale, showWatermark, watermark, saveAsGif } = settings.store;
+
+                    const image = await createQuoteImage({
+                        avatarUrl: IconUtils.getUserAvatarURL(user, true, 512),
+                        quote: text,
+                        grayScale: grayscale,
+                        author: user,
+                        watermark,
+                        showWatermark,
+                        saveAsGif,
+                        quoteFont
+                    });
+
+                    const channel = getCurrentChannel();
+                    if (!channel) return;
+
+                    UploadManager.clearAll(channel.id, DraftType.SlashCommand);
+
+                    const file = new File([image], `quote-${text.slice(0, 10)}-${user.username}.${getFileExtension(saveAsGif)}`, {
+                        type: getMimeType(saveAsGif)
+                    });
+
+                    setTimeout(() => UploadHandler.promptToUpload([file], channel, 0), 10);
+                } catch (err) {
+                    console.error("Failed to create quote:", err);
+                }
+            }
+        }
+    ],
 
     async start() {
         await ensureFontLoaded();
