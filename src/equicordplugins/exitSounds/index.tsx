@@ -31,7 +31,7 @@ function GuildSelector() {
     return (
         <SearchableSelect
             options={options}
-            value={options.find(o => o.value === soundGuildId)}
+            value={options.find(o => o.value === soundGuildId)?.value}
             placeholder={t("equicord.exitSounds.ui.selectServer")}
             maxVisibleItems={6}
             closeOnSelect={true}

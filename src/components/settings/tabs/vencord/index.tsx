@@ -82,6 +82,13 @@ function EquicordSettings() {
                 restartRequired: true,
                 warning: { enabled: false },
             },
+            (!IS_WEB && !IS_DISCORD_DESKTOP || !IS_WINDOWS) && {
+                key: "mainWindowFrameless",
+                title: t("equicord.mainWindowFrameless.title"),
+                description: t("equicord.mainWindowFrameless.description"),
+                restartRequired: true,
+                warning: { enabled: false },
+            },
             !IS_WEB &&
             (!IS_DISCORD_DESKTOP || !IS_WINDOWS
                 ? {
@@ -97,7 +104,8 @@ function EquicordSettings() {
                     description: t("vencord.settings.winNativeTitleBar.description"),
                     restartRequired: true,
                     warning: { enabled: false },
-                }),
+                }
+            ),
             !IS_WEB && {
                 key: "transparent",
                 title: t("vencord.settings.transparent.title"),
