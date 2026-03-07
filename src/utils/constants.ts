@@ -1276,7 +1276,7 @@ export const EquicordDevs = Object.freeze({
         name: "m.shl",
         id: 1025245410224263258n,
     },
-    playfairs: { // Didn't know which list to put it in, so I just did both, remove comment when merging.
+    playfairs: {
         name: "playfairs",
         id: 1426711359059394662n,
     },
