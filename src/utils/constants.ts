@@ -648,10 +648,6 @@ export const Devs = /* #__PURE__*/ Object.freeze({
         name: "prism",
         id: 390884143749136386n,
     },
-    playfairs: {
-        name: "playfairs",
-        id: 1426711359059394662n,
-    },
 } satisfies Record<string, Dev>);
 
 export const EquicordDevs = Object.freeze({
