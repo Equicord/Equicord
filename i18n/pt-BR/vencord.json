@@ -678,7 +678,7 @@
         "settings": {
             "location": "Onde mostrar o botão de alternância de atividade do jogo",
             "locationPanel": "Ao lado de Silenciar/Ensurdecer",
-            "locationToolbox": "Caixa de ferramentas Equicord",
+            "locationToolbox": "Equicord Toolbox",
             "oldIcon": "Use o estilo de ícone antigo antes do redesenho do ícone Discord"
         }
     },
