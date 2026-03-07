@@ -4,7 +4,8 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { ApplicationCommandInputType, sendBotMessage } from "@api/Commands";
+import { ApplicationCommandInputType } from "@api/Commands";
+import { sendMessage } from "@utils/discord";
 
 import { fetchCatImage, fetchDogImage, fetchFoxImage } from "./api";
 import { CatImage, DogResponse, FoxResponse } from "./types";
@@ -18,9 +19,9 @@ export const animalFetchCommands = [
         execute: async (args: any[], ctx: any) => {
             try {
                 const catData: CatImage = await fetchCatImage();
-                sendBotMessage(ctx.channel.id, { content: `${catData.url}` });
+                sendMessage(ctx.channel.id, { content: `${catData.url}` });
             } catch (error) {
-                sendBotMessage(ctx.channel.id, { content: "Failed to fetch cat image. Please try again later." });
+                sendMessage(ctx.channel.id, { content: `Failed to fetch cat image: ${error}` });
             }
         }
     },
@@ -32,9 +33,9 @@ export const animalFetchCommands = [
         execute: async (args: any[], ctx: any) => {
             try {
                 const dogData: DogResponse = await fetchDogImage();
-                sendBotMessage(ctx.channel.id, { content: `${dogData.message}` });
+                sendMessage(ctx.channel.id, { content: `${dogData.url}` });
             } catch (error) {
-                sendBotMessage(ctx.channel.id, { content: "Failed to fetch dog image. Please try again later." });
+                sendMessage(ctx.channel.id, { content: `Failed to fetch dog image: ${error}` });
             }
         }
     },
@@ -46,9 +47,9 @@ export const animalFetchCommands = [
         execute: async (args: any[], ctx: any) => {
             try {
                 const foxData: FoxResponse = await fetchFoxImage();
-                sendBotMessage(ctx.channel.id, { content: `${foxData.image}` });
+                sendMessage(ctx.channel.id, { content: `${foxData.image}` });
             } catch (error) {
-                sendBotMessage(ctx.channel.id, { content: "Failed to fetch fox image. Please try again later." });
+                sendMessage(ctx.channel.id, { content: `Failed to fetch fox image: ${error}` });
             }
         }
     }

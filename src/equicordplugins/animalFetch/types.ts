@@ -12,8 +12,10 @@ export interface CatImage {
 }
 
 export interface DogResponse {
-    message: string;
-    status: string;
+    id: string;
+    url: string;
+    width: number;
+    height: number;
 }
 
 export interface FoxResponse {

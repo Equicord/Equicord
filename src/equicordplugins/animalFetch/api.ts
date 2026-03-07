@@ -24,7 +24,8 @@ export async function fetchDogImage(): Promise<DogResponse> {
     if (!response.ok) {
         throw new Error(`Failed to fetch dog image: ${response.statusText}`);
     }
-    return await response.json();
+    const data = await response.json();
+    return data[0];
 }
 
 export async function fetchFoxImage(): Promise<FoxResponse> {
