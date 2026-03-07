@@ -5,11 +5,12 @@
  */
 
 import { Devs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 
 export default definePlugin({
     name: "ChatInputButtonAPI",
-    description: "API to add buttons to the chat input",
+    description: t("vencord.chatInputButtonAPI.description"),
     authors: [Devs.Ven],
 
     patches: [

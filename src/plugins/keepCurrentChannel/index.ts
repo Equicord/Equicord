@@ -18,6 +18,7 @@
 
 import * as DataStore from "@api/DataStore";
 import { Devs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 import { ChannelRouter, ChannelStore, NavigationRouter, SelectedChannelStore, SelectedGuildStore } from "@webpack/common";
 
@@ -42,7 +43,7 @@ let previousCache: PreviousChannel | undefined;
 
 export default definePlugin({
     name: "KeepCurrentChannel",
-    description: "Attempt to navigate to the channel you were in before switching accounts or loading Discord.",
+    description: t("vencord.keepCurrentChannel.description"),
     authors: [Devs.Nuckyz],
 
     patches: [

@@ -5,11 +5,12 @@
  */
 
 import { Devs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 
 export default definePlugin({
     name: "NicknameIconsAPI",
-    description: "API to add icons to the nickname, in profiles",
+    description: t("vencord.nicknameIconsAPI.description"),
     authors: [Devs.Nuckyz],
     patches: [
         {

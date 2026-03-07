@@ -6,11 +6,12 @@
 
 import { definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 
 const settings = definePluginSettings({
     inlineVideo: {
-        description: "Play videos without carousel modal",
+        description: t("vencord.noMosaic.description.settings.inlineVideo"),
         type: OptionType.BOOLEAN,
         default: true,
         restartNeeded: true
@@ -20,7 +21,7 @@ const settings = definePluginSettings({
 export default definePlugin({
     name: "NoMosaic",
     authors: [Devs.AutumnVN],
-    description: "Removes Discord image mosaic",
+    description: t("vencord.noMosaic.description"),
     tags: ["image", "mosaic", "media"],
 
     settings,

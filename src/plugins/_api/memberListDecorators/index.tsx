@@ -17,13 +17,14 @@
 */
 
 import { Devs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 
 import managedStyle from "./style.css?managed";
 
 export default definePlugin({
     name: "MemberListDecoratorsAPI",
-    description: "API to add decorators to member list (both in servers and DMs)",
+    description: t("vencord.memberListDecoratorsAPI.description"),
     authors: [Devs.TheSun, Devs.Ven],
 
     managedStyle,

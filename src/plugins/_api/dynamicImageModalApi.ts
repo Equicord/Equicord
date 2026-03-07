@@ -5,12 +5,13 @@
  */
 
 import { Devs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 
 export default definePlugin({
     name: "DynamicImageModalAPI",
     authors: [Devs.sadan, Devs.Nuckyz],
-    description: "Allows you to omit either width or height when opening an image modal",
+    description: t("vencord.dynamicImageModalAPI.description"),
     patches: [
         {
             // TODO: bundler compat

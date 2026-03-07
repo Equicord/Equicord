@@ -17,11 +17,12 @@
 */
 
 import { Devs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 
 export default definePlugin({
     name: "MessageUpdaterAPI",
-    description: "API for updating and re-rendering messages.",
+    description: t("vencord.messageUpdaterAPI.description"),
     authors: [Devs.Nuckyz],
 
     patches: [

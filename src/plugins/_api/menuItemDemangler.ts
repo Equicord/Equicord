@@ -6,6 +6,7 @@
 
 import { Devs } from "@utils/constants";
 import { canonicalizeMatch } from "@utils/patches";
+import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 
 // duplicate values have multiple branches with different types. Just include all to be safe
@@ -24,7 +25,7 @@ const nameMap = {
 
 export default definePlugin({
     name: "MenuItemDemanglerAPI",
-    description: "Demangles Discord's Menu Item module",
+    description: t("vencord.menuItemDemanglerAPI.description"),
     authors: [Devs.Ven],
     required: true,
     patches: [

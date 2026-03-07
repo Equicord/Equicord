@@ -676,7 +676,7 @@
         }
     },
     "moyai": {
-        "description": "Play the moyai sound effect when 🗿 emoji is used",
+        "description": "Plays a 🗿 sound effect whenever a moyai emoji is sent, reacted, or used as a voice effect in your current channel.",
         "settings": {
             "volume": "Volume of the moyai sound",
             "quality": "Quality of the moyai sound",
@@ -1179,7 +1179,7 @@
         "description": "Changes the home button to a typing indicator if someone in your dms is typing"
     },
     "hopOn": {
-        "description": "Hop on Fortnite or Hop on bloons :3",
+        "description": "Hop on! Opens a configurable URL when a message matches a custom regex in the current channel.",
         "settings": {
             "regex": "Regex to trigger on",
             "url": "URL to open"
@@ -2462,5 +2462,27 @@
     },
     "youtubeDescription": {
         "description": "Adds a toggleable description for YouTube video embeds"
+    },
+    "mainWindowFrameless": {
+        "title": "Disable the Main Window Frame",
+        "description": "Remove the native window frame for a cleaner look. You can still move the window by dragging the title bar area."
+    },
+    "equicordDonor": {
+        "title": "Equicord Donor",
+        "description": "This Badge is a special perk for Equicord (Not Vencord) Donors",
+        "description2": "Please consider supporting the development of Equicord by becoming a donor. It would mean a lot!!"
+    },
+    "equicordTranslator": {
+        "title": "Equicord Translator",
+        "description": "Awarded to contributors who expand Equicord's language support by translating content for the community."
+    },
+    "audioPlayerAPI": {
+        "description": "API to play internal Discord audio files or external audio links."
+    },
+    "headerBarAPI": {
+        "description": "API to add buttons to the header bar and channel toolbar."
+    },
+    "userAreaAPI": {
+        "description": "API to add buttons to the user area panel."
     }
 }

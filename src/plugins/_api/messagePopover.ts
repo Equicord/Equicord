@@ -17,11 +17,12 @@
 */
 
 import { Devs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 
 export default definePlugin({
     name: "MessagePopoverAPI",
-    description: "API to add buttons to message popovers.",
+    description: t("vencord.messagePopoverAPI.description"),
     authors: [Devs.KingFish, Devs.Ven, Devs.Nuckyz],
     patches: [
         {

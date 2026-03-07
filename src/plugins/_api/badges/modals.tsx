@@ -12,6 +12,7 @@ import { Paragraph } from "@components/Paragraph";
 import { DonateButton, TranslateButton } from "@components/settings";
 import { Margins } from "@utils/margins";
 import { closeModal, ModalContent, ModalFooter, ModalHeader, ModalRoot, openModal } from "@utils/modal";
+import { Translate } from "@utils/translation";
 
 export function VencordDonorModal() {
     const modalKey = openModal(props => (
@@ -30,7 +31,9 @@ export function VencordDonorModal() {
                     >
                         <Flex justifyContent="center" alignItems="center" gap="0.5em">
                             <Heart />
-                            Vencord Donor
+                            <Translate i18nKey="vencord.vencordDonor.title">
+                                Vencord Donor
+                            </Translate>
                         </Flex>
                     </HeadingPrimary>
                 </ModalHeader>
@@ -85,7 +88,9 @@ export function EquicordDonorModal() {
                     >
                         <Flex justifyContent="center" alignItems="center" gap="0.5em">
                             <Heart />
-                            Equicord Donor
+                            <Translate i18nKey="equicord.equicordDonor.title">
+                                Equicord Donor
+                            </Translate>
                         </Flex>
                     </HeadingPrimary>
                 </ModalHeader>
@@ -106,10 +111,14 @@ export function EquicordDonorModal() {
                     </Flex>
                     <div style={{ padding: "1em" }}>
                         <Paragraph>
-                            This Badge is a special perk for Equicord (Not Vencord) Donors
+                            <Translate i18nKey="equicord.equicordDonor.description">
+                                This Badge is a special perk for Equicord (Not Vencord) Donors
+                            </Translate>
                         </Paragraph>
                         <Paragraph className={Margins.top20}>
-                            Please consider supporting the development of Equicord by becoming a donor. It would mean a lot! :3
+                            <Translate i18nKey="equicord.equicordDonor.description2">
+                                Please consider supporting the development of Equicord by becoming a donor. It would mean a lot!!
+                            </Translate>
                         </Paragraph>
                     </div>
                 </ModalContent>
@@ -138,7 +147,9 @@ export function EquicordTranslatorModal() {
                         }}
                     >
                         <Flex justifyContent="center" alignItems="center" gap="0.5em">
-                            Equicord Translator
+                            <Translate i18nKey="equicord.equicordTranslator.title">
+                                Equicord Translator
+                            </Translate>
                         </Flex>
                     </HeadingPrimary>
                 </ModalHeader>
@@ -153,7 +164,9 @@ export function EquicordTranslatorModal() {
                     </Flex>
                     <div className="vc-translate-modal-paragraph">
                         <Paragraph>
-                            Awarded to contributors who expand Equicord’s language support by translating content for the community.
+                            <Translate i18nKey="equicord.equicordTranslator.description">
+                                Awarded to contributors who expand Equicord's language support by translating content for the community.
+                            </Translate>
                         </Paragraph>
                     </div>
                 </ModalContent>

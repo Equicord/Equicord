@@ -19,11 +19,12 @@
 import "./style.css";
 
 import { Devs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 
 export default definePlugin({
     name: "PlainFolderIcon",
-    description: "Dont show the small guild icons in folders",
+    description: t("vencord.plainFolderIcon.description"),
     authors: [Devs.botato],
 
     patches: [

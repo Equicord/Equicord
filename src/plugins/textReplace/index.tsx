@@ -67,12 +67,12 @@ const settings = definePluginSettings({
     stringRules: {
         type: OptionType.CUSTOM,
         default: makeEmptyRuleArray(),
-        description: "Rules for replacing text using string matching."
+        description: t("vencord.textReplace.stringRules")
     },
     regexRules: {
         type: OptionType.CUSTOM,
         default: makeEmptyRuleArray(),
-        description: "Rules for replacing text using regular expressions."
+        description: t("vencord.textReplace.regexRules")
     }
 });
 
@@ -256,7 +256,7 @@ const TEXT_REPLACE_RULES_EXEMPT_CHANNEL_IDS = [
 
 export default definePlugin({
     name: "TextReplace",
-    description: "Replace text in your or others' messages. You can find pre-made rules in the #textreplace-rules channel in Vencord's Server.",
+    description: t("vencord.textReplace.description"),
     authors: [Devs.AutumnVN, Devs.TheKodeToad, EquicordDevs.Etorix],
     isModified: true,
 

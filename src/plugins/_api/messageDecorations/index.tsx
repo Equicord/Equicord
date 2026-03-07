@@ -17,13 +17,14 @@
 */
 
 import { Devs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 
 import managedStyle from "./style.css?managed";
 
 export default definePlugin({
     name: "MessageDecorationsAPI",
-    description: "API to add decorations to messages",
+    description: t("vencord.messageDecorationsAPI.description"),
     authors: [Devs.TheSun],
 
     managedStyle,

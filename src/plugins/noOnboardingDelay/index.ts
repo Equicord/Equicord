@@ -17,11 +17,12 @@
 */
 
 import { Devs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 
 export default definePlugin({
     name: "NoOnboardingDelay",
-    description: "Skips the slow and annoying onboarding delay",
+    description: t("vencord.noOnboardingDelay.description"),
     authors: [Devs.nekohaxx],
     patches: [
         {

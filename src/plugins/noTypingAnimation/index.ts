@@ -5,12 +5,13 @@
  */
 
 import { Devs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 
 export default definePlugin({
     name: "NoTypingAnimation",
     authors: [Devs.AutumnVN],
-    description: "Disables the CPU-intensive typing dots animation",
+    description: t("vencord.noTypingAnimation.description"),
     patches: [
         {
             find: "dotCycle",

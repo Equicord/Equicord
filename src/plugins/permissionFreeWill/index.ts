@@ -7,26 +7,27 @@
 import { definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
 import { canonicalizeMatch } from "@utils/patches";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 
 const settings = definePluginSettings({
     lockout: {
         type: OptionType.BOOLEAN,
         default: true,
-        description: 'Bypass the permission lockout prevention ("Pretty sure you don\'t want to do this")',
+        description: t("vencord.permissionFreeWill.settings.lockout"),
         restartNeeded: true
     },
     onboarding: {
         type: OptionType.BOOLEAN,
         default: true,
-        description: 'Bypass the onboarding requirements ("Making this change will make your server incompatible [...]")',
+        description: t("vencord.permissionFreeWill.settings.onboarding"),
         restartNeeded: true
     }
 });
 
 export default definePlugin({
     name: "PermissionFreeWill",
-    description: "Disables the client-side restrictions for channel permission management.",
+    description: t("vencord.permissionFreeWill.description"),
     authors: [Devs.lewisakura],
 
     patches: [

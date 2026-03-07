@@ -17,11 +17,12 @@
 */
 
 import { Devs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 
 export default definePlugin({
     name: "NoUnblockToJump",
-    description: "Allows you to jump to messages of blocked or ignored users and likely spammers without unblocking them",
+    description: t("vencord.noUnblockToJump.description"),
     authors: [Devs.dzshn],
     patches: [
         {

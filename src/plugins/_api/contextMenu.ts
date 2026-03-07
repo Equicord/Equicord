@@ -17,11 +17,12 @@
 */
 
 import { Devs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 
 export default definePlugin({
     name: "ContextMenuAPI",
-    description: "API for adding/removing items to/from context menus.",
+    description: t("vencord.contextMenuAPI.description"),
     authors: [Devs.Nuckyz, Devs.Ven, Devs.Kyuuhachi],
     required: true,
 

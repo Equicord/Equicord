@@ -38,6 +38,7 @@ import { isAnyPluginDev, isEquicordGuild, isEquicordSupport, isSupportChannel, t
 import { relaunch } from "@utils/native";
 import { onlyOnce } from "@utils/onlyOnce";
 import { makeCodeblock } from "@utils/text";
+import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 import { checkForUpdates, isOutdated, update } from "@utils/updater";
 import { CloudUploadPlatform } from "@vencord/discord-types/enums";
@@ -287,7 +288,7 @@ const settings = definePluginSettings({}).withPrivateSettings<{
 export default definePlugin({
     name: "SupportHelper",
     required: true,
-    description: "Helps us provide support to you",
+    description: t("vencord.supportHelper.description"),
     authors: [Devs.Ven],
     dependencies: ["UserSettingsAPI"],
 
@@ -304,14 +305,14 @@ export default definePlugin({
     commands: [
         {
             name: "equicord-debug",
-            description: "Send Equicord debug info",
+            description: t("vencord.supportHelper.debug"),
             // @ts-ignore
             predicate: ctx => isAnyPluginDev(UserStore.getCurrentUser()?.id) || isEquicordGuild(ctx?.guild?.id, true),
             execute: async () => ({ content: await generateDebugInfoMessage() })
         },
         {
             name: "equicord-plugins",
-            description: "Send Equicord plugin list",
+            description: t("vencord.supportHelper.plugins"),
             // @ts-ignore
             predicate: ctx => isAnyPluginDev(UserStore.getCurrentUser()?.id) || isEquicordGuild(ctx?.guild?.id, true),
             execute: async () => {

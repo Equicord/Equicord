@@ -5,11 +5,12 @@
  */
 
 import { Devs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 
 export default definePlugin({
     name: "HeaderBarAPI",
-    description: "API to add buttons to the header bar and channel toolbar.",
+    description: t("equicord.headerBarAPI.description"),
     authors: [Devs.prism],
 
     patches: [

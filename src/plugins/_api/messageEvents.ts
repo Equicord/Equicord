@@ -17,11 +17,12 @@
 */
 
 import { Devs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 
 export default definePlugin({
     name: "MessageEventsAPI",
-    description: "Api required by anything using message events.",
+    description: t("vencord.messageEventsAPI.description"),
     authors: [Devs.Arjix, Devs.hunt, Devs.Ven],
     patches: [
         {

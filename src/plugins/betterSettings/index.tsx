@@ -77,7 +77,7 @@ function Layer({ mode, baseLayer = false, ...props }: LayerProps) {
 
 export default definePlugin({
     name: "BetterSettings",
-    description: "Enhances your settings-menu-opening experience",
+    description: t("vencord.betterSettings.description"),
     authors: [Devs.Kyuuhachi],
     settings,
 

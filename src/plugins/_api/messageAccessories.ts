@@ -17,11 +17,12 @@
 */
 
 import { Devs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 
 export default definePlugin({
     name: "MessageAccessoriesAPI",
-    description: "API to add message accessories.",
+    description: t("vencord.messageAccessoriesAPI.description"),
     authors: [Devs.Cyn],
     patches: [
         {

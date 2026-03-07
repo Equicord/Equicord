@@ -20,8 +20,8 @@ import "./style.css";
 
 import { definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
-import { t } from "@utils/translation";
 import { getIntlMessage } from "@utils/discord";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import type { GuildFolder } from "@vencord/discord-types";
 import { findByPropsLazy, findComponentByCodeLazy, findStoreLazy } from "@webpack";
@@ -249,7 +249,7 @@ const GRID_STYLE_NAME = "vc-betterFolders-sidebar-grid";
 
 export default definePlugin({
     name: "BetterFolders",
-    description: "Shows server folders on dedicated sidebar and adds folder related improvements",
+    description: t("vencord.betterFolders.description"),
     authors: [Devs.juby, Devs.AutumnVN, Devs.Nuckyz],
     isModified: true,
 

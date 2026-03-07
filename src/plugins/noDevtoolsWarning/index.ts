@@ -17,11 +17,12 @@
 */
 
 import { Devs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 
 export default definePlugin({
     name: "NoDevtoolsWarning",
-    description: "Disables the 'HOLD UP' banner in the console. As a side effect, also prevents Discord from hiding your token, which prevents random logouts.",
+    description: t("vencord.noDevtoolsWarning.description"),
     authors: [Devs.Ven],
     patches: [{
         find: "setDevtoolsCallbacks",

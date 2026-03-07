@@ -5,12 +5,13 @@
  */
 
 import { Devs } from "@utils/constants.js";
+import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 
 export default definePlugin({
     name: "NoMaskedUrlPaste",
     authors: [Devs.CatNoir],
-    description: "Pasting a link while having text selected will not paste as masked URL",
+    description: t("vencord.noMaskedUrlPaste.description"),
     patches: [
         {
             find: ".selection,preventEmojiSurrogates:",

@@ -17,11 +17,12 @@
 */
 
 import { Devs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 
 export default definePlugin({
     name: "UserSettingsAPI",
-    description: "Patches Discord's UserSettings to expose their group and name.",
+    description: t("vencord.userSettingsAPI.description"),
     authors: [Devs.Nuckyz],
 
     patches: [

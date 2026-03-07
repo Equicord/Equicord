@@ -139,6 +139,7 @@
         "description": "API to add badges to users"
     },
     "betterFolders": {
+        "description": "Shows server folders on dedicated sidebar and adds folder related improvements",
         "settings": {
             "closeAllFolders": "Close all folders when selecting a server not in a folder",
             "closeAllHomeButton": "Close all folders when clicking on the home button",
@@ -188,6 +189,7 @@
         }
     },
     "betterSessions": {
+        "description": "Enhances the sessions (devices) menu. Allows you to view exact timestamps, give each session a custom name, and receive notifications about new sessions.",
         "newBadge": "NEW",
         "newSession": "New session:",
         "rename": "Rename",
@@ -203,6 +205,7 @@
         }
     },
     "betterSettings": {
+        "description": "Enhances your settings-menu-opening experience",
         "settings": {
             "disableFade": "Disable the crossfade animation",
             "eagerLoad": "Removes the loading delay when opening the menu for the first time",
@@ -370,6 +373,7 @@
         }
     },
     "customRPC": {
+        "description": "Add a fully customisable Rich Presence (Game status) to your Discord profile",
         "activityType": "Activity Type",
         "activityTypes": {
             "competing": "Competing",
@@ -454,7 +458,9 @@
         "enableAndRestart": "Enable Decor and restart your client to change your avatar decoration.",
         "profilesLink": "Profiles",
         "removeDecoration": "Remove Decoration",
-        "title": "Decor"
+        "title": "Decor",
+        "baseUrl": "Decor api url",
+        "agreedToGuidelines": "Agreed to guidelines"
     },
     "devCompanion": {
         "description": "Dev Companion Plugin. Please report anything not working or being weird (most likely its a bug) to sadan, either ping or dm, thanks!",
@@ -500,6 +506,7 @@
         "warning3": "No, you cannot use server-side features like checking the \"Send to Client\" box."
     },
     "expressionCloner": {
+        "description": "Allows you to clone Emotes & Stickers to your own server (right click them)",
         "cloneEmoji": "Clone Emoji",
         "cloneSticker": "Clone Sticker",
         "cloneTo": "Clone to {guild}",
@@ -699,6 +706,7 @@
         "description": "Do not hide messages from 'likely spammers'"
     },
     "ignoreActivities": {
+        "description": "Ignore activities from showing up on your status ONLY. You can configure which ones are specifically ignored from the Registered Games and Activities tabs, or use the general settings below",
         "disableActivity": "Disable activity",
         "enableActivity": "Enable activity",
         "filterList": {
@@ -732,6 +740,7 @@
         "description": "Never hide image links in messages, even if it's the only content"
     },
     "imageZoom": {
+        "description": "Lets you zoom in to images and gifs. Use scroll wheel to zoom in and shift + scroll wheel to increase lens radius / size",
         "lensSize": "Lens Size",
         "nearestNeighbour": "Nearest Neighbour",
         "settings": {
@@ -840,6 +849,7 @@
         "showLogs": "Show Logs"
     },
     "memberCount": {
+        "description": "Shows the number of online members, total members, and users in voice channels on the server — in the member list and tooltip.",
         "settings": {
             "memberList": "Show member count in the member list",
             "toolTip": "Show member count on the server tooltip",
@@ -928,6 +938,7 @@
         "description": "API required by anything using message events"
     },
     "messageLatency": {
+        "description": "Displays an indicator for messages that took ≥n seconds to send",
         "clockAhead": "This user's clock is {delta} ahead.",
         "delayedMessage": "Delayed Message",
         "messageDelayed": "This message was sent with a delay of {delta}.",
@@ -985,6 +996,7 @@
         }
     },
     "messageLogger": {
+        "description": "Temporarily logs deleted and edited messages.",
         "clearMessageLog": "Clear Message Log",
         "deletedMessages_one": "{count} deleted message",
         "deletedMessages_other": "{count} deleted messages",
@@ -1230,6 +1242,7 @@
         }
     },
     "permissionsViewer": {
+        "description": "View the permissions a user or channel has, and the roles of a server",
         "noPermissions": "No permissions to display!",
         "owner": "owner",
         "permissions": "Permissions",
@@ -1276,6 +1289,7 @@
         "togglePip": "Toggle Picture in Picture"
     },
     "pinDms": {
+        "description": "Allows you to pin private channels to the top of your DM list. To pin/unpin or re-order pins, right click DMs",
         "addCategory": "Add Category",
         "color": "Color",
         "create": "Create",
@@ -1446,7 +1460,8 @@
         },
         "system": "System",
         "unblockUser": "Unblock user",
-        "viewReviews": "View Reviews"
+        "viewReviews": "View Reviews",
+        "description": "Review other users (Adds a new settings to profiles)"
     },
     "roleColorEverywhere": {
         "description": "Adds the top role color anywhere possible",
@@ -1603,8 +1618,8 @@
             "title": "Enable React Developer Tools"
         },
         "frameless": {
-            "description": "Remove the native window frame for a cleaner look. You can still move the window by dragging the title bar area.",
-            "title": "Disable the window frame"
+            "title": "Disable All Window Frames",
+            "description": "Remove the native window frame for a cleaner look. You can still move the window by dragging the title bar area."
         },
         "hint": "Hint: You can change the position of this settings section in the <0>settings of the Settings plugin</0>!",
         "macosVibrancyStyle": {
@@ -1827,6 +1842,7 @@
         }
     },
     "silentTyping": {
+        "description": "Hide your typing indicator from chat.",
         "clickActions": {
             "openPluginSettings": "Open Plugin Settings",
             "toggleTypingGlobally": "Toggle Typing Globally",
@@ -1918,6 +1934,7 @@
         "settings": "Equicord Settings"
     },
     "textReplace": {
+        "description": "Replace text in your or others' messages. You can find pre-made rules in the #textreplace-rules channel in Vencord's Server.",
         "find": "Find",
         "messageWithRules": "Message with rules applied",
         "onlyIfIncludes": "Only if includes",
@@ -1928,7 +1945,9 @@
         "testRules": "Test Rules",
         "typeMessage": "Type a message",
         "usingRegex": "Using Regex",
-        "usingString": "Using String"
+        "usingString": "Using String",
+        "stringRules": "Rules for replacing text using string matching.",
+        "regexRules": "Rules for replacing text using regular expressions."
     },
     "themeAttributes": {
         "description": "Adds data attributes to various elements for theming purposes"
@@ -1940,6 +1959,7 @@
             "title": "Equicord Auto-Translate Enabled"
         },
         "autoTranslateEnabledLabel": "Auto Translate Enabled",
+        "description": "Translate messages with Google Translate or DeepL",
         "disableAutoTranslate": "Disable Auto-Translate",
         "dontShowAgain": "Don't show again",
         "gotIt": "Got it",
@@ -2094,6 +2114,7 @@
         "downloadVoiceMessage": "Download voice message"
     },
     "voiceMessages": {
+        "description": "Allows you to send voice messages like on mobile. To do so, right click the upload button and click Send Voice Message.",
         "echoCancellation": "Echo Cancellation",
         "failedToParse": "Failed to parse selected audio file: {error}",
         "failedToUpload": "Failed to upload voice message",
@@ -2126,6 +2147,7 @@
         "description": "Removes 2500kbps bitrate cap on chromium and vesktop clients."
     },
     "whoReacted": {
+        "description": "Renders the avatars of users who reacted to a message",
         "settings": {
             "avatarClick": "Toggle clicking avatars in reactions"
         }
@@ -2161,5 +2183,25 @@
     },
     "youtubeAdblock": {
         "description": "Block ads in YouTube embeds and the WatchTogether activity via AdGuard"
+    },
+    "vencordDonor": {
+        "title": "Vencord Donor",
+        "description": "This Badge is a special perk for Vencord Donors",
+        "description2": "Please consider supporting the development of Vencord by becoming a donor. It would mean a lot!!"
+    },
+    "settingsPlugin": {
+        "description": "Adds Settings UI and debug info",
+        "settingsLocation": "Where to put the Equicord settings section",
+        "top": "At the very top",
+        "aboveNitro": "Above the Nitro section",
+        "belowNitro": "Below the Nitro section",
+        "aboveActivity": "Above Activity Settings",
+        "belowActivity": "Below Activity Settings",
+        "bottom": "At the very bottom"
+    },
+    "supportHelper": {
+        "description": "Helps us provide support to you",
+        "debug": "Send Equicord debug info",
+        "plugins": "Send Equicord plugin list"
     }
 }

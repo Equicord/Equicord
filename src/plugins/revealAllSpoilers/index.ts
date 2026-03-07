@@ -17,6 +17,7 @@
 */
 
 import { Devs, IS_MAC } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 import { findCssClassesLazy } from "@webpack";
 
@@ -25,7 +26,7 @@ const MessagesClasses = findCssClassesLazy("messagesWrapper", "navigationDescrip
 
 export default definePlugin({
     name: "RevealAllSpoilers",
-    description: "Reveal all spoilers in a message by Ctrl-clicking a spoiler, or in the chat with Ctrl+Shift-click",
+    description: t("vencord.revealAllSpoilers.description"),
     authors: [Devs.whqwert],
 
     patches: [

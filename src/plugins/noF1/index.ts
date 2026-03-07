@@ -17,11 +17,12 @@
 */
 
 import { Devs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 
 export default definePlugin({
     name: "NoF1",
-    description: "Disables F1 help bind.",
+    description: t("vencord.noF1.description"),
     authors: [Devs.Cyn],
     patches: [
         {

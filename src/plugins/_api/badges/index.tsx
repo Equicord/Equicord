@@ -25,6 +25,7 @@ import { Devs } from "@utils/constants";
 import { copyWithToast } from "@utils/discord";
 import { Logger } from "@utils/Logger";
 import { shouldShowContributorBadge, shouldShowEquicordContributorBadge } from "@utils/misc";
+import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 import { ContextMenuApi, Menu, Toasts, UserStore } from "@webpack/common";
 
@@ -126,7 +127,7 @@ export function BadgeContextMenu({ badge }: { badge: ProfileBadge & BadgeUserArg
 
 export default definePlugin({
     name: "BadgeAPI",
-    description: "API to add badges to users",
+    description: t("vencord.badgeAPI.description"),
     authors: [Devs.Megu, Devs.Ven, Devs.TheSun],
     required: true,
     patches: [

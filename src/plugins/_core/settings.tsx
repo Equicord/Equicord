@@ -19,6 +19,7 @@ import {
 import { gitHashShort } from "@shared/vencordUserAgent";
 import { Devs } from "@utils/constants";
 import { isTruthy } from "@utils/guards";
+import { t } from "@utils/translation";
 import definePlugin, { IconProps, OptionType } from "@utils/types";
 import { findByPropsLazy } from "@webpack";
 import { React } from "@webpack/common";
@@ -91,14 +92,14 @@ interface SettingsLayoutBuilder {
 const settings = definePluginSettings({
     settingsLocation: {
         type: OptionType.SELECT,
-        description: "Where to put the Equicord settings section",
+        description: t("vencord.settingsPlugin.settingsLocation"),
         options: [
-            { label: "At the very top", value: "top" },
-            { label: "Above the Nitro section", value: "aboveNitro", default: true },
-            { label: "Below the Nitro section", value: "belowNitro" },
-            { label: "Above Activity Settings", value: "aboveActivity" },
-            { label: "Below Activity Settings", value: "belowActivity" },
-            { label: "At the very bottom", value: "bottom" },
+            { label: t("vencord.settingsPlugin.top"), value: "top" },
+            { label: t("vencord.settingsPlugin.aboveNitro"), value: "aboveNitro", default: true },
+            { label: t("vencord.settingsPlugin.belowNitro"), value: "belowNitro" },
+            { label: t("vencord.settingsPlugin.aboveActivity"), value: "aboveActivity" },
+            { label: t("vencord.settingsPlugin.belowActivity"), value: "belowActivity" },
+            { label: t("vencord.settingsPlugin.bottom"), value: "bottom" },
         ] as { label: string; value: SettingsLocation; default?: boolean; }[]
     }
 });
@@ -117,7 +118,7 @@ const settingsSectionMap: [string, string][] = [
 
 export default definePlugin({
     name: "Settings",
-    description: "Adds Settings UI and debug info",
+    description: t("vencord.settingsPlugin.description"),
     authors: [Devs.Ven, Devs.Megu],
     required: true,
 

@@ -7,6 +7,7 @@
 import { isPluginEnabled } from "@api/PluginManager";
 import declutter from "@equicordplugins/declutter";
 import { Devs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 import { findCssClassesLazy } from "@webpack";
 
@@ -14,7 +15,7 @@ const { iconForeground } = findCssClassesLazy("iconForeground", "accountPopoutBu
 
 export default definePlugin({
     name: "UserAreaAPI",
-    description: "API to add buttons to the user area panel.",
+    description: t("equicord.userAreaAPI.description"),
     authors: [Devs.prism],
 
     patches: [

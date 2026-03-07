@@ -28,14 +28,16 @@ export const settings = definePluginSettings({
             return <div>
                 <DecorSection hideTitle hideDivider noMargin />
                 <Paragraph className={classes(Margins.top8, Margins.bottom8)}>
-                    {t("decor.accessFromProfiles", { link: <Link
-                        href="/settings/profile-customization"
-                        onClick={e => {
-                            e.preventDefault();
-                            closeAllModals();
-                            FluxDispatcher.dispatch({ type: "USER_SETTINGS_MODAL_SET_SECTION", section: "Profile Customization" });
-                        }}
-                    >{t("vencord.decor.profilesLink")}</Link> })}
+                    {t("decor.accessFromProfiles", {
+                        link: <Link
+                            href="/settings/profile-customization"
+                            onClick={e => {
+                                e.preventDefault();
+                                closeAllModals();
+                                FluxDispatcher.dispatch({ type: "USER_SETTINGS_MODAL_SET_SECTION", section: "Profile Customization" });
+                            }}
+                        >{t("vencord.decor.profilesLink")}</Link>
+                    })}
                 </Paragraph>
             </div>;
         }
@@ -43,12 +45,12 @@ export const settings = definePluginSettings({
     baseUrl: {
         type: OptionType.STRING,
         hidden: true,
-        description: "Decor api url",
+        description: t("vencord.decor.baseUrl"),
         default: "https://decor.fieryflames.dev"
     },
     agreedToGuidelines: {
         type: OptionType.BOOLEAN,
-        description: "Agreed to guidelines",
+        description: t("vencord.decor.agreedToGuidelines"),
         hidden: true,
         default: false
     }

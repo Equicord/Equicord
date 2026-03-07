@@ -278,7 +278,7 @@ export const settings = definePluginSettings({
 
 export default definePlugin({
     name: "VoiceMessages",
-    description: "Allows you to send voice messages like on mobile. To do so, right click the upload button and click Send Voice Message.",
+    description: t("vencord.voiceMessages.description"),
     authors: [Devs.Ven, Devs.Vap, Devs.Nickyux, EquicordDevs.Z1xus, Devs.prism],
     settings,
 

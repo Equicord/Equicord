@@ -17,12 +17,13 @@
 */
 
 import { Devs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 import { UserStore } from "@webpack/common";
 
 export default definePlugin({
     name: "NoProfileThemes",
-    description: "Completely removes Nitro profile themes from everyone but yourself",
+    description: t("vencord.noProfileThemes.description"),
     authors: [Devs.TheKodeToad],
     patches: [
         {
