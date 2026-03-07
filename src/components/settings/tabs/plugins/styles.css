@@ -52,6 +52,10 @@
     margin: 0 auto;
 }
 
+.vc-plugins-disable-notice .vc-notice-inner {
+    align-items: center;
+}
+
 .vc-plugins-info-card {
     padding: 1em;
     height: fit-content;

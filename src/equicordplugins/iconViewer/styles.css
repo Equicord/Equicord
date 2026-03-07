@@ -41,6 +41,7 @@
 
 .vc-icon-tab-search-bar-grid {
     display: flex;
+    align-items: stretch;
     gap: 8px;
     margin-bottom: 16px;
 }

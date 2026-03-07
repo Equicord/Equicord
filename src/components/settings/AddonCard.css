@@ -41,7 +41,7 @@
     -webkit-box-orient: vertical;
     /* stylelint-disable-next-line property-no-unknown */
     box-orient: vertical;
-    color: var(--text-default);
+    color: var(--text-subtle);
 }
 
 .vc-addon-name-author {
