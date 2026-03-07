@@ -4,14 +4,16 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { AudioPlayerInterface, createAudioPlayer } from "@api/AudioPlayer";
 import { ApplicationCommandInputType, sendBotMessage } from "@api/Commands";
 import { HeaderBarButton } from "@api/HeaderBar";
 import { addMessagePreSendListener, removeMessagePreSendListener } from "@api/MessageEvents";
-import { isPluginEnabled } from "@api/PluginManager";
+import { isPluginEnabled, plugins } from "@api/PluginManager";
 import { definePluginSettings, migratePluginToSettings } from "@api/Settings";
 import customRPC from "@plugins/customRPC";
 import { Devs, EquicordDevs, GUILD_ID, SUPPORT_CHANNEL_ID, SUPPORT_CHANNEL_IDS, VC_SUPPORT_CHANNEL_IDS } from "@utils/constants";
 import { isAnyPluginDev } from "@utils/misc";
+import { ModalProps, ModalRoot, openModal } from "@utils/modal";
 import definePlugin, { OptionType } from "@utils/types";
 import { StandingState } from "@vencord/discord-types/enums";
 import { findByCodeLazy, findExportedComponentLazy, findStoreLazy } from "@webpack";
@@ -25,6 +27,8 @@ migratePluginToSettings(true, "EquicordHelper", "NoBulletPoints", "noBulletPoint
 migratePluginToSettings(true, "EquicordHelper", "NoModalAnimation", "noModalAnimation");
 
 let clicked = false;
+let boopSound: AudioPlayerInterface;
+let song: AudioPlayerInterface;
 
 const SafetyHubStore = findStoreLazy("SafetyHubStore");
 const fetchSafetyHub: () => Promise<void> = findByCodeLazy("SAFETY_HUB_FETCH_START");
@@ -38,6 +42,42 @@ const StandingConfig: Record<number, { label: string; hoverColor: string; Icon: 
     [StandingState.AT_RISK]: { label: "At risk", hoverColor: "var(--status-danger)", Icon: WarningIcon },
     [StandingState.SUSPENDED]: { label: "Suspended", hoverColor: "var(--interactive-muted)", Icon: WarningIcon },
 };
+
+function assignSong(url: string, volume: number) {
+    song?.delete();
+    song = createAudioPlayer(url, { volume, preload: true, persistent: true });
+    song.load();
+}
+
+function assignBoop(url: string, volume: number) {
+    boopSound?.delete();
+    boopSound = createAudioPlayer(url, { volume, preload: true, persistent: true });
+    boopSound.load();
+}
+
+function syncSoggyPlayers() {
+    if (!settings.store.enableSoggy) {
+        boopSound?.delete();
+        song?.delete();
+        return;
+    }
+
+    assignBoop(settings.store.boopLink, settings.store.boopVolume * 100);
+    assignSong(settings.store.songLink, settings.store.songVolume * 100);
+}
+
+const soggySettingNames = ["songVolume", "boopVolume", "tooltipText", "imageLink", "songLink", "boopLink"] as const;
+
+function updateSoggySettingsVisibility(enabled: boolean) {
+    const { options } = plugins[settings.pluginName] ?? {};
+    if (!options) return;
+
+    for (const settingName of soggySettingNames) {
+        const { [settingName]: option } = options;
+        if (!option || option.type === OptionType.CUSTOM) continue;
+        option.hidden = !enabled;
+    }
+}
 
 function StandingButton() {
     const standing = useStateFromStores([SafetyHubStore], () => SafetyHubStore.getAccountStanding());
@@ -59,6 +99,74 @@ function StandingButton() {
                 onClick={() => SettingsRouter.openUserSettings("my_account_panel")}
             />
         </div>
+    );
+}
+
+function SoggyModal(props: ModalProps) {
+    React.useEffect(() => {
+        if (settings.store.songVolume === 0) return;
+        song?.loop();
+        return () => song?.stop();
+    }, []);
+
+    const boop = (e: React.MouseEvent<HTMLImageElement>) => {
+        const { offsetX, offsetY } = e.nativeEvent;
+        const region = { x: 155, y: 220, width: 70, height: 70 };
+
+        if (
+            settings.store.boopVolume !== 0
+            && offsetX >= region.x
+            && offsetX <= region.x + region.width
+            && offsetY >= region.y
+            && offsetY <= region.y + region.height
+        ) {
+            boopSound?.play();
+        }
+    };
+
+    return (
+        <ModalRoot {...props}>
+            <img
+                src={settings.store.imageLink}
+                onClick={boop}
+                style={{ display: "block" }}
+            />
+        </ModalRoot>
+    );
+}
+
+function openSoggyModal() {
+    openModal(props => <SoggyModal {...props} />);
+}
+
+function SoggyButton() {
+    return (
+        <HeaderBarButton
+            tooltip={settings.store.tooltipText}
+            icon={() => (
+                <img
+                    alt=""
+                    src={settings.store.imageLink}
+                    width={24}
+                    height={24}
+                    draggable={false}
+                    style={{ pointerEvents: "none" }}
+                />
+            )}
+            onClick={openSoggyModal}
+            selected={false}
+        />
+    );
+}
+
+function HelperHeaderButtons() {
+    const { accountStandingButton, enableSoggy } = settings.use(["accountStandingButton", "enableSoggy"]);
+
+    return (
+        <>
+            {accountStandingButton ? <StandingButton /> : null}
+            {enableSoggy ? <SoggyButton /> : null}
+        </>
     );
 }
 
@@ -127,6 +235,67 @@ const settings = definePluginSettings({
         restartNeeded: true,
         default: false
     },
+    enableSoggy: {
+        type: OptionType.BOOLEAN,
+        description: "Enable Soggy in the header bar.",
+        default: false,
+        onChange() {
+            updateSoggySettingsVisibility(settings.store.enableSoggy);
+            syncSoggyPlayers();
+        }
+    },
+    songVolume: {
+        type: OptionType.SLIDER,
+        description: "Volume of the song. Set to 0 to disable.",
+        default: 0.25,
+        markers: [0, 0.25, 0.5, 0.75, 1],
+        stickToMarkers: false,
+        hidden: true,
+        onChange(newValue) {
+            assignSong(settings.store.songLink, newValue * 100);
+        }
+    },
+    boopVolume: {
+        type: OptionType.SLIDER,
+        description: "Volume of the boop sound.",
+        default: 0.2,
+        markers: [0, 0.25, 0.5, 0.75, 1],
+        stickToMarkers: false,
+        hidden: true,
+        onChange(newValue) {
+            assignBoop(settings.store.boopLink, newValue * 100);
+        }
+    },
+    tooltipText: {
+        type: OptionType.STRING,
+        description: "Text shown when hovering over the Soggy button.",
+        default: "the soggy",
+        hidden: true
+    },
+    imageLink: {
+        type: OptionType.STRING,
+        description: "URL for the Soggy image used in the button and modal.",
+        default: "https://equicord.org/assets/plugins/soggy/cat.png",
+        hidden: true
+    },
+    songLink: {
+        type: OptionType.STRING,
+        description: "URL for the song played in the Soggy modal.",
+        default: "https://github.com/Equicord/Equibored/raw/main/sounds/soggy/song.mp3?raw=true",
+        hidden: true,
+        onChange(newValue) {
+            assignSong(newValue, settings.store.songVolume * 100);
+        }
+    },
+    boopLink: {
+        type: OptionType.STRING,
+        description: "URL for the boop sound effect.",
+        default: "https://github.com/Equicord/Equibored/raw/main/sounds/soggy/honk.wav?raw=true",
+        hidden: true,
+        onChange(newValue) {
+            assignBoop(newValue, settings.store.boopVolume * 100);
+        }
+    },
 });
 
 export default definePlugin({
@@ -144,10 +313,11 @@ export default definePlugin({
         Devs.AutumnVN
     ],
     required: true,
+    dependencies: ["AudioPlayerAPI"],
     settings,
     headerBarButton: {
         icon: ShieldIcon,
-        render: () => (settings.store.accountStandingButton ? <StandingButton /> : null),
+        render: HelperHeaderButtons,
     },
     patches: [
         // Fixes Unknown Resolution/FPS Crashing
@@ -324,11 +494,17 @@ export default definePlugin({
         }
     ],
     start() {
+        updateSoggySettingsVisibility(settings.store.enableSoggy);
+        syncSoggyPlayers();
+
         if (settings.store.noBulletPoints) {
             addMessagePreSendListener(listener);
         }
     },
     stop() {
+        boopSound?.delete();
+        song?.delete();
+
         if (settings.store.noBulletPoints) {
             removeMessagePreSendListener(listener);
         }
