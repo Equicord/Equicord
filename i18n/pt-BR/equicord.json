@@ -55,6 +55,9 @@
         },
         "description": "Mencione alguém aleatoriamente"
     },
+    "audioPlayerAPI": {
+        "description": "API para reproduzir arquivos de áudio internos do Discord ou links de áudio externos."
+    },
     "autoZipper": {
         "description": "Compacta automaticamente pastas e tipos de arquivos especificados antes de fazer o upload para o Discord",
         "settings": {
@@ -552,6 +555,11 @@
             "reset": "Redefinir"
         }
     },
+    "equicordDonor": {
+        "description": "Esta insígnia é uma vantagem especial para doadores do Equicord (Não Vencord)",
+        "description2": "Considere apoiar o desenvolvimento do Equicord tornando-se um doador. Isso significaria muito!!",
+        "title": "Doador do Equicord"
+    },
     "equicordHelper": {
         "alerts": {
             "equicordSupport": "Suporte Equicord",
@@ -599,6 +607,10 @@
             "themes": "Temas",
             "tooltip": "Caixa de ferramentas Equicord"
         }
+    },
+    "equicordTranslator": {
+        "description": "Concedido a colaboradores que expandem o suporte a idiomas do Equicord, traduzindo conteúdo para a comunidade.",
+        "title": "Tradutor do Equicord"
     },
     "equissant": {
         "description": "Crossant a cada quantidade especificada de cliques:trolley:",
@@ -935,6 +947,9 @@
             "hideTags": "Esconder Tags"
         }
     },
+    "headerBarAPI": {
+        "description": "API para adicionar botões à barra de cabeçalho e à barra de ferramentas do canal."
+    },
     "hideChatButtons": {
         "description": "Capaz de ocultar os botões de chat",
         "settings": {
@@ -977,7 +992,7 @@
         "description": "Muda o botão home para um indicador de digitação se alguém em sua dm estiver digitando"
     },
     "hopOn": {
-        "description": "Entre no Fortnite ou entre no Bloons:3",
+        "description": "Bora lá! Abre uma URL configurável quando uma mensagem corresponde a um regex personalizado no canal atual.",
         "settings": {
             "regex": "Regex para acionar",
             "url": "URL para abrir"
@@ -1316,6 +1331,10 @@
             "scanQrCode": "Escanear um QR code"
         }
     },
+    "mainWindowFrameless": {
+        "description": "Remove a moldura nativa da janela para um visual mais limpo. Você ainda pode mover a janela arrastando a área da barra de título.",
+        "title": "Desativar a moldura(frame) da janela principal"
+    },
     "mediaPlaybackSpeed": {
         "description": "Controle a velocidade de reprodução de mídia para mensagens de voz, vídeos e anexos de áudio",
         "settings": {
@@ -1497,7 +1516,7 @@
         }
     },
     "moyai": {
-        "description": "Reproduz o efeito sonoro moyai quando o emoji 🗿 for usado",
+        "description": "Reproduz um efeito de 🗿 sempre que um emoji moyai é enviado, reagido ou usado como efeito de voz no seu canal atual.",
         "settings": {
             "ignoreBlocked": "Ignorar mensagens de usuários bloqueados",
             "ignoreBots": "Ignorar mensagens de bots",
@@ -2165,6 +2184,9 @@
             "patternPlaceholder": "*.exemplo.com",
             "urlPatterns": "Padrões de URL"
         }
+    },
+    "userAreaAPI": {
+        "description": "API para adicionar botões ao painel da área do usuário."
     },
     "userpfp": {
         "avatarOptions": {
