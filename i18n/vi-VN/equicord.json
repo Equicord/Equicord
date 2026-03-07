@@ -2037,12 +2037,12 @@
             "topRight": "Trên Cùng Bên Phải"
         },
         "settings": {
-            "determineServerNotifications": "Tự động xác định thông báo máy chủ nào sẽ hiển thị dựa trên cài đặt kênh/bang hội của bạn",
+            "determineServerNotifications": "Tự động xác định thông báo máy chủ nào sẽ hiển thị dựa trên cài đặt kênh/máy chủ của bạn",
             "directMessages": "Hiển thị thông báo cho tin nhắn trực tiếp",
-            "disableInStreamerMode": "Tắt thông báo khi ở chế độ truyền phát",
-            "exampleButton": "Hiển thị một ví dụ về thông báo bánh mì nướng",
-            "friendActivity": "Hiển thị thông báo để thêm ai đó hoặc nhận yêu cầu kết bạn",
-            "friendServerNotifications": "Hiển thị thông báo khi bạn bè gửi tin nhắn trong máy chủ họ chia sẻ với bạn",
+            "disableInStreamerMode": "Tắt thông báo khi ở chế độ streamer",
+            "exampleButton": "Hiển thị một ví dụ về thông báo",
+            "friendActivity": "Hiển thị thông báo khi thêm ai đó hoặc nhận yêu cầu kết bạn",
+            "friendServerNotifications": "Hiển thị thông báo khi bạn bè gửi tin nhắn trong máy chủ họ chung với bạn",
             "groupMessages": "Hiển thị thông báo cho tin nhắn nhóm",
             "ignoreUsers": "Tạo danh sách id người dùng để bỏ qua tất cả các thông báo của họ (phân tách bằng dấu phẩy)",
             "maxNotifications": "Số lượng thông báo tối đa được hiển thị cùng một lúc",
@@ -2051,7 +2051,7 @@
             "position": "Vị trí của thông báo",
             "renderImages": "Hiển thị hình ảnh trong thông báo",
             "streamingTreatment": "Cách xử lý thông báo khi chia sẻ màn hình của bạn",
-            "timeout": "Thông báo thời gian tính bằng giây sẽ được hiển thị cho"
+            "timeout": "Thời gian để hiển thị thông báo tính bằng giây"
         },
         "streamingOptions": {
             "ignore": "Bỏ qua - Hoàn toàn không hiển thị thông báo",
@@ -2060,30 +2060,30 @@
         }
     },
     "toggleVideoBind": {
-        "description": "Thêm tổ hợp phím để chuyển đổi video/webcam của bạn trong trò chuyện thoại",
+        "description": "Thêm phím tắt để bật/tắt video/webcam của bạn trong kênh thoại",
         "settings": {
-            "keyBind": "Phím chuyển đổi webcam khi nhấn",
-            "reqAlt": "Yêu cầu giữ alt",
-            "reqCtrl": "Yêu cầu phải nắm quyền kiểm soát",
-            "reqShift": "Yêu cầu giữ ca"
+            "keyBind": "Phím bật/tắt webcam khi nhấn",
+            "reqAlt": "Yêu cầu giữ phím alt",
+            "reqCtrl": "Yêu cầu phải giữ phím control",
+            "reqShift": "Yêu cầu giữ phím shift"
         }
     },
     "toneIndicators": {
-        "description": "Thêm chỉ báo giọng điệu (mỉa mai, đùa giỡn, v.v.) vào tin nhắn",
+        "description": "Thêm các ký hiệu biểu thị sắc thái (mỉa mai, đùa giỡn, v.v.) vào tin nhắn",
         "settings": {
-            "customIndicators": "Chỉ báo âm tùy chỉnh (định dạng: jk=Đùa; srs=Nghiêm túc)",
-            "maxIndicators": "Số lượng chỉ báo âm tối đa hiển thị trên mỗi tin nhắn",
-            "prefix": "(Các) ký tự tiền tố cho chỉ báo âm thanh"
+            "customIndicators": "Ký hiệu biểu thị sắc thái tùy chỉnh (định dạng: jk=Đùa; srs=Nghiêm túc)",
+            "maxIndicators": "Số lượng tối đa ký hiệu biểu thị sắc thái hiển thị trên mỗi tin nhắn",
+            "prefix": "(Các) ký tự tiền tố cho ký hiệu biểu thị sắc thái"
         }
     },
     "tosuRPC": {
-        "description": "Tích hợp hiện diện phong phú cho osu! qua tosu"
+        "description": "Tích hợp rich presence của osu! qua tosu"
     },
     "translatePlus": {
         "contextMenu": {
             "translate": "Dịch"
         },
-        "description": "Thêm nút dịch vào tin nhắn có UI tốt hơn",
+        "description": "Thêm nút dịch vào tin nhắn với giao diện tốt hơn",
         "popover": {
             "translate": "Dịch"
         }
@@ -2104,7 +2104,7 @@
         }
     },
     "unitConverter": {
-        "description": "Chuyển đổi đơn vị trong tin nhắn (hệ đo lường Anh/số liệu)",
+        "description": "Chuyển đổi các đơn vị đo lường trong tin nhắn (hệ đo lường Anh/hệ mét)",
         "popover": {
             "convertUnits": "Chuyển đổi đơn vị"
         },
@@ -2112,29 +2112,29 @@
             "myUnits": "Đơn vị bạn sử dụng và muốn mọi thứ được chuyển đổi thành"
         },
         "unitOptions": {
-            "imperial": "hoàng gia",
-            "metric": "Số liệu"
+            "imperial": "Hệ đo lường Anh",
+            "metric": "Hệ mét"
         }
     },
     "universalMention": {
-        "description": "Đề cập đến người dùng từ bất kỳ máy chủ nào bằng định dạng chung",
+        "description": "Đề cập người dùng từ bất kỳ máy chủ nào bằng định dạng chung",
         "settings": {
-            "globalMention": "Đề cập đến người dùng từ bất kỳ máy chủ nào, không chỉ máy chủ hiện tại",
-            "onlyDMUsers": "Chỉ hiển thị cho người dùng bạn đã có tin nhắn trực tiếp"
+            "globalMention": "Đề cập người dùng từ bất kỳ máy chủ nào, không chỉ máy chủ hiện tại",
+            "onlyDMUsers": "Chỉ hiển thị người dùng bạn đã DM với"
         },
-        "warning": "Việc sử dụng Global Mention có thể gây ra vấn đề về hiệu suất và hiển thị số lượng người dùng vô lý trong phần tự động hoàn thành."
+        "warning": "Việc sử dụng Global Mention có thể gây ra các vấn đề về hiệu năng và hiển thị một lượng người dùng cực lớn trong danh sách tự động hoàn thành."
     },
     "unlimitedAccounts": {
-        "description": "Loại bỏ giới hạn 5 tài khoản cho trình chuyển đổi tài khoản của Discord",
+        "description": "Loại bỏ giới hạn 5 tài khoản trong trình chuyển đổi tài khoản của Discord",
         "settings": {
-            "maxAccounts": "Số lượng tài khoản có thể được thêm hoặc 0 không giới hạn"
+            "maxAccounts": "Số lượng tài khoản có thể được thêm hoặc 0 cho không giới hạn"
         }
     },
     "unreadBadgeCount": {
         "description": "Hiển thị huy hiệu đếm tin nhắn chưa đọc trên các kênh",
         "settings": {
             "notificationCountLimit": "Giới hạn số lượng thông báo ở mức 99+",
-            "showOnMutedChannels": "Hiển thị số lượng chưa đọc trên các kênh bị tắt tiếng"
+            "showOnMutedChannels": "Hiển thị số lượng chưa đọc trên các kênh bị tắt thông báo"
         }
     },
     "urlHighlighter": {
@@ -2142,18 +2142,18 @@
         "settings": {
             "boldUrls": "Làm đậm các URL được đánh dấu",
             "highlightEmbeds": "Đồng thời đánh dấu các URL trong nội dung nhúng",
-            "patterns": "URL mẫu để làm nổi bật bằng cách sử dụng mẫu hình cầu"
+            "patterns": "URL mẫu để làm nổi bật bằng cách sử dụng glob pattern"
         },
         "ui": {
             "addNew": "Thêm mới",
             "patternPlaceholder": "*.example.com",
-            "urlPatterns": "URL Mẫu"
+            "urlPatterns": "Mẫu URL"
         }
     },
     "userpfp": {
         "avatarOptions": {
-            "nitro": "Nitơ",
-            "userpfp": "Người dùngPFP"
+            "nitro": "Nitro",
+            "userpfp": "UserPFP"
         },
         "buttons": {
             "joinServer": "Tham gia máy chủ UserPFP",
@@ -2167,7 +2167,7 @@
         "settings": {
             "databaseSource": "URL để tải cơ sở dữ liệu từ",
             "overrideServerAvatars": "Ghi đè hình đại diện máy chủ bằng hình đại diện tùy chỉnh hoặc hình đại diện người dùng mặc định nếu không đặt hình đại diện tùy chỉnh",
-            "preferNitro": "Nên sử dụng hình đại diện nào nếu có cả hình đại diện pfp hoạt hình mặc định (Nitro) và hình đại diện PFP của người dùng"
+            "preferNitro": "Nên sử dụng hình đại diện nào nếu có cả hình đại diện hoạt hình mặc định (Nitro) và hình đại diện UserPFP"
         }
     },
     "vcNarratorCustom": {
@@ -2176,7 +2176,7 @@
             "vcNarrator": "Trình tường thuật VC",
             "voice": "Giọng nói"
         },
-        "description": "Trình tường thuật kênh giọng nói tùy chỉnh với TTS để người dùng tham gia/rời khỏi và thay đổi trạng thái",
+        "description": "Trình tường thuật kênh thoại tùy chỉnh với TTS khi người dùng tham gia/rời khỏi và trạng thái thay đổi",
         "filterOptions": {
             "blacklist": "Danh sách đen (thông báo tất cả mọi người ngoại trừ được liệt kê)",
             "off": "Tắt",
@@ -2199,7 +2199,7 @@
             "announceOthersMute": "Thông báo khi người dùng khác tắt tiếng/bật tiếng trong VC hiện tại của bạn",
             "announceOthersStream": "Thông báo khi người dùng khác bắt đầu/dừng phát trực tuyến trong VC hiện tại của bạn",
             "announceSelfStream": "Thông báo khi bạn bắt đầu/dừng phát trực tuyến",
-            "customVoice": "Giọng kể chuyện",
+            "customVoice": "Giọng trình tường thuật",
             "ignoreSelf": "Bỏ qua chính mình cho tất cả các sự kiện",
             "joinMessage": "Phần giữ chỗ: {{USER}}, {{DISPLAY_NAME}}, {{NICKNAME}}, {{CHANNEL}}",
             "latinOnly": "Loại bỏ các ký tự không phải tiếng Latinh khỏi tên trước khi nói chúng",
