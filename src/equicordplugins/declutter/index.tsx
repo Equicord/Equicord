@@ -4,8 +4,13 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import "./style.css";
+
 import { definePluginSettings, migratePluginSetting, migratePluginSettings } from "@api/Settings";
+import { Divider } from "@components/Divider";
 import { HeadingSecondary } from "@components/Heading";
+import { Notice } from "@components/Notice";
+import { classNameFactory } from "@utils/css";
 import { Devs, EquicordDevs } from "@utils/index";
 import definePlugin, { OptionType } from "@utils/types";
 
@@ -24,16 +29,12 @@ for (const [oldKey, newKey] of migrationsAnammox) {
     migratePluginSetting("Declutter", newKey, oldKey);
 }
 
+const cl = classNameFactory("vc-declutter-");
+
 export const settings = definePluginSettings({
     userProfileHeader: {
         type: OptionType.COMPONENT,
         component: () => SectionSeparator("User Profile"),
-    },
-    removeAvatarDecoration: {
-        type: OptionType.BOOLEAN,
-        description: "Remove avatar decorations.",
-        default: true,
-        restartNeeded: true,
     },
     removeNameplate: {
         type: OptionType.BOOLEAN,
@@ -59,11 +60,13 @@ export const settings = definePluginSettings({
         default: true,
         restartNeeded: true
     },
-    removeUsernameStyles: {
-        type: OptionType.BOOLEAN,
-        description: "Remove username colors and effects.",
-        default: true,
-        restartNeeded: true
+    accessibilityNotice: {
+        type: OptionType.COMPONENT,
+        component: () => (
+            <Notice.Info className={cl("accessibility-notice")}>
+                Discord already has a built-in username style option in Accessibility settings.
+            </Notice.Info>
+        )
     },
     friendsListHeader: {
         type: OptionType.COMPONENT,
@@ -72,7 +75,7 @@ export const settings = definePluginSettings({
     removeShopAboveDM: {
         type: OptionType.BOOLEAN,
         description: "Remove shops above DMs list.",
-        default: true,
+        default: false,
         restartNeeded: true,
     },
     removeQuestsAboveDM: {
@@ -125,29 +128,21 @@ export const settings = definePluginSettings({
 
 function SectionSeparator(title: string) {
     return (
-        <>
-            <hr style={{ width: "100%" }} />
-            <HeadingSecondary>{title}</HeadingSecondary>
-            <hr style={{ width: "100%" }} />
-        </>
+        <div className={cl("section-separator")}>
+            <Divider />
+            <HeadingSecondary className={cl("section-title")}>
+                {title}
+            </HeadingSecondary>
+        </div>
     );
 }
 
 export default definePlugin({
     name: "Declutter",
-    description: "Declutter discord ui by removing unwanted elements such as profile customizations, shops, quests and more.",
+    description: "Cleans up Discord by removing non-essential UI elements like profile effects, shop tabs, boosts, and more.",
     authors: [EquicordDevs.Leon135, Devs.prism, Devs.Kyuuhachi],
     settings,
     patches: [
-        {
-            // Avatar decoration
-            find: "getAvatarDecorationURL:",
-            replacement: {
-                match: /(?<=function \i\((\i)\){)(?=.{0,150}let{avatarDecoration)/,
-                replace: "$&return null;"
-            },
-            predicate: () => settings.store.removeAvatarDecoration,
-        },
         {
             // Nameplate
             find: "#{intl::AVATAR_MALLOW}",
@@ -176,20 +171,13 @@ export default definePlugin({
             predicate: () => settings.store.removeClanTag,
         },
         {
-            // Username styles and allways show username
-            find: ".NITRO_PRIVACY_PERK_BETA_COACHMARK));",
-            replacement: [
-                {
-                    match: /displayNameStyles:(\i),/,
-                    replace: "displayNameStyles:void 0,",
-                    predicate: () => settings.store.removeUsernameStyles
-                },
-                {
-                    match: /hoverText:(\i),forceHover:\i,children:/g,
-                    replace: "hoverText:$1,forceHover:!0,children:",
-                    predicate: () => settings.store.alwaysShowUsername
-                },
-            ],
+            // Always show username
+            find: ".DISPLAY_NAME_STYLES_COACHMARK),",
+            replacement: {
+                match: /hoverText:(\i),forceHover:\i,children:/g,
+                replace: "hoverText:$1,forceHover:!0,children:"
+            },
+            predicate: () => settings.store.alwaysShowUsername
         },
         {
             // Button tooltips in user area
