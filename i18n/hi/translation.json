@@ -2,9 +2,9 @@
     "description": "Equicord का अनुवाद करने में सहायता करता है",
     "settings": {
         "forceLocale": {
-            "description": "Equicord के उपयोग के लिए एक अलग स्थान को बाध्य करें",
-            "followDiscord": "डिफ़ॉल्ट (अनुसरण करें Discord)"
+            "description": "Equicord के लिए एक अलग locale का उपयोग बाध्य करें",
+            "followDiscord": "डिफ़ॉल्ट (follow Discord)"
         },
-        "showMissingKeys": "यदि वर्तमान स्थान में अनुवाद अनुपलब्ध है, तो अंग्रेजी पर वापस जाने के बजाय कुंजियाँ दिखाएँ"
+        "showMissingKeys": "यदि वर्तमान locale में अनुवाद उपलब्ध नहीं हैं, तो English पर वापस जाने के बजाय keys दिखाएँ"
     }
 }

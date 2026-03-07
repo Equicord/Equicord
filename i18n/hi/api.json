@@ -1,37 +1,37 @@
 {
     "commands": {
-        "errorExecuting": "\"{name}\" कमांड निष्पादित करते समय एक त्रुटि उत्पन्न हुई"
+        "errorExecuting": "\"{name}\" कमांड निष्पादित करते समय एक त्रुटि उत्पन्न हुई है"
     },
     "memberListDecorators": {
-        "fallback": "{key} सदस्य सूची डेकोरेटर प्रस्तुत करने में विफल"
+        "fallback": "{key} Member List Decorator प्रस्तुत करने में विफल"
     },
     "messageAccessories": {
-        "fallback": "{key} संदेश सहायक सामग्री प्रस्तुत करने में विफल"
+        "fallback": "{key} Message Accessory प्रस्तुत करने में विफल"
     },
     "messageDecorations": {
-        "fallback": "{key} संदेश सजावट प्रस्तुत करने में विफल"
+        "fallback": "{key} Message Decoration प्रस्तुत करने में विफल"
     },
     "notices": {
         "fallback": "सूचना दिखाने में त्रुटि"
     },
     "notifications": {
-        "dismissNotification": "अधिसूचना खारिज करें",
+        "dismissNotification": "सूचना खारिज करें",
         "logs": {
             "body_one": "इससे {count} अधिसूचना स्थायी रूप से हट जाएगी। इस एक्शन को वापस नहीं किया जा सकता।",
-            "body_other": "इससे {count} सूचनाएं स्थायी रूप से हटा दी जाएंगी। इस एक्शन को वापस नहीं किया जा सकता।",
-            "body_zero": "कोई अधिसूचना चयनित नहीं।",
+            "body_other": "इससे {count} सूचनाएं स्थायी रूप से हटा दी जाएंगी। इस action को वापस नहीं किया जा सकता।",
+            "body_zero": "कोई notification selected नहीं।",
             "cancel": "कोई बात नहीं",
-            "clearNotificationLog": "अधिसूचना लॉग साफ़ करें",
-            "confirm": "इसे करें!",
-            "title": "क्या आपको यकीन है?"
+            "clearNotificationLog": "अधिसूचना log साफ़ करें",
+            "confirm": "कर दो !",
+            "title": "क्या आप सुनिश्चित हैं?"
         },
         "missedNotifications": {
             "body_one": "{count} अधिसूचना प्राप्त हुई",
             "body_other": "{count} सूचनाएं प्राप्त हुईं",
-            "title": "जब तुम दूर थे"
+            "title": "जब आप दूर थे"
         },
         "noNotifications": "अभी तक कोई सूचना नहीं",
-        "notificationLog": "अधिसूचना लॉग",
-        "notificationSettings": "अधिसूचना सेटिंग्स"
+        "notificationLog": "अधिसूचना Log",
+        "notificationSettings": "अधिसूचना Settings"
     }
 }
