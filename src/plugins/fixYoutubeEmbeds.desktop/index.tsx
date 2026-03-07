@@ -1,25 +1,39 @@
 /*
  * Vencord, a Discord client mod
- * Copyright (c) 2024 Vendicated and contributors
+ * Copyright (c) 2023 Vendicated and contributors
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { definePluginSettings, migratePluginSettings } from "@api/Settings";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Devs } from "@utils/constants";
 import { t } from "@utils/translation";
-import definePlugin from "@utils/types";
+import definePlugin, { OptionType } from "@utils/types";
 import { Embed } from "@vencord/discord-types";
 import { useState } from "@webpack/common";
 
 interface ToggleableDescriptionProps { embed: Embed, original: () => any; }
 
+const settings = definePluginSettings({
+    youtubeDescription: {
+        description: "Adds descriptions to youtube video embeds",
+        type: OptionType.BOOLEAN,
+        default: false,
+        restartNeeded: true
+    }
+});
+
+migratePluginSettings("FixYoutubeEmbeds", "YoutubeDescription");
+
 export default definePlugin({
-    name: "YoutubeDescription",
-    description: t("equicord.youtubeDescription.description"),
-    authors: [Devs.arHSM],
+    name: "FixYoutubeEmbeds",
+    description: t("vencord.fixYoutubeEmbeds.description"),
+    authors: [Devs.coolelectronics, Devs.arHSM],
+    settings,
     patches: [
         {
             find: "#{intl::SUPPRESS_ALL_EMBEDS}",
+            predicate: () => settings.store.youtubeDescription,
             replacement: {
                 match: /case (\i\.\i\.VIDEO):(case \i\.\i\.\i:)*break;default:(\i)=(?:(this\.renderDescription)\(\))\}/,
                 replace: "$2 break; case $1: $3 = $self.ToggleableDescriptionWrapper({ embed: this.props.embed, original: $4.bind(this) }); break; default: $3 = $4() }"

@@ -6,8 +6,9 @@
 
 import { ApplicationCommandInputType, sendBotMessage } from "@api/Commands";
 import { HeaderBarButton } from "@api/HeaderBar";
+import { addMessagePreSendListener, removeMessagePreSendListener } from "@api/MessageEvents";
 import { isPluginEnabled } from "@api/PluginManager";
-import { definePluginSettings } from "@api/Settings";
+import { definePluginSettings, migratePluginToSettings } from "@api/Settings";
 import customRPC from "@plugins/customRPC";
 import { Devs, EquicordDevs, GUILD_ID, SUPPORT_CHANNEL_ID, SUPPORT_CHANNEL_IDS, VC_SUPPORT_CHANNEL_IDS } from "@utils/constants";
 import { isAnyPluginDev } from "@utils/misc";
@@ -20,6 +21,9 @@ import { ComponentType } from "react";
 
 import { PluginButtons } from "./pluginButtons";
 import { PluginCards } from "./pluginCards";
+
+migratePluginToSettings(true, "EquicordHelper", "NoBulletPoints", "noBulletPoints");
+migratePluginToSettings(true, "EquicordHelper", "NoModalAnimation", "noModalAnimation");
 
 let clicked = false;
 
@@ -58,6 +62,11 @@ function StandingButton() {
         </div>
     );
 }
+
+const listener = async (channelId, msg) => {
+    if (!settings.store.noBulletPoints) return;
+    msg.content = textProcessing(msg.content);
+};
 
 const settings = definePluginSettings({
     noMirroredCamera: {
@@ -107,12 +116,34 @@ const settings = definePluginSettings({
         restartNeeded: true,
         default: false
     },
+    noBulletPoints: {
+        type: OptionType.BOOLEAN,
+        description: t("equicord.noBulletPoints.description"),
+        restartNeeded: true,
+        default: false
+    },
+    noModalAnimation: {
+        type: OptionType.BOOLEAN,
+        description: t("equicord.noModalAnimation.description"),
+        restartNeeded: true,
+        default: false
+    },
 });
 
 export default definePlugin({
     name: "EquicordHelper",
     description: t("equicord.equicordHelper.description"),
-    authors: [Devs.thororen, EquicordDevs.nyx, EquicordDevs.Naibuu, EquicordDevs.keircn, EquicordDevs.SerStars, EquicordDevs.mart, EquicordDevs.omaw],
+    authors: [
+        Devs.thororen,
+        EquicordDevs.nyx,
+        EquicordDevs.Naibuu,
+        EquicordDevs.keircn,
+        EquicordDevs.SerStars,
+        EquicordDevs.mart,
+        EquicordDevs.omaw,
+        Devs.Samwich,
+        Devs.AutumnVN
+    ],
     required: true,
     settings,
     headerBarButton: {
@@ -200,13 +231,49 @@ export default definePlugin({
         },
         // Restore File Download Button
         {
-            predicate: () => settings.store.restoreFileDownloadButton,
             find: '"VISUAL_PLACEHOLDER":',
+            predicate: () => settings.store.restoreFileDownloadButton,
             replacement: {
                 match: /(\.downloadUrl,showDownload:)\i/,
                 replace: "$1!0"
             }
         },
+        // Removes Modal Animation
+        {
+            find: "DURATION_IN:",
+            predicate: () => settings.store.noModalAnimation,
+            replacement: {
+                match: /300,/,
+                replace: "0,",
+            }
+        },
+        // Removes Modal Animation
+        {
+            find: 'backdropFilter:"blur(0px)"',
+            predicate: () => settings.store.noModalAnimation,
+            replacement: {
+                match: /\?0:200/,
+                replace: "?0:0",
+            }
+        },
+        // Removes Modal Animation
+        {
+            find: '="ABOVE"',
+            predicate: () => settings.store.noModalAnimation,
+            replacement: {
+                match: /\?\?300/,
+                replace: "??0",
+            }
+        },
+        // Removes Modal Animation
+        {
+            find: "renderLurkerModeUpsellPopout,position:",
+            predicate: () => settings.store.noModalAnimation,
+            replacement: {
+                match: /200:300/g,
+                replace: "0:0",
+            },
+        }
     ],
     renderMessageAccessory(props) {
         return (
@@ -256,5 +323,19 @@ export default definePlugin({
                 }
             }
         }
-    ]
+    ],
+    start() {
+        if (settings.store.noBulletPoints) {
+            addMessagePreSendListener(listener);
+        }
+    },
+    stop() {
+        if (settings.store.noBulletPoints) {
+            removeMessagePreSendListener(listener);
+        }
+    }
 });
+
+function textProcessing(text: string): string {
+    return text.replace(/(^|\n)(\s*)([*+-])\s+/g, "$1$2\\$3 ");
+}

@@ -116,4 +116,10 @@ export const settings = definePluginSettings({
         component: SettingsComponent,
         description: t("equicord.moreUserTags.settings.tagSettings")
     },
+    noAppsAllowed: {
+        description: "Replaces app for bot",
+        type: OptionType.BOOLEAN,
+        default: false,
+        restartNeeded: true
+    }
 });

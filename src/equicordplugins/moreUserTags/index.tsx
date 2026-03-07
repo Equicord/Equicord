@@ -6,6 +6,7 @@
 
 import "./styles.css";
 
+import { migratePluginToSettings } from "@api/Settings";
 import { Devs, EquicordDevs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
 import { getCurrentChannel, getIntlMessage } from "@utils/discord";
@@ -32,10 +33,12 @@ const genTagTypes = () => {
     return obj;
 };
 
+migratePluginToSettings(true, "MoreUserTags", "NoAppsAllowed", "noAppsAllowed");
+
 export default definePlugin({
     name: "MoreUserTags",
     description: t("equicord.moreUserTags.description"),
-    authors: [Devs.Cyn, Devs.TheSun, Devs.RyanCaoDev, Devs.LordElias, Devs.AutumnVN, EquicordDevs.Hen],
+    authors: [Devs.Cyn, Devs.TheSun, Devs.RyanCaoDev, Devs.LordElias, Devs.AutumnVN, EquicordDevs.Hen, EquicordDevs.meowabyte],
     settings,
     patches: [
         // Make discord actually use our tags
@@ -52,6 +55,14 @@ export default definePlugin({
                     predicate: () => settings.store.dontShowBotTag
                 },
             ],
+        },
+        {
+            find: '"#{intl::APP_TAG::hash}":',
+            predicate: () => settings.store.noAppsAllowed,
+            replacement: {
+                match: /(#{intl::APP_TAG::hash}":\[").*?("\])/,
+                replace: "$1BOT$2"
+            }
         }
     ],
     start() {
