@@ -1,22 +1,22 @@
 {
     "absRPC": {
         "about": {
-            "automaticAuth": "प्लगइन स्वचालित रूप से प्रमाणित करेगा और आपकी सुनने की प्रगति प्राप्त करेगा।",
-            "description": "अपनी वर्तमान में चल रही ऑडियोबुक को Discord रिच प्रेजेंस के रूप में प्रदर्शित करने के लिए अपना ऑडियोबुकशेल्फ़ सर्वर URL, उपयोगकर्ता नाम और पासवर्ड दर्ज करें।",
-            "title": "ऑडियोबुकशेल्फ़ से कैसे जुड़ें"
+            "automaticAuth": "प्लगइन अपने-आप authenticate करेगा और आपकी listening progress को प्राप्त कर लेगा।",
+            "description": "अपने AudioBookShelf server URL, username, और password दर्ज करें ताकि आपकी अभी चल रही audiobooks को Discord Rich Presence के रूप में दिखाया जा सके।",
+            "title": "AudioBookShelf से कैसे जुड़ें"
         },
-        "description": "ऑडियोबुकशेल्फ़ मीडिया सर्वर के लिए समृद्ध उपस्थिति",
+        "description": "AudioBookShelf मीडिया सर्वर के लिए Rich presence",
         "settings": {
-            "password": "ऑडियोबुकशेल्फ़ पासवर्ड",
-            "serverUrl": "ऑडियोबुकशेल्फ़ सर्वर URL (उदाहरण के लिए, https://abs.example.com)",
-            "username": "ऑडियोबुकशेल्फ़ उपयोक्तानाम"
+            "password": "AudioBookShelf का पासवर्ड",
+            "serverUrl": "AudioBookShelf सर्वर URL (उदा., https://abs.example.com)",
+            "username": "AudioBookShelf उपयोगकर्ता नाम"
         },
         "toasts": {
-            "notConfigured": "ऑडियोबुकशेल्फ़ RPC कॉन्फ़िगर नहीं है।"
+            "notConfigured": "AudioBookShelf RPC configured नहीं है।"
         }
     },
     "altKrispSwitch": {
-        "description": "क्रिस्प और स्टैंडर्ड के बजाय कोई नहीं और क्रिस्प के बीच शोर दमन पॉपआउट स्विच बनाता है"
+        "description": "Krisp और Standard के बजाय None और Krisp को Noise Suppression Popout switch बनाता है"
     },
     "alwaysExpandProfiles": {
         "description": "प्रोफ़ाइल पॉपआउट को हमेशा पूर्ण मोडल तक विस्तारित करता है"
@@ -42,7 +42,7 @@
         },
         "settings": {
             "messageLengthLimit": "संसाधित करने के लिए संदेश की अधिकतम लंबाई",
-            "pitch": "पिच गुणक",
+            "pitch": "Pitch multiplier",
             "processOwnMessages": "अपने स्वयं के संदेशों को भी याप करने में सक्षम करें",
             "soundQuality": "उपयोग हेतु ध्वनि की गुणवत्ता",
             "speed": "पाशविक ध्वनि की गति",
@@ -62,28 +62,28 @@
         }
     },
     "bannersEverywhere": {
-        "description": "सदस्य सूची में बैनर प्रदर्शित करता है ",
+        "description": "सदस्य सूची में banners प्रदर्शित करे। ",
         "settings": {
-            "animate": "चेतन बैनर",
-            "preferNameplate": "बैनर के स्थान पर नेमप्लेट को प्राथमिकता दें"
+            "animate": "Animate banners",
+            "preferNameplate": "banner के स्थान पर nameplate को प्राथमिकता दें"
         }
     },
     "baseDecoder": {
-        "description": "किसी भी संदेश की बेस64 सामग्री को डिकोड करें और डिकोड की गई सामग्री को कॉपी करें।",
+        "description": "किसी भी संदेश की base64 content को decoded करें और decoded content को कॉपी करें।",
         "settings": {
-            "clickMethod": "किसी भी संदेश की बेस64 सामग्री को डीकोड करने के लिए बटन बदलें।",
+            "clickMethod": "किसी भी संदेश की base64 content को decode करने वाला button बदलें।",
             "clickMethodOptions": {
                 "left": "बेस64 सामग्री को डीकोड करने के लिए बायाँ-क्लिक करें।",
-                "right": "बेस64 सामग्री को डीकोड करने के लिए राइट क्लिक करें।"
+                "right": "base64 content को decode करने के लिए दायाँ क्लिक करें।"
             }
         },
         "ui": {
-            "copiedToast": "डिकोड की गई सामग्री को क्लिपबोर्ड पर कॉपी किया गया!",
-            "copyDecoded": "डिकोड की गई सामग्री की प्रतिलिपि बनाएँ",
-            "decodedContent": "डिकोड की गई सामग्री",
-            "modalTitle": "डीकोडेड बेस64 सामग्री",
-            "tooltipLeft": "कॉपी डिकोडेड (बायाँ क्लिक) / डिकोड बेस64 (राइट क्लिक)",
-            "tooltipRight": "डिकोड बेस64 (बायाँ क्लिक) / कॉपी डिकोडेड (दायाँ क्लिक)"
+            "copiedToast": "Decode किया गया content clipboard पर copy हो गया है !",
+            "copyDecoded": "Decoded Content को कॉपी करें",
+            "decodedContent": "Decoded Content",
+            "modalTitle": "Decoded Base64 Content",
+            "tooltipLeft": "Copy Decoded (Left Click) / Decode Base64 (Right Click)",
+            "tooltipRight": "Decode Base64 (Left Click) / Copy Decoded (Right Click)"
         }
     },
     "betterActivities": {
@@ -788,7 +788,7 @@
         }
     },
     "fullVcPfp": {
-        "description": "अवतारों को संपूर्ण वीसी टाइल पर ले जाता है"
+        "description": "avatars को संपूर्ण vc tile पर दिखाता है"
     },
     "gensokyoRadioRPC": {
         "description": "Discord जेनसोक्यो रेडियो की समृद्ध उपस्थिति!",
@@ -1623,7 +1623,7 @@
     "profileSets": {
         "description": "प्रोफ़ाइल अनुकूलन प्रीसेट सहेजें और प्रबंधित करें",
         "settings": {
-            "avatarSize": "प्रीसेट मैनेजर में अवतार का आकार"
+            "avatarSize": "Preset manager में avatar size"
         }
     },
     "questify": {
@@ -1721,7 +1721,7 @@
             "clearRdms": "आरडीएमएस इतिहास साफ़ करें",
             "overlayMode": "ओवरले सामग्री मोड",
             "overlayRowLength": "ओवरले पंक्ति में दिखाने के लिए डीएम की संख्या",
-            "overlayShowAvatars": "ओवरले में अवतार दिखाएं",
+            "overlayShowAvatars": "Overlay में avatars दिखाएं",
             "toastDurationMs": "टोस्ट अधिसूचना अवधि (एमएस)",
             "visualStyle": "साइकिल चलाते समय दृश्य संकेतक शैली"
         },
@@ -1767,7 +1767,7 @@
         "settings": {
             "RPCTitle": "आरपीसी के लिए शीर्षक पाठ",
             "albumCoverImage": "एल्बम कवर को RPC छवि के रूप में उपयोग करें (Last.fm मोड)",
-            "assetURL": "RPC के लिए कस्टम छवि URL (डिफ़ॉल्ट: आपका अवतार)",
+            "assetURL": "RPC के लिए custom image URL (default: your avatar)",
             "lastFMApiKey": "Last.fm API कुंजी (last.fm/api से प्राप्त करें)",
             "lastFMStatFormat": "Last.fm स्टेट के लिए प्रारूप ($एल्बम, $कलाकार)",
             "lastFMUsername": "Last.fm उपयोक्तानाम",
@@ -2139,22 +2139,22 @@
     },
     "userpfp": {
         "avatarOptions": {
-            "nitro": "नाइट्रो",
-            "userpfp": "उपयोक्तापीएफपी"
+            "nitro": "Nitro",
+            "userpfp": "UserPFP"
         },
         "buttons": {
             "joinServer": "UserPFP सर्वर से जुड़ें",
             "support": "यहां यूजरपीएफपी का समर्थन करें"
         },
         "contextMenu": {
-            "setAvatar": "अवतार सेट करें"
+            "setAvatar": "Set Avatar"
         },
         "description": "UserPFP डेटाबेस से कस्टम प्रोफ़ाइल चित्रों का उपयोग करें या अपना स्वयं का सेट करें",
-        "notice": "सेट अवतार सुविधा का उपयोग केवल स्थानीय है जिसका अर्थ है कि आप केवल इसमें परिवर्तन देख सकते हैं।",
+        "notice": "set avatar feature का उपयोग केवल local है जिसका अर्थ है कि सिर्फ आप इसमें परिवर्तन देख सकते हैं।",
         "settings": {
             "databaseSource": "URL से डेटाबेस लोड करने के लिए",
-            "overrideServerAvatars": "यदि कोई कस्टम अवतार सेट नहीं है, तो कस्टम अवतार या डिफ़ॉल्ट उपयोगकर्ता अवतार के साथ सर्वर अवतार को ओवरराइड करें",
-            "preferNitro": "यदि डिफ़ॉल्ट एनिमेटेड (नाइट्रो) पीएफपी और उपयोगकर्ता पीएफपी दोनों अवतार मौजूद हैं तो किस अवतार का उपयोग करें"
+            "overrideServerAvatars": "यदि कोई custom avatar सेट नहीं है, तो custom avatar या default user avatar के साथ server avatars को override करें",
+            "preferNitro": "अगर default animated (Nitro) pfp और UserPFP avatars दोनों मौजूद हों, तो कौनसा avatar इस्तेमाल किया जाए"
         }
     },
     "vcNarratorCustom": {
