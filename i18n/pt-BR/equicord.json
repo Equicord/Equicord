@@ -2286,7 +2286,7 @@
     },
     "viewRawVariant": {
         "contextMenu": {
-            "viewRaw": "Ver raw"
+            "viewRaw": "Ver Raw"
         },
         "description": "Visualize dados JSON brutos para mensagens, usuários, canais e servidores",
         "modal": {
