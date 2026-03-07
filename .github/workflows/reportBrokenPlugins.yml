@@ -28,12 +28,8 @@ jobs:
 
         steps:
             - uses: actions/checkout@v4
-              if: ${{ github.event_name == 'schedule' }}
               with:
-                  ref: dev
-
-            - uses: actions/checkout@v4
-              if: ${{ github.event_name == 'workflow_dispatch' }}
+                  ref: ${{ github.event_name == 'schedule' && 'dev' || github.ref }}
 
             - uses: oven-sh/setup-bun@v2
 
@@ -44,19 +40,13 @@ jobs:
               run: |
                   bun install
 
-            - name: Install Google Chrome
-              id: setup-chrome
-              uses: browser-actions/setup-chrome@82b9ce628cc5595478a9ebadc480958a36457dc2
-              with:
-                  chrome-version: stable
-
             - name: Build Equicord Reporter Version
               run: bun run buildReporter
 
             - name: Run Reporter
               timeout-minutes: 10
               run: |
-                  export CHROMIUM_BIN=${{ steps.setup-chrome.outputs.chrome-path }}
+                  export CHROMIUM_BIN=/usr/bin/google-chrome
 
                   bun build scripts/generateReport.ts --outfile dist/report.mjs --target bun
 
