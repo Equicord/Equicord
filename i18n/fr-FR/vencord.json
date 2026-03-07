@@ -1,6 +1,6 @@
 {
     "accountPanelServerProfile": {
-        "description": "Faites un clic droit sur le panneau de votre compte en bas à gauche pour afficher votre profil sur le serveur actuel",
+        "description": "Faites un clic droit sur votre panneau de compte en bas à gauche pour afficher votre profil sur le serveur actuel",
         "prioritizeServerProfile": "Prioriser le profil du serveur",
         "prioritizeServerProfileDescription": "Donnez la priorité au profil du serveur lorsque vous cliquez avec le bouton gauche sur le panneau de votre compte",
         "viewAccountProfile": "Afficher le profil du compte",

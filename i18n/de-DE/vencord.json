@@ -68,16 +68,16 @@
     },
     "appleMusicRichPresence": {
         "activityTypes": {
-            "listening": "Hören",
-            "playing": "Spielen"
+            "listening": "Hört Musik",
+            "playing": "Wird abgespielt"
         },
         "assetImageTypes": {
             "album": "Albumcover",
-            "artist": "Künstlerische Kunstwerke",
+            "artist": "Künstlerbild",
             "disabled": "Deaktiviert"
         },
         "buttons": {
-            "listenOnAppleMusic": "Hören Sie auf Apple Music",
+            "listenOnAppleMusic": "Auf Apple Music hören",
             "viewOnSongLink": "Auf SongLink ansehen"
         },
         "defaultDetails": "{name}",
