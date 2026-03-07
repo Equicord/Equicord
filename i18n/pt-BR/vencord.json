@@ -139,6 +139,7 @@
         "description": "API para adicionar insígnias aos usuários"
     },
     "betterFolders": {
+        "description": "Mostra as pastas de servidores em uma barra lateral dedicada e adiciona melhorias relacionadas a pastas",
         "settings": {
             "closeAllFolders": "Feche todas as pastas ao selecionar um servidor que não esteja em uma pasta",
             "closeAllHomeButton": "Feche todas as pastas ao clicar no botão home",
@@ -188,6 +189,7 @@
         }
     },
     "betterSessions": {
+        "description": "Melhora o menu de sessões (dispositivos). Permite visualizar timestamps exatos, dar um nome personalizado a cada sessão e receber notificações sobre novas sessões.",
         "newBadge": "NOVO",
         "newSession": "Nova sessão:",
         "rename": "Renomear",
@@ -203,6 +205,7 @@
         }
     },
     "betterSettings": {
+        "description": "Melhora a sua experiência ao abrir o menu de configurações",
         "settings": {
             "disableFade": "Desative a animação crossfade",
             "eagerLoad": "Remove o atraso de carregamento ao abrir o menu pela primeira vez",
@@ -384,6 +387,7 @@
         "button1Url": "URL do botão1",
         "button2Text": "Texto do botão2",
         "button2Url": "URL do botão2",
+        "description": "Adicione uma Rich Presence (status de jogo) totalmente personalizável ao seu perfil do Discord",
         "detailLine1": "Detalhe (linha 1)",
         "detailUrl": "URL detalhada",
         "endTimestamp": "Data/hora final (em milissegundos)",
@@ -449,6 +453,8 @@
     },
     "decor": {
         "accessFromProfiles": "Você também pode acessar as decorações de decoração na página {link}.",
+        "agreedToGuidelines": "Concordou com as diretrizes",
+        "baseUrl": "Decor API url",
         "changeDecoration": "Mudar decoração",
         "description": "Crie e use suas próprias decorações de avatar personalizadas ou escolha a sua favorita nas predefinições.",
         "enableAndRestart": "Habilite o Decor e reinicie seu cliente para alterar a decoração do seu avatar.",
@@ -505,6 +511,7 @@
         "cloneTo": "Clonar para {guild}",
         "clonedSuccess": "{name} clonado com sucesso para {guild}!",
         "customName": "Nome personalizado",
+        "description": "Permite clonar emotes e figurinhas para o seu próprio servidor (clique com o botão direito do mouse sobre eles).",
         "failedToClone": "Falha ao clonar: {error}",
         "nameValidation": "O nome deve ter entre 2 e 32 caracteres",
         "somethingWentWrong": "Algo deu errado (verifique o console!)"
@@ -699,6 +706,7 @@
         "description": "Não ocultar mensagens de 'prováveis spammers'"
     },
     "ignoreActivities": {
+        "description": "Ignora APENAS a exibição de atividades no seu status. Você pode configurar quais atividades são especificamente ignoradas nas abas de Jogos Registrados e Atividades, ou usar as configurações gerais abaixo",
         "disableActivity": "Desativar atividade",
         "enableActivity": "Habilitar atividade",
         "filterList": {
@@ -732,6 +740,7 @@
         "description": "Nunca ocultar links de imagens nas mensagens, mesmo que seja o único conteúdo"
     },
     "imageZoom": {
+        "description": "Permite ampliar imagens e GIFs. Use o scroll para o zoom e Shift + scroll para o tamanho da lente.",
         "lensSize": "Tamanho da lente",
         "nearestNeighbour": "Vizinho mais próximo",
         "settings": {
@@ -840,6 +849,7 @@
         "showLogs": "Mostrar Registros"
     },
     "memberCount": {
+        "description": "Mostra o número de membros online, o total de membros e os usuários em canais de voz no servidor — na lista de membros e na dica de ferramenta.",
         "settings": {
             "memberList": "Mostrar contagem de membros na lista de membros",
             "toolTip": "Mostrar contagem de membros na dica do servidor",
@@ -930,6 +940,7 @@
     "messageLatency": {
         "clockAhead": "O relógio deste usuário está {delta} adiantado.",
         "delayedMessage": "Mensagem atrasada",
+        "description": "Exibe um indicador para mensagens que levaram ≥n segundos para serem enviadas.",
         "messageDelayed": "Esta mensagem foi enviada com um atraso de {delta}.",
         "oldAndroidClient": "Cliente Discord Android antigo",
         "oldDiscordAndroid": "Suspeita-se que o usuário esteja em um cliente Discord Android antigo",
@@ -989,6 +1000,7 @@
         "deletedMessages_one": "{count} mensagem excluída",
         "deletedMessages_other": "{count} mensagens excluídas",
         "deletedMessages_zero": "Nenhuma Mensagem excluída",
+        "description": "Registra temporariamente as mensagens excluídas e editadas.",
         "disableDiffView": "Desativa visualização de diferenças",
         "editHistory": "Histórico de Edição de Mensagens",
         "enableDiffView": "Ativa visualização de diferença",
@@ -1230,6 +1242,7 @@
         }
     },
     "permissionsViewer": {
+        "description": "Veja as permissões que um usuário ou canal possui e os cargos de um servidor.",
         "noPermissions": "Sem permissões para exibir!",
         "owner": "dono(a)",
         "permissions": "Permissões",
@@ -1280,6 +1293,7 @@
         "color": "Cor",
         "create": "Criar",
         "deleteCategory": "Excluir Categoria",
+        "description": "Permite fixar canais privados no topo da sua lista de DMs. Para fixar/desafixar ou reordenar, clique com o botão direito nas DMs.",
         "editCategory": "Editar categoria",
         "editCategoryTitle": "Editar categoria",
         "moveDown": "Mover para baixo",
@@ -1414,6 +1428,7 @@
         "confirmDelete": "Você realmente deseja deletar esta avaliação?",
         "confirmReport": "Você realmente deseja reportar está avaliação?",
         "delete": "Excluir",
+        "description": "Avalie outros usuários (Adiciona novas configurações aos perfis)",
         "failedToFetchBlocks": "Falha ao buscar blocos: {error}",
         "mustBeLoggedInBlock": "Você tem que estar logado para bloquear usuários.",
         "mustBeLoggedInDelete": "Você tem que estar logado para deletar avaliações.",
@@ -1654,6 +1669,16 @@
             "title": "Use a barra de título nativa do Windows em vez da barra personalizada do Discord"
         }
     },
+    "settingsPlugin": {
+        "aboveActivity": "Acima das Configurações de atividade",
+        "aboveNitro": "Acima da seção Nitro",
+        "belowActivity": "Abaixo das Configurações de Atividade",
+        "belowNitro": "Abaixo da seção Nitro",
+        "bottom": "No final",
+        "description": "Adiciona a configurações de UI e informações de depuração",
+        "settingsLocation": "Onde colocar a seção de configurações do Equicord",
+        "top": "No topo"
+    },
     "settingsSync": {
         "failedToImport": "Falha ao importar configurações: {e}",
         "imported": "Configurações importadas com sucesso. Reinicie para aplicar as alterações!"
@@ -1853,6 +1878,7 @@
             "membersListIndicators": "Indicadores da Lista de Membros",
             "silentTyping": "Silent Typing"
         },
+        "description": "Oculte o indicador de digitação do chat.",
         "noChanges": "Nenhuma alteração feita nas configurações de silent typing",
         "settings": {
             "chatContextMenu": "Mostra um submenu no menu de chat para modificar as configurações do plugin em qualquer lugar.",
@@ -1914,17 +1940,25 @@
             "unlimitedSuperReactionPlaying": "Remove o limite de Super Reações animadas ao mesmo tempo"
         }
     },
+    "supportHelper": {
+        "debug": "Enviar informações de depuração do Equicord",
+        "description": "Nos ajuda a lhe oferecer suporte",
+        "plugins": "Enviar lista de plugins do Equicord"
+    },
     "tabs": {
         "settings": "Configurações do Equicord"
     },
     "textReplace": {
+        "description": "Substitua texto em suas mensagens ou nas de outros. Você pode encontrar regras prontas no canal #textreplace-rules no servidor do Vencord.",
         "find": "Encontrar",
         "messageWithRules": "Mensagem com regras aplicadas",
         "onlyIfIncludes": "Somente se incluir",
+        "regexRules": "Regras para substituir texto usando expressões regulares.",
         "replace": "Substituir",
         "scope.allMessages": "Aplicar a todas as mensagens",
         "scope.myMessages": "Aplicar às suas mensagens (visíveis para todos)",
         "scope.othersMessages": "Aplicar às mensagens de outras pessoas (visíveis apenas para você)",
+        "stringRules": "Regras para substituir texto usando correspondência de strings.",
         "testRules": "Regras de teste",
         "typeMessage": "Digite uma mensagem",
         "usingRegex": "Usando Regex",
@@ -1940,6 +1974,7 @@
             "title": "Tradução Automática do Equicord Ativada"
         },
         "autoTranslateEnabledLabel": "Tradução Automática Ativada",
+        "description": "Traduza mensagens com o Google Tradutor ou o DeepL",
         "disableAutoTranslate": "Desativar Tradução Automática",
         "dontShowAgain": "Não mostrar novamente",
         "gotIt": "Entendi",
@@ -2061,6 +2096,11 @@
         },
         "speechSynthesisNotSupported": "SpeechSynthesis não suportado ou nenhuma voz do Narrador encontrada. Portanto, este plugin não funcionará. Verifique minhas configurações para mais informações"
     },
+    "vencordDonor": {
+        "description": "Esta insígnia é uma vantagem especial para doadores do Vencord.",
+        "description2": "Considere apoiar o desenvolvimento do Vencord tornando-se um doador. Isso significaria muito!!",
+        "title": "Doador do Vencord"
+    },
     "viewIcons": {
         "description": "Torna avatares e banners em perfis de usuário clicáveis, adiciona as entradas Ver Ícone/Banner nos menus de contexto de usuário, servidor e canal de grupo.",
         "settings": {
@@ -2094,6 +2134,7 @@
         "downloadVoiceMessage": "Baixar mensagem de voz"
     },
     "voiceMessages": {
+        "description": "Permite enviar mensagens de voz como no celular. Para isso, clique com o botão direito no botão de upload e clique em Enviar Mensagem de Voz.",
         "echoCancellation": "Cancelamento de Eco",
         "failedToParse": "Falha ao analisar o arquivo de áudio selecionado: {error}",
         "failedToUpload": "Falha ao enviar mensagem de voz",
@@ -2126,6 +2167,7 @@
         "description": "Remove o limite de taxa de bits de 2500kbps em clientes de chromium e vesktop."
     },
     "whoReacted": {
+        "description": "Exibe os avatares dos usuários que reagiram a uma mensagem.",
         "settings": {
             "avatarClick": "Alternar clicar em avatares nas reações"
         }
