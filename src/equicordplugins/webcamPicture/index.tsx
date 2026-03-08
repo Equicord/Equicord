@@ -13,7 +13,7 @@ import { Heading } from "@components/Heading";
 import { Paragraph } from "@components/Paragraph";
 import { EquicordDevs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
-import { sleep } from "@utils/misc";
+import { sleep, tryOrElse } from "@utils/misc";
 import { closeModal, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot, ModalSize, openModal } from "@utils/modal";
 import definePlugin from "@utils/types";
 import { Channel } from "@vencord/discord-types";
@@ -35,23 +35,9 @@ type VideoDevice = {
     name: string;
 };
 
-const getConfigModule = () => {
-    try {
-        return configModule;
-    } catch {
-        return null;
-    }
-};
+const getConfigModule = () => tryOrElse(() => configModule, null);
 
-const getCameraComponent = () => {
-    try {
-        return mediaEngineStore.getCameraComponent?.() ?? null;
-    } catch {
-        return null;
-    }
-};
-
-const getVideoDevices = (): VideoDevice[] => Object.values(getConfigModule()?.getVideoDevices?.() ?? {}) as VideoDevice[];
+const getCameraComponent = () => tryOrElse(() => mediaEngineStore.getCameraComponent?.() ?? null, null);
 
 type WebcamModalProps = {
     modalProps: ModalProps;
@@ -89,20 +75,21 @@ const WebcamModal = ErrorBoundary.wrap(function WebcamModal({ modalProps, close,
             setError(null);
             setReady(false);
 
-            const devices = getVideoDevices();
+            const devices = tryOrElse(
+                () => Object.values(getConfigModule()?.getVideoDevices?.() ?? {}) as VideoDevice[],
+                []
+            );
             if (cancelled) return;
             setVideoDevices(devices);
 
-            const resolvedDeviceId = devices.some(device => device.id === selectedDeviceId)
-                ? selectedDeviceId
-                : devices[0]?.id ?? "";
-            if (!resolvedDeviceId) {
+            const resolvedDevice = devices.find(device => device.id === selectedDeviceId) ?? devices[0];
+            if (!resolvedDevice) {
                 setError("No camera was found.");
                 return;
             }
 
-            if (resolvedDeviceId !== selectedDeviceId) {
-                setSelectedDeviceId(resolvedDeviceId);
+            if (resolvedDevice.id !== selectedDeviceId) {
+                setSelectedDeviceId(resolvedDevice.id);
                 return;
             }
 
@@ -111,7 +98,7 @@ const WebcamModal = ErrorBoundary.wrap(function WebcamModal({ modalProps, close,
         })();
 
         return () => { cancelled = true; };
-    }, [selectedDeviceId]);
+    }, [CameraComponent, selectedDeviceId]);
 
     const captureFrame = async () => {
         const video = captureVideoElement;
@@ -123,32 +110,30 @@ const WebcamModal = ErrorBoundary.wrap(function WebcamModal({ modalProps, close,
         }
 
         setIsSnapping(true);
-
-        const canvas = new OffscreenCanvas(video.videoWidth, video.videoHeight);
-        const context = canvas.getContext("2d");
-        if (!context) {
-            setIsSnapping(false);
-            showToast("Failed to capture webcam picture.", Toasts.Type.FAILURE);
-            return;
-        }
-
-        context.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
-
-        const blob = await canvas.convertToBlob({ type: IMAGE_TYPE }).catch(() => null);
-        if (!blob) {
-            setIsSnapping(false);
-            showToast("Failed to capture webcam picture.", Toasts.Type.FAILURE);
-            return;
-        }
-
-        const file = new File([blob], `${IMAGE_NAME_PREFIX}-${Date.now()}.png`, { type: IMAGE_TYPE });
-
         try {
-            await UploadHandler.promptToUpload([file], channel, DraftType.ChannelMessage);
-            showToast("Picture added to attachments.", Toasts.Type.SUCCESS);
-            close();
-        } catch {
-            showToast("Failed to attach webcam picture.", Toasts.Type.FAILURE);
+            const canvas = new OffscreenCanvas(video.videoWidth, video.videoHeight);
+            const context = canvas.getContext("2d");
+            if (!context) {
+                showToast("Failed to capture webcam picture.", Toasts.Type.FAILURE);
+                return;
+            }
+
+            context.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
+
+            const blob = await canvas.convertToBlob({ type: IMAGE_TYPE }).catch(() => null);
+            if (!blob) {
+                showToast("Failed to capture webcam picture.", Toasts.Type.FAILURE);
+                return;
+            }
+
+            const file = new File([blob], `${IMAGE_NAME_PREFIX}-${Date.now()}.png`, { type: IMAGE_TYPE });
+
+            try {
+                await UploadHandler.promptToUpload([file], channel, DraftType.ChannelMessage);
+                close();
+            } catch {
+                showToast("Failed to attach webcam picture.", Toasts.Type.FAILURE);
+            }
         } finally {
             setIsSnapping(false);
         }
@@ -206,7 +191,7 @@ const WebcamModal = ErrorBoundary.wrap(function WebcamModal({ modalProps, close,
                             value: device.id,
                         }))}
                         value={selectedDeviceId}
-                        onChange={value => setSelectedDeviceId(String(value))}
+                        onChange={setSelectedDeviceId}
                         closeOnSelect
                         isDisabled={isSnapping || !videoDevices.length}
                     />
@@ -224,7 +209,7 @@ const WebcamModal = ErrorBoundary.wrap(function WebcamModal({ modalProps, close,
                     </Checkbox>
                 </div>
                 <div className={cl("footer-actions")}>
-                    <Button disabled={Boolean(error) || !ready || isSnapping} onClick={snapAndAttach}>Capture Image</Button>
+                    <Button disabled={!!error || !ready || isSnapping} onClick={snapAndAttach}>Capture Image</Button>
                 </div>
             </ModalFooter>
         </ModalRoot>
@@ -287,5 +272,9 @@ export default definePlugin({
     },
     getCaptureVideoElement() {
         return captureVideoElement;
+    },
+    stop() {
+        captureVideoElement = null;
+        shouldCaptureVideoElement = false;
     }
 });
