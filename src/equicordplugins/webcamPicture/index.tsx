@@ -203,7 +203,7 @@ const WebcamModal = ErrorBoundary.wrap(function WebcamModal({ modalProps, close,
             </ModalContent>
 
             <ModalFooter className={cl("footer")}>
-                <div className={cl("footer-left")}>
+                <div className={cl("footer-actions")}>
                     <Checkbox
                         value={timerEnabled}
                         onChange={(_, value) => setTimerEnabled(value)}
@@ -211,8 +211,6 @@ const WebcamModal = ErrorBoundary.wrap(function WebcamModal({ modalProps, close,
                     >
                         Timer
                     </Checkbox>
-                </div>
-                <div className={cl("footer-actions")}>
                     <Button disabled={!!error || !ready || isSnapping} onClick={snapAndAttach}>Capture Image</Button>
                 </div>
             </ModalFooter>

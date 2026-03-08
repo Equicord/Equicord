@@ -76,10 +76,6 @@
     margin: 0;
 }
 
-.vc-webcam-picture-footer-left {
-    flex: 1 1 auto;
-}
-
 .vc-webcam-picture-footer-actions {
     display: flex;
     align-items: center;
