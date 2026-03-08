@@ -109,14 +109,14 @@ function AnimationSettings(): JSX.Element {
 export const logger = new Logger("ChannelTabs");
 
 export const bookmarkFolderColors = {
-    Red: "var(--channeltabs-red)",
-    Blue: "var(--channeltabs-blue)",
-    Yellow: "var(--channeltabs-yellow)",
-    Green: "var(--channeltabs-green)",
-    Black: "var(--channeltabs-black)",
-    White: "var(--channeltabs-white)",
-    Orange: "var(--channeltabs-orange)",
-    Pink: "var(--channeltabs-pink)"
+    Red: "#f23f42",
+    Blue: "#0052b6",
+    Yellow: "#f0b132",
+    Green: "#24934f",
+    Black: "#000",
+    White: "#fff",
+    Orange: "#e67e22",
+    Pink: "#ff73fa"
 } as const;
 
 export const settings = definePluginSettings({
