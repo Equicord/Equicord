@@ -26,7 +26,7 @@
         }
     },
     "alwaysTrust": {
-        "description": "कष्टप्रद अविश्वसनीय डोमेन और संदिग्ध फ़ाइल पॉपअप को हटा देता है",
+        "description": "कष्टप्रद untrusted domain और suspicious file popup को हटा देता है",
         "settings": {
             "confirmModal": "क्या \"क्या आप वाकई हटाना चाहते हैं\" modal दिखाया जाना चाहिए?",
             "domain": "Links खोलते समय अविश्वसनीय domain popup हटा दें",
@@ -42,18 +42,18 @@
     "anonymiseFileNames": {
         "commands": {
             "spoiler": {
-                "description": "अपने स्पॉयलर को टॉगल करें",
-                "disabled": "स्पॉइलर अक्षम!",
-                "enabled": "स्पॉइलर सक्षम!",
-                "name": "बिगाड़ने वाला",
-                "optionDescription": "अपने स्पॉइलर को टॉगल करें (डिफ़ॉल्ट टॉगल है)",
-                "optionName": "कीमत"
+                "description": "अपने spoiler को toggle करें",
+                "disabled": "Spoiler अक्षम!",
+                "enabled": "Spoiler सक्षम!",
+                "name": "Spoiler",
+                "optionDescription": "अपने spoiler को toggle करें (default टॉगल है)",
+                "optionName": "value"
             }
         },
-        "description": "अपलोड किए गए फ़ाइल नाम अज्ञात करें",
+        "description": "Uploaded file के नाम anonymise करे",
         "methods": {
-            "consistent": "सुसंगत",
-            "random": "यादृच्छिक पात्र",
+            "consistent": "Consistent",
+            "random": "Random Characters",
             "timestamp": "समय-चिह्न"
         },
         "settings": {
@@ -64,7 +64,7 @@
             "spoilerMessages": "बिगाड़ने वाले संदेश"
         },
         "usingAnonymous": "अनाम फ़ाइल नाम का उपयोग करना",
-        "usingNormal": "सामान्य फ़ाइल नाम का उपयोग करना"
+        "usingNormal": "सामान्य file नाम का उपयोग करा जा रहा है"
     },
     "appleMusicRichPresence": {
         "activityTypes": {
@@ -89,12 +89,12 @@
         "name": "एप्पलम्यूजिकरिचप्रेजेंस",
         "settings": {
             "activityType": "किस प्रकार की गतिविधि",
-            "detailsString": "गतिविधि विवरण प्रारूप स्ट्रिंग",
-            "enableButtons": "बटन सक्षम करना है या नहीं",
-            "enableTimestamps": "टाइमस्टैम्प सक्षम करना है या नहीं",
-            "largeImageType": "गतिविधि परिसंपत्तियाँ बड़ी छवि प्रकार",
-            "largeTextString": "गतिविधि संपत्ति बड़ी पाठ प्रारूप स्ट्रिंग",
-            "nameString": "गतिविधि नाम प्रारूप स्ट्रिंग",
+            "detailsString": "गतिविधि विवरण प्रारूप string",
+            "enableButtons": "Buttons सक्षम करने हैं या नहीं",
+            "enableTimestamps": "Timestamps सक्षम करने हैं या नहीं",
+            "largeImageType": "गतिविधि assets बड़ी image type",
+            "largeTextString": "गतिविधि assets बड़ी text प्रारूप string",
+            "nameString": "गतिविधि नाम प्रारूप string",
             "refreshInterval": "गतिविधि ताज़ा होने के बीच का अंतराल (सेकंड)",
             "smallImageType": "गतिविधि परिसंपत्तियाँ छोटी छवि प्रकार",
             "smallTextString": "गतिविधि परिसंपत्तियाँ छोटी पाठ प्रारूप स्ट्रिंग",
@@ -105,7 +105,7 @@
             "albumPlaceholder": "{album} को एल्बम नाम से बदल दिया गया है।",
             "artistPlaceholder": "{artist} को कलाकार(कलाकारों) के नाम से बदल दिया गया है",
             "intro": "अनुकूलन योग्य गतिविधि प्रारूप स्ट्रिंग्स के लिए, आप गतिविधियों में ट्रैक डेटा शामिल करने के लिए कई विशेष स्ट्रिंग्स का उपयोग कर सकते हैं!",
-            "namePlaceholder": "{name} को ट्रैक नाम से बदल दिया गया है"
+            "namePlaceholder": "{name} को track name से बदल दिया गया है"
         },
         "statusDisplayTypes": {
             "artist": "कलाकार का नाम दिखाएँ",
