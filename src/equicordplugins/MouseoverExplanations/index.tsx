@@ -220,7 +220,7 @@ function patchChildrenTree(children: any): any {
             const tagcheck = new RegExp(`${escapedPrefix}[\\p{L}_]+`, "iu").test(node);
             const abbreviationcheck = new RegExp("[\\p{L}_]+", "iu").test(node);
 
-            if (!tagcheck && !abbreviationcheck) return node;
+            if (new RegExp(`${escapedPrefix}[\\p{L}_]+`, "iu").test(node)) return node;
             const tagparts = splitTextWithTags(node);
             return tagparts.length === 1 ? tagparts[0] : tagparts;
         }
