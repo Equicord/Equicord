@@ -27,6 +27,9 @@ const configModule = findByPropsLazy("getVideoDeviceId", "getVideoDevices");
 const mediaEngineStore = findByPropsLazy("getCameraComponent", "getVideoDeviceId");
 const cl = classNameFactory("vc-webcam-picture-");
 
+let captureVideoElement: HTMLVideoElement | null = null;
+let shouldCaptureVideoElement = false;
+
 const getConfigModule = () => tryOrElse(() => configModule, null);
 
 const getCameraComponent = () => tryOrElse(() => mediaEngineStore.getCameraComponent?.() ?? null, null);
@@ -47,7 +50,6 @@ const WebcamModal = ErrorBoundary.wrap(function WebcamModal({ modalProps, close,
     const [selectedDeviceId, setSelectedDeviceId] = useState<string>(() => getConfigModule()?.getVideoDeviceId?.() ?? "");
     const [videoDevices, setVideoDevices] = useState<VideoDevice[]>([]);
     const isMounted = useRef(true);
-    const previewRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         isMounted.current = true;
@@ -56,8 +58,53 @@ const WebcamModal = ErrorBoundary.wrap(function WebcamModal({ modalProps, close,
         };
     }, []);
 
+    useEffect(() => {
+        captureVideoElement = null;
+
+        return () => {
+            captureVideoElement = null;
+        };
+    }, [selectedDeviceId]);
+
+    useEffect(() => {
+        if (!CameraComponent) {
+            setError("Webcam is not supported on this client.");
+            return;
+        }
+
+        let cancelled = false;
+
+        void (async () => {
+            setError(null);
+            setReady(false);
+
+            const devices = tryOrElse(
+                () => Object.values(getConfigModule()?.getVideoDevices?.() ?? {}) as VideoDevice[],
+                []
+            );
+            if (cancelled) return;
+            setVideoDevices(devices);
+
+            const resolvedDevice = devices.find(device => device.id === selectedDeviceId) ?? devices[0];
+            if (!resolvedDevice) {
+                setError("No camera was found.");
+                return;
+            }
+
+            if (resolvedDevice.id !== selectedDeviceId) {
+                setSelectedDeviceId(resolvedDevice.id);
+                return;
+            }
+
+            setError(null);
+            setReady(true);
+        })();
+
+        return () => { cancelled = true; };
+    }, [CameraComponent, selectedDeviceId]);
+
     const captureFrame = async () => {
-        const video = previewRef.current?.querySelector("video");
+        const video = captureVideoElement;
         if (!video) return;
 
         if (!video.videoWidth || !video.videoHeight) {
@@ -112,39 +159,6 @@ const WebcamModal = ErrorBoundary.wrap(function WebcamModal({ modalProps, close,
         await captureFrame();
     };
 
-    useEffect(() => {
-        if (!CameraComponent) {
-            setError("Webcam is not supported on this client.");
-            return;
-        }
-
-        void (async () => {
-            setError(null);
-            setReady(false);
-
-            const devices = tryOrElse(
-                () => Object.values(getConfigModule()?.getVideoDevices?.() ?? {}) as VideoDevice[],
-                []
-            );
-
-            setVideoDevices(devices);
-
-            const resolvedDevice = devices.find(device => device.id === selectedDeviceId) ?? devices[0];
-            if (!resolvedDevice) {
-                setError("No camera was found.");
-                return;
-            }
-
-            if (resolvedDevice.id !== selectedDeviceId) {
-                setSelectedDeviceId(resolvedDevice.id);
-                return;
-            }
-
-            setError(null);
-            setReady(true);
-        })();
-    }, [CameraComponent, selectedDeviceId]);
-
     return (
         <ModalRoot {...modalProps} size={ModalSize.LARGE}>
             <ModalHeader className={cl("header")}>
@@ -153,7 +167,7 @@ const WebcamModal = ErrorBoundary.wrap(function WebcamModal({ modalProps, close,
             </ModalHeader>
 
             <ModalContent className={cl("content")}>
-                <div className={cl("preview-wrap")} ref={previewRef}>
+                <div className={cl("preview-wrap")}>
                     {!error && CameraComponent && (
                         <div className={cl("preview")}>
                             <CameraComponent
@@ -205,11 +219,15 @@ const WebcamModal = ErrorBoundary.wrap(function WebcamModal({ modalProps, close,
 }, { noop: true });
 
 function openWebcamModal(channel: Channel) {
+    shouldCaptureVideoElement = true;
+    captureVideoElement = null;
     const key = openModal(modalProps => (
         <WebcamModal
             modalProps={modalProps}
             channel={channel}
             close={() => {
+                shouldCaptureVideoElement = false;
+                captureVideoElement = null;
                 closeModal(key);
             }}
         />
@@ -238,7 +256,27 @@ export default definePlugin({
     description: "Take a webcam picture and attach it to chat.",
     authors: [EquicordDevs.mshl],
     requiresRestart: true,
+    patches: [
+        {
+            find: "handleReady for ${g.current.streamId}, have onReady callback =",
+            replacement: {
+                match: /(\i)\.addEventListener\("canplaythrough",(\i)\)/,
+                replace: "$1.addEventListener(\"canplaythrough\",(e)=>{$self.setCaptureVideoElement($1);$2(e)})"
+            }
+        }
+    ],
     contextMenus: {
         "channel-attach": UploadContextMenuPatch,
+    },
+    setCaptureVideoElement(video: HTMLVideoElement | null) {
+        if (!shouldCaptureVideoElement || !video) return;
+        captureVideoElement = video;
+    },
+    getCaptureVideoElement() {
+        return captureVideoElement;
+    },
+    stop() {
+        captureVideoElement = null;
+        shouldCaptureVideoElement = false;
     }
 });
