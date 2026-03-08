@@ -218,7 +218,7 @@ function patchChildrenTree(children: any): any {
             }
             // the reason abbreviations dont work is because the code from here
             const tagcheck = new RegExp(`${escapedPrefix}[\\p{L}_]+`, "iu").test(node);
-            const abbreviationcheck = new RegExp("[\\p{L}_]+", "iu").test(node);
+            // const abbreviationcheck = .test(node);
 
             if (new RegExp(`${escapedPrefix}[\\p{L}_]+`, "iu").test(node)) return node;
             const tagparts = splitTextWithTags(node);
