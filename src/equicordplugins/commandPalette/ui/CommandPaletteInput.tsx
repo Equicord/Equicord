@@ -6,8 +6,7 @@
 
 import { classNameFactory } from "@utils/css";
 import { classes } from "@utils/misc";
-import { TextInput } from "@webpack/common";
-import { type FocusEventHandler, forwardRef, type MouseEventHandler, type ReactNode } from "react";
+import { React, TextInput } from "@webpack/common";
 
 const cl = classNameFactory("vc-command-palette-");
 
@@ -18,13 +17,13 @@ interface CommandPaletteInputProps {
     autoFocus?: boolean;
     inputClassName?: string;
     readOnly?: boolean;
-    onInputFocus?: FocusEventHandler<HTMLInputElement>;
-    onInputBlur?: FocusEventHandler<HTMLInputElement>;
-    onInputClick?: MouseEventHandler<HTMLInputElement>;
-    children?: ReactNode;
+    onInputFocus?: React.FocusEventHandler<HTMLInputElement>;
+    onInputBlur?: React.FocusEventHandler<HTMLInputElement>;
+    onInputClick?: React.MouseEventHandler<HTMLInputElement>;
+    children?: React.ReactNode;
 }
 
-export const CommandPaletteInput = forwardRef<HTMLInputElement, CommandPaletteInputProps>(function CommandPaletteInput({
+export const CommandPaletteInput = React.forwardRef<HTMLInputElement, CommandPaletteInputProps>(function CommandPaletteInput({
     value,
     onChange,
     placeholder,
