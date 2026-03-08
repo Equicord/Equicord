@@ -1861,17 +1861,17 @@
             "chatIconLeftClickAction": "Phải làm gì khi nhấp chuột trái vào biểu tượng trò chuyện.",
             "chatIconMiddleClickAction": "Phải làm gì khi nhấp chuột giữa vào biểu tượng trò chuyện.",
             "chatIconRightClickAction": "Phải làm gì khi nhấp chuột phải vào biểu tượng trò chuyện.",
-            "defaultHidden": "Nếu được bật, plugin sẽ ẩn nội dung bạn nhập với những người khác trong bất kỳ DM/kênh/bang hội nào không được liệt kê trong \"Vị trí bị vô hiệu hóa\" bên dưới. Nếu bị tắt, plugin sẽ hiển thị nội dung bạn nhập cho người khác đối với bất kỳ DM/kênh/bang hội nào không được liệt kê trong \"Vị trí đã bật\" bên dưới.",
-            "disabledLocations": "Tắt chức năng cho các ID này. Chấp nhận danh sách ID DM, ID kênh và ID bang hội được phân tách bằng dấu phẩy. Chỉ được sử dụng nếu \"Ẩn mặc định\" được bật.",
-            "enabledGlobally": "Chuyển đổi chức năng của chỉ báo gõ của riêng bạn trên toàn cầu.",
-            "enabledLocations": "Kích hoạt chức năng cho các ID này. Chấp nhận danh sách ID DM, ID kênh và ID bang hội được phân tách bằng dấu phẩy. Chỉ được sử dụng nếu \"Ẩn mặc định\" bị tắt.",
-            "hideChatBoxTypingIndicators": "Ẩn chỉ báo gõ của người dùng khác phía trên thanh trò chuyện.",
-            "hideMembersListTypingIndicators": "Ẩn chỉ báo gõ của người dùng khác khỏi danh sách thành viên."
+            "defaultHidden": "Nếu bật, plugin sẽ ẩn trạng thái soạn thảo của bạn trong bất kỳ DM/kênh/máy chủ nào không nằm trong danh sách \"Vị trí vô hiệu hóa\" bên dưới. Nếu tắt, plugin sẽ hiển thị trạng thái soạn thảo trong bất kỳ DM/kênh/máy chủ nào không nằm trong danh sách \"Vị trí kích hoạt\" bên dưới.",
+            "disabledLocations": "Tắt chức năng cho các ID này. Chấp nhận danh sách ID DM, ID kênh và ID máy chủ được phân tách bằng dấu phẩy. Chỉ được sử dụng nếu \"Ẩn mặc định\" được bật.",
+            "enabledGlobally": "Bật/tắt chức năng của chỉ báo soạn thảo tcủa riêng bạn trên toàn cục.",
+            "enabledLocations": "Kích hoạt chức năng cho các ID này. Chấp nhận danh sách ID DM, ID kênh và ID máy chủ được phân tách bằng dấu phẩy. Chỉ được sử dụng nếu \"Ẩn mặc định\" bị tắt.",
+            "hideChatBoxTypingIndicators": "Ẩn chỉ báo soạn thảo của người dùng khác phía trên thanh trò chuyện.",
+            "hideMembersListTypingIndicators": "Ẩn chỉ báo soạn thảo của người dùng khác khỏi danh sách thành viên."
         },
         "settingsUpdated": "Đã cập nhật cài đặt gõ im lặng.",
-        "typingHidden": "Đang gõ ẩn ({location})",
-        "typingVisible": "Đang gõ Hiển thị ({location})",
-        "typingVisibleGlobal": "Đang gõ có thể nhìn thấy (Toàn cầu)"
+        "typingHidden": "Ẩn soạn thảo ({location})",
+        "typingVisible": "Hiển thị soạn thảo ({location})",
+        "typingVisibleGlobal": "Hiển thị soạn thảo (Toàn cục)"
     },
     "sortFriendRequests": {
         "added": "Đã thêm",
@@ -1881,22 +1881,22 @@
         }
     },
     "spotifyCrack": {
-        "description": "Nghe miễn phí, không tự động tạm dừng trong trò chuyện thoại và cho phép hoạt động tiếp tục phát khi không hoạt động",
+        "description": "Nghe nhạc chung miễn phí, không tự động tạm dừng trong kênh thoại, và cho phép tiếp tục hiển thị hoạt động khi đang treo",
         "settings": {
-            "keepSpotifyActivityOnIdle": "Tiếp tục phát hoạt động Spotify khi không hoạt động",
+            "keepSpotifyActivityOnIdle": "Tiếp tục giữ hoạt động Spotify khi không hoạt động",
             "noSpotifyAutoPause": "Vô hiệu hóa tự động tạm dừng Spotify"
         }
     },
     "spotifyShareCommands": {
         "commands": {
-            "notListening": "Bạn không nghe bất kỳ bản nhạc nào.",
+            "notListening": "Bạn không nghe bất kỳ bài hát nào.",
             "shareDescription": "Chia sẻ Spotify {name} hiện tại của bạn trong cuộc trò chuyện",
             "trackNotFound": "Không tìm thấy bài hát trên Spotify."
         },
-        "description": "Chia sẻ bản nhạc, album hoặc nghệ sĩ Spotify hiện tại của bạn thông qua lệnh gạch chéo (/track, /album, /artist)"
+        "description": "Chia sẻ bài hát, album hoặc nghệ sĩ Spotify hiện tại của bạn thông qua lệnh (/track, /album, /artist)"
     },
     "startupTimings": {
-        "description": "Thêm Thời gian khởi động vào menu Cài đặt",
+        "description": "Thêm Thời Điểm Khởi Chạy vào menu Cài đặt",
         "ui": {
             "title": "Thời Điểm Khởi Chạy"
         }
@@ -1905,27 +1905,30 @@
         "description": "Làm cho việc chọn nhãn dán trong bộ chọn nhãn dán chèn nhãn dán đó vào hộp trò chuyện thay vì gửi ngay lập tức"
     },
     "streamerModeOnStream": {
-        "description": "Tự động bật chế độ phát trực tiếp khi bạn bắt đầu phát trực tuyến trong Discord"
+        "description": "Tự động bật chế độ streamer khi bạn bắt đầu stream trong Discord"
     },
     "superReactionTweaks": {
-        "description": "Tùy chỉnh giới hạn Super Reactions phát cùng lúc và super Reactions theo mặc định",
+        "description": "Tùy chỉnh giới hạn số lượng Biểu Cảm Siêu Cấp phát cùng lúc, và mặc định sử dụng biểu cảm siêu cấp khi biểu cảm.",
         "settings": {
-            "superReactByDefault": "Bộ chọn phản ứng sẽ mặc định là Siêu phản ứng",
-            "superReactionPlayingLimit": "Max Super Reactions để chơi cùng một lúc. 0 để tắt tính năng chơi Super Reactions",
-            "unlimitedSuperReactionPlaying": "Loại bỏ giới hạn chơi Super Reactions cùng một lúc"
+            "superReactByDefault": "Bộ chọn biểu cảm sẽ mặc định là Biểu Cảm Siêu Cấp",
+            "superReactionPlayingLimit": "Số lượng Biểu Cảm Siêu Cấp tối đa phát cùng lúc. Nhập 0 để tắt hoàn toàn hiệu ứng Biểu Cảm Siêu Cấp",
+            "unlimitedSuperReactionPlaying": "Loại bỏ giới hạn phát Biểu Cảm Siêu Cấp cùng một lúc"
         }
     },
     "tabs": {
-        "settings": "Equicord Cài đặt"
+        "settings": "Cài đặt Equicord"
     },
     "textReplace": {
+        "description": "Thay thế văn bản trong tin nhắn của bạn hoặc của người khác. Bạn có thể tìm thấy các quy tắc sẵn trong kênh #textreplace-rules tại máy chủ Vencord.",
         "find": "Tìm",
         "messageWithRules": "Tin nhắn có áp dụng quy tắc",
         "onlyIfIncludes": "Chỉ khi bao gồm",
+        "regexRules": "Các quy tắc thay thế văn bản bằng cách sử dụng biểu thức chính quy.",
         "replace": "Thay thế",
-        "scope.allMessages": "Apply to all messages",
-        "scope.myMessages": "Apply to your messages (visible to everyone)",
-        "scope.othersMessages": "Apply to others' messages (only visible to you)",
+        "scope.allMessages": "Áp dụng cho tất cả tin nhắn",
+        "scope.myMessages": "Áp dụng cho tin nhắn của bạn (hiển thị đến mọi người)",
+        "scope.othersMessages": "Áp dụng cho tin nhắn của người khác (chi hiển thị đối với bạn)",
+        "stringRules": "Các quy tắc thay thế văn bản bằng cách sử dụng đối sánh xâu.",
         "testRules": "Quy tắc kiểm tra",
         "typeMessage": "Nhập tin nhắn",
         "usingRegex": "Sử dụng Regex",
@@ -1938,42 +1941,43 @@
         "autoTranslate": "Tự động dịch",
         "autoTranslateEnabled": {
             "body": "Bạn vừa bật Tự động dịch! Mọi tin nhắn <0>sẽ được dịch tự động</0> trước khi gửi đi.",
-            "title": "Equicord Đã bật tính năng dịch tự động"
+            "title": "Đã bật tính năng dịch tự động Equicord"
         },
         "autoTranslateEnabledLabel": "Đã bật dịch tự động",
+        "description": "Dịch tin nhắn bằng Google Dịch hoặc DeepL",
         "disableAutoTranslate": "Tắt tính năng tự động dịch",
         "dontShowAgain": "Không hiển thị lại",
         "gotIt": "Hiểu rồi",
         "modalTitle": "Dịch",
-        "openTranslateModal": "Mở phương thức dịch",
+        "openTranslateModal": "Mở cửa sổ dịch",
         "selectLanguage": "Chọn một ngôn ngữ",
         "translate": "Dịch"
     },
     "typingIndicator": {
-        "description": "Thêm chỉ báo nếu ai đó đang gõ trên một kênh.",
+        "description": "Thêm chỉ báo nếu ai đó đang soạn thảo trên một kênh.",
         "settings": {
-            "animatedDots": "chấm hoạt hình",
+            "animatedDots": "Chấm hoạt hình",
             "avatars": "Hình đại diện",
             "avatarsAndDots": "Hình đại diện và dấu chấm hoạt hình",
-            "includeBlockedUsers": "Có hiển thị chỉ báo nhập cho người dùng bị chặn hay không.",
-            "includeCurrentChannel": "Có hiển thị chỉ báo nhập cho kênh hiện được chọn hay không",
-            "includeIgnoredUsers": "Có hiển thị chỉ báo nhập cho người dùng bị bỏ qua hay không.",
-            "includeMutedChannels": "Có hiển thị chỉ báo nhập cho các kênh bị tắt tiếng hay không.",
+            "includeBlockedUsers": "Có hiển thị chỉ báo soạn thảo cho người dùng bị chặn hay không.",
+            "includeCurrentChannel": "Có hiển thị chỉ báo soạn thảo cho kênh hiện được chọn hay không",
+            "includeIgnoredUsers": "Có hiển thị chỉ báo soạn thảo cho người dùng bị bỏ qua hay không.",
+            "includeMutedChannels": "Có hiển thị chỉ báo soạn thảo cho các kênh bị tắt thông báo hay không.",
             "indicatorMode": "Chỉ báo nên được hiển thị như thế nào?"
         }
     },
     "typingTweaks": {
-        "andOthersTyping": "và {count} người khác đang gõ...",
-        "description": "Hiển thị hình đại diện và màu sắc vai trò trong chỉ báo gõ",
+        "andOthersTyping": "và {count} người khác đang soạn thảo...",
+        "description": "Hiển thị hình đại diện và màu sắc vai trò trong chỉ báo soạn thảo",
         "settings": {
-            "alternativeFormatting": "Hiển thị thông báo hữu ích hơn khi có nhiều người dùng đang nhập",
-            "amITyping": "Hiển thị cho bạn biết liệu người khác có thể thấy bạn đang gõ hay không",
-            "showAvatars": "Hiển thị hình đại diện trong chỉ báo gõ",
-            "showRoleColors": "Hiển thị màu vai trò trong chỉ báo gõ"
+            "alternativeFormatting": "Hiển thị thông báo hữu ích hơn khi có nhiều người dùng đang soạn thảo",
+            "amITyping": "Hiển thị cho bạn biết liệu người khác có thể thấy bạn đang soạn thảo hay không",
+            "showAvatars": "Hiển thị hình đại diện trong chỉ báo soạn thảo",
+            "showRoleColors": "Hiển thị màu vai trò trong chỉ báo soạn thảo"
         }
     },
     "unindent": {
-        "description": "Cắt bớt phần thụt đầu dòng từ codeblocks"
+        "description": "Cắt bớt phần thụt đầu dòng trong codeblock"
     },
     "unlockedAvatarZoom": {
         "description": "Cho phép bạn phóng to hơn nữa trong công cụ cắt ảnh khi thay đổi hình đại diện",
@@ -1982,28 +1986,28 @@
         }
     },
     "unsuppressEmbeds": {
-        "description": "Cho phép bạn hủy chặn các nội dung nhúng trong tin nhắn",
-        "suppressEmbeds": "Ngăn chặn nhúng",
-        "unsuppressEmbeds": "Bỏ chặn nội dung nhúng"
+        "description": "Cho phép bạn hiện lại các nội dung nhúng trong tin nhắn",
+        "suppressEmbeds": "Ẩn nhúng",
+        "unsuppressEmbeds": "Hiện nhúng"
     },
     "userMessagesPronouns": {
-        "description": "Thêm đại từ vào tin nhắn trò chuyện của người dùng",
+        "description": "Thêm đại từ nhân xưng vào tin nhắn trò chuyện của người dùng",
         "settings": {
-            "pronounsFormat": "Định dạng đại từ xuất hiện trong trò chuyện",
+            "pronounsFormat": "Định dạng đại từ nhân xưng xuất hiện trong trò chuyện",
             "pronounsFormatOptions": {
                 "capitalized": "Viết hoa",
-                "lowercase": "Chữ thường"
+                "lowercase": "Viết thường"
             },
-            "showSelf": "Bật hoặc tắt hiển thị đại từ cho chính bạn"
+            "showSelf": "Bật hoặc tắt hiển thị đại từ nhân xưng cho chính bạn"
         }
     },
     "userSettingsAPI": {
-        "description": "Sửa lỗi Cài đặt người dùng của Discord để hiển thị nhóm và tên của họ"
+        "description": "Chỉnh sửa UserSettings của Discord để hiển thị nhóm và tên của chúng"
     },
     "userVoiceShow": {
-        "cannotJoinChannel": "Bạn không thể tham gia Kênh Thoại của người dùng",
+        "cannotJoinChannel": "Bạn không thể tham gia Kênh Thoại của người dùng này",
         "description": "Hiển thị chỉ báo khi người dùng đang ở Kênh Thoại",
-        "inVoiceChat": "Bằng giọng nói Chat",
+        "inVoiceChat": "Trong kênh thoại",
         "settings": {
             "showInMemberList": "Hiển thị chỉ báo Kênh Thoại của người dùng trong danh sách thành viên và DM",
             "showInMessages": "Hiển thị chỉ báo Kênh Thoại của người dùng trong tin nhắn",
@@ -2011,10 +2015,10 @@
         }
     },
     "usrbg": {
-        "description": "Hiển thị biểu ngữ người dùng từ USRBG, cho phép mọi người nhận biểu ngữ mà không cần Nitro",
-        "getOwnBanner": "Nhận biểu ngữ USRBG của riêng bạn",
+        "description": "Hiển thị biểu ngữ người dùng từ USRBG, cho phép mọi người tạo biểu ngữ mà không cần Nitro",
+        "getOwnBanner": "Tạo biểu ngữ USRBG của riêng bạn",
         "settings": {
-            "nitroBanner": "biểu ngữ nitro",
+            "nitroBanner": "Biểu ngữ Nitro",
             "nitroFirst": "Biểu ngữ sẽ sử dụng nếu có cả biểu ngữ Nitro và USRBG",
             "usrbgBanner": "Biểu ngữ USRBG",
             "voiceBackground": "Sử dụng biểu ngữ USRBG làm hình nền trò chuyện thoại"
@@ -2024,48 +2028,48 @@
         "description": "Sửa lỗi \"Không thể tải tin nhắn\" khi di chuột qua câu trả lời"
     },
     "validUser": {
-        "description": "Sửa các đề cập cho những người dùng không xác định hiển thị dưới dạng '@unknown-user' (di chuột qua một đề cập để sửa nó)"
+        "description": "Sửa các đề cập cho những người dùng không xác định hiển thị dưới dạng '@người-dùng-không-xác-định' (di chuột qua một đề cập để sửa nó)"
     },
     "vcDoubleClick": {
-        "description": "Tham gia trò chuyện thoại bằng cách nhấp đúp thay vì nhấp một lần"
+        "description": "Tham gia kênh thoại bằng cách nhấp đúp thay vì nhấp một lần"
     },
     "vcNarrator": {
         "customiseMessages": "Bạn có thể tùy chỉnh các tin nhắn nói bên dưới. Bạn có thể tắt các tin nhắn cụ thể bằng cách đặt chúng thành không có gì",
         "defaults": {
-            "deafen": "{{USER}} bị điếc",
+            "deafen": "{{USER}} bị tắt tiếng",
             "join": "{{USER}} đã tham gia",
-            "leave": "{{USER}} còn lại",
+            "leave": "{{USER}} đã rời",
             "move": "{{USER}} đã được chuyển đến {{CHANNEL}}",
-            "mute": "{{USER}} bị tắt tiếng",
-            "undeafen": "{{USER}} không bị đánh bại",
-            "unmute": "{{USER}} đã được bật tiếng"
+            "mute": "{{USER}} đã tắt âm",
+            "undeafen": "{{USER}} đã bỏ tắt tiếng",
+            "unmute": "{{USER}} đã bỏ tắt âm"
         },
         "description": "Thông báo khi người dùng tham gia, rời khỏi hoặc di chuyển các kênh thoại thông qua trình tường thuật",
-        "linuxVoicesHelp": "Cài đặt bộ điều phối lời nói hoặc đặc biệt và chạy Discord với cờ --enable-speech-dispatcher",
-        "noEnglishVoices": "Bạn chưa cài giọng tiếng Anh nên nghe có vẻ lạ",
-        "noVoices": "Không tìm thấy giọng nói của người kể chuyện. ",
+        "linuxVoicesHelp": "Cài đặt speech-dispatcher hoặc espeak và chạy Discord với cờ --enable-speech-dispatcher",
+        "noEnglishVoices": "Bạn chưa cài giọng tiếng Anh nên trình tường thuật nghe có vẻ lạ",
+        "noVoices": "Không tìm thấy giọng nói của trình tường thuật. ",
         "osVoicesHelp": "Hãy thử cài đặt một số trong cài đặt Trình tường thuật của Hệ điều hành của bạn",
-        "placeholdersHelp": "Các phần giữ chỗ đặc biệt <0>{{USER}}</0>, <1>{{DISPLAY_NAME}}</1>, <2>{{NICKNAME}}</2> và <3>{{CHANNEL}}</3> sẽ được thay thế bằng tên người dùng (không có gì nếu đó là chính bạn), tên hiển thị của người dùng, biệt danh của người dùng trên máy chủ hiện tại và tên kênh tương ứng",
-        "playExampleSounds": "Chơi âm thanh mẫu",
+        "placeholdersHelp": "Các phần giữ chỗ đặc biệt <0>{{USER}}</0>, <1>{{DISPLAY_NAME}}</1>, <2>{{NICKNAME}}</2> và <3>{{CHANNEL}}</3> sẽ được thay thế bằng tên người dùng (không có gì nếu đó là bạn), tên hiển thị của người dùng, biệt danh của người dùng trên máy chủ hiện tại và tên kênh tương ứng",
+        "playExampleSounds": "Phát âm thanh mẫu",
         "settings": {
-            "deafenMessage": "Tin nhắn điếc tai (hiện tại chỉ có bản thân)",
-            "joinMessage": "Tham gia tin nhắn",
-            "latinOnly": "Loại bỏ các ký tự không phải tiếng Latinh khỏi tên trước khi nói chúng",
-            "leaveMessage": "Để lại tin nhắn",
-            "moveMessage": "Di chuyển tin nhắn",
-            "muteMessage": "Tắt tiếng tin nhắn (bây giờ chỉ có bản thân)",
-            "sayOwnName": "Nói tên riêng",
-            "speed": "Tốc độ của người kể chuyện",
-            "undeafenMessage": "Tin nhắn Undeafen (chỉ bản thân bây giờ)",
-            "unmuteMessage": "Bật tiếng tin nhắn (bây giờ chỉ có bản thân)",
-            "volume": "Âm lượng của người kể chuyện"
+            "deafenMessage": "Tin nhắn tắt tiếng (hiện chỉ hỗ trợ cho bản thân)",
+            "joinMessage": "Tin nhắn tham gia",
+            "latinOnly": "Loại bỏ các ký tự không phải chữ Latinh khỏi tên trước khi đọc",
+            "leaveMessage": "Tin nhắn rời khỏi",
+            "moveMessage": "Tin nhắn di chuyển",
+            "muteMessage": "Tin nhắn tắt âm (hiện chỉ hỗ trợ cho bản thân)",
+            "sayOwnName": "Nói tên của chính mình",
+            "speed": "Tốc độ của trình tường thuật",
+            "undeafenMessage": "Tin nhắn bỏ tắt tiếng (hiện chỉ hỗ trợ cho bản thân)",
+            "unmuteMessage": "Tin nhắn bỏ tắt âm (hiện chỉ hỗ trợ cho bản thân)",
+            "volume": "Âm lượng của trình tường thuật"
         },
-        "speechSynthesisNotSupported": "Tổng hợp giọng nói không được hỗ trợ hoặc không tìm thấy giọng nói của Trình tường thuật. Vì vậy, plugin này sẽ không hoạt động. Kiểm tra Cài đặt của tôi để biết thêm thông tin"
+        "speechSynthesisNotSupported": "SpeechSynthesis không được hỗ trợ hoặc không tìm thấy giọng nói của Trình tường thuật. Vì vậy, plugin này sẽ không hoạt động. Kiểm tra Cài đặt của plugin để biết thêm thông tin"
     },
     "viewIcons": {
         "description": "Làm cho hình đại diện và biểu ngữ trong hồ sơ người dùng có thể nhấp vào được, thêm các mục Xem Biểu tượng/Biểu ngữ trong menu ngữ cảnh kênh người dùng, máy chủ và nhóm.",
         "settings": {
-            "formatDescription": "Chọn định dạng hình ảnh để sử dụng cho hình ảnh không hoạt hình. Hình ảnh động sẽ luôn sử dụng .gif",
+            "formatDescription": "Chọn định dạng hình ảnh để sử dụng cho hình ảnh tĩnh. Hình ảnh động sẽ luôn sử dụng .gif",
             "imgSizeDescription": "Kích thước hình ảnh sử dụng"
         },
         "viewAvatar": "Xem hình đại diện",
@@ -2075,60 +2079,62 @@
     },
     "viewRaw": {
         "content": "Nội dung",
-        "contentCopied": "Nội dung được sao chép vào clipboard!",
-        "copyJson": "Sao chép {type} JSON",
+        "contentCopied": "Nội dung được sao chép vào bảng nhớ tạm!",
+        "copyJson": "Sao chép JSON {type}",
         "copyRawContent": "Sao chép nội dung thô",
-        "copyRawLeftViewRawRight": "Sao chép thô (Click chuột trái) / Xem Raw (Click chuột phải)",
-        "data": "dữ liệu",
-        "dataCopied": "{type} dữ liệu đã được sao chép vào bảng nhớ tạm!",
-        "description": "Sao chép và xem nội dung/dữ liệu thô của bất kỳ tin nhắn, kênh hoặc bang hội nào",
+        "copyRawLeftViewRawRight": "Sao chép dữ liệu thô (Chuột trái) / Xem dữ liệu thô (Chuột phải)",
+        "data": "Dữ liệu",
+        "dataCopied": "Dữ liệu {type} đã được sao chép vào bảng nhớ tạm!",
+        "description": "Sao chép và xem nội dung/dữ liệu thô của bất kỳ tin nhắn, kênh hoặc máy chủ",
         "settings": {
             "clickMethodDescription": "Thay đổi nút để xem nội dung/dữ liệu thô của bất kỳ tin nhắn nào.",
             "leftClick": "Nhấp chuột trái để xem nội dung thô.",
             "rightClick": "Nhấp chuột phải để xem nội dung thô."
         },
-        "viewRaw": "Xem bản thô",
-        "viewRawLeftCopyRawRight": "Xem bản thô (Click chuột trái) / Copy Raw (Click chuột phải)"
+        "viewRaw": "Xem nội dung thô",
+        "viewRawLeftCopyRawRight": "Xem nội dung thô (Chuột trái) / Sao chép nội dung thô (Chuột phải)"
     },
     "voiceDownload": {
-        "description": "Thêm phần tải xuống vào tin nhắn thoại. (Mở tab trình duyệt mới)",
+        "description": "Thêm nút tải xuống vào tin nhắn thoại. (Mở tab trình duyệt mới)",
         "downloadVoiceMessage": "Tải xuống tin nhắn thoại"
     },
     "voiceMessages": {
-        "echoCancellation": "Huỷ Tiếng Vang",
-        "failedToParse": "Không thể phân tích cú pháp tệp âm thanh đã chọn: {error}",
+        "description": "Cho phép bạn gửi tin nhắn thoại như trên điện thoại. Để thực hiện, chuột phải vào nút tải lên và nhấp vào Gửi Tin Nhắn Thoại",
+        "echoCancellation": "Khử Tiếng Vang",
+        "failedToParse": "Không thể phân tích tệp âm thanh đã chọn: {error}",
         "failedToUpload": "Không thể tải lên tin nhắn thoại",
-        "iosFix": "Để khắc phục, trước tiên hãy chuyển đổi nó thành OggOpus, ví dụ như sử dụng <0>trình chuyển đổi webconvertio</0>",
-        "iosWarning": "Tin nhắn thoại phải là OggOpus để có thể phát trên iOS. Tệp này <0>{type}</0> nên sẽ không thể phát được trên iOS.",
+        "iosFix": "Để khắc phục, trước tiên hãy chuyển đổi nó thành OggOpus, ví dụ như sử dụng <0>trình chuyển đổi convertio</0>",
+        "iosWarning": "Tin nhắn thoại phải là OggOpus để có thể phát trên iOS. Tệp <0>{type}</0> sẽ không thể phát được trên iOS.",
         "missingPermissions": "(Thiếu quyền)",
         "noiseSuppression": "Chặn Tiếng Ồn",
         "preview": "Xem trước",
         "recordModal": "Ghi tin nhắn thoại",
         "send": "Gửi tin nhắn thoại",
-        "sending": "Hiện đang gửi tin nhắn thoại... Xin hãy kiên nhẫn",
+        "sending": "Hiện đang gửi tin nhắn thoại... Vui lòng đợi",
         "uploadFile": "Tải tệp lên"
     },
     "volumeBooster": {
-        "description": "Cho phép bạn đặt người dùng và âm lượng luồng trên mức tối đa mặc định",
+        "description": "Cho phép bạn đặt người dùng và âm lượng stream vượt mức tối đa mặc định",
         "settings": {
-            "multiplier": "Hệ số nhân khối lượng"
+            "multiplier": "Hệ số nhân âm lượng"
         }
     },
     "webContextMenus": {
-        "description": "Thêm lại các menu ngữ cảnh bị thiếu trong phiên bản web của Discord: Liên kết và Hình ảnh (Sao chép/Mở liên kết/Hình ảnh), Văn bản là (Sao chép, Cắt, Dán, Kiểm tra chính tả)",
+        "description": "Thêm lại các menu ngữ cảnh bị thiếu trên phiên bản Discord web: Liên kết & Hình ảnh (Sao chép/Mở Liên kết/Hình ảnh), Vùng văn bản (Sao chép, Cắt, Dán, Kiểm tra chính tả).",
         "settings": {
-            "addBack": "Thêm lại menu ngữ cảnh Discord cho hình ảnh, liên kết và thanh nhập trò chuyện"
+            "addBack": "Thêm lại menu ngữ cảnh Discord cho hình ảnh, liên kết và thanh trò chuyện"
         }
     },
     "webKeybinds": {
-        "description": "Thêm lại các tổ hợp phím bị thiếu trong phiên bản web của Discord: ctrl+t, ctrl+shift+t, ctrl+tab, ctrl+shift+tab, ctrl+1-9, ctrl+,. Chỉ hoạt động hoàn toàn trên Vesktop/Legcord, không hoạt động trên trình duyệt của bạn"
+        "description": "Thêm lại các phím tắt bị thiếu trong phiên bản web của Discord: ctrl+t, ctrl+shift+t, ctrl+tab, ctrl+shift+tab, ctrl+1-9, ctrl+,. Chỉ hoạt động hoàn toàn trên Vesktop/Legcord, không hoạt động trên trình duyệt của bạn"
     },
     "webScreenShareFixes": {
-        "description": "Loại bỏ giới hạn tốc độ bit 2500kbps trên máy khách crom và vesktop."
+        "description": "Loại bỏ giới hạn tốc độ bit 2500kbps trên ứng dụng chromium và vesktop."
     },
     "whoReacted": {
+        "description": "Hiển thị ảnh đại diện của những người dùng đã bày tỏ cảm xúc vào tin nhắn",
         "settings": {
-            "avatarClick": "Chuyển đổi cách nhấp vào hình đại diện trong phản ứng"
+            "avatarClick": "Bật/tắt việc nhấn vào ảnh đại diện trong phản ứng"
         }
     },
     "xsOverlay": {
@@ -2136,21 +2142,21 @@
         "botNotifications": "Cho phép thông báo bot",
         "callNotifications": "Cho phép thông báo cuộc gọi",
         "channelPingColor": "Màu đề cập kênh",
-        "description": "Chuyển tiếp thông báo bất hòa tới XSOverlay để dễ dàng xem trong VR",
+        "description": "Chuyển tiếp thông báo discord tới XSOverlay để dễ dàng xem trong VR",
         "dmNotifications": "Cho phép thông báo bằng tin nhắn trực tiếp",
         "embed": "nhúng",
-        "groupDmNotifications": "Cho phép thông báo DM Group",
+        "groupDmNotifications": "Cho phép thông báo nhóm DM",
         "helloFromVendor": "Xin chào từ nhà cung cấp!",
         "image": "hình ảnh",
         "incomingCall": "Cuộc gọi đến",
         "isCallingYou": "đang gọi bạn...",
         "lengthBasedTimeout": "Kéo dài thời lượng với độ dài tin nhắn",
         "opacity": "Độ mờ của thông báo",
-        "pingColor": "Người dùng đề cập đến màu sắc",
-        "preferUDPDescription": "Bật nếu bạn sử dụng bản dựng XSOverlay cũ hơn không thể kết nối qua ổ cắm web. Cài đặt này bị bỏ qua trên web.",
-        "reply": "hồi đáp",
-        "sendTestNotification": "Gửi thông báo kiểm tra",
-        "sentEmbeds": "(các) tin nhắn nhúng đã gửi",
+        "pingColor": "Màu sắc đề cập người dùng",
+        "preferUDPDescription": "Bật nếu bạn sử dụng bản dựng XSOverlay cũ hơn không thể kết nối qua websocket. Cài đặt này bị bỏ qua trên web.",
+        "reply": "trả lời",
+        "sendTestNotification": "Gửi thông báo thử",
+        "sentEmbeds": "(Các) tin nhắn nhúng đã gửi",
         "sentSticker": "đã gửi nhãn dán",
         "serverNotifications": "Cho phép thông báo máy chủ",
         "soundPath": "Âm thanh thông báo (mặc định/cảnh báo/lỗi)",
