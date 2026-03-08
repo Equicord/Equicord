@@ -234,6 +234,7 @@ const UploadContextMenuPatch: NavContextMenuPatchCallback = (children, props) =>
         <Menu.MenuItem
             id="vc-webcam-picture"
             label="Take a Picture"
+            iconLeft={CameraIcon}
             leadingAccessory={{
                 type: "icon",
                 icon: CameraIcon
