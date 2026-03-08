@@ -1495,7 +1495,7 @@ export function CommandPaletteModal({ modalProps, instanceKey }: { modalProps: M
             <div className={cl("shell")} onKeyDown={onKeyDown}>
                 {!isPageOpen && (
                     <CommandPaletteInput
-                        ref={mainInputRef}
+                        inputRef={mainInputRef}
                         autoFocus={!activePromptCommand}
                         value={query}
                         onChange={value => {

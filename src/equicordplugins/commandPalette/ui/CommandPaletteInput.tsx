@@ -17,29 +17,31 @@ interface CommandPaletteInputProps {
     autoFocus?: boolean;
     inputClassName?: string;
     readOnly?: boolean;
+    inputRef?: React.Ref<HTMLInputElement>;
     onInputFocus?: React.FocusEventHandler<HTMLInputElement>;
     onInputBlur?: React.FocusEventHandler<HTMLInputElement>;
     onInputClick?: React.MouseEventHandler<HTMLInputElement>;
     children?: React.ReactNode;
 }
 
-export const CommandPaletteInput = React.forwardRef<HTMLInputElement, CommandPaletteInputProps>(function CommandPaletteInput({
+export function CommandPaletteInput({
     value,
     onChange,
     placeholder,
     autoFocus = true,
     inputClassName,
     readOnly = false,
+    inputRef,
     onInputFocus,
     onInputBlur,
     onInputClick,
     children
-}, ref) {
+}: CommandPaletteInputProps) {
     return (
         <div className={cl("input")}>
             <div className={cl("main-input")}>
                 <TextInput
-                    ref={ref}
+                    ref={inputRef}
                     className={classes(cl("main-search-input"), inputClassName)}
                     autoFocus={autoFocus}
                     value={value}
@@ -54,4 +56,4 @@ export const CommandPaletteInput = React.forwardRef<HTMLInputElement, CommandPal
             {children}
         </div>
     );
-});
+}
