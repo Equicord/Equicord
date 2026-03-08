@@ -46,8 +46,7 @@
 }
 
 .vc-webcam-picture-device-row {
-    display: grid;
-    grid-template-columns: 20px minmax(0, 1fr);
+    display: flex;
     align-items: center;
     gap: 12px;
     padding: 0 4px;

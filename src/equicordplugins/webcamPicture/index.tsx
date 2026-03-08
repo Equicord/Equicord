@@ -18,7 +18,7 @@ import { closeModal, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, M
 import definePlugin from "@utils/types";
 import { Channel, VideoDevice } from "@vencord/discord-types";
 import { findByPropsLazy, findExportedComponentLazy } from "@webpack";
-import { Checkbox, DraftType, Menu, SearchableSelect, showToast, Toasts, UploadHandler, useEffect, useState } from "@webpack/common";
+import { Checkbox, DraftType, Menu, SearchableSelect, showToast, Toasts, UploadHandler, useEffect, useRef, useState } from "@webpack/common";
 
 const IMAGE_TYPE = "image/png";
 const IMAGE_NAME_PREFIX = "webcam";
@@ -49,6 +49,14 @@ const WebcamModal = ErrorBoundary.wrap(function WebcamModal({ modalProps, close,
     const [timerEnabled, setTimerEnabled] = useState(false);
     const [selectedDeviceId, setSelectedDeviceId] = useState<string>(() => getConfigModule()?.getVideoDeviceId?.() ?? "");
     const [videoDevices, setVideoDevices] = useState<VideoDevice[]>([]);
+    const isMounted = useRef(true);
+
+    useEffect(() => {
+        isMounted.current = true;
+        return () => {
+            isMounted.current = false;
+        };
+    }, []);
 
     useEffect(() => {
         captureVideoElement = null;
@@ -141,10 +149,12 @@ const WebcamModal = ErrorBoundary.wrap(function WebcamModal({ modalProps, close,
         }
 
         for (const next of [3, 2, 1]) {
+            if (!isMounted.current) return;
             setCountdown(next);
             await sleep(1000);
         }
 
+        if (!isMounted.current) return;
         setCountdown(0);
         await captureFrame();
     };
