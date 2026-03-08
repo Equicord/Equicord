@@ -16,7 +16,7 @@ import { classNameFactory } from "@utils/css";
 import { sleep, tryOrElse } from "@utils/misc";
 import { closeModal, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot, ModalSize, openModal } from "@utils/modal";
 import definePlugin from "@utils/types";
-import { Channel } from "@vencord/discord-types";
+import { Channel, VideoDevice } from "@vencord/discord-types";
 import { findByPropsLazy, findExportedComponentLazy } from "@webpack";
 import { Checkbox, DraftType, Menu, SearchableSelect, showToast, Toasts, UploadHandler, useEffect, useState } from "@webpack/common";
 
@@ -29,11 +29,6 @@ const cl = classNameFactory("vc-webcam-picture-");
 
 let captureVideoElement: HTMLVideoElement | null = null;
 let shouldCaptureVideoElement = false;
-
-type VideoDevice = {
-    id: string;
-    name: string;
-};
 
 const getConfigModule = () => tryOrElse(() => configModule, null);
 
@@ -239,7 +234,6 @@ const UploadContextMenuPatch: NavContextMenuPatchCallback = (children, props) =>
         <Menu.MenuItem
             id="vc-webcam-picture"
             label="Take a Picture"
-            iconLeft={CameraIcon}
             leadingAccessory={{
                 type: "icon",
                 icon: CameraIcon
@@ -259,7 +253,7 @@ export default definePlugin({
             find: "handleReady for ${g.current.streamId}, have onReady callback =",
             replacement: {
                 match: /(\i)\.addEventListener\("canplaythrough",(\i)\)/,
-                replace: "$1.addEventListener(\"canplaythrough\",()=>{$self.setCaptureVideoElement($1);$2()})"
+                replace: "$1.addEventListener(\"canplaythrough\",(e)=>{$self.setCaptureVideoElement($1);$2(e)})"
             }
         }
     ],
