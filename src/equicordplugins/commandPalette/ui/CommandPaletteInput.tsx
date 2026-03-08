@@ -7,7 +7,7 @@
 import { classNameFactory } from "@utils/css";
 import { classes } from "@utils/misc";
 import { TextInput } from "@webpack/common";
-import type { FocusEventHandler, MouseEventHandler, ReactNode } from "react";
+import { type FocusEventHandler, forwardRef, type MouseEventHandler, type ReactNode } from "react";
 
 const cl = classNameFactory("vc-command-palette-");
 
@@ -24,7 +24,7 @@ interface CommandPaletteInputProps {
     children?: ReactNode;
 }
 
-export function CommandPaletteInput({
+export const CommandPaletteInput = forwardRef<HTMLInputElement, CommandPaletteInputProps>(function CommandPaletteInput({
     value,
     onChange,
     placeholder,
@@ -35,11 +35,12 @@ export function CommandPaletteInput({
     onInputBlur,
     onInputClick,
     children
-}: CommandPaletteInputProps) {
+}, ref) {
     return (
         <div className={cl("input")}>
             <div className={cl("main-input")}>
                 <TextInput
+                    ref={ref}
                     className={classes(cl("main-search-input"), inputClassName)}
                     autoFocus={autoFocus}
                     value={value}
@@ -54,4 +55,4 @@ export function CommandPaletteInput({
             {children}
         </div>
     );
-}
+});

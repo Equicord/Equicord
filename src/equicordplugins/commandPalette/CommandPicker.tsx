@@ -7,7 +7,7 @@
 import { CogWheel } from "@components/Icons";
 import { classNameFactory } from "@utils/css";
 import { classes } from "@utils/misc";
-import { ModalRoot, ModalSize, openModal } from "@utils/modal";
+import { type ModalProps,ModalRoot, ModalSize, openModal } from "@utils/modal";
 import { TextInput, useCallback, useEffect, useMemo, useRef, useState } from "@webpack/common";
 
 import {
@@ -56,7 +56,7 @@ export function openCommandPicker(props: CommandPickerProps) {
     ));
 }
 
-function CommandPickerModal({ modalProps, commands: providedCommands, allowMultiple = false, initialQuery = "", initialSelectedIds = [], includeHiddenInSearch = false, emptyStateText = "No commands found", filter: filterPredicate, onSelect, onComplete, onClose }: CommandPickerProps & { modalProps: any; }) {
+function CommandPickerModal({ modalProps, commands: providedCommands, allowMultiple = false, initialQuery = "", initialSelectedIds = [], includeHiddenInSearch = false, emptyStateText = "No commands found", filter: filterPredicate, onSelect, onComplete, onClose }: CommandPickerProps & { modalProps: ModalProps; }) {
     const [query, setQuery] = useState(initialQuery);
     const [registryVersion, setRegistryVersion] = useState(() => getRegistryVersion());
     const [selectedIndex, setSelectedIndex] = useState(-1);

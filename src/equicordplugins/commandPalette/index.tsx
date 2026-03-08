@@ -8,12 +8,15 @@ import { definePluginSettings } from "@api/Settings";
 import { BaseText } from "@components/BaseText";
 import { Button } from "@components/Button";
 import { EquicordDevs, IS_MAC } from "@utils/constants";
+import { classNameFactory } from "@utils/css";
 import definePlugin, { OptionType } from "@utils/types";
 import { useEffect, useState } from "@webpack/common";
 
 import { cleanupCommandPaletteRuntime, registerBuiltInCommands, wrapChatBarChildren } from "./registry";
 import { CommandPaletteSettingsPanel } from "./settingsPanel";
 import { openCommandPalette } from "./ui";
+
+const cl = classNameFactory("vc-command-palette-");
 
 const DEFAULT_KEYS = IS_MAC ? ["Meta", "Shift", "P"] : ["Control", "Shift", "P"];
 
@@ -85,22 +88,22 @@ function KeybindRecorder() {
     }, [isListening]);
 
     return (
-        <div className="vc-command-palette-keybind-input">
-            <div className="vc-command-palette-keybind-info">
+        <div className={cl("keybind-input")}>
+            <div className={cl("keybind-info")}>
                 <BaseText size="md" weight="semibold">Keybind</BaseText>
             </div>
-            <div className="vc-command-palette-keybind-controls">
+            <div className={cl("keybind-controls")}>
                 <Button
                     type="button"
                     variant="secondary"
-                    className={`vc-command-palette-keybind-button ${isListening ? "listening" : ""}`}
+                    className={`${cl("keybind-button")} ${isListening ? "listening" : ""}`}
                     onClick={() => setIsListening(true)}
                 >
                     {isListening ? "Recording..." : formatKeybind(currentKeybind)}
                 </Button>
             </div>
             {error && (
-                <BaseText size="xs" weight="normal" className="vc-command-palette-keybind-conflict">
+                <BaseText size="xs" weight="normal" className={cl("keybind-conflict")}>
                     {error}
                 </BaseText>
             )}

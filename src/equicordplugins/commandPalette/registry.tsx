@@ -11,6 +11,7 @@ import { getUserSettingLazy } from "@api/UserSettings";
 import { openPluginModal } from "@components/settings/tabs";
 import { toggleEnabled } from "@equicordplugins/equicordHelper/utils";
 import { copyWithToast } from "@utils/discord";
+import { Logger } from "@utils/Logger";
 import type { Plugin } from "@utils/types";
 import { changes, checkForUpdates } from "@utils/updater";
 import { Guild } from "@vencord/discord-types";
@@ -203,6 +204,48 @@ interface ReadStateStoreLike {
     getReadStatesByChannel?: () => Record<string, unknown>;
 }
 
+interface DiscordNativeLike {
+    app?: {
+        openExternalURL?: (url: string) => void;
+    };
+    window?: {
+        openDevTools?: () => void;
+        toggleDevTools?: () => void;
+    };
+    notifications?: {
+        clearAll?: () => void;
+    };
+}
+
+interface ChannelLike {
+    id: string;
+    type?: number;
+    name?: string;
+    recipients?: string[];
+    rawRecipients?: Array<string | { id?: string; }>;
+    isDM?: () => boolean;
+    isGroupDM?: () => boolean;
+    getRecipientId?: () => string | null | undefined;
+}
+
+interface WindowWithDiscordNative extends Window {
+    DiscordNative?: DiscordNativeLike;
+}
+
+interface ChannelClosePayloadLike {
+    channel?: unknown;
+    channel_id?: string;
+    recipients?: unknown;
+    rawRecipients?: unknown;
+    type?: unknown;
+    id?: unknown;
+}
+
+interface ChannelStoreAccessorMixins {
+    getDMFromUserId?: (id: string) => string | null;
+    getSortedPrivateChannels?: () => Array<string | { id?: string; channelId?: string; }>;
+}
+
 export const chatBarCommandStates = new Map<string, ChatBarCommandState>();
 export const chatBarCommandStatesById = new Map<string, ChatBarCommandState>();
 const CHATBAR_DATASET_KEY = "vcCommandPaletteId";
@@ -220,6 +263,7 @@ const extensionsState = createExtensionsState(
 );
 const StatusSetting = getUserSettingLazy<string>("status", "status");
 const COMMAND_PALETTE_PLUGIN_NAME = "CommandPalette";
+const logger = new Logger(COMMAND_PALETTE_PLUGIN_NAME);
 const CUSTOM_COMMANDS_KEY = "CommandPaletteCustomCommands";
 
 const commandTagIds = new Map<string, string[]>();
@@ -247,7 +291,7 @@ export function wrapChatBarChildren(children: ReactNode): ReactNode {
         };
 
         return (
-            <ChatBarCommandBridge key={existingKey} {...bridgeProps} />
+            <ChatBarCommandBridge key={existingKey ?? buttonKey} {...bridgeProps} />
         );
     });
 
@@ -344,7 +388,7 @@ export function attachChatBarInstance(buttonKey: string, label: string, containe
         if (element.isConnected) return element;
         const scoped = container.querySelector<HTMLElement>(`[${CHATBAR_DATA_ATTRIBUTE}="${commandId}"]`);
         if (scoped) return scoped;
-        return document.querySelector<HTMLElement>(`[${CHATBAR_DATA_ATTRIBUTE}="${commandId}"]`);
+        return null;
     };
 
     state.getters.add(getter);
@@ -479,7 +523,7 @@ export function resolveChatBarElement(state: ChatBarCommandState): HTMLElement |
             continue;
         }
     }
-    return document.querySelector<HTMLElement>(`[${CHATBAR_DATA_ATTRIBUTE}="${state.commandId}"]`);
+    return null;
 }
 
 function incrementTagMetadata(tagId: string, label: string) {
@@ -579,23 +623,45 @@ function findUserIdInArgs(args: unknown[]): string | null {
     return null;
 }
 
-function resolveChannelFromPayload(input: unknown): any | null {
+function resolveChannelFromPayload(input: unknown): ChannelLike | null {
     if (!input) return null;
 
     if (typeof input === "object") {
         const candidate = input as Record<string, unknown>;
         if (candidate && typeof candidate.id === "string" && ("type" in candidate || "isDM" in candidate)) {
-            return candidate;
+            const resolved = candidate as { id: string; type?: unknown; name?: unknown; recipients?: unknown; rawRecipients?: unknown; isDM?: unknown; isGroupDM?: unknown; getRecipientId?: unknown; };
+            return {
+                id: resolved.id,
+                type: typeof resolved.type === "number" ? resolved.type : undefined,
+                name: typeof resolved.name === "string" ? resolved.name : undefined,
+                recipients: Array.isArray(resolved.recipients)
+                    ? resolved.recipients.filter((value): value is string => typeof value === "string")
+                    : undefined,
+                rawRecipients: Array.isArray(resolved.rawRecipients)
+                    ? resolved.rawRecipients.filter((value): value is string | { id?: string; } => typeof value === "string" || Boolean(value && typeof value === "object"))
+                    : undefined,
+                isDM: typeof resolved.isDM === "function" ? (resolved.isDM as () => boolean) : undefined,
+                isGroupDM: typeof resolved.isGroupDM === "function" ? (resolved.isGroupDM as () => boolean) : undefined,
+                getRecipientId: typeof resolved.getRecipientId === "function" ? (resolved.getRecipientId as () => string | null | undefined) : undefined
+            };
         }
         if (candidate.channel) {
             const nested = resolveChannelFromPayload(candidate.channel);
             if (nested) return nested;
         }
         if (typeof candidate.channel_id === "string") {
-            const fallback: Record<string, unknown> = { id: candidate.channel_id };
-            if (candidate.recipients) fallback.recipients = candidate.recipients;
-            if (candidate.rawRecipients) fallback.rawRecipients = candidate.rawRecipients;
-            if (candidate.type) fallback.type = candidate.type;
+            const fallback: ChannelLike = { id: candidate.channel_id };
+            if (Array.isArray(candidate.recipients)) {
+                fallback.recipients = candidate.recipients.filter((value): value is string => typeof value === "string");
+            }
+            if (Array.isArray(candidate.rawRecipients)) {
+                fallback.rawRecipients = candidate.rawRecipients.filter((value): value is string | { id?: string; } => {
+                    if (typeof value === "string") return true;
+                    return Boolean(value && typeof value === "object");
+                });
+            }
+            if (typeof candidate.type === "number") fallback.type = candidate.type;
+            if (typeof candidate.name === "string") fallback.name = candidate.name;
             return fallback;
         }
     }
@@ -605,7 +671,7 @@ function resolveChannelFromPayload(input: unknown): any | null {
     return ChannelStore.getChannel(channelId) ?? { id: channelId };
 }
 
-function deriveDmRecipient(channel: any): string | undefined {
+function deriveDmRecipient(channel: ChannelLike | null): string | undefined {
     if (!channel) return undefined;
     const currentUserId = UserStore?.getCurrentUser?.()?.id;
     try {
@@ -637,7 +703,7 @@ function deriveDmRecipient(channel: any): string | undefined {
     return undefined;
 }
 
-function trackClosedChannel(channel: any) {
+function trackClosedChannel(channel: ChannelLike | null) {
     if (!channel || typeof channel.id !== "string") return;
 
     try {
@@ -699,7 +765,7 @@ function patchChannelCloseMethods() {
         const original = actions[name];
         if (typeof original !== "function") continue;
 
-        const patched = function patchedChannelClose(this: unknown, ...args: any[]) {
+        const patched = function patchedChannelClose(this: unknown, ...args: unknown[]) {
             try {
                 const channel = resolveChannelFromPayload(args[0]);
                 trackClosedChannel(channel);
@@ -715,7 +781,7 @@ function patchChannelCloseMethods() {
             } catch {
                 lastClosedDm = lastClosedDm ?? null;
             }
-            return (original as (...inner: any[]) => unknown).apply(this, args);
+            return (original as (...inner: unknown[]) => unknown).apply(this, args);
         };
 
         (actions as Record<string, unknown>)[name] = patched;
@@ -754,7 +820,8 @@ const HeadphonesIcon = findExportedComponentLazy("HeadphonesIcon");
 const UserGuildSettingsStore = findStoreLazy("UserGuildSettingsStore");
 const NotificationsInboxStore = findStoreLazy("NotificationsInboxStore") as NotificationsInboxStoreLike;
 const RecentMentionsStore = findStoreLazy("RecentMentionsStore") as RecentMentionsStoreLike;
-const ReadStateStoreRef = (ReadStateStore as unknown as ReadStateStoreLike | undefined) ?? (findStoreLazy("ReadStateStore") as ReadStateStoreLike | undefined);
+const ReadStateStoreRef = (ReadStateStore as ReadStateStoreLike | undefined) ?? (findStoreLazy("ReadStateStore") as ReadStateStoreLike | undefined);
+const channelStoreAccessors = ChannelStore as ChannelStoreAccessorMixins;
 
 interface ContextCommandProvider {
     id: string;
@@ -896,7 +963,8 @@ async function openDiscordSettingsRoute(route: string, label?: string) {
 }
 
 function openExternalUrl(url: string) {
-    const external = (window as any)?.DiscordNative?.app?.openExternalURL;
+    const discordNative = window as WindowWithDiscordNative;
+    const external = discordNative.DiscordNative?.app?.openExternalURL;
     if (typeof external === "function") {
         external(url);
         return;
@@ -906,14 +974,8 @@ function openExternalUrl(url: string) {
 }
 
 function openDevToolsWindow() {
-    const nativeWindow = (window as unknown as {
-        DiscordNative?: {
-            window?: {
-                openDevTools?: () => void;
-                toggleDevTools?: () => void;
-            };
-        };
-    })?.DiscordNative?.window;
+    const discordNative = window as WindowWithDiscordNative;
+    const nativeWindow = discordNative.DiscordNative?.window;
 
     if (typeof nativeWindow?.openDevTools === "function") {
         nativeWindow.openDevTools();
@@ -934,15 +996,15 @@ function openDevToolsWindow() {
             }
         });
         return true;
-    } catch { }
+    } catch (error) {
+        logger.error("Failed to open DevTools via FluxDispatcher fallback", error);
+    }
 
     return false;
 }
 
 function getLastPrivateChannelId(): string | null {
-    const channels = (ChannelStore as unknown as {
-        getSortedPrivateChannels?: () => Array<string | { id?: string; channelId?: string; }>;
-    }).getSortedPrivateChannels?.() ?? [];
+    const channels = channelStoreAccessors.getSortedPrivateChannels?.() ?? [];
 
     for (const raw of channels) {
         const channelId = typeof raw === "string" ? raw : raw?.id ?? raw?.channelId ?? null;
@@ -1023,12 +1085,15 @@ function sanitizeCustomCommands(input: CustomCommandDefinition[] | undefined | n
                     return { type: "settings", route: resolveCanonicalSettingsRoute(String(action.route ?? "")) } as CustomCommandAction;
                 case "url":
                     return { type: "url", url: String(action.url ?? ""), openExternal: Boolean(action.openExternal) } as CustomCommandAction;
-                case "macro":
-                    if (!Array.isArray((action as any).steps)) return { type: "macro", steps: [] } as CustomCommandAction;
+                case "macro": {
+                    const macroAction = action as { steps?: unknown; };
+                    const rawSteps = macroAction.steps;
+                    if (!Array.isArray(rawSteps)) return { type: "macro", steps: [] } as CustomCommandAction;
                     return {
                         type: "macro",
-                        steps: (action as any).steps.map((step: unknown) => String(step)).filter(Boolean)
+                        steps: rawSteps.map((step: unknown) => String(step)).filter(Boolean)
                     } as CustomCommandAction;
+                }
                 default:
                     return null;
             }
@@ -1177,7 +1242,7 @@ function ensureSessionHooks() {
 
     patchChannelCloseMethods();
 
-    const handleChannelClose = (payload: any) => {
+    const handleChannelClose = (payload: unknown) => {
         const channel = resolveChannelFromPayload(payload);
         if (channel) trackClosedChannel(channel);
 
@@ -2337,14 +2402,16 @@ function getGuildPermalink(guildId: string): string {
     return `https://discord.com/channels/${guildId}`;
 }
 
-function getChannelDisplayLabel(channel: any): string {
+function getChannelDisplayLabel(channel: ChannelLike | null): string {
     if (!channel) return "Current Channel";
     try {
         if (typeof channel.isDM === "function" && channel.isDM()) return "Direct Message";
         if (typeof channel.isGroupDM === "function" && channel.isGroupDM()) return channel.name ?? "Group DM";
         if (channel.name) return `#${channel.name}`;
         if (channel.rawRecipients?.length) return "Direct Message";
-    } catch { }
+    } catch (error) {
+        logger.error("Failed to resolve channel display label", error);
+    }
     return "Current Channel";
 }
 
@@ -2364,7 +2431,9 @@ function buildMuteConfig(durationMinutes?: number | null) {
 }
 
 function toggleChannelMuteState(channelId: string, guildId: string | null, mute: boolean, durationMinutes?: number) {
-    const actions = NotificationSettingsActionCreators as any;
+    const actions = NotificationSettingsActionCreators as {
+        updateChannelOverrideSettings?: (guildId: string | null, channelId: string, payload: Record<string, unknown>) => void;
+    } | undefined;
     if (!actions?.updateChannelOverrideSettings) {
         showToast("Channel mute controls unavailable.", Toasts.Type.FAILURE);
         return;
@@ -2384,7 +2453,9 @@ function toggleChannelMuteState(channelId: string, guildId: string | null, mute:
 }
 
 function toggleGuildMuteState(guildId: string, mute: boolean, durationMinutes?: number) {
-    const actions = NotificationSettingsActionCreators as any;
+    const actions = NotificationSettingsActionCreators as {
+        updateGuildNotificationSettings?: (guildId: string, payload: Record<string, unknown>) => void;
+    } | undefined;
     if (!actions?.updateGuildNotificationSettings) {
         showToast("Guild mute controls unavailable.", Toasts.Type.FAILURE);
         return;
@@ -2732,7 +2803,14 @@ async function performCustomCommand(command: CustomCommandDefinition) {
                 return;
             }
 
+            const isHttpProtocol = parsed.protocol === "http:" || parsed.protocol === "https:";
+
             if (action.openExternal) {
+                if (!isHttpProtocol) {
+                    showToast("Only HTTP(S) URLs can be opened externally.", Toasts.Type.FAILURE);
+                    return;
+                }
+
                 openExternalUrl(parsed.toString());
                 return;
             }
@@ -2741,6 +2819,11 @@ async function performCustomCommand(command: CustomCommandDefinition) {
             if (route) {
                 NavigationRouter.transitionTo(route);
             } else {
+                if (!isHttpProtocol) {
+                    showToast("Only HTTP(S) URLs can be opened externally.", Toasts.Type.FAILURE);
+                    return;
+                }
+
                 openExternalUrl(parsed.toString());
                 showToast("Non-Discord links open externally.", Toasts.Type.MESSAGE);
             }
@@ -2793,10 +2876,11 @@ function registerCustomCommandProvider() {
 }
 
 function clearDesktopNotifications() {
-    const api = (window as any)?.DiscordNative?.notifications;
-    if (api?.clearAll) {
+    const discordNative = window as WindowWithDiscordNative;
+    const notifications = discordNative.DiscordNative?.notifications;
+    if (typeof notifications?.clearAll === "function") {
         try {
-            api.clearAll();
+            notifications.clearAll();
             showToast("Cleared desktop notifications.", Toasts.Type.SUCCESS);
         } catch {
             showToast("Failed to clear notifications.", Toasts.Type.FAILURE);

@@ -83,8 +83,6 @@ const SINGLE_SELECT_PROMPT_COMMAND_IDS = new Set([
 const logger = new Logger("CommandPaletteModal");
 const cl = classNameFactory("vc-command-palette-");
 const cn = classNameFactory();
-const promptInputSelector = `input${classNameToSelector(cl("prompt-active-input"))}, ${classNameToSelector(cl("prompt-active-input"))} input`;
-const mainInputSelector = `input${classNameToSelector(cl("main-search-input"))}, ${classNameToSelector(cl("main-search-input"))} input`;
 const promptActiveSelector = classNameToSelector(cl("prompt-active-input"));
 const mainInputSelectorClass = classNameToSelector(cl("main-input"));
 const pageSelector = classNameToSelector(cl("page"));
@@ -317,6 +315,8 @@ export function CommandPaletteModal({ modalProps, instanceKey }: { modalProps: M
     const [calculatorViewMode, setCalculatorViewMode] = useState<CalculatorViewMode>("result");
     const activePromptCommandIdRef = useRef<string | null>(null);
     const promptContainerRef = useRef<HTMLDivElement | null>(null);
+    const mainInputRef = useRef<HTMLInputElement | null>(null);
+    const promptInputRef = useRef<HTMLInputElement | null>(null);
     const suggestionSeedRef = useRef((Math.random() * 0xffffffff) >>> 0);
     const listRef = useRef<HTMLDivElement | null>(null);
     const closeReasonRef = useRef<"programmatic" | "explicit-root" | null>(null);
@@ -689,15 +689,13 @@ export function CommandPaletteModal({ modalProps, instanceKey }: { modalProps: M
         if (!focusPromptInput) return;
 
         requestAnimationFrame(() => {
-            const node = document.querySelector<HTMLInputElement>(promptInputSelector);
-            node?.focus();
+            promptInputRef.current?.focus();
         });
         setFocusPromptInput(false);
     }, [focusPromptInput]);
 
     const focusSearchInput = () => {
-        const node = document.querySelector<HTMLInputElement>(mainInputSelector);
-        node?.focus();
+        mainInputRef.current?.focus();
     };
 
     const clearPromptState = () => {
@@ -1497,6 +1495,7 @@ export function CommandPaletteModal({ modalProps, instanceKey }: { modalProps: M
             <div className={cl("shell")} onKeyDown={onKeyDown}>
                 {!isPageOpen && (
                     <CommandPaletteInput
+                        ref={mainInputRef}
                         autoFocus={!activePromptCommand}
                         value={query}
                         onChange={value => {
@@ -1536,6 +1535,7 @@ export function CommandPaletteModal({ modalProps, instanceKey }: { modalProps: M
                                             onMouseDown={() => setShowPromptDropdown(true)}
                                         >
                                             <TextInput
+                                                ref={promptInputRef}
                                                 className={cl("prompt-active-input")}
                                                 value={promptInputValue}
                                                 onChange={value => {

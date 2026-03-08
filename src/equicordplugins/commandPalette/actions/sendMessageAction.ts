@@ -6,6 +6,7 @@
 
 import { openPrivateChannel, sendMessage } from "@utils/discord";
 import { Logger } from "@utils/Logger";
+import { sleep } from "@utils/misc";
 import { chooseFile } from "@utils/web";
 import { CloudUpload } from "@vencord/discord-types";
 import { CloudUploadPlatform } from "@vencord/discord-types/enums";
@@ -16,29 +17,19 @@ const logger = new Logger("CommandPaletteSendMessage");
 
 const CloudUploader = findLazy(m => m.prototype?.trackUploadFinished) as typeof CloudUpload;
 
-function waitForDmChannel(userId: string, timeoutMs = 2500): Promise<string | null> {
-    return new Promise(resolve => {
-        const existing = ChannelStore.getDMFromUserId?.(userId) ?? null;
-        if (existing) {
-            resolve(existing);
-            return;
-        }
+async function waitForDmChannel(userId: string, timeoutMs = 2500): Promise<string | null> {
+    const existing = ChannelStore.getDMFromUserId?.(userId) ?? null;
+    if (existing) return existing;
 
-        const started = Date.now();
-        const interval = window.setInterval(() => {
-            const next = ChannelStore.getDMFromUserId?.(userId) ?? null;
-            if (next) {
-                window.clearInterval(interval);
-                resolve(next);
-                return;
-            }
+    const started = Date.now();
+    while (Date.now() - started < timeoutMs) {
+        const next = ChannelStore.getDMFromUserId?.(userId) ?? null;
+        if (next) return next;
 
-            if (Date.now() - started >= timeoutMs) {
-                window.clearInterval(interval);
-                resolve(null);
-            }
-        }, 80);
-    });
+        await sleep(80);
+    }
+
+    return null;
 }
 
 async function pickFilesFromDisk(): Promise<File[]> {

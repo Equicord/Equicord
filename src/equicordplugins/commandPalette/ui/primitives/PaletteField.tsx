@@ -4,7 +4,10 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { classNameFactory } from "@utils/css";
 import type { ReactNode } from "react";
+
+const cl = classNameFactory("vc-command-palette-");
 
 interface PaletteFieldProps {
     label: string;
@@ -13,8 +16,8 @@ interface PaletteFieldProps {
 
 export function PaletteField({ label, children }: PaletteFieldProps) {
     return (
-        <div className="vc-command-palette-page-field">
-            <label className="vc-command-palette-page-field-label">{label}</label>
+        <div className={cl("page-field")}>
+            <label className={cl("page-field-label")}>{label}</label>
             {children}
         </div>
     );

@@ -7,6 +7,7 @@
 import { Button } from "@components/Button";
 import { Heading } from "@components/Heading";
 import { Paragraph } from "@components/Paragraph";
+import { classNameFactory } from "@utils/css";
 import { React } from "@webpack/common";
 
 import {
@@ -15,6 +16,8 @@ import {
     saveCustomCommands,
     subscribeCustomCommands,
     subscribeRegistry } from "../../registry";
+
+const cl = classNameFactory("vc-command-palette-");
 import { CustomCommandCard } from "./CustomCommandCard";
 import { buildCategoryOptions, createDefaultCommand } from "./helpers";
 
@@ -83,7 +86,7 @@ export function CustomCommandsPanel() {
     return (
         <section>
             <Heading tag="h4" style={{ color: "var(--text-normal, #dcddde)" }}>Custom Commands</Heading>
-            <Paragraph size="sm" className="vc-command-palette-settings-help">
+            <Paragraph size="sm" className={cl("settings-help")}>
                 Build commands in three simple steps: Basics, Action, and Review. Advanced options stay hidden unless you need them.
             </Paragraph>
 

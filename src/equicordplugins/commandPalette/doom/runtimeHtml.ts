@@ -7,8 +7,7 @@
 export function getDoomBootstrapScript() {
     return `
 const setStatus = message => {
-    parent.postMessage({ type: "command-palette-doom-status", message }, "*");
-    console.log("[DOOM]", message);
+    parent.postMessage({ type: "command-palette-doom-status", message: String(message ?? "") }, "*");
 };
 
 const defaultArgs = ["-iwad", "doom1.wad", "-window", "-nogui", "-nomusic"];
@@ -81,10 +80,10 @@ window.addEventListener("message", async event => {
                 callMain([...defaultArgs, "-config", "default.cfg"]);
             },
             print(text) {
-                console.log(text);
+                setStatus(text);
             },
             printErr(text) {
-                console.error(text);
+                setStatus("stderr: " + text);
             },
             setStatus() { }
         };

@@ -109,10 +109,16 @@ export function resolveUsers(target: string): ResolvedUser[] {
         .map(item => item.entry);
 }
 
+interface ChannelStoreWithPrivateChannels {
+    getSortedPrivateChannels?(): Array<string | { id?: string; channelId?: string; recipients?: string[]; }>;
+    getMutableGuildChannelsForGuild?(guildId: string): Record<string, { channel?: { id: string; name?: string; guild_id?: string; }; }>;
+    getMutablePrivateChannels?(): Record<string, PickerChannelLike | PickerChannelWrapper>;
+}
+
+const channelStoreWithPrivateChannels = ChannelStore as ChannelStoreWithPrivateChannels;
+
 export function resolveRecentDmUsers(limit = 10): ResolvedUser[] {
-    const channels = (ChannelStore as unknown as {
-        getSortedPrivateChannels?(): Array<string | { id?: string; channelId?: string; recipients?: string[]; }>;
-    }).getSortedPrivateChannels?.() ?? [];
+    const channels = channelStoreWithPrivateChannels.getSortedPrivateChannels?.() ?? [];
 
     const seenUsers = new Set<string>();
     const results: ResolvedUser[] = [];
@@ -209,11 +215,7 @@ export function resolveChannelIds(target: string): string[] {
     const selectedGuildId = SelectedGuildStore.getGuildId?.();
     if (!selectedGuildId || selectedGuildId === "@me") return [];
 
-    const store = ChannelStore as unknown as {
-        getMutableGuildChannelsForGuild?(guildId: string): Record<string, { channel?: { id: string; name?: string; guild_id?: string; }; }>;
-    };
-
-    const grouped = store.getMutableGuildChannelsForGuild?.(selectedGuildId);
+    const grouped = channelStoreWithPrivateChannels.getMutableGuildChannelsForGuild?.(selectedGuildId);
     if (!grouped) return [];
 
     const scored: Array<{ id: string; score: number; }> = [];
@@ -298,12 +300,7 @@ function resolveChannelIdEntry(raw: string | { id?: string; channelId?: string; 
 function getPrivateChannelIds(): string[] {
     const ids: string[] = [];
     const seen = new Set<string>();
-    const store = ChannelStore as unknown as {
-        getSortedPrivateChannels?(): Array<string | { id?: string; channelId?: string; }>;
-        getMutablePrivateChannels?(): Record<string, PickerChannelLike | PickerChannelWrapper>;
-    };
-
-    const sorted = store.getSortedPrivateChannels?.() ?? [];
+    const sorted = channelStoreWithPrivateChannels.getSortedPrivateChannels?.() ?? [];
     for (const raw of sorted) {
         const channelId = resolveChannelIdEntry(raw);
         if (!channelId || seen.has(channelId)) continue;
@@ -311,7 +308,7 @@ function getPrivateChannelIds(): string[] {
         ids.push(channelId);
     }
 
-    const mutable = store.getMutablePrivateChannels?.() ?? {};
+    const mutable = channelStoreWithPrivateChannels.getMutablePrivateChannels?.() ?? {};
     for (const value of Object.values(mutable)) {
         const channel = "channel" in value ? value.channel : value;
         if (!isPickerChannelLike(channel)) continue;
@@ -327,10 +324,7 @@ function getPrivateChannelIds(): string[] {
 function getGuildChannelsForPicker(guildId: string): PickerChannelLike[] {
     const channels: PickerChannelLike[] = [];
     const seen = new Set<string>();
-    const store = ChannelStore as unknown as {
-        getMutableGuildChannelsForGuild?(id: string): Record<string, PickerChannelWrapper | PickerChannelLike>;
-    };
-    const grouped = store.getMutableGuildChannelsForGuild?.(guildId) ?? {};
+    const grouped = channelStoreWithPrivateChannels.getMutableGuildChannelsForGuild?.(guildId) ?? {};
 
     for (const value of Object.values(grouped)) {
         const channel = "channel" in value ? value.channel : value;

@@ -5,6 +5,7 @@
  */
 
 import { classNameFactory } from "@utils/css";
+import { Logger } from "@utils/Logger";
 import { useEffect, useRef, useState } from "@webpack/common";
 
 import { doomWasmBase64, doomWasmScriptSource, freedoomWadGzipBase64 } from "../../../doom/runtimeAssets";
@@ -12,6 +13,7 @@ import { getDoomBootstrapScript, getDoomRuntimeHtml } from "../../../doom/runtim
 import type { PalettePageSpec } from "../types";
 
 const cl = classNameFactory("vc-command-palette-");
+const logger = new Logger("CommandPalette", "DoomPage");
 
 let focusDoomRuntime: (() => void) | null = null;
 
@@ -52,7 +54,7 @@ function DoomRuntime() {
 
         const onMessage = (event: MessageEvent) => {
             if (event.data?.type === "command-palette-doom-status" && typeof event.data?.message === "string") {
-                console.log("[DOOM page]", event.data.message);
+                logger.info(event.data.message);
             }
         };
 

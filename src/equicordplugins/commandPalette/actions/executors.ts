@@ -11,6 +11,7 @@ import { noteHandler } from "@equicordplugins/holyNotes/NoteHandler";
 import type { Note } from "@equicordplugins/holyNotes/types";
 import type { ScheduledMessage } from "@equicordplugins/scheduledMessages/types";
 import { addScheduledMessage, getChannelDisplayInfo, getScheduledMessages, removeScheduledMessage, sendScheduledMessageNow, updateScheduledMessageTime } from "@equicordplugins/scheduledMessages/utils";
+import { sleep } from "@utils/misc";
 import { ChannelActionCreators, ChannelStore, NavigationRouter, SelectedChannelStore, Toasts, UserStore } from "@webpack/common";
 
 import { parseQuery } from "../query/parser";
@@ -160,7 +161,7 @@ async function openDmByUserId(userId: string): Promise<string | null> {
         const fallback = findDirectMessageChannelForUser(userId);
         if (fallback) return fallback;
 
-        await new Promise(resolve => window.setTimeout(resolve, 80));
+        await sleep(80);
     }
 
     return null;
