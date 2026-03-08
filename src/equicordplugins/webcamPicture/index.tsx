@@ -177,7 +177,6 @@ const WebcamModal = ErrorBoundary.wrap(function WebcamModal({ modalProps, close,
                 </div>
 
                 <div className={cl("device-row")}>
-                    <CameraIcon className={cl("device-icon")} />
                     <SearchableSelect
                         placeholder="Select camera"
                         maxVisibleItems={5}
