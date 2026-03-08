@@ -19,7 +19,7 @@
         "description": "Krisp और Standard के बजाय None और Krisp को Noise Suppression Popout switch बनाता है"
     },
     "alwaysExpandProfiles": {
-        "description": "प्रोफ़ाइल पॉपआउट को हमेशा पूर्ण मोडल तक विस्तारित करता है"
+        "description": "Profile popouts को हमेशा पूर्ण modal में विस्तारित करता है"
     },
     "anammox": {
         "description": "नाइट्रो और स्टोर से संबंधित विभिन्न विशेषताएं छुपाता है",
@@ -73,7 +73,7 @@
         "settings": {
             "clickMethod": "किसी भी संदेश की base64 content को decode करने वाला button बदलें।",
             "clickMethodOptions": {
-                "left": "बेस64 सामग्री को डीकोड करने के लिए बायाँ-क्लिक करें।",
+                "left": "base64 content को decode करने के लिए बायाँ-क्लिक करें।",
                 "right": "base64 content को decode करने के लिए दायाँ क्लिक करें।"
             }
         },
@@ -104,18 +104,18 @@
         }
     },
     "betterAudioPlayer": {
-        "description": "ऑडियो अटैचमेंट प्लेयर्स में एक स्पेक्ट्रोग्राफ और ऑसिलोस्कोप विज़ुअलाइज़र जोड़ता है",
+        "description": "audio attachment players में एक spectrograph और oscilloscope visualizer जोड़ता है",
         "settings": {
-            "forceMoveBelow": "ऑडियो प्लेयर के नीचे विज़ुअलाइज़र को बाध्य करें",
-            "oscilloscope": "आस्टसीलस्कप विज़ुअलाइज़र सक्षम करें",
-            "oscilloscopeColor": "आस्टसीलस्कप के लिए रंग",
-            "oscilloscopeSolidColor": "आस्टसीलस्कप के लिए ठोस रंग का प्रयोग करें",
-            "spectrograph": "स्पेक्ट्रोग्राफ़ विज़ुअलाइज़र सक्षम करें",
-            "spectrographColor": "स्पेक्ट्रोग्राफ के लिए रंग",
-            "spectrographSolidColor": "स्पेक्ट्रोग्राफ के लिए ठोस रंग का प्रयोग करें"
+            "forceMoveBelow": "audio player के नीचे visualizer को force करें",
+            "oscilloscope": "oscilloscope visualizer को सक्षम करें",
+            "oscilloscopeColor": "Oscilloscope के लिए रंग",
+            "oscilloscopeSolidColor": "oscilloscope के लिए solid color का प्रयोग करें",
+            "spectrograph": "Spectrograph visualizer सक्षम करें",
+            "spectrographColor": "Spectrograph के लिए रंग",
+            "spectrographSolidColor": "Spectrograph के लिए solid color का प्रयोग करें"
         },
         "toasts": {
-            "invalidColor": "{settingKey} के लिए अमान्य रंग प्रारूप, सुनिश्चित करें कि यह 'R, G, B' या '#RRGGBB' प्रारूप में है"
+            "invalidColor": "{settingKey} के लिए गलत रंग प्रारूप, सुनिश्चित करें कि यह 'R, G, B' या '#RRGGBB' प्रारूप में है"
         }
     },
     "betterBanReasons": {
@@ -192,8 +192,8 @@
     },
     "bypassStatus": {
         "contextMenu": {
-            "addStatusBypass": "स्टेटस बायपास जोड़ें",
-            "removeStatusBypass": "स्टेटस बायपास हटाएँ"
+            "addStatusBypass": "Status Bypass जोड़ें",
+            "removeStatusBypass": "Status Bypass हटाएँ"
         },
         "description": "डिस्टर्ब न करें मोड में होने पर भी विशिष्ट स्रोतों से सूचनाएं प्राप्त होती हैं। उपयोगकर्ताओं/चैनलों/गिल्डों को डिस्टर्ब न करें मोड को बायपास करने के लिए सेट करने के लिए उन पर राइट-क्लिक करें।",
         "placeholder": {
@@ -211,7 +211,7 @@
         "statusOptions": {
             "dnd": "परेशान मत करो",
             "idle": "निठल्ला",
-            "invisible": "अदृश्य",
+            "invisible": "Invisible",
             "online": "ऑनलाइन"
         }
     },
@@ -251,7 +251,7 @@
             "showNSFWBadge": "NSFW बैज दिखाएँ",
             "showPrivateThreadBadge": "निजी थ्रेड बैज दिखाएँ",
             "showPublicThreadBadge": "सार्वजनिक थ्रेड बैज दिखाएँ",
-            "showRulesBadge": "नियम बैज दिखाएँ",
+            "showRulesBadge": "नियम badge दिखाएँ",
             "showStageBadge": "स्टेज बैज दिखाएँ",
             "showTextBadge": "टेक्स्ट बैज दिखाएँ",
             "showUnknownBadge": "अज्ञात बैज दिखाएँ",
