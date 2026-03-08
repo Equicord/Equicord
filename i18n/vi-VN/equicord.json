@@ -2180,43 +2180,43 @@
         "filterOptions": {
             "blacklist": "Danh sách đen (thông báo tất cả mọi người ngoại trừ được liệt kê)",
             "off": "Tắt",
-            "whitelist": "Danh sách trắng (chỉ công bố người dùng được liệt kê)"
+            "whitelist": "Danh sách trắng (chỉ thông báo người dùng được liệt kê)"
         },
         "modal": {
             "cancel": "Hủy bỏ",
             "previewHint": "Xem trước giọng nói này phát ra như thế nào với tên của họ:",
             "save": "Lưu",
             "selectVoice": "Chọn một giọng nói",
-            "title": "Giọng kể chuyện của VC"
+            "title": "Giọng trình tường thuật trong VC"
         },
         "preview": {
             "playing": "đang chơi...",
-            "subtitle": "Sử dụng giọng kể chuyện đã chọn của bạn",
+            "subtitle": "Sử dụng giọng trình tường thuật đã chọn",
             "title": "Xem trước âm thanh"
         },
         "settings": {
-            "announceOthersDeafen": "Thông báo khi người dùng khác chặn/không chặn trong VC hiện tại của bạn",
-            "announceOthersMute": "Thông báo khi người dùng khác tắt tiếng/bật tiếng trong VC hiện tại của bạn",
-            "announceOthersStream": "Thông báo khi người dùng khác bắt đầu/dừng phát trực tuyến trong VC hiện tại của bạn",
-            "announceSelfStream": "Thông báo khi bạn bắt đầu/dừng phát trực tuyến",
+            "announceOthersDeafen": "Thông báo khi người dùng khác tắt tiếng/bỏ tắt tiếng trong VC hiện tại của bạn",
+            "announceOthersMute": "Thông báo khi người dùng khác tắt âm/bỏ tắt âm trong VC hiện tại của bạn",
+            "announceOthersStream": "Thông báo khi người dùng khác bắt đầu/dừng stream trong VC hiện tại của bạn",
+            "announceSelfStream": "Thông báo khi bạn bắt đầu/dừng stream",
             "customVoice": "Giọng trình tường thuật",
             "ignoreSelf": "Bỏ qua chính mình cho tất cả các sự kiện",
             "joinMessage": "Phần giữ chỗ: {{USER}}, {{DISPLAY_NAME}}, {{NICKNAME}}, {{CHANNEL}}",
-            "latinOnly": "Loại bỏ các ký tự không phải tiếng Latinh khỏi tên trước khi nói chúng",
-            "leaveMessage": "Để lại tin nhắn",
-            "moveMessage": "Di chuyển tin nhắn",
-            "rate": "Tốc độ của người kể chuyện",
-            "sayOwnName": "Nói tên riêng",
-            "stateChangeCooldownMs": "Thời gian hồi chiêu thông báo thay đổi trạng thái (ms)",
+            "latinOnly": "Loại bỏ các ký tự không phải chữ Latinh khỏi tên trước khi đọc",
+            "leaveMessage": "Tin nhắn rời khỏi",
+            "moveMessage": "Tin nhắn di chuyển",
+            "rate": "Tốc độ của trình tường thuật",
+            "sayOwnName": "Nói tên của mình",
+            "stateChangeCooldownMs": "Thời gian chờ giữa các thông báo thay đổi trạng thái (mili giây)",
             "stateChangeFilterList": "ID người dùng được phân tách bằng dấu phẩy cho danh sách trắng/danh sách đen. Nhấp chuột phải vào người dùng để thêm/xóa.",
             "stateChangeFilterMode": "Lọc những người dùng kích hoạt thông báo thay đổi trạng thái",
-            "userVoiceMap": "Ghi đè giọng nói của mỗi người dùng (định dạng: userId:voiceId,userId2:voiceId2). Người dùng nhấp chuột phải để thiết lập.",
-            "volume": "Âm lượng của người kể chuyện"
+            "userVoiceMap": "Ghi đè giọng nói của mỗi người dùng (định dạng: userId:voiceId,userId2:voiceId2). Nhấp chuột phải người dùng để thiết lập.",
+            "volume": "Âm lượng của trình tường thuật"
         },
         "troubleshooting": {
             "cacheInfo": "Bộ nhớ đệm",
             "clearCache": "Xóa bộ nhớ đệm",
-            "lastApiCall": "Cuộc gọi API gần đây nhất",
+            "lastApiCall": "Lần gọi API cuối cùng",
             "refreshSize": "Làm mới kích thước",
             "title": "Khắc phục sự cố"
         }
@@ -2237,7 +2237,7 @@
             "uncollapseSettingsByDefault": "Tự động thu gọn cài đặt giọng nói theo mặc định"
         },
         "ui": {
-            "camera": "Máy ảnh",
+            "camera": "Camera",
             "hide": "Ẩn",
             "inputDevice": "Thiết bị đầu vào",
             "inputVolume": "Âm lượng đầu vào",
@@ -2250,20 +2250,20 @@
         "contextMenu": {
             "viewRaw": "Xem bản thô"
         },
-        "description": "Xem dữ liệu JSON thô cho tin nhắn, người dùng, kênh và bang hội",
+        "description": "Xem dữ liệu JSON thô cho tin nhắn, người dùng, kênh và máy chủ",
         "modal": {
             "content": "Nội dung",
-            "data": "dữ liệu",
+            "data": "Dữ liệu",
             "title": "Xem bản thô {type}"
         }
     },
     "voiceButtons": {
-        "description": "Thêm các nút hành động nhanh (trò chuyện, tắt tiếng, tắt tiếng) cho người dùng kênh thoại",
+        "description": "Thêm các nút hành động nhanh (trò chuyện, tắt âm, tắt tiếng) cho người dùng kênh thoại",
         "options": {
             "both": "Cả hai",
             "disable": "Tắt",
             "display": "Hiển thị",
-            "globalName": "Global Name",
+            "globalName": "Tên hiển thị",
             "hide": "Ẩn",
             "left": "Bên trái",
             "right": "Phải",
@@ -2271,15 +2271,15 @@
         },
         "settings": {
             "buttonPosition": "Chọn vị trí đặt nút thoại trong hàng người dùng giọng nói.",
-            "disableVideo": "Chuyển đổi video của họ khi nhấp vào nút tắt tiếng.",
-            "muteSoundboard": "Chuyển đổi soundboard của họ khi nhấp vào nút điếc.",
-            "serverSelf": "Điếc/Tắt tiếng trên máy chủ khi sử dụng tắt tiếng/điếc.",
-            "showButtonsSelf": "Cho dù bạn muốn hiển thị các nút cho người dùng của riêng bạn. Chức năng tương tự như (các) nút khác, ngoại trừ nó sẽ mở bảng điều khiển DM và tắt tiếng/điếc cho chính bạn khi nhấp vào (các) nút.",
-            "showChatButton": "Bạn có muốn hiển thị nút trò chuyện hay không",
-            "showDeafenButton": "Cho dù bạn muốn hiển thị nút điếc",
-            "showMuteButton": "Cho dù bạn muốn hiển thị nút tắt tiếng",
-            "useServer": "Sử dụng chế độ tắt tiếng/điếc máy chủ thay vì cục bộ khi bạn được phép.",
-            "whichNameToShow": "Chọn hiển thị biệt hiệu hoặc tên người dùng trong chú giải công cụ."
+            "disableVideo": "Bật/tắt video của họ khi nhấp vào nút tắt tiếng.",
+            "muteSoundboard": "Bật/tắt biểu cảm tiếng của họ khi nhấp vào nút tiếng.",
+            "serverSelf": "Tắt âm / Tắt tiếng trên máy chủ khi sử dụng tắt âm/tắt tiếng.",
+            "showButtonsSelf": "Có muốn hiển thị các nút cho người dùng của riêng bạn. Chức năng tương tự như (các) nút khác, ngoại trừ nó sẽ mở bảng DM và tắt âm/tắt tiếng cho chính bạn khi nhấp vào (các) nút.",
+            "showChatButton": "Có nên hiển thị nút trò chuyện hay không",
+            "showDeafenButton": "Có nên hiển thị nút tắt tiếng hay không",
+            "showMuteButton": "Có nên hiển thị nút tắt âm hay không",
+            "useServer": "Sử dụng chế độ tắt âm/tiếng máy chủ thay vì cục bộ khi có quyền.",
+            "whichNameToShow": "Chọn hiển thị biệt danh hoặc tên đăng nhập trong phần chú giải công cụ."
         }
     },
     "voiceChannelLog": {
@@ -2288,30 +2288,30 @@
         },
         "description": "Ghi nhật ký các sự kiện tham gia/rời/di chuyển kênh thoại",
         "modeOptions": {
-            "both": "Đăng nhập vào menu trò chuyện và đăng nhập",
-            "logMenu": "Trình đơn nhật ký",
-            "logToChat": "Đăng nhập trực tiếp vào cuộc trò chuyện được liên kết"
+            "both": "Ghi nhật ký vào cả kênh chat và menu nhật ký",
+            "logMenu": "Menu nhật ký",
+            "logToChat": "Ghi nhật ký trực tiếp vào kênh chat liên quan"
         },
         "settings": {
-            "ignoreBlockedUsers": "Không đăng nhập người dùng bị chặn",
+            "ignoreBlockedUsers": "Không lưu người dùng bị chặn",
             "mode": "Cách hiển thị nhật ký kênh thoại",
             "voiceChannelChatSelf": "Ghi lại các sự kiện kênh thoại của riêng bạn trong các kênh thoại",
-            "voiceChannelChatSilent": "Tham gia/rời khỏi/di chuyển tin nhắn trong các cuộc trò chuyện trên kênh thoại sẽ ở chế độ im lặng",
-            "voiceChannelChatSilentSelf": "Tham gia/rời khỏi/di chuyển tin nhắn trong cuộc trò chuyện trên kênh thoại sẽ ở chế độ im lặng nếu bạn đang ở trong kênh thoại"
+            "voiceChannelChatSilent": "Tin nhắn tham gia/rời khỏi/di chuyển trong các kênh thoại sẽ ở chế độ im lặng",
+            "voiceChannelChatSilentSelf": "Tin nhắn tham gia/rời khỏi/di chuyển trong kênh thoại sẽ ở chế độ im lặng nếu bạn đang ở trong kênh thoại"
         }
     },
     "voiceChatUtils": {
         "contextMenu": {
-            "deafenAll": "Làm điếc tất cả",
+            "deafenAll": "Tắt tiếng tất cả",
             "disconnectAll": "Ngắt kết nối tất cả",
-            "mentionAllUsers": "Mention all Users",
+            "mentionAllUsers": "Nhắc đến tất cả người dùng",
             "moveAll": "Di chuyển tất cả",
-            "muteAll": "Tắt tiếng tất cả",
-            "undeafenAll": "Làm điếc tất cả",
-            "unmuteAll": "Bật tiếng tất cả",
+            "muteAll": "Tắt âm tất cả",
+            "undeafenAll": "Bỏ tắt tiếng tất cả",
+            "unmuteAll": "Bỏ tắt âm tất cả",
             "voiceTools": "Công cụ giọng nói"
         },
-        "description": "Thêm các công cụ kiểm duyệt kênh thoại (tắt tiếng tất cả, tắt tiếng tất cả, di chuyển tất cả, ngắt kết nối tất cả)",
+        "description": "Thêm các công cụ kiểm duyệt kênh thoại (tắt âm tất cả, tắt tiếng tất cả, di chuyển tất cả, ngắt kết nối tất cả)",
         "settings": {
             "waitAfter": "Số lượng hành động API cần thực hiện trước khi chờ đợi (để tránh giới hạn tốc độ)",
             "waitSeconds": "Thời gian chờ giữa mỗi hành động (tính bằng giây)"
@@ -2320,23 +2320,23 @@
     "voiceJoinMessages": {
         "description": "Nhận thông báo khi bạn bè tham gia kênh thoại",
         "settings": {
-            "allowedFriends": "Danh sách ID người dùng của bạn bè được phân tách bằng dấu phẩy hoặc dấu cách mà bạn muốn nhận tin nhắn tham gia từ đó",
+            "allowedFriends": "Danh sách ID người dùng của bạn bè được phân tách bằng dấu phẩy hoặc dấu cách mà bạn muốn nhận tin nhắn tham gia",
             "friendDirectMessages": "Nhận thông báo trong DM của bạn bè khi họ tham gia kênh thoại",
             "friendDirectMessagesSelf": "Nhận thông báo trong DM của bạn bè ngay cả khi bạn ở cùng kênh thoại với họ",
             "friendDirectMessagesShowMemberCount": "Hiển thị số lượng thành viên khác trong kênh thoại khi nhận được thông báo DM",
             "friendDirectMessagesShowMembers": "Hiển thị danh sách các thành viên khác trong kênh thoại khi nhận được thông báo DM",
-            "friendDirectMessagesSilent": "Tham gia tin nhắn với bạn bè của bạn DM sẽ im lặng",
+            "friendDirectMessagesSilent": "Tin nhắn tham gia trong DM bạn bè sẽ im lặng",
             "ignoreBlockedUsers": "Không gửi tin nhắn về việc người dùng bị chặn tham gia/rời/di chuyển kênh thoại"
         }
     },
     "voiceMessageTranscriber": {
-        "description": "Chép lời tin nhắn bằng giọng nói bằng AI (Whisper)",
+        "description": "Chuyển đổi tin nhắn thoại thành văn bản bằng AI (Whisper)",
         "modal": {
             "action": "Hành động",
             "audioLanguage": "Ngôn ngữ âm thanh",
             "autoDetect": "Tự động phát hiện",
             "copied": "Đã sao chép!",
-            "copyToClipboard": "Sao chép vào Clipboard",
+            "copyToClipboard": "Sao chép vào bảng nhớ tạm",
             "downloadingAudio": "Đang tải xuống âm thanh...",
             "error": "Lỗi",
             "inProgress": "Đang trong quá trình phiên âm...",
@@ -2347,19 +2347,19 @@
             "showTimestamps": "Hiển thị dấu thời gian",
             "start": "Bắt đầu",
             "transcribe": "Phiên âm",
-            "transcribing": "Phiên âm...",
-            "transcription": "Phiên âm",
-            "transcriptionOptions": "Tùy chọn phiên âm",
+            "transcribing": "Đang phiên âm...",
+            "transcription": "Bản ghi lại",
+            "transcriptionOptions": "Tùy chọn chuyễn đổi văn bản",
             "translateToEnglish": "Dịch sang tiếng Anh"
         },
         "modelOptions": {
-            "base": "Cơ sở (Khuyến nghị)",
+            "base": "Cơ bản (Khuyến nghị)",
             "medium": "Trung bình (Chậm nhất, độ chính xác tốt nhất)",
             "small": "Nhỏ",
-            "tiny": "Tiny (Nhanh nhất, độ chính xác thấp nhất)"
+            "tiny": "Bé (Nhanh nhất, độ chính xác thấp nhất)"
         },
         "settings": {
-            "delete": "Xóa tất cả các tập tin được lưu trong bộ nhớ cache",
+            "delete": "Xóa tất cả các tập tin được lưu trong bộ nhớ đệm",
             "quantized": "Sử dụng mô hình lượng tử hóa (kích thước nhỏ hơn, độ chính xác thấp hơn một chút)",
             "selectedModel": "Kích thước mô hình"
         }
@@ -2368,15 +2368,15 @@
         "description": "Tự động tham gia lại các kênh thoại sau khi mất kết nối",
         "preventionOptions": {
             "both": "DM và máy chủ",
-            "dms": "chỉ DM",
+            "dms": "Chỉ DM",
             "none": "Không",
             "servers": "Chỉ máy chủ"
         },
         "settings": {
             "applyOnlyToDms": "Chỉ áp dụng cho DM",
             "preventReconnectIfCallEnded": "Không kết nối lại nếu cuộc gọi đã kết thúc hoặc kênh thoại trống hoặc không tồn tại",
-            "rejoinDelay": "Đặt độ trễ trước khi nối lại kênh thoại",
-            "rejoinTimeout": "Đừng cố gắng tham gia lại sau nhiều giây trôi qua kể từ khi ngắt kết nối"
+            "rejoinDelay": "Đặt độ trễ trước khi kết nối lại kênh thoại",
+            "rejoinTimeout": "Ngừng cố gắng kết nối lại sau khi đã quá số giây này kể từ lúc mất kết nối"
         }
     },
     "waitForSlot": {
@@ -2384,9 +2384,9 @@
             "joinQueue": "Tham gia hàng đợi",
             "leaveQueue": "Rời khỏi hàng đợi"
         },
-        "description": "Xếp hàng cho các kênh thoại đầy đủ và nhận thông báo khi có vị trí mở",
+        "description": "Xếp hàng chờ kênh thoại đầy và nhận thông báo khi có chỗ trống",
         "notices": {
-            "channelFull": "Kênh thoại {channel} đã đầy. Chờ một chỗ?",
+            "channelFull": "Kênh thoại {channel} đã đầy. Chờ lượt không?",
             "join": "Tham gia",
             "slotAvailable": "Này, có người vừa rời khỏi #{channel} và hiện có chỗ dành cho bạn!",
             "wait": "Chờ đợi"
@@ -2401,29 +2401,29 @@
             "removeWallpaper": "Xóa hình nền",
             "setWallpaper": "Đặt hình nền"
         },
-        "description": "Đặt hình nền tùy chỉnh cho kênh, người dùng hoặc toàn cầu",
+        "description": "Đặt hình nền tùy chỉnh cho kênh, người dùng hoặc toàn cục",
         "settings": {
             "globalDefault": "Đặt hình nền mặc định chung cho tất cả các kênh",
             "stylingTips": "Mẹo tạo kiểu"
         }
     },
     "webpackTarball": {
-        "description": "Xuất mô-đun webpack của Discord dưới dạng tarball để phân tích",
+        "description": "Xuất mô-đun webpack của Discord dưới dạng tệp nén để phân tích",
         "modal": {
             "create": "Tạo",
             "errors": "lỗi",
-            "lazyChunks": "Khối lười biếng",
+            "lazyChunks": "Các khối tải chậm",
             "loadAll": "Tải tất cả",
             "loaded": "Đã tải",
             "loadedStatus": "Đã tải",
             "loading": "Đang tải",
-            "title": "Tarball gói web"
+            "title": "Tệp nén Webpack"
         },
         "settings": {
             "patched": "Bao gồm các mô-đun được vá"
         },
         "toolbox": {
-            "webpackTarball": "Tarball gói web"
+            "webpackTarball": "Tệp nén Webpack"
         }
     },
     "whitelistedEmojis": {
@@ -2434,20 +2434,20 @@
             "resetConfirmTitle": "Bạn có chắc không?"
         },
         "contextMenu": {
-            "addAllGuildEmojis": "Thêm tất cả biểu tượng cảm xúc của bang hội",
+            "addAllGuildEmojis": "Thêm tất cả biểu tượng cảm xúc của máy chủ",
             "addToWhitelist": "Thêm vào danh sách trắng",
-            "removeAllGuildEmojis": "Xóa tất cả biểu tượng cảm xúc của bang hội",
+            "removeAllGuildEmojis": "Xóa tất cả biểu tượng cảm xúc của máy chủ",
             "removeFromWhitelist": "Xóa khỏi danh sách trắng"
         },
         "description": "Đưa các biểu tượng cảm xúc cụ thể vào danh sách trắng và ẩn tất cả các biểu tượng cảm xúc khác khỏi bộ chọn biểu tượng cảm xúc",
         "settings": {
             "defaultEmojis": "Ẩn biểu tượng cảm xúc mặc định",
-            "disableToasts": "Tắt nâng ly chúc mừng",
+            "disableToasts": "Tắt thông báo",
             "exportEmojis": "Xuất biểu tượng cảm xúc",
             "importEmojis": "Nhập biểu tượng cảm xúc",
             "resetEmojis": "Đặt lại biểu tượng cảm xúc",
             "serverEmojis": "Ẩn biểu tượng cảm xúc của máy chủ",
-            "whitelistedEmojis": "Biểu tượng cảm xúc được đưa vào danh sách trắng"
+            "whitelistedEmojis": "Danh sách trắng biểu tượng cảm xúc"
         },
         "toasts": {
             "added": "Đã thêm \"{name}\" vào danh sách",
@@ -2463,7 +2463,7 @@
         },
         "ui": {
             "defaultEmojis": "Biểu tượng cảm xúc mặc định",
-            "guildEmojis": "{guild} Biểu tượng cảm xúc",
+            "guildEmojis": "Biểu tượng cảm xúc {guild}",
             "noEmojis": "Không có biểu tượng cảm xúc trong danh sách trắng.",
             "removeAll": "Xóa tất cả"
         }
