@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-const defaultIndicators = new Map(
+const defaultTags = new Map(
     Object.entries({
         j: "Joking",
         hj: "Half Joking",
@@ -15,7 +15,7 @@ const defaultIndicators = new Map(
         genq: "Genuine Question",
         _gq: "Genuine Question", // Alias for genq
         srs: "Serious",
-        nsrs: "Non-Serious",
+        nsrs: "Not Serious",
         pos: "Positive Connotation",
         _pc: "Positive Connotation", // Alias for pos
         neu: "Neutral Connotation",
@@ -27,6 +27,7 @@ const defaultIndicators = new Map(
         c: "Copypasta",
         l: "Lyrics",
         _ly: "Lyrics", // Alias for l
+        _lyr: "Lyrics", // Alias for l
         lh: "Light-Hearted",
         nm: "Not Mad",
         lu: "A Little Upset",
@@ -59,4 +60,4 @@ const defaultIndicators = new Map(
     }),
 );
 
-export default defaultIndicators;
+export default defaultTags;

@@ -4,95 +4,135 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { definePluginSettings } from "@api/Settings";
+import { definePluginSettings, migratePluginSettings } from "@api/Settings";
 import { EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 import { React } from "@webpack/common";
 import { type ReactNode } from "react";
 
-import indicatorsDefault from "./indicators";
-import ToneIndicator from "./ToneIndicator";
+import Abbreviations from "./abbreviation";
+import abbreviationsDefault from "./abbreviations";
+import tagsDefault from "./tags";
+import Tonetags from "./tonetag";
 
 const settings = definePluginSettings({
-    prefix: {
+customTonetags: {
         type: OptionType.STRING,
-        description: "Prefix character(s) for tone indicators.",
-        default: "/",
-    },
-    customIndicators: {
-        type: OptionType.STRING,
-        description: "Custom tone indicators (format: jk=Joking; srs=Serious)",
+        description: "Custom tonetags (format: jk=Joking; srs=Serious)",
         default: "",
     },
+customAbbreviations: {
+    type: OptionType.STRING,
+    description: "Custom abbreviations (format: jk=Joking; srs=Serious)"
+}
 });
 
-function getCustomIndicators(): Record<string, string> {
-    const raw = settings.store.customIndicators || "";
-    const result: Record<string, string> = {};
+function getCustomTonetags(): Record<string, string> {
+    const raw = settings.store.customTonetags || "";
+    const toneResult: Record<string, string> = {};
 
     raw.split("; ").forEach(entry => {
         const [key, ...rest] = entry.split("=");
         if (key && rest.length > 0) {
-            result[key.trim().toLowerCase()] = rest.join("=").trim();
+            toneResult[key.trim().toLowerCase()] = rest.join("=").trim();
         }
     });
 
-    return result;
+    return toneResult;
 }
 
-function getIndicator(text: string): string | null {
+function getCustomAbbreviations(): Record<string, string> {
+    const raw = settings.store.customAbbreviations || "";
+    const abbreviationResult: Record<string, string> = {};
+
+    raw.split("; ").forEach(entry => {
+        const [key, ...rest] = entry.split("=");
+        if (key && rest.length > 0) {
+            abbreviationResult[key.trim().toLowerCase()] = rest.join("=").trim();
+        }
+    });
+
+    return abbreviationResult;
+}
+
+function getTonetags(text: string): string | null {
     text = text.toLowerCase();
-    const customIndicators = getCustomIndicators();
+    const customTonetags = getCustomTonetags();
 
     return (
-        customIndicators[text] ||
-        customIndicators[`_${text}`] ||
-        indicatorsDefault.get(text) ||
-        indicatorsDefault.get(`_${text}`) ||
+        customTonetags[text] ||
+        customTonetags[`_${text}`] ||
+        tagsDefault.get(text) ||
+        tagsDefault.get(`_${text}`) ||
         null
     );
 }
 
-function buildIndicatorRegex(): RegExp {
-    const customIndicators = getCustomIndicators();
-    const allIndicators = new Set<string>();
+function getAbbreviations(text: string): string | null {
+    text = text.toLowerCase();
+    const customAbbreviations = getCustomAbbreviations();
 
-    indicatorsDefault.forEach((_, key) => {
-        allIndicators.add(key.replace(/^_/, "")); // remove underscore prefix for aliases
+    return (
+        customAbbreviations[text] ||
+        customAbbreviations[`_${text}`] ||
+        abbreviationsDefault.get(text) ||
+        abbreviationsDefault.get(`_${text}`) ||
+        null
+    );
+}
+
+function buildTagRegex(): RegExp {
+    const customTonetags = getCustomTonetags();
+    const allTonetags = new Set<string>();
+
+    tagsDefault.forEach((_, key) => {
+        allTonetags.add(key.replace(/^_/, "")); // remove underscore prefix for aliases
     });
-    Object.keys(customIndicators).forEach(key => {
-        allIndicators.add(key.replace(/^_/, "")); // remove underscore prefix for aliases
+    Object.keys(customTonetags).forEach(key => {
+        allTonetags.add(key.replace(/^_/, "")); // remove underscore prefix for aliases
     });
 
     // escape special regex characters and sort by length (longest first)
-    const escaped = Array.from(allIndicators)
+    const escaped = Array.from(allTonetags)
         .map(ind => ind.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"))
         .sort((a, b) => b.length - a.length); // longest first to avoid partial matches (should fix some edge cases)
 
-    const prefix = settings.store.prefix || "/";
-    let escapedPrefix = prefix.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-
-    // if prefix is a markdown character, also match escaped version
-    const isMarkdown = /[*_~`|]/.test(prefix);
-    if (isMarkdown) {
-        escapedPrefix = `(?:\\\\${escapedPrefix}|${escapedPrefix})`;
-    }
-
     // exclude forward slash from punctuation to prevent sed syntax conflicts (s/find/replace)
-    const pattern = `(?:^|\\s)${escapedPrefix}(${escaped.join("|")})(?=\\s|$|[^\\s\\w/])`;
+    const pattern = `(?:^|\\s)/(${escaped.join("|")})(?=\\s|$|[^\\s\\w/])`;
     return new RegExp(pattern, "giu"); // 'i' = case-insensitive, 'u' = unicode
 }
 
-function splitTextWithIndicators(text: string): ReactNode[] {
+function buildAbbreviationRegex(): RegExp {
+    const customAbbreviations = getCustomAbbreviations();
+    const allAbbreviations = new Set<string>();
+
+    abbreviationsDefault.forEach((_, key) => {
+        allAbbreviations.add(key.replace(/^_/, "")); // remove underscore prefix for aliases
+    });
+    Object.keys(customAbbreviations).forEach(key => {
+        allAbbreviations.add(key.replace(/^_/, "")); // remove underscore prefix for aliases
+    });
+
+    // escape special regex characters and sort by length (longest first)
+    const escaped = Array.from(allAbbreviations)
+        .map(ind => ind.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"))
+        .sort((a, b) => b.length - a.length); // longest first to avoid partial matches (should fix some edge cases)
+
+    // exclude forward slash from punctuation to prevent sed syntax conflicts (s/find/replace)
+    const pattern = `(?:^|\\s)(${escaped.join("|")})(?=\\s|$|[^\\s\\w/])`;
+    return new RegExp(pattern, "giu"); // 'i' = case-insensitive, 'u' = unicode
+}
+
+function splitTextWithTags(text: string): ReactNode[] {
     const nodes: ReactNode[] = [];
     let lastIndex = 0;
-    const regex = buildIndicatorRegex();
-    const prefix = settings.store.prefix || "/";
+    const regex = buildTagRegex();
+    const prefix = "/";
     let match: RegExpExecArray | null;
 
     while ((match = regex.exec(text))) {
-        const indicator = match[1];
-        const desc = getIndicator(indicator);
+        const tonetag = match[1];
+        const desc = getTonetags(tonetag);
 
         const fullMatch = match[0];
         const leadingWhitespace = fullMatch.match(/^(\s*)/)?.[1] ?? "";
@@ -107,10 +147,49 @@ function splitTextWithIndicators(text: string): ReactNode[] {
         if (desc) {
             if (leadingWhitespace) nodes.push(leadingWhitespace);
             nodes.push(
-                <ToneIndicator
+                <Tonetags
                     key={`ti-${matchStart}`}
                     prefix={prefix}
-                    indicator={indicator}
+                    tonetag={tonetag}
+                    desc={desc}
+                />,
+            );
+        }
+
+        lastIndex = matchEnd;
+    }
+
+    if (lastIndex < text.length) nodes.push(text.slice(lastIndex));
+
+    return nodes;
+}
+
+function splitTextWithAbbreviations(text: string): ReactNode[] {
+    const nodes: ReactNode[] = [];
+    let lastIndex = 0;
+    const regex = buildAbbreviationRegex();
+    let match: RegExpExecArray | null;
+
+    while ((match = regex.exec(text))) {
+        const Abbreviation = match[1];
+        const desc = getAbbreviations(Abbreviation);
+
+        const fullMatch = match[0];
+        const leadingWhitespace = fullMatch.match(/^(\s*)/)?.[1] ?? "";
+
+        const matchStart = match.index;
+        const matchEnd = regex.lastIndex;
+
+        if (matchStart > lastIndex) {
+            nodes.push(text.slice(lastIndex, matchStart));
+        }
+
+        if (desc) {
+            if (leadingWhitespace) nodes.push(leadingWhitespace);
+            nodes.push(
+                <Abbreviations
+                    key={`ti-${matchStart}`}
+                    abbreviations={Abbreviation}
                     desc={desc}
                 />,
             );
@@ -129,7 +208,7 @@ function patchChildrenTree(children: any): any {
         if (node == null) return node;
 
         if (typeof node === "string") {
-            const prefix = settings.store.prefix || "/";
+            const prefix = "/";
             let escapedPrefix = prefix.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
             // if prefix is markdown character, also check for escaped version
@@ -137,12 +216,15 @@ function patchChildrenTree(children: any): any {
             if (isMarkdown) {
                 escapedPrefix = `(?:\\\\${escapedPrefix}|${escapedPrefix})`;
             }
+            // from here
+            const tagcheck = new RegExp(`${escapedPrefix}[\\p{L}_]+`, "iu").test(node);
+            const abbreviationcheck = new RegExp("[\\p{L}_]+", "iu").test(node);
 
-            if (!new RegExp(`${escapedPrefix}[\\p{L}_]+`, "iu").test(node)) return node;
-            const parts = splitTextWithIndicators(node);
-            return parts.length === 1 ? parts[0] : parts;
+            if (!tagcheck && !abbreviationcheck) return node;
+            const tagparts = splitTextWithTags(node);
+            return tagparts.length === 1 ? tagparts[0] : tagparts;
         }
-
+        // to here only works for tone tags and i cant figure out how to make it work with abbreviations too
         if (node?.props?.children != null) {
             const c = node.props.children;
             if (Array.isArray(c)) {
@@ -159,6 +241,8 @@ function patchChildrenTree(children: any): any {
     if (Array.isArray(children)) return children.map(transform).flat();
     return transform(children);
 }
+
+migratePluginSettings("mouseoverExplanations", "toneIndicators");
 
 export default definePlugin({
     name: "MouseoverExplanations",
