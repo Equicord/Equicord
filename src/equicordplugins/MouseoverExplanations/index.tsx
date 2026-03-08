@@ -216,7 +216,7 @@ function patchChildrenTree(children: any): any {
             if (isMarkdown) {
                 escapedPrefix = `(?:\\\\${escapedPrefix}|${escapedPrefix})`;
             }
-            // from here
+            // the reason abbreviations dont work is because the code from here
             const tagcheck = new RegExp(`${escapedPrefix}[\\p{L}_]+`, "iu").test(node);
             const abbreviationcheck = new RegExp("[\\p{L}_]+", "iu").test(node);
 
