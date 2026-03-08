@@ -1,0 +1,89 @@
+.vc-webcam-picture-header {
+    align-items: center;
+    justify-content: space-between;
+}
+
+.vc-webcam-picture-title {
+    margin: 0;
+    font-size: 28px;
+    line-height: 1.2;
+}
+
+.vc-webcam-picture-content {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.vc-webcam-picture-preview-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border-radius: 12px;
+    background: var(--background-secondary);
+    aspect-ratio: 16 / 9;
+}
+
+.vc-webcam-picture-preview {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.vc-webcam-picture-countdown {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: color-mix(in srgb, var(--black-500) 45%, transparent);
+    color: var(--white-500);
+    font-size: 72px;
+    font-weight: 700;
+}
+
+.vc-webcam-picture-device-row {
+    display: grid;
+    grid-template-columns: 20px minmax(0, 1fr);
+    align-items: center;
+    gap: 12px;
+    padding: 0 4px;
+}
+
+.vc-webcam-picture-device-icon {
+    color: var(--interactive-normal);
+}
+
+.vc-webcam-picture-footer {
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.vc-webcam-picture-error-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding: 24px;
+    text-align: center;
+}
+
+.vc-webcam-picture-error {
+    margin: 0;
+}
+
+.vc-webcam-picture-footer-left {
+    flex: 1 1 auto;
+}
+
+.vc-webcam-picture-footer-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: auto;
+}
