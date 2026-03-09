@@ -23,10 +23,11 @@ const defaultAbbreviations = new Map(
         rn: "right now",
         atm: "at the moment",
         oomf: "one of my friends",
+        _oomfie: "one of my friends",
         iykyk: "if you know you know",
         yk: "you know",
         yolo: "you only live once",
-        tldr: "to long; didnt read",
+        tldr: "too long; didnt read",
         idc: "i dont care",
         afaik: "as far as i know",
         afk: "away from keyboard",
@@ -92,6 +93,8 @@ const defaultAbbreviations = new Map(
         ty: "thank you",
         tysm: "thank you so much",
         dw: "dont worry",
+        cmiiw: "correct me if im wrong",
+        tmyk: "the more you know",
     }),
 );
 
