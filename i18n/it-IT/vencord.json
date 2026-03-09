@@ -139,6 +139,7 @@
         "description": "API per aggiungere badge agli utenti"
     },
     "betterFolders": {
+        "description": "Mostra le cartelle del server sulla barra laterale dedicata e aggiunge miglioramenti relativi alle cartelle",
         "settings": {
             "closeAllFolders": "Chiudi tutte le cartelle quando selezioni un server non presente in una cartella",
             "closeAllHomeButton": "Chiudi tutte le cartelle quando fai clic sul pulsante Home",
