@@ -211,20 +211,34 @@ function patchChildrenTree(children: any): any {
             const prefix = "/";
             let escapedPrefix = prefix.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
-            // if prefix is markdown character, also check for escaped version
             const isMarkdown = /[*_~`|]/.test(prefix);
             if (isMarkdown) {
                 escapedPrefix = `(?:\\\\${escapedPrefix}|${escapedPrefix})`;
             }
-            // the reason abbreviations dont work is because the code from here
-            const tagcheck = new RegExp(`${escapedPrefix}[\\p{L}_]+`, "iu").test(node);
-            // const abbreviationcheck = .test(node);
 
-            if (new RegExp(`${escapedPrefix}[\\p{L}_]+`, "iu").test(node)) return node;
-            const tagparts = splitTextWithTags(node);
-            return tagparts.length === 1 ? tagparts[0] : tagparts;
+            const hasTag = new RegExp(`${escapedPrefix}[\\p{L}_]+`, "iu").test(node);
+            const hasAbbreviation = buildAbbreviationRegex().test(node);
+
+            if (!hasTag && !hasAbbreviation) return node;
+
+            if (hasTag) {
+                const tagparts = splitTextWithTags(node);
+                const result = tagparts.length === 1 ? tagparts[0] : tagparts;
+                if (hasAbbreviation) {
+                    const flat = (Array.isArray(result) ? result : [result]);
+                    return flat.flatMap(part =>
+                        typeof part === "string"
+                            ? splitTextWithAbbreviations(part)
+                            : part
+                    );
+                }
+                return result;
+            }
+
+            const abbrparts = splitTextWithAbbreviations(node);
+            return abbrparts.length === 1 ? abbrparts[0] : abbrparts;
         }
-        // to here only works for tone tags and i cant figure out how to make it work with abbreviations too
+
         if (node?.props?.children != null) {
             const c = node.props.children;
             if (Array.isArray(c)) {
@@ -245,9 +259,9 @@ function patchChildrenTree(children: any): any {
 migratePluginSettings("mouseoverExplanations", "toneIndicators");
 
 export default definePlugin({
-    name: "MouseoverExplanations",
+    name: "mouseoverExplanations",
     description: "Shows the meanings of abbreviations and tonetags upon hover",
-    authors: [EquicordDevs.justjxke],
+    authors: [EquicordDevs.justjxke, EquicordDevs.creations],
     settings,
 
     patches: [

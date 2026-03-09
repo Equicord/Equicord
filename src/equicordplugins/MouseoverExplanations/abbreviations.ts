@@ -88,7 +88,6 @@ const defaultAbbreviations = new Map(
         eol: "end of life",
         gg: "good game",
         nm: "not much",
-        so: "significant other",
         tos: "terms of service",
         ty: "thank you",
         tysm: "thank you so much",
