@@ -95,6 +95,7 @@ const defaultAbbreviations = new Map(
         dw: "dont worry",
         cmiiw: "correct me if im wrong",
         tmyk: "the more you know",
+        mb: "my bad",
     }),
 );
 
