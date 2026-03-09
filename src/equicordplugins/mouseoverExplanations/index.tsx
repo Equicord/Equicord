@@ -23,7 +23,8 @@ customTonetags: {
     },
 customAbbreviations: {
     type: OptionType.STRING,
-    description: "Custom abbreviations (format: jk=Joking; srs=Serious)"
+    description: "Custom abbreviations (format: jk=Joking; srs=Serious)",
+    default: "",
 }
 });
 
@@ -171,8 +172,8 @@ function splitTextWithAbbreviations(text: string): ReactNode[] {
     let match: RegExpExecArray | null;
 
     while ((match = regex.exec(text))) {
-        const Abbreviation = match[1];
-        const desc = getAbbreviations(Abbreviation);
+        const abbreviation = match[1];
+        const desc = getAbbreviations(abbreviation);
 
         const fullMatch = match[0];
         const leadingWhitespace = fullMatch.match(/^(\s*)/)?.[1] ?? "";
@@ -189,7 +190,7 @@ function splitTextWithAbbreviations(text: string): ReactNode[] {
             nodes.push(
                 <Abbreviations
                     key={`ti-${matchStart}`}
-                    abbreviations={Abbreviation}
+                    abbreviation={abbreviation}
                     desc={desc}
                 />,
             );
@@ -279,7 +280,8 @@ export default definePlugin({
     patchToneIndicators(content: any): any {
         try {
             return patchChildrenTree(content);
-        } catch {
+        } catch(e) {
+            console.error("[MouseoverExplanations] i think there is an error", e);
             return content;
         }
     },

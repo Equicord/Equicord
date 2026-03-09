@@ -7,14 +7,14 @@
 import { Tooltip } from "@webpack/common";
 import type { ReactElement } from "react";
 
-export interface abbreviationProps {
-    abbreviations: string;
+export interface AbbreviationProps {
+    abbreviation: string;
     desc: string;
 }
-export default function abbreviations({
-    abbreviations,
+export default function Abbreviation({
+    abbreviation,
     desc,
-}: abbreviationProps): ReactElement {
+}: AbbreviationProps): ReactElement {
     return (
         <Tooltip text={desc}>
             {tooltipProps => (
@@ -25,7 +25,7 @@ export default function abbreviations({
                         userSelect: "text",
                     }}
                 >
-                    {abbreviations}
+                    {abbreviation}
                 </span>
             )}
         </Tooltip>

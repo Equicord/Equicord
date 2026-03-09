@@ -7,17 +7,17 @@
 import { Tooltip } from "@webpack/common";
 import type { ReactElement } from "react";
 
-export interface tonetagsProps {
+export interface TonetagsProps {
     prefix: string;
     tonetag: string;
     desc: string;
 }
 
-export default function tonetags({
+export default function Tonetags({
     prefix,
     tonetag,
     desc,
-}: tonetagsProps): ReactElement {
+}: TonetagsProps): ReactElement {
     return (
         <Tooltip text={desc}>
             {tooltipProps => (
