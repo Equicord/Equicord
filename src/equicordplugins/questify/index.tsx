@@ -1140,10 +1140,10 @@ function setLastFilterChoices(filters: { group: string; filter: string; }[] | nu
         return;
     }
 
-    settings.store.lastQuestPageFilters = JSON.parse(JSON.stringify(filters)).reduce((acc: any, item: any) => ({
-        ...acc,
-        [item.filter]: item
-    }), {});
+    settings.store.lastQuestPageFilters = (JSON.parse(JSON.stringify(filters)) as { group: string; filter: string; }[]).reduce((acc, item) => {
+        acc[item.filter] = item;
+        return acc;
+    }, {});
 }
 
 function getQuestAcceptedButtonProps(quest: Quest, text: string, disabled: boolean, onClick?: () => void) {
