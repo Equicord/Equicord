@@ -2451,14 +2451,14 @@
         },
         "toasts": {
             "added": "Đã thêm \"{name}\" vào danh sách",
-            "addedBulk": "Đã thêm biểu tượng cảm xúc {count} vào danh sách, {skipped} đã có trong danh sách",
+            "addedBulk": "Đã thêm {count} emoji vào danh sách, có {skipped} mục đã tồn tại",
             "alreadyInList": "\"{name}\" đã có trong danh sách",
             "exported": "Đã xuất biểu tượng cảm xúc thành công",
             "importFailed": "Không nhập được biểu tượng cảm xúc: {error}",
             "imported": "Đã nhập biểu tượng cảm xúc thành công",
             "notInList": "\"{name}\" không có trong danh sách",
             "removed": "Đã xóa \"{name}\" khỏi danh sách",
-            "removedBulk": "Đã xóa biểu tượng cảm xúc {count} khỏi danh sách",
+            "removedBulk": "Đã xóa {count} biểu tượng cảm xúc khỏi danh sách",
             "reset": "Đặt lại biểu tượng cảm xúc"
         },
         "ui": {
@@ -2469,7 +2469,7 @@
         }
     },
     "whosWatching": {
-        "description": "Xem ai đang xem chia sẻ màn hình hoặc luồng của bạn",
+        "description": "Xem ai đang xem chia sẻ màn hình hoặc stream của bạn",
         "settings": {
             "showPanel": "Hiển thị người xem dưới bảng chia sẻ màn hình"
         },
