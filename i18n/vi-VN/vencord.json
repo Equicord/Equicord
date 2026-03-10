@@ -2066,6 +2066,10 @@
         },
         "speechSynthesisNotSupported": "SpeechSynthesis không được hỗ trợ hoặc không tìm thấy giọng nói của Trình tường thuật. Vì vậy, plugin này sẽ không hoạt động. Kiểm tra Cài đặt của plugin để biết thêm thông tin"
     },
+    "vencordDonor": {
+        "description": "Huy hiệu này là một đặc quyền đặc biệt dành cho nhà tài trợ Vencord",
+        "title": "Nhà tài trợ Vencord"
+    },
     "viewIcons": {
         "description": "Làm cho hình đại diện và biểu ngữ trong hồ sơ người dùng có thể nhấp vào được, thêm các mục Xem Biểu tượng/Biểu ngữ trong menu ngữ cảnh kênh người dùng, máy chủ và nhóm.",
         "settings": {
@@ -2161,12 +2165,12 @@
         "serverNotifications": "Cho phép thông báo máy chủ",
         "soundPath": "Âm thanh thông báo (mặc định/cảnh báo/lỗi)",
         "sticker": "nhãn dán",
-        "testNotification": "Đây là thông báo thử nghiệm! nổ tung",
+        "testNotification": "Đây là một thông báo thử nghiệm! bùm",
         "timeout": "Thời lượng thông báo (giây)",
         "volume": "Âm Lượng",
         "webSocketPort": "Cổng websocket"
     },
     "youtubeAdblock": {
-        "description": "Chặn quảng cáo trong nội dung nhúng trên YouTube và hoạt động WatchTogether thông qua AdGuard"
+        "description": "Chặn quảng cáo trong nội dung nhúng YouTube và hoạt động WatchTogether thông qua AdGuard"
     }
 }
