@@ -48,7 +48,7 @@ function BookmarkIcon({ bookmark }: { bookmark: Bookmark | BookmarkFolder; }) {
         const IconComponent = getDiscordFolderIcon(bookmark.iconName);
 
         const fill = bookmark.iconName === "CircleShieldIcon" ? "var(--background-base-low)" : bookmark.iconColor;
-        const customIconSize = 14;
+        const customIconSize = 16;
 
         return IconComponent
             ? <IconComponent
@@ -56,6 +56,7 @@ function BookmarkIcon({ bookmark }: { bookmark: Bookmark | BookmarkFolder; }) {
                 width={customIconSize}
                 color={bookmark.iconColor}
                 fill={fill}
+                style={{ transform: "scale(0.6666667)", transformOrigin: "center" }}
             />
             : <svg
                 height={16}

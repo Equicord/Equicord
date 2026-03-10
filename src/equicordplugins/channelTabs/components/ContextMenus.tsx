@@ -68,7 +68,7 @@ function FolderGlyph({ color, iconName }: { color: string; iconName?: string; })
     const IconComponent = getDiscordFolderIcon(iconName);
     const resolvedColor = normalizeFolderColor(color);
     const fill = iconName === "CircleShieldIcon" ? "var(--background-base-low)" : resolvedColor;
-    const customIconSize = 14;
+    const customIconSize = 16;
 
     return (
         <div style={{
@@ -79,7 +79,13 @@ function FolderGlyph({ color, iconName }: { color: string; iconName?: string; })
             lineHeight: 0
         }}>
             {IconComponent
-                ? <IconComponent height={customIconSize} width={customIconSize} color={resolvedColor} fill={fill} />
+                ? <IconComponent
+                    height={customIconSize}
+                    width={customIconSize}
+                    color={resolvedColor}
+                    fill={fill}
+                    style={{ transform: "scale(0.6666667)", transformOrigin: "center" }}
+                />
                 : <svg height={16} width={16} viewBox="0 0 24 24">
                     <path
                         fill="currentColor"
