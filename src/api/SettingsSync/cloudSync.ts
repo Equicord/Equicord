@@ -48,7 +48,7 @@ function fromBase64(b64: string): Uint8Array {
 }
 
 async function computeChecksum(data: Uint8Array): Promise<string> {
-    const hash = await crypto.subtle.digest("SHA-256", data.buffer.slice(data.byteOffset, data.byteOffset + data.byteLength));
+    const hash = await crypto.subtle.digest("SHA-256", new Uint8Array(data));
     const bytes = new Uint8Array(hash, 0, 8);
     return Array.from(bytes, b => b.toString(16).padStart(2, "0")).join("");
 }
