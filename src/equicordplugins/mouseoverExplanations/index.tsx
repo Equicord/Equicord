@@ -271,13 +271,13 @@ export default definePlugin({
             replacement: [
                 {
                     match: /(?=return\{hasSpoilerEmbeds:\i,.{0,15}content:(\i))/,
-                    replace: "$1=$self.patchToneIndicators($1);",
+                    replace: "$1=$self.patchExplanations($1);",
                 },
             ],
         },
     ],
 
-    patchToneIndicators(content: any): any {
+    patchExplanations(content: any): any {
         try {
             return patchChildrenTree(content);
         } catch(e) {
