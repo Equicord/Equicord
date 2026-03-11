@@ -28,6 +28,7 @@ import { ChannelStore, FluxDispatcher, ReadStateStore } from "@webpack/common";
 import { ReactNode } from "react";
 
 import FolderSideBar from "./FolderSideBar";
+import { areNestedRelated as areNestedRelatedInMap, getChildFolderIds as getChildFolderIdsFromMap, getDescendantFolderIds as getDescendantFolderIdsFromMap, hasParentInChain as hasParentInChainInMap, sanitizeNestedFolderMap } from "./nestedFolders";
 
 enum FolderIconDisplay {
     Never,
@@ -116,7 +117,19 @@ function filterTreeWithTargetNode(children: any, predicate: (node: any) => boole
 }
 
 function getNestedFolderMap(): Record<string, string> {
-    return settings.store.nestedFolders ?? {};
+    const nestedFolders = settings.store.nestedFolders ?? {};
+    const validFolderIds = new Set<string>(
+        SortedGuildStore.getGuildFolders()
+            .map((folder: GuildFolder) => folder.folderId?.toString())
+            .filter((folderId): folderId is string => folderId != null)
+    );
+    const sanitizedFolders = sanitizeNestedFolderMap(nestedFolders, validFolderIds);
+
+    if (JSON.stringify(sanitizedFolders) !== JSON.stringify(nestedFolders)) {
+        settings.store.nestedFolders = sanitizedFolders;
+    }
+
+    return sanitizedFolders;
 }
 
 function saveNestedFolderMap(map: Record<string, string>) {
@@ -128,24 +141,11 @@ export function getParentFolderId(childId: string | number): string | undefined 
 }
 
 export function getChildFolderIds(parentId: string | number): string[] {
-    const map = getNestedFolderMap();
-    return Object.entries(map)
-        .filter(([, pid]) => pid === String(parentId))
-        .map(([cid]) => cid);
+    return getChildFolderIdsFromMap(getNestedFolderMap(), parentId);
 }
 
 function getDescendantFolderIds(parentId: string | number): string[] {
-    const descendants: string[] = [];
-    const queue = [...getChildFolderIds(parentId)];
-
-    while (queue.length) {
-        const current = queue.shift();
-        if (!current) continue;
-        descendants.push(current);
-        queue.push(...getChildFolderIds(current));
-    }
-
-    return descendants;
+    return getDescendantFolderIdsFromMap(getNestedFolderMap(), parentId);
 }
 
 function nestFolder(childId: string, parentId: string) {
@@ -168,20 +168,11 @@ function unnestFolder(childId: string) {
 }
 
 function hasParentInChain(childId: string, parentId: string): boolean {
-    const seen = new Set<string>();
-    let current = getParentFolderId(childId);
-
-    while (current != null && !seen.has(current)) {
-        if (current === parentId) return true;
-        seen.add(current);
-        current = getParentFolderId(current);
-    }
-
-    return false;
+    return hasParentInChainInMap(getNestedFolderMap(), childId, parentId);
 }
 
 function areNestedRelated(firstId: string, secondId: string): boolean {
-    return hasParentInChain(firstId, secondId) || hasParentInChain(secondId, firstId);
+    return areNestedRelatedInMap(getNestedFolderMap(), firstId, secondId);
 }
 
 export const settings = definePluginSettings({
@@ -254,7 +245,7 @@ export default definePlugin({
 
     settings,
     start() {
-        settings.store.nestedFolders ??= {};
+        settings.store.nestedFolders = getNestedFolderMap();
     },
 
     patches: [
