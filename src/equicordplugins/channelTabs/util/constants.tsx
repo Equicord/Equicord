@@ -160,6 +160,12 @@ export const settings = definePluginSettings({
         type: OptionType.BOOLEAN,
         default: true
     },
+    persistUnreadCountFallback: {
+        description: "Persist unread badge fallbacks across reloads for tabs and bookmarks",
+        type: OptionType.BOOLEAN,
+        default: true,
+        restartNeeded: false
+    },
     widerTabsAndBookmarks: {
         description: "Extend the length of tabs and bookmarks for larger monitors",
         type: OptionType.BOOLEAN,
