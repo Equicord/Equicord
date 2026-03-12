@@ -214,11 +214,11 @@
     },
     "biggerStreamPreview": {
         "description": "यह प्लगइन आपको स्ट्रीम पूर्वावलोकन को बड़ा करने की अनुमति देता है",
-        "name": "बड़ास्ट्रीमपूर्वावलोकन",
-        "viewStreamPreview": "स्ट्रीम पूर्वावलोकन देखें"
+        "name": "BiggerStreamPreview",
+        "viewStreamPreview": "Stream Preview देखें"
     },
     "blurNsfw": {
-        "description": "होवर होने तक NSFW चैनलों में अटैचमेंट को धुंधला करें",
+        "description": "hover करने तक NSFW channels में attachments को धुंधला करें",
         "settings": {
             "blurAllChannels": "सभी चैनलों में अनुलग्नकों को धुंधला करें (सिर्फ NSFW नहीं)",
             "blurAmount": "धुंधला राशि (पिक्सेल में)"
