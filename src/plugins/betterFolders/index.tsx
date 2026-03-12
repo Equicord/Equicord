@@ -28,7 +28,7 @@ import { ChannelStore, FluxDispatcher, ReadStateStore } from "@webpack/common";
 import { ReactNode } from "react";
 
 import FolderSideBar from "./FolderSideBar";
-import { areNestedRelated as areNestedRelatedInMap, getChildFolderIds as getChildFolderIdsFromMap, getDescendantFolderIds as getDescendantFolderIdsFromMap, hasParentInChain as hasParentInChainInMap, sanitizeNestedFolderMap } from "./nestedFolders";
+import { areNestedRelated as areNestedRelatedInMap, getAncestorFolderIds as getAncestorFolderIdsFromMap, getChildFolderIds as getChildFolderIdsFromMap, getDescendantFolderIds as getDescendantFolderIdsFromMap, hasParentInChain as hasParentInChainInMap, sanitizeNestedFolderMap } from "./nestedFolders";
 
 enum FolderIconDisplay {
     Never,
@@ -146,6 +146,10 @@ export function getChildFolderIds(parentId: string | number): string[] {
 
 function getDescendantFolderIds(parentId: string | number): string[] {
     return getDescendantFolderIdsFromMap(getNestedFolderMap(), parentId);
+}
+
+function getAncestorFolderIds(childId: string | number): string[] {
+    return getAncestorFolderIdsFromMap(getNestedFolderMap(), childId);
 }
 
 function nestFolder(childId: string, parentId: string) {
@@ -437,14 +441,17 @@ export default definePlugin({
 
     flux: {
         CHANNEL_SELECT(data) {
-            if (!settings.store.closeAllFolders && !settings.store.forceOpen && !settings.store.closeServerFolder)
-                return;
-
             if (lastGuildId !== data.guildId) {
                 lastGuildId = data.guildId;
                 const guildFolder = getGuildFolder(data.guildId);
 
                 if (guildFolder?.folderId) {
+                    for (const folderId of getAncestorFolderIds(guildFolder.folderId).reverse()) {
+                        if (!ExpandedGuildFolderStore.isFolderExpanded(folderId)) {
+                            FolderUtils.toggleGuildFolderExpand(folderId);
+                        }
+                    }
+
                     if (settings.store.forceOpen && !ExpandedGuildFolderStore.isFolderExpanded(guildFolder.folderId)) {
                         FolderUtils.toggleGuildFolderExpand(guildFolder.folderId);
                     }

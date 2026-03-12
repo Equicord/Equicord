@@ -41,6 +41,20 @@ export function areNestedRelated(map: NestedFolderMap, firstId: string, secondId
     return hasParentInChain(map, firstId, secondId) || hasParentInChain(map, secondId, firstId);
 }
 
+export function getAncestorFolderIds(map: NestedFolderMap, childId: string | number): string[] {
+    const ancestors: string[] = [];
+    const seen = new Set<string>([String(childId)]);
+    let current = map[String(childId)];
+
+    while (current != null && !seen.has(current)) {
+        ancestors.push(current);
+        seen.add(current);
+        current = map[current];
+    }
+
+    return ancestors;
+}
+
 export function getDescendantFolderIds(map: NestedFolderMap, parentId: string | number): string[] {
     const descendants: string[] = [];
     const rootId = String(parentId);
