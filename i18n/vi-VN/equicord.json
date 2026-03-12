@@ -2480,12 +2480,12 @@
     },
     "wigglyText": {
         "about": {
-            "circle": "trong một vòng tròn bằng cách gõ )~text~^(",
+            "circle": "trong một vòng tròn bằng cách gõ )~văn bản~^(",
             "description": "Bạn có thể làm cho văn bản lung lay bằng cách sau:",
-            "leftRight": "trái và phải bằng cách gõ <~text~>",
-            "upDown": "lên xuống bằng cách gõ ^~text~^"
+            "leftRight": "trái và phải bằng cách gõ <~văn bản~>",
+            "upDown": "lên xuống bằng cách gõ ^~văn bản~^"
         },
-        "description": "Làm cho văn bản lung lay với cú pháp đặc biệt (~text~)",
+        "description": "Làm cho văn bản lung lay với cú pháp đặc biệt (~văn bản~)",
         "settings": {
             "intensity": "Cường độ hoạt ảnh tính bằng px"
         }
