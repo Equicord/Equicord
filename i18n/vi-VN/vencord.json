@@ -1654,6 +1654,16 @@
             "title": "Sử dụng thanh tiêu đề gốc của Windows thay vì thanh tiêu đề tùy chỉnh của Discord"
         }
     },
+    "settingsPlugin": {
+        "aboveActivity": "Trên Cài Đặt Hoạt Động",
+        "aboveNitro": "Trên mục Nitro",
+        "belowActivity": "Dưới Cài Đặt Hoạt Động",
+        "belowNitro": "Dưới mục Nitro",
+        "bottom": "Ở dưới cùng",
+        "description": "Thêm giao diện Cài Đặt và thông tin gỡ lỗi",
+        "settingsLocation": "Vị trí đặt mục cài đặt Equicord",
+        "top": "Ở trên cùng"
+    },
     "settingsSync": {
         "failedToImport": "Không thể nhập cài đặt: {e}",
         "imported": "Cài đặt đã được nhập thành công. Hãy khởi động lại để áp dụng các thay đổi!"
@@ -1915,6 +1925,10 @@
             "unlimitedSuperReactionPlaying": "Loại bỏ giới hạn phát Biểu Cảm Siêu Cấp cùng một lúc"
         }
     },
+    "supportHelper": {
+        "debug": "Gửi thông tin gỡ lỗi Equicord",
+        "description": "Giúp chúng tôi cung cấp hỗ trợ cho bạn"
+    },
     "tabs": {
         "settings": "Cài đặt Equicord"
     },
@@ -2068,6 +2082,7 @@
     },
     "vencordDonor": {
         "description": "Huy hiệu này là một đặc quyền đặc biệt dành cho nhà tài trợ Vencord",
+        "description2": "Hãy cân nhắc ủng hộ sự phát triển của Vencord bằng cách quyên góp. Điều đó có ý nghĩa rất lớn!!",
         "title": "Nhà tài trợ Vencord"
     },
     "viewIcons": {
