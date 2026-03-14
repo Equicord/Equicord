@@ -250,26 +250,14 @@ export function PresetManager({ section, guildId }: PresetManagerProps) {
             )}
 
             <div className={cl("import")}>
-                {ManaButton ? (
-                    <ManaButton
-                        size="sm"
-                        variant="expressive"
-                        onClick={handleRandomPreset}
-                        className={cl("random")}
-                        disabled={!presets.length || !canUseGuild}
-                        text="Random"
-                    />
-                ) : (
-                    <Button
-                        size="small"
-                        variant="secondary"
-                        onClick={handleRandomPreset}
-                        className={cl("random")}
-                        disabled={!presets.length || !canUseGuild}
-                    >
-                        Random
-                    </Button>
-                )}
+                <ManaButton
+                    size="sm"
+                    variant="expressive"
+                    onClick={handleRandomPreset}
+                    className={cl("random")}
+                    disabled={!presets.length || !canUseGuild}
+                    text="Random"
+                />
                 <Button
                     size="small"
                     variant="secondary"
