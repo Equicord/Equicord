@@ -5,14 +5,15 @@
  */
 
 import { findGroupChildrenByChildId, NavContextMenuPatchCallback } from "@api/ContextMenu";
-import { EquicordDevs } from "@utils/constants";
+import { OpenExternalIcon } from "@components/Icons";
+import { Devs, EquicordDevs } from "@utils/constants";
 import definePlugin from "@utils/types";
-import { Menu } from "@webpack/common";
+import { Menu, PermissionsBits, PermissionStore } from "@webpack/common";
 
 import { settings } from "./settings";
 import { serviceLabels, ServiceType } from "./types";
 import { getMediaUrl } from "./utils/getMediaUrl";
-import { uploadFile } from "./utils/upload";
+import { uploadFile, uploadPickedFile } from "./utils/upload";
 
 const messageContextMenuPatch: NavContextMenuPatchCallback = (children, props) => {
     if (!props) return;
@@ -65,13 +66,37 @@ const imageContextMenuPatch: NavContextMenuPatchCallback = (children, props) => 
     );
 };
 
+const ExternalIcon = () => <OpenExternalIcon height={24} width={24} />;
+
+const channelAttachMenuPatch: NavContextMenuPatchCallback = (children, props) => {
+    const channel = props?.channel;
+    if (!channel) return;
+    if (channel.guild_id && !PermissionStore.can(PermissionsBits.SEND_MESSAGES, channel)) return;
+    if (children.some(child => child?.props?.id === "file-upload-manual")) return;
+
+    children.splice(1, 0,
+        <Menu.MenuItem
+            id="file-upload-manual"
+            key="file-upload-manual"
+            label="Upload to Host"
+            iconLeft={ExternalIcon}
+            leadingAccessory={{
+                type: "icon",
+                icon: ExternalIcon
+            }}
+            action={() => uploadPickedFile()}
+        />
+    );
+};
+
 export default definePlugin({
     name: "FileUpload",
     description: "Upload images and videos to file hosting services like Zipline and Nest",
-    authors: [EquicordDevs.creations, EquicordDevs.keircn],
+    authors: [EquicordDevs.creations, EquicordDevs.keircn, Devs.ScattrdBlade],
     settings,
     contextMenus: {
         "message": messageContextMenuPatch,
-        "image-context": imageContextMenuPatch
+        "image-context": imageContextMenuPatch,
+        "channel-attach": channelAttachMenuPatch
     }
 });
