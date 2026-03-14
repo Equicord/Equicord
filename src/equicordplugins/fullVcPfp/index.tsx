@@ -15,7 +15,6 @@ export default definePlugin({
     name: "FullVCPFP",
     description: "Makes avatars take up the entire vc tile",
     authors: [EquicordDevs.mochienya],
-    settings,
     patches: [
         {
             find: "\"data-selenium-video-tile\":",
