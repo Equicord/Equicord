@@ -47,7 +47,7 @@ export default definePlugin({
         const guildId = ChannelStore.getChannel(channelId)?.guild_id;
         const isSpeaking = ChannelRTCStore.getSpeakingParticipants(channelId).some(p => p.user.id === participantUserId && p.speaking);
         const avatarUrl = settings.store.useServerProfileAvatars
-            ? user.getAvatarURL(guildId ?? void 0, 1024, true) ?? IconUtils.getUserAvatarURL(user, true, 1024)
+            ? user.getAvatarURL(guildId ?? void 0, 1024, isSpeaking) ?? IconUtils.getUserAvatarURL(user, isSpeaking, 1024)
             : IconUtils.getUserAvatarURL(user, isSpeaking, 1024);
 
         return {
