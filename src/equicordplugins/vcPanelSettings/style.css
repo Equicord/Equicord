@@ -1,3 +1,31 @@
 .vc-panelsettings-underline-on-hover:hover {
     text-decoration: underline;
 }
+
+.vc-panelsettings-panel {
+    margin-top: 20px;
+}
+
+.vc-panelsettings-section {
+    margin-top: 10px;
+}
+
+.vc-panelsettings-toggle-row {
+    margin-bottom: 10px;
+}
+
+.vc-panelsettings-toggle {
+    color: var(--text-default);
+}
+
+.vc-panelsettings-toggle:hover {
+    text-decoration: underline;
+}
+
+.vc-panelsettings-filter-list {
+    display: grid;
+    grid-template-columns: repeat(2, max-content);
+    gap: 12px 20px;
+    width: fit-content;
+    max-width: 100%;
+}
