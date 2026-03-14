@@ -4,16 +4,72 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import "./styles.css";
+
 import { findGroupChildrenByChildId, NavContextMenuPatchCallback } from "@api/ContextMenu";
+import ErrorBoundary from "@components/ErrorBoundary";
 import { OpenExternalIcon } from "@components/Icons";
 import { Devs, EquicordDevs } from "@utils/constants";
+import { classNameFactory } from "@utils/css";
 import definePlugin from "@utils/types";
-import { Menu, PermissionsBits, PermissionStore } from "@webpack/common";
+import { Menu, PermissionsBits, PermissionStore, React, useEffect, useState } from "@webpack/common";
 
 import { settings } from "./settings";
 import { serviceLabels, ServiceType } from "./types";
 import { getMediaUrl } from "./utils/getMediaUrl";
-import { uploadFile, uploadPickedFile } from "./utils/upload";
+import { cancelCurrentUpload, getUploadState, subscribeUploadState, uploadFile, uploadPickedFile } from "./utils/upload";
+
+const cl = classNameFactory("vc-file-upload-");
+
+const ProgressBarInner = () => {
+    const [state, setState] = useState(getUploadState);
+
+    useEffect(() => subscribeUploadState(() => setState(getUploadState())), []);
+
+    if (state.phase === "idle") {
+        return null;
+    }
+
+    const percentage = Math.max(0, Math.min(100, state.percent));
+
+    return (
+        <div
+            className={cl("progress-wrap")}
+            data-phase={state.phase}
+        >
+            <div className={cl("progress-head")}>
+                <div className={cl("progress-label")}>
+                    {state.status || "Uploading..."}
+                </div>
+                <div className={cl("progress-meta")}>
+                    <span className={cl("progress-attempt")}>
+                        {state.attempt > 0 && state.totalAttempts > 0 ? `${state.attempt}/${state.totalAttempts}` : ""}
+                    </span>
+                    {state.canCancel && (
+                        <button
+                            className={cl("progress-cancel")}
+                            type="button"
+                            onClick={cancelCurrentUpload}
+                        >
+                            Cancel
+                        </button>
+                    )}
+                </div>
+            </div>
+            <div className={cl("progress-track")}>
+                <div
+                    className={cl("progress-fill")}
+                    style={{ width: `${percentage}%` }}
+                />
+            </div>
+            <div className={cl("progress-file")}>
+                {state.fileName || ""}{state.currentServiceLabel ? ` • ${state.currentServiceLabel}` : ""}
+            </div>
+        </div>
+    );
+};
+
+const ProgressBar = ErrorBoundary.wrap(ProgressBarInner, { noop: true });
 
 const messageContextMenuPatch: NavContextMenuPatchCallback = (children, props) => {
     if (!props) return;
@@ -94,9 +150,21 @@ export default definePlugin({
     description: "Upload images and videos to file hosting services like Zipline and Nest",
     authors: [EquicordDevs.creations, EquicordDevs.keircn, Devs.ScattrdBlade],
     settings,
+    patches: [
+        {
+            find: ".CREATE_FORUM_POST||",
+            replacement: {
+                match: /(textValue:.{0,50}channelId:\i\.id\}\)),\i/,
+                replace: "$1,$self.renderUploadProgress()"
+            }
+        }
+    ],
     contextMenus: {
         "message": messageContextMenuPatch,
         "image-context": imageContextMenuPatch,
         "channel-attach": channelAttachMenuPatch
+    },
+    renderUploadProgress() {
+        return <ProgressBar />;
     }
 });

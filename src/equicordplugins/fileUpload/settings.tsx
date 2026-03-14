@@ -172,6 +172,12 @@ export const settings = definePluginSettings({
         default: "",
         hidden: true
     },
+    uploadTimeoutMs: {
+        type: OptionType.NUMBER,
+        description: "Upload timeout in milliseconds",
+        default: 300000,
+        hidden: true
+    },
     stripQueryParams: {
         type: OptionType.BOOLEAN,
         description: "Strip query params from uploaded URLs",
@@ -496,6 +502,25 @@ export function SettingsComponent() {
                 <Switch
                     checked={store.autoFormat}
                     onChange={v => store.autoFormat = v}
+                />
+            </SettingsSection>
+
+            <SettingsSection name="Upload Timeout" description="Maximum time to wait per upload attempt before switching to fallback">
+                <Select
+                    options={[
+                        { label: "30 seconds", value: 30000 },
+                        { label: "1 minute", value: 60000 },
+                        { label: "2 minutes", value: 120000 },
+                        { label: "5 minutes", value: 300000, default: true },
+                        { label: "10 minutes", value: 600000 }
+                    ]}
+                    isSelected={v => v === (store.uploadTimeoutMs || 300000)}
+                    select={v => {
+                        store.uploadTimeoutMs = v;
+                        update();
+                    }}
+                    serialize={v => v}
+                    placeholder="Select timeout"
                 />
             </SettingsSection>
         </>

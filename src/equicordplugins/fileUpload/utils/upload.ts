@@ -28,6 +28,110 @@ const CORS_PROXY = "https://cors.keiran0.workers.dev"; // im hosting this on clo
 
 let isUploading = false;
 
+type UploadPhase = "idle" | "preparing" | "uploading" | "retrying" | "success" | "failed" | "cancelled";
+
+export interface UploadProgressState {
+    phase: UploadPhase;
+    fileName: string;
+    currentService: ServiceType | null;
+    currentServiceLabel: string;
+    attempt: number;
+    totalAttempts: number;
+    percent: number;
+    status: string;
+    canCancel: boolean;
+}
+
+const defaultUploadState: UploadProgressState = {
+    phase: "idle",
+    fileName: "",
+    currentService: null,
+    currentServiceLabel: "",
+    attempt: 0,
+    totalAttempts: 0,
+    percent: 0,
+    status: "",
+    canCancel: false
+};
+
+let uploadState: UploadProgressState = { ...defaultUploadState };
+const uploadStateListeners = new Set<() => void>();
+let activeAbortController: AbortController | null = null;
+let cancelRequested = false;
+
+function emitUploadState() {
+    for (const listener of uploadStateListeners) {
+        listener();
+    }
+}
+
+function setUploadState(patch: Partial<UploadProgressState>) {
+    uploadState = { ...uploadState, ...patch };
+    emitUploadState();
+}
+
+function resetUploadState() {
+    uploadState = { ...defaultUploadState };
+    emitUploadState();
+}
+
+export function subscribeUploadState(listener: () => void): () => void {
+    uploadStateListeners.add(listener);
+    return () => uploadStateListeners.delete(listener);
+}
+
+export function getUploadState(): UploadProgressState {
+    return uploadState;
+}
+
+export function cancelCurrentUpload() {
+    if (!isUploading) {
+        return;
+    }
+
+    cancelRequested = true;
+    activeAbortController?.abort();
+    setUploadState({
+        phase: "cancelled",
+        status: "Upload cancelled.",
+        canCancel: false,
+        percent: 0
+    });
+}
+
+function getUploadTimeoutMs(): number {
+    const value = (settings.store as { uploadTimeoutMs?: number; }).uploadTimeoutMs;
+    if (!Number.isFinite(value) || !value) {
+        return 300000;
+    }
+
+    return Math.max(5000, value);
+}
+
+async function fetchWithTimeout(url: string, options: RequestInit): Promise<Response> {
+    const controller = new AbortController();
+    activeAbortController = controller;
+    const timeout = setTimeout(() => controller.abort(), getUploadTimeoutMs());
+
+    try {
+        return await fetch(url, {
+            ...options,
+            signal: controller.signal
+        });
+    } catch (error) {
+        if (cancelRequested || controller.signal.aborted) {
+            throw new Error(cancelRequested ? "Upload cancelled by user" : "Upload timed out");
+        }
+
+        throw error;
+    } finally {
+        clearTimeout(timeout);
+        if (activeAbortController === controller) {
+            activeAbortController = null;
+        }
+    }
+}
+
 function resolveShareXRequestValue(value: string | number | boolean, filename: string): string {
     return String(value)
         .replace(/\$filename\$/g, filename)
@@ -92,14 +196,14 @@ async function uploadToShareX(fileBlob: Blob, filename: string): Promise<string>
 
     let response: Response;
     try {
-        response = await fetch(requestUrl, { method, headers, body });
+        response = await fetchWithTimeout(requestUrl, { method, headers, body });
     } catch (error) {
         if (Native) {
             throw error;
         }
 
         const proxiedUrl = `${CORS_PROXY}?url=${encodeURIComponent(requestUrl)}`;
-        response = await fetch(proxiedUrl, { method, headers, body });
+        response = await fetchWithTimeout(proxiedUrl, { method, headers, body });
     }
 
     const responseText = await response.text();
@@ -147,7 +251,7 @@ async function uploadToZipline(fileBlob: Blob, filename: string): Promise<string
         headers["x-zipline-folder"] = folderId;
     }
 
-    const response = await fetch(`${baseUrl}/api/upload`, {
+    const response = await fetchWithTimeout(`${baseUrl}/api/upload`, {
         method: "POST",
         headers,
         body: formData
@@ -200,7 +304,7 @@ async function uploadToNest(fileBlob: Blob, filename: string): Promise<string> {
 
     const proxiedUrl = `${CORS_PROXY}?url=${encodeURIComponent("https://nest.rip/api/files/upload")}`;
 
-    const response = await fetch(proxiedUrl, {
+    const response = await fetchWithTimeout(proxiedUrl, {
         method: "POST",
         headers: {
             "Authorization": nestToken
@@ -291,7 +395,7 @@ async function uploadToEzHost(fileBlob: Blob, filename: string): Promise<string>
     const headers: Record<string, string> = { key: ezHostKey };
 
     const proxiedUrl = `${CORS_PROXY}?url=${encodeURIComponent("https://api.e-z.host/files")}`;
-    const response = await fetch(proxiedUrl, {
+    const response = await fetchWithTimeout(proxiedUrl, {
         method: "POST",
         headers,
         body: formData
@@ -324,7 +428,7 @@ async function uploadToCatbox(fileBlob: Blob, filename: string): Promise<string>
     if (catboxUserhash) formData.append("userhash", catboxUserhash);
     formData.append("fileToUpload", fileBlob, filename);
 
-    const response = await fetch(`${CORS_PROXY}?url=${encodeURIComponent("https://catbox.moe/user/api.php")}`, {
+    const response = await fetchWithTimeout(`${CORS_PROXY}?url=${encodeURIComponent("https://catbox.moe/user/api.php")}`, {
         method: "POST",
         body: formData
     });
@@ -368,7 +472,7 @@ async function uploadToLitterbox(fileBlob: Blob, filename: string): Promise<stri
     formData.append("time", expiry);
     formData.append("fileToUpload", fileBlob, filename);
 
-    const response = await fetch(`${CORS_PROXY}?url=${encodeURIComponent("https://litterbox.catbox.moe/resources/internals/api.php")}`, {
+    const response = await fetchWithTimeout(`${CORS_PROXY}?url=${encodeURIComponent("https://litterbox.catbox.moe/resources/internals/api.php")}`, {
         method: "POST",
         body: formData
     });
@@ -396,7 +500,7 @@ async function uploadToGofile(fileBlob: Blob, filename: string): Promise<string>
 
     const uploadUrl = "https://upload.gofile.io/uploadfile";
     const requestUrl = Native ? uploadUrl : `${CORS_PROXY}?url=${encodeURIComponent(uploadUrl)}`;
-    const response = await fetch(requestUrl, {
+    const response = await fetchWithTimeout(requestUrl, {
         method: "POST",
         body: formData
     });
@@ -431,7 +535,7 @@ async function uploadToTmpfiles(fileBlob: Blob, filename: string): Promise<strin
     formData.append("file", fileBlob, filename);
 
     const uploadUrl = "https://tmpfiles.org/api/v1/upload";
-    const response = await fetch(`${CORS_PROXY}?url=${encodeURIComponent(uploadUrl)}`, {
+    const response = await fetchWithTimeout(`${CORS_PROXY}?url=${encodeURIComponent(uploadUrl)}`, {
         method: "POST",
         body: formData
     });
@@ -459,7 +563,7 @@ async function uploadToBuzzheavier(fileBlob: Blob, filename: string): Promise<st
     }
 
     const uploadUrl = `https://w.buzzheavier.com/${encodeURIComponent(filename)}`;
-    const response = await fetch(`${CORS_PROXY}?url=${encodeURIComponent(uploadUrl)}`, {
+    const response = await fetchWithTimeout(`${CORS_PROXY}?url=${encodeURIComponent(uploadUrl)}`, {
         method: "PUT",
         body: fileBlob
     });
@@ -494,7 +598,7 @@ async function uploadToTempSh(fileBlob: Blob, filename: string): Promise<string>
     formData.append("file", fileBlob, filename);
 
     const uploadUrl = "https://temp.sh/upload";
-    const response = await fetch(`${CORS_PROXY}?url=${encodeURIComponent(uploadUrl)}`, {
+    const response = await fetchWithTimeout(`${CORS_PROXY}?url=${encodeURIComponent(uploadUrl)}`, {
         method: "POST",
         body: formData
     });
@@ -526,7 +630,7 @@ async function uploadToFilebin(fileBlob: Blob, filename: string): Promise<string
     const formData = new FormData();
     formData.append("file", fileBlob, filename);
 
-    const response = await fetch(`${CORS_PROXY}?url=${encodeURIComponent(uploadUrl)}`, {
+    const response = await fetchWithTimeout(`${CORS_PROXY}?url=${encodeURIComponent(uploadUrl)}`, {
         method: "POST",
         body: formData
     });
@@ -582,15 +686,55 @@ const FALLBACK_SERVICES: ServiceType[] = [
     ServiceType.FILEBIN
 ];
 
-function buildUploadOrder(primary: ServiceType): ServiceType[] {
-    const disableFallbacks = Boolean((settings.store as { disableFallbacks?: boolean; }).disableFallbacks);
-    if (disableFallbacks || primary === ServiceType.SHAREX || primary === ServiceType.S3 || primary === ServiceType.ZIPLINE || primary === ServiceType.NEST || primary === ServiceType.EZHOST) {
-        return [primary];
+const EXE_BLOCKED_SERVICES = new Set<ServiceType>([
+    ServiceType.CATBOX,
+    ServiceType.LITTERBOX,
+    ServiceType.ZEROX0
+]);
+
+function isExeFileName(fileName: string): boolean {
+    return fileName.toLowerCase().endsWith(".exe");
+}
+
+function canServiceHandleFile(service: ServiceType, fileName: string): boolean {
+    if (service === ServiceType.ZEROX0 && !Native) {
+        return false;
     }
 
-    const order: ServiceType[] = [primary];
+    if (isExeFileName(fileName) && EXE_BLOCKED_SERVICES.has(service)) {
+        return false;
+    }
+
+    return true;
+}
+
+function normalizePrimaryService(primary: ServiceType, fileName: string): ServiceType {
+    if (canServiceHandleFile(primary, fileName)) {
+        return primary;
+    }
+
+    if (isExeFileName(fileName)) {
+        return ServiceType.GOFILE;
+    }
+
+    if (!Native && primary === ServiceType.ZEROX0) {
+        return ServiceType.CATBOX;
+    }
+
+    return primary;
+}
+
+function buildUploadOrder(primary: ServiceType, fileName: string): ServiceType[] {
+    const disableFallbacks = Boolean((settings.store as { disableFallbacks?: boolean; }).disableFallbacks);
+    const effectivePrimary = normalizePrimaryService(primary, fileName);
+
+    if (disableFallbacks || effectivePrimary === ServiceType.SHAREX || effectivePrimary === ServiceType.S3 || effectivePrimary === ServiceType.ZIPLINE || effectivePrimary === ServiceType.NEST || effectivePrimary === ServiceType.EZHOST) {
+        return [effectivePrimary];
+    }
+
+    const order: ServiceType[] = [effectivePrimary];
     for (const fallback of FALLBACK_SERVICES) {
-        if (fallback !== primary) {
+        if (fallback !== effectivePrimary && canServiceHandleFile(fallback, fileName)) {
             order.push(fallback);
         }
     }
@@ -628,24 +772,78 @@ function notifyUploadSuccess(finalUrl: string): void {
 }
 
 async function uploadWithFallbacks(fileBlob: Blob, filename: string, primary: ServiceType): Promise<string> {
-    const uploadOrder = buildUploadOrder(primary);
+    const uploadOrder = buildUploadOrder(primary, filename);
     const attempted: string[] = [];
     let lastError = "Unknown error";
 
+    setUploadState({
+        phase: "uploading",
+        fileName: filename,
+        totalAttempts: uploadOrder.length,
+        attempt: 1,
+        percent: 5,
+        status: `Starting upload via ${serviceLabels[uploadOrder[0]]}...`,
+        currentService: uploadOrder[0],
+        currentServiceLabel: serviceLabels[uploadOrder[0]],
+        canCancel: true
+    });
+
     for (const service of uploadOrder) {
+        const attempt = attempted.length + 1;
+        setUploadState({
+            phase: attempt === 1 ? "uploading" : "retrying",
+            attempt,
+            currentService: service,
+            currentServiceLabel: serviceLabels[service],
+            percent: Math.min(90, 10 + Math.round((attempt / uploadOrder.length) * 70)),
+            status: attempt === 1
+                ? `Uploading via ${serviceLabels[service]}...`
+                : `Retrying with ${serviceLabels[service]} (${attempt}/${uploadOrder.length})...`
+        });
+
         try {
             const uploadedUrl = await uploadToService(service, fileBlob, filename);
             if (attempted.length) {
                 showToast(`Upload succeeded with ${serviceLabels[service]} after fallback`, Toasts.Type.SUCCESS);
             }
+
+            setUploadState({
+                phase: "success",
+                percent: 100,
+                attempt,
+                currentService: service,
+                currentServiceLabel: serviceLabels[service],
+                status: `Uploaded successfully via ${serviceLabels[service]}.`,
+                canCancel: false
+            });
+
             return uploadedUrl;
         } catch (error) {
             const message = error instanceof Error ? error.message : "Unknown error";
+            if (message === "Upload cancelled by user") {
+                throw error;
+            }
+
             attempted.push(serviceLabels[service]);
             lastError = message;
             logger.warn(`Upload failed for ${serviceLabels[service]}: ${message}`);
+            setUploadState({
+                phase: "retrying",
+                attempt,
+                currentService: service,
+                currentServiceLabel: serviceLabels[service],
+                status: `${serviceLabels[service]} failed: ${message}`,
+                percent: Math.min(95, 10 + Math.round((attempt / uploadOrder.length) * 80))
+            });
         }
     }
+
+    setUploadState({
+        phase: "failed",
+        status: `All upload services failed. Last error: ${lastError}`,
+        canCancel: false,
+        percent: 0
+    });
 
     throw new Error(`All upload services failed. Last error: ${lastError}. Tried: ${attempted.join(", ")}`);
 }
@@ -674,6 +872,7 @@ async function normalizeUploadBlob(blob: Blob, sourceUrl?: string): Promise<{ bl
 async function uploadPreparedBlob(blob: Blob, sourceUrl?: string): Promise<void> {
     const primary = settings.store.serviceType as ServiceType;
     const { blob: normalizedBlob, filename } = await normalizeUploadBlob(blob, sourceUrl);
+    setUploadState({ fileName: filename, status: "File ready, starting upload...", percent: 4 });
     const uploadedUrl = await uploadWithFallbacks(normalizedBlob, filename, primary);
     const finalUrl = finalizeUploadedUrl(uploadedUrl);
     notifyUploadSuccess(finalUrl);
@@ -691,6 +890,18 @@ export async function uploadFile(url: string): Promise<void> {
     }
 
     isUploading = true;
+    cancelRequested = false;
+    setUploadState({
+        phase: "preparing",
+        fileName: "",
+        currentService: null,
+        currentServiceLabel: "",
+        attempt: 0,
+        totalAttempts: 0,
+        percent: 1,
+        status: "Preparing upload...",
+        canCancel: true
+    });
 
     try {
         let fetchUrl = url;
@@ -730,10 +941,18 @@ export async function uploadFile(url: string): Promise<void> {
         await uploadPreparedBlob(blob, url);
     } catch (error) {
         const message = error instanceof Error ? error.message : "Unknown error";
-        showToast(`Upload failed: ${message}`, Toasts.Type.FAILURE);
-        logger.error("Upload error", error);
+        if (message === "Upload cancelled by user") {
+            showToast("Upload cancelled", Toasts.Type.MESSAGE);
+            setUploadState({ phase: "cancelled", status: "Upload cancelled.", canCancel: false, percent: 0 });
+        } else {
+            showToast(`Upload failed: ${message}`, Toasts.Type.FAILURE);
+            logger.error("Upload error", error);
+            setUploadState({ phase: "failed", status: `Upload failed: ${message}`, canCancel: false, percent: 0 });
+        }
     } finally {
         isUploading = false;
+        activeAbortController = null;
+        setTimeout(() => resetUploadState(), 1800);
     }
 }
 
@@ -754,13 +973,34 @@ export async function uploadPickedFile(): Promise<void> {
     }
 
     isUploading = true;
+    cancelRequested = false;
+    setUploadState({
+        phase: "preparing",
+        fileName: file.name,
+        currentService: null,
+        currentServiceLabel: "",
+        attempt: 0,
+        totalAttempts: 0,
+        percent: 2,
+        status: `Preparing ${file.name}...`,
+        canCancel: true
+    });
+
     try {
         await uploadPreparedBlob(file);
     } catch (error) {
         const message = error instanceof Error ? error.message : "Unknown error";
-        showToast(`Upload failed: ${message}`, Toasts.Type.FAILURE);
-        logger.error("Manual upload error", error);
+        if (message === "Upload cancelled by user") {
+            showToast("Upload cancelled", Toasts.Type.MESSAGE);
+            setUploadState({ phase: "cancelled", status: "Upload cancelled.", canCancel: false, percent: 0 });
+        } else {
+            showToast(`Upload failed: ${message}`, Toasts.Type.FAILURE);
+            logger.error("Manual upload error", error);
+            setUploadState({ phase: "failed", status: `Upload failed: ${message}`, canCancel: false, percent: 0 });
+        }
     } finally {
         isUploading = false;
+        activeAbortController = null;
+        setTimeout(() => resetUploadState(), 1800);
     }
 }
