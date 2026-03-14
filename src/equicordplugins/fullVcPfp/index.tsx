@@ -4,21 +4,12 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { definePluginSettings } from "@api/Settings";
 import { disableStyle, enableStyle } from "@api/Styles";
 import { EquicordDevs } from "@utils/constants";
-import definePlugin, { OptionType } from "@utils/types";
-import { ChannelRTCStore, ChannelStore, IconUtils, UserStore, VoiceStateStore } from "@webpack/common";
+import definePlugin from "@utils/types";
+import { ChannelRTCStore, ChannelStore, UserStore, VoiceStateStore } from "@webpack/common";
 
 import style from "./style.css?managed";
-
-const settings = definePluginSettings({
-    useServerProfileAvatars: {
-        type: OptionType.BOOLEAN,
-        description: "Use server profile avatars in guild voice channels when available.",
-        default: false
-    }
-});
 
 export default definePlugin({
     name: "FullVCPFP",
@@ -46,9 +37,7 @@ export default definePlugin({
 
         const guildId = ChannelStore.getChannel(channelId)?.guild_id;
         const isSpeaking = ChannelRTCStore.getSpeakingParticipants(channelId).some(p => p.user.id === participantUserId && p.speaking);
-        const avatarUrl = settings.store.useServerProfileAvatars
-            ? user.getAvatarURL(guildId ?? void 0, 1024, isSpeaking) ?? IconUtils.getUserAvatarURL(user, isSpeaking, 1024)
-            : IconUtils.getUserAvatarURL(user, isSpeaking, 1024);
+        const avatarUrl = user.getAvatarURL(guildId, 1024, isSpeaking);
 
         return {
             "--full-res-avatar": `url(${avatarUrl})`
