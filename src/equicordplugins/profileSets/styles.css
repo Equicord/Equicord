@@ -71,14 +71,23 @@
     margin-bottom: 16px;
 }
 
-.vc-profile-presets-random {
-    background: linear-gradient(135deg, #ff5f6d 0%, #ffc371 50%, #8a7bff 100%);
-    color: #fff;
-    border: none;
+.vc-profile-presets-import button[data-mana-component="button"][class*="expressive"] {
+    background: linear-gradient(135deg, #25458e 0%, #315bb6 55%, #3b6dd1 100%) !important;
+    color: #fff !important;
 }
 
-.vc-profile-presets-random:hover {
-    filter: brightness(1.05);
+.vc-profile-presets-import button[data-mana-component="button"][class*="expressive"] > div[class*="expressiveBackground"],
+.vc-profile-presets-import button[data-mana-component="button"][class*="expressive"] > div[class*="expressiveFill"] {
+    display: none !important;
+}
+
+.vc-profile-presets-import button[data-mana-component="button"][class*="expressive"] > div[class*="expressiveHoverContainer"] {
+    opacity: 0.55;
+    mix-blend-mode: screen;
+}
+
+.vc-profile-presets-import button[data-mana-component="button"][class*="expressive"]:hover {
+    filter: brightness(1.1);
 }
 
 .vc-profile-presets-random-content {
