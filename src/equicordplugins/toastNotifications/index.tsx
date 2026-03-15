@@ -398,12 +398,12 @@ function switchChannels(guildId: string | null, channelId: string) {
 
 function navigateToChannel(channel: Channel) {
     if (channel.isGuildVocal?.()) {
-        switchChannels(channel.guild_id ?? null, channel.id);
+        switchChannels(channel.guild_id, channel.id);
         ChannelRTCActions.updateChatOpen(channel.id, true);
         return;
     }
 
-    switchChannels(channel.guild_id ?? null, channel.id);
+    switchChannels(channel.guild_id, channel.id);
 }
 
 enum NotificationLevel {
