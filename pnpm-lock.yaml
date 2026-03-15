@@ -105,7 +105,7 @@ importers:
         specifier: ^3.3.0
         version: 3.3.0
       '@vencord/discord-types':
-        specifier: link:packages/discord-types
+        specifier: workspace:./packages/discord-types
         version: link:packages/discord-types
       diff:
         specifier: ^8.0.2

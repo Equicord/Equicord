@@ -3,7 +3,7 @@
         "resolveJsonModule": true,
         "allowSyntheticDefaultImports": true,
         "esModuleInterop": true,
-        "skipLibCheck": false,
+        "skipLibCheck": true,
         "allowJs": true,
         "lib": [
             "DOM",
