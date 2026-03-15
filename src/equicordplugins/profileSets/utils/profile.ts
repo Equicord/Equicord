@@ -362,19 +362,19 @@ export async function loadPresetAsPending(preset: ProfilePreset, guildId?: strin
             }
         }
 
-        if ("avatarDecoration" in preset && !avatarDecorationEq(preset.avatarDecoration, current.avatarDecoration)) {
+        if (preset.avatarDecoration !== undefined && !avatarDecorationEq(preset.avatarDecoration, current.avatarDecoration)) {
             setPending("COLLECTIBLES_ITEM", {
                 item: { type: 0, value: preset.avatarDecoration }
             });
         }
 
-        if ("profileEffect" in preset && !collectibleEqBySku(preset.profileEffect, current.profileEffect)) {
+        if (preset.profileEffect !== undefined && !collectibleEqBySku(preset.profileEffect, current.profileEffect)) {
             setPending("COLLECTIBLES_ITEM", {
                 item: { type: 1, value: preset.profileEffect }
             });
         }
 
-        if ("nameplate" in preset && !nameplateEq(preset.nameplate, current.nameplate)) {
+        if (preset.nameplate !== undefined && !nameplateEq(preset.nameplate, current.nameplate)) {
             setPending("COLLECTIBLES_ITEM", {
                 item: { type: 2, value: preset.nameplate }
             });
