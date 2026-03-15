@@ -69,10 +69,10 @@
     "appleMusicRichPresence": {
         "activityTypes": {
             "listening": "सुनना",
-            "playing": "खेलना"
+            "playing": "बज रहा है"
         },
         "assetImageTypes": {
-            "album": "एल्बम कलाकृति",
+            "album": "Album कलाकृति",
             "artist": "कलाकार कलाकृति",
             "disabled": "अक्षम"
         },
@@ -86,7 +86,7 @@
         "defaultSmallText": "{artist}",
         "defaultState": "{artist} · {album}",
         "description": "Discord आपके Apple Music के लिए समृद्ध उपस्थिति!",
-        "name": "एप्पलम्यूजिकरिचप्रेजेंस",
+        "name": "AppleMusicRichPresence",
         "settings": {
             "activityType": "किस प्रकार की गतिविधि",
             "detailsString": "गतिविधि विवरण प्रारूप string",
