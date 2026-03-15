@@ -155,10 +155,10 @@
     "betterInvites": {
         "description": "नाम पर क्लिक करके शामिल होने से पहले आमंत्रण की समाप्ति तिथि देखें, आमंत्रितकर्ता प्रोफ़ाइल देखें और सर्वर का पूर्वावलोकन करें",
         "ui": {
-            "expireTooltip": "यह आमंत्रण {expiry} होगा",
-            "expireWill": "समय सीमा समाप्त",
+            "expireTooltip": "यह आमंत्रण {expiry}",
+            "expireWill": "expire",
             "invitedYouTo": "{inviter} ने आपको {guild} में आमंत्रित किया है",
-            "notExpire": "समाप्त नहीं होता"
+            "notExpire": "not expire"
         }
     },
     "betterPlusReacts": {
@@ -209,10 +209,10 @@
             "users": "उपयोगकर्ताओं को बायपास करने दें (डीएम में भेजे गए सभी संदेशों के लिए अधिसूचित)"
         },
         "statusOptions": {
-            "dnd": "परेशान मत करो",
-            "idle": "निठल्ला",
+            "dnd": "परेशान मत करना",
+            "idle": "खाली",
             "invisible": "Invisible",
-            "online": "ऑनलाइन"
+            "online": "Online"
         }
     },
     "channelBadges": {
