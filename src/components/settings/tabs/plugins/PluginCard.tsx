@@ -10,6 +10,7 @@ import { CogWheel, InfoIcon } from "@components/Icons";
 import { AddonCard } from "@components/settings/AddonCard";
 import { classNameFactory } from "@utils/css";
 import { Logger } from "@utils/Logger";
+import { classes } from "@utils/misc";
 import { OptionType, Plugin } from "@utils/types";
 import { React, showToast, Toasts } from "@webpack/common";
 import { Settings } from "Vencord";
@@ -20,6 +21,23 @@ import { openPluginModal } from "./PluginModal";
 
 const logger = new Logger("PluginCard");
 const cl = classNameFactory("vc-plugins-");
+
+function HeartIcon({ filled, className }: { filled?: boolean; className?: string; }) {
+    return (
+        <svg
+            className={classes(className, "vc-icon")}
+            role="img"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill={filled ? "currentColor" : "none"}
+            stroke="currentColor"
+            strokeWidth="2"
+        >
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+        </svg>
+    );
+}
 interface PluginCardProps extends React.HTMLProps<HTMLDivElement> {
     plugin: Plugin;
     disabled?: boolean;
@@ -27,9 +45,11 @@ interface PluginCardProps extends React.HTMLProps<HTMLDivElement> {
     isNew?: boolean;
     onMouseEnter?: React.MouseEventHandler<HTMLDivElement>;
     onMouseLeave?: React.MouseEventHandler<HTMLDivElement>;
+    isFavorite?: boolean;
+    onToggleFavorite?: (pluginName: string) => void;
 }
 
-export function PluginCard({ plugin, disabled, onRestartNeeded, onMouseEnter, onMouseLeave, isNew }: PluginCardProps) {
+export function PluginCard({ plugin, disabled, onRestartNeeded, onMouseEnter, onMouseLeave, isNew, isFavorite, onToggleFavorite }: PluginCardProps) {
     const settings = Settings.plugins[plugin.name];
     const pluginMeta = PluginMeta[plugin.name];
     const isEquicordPlugin = pluginMeta.folderName.startsWith("src/equicordplugins/") ?? false;
@@ -141,16 +161,27 @@ export function PluginCard({ plugin, disabled, onRestartNeeded, onMouseEnter, on
             onMouseEnter={onMouseEnter}
             onMouseLeave={onMouseLeave}
             infoButton={
-                <button
-                    role="switch"
-                    onClick={() => openPluginModal(plugin, onRestartNeeded)}
-                    className={cl("info-button")}
-                >
-                    {plugin.settings?.def && Object.values(plugin.settings.def).some(s => s.type !== OptionType.CUSTOM && !s.hidden)
-                        ? <CogWheel className={cl("info-icon")} />
-                        : <InfoIcon className={cl("info-icon")} />
-                    }
-                </button>
+                <div style={{ display: "flex", gap: "4px" }}>
+                    {onToggleFavorite && (
+                        <button
+                            role="switch"
+                            onClick={() => onToggleFavorite(plugin.name)}
+                            className={cl("info-button")}
+                            style={{ color: isFavorite ? "#f04747" : "currentColor" }}
+                        >
+                            <HeartIcon className={cl("info-icon")} filled={isFavorite} />
+                        </button>
+                    )}
+                    <button
+                        role="switch"
+                        onClick={() => openPluginModal(plugin, onRestartNeeded)}
+                        className={cl("info-button")}
+                    >
+                        {plugin.settings?.def && Object.values(plugin.settings.def).some(s => s.type !== OptionType.CUSTOM && !s.hidden)
+                            ? <CogWheel className={cl("info-icon")} />
+                            : <InfoIcon className={cl("info-icon")} />}
+                    </button>
+                </div>
             } />
     );
 }

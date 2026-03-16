@@ -103,6 +103,7 @@ const enum SearchStatus {
     EQUICORD,
     VENCORD,
     NEW,
+    FAVORITE,
     USER_PLUGINS,
     API_PLUGINS
 }
@@ -144,6 +145,31 @@ function ExcludedPluginsList({ search }: { search: string; }) {
 export default function PluginSettings() {
     const settings = useSettings();
     const changes = React.useMemo(() => new ChangeList<string>(), []);
+
+    const [favorites, setFavorites] = React.useState<Set<string>>(new Set());
+
+    React.useEffect(() => {
+        DataStore.get("Vencord_FavoritePlugins").then((storedFavorites: string[] | undefined) => {
+            if (storedFavorites) {
+                setFavorites(new Set(storedFavorites));
+            }
+        });
+    }, []);
+
+    const updateFavorites = React.useCallback((newFavorites: Set<string>) => {
+        setFavorites(newFavorites);
+        DataStore.set("Vencord_FavoritePlugins", Array.from(newFavorites));
+    }, []);
+
+    const toggleFavorite = React.useCallback((pluginName: string) => {
+        const newFavorites = new Set(favorites);
+        if (newFavorites.has(pluginName)) {
+            newFavorites.delete(pluginName);
+        } else {
+            newFavorites.add(pluginName);
+        }
+        updateFavorites(newFavorites);
+    }, [favorites, updateFavorites]);
 
     React.useEffect(() => {
         return () => {
@@ -231,6 +257,9 @@ export default function PluginSettings() {
             case SearchStatus.NEW:
                 if (!newPluginsSet?.has(plugin.name)) return false;
                 break;
+            case SearchStatus.FAVORITE:
+                if (!favorites.has(plugin.name)) return false;
+                break;
             case SearchStatus.USER_PLUGINS:
                 if (!PluginMeta[plugin.name]?.userPlugin) return false;
                 break;
@@ -246,7 +275,7 @@ export default function PluginSettings() {
             plugin.description.toLowerCase().includes(search) ||
             plugin.tags?.some(t => t.toLowerCase().includes(search))
         );
-    }, [searchValue, search]);
+    }, [searchValue, search, favorites]);
 
     const [newPluginsSet] = useAwaiter(() => DataStore.get("Vencord_existingPlugins").then((cachedPlugins: Record<string, number> | undefined) => {
         const now = Date.now() / 1000;
@@ -294,6 +323,8 @@ export default function PluginSettings() {
                                 onRestartNeeded={handleRestartNeeded}
                                 disabled={true}
                                 plugin={p}
+                                isFavorite={favorites.has(p.name)}
+                                onToggleFavorite={toggleFavorite}
                             />
                         )}
                     </Tooltip>
@@ -305,6 +336,8 @@ export default function PluginSettings() {
                         disabled={false}
                         plugin={p}
                         isNew={newPluginsSet?.has(p.name)}
+                        isFavorite={favorites.has(p.name)}
+                        onToggleFavorite={toggleFavorite}
                         key={p.name}
                     />
                 );
@@ -420,6 +453,7 @@ export default function PluginSettings() {
                                 { label: "Show Equicord", value: SearchStatus.EQUICORD },
                                 { label: "Show Vencord", value: SearchStatus.VENCORD },
                                 { label: "Show New", value: SearchStatus.NEW },
+                                { label: "Show Favorites", value: SearchStatus.FAVORITE },
                                 hasUserPlugins && { label: "Show UserPlugins", value: SearchStatus.USER_PLUGINS },
                                 { label: "Show API Plugins", value: SearchStatus.API_PLUGINS },
                             ].filter(isTruthy)}
