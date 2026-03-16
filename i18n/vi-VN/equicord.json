@@ -55,6 +55,9 @@
         },
         "description": "Đề cập ngẫu nhiên một người"
     },
+    "audioPlayerAPI": {
+        "description": "API để phát các tệp âm thanh nội bộ của Discord hoặc các liên kết âm thanh bên ngoài."
+    },
     "autoZipper": {
         "description": "Tự động nén các loại tệp và thư mục được chỉ định trước khi tải lên Discord",
         "settings": {
@@ -552,6 +555,11 @@
             "reset": "Đặt lại"
         }
     },
+    "equicordDonor": {
+        "description": "Huy hiệu này là đặc quyền dành riêng cho những người ủng hộ Equicord (Không phải Vencord)",
+        "description2": "Hãy cân nhắc ủng hộ sự phát triển của Equicord bằng cách trở thành nhà ủng hộ. Điều đó có ý nghĩa rất lớn!!",
+        "title": "Người ủng hộ Equicord"
+    },
     "equicordHelper": {
         "alerts": {
             "equicordSupport": "Hỗ trợ Equicord",
@@ -599,6 +607,10 @@
             "themes": "Chủ đề",
             "tooltip": "Hộp công cụ Equicord"
         }
+    },
+    "equicordTranslator": {
+        "description": "Được trao cho những người đóng góp giúp mở rộng hỗ trợ ngôn ngữ của Equicord bằng cách dịch nội dung cho cộng đồng.",
+        "title": "Biên dịch viên Equicord"
     },
     "equissant": {
         "description": "Crossant sau mỗi số lần nhấp chuột nhất định :trolley:",
@@ -935,6 +947,9 @@
             "hideTags": "Ẩn thẻ"
         }
     },
+    "headerBarAPI": {
+        "description": "API để thêm các nút trên thanh tiêu đề và thanh công cụ kênh."
+    },
     "hideChatButtons": {
         "description": "Ẩn các nút trong thanh trò chuyện",
         "settings": {
@@ -977,7 +992,7 @@
         "description": "Thay đổi nút home thành chỉ báo đang soạn thảo nếu ai đó trong dm của bạn đang soạn tin nhắn"
     },
     "hopOn": {
-        "description": "Vào Fortnite hay bloons đi :3",
+        "description": "Vào thôi! Mở một URL có thể cấu hình khi tin nhắn khớp với regex tùy chỉnh trong kênh hiện tại.",
         "settings": {
             "regex": "Regex để kích hoạt",
             "url": "URL để mở"
@@ -1316,6 +1331,10 @@
             "scanQrCode": "Quét Mã QR"
         }
     },
+    "mainWindowFrameless": {
+        "description": "Loại bỏ khung cửa sổ mặc định để có giao diện gọn gàng hơn. Bạn vẫn có thể di chuyển cửa sổ bằng cách kéo vùng thanh tiêu đề.",
+        "title": "Tắt khung viền của cửa sổ chính"
+    },
     "mediaPlaybackSpeed": {
         "description": "Kiểm soát tốc độ phát lại phương tiện cho tin nhắn thoại, video và tệp đính kèm âm thanh",
         "settings": {
@@ -1497,7 +1516,7 @@
         }
     },
     "moyai": {
-        "description": "Phát hiệu ứng âm thanh moyai khi sử dụng emoji 🗿",
+        "description": "Phát hiệu ứng âm thanh 🗿 bất cứ khi nào emoji moyai được gửi, biểu cảm, hoặc sử dụng làm hiệu ứng giọng nói trong kênh hiện tại.",
         "settings": {
             "ignoreBlocked": "Bỏ qua tin nhắn từ người dùng bị chặn",
             "ignoreBots": "Bỏ qua tin nhắn từ bot",
@@ -1560,13 +1579,13 @@
         "description": "Xóa tiêu đề vai trò khỏi danh sách thành viên, tạo giao diện rõ ràng hơn"
     },
     "normalizeMessageLinks": {
-        "description": "Bình thường hóa các liên kết tin nhắn Discord bằng cách xóa tên miền phụ canary/ptb để đảm bảo tính nhất quán"
+        "description": "Chuẩn hóa các liên kết tin nhắn Discord bằng cách loại bỏ các tên miền phụ như canary/ptb để đảm bảo tính nhất quán"
     },
     "notificationTitle": {
         "description": "Thêm tiêu đề thông báo chi tiết hiển thị thông tin người gửi, kênh và máy chủ"
     },
     "orbolayBridge": {
-        "description": "Plugin cầu nối để tích hợp lớp phủ Orbolay, cho phép đồng bộ hóa trạng thái giọng nói và thông báo tin nhắn",
+        "description": "Plugin cầu nối để tích hợp overlay Orbolay, cho phép đồng bộ trạng thái giọng nói và thông báo tin nhắn",
         "settings": {
             "alignmentOptions": {
                 "bottomLeft": "Dưới Cùng Bên Trái",
@@ -1574,12 +1593,12 @@
                 "topLeft": "Trên Cùng Bên Trái",
                 "topRight": "Trên Cùng Bên Phải"
             },
-            "isKeybindEnabled": "Bật hỗ trợ liên kết phím cho điều khiển Orbolay",
-            "messageAlignment": "Vị trí căn chỉnh cho lớp phủ tin nhắn",
-            "messagesSemitransparent": "Làm cho lớp phủ tin nhắn ở dạng bán trong suốt",
-            "port": "Số cổng cho kết nối Orbolay WebSocket",
-            "userAlignment": "Vị trí căn chỉnh cho lớp phủ người dùng",
-            "voiceSemitransparent": "Làm cho lớp phủ giọng nói trở nên trong suốt"
+            "isKeybindEnabled": "Bật hỗ trợ phím tắt cho điều khiển Orbolay",
+            "messageAlignment": "Vị trí căn chỉnh cho overlay tin nhắn",
+            "messagesSemitransparent": "Làm cho overlay tin nhắn trở nên bán trong suốt",
+            "port": "Số cổng cho kết nối WebSocket của Orbolay",
+            "userAlignment": "Vị trí căn chỉnh cho overlay người dùng",
+            "voiceSemitransparent": "Làm cho overlay giọng nói trở nên bán trong suốt"
         }
     },
     "partyMode": {
@@ -2150,6 +2169,9 @@
             "urlPatterns": "Mẫu URL"
         }
     },
+    "userAreaAPI": {
+        "description": "API để thêm các nút vào bảng khu vực người dùng."
+    },
     "userpfp": {
         "avatarOptions": {
             "nitro": "Nitro",
@@ -2497,6 +2519,6 @@
         }
     },
     "youtubeDescription": {
-        "description": "Thêm mô tả có thể chuyển đổi để nhúng video YouTube"
+        "description": "Thêm mô tả có thể bật/tắt trong nhúng video YouTube"
     }
 }
