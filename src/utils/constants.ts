@@ -1274,7 +1274,7 @@ export const EquicordDevs = Object.freeze({
     },
     playfairs: {
         name: "playfairs",
-        id: 816725924959354890n,
+        id: 1426711359059394662n,
     }
 } satisfies Record<string, Dev>);
 
