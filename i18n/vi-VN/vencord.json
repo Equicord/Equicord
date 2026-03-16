@@ -139,6 +139,7 @@
         "description": "API để thêm huy hiệu cho người dùng"
     },
     "betterFolders": {
+        "description": "Hiển thị các thư mục máy chủ trên một thanh riêng biệt và thêm các cải tiến liên quan đến thư mục",
         "settings": {
             "closeAllFolders": "Đóng tất cả các thư mục khi chọn máy chủ không có trong thư mục",
             "closeAllHomeButton": "Đóng tất cả các thư mục khi nhấp vào nút home",
@@ -188,6 +189,7 @@
         }
     },
     "betterSessions": {
+        "description": "Cải thiện menu quản lý phiên đăng nhập (thiết bị). Cho phép bạn xem mốc thời gian chính xác, đặt tên tùy chỉnh cho từng phiên và nhận thông báo về các phiên đăng nhập mới.",
         "newBadge": "MỚI",
         "newSession": "Phiên mới:",
         "rename": "Đổi tên",
@@ -203,6 +205,7 @@
         }
     },
     "betterSettings": {
+        "description": "Cải thiện trải nghiệm mở menu cài đặt",
         "settings": {
             "disableFade": "Tắt hoạt ảnh xen kẽ",
             "eagerLoad": "Loại bỏ độ trễ tải khi mở menu lần đầu tiên",
@@ -384,6 +387,7 @@
         "button1Url": "URL Nút1",
         "button2Text": "Văn bản Nút2",
         "button2Url": "URL Nút2",
+        "description": "Thêm Rich Presence (trạng thái game) hoàn toàn tùy chỉnh vào hồ sơ Discord của bạn",
         "detailLine1": "Chi tiết (dòng 1)",
         "detailUrl": "URL Chi tiết",
         "endTimestamp": "Dấu thời gian kết thúc (tính bằng mili giây)",
@@ -449,6 +453,8 @@
     },
     "decor": {
         "accessFromProfiles": "Bạn cũng có thể truy cập trang trí Decor từ trang {link}.",
+        "agreedToGuidelines": "Đã đồng ý với các quy định",
+        "baseUrl": "Url api Decor",
         "changeDecoration": "Thay đổi trang trí",
         "description": "Tạo và sử dụng trang trí hình đại diện tùy chỉnh của riêng bạn, hoặc chọn mục yêu thích của bạn từ các cài đặt trước.",
         "enableAndRestart": "Bật Decor và khởi động lại ứng dụng của bạn để thay đổi trang trí hình đại diện của bạn.",
@@ -505,6 +511,7 @@
         "cloneTo": "Nhân bản vào {guild}",
         "clonedSuccess": "Đã nhân bản thành công {name} sang {guild}!",
         "customName": "Tên tùy chỉnh",
+        "description": "Cho phép bạn nhân bản Emoji & Nhãn Dán về máy chủ của riêng mình (chuột phải vào chúng)",
         "failedToClone": "Không nhân bản được: {error}",
         "nameValidation": "Tên phải có độ dài từ 2 đến 32 ký tự",
         "somethingWentWrong": "Đã xảy ra lỗi (kiểm tra console!)"
@@ -699,6 +706,7 @@
         "description": "Không ẩn tin nhắn khỏi 'có thể là kẻ gửi thư rác'"
     },
     "ignoreActivities": {
+        "description": "Ẩn các hoạt động để chúng CHỈ không hiển thị trên trạng thái của bạn. Bạn có thể cấu hình các mục cụ thể muốn ẩn từ tab Trò chơi đã đăng ký và Hoạt động, hoặc sử dụng các cài đặt chung bên dưới",
         "disableActivity": "Tắt hoạt động",
         "enableActivity": "Kích hoạt hoạt động",
         "filterList": {
@@ -732,6 +740,7 @@
         "description": "Không bao giờ ẩn liên kết hình ảnh trong tin nhắn, ngay cả khi đó là nội dung duy nhất"
     },
     "imageZoom": {
+        "description": "Cho phép bạn phóng to hình ảnh và gif. Sử dụng con lăn chuột để phóng to và nhấn shift + con lăn chuột để tăng bán kính / kích thước kính lúp",
         "lensSize": "Kích thước ống kính",
         "nearestNeighbour": "Lân cận gần nhất",
         "settings": {
@@ -840,6 +849,7 @@
         "showLogs": "Hiển thị nhật ký"
     },
     "memberCount": {
+        "description": "Hiển thị số lượng thành viên đang trực tuyến, tổng số thành viên, và số người dùng trong các kênh thoại của máy chủ — tại danh sách thành viên và chú thích công cụ.",
         "settings": {
             "memberList": "Hiển thị số lượng thành viên trong danh sách thành viên",
             "toolTip": "Hiển thị số lượng thành viên trên chú giải công cụ máy chủ",
@@ -930,6 +940,7 @@
     "messageLatency": {
         "clockAhead": "Đồng hồ của người dùng này đang chạy trước {delta}.",
         "delayedMessage": "Tin nhắn bị trì hoãn",
+        "description": "Hiển thị chỉ báo cho các tin nhắn mất ≥n giây để gửi",
         "messageDelayed": "Tin nhắn này được gửi với độ trễ {delta}.",
         "oldAndroidClient": "Ứng dụng Discord Android cũ",
         "oldDiscordAndroid": "Người dùng bị nghi ngờ đang sử dụng ứng dụng Discord Android cũ",
@@ -989,6 +1000,7 @@
         "deletedMessages_one": "{count} tin nhắn đã xóa",
         "deletedMessages_other": "{count} tin nhắn đã xóa",
         "deletedMessages_zero": "Không có tin nhắn nào bị xóa",
+        "description": "Lưu nhật ký tạm thời các tin nhắn đã bị xóa và chỉnh sửa",
         "disableDiffView": "Tắt chế độ xem so sánh",
         "editHistory": "Lịch sử chỉnh sửa tin nhắn",
         "enableDiffView": "Bật chế độ xem so sánh",
@@ -1230,6 +1242,7 @@
         }
     },
     "permissionsViewer": {
+        "description": "Xem quyền hạn của một người dùng hoặc một kênh, và danh sách vai trò của máy chủ",
         "noPermissions": "Không có quyền để hiển thị!",
         "owner": "người sở hữu",
         "permissions": "Quyền hạn",
@@ -1280,6 +1293,7 @@
         "color": "Màu sắc",
         "create": "Tạo",
         "deleteCategory": "Xóa Danh Mục",
+        "description": "Cho phép bạn ghim các kênh tin nhắn trực tiếp lên đầu danh sách DM. Để ghim/bỏ ghim hoặc sắp xếp lại thứ tự, chuột phải vào DM",
         "editCategory": "Chỉnh Sửa Danh Mục",
         "editCategoryTitle": "Chỉnh Sửa Danh Mục",
         "moveDown": "Chuyển xuống",
@@ -1414,6 +1428,7 @@
         "confirmDelete": "Bạn có thực sự muốn xóa đánh giá này?",
         "confirmReport": "Bạn có thực sự muốn báo cáo đánh giá này?",
         "delete": "Xóa",
+        "description": "Đánh giá người dùng khác (Thêm một cài đặt mới vào hồ sơ)",
         "failedToFetchBlocks": "Không tìm nạp được khối: {error}",
         "mustBeLoggedInBlock": "Bạn phải đăng nhập để chặn người dùng.",
         "mustBeLoggedInDelete": "Bạn phải đăng nhập để xóa đánh giá.",
@@ -1604,7 +1619,7 @@
         },
         "frameless": {
             "description": "Loại bỏ khung cửa sổ mặc định để có giao diện gọn gàng hơn. Bạn vẫn có thể di chuyển cửa sổ bằng cách kéo vùng thanh tiêu đề.",
-            "title": "Tắt khung cửa sổ"
+            "title": "Tắt tất cả khung cửa sổ"
         },
         "hint": "Gợi ý: Bạn có thể thay đổi vị trí của phần cài đặt này trong <0>cài đặt của plugin Cài đặt</0>!",
         "macosVibrancyStyle": {
@@ -1927,7 +1942,8 @@
     },
     "supportHelper": {
         "debug": "Gửi thông tin gỡ lỗi Equicord",
-        "description": "Giúp chúng tôi cung cấp hỗ trợ cho bạn"
+        "description": "Giúp chúng tôi cung cấp hỗ trợ cho bạn",
+        "plugins": "Gửi danh sách plugin Equicord"
     },
     "tabs": {
         "settings": "Cài đặt Equicord"
