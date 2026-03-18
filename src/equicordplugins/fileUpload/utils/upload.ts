@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { CORS_PROXY, toProxiedUrl } from "@equicordplugins/fileUpload/constants";
 import { settings } from "@equicordplugins/fileUpload/settings";
 import { serviceLabels, ServiceType, ShareXUploaderConfig, UploadResponse } from "@equicordplugins/fileUpload/types";
 import { copyToClipboard } from "@utils/clipboard";
@@ -24,7 +25,13 @@ const Native = IS_DISCORD_DESKTOP
 
 const logger = new Logger("FileUpload", "#7cb7ff");
 
-const CORS_PROXY = "https://cors.keiran0.workers.dev"; // im hosting this on cloudflare workers so uptime and latency should be reliable
+function toProxyUrl(url: string): string {
+    if (Native || url.startsWith(`${CORS_PROXY}?url=`)) {
+        return url;
+    }
+
+    return toProxiedUrl(url);
+}
 
 let isUploading = false;
 
@@ -112,9 +119,10 @@ async function fetchWithTimeout(url: string, options: RequestInit): Promise<Resp
     const controller = new AbortController();
     activeAbortController = controller;
     const timeout = setTimeout(() => controller.abort(), getUploadTimeoutMs());
+    const requestUrl = toProxyUrl(url);
 
     try {
-        return await fetch(url, {
+        return await fetch(requestUrl, {
             ...options,
             signal: controller.signal
         });
@@ -194,17 +202,7 @@ async function uploadToShareX(fileBlob: Blob, filename: string): Promise<string>
         throw new Error(`Unsupported ShareX Body type: ${config.Body || "unknown"}`);
     }
 
-    let response: Response;
-    try {
-        response = await fetchWithTimeout(requestUrl, { method, headers, body });
-    } catch (error) {
-        if (Native) {
-            throw error;
-        }
-
-        const proxiedUrl = `${CORS_PROXY}?url=${encodeURIComponent(requestUrl)}`;
-        response = await fetchWithTimeout(proxiedUrl, { method, headers, body });
-    }
+    const response = await fetchWithTimeout(requestUrl, { method, headers, body });
 
     const responseText = await response.text();
     let responseJson: unknown = null;
@@ -302,9 +300,7 @@ async function uploadToNest(fileBlob: Blob, filename: string): Promise<string> {
     const formData = new FormData();
     formData.append("file", fileBlob, filename);
 
-    const proxiedUrl = `${CORS_PROXY}?url=${encodeURIComponent("https://nest.rip/api/files/upload")}`;
-
-    const response = await fetchWithTimeout(proxiedUrl, {
+    const response = await fetchWithTimeout("https://nest.rip/api/files/upload", {
         method: "POST",
         headers: {
             "Authorization": nestToken
@@ -394,8 +390,7 @@ async function uploadToEzHost(fileBlob: Blob, filename: string): Promise<string>
 
     const headers: Record<string, string> = { key: ezHostKey };
 
-    const proxiedUrl = `${CORS_PROXY}?url=${encodeURIComponent("https://api.e-z.host/files")}`;
-    const response = await fetchWithTimeout(proxiedUrl, {
+    const response = await fetchWithTimeout("https://api.e-z.host/files", {
         method: "POST",
         headers,
         body: formData
@@ -428,7 +423,7 @@ async function uploadToCatbox(fileBlob: Blob, filename: string): Promise<string>
     if (catboxUserhash) formData.append("userhash", catboxUserhash);
     formData.append("fileToUpload", fileBlob, filename);
 
-    const response = await fetchWithTimeout(`${CORS_PROXY}?url=${encodeURIComponent("https://catbox.moe/user/api.php")}`, {
+    const response = await fetchWithTimeout("https://catbox.moe/user/api.php", {
         method: "POST",
         body: formData
     });
@@ -472,7 +467,7 @@ async function uploadToLitterbox(fileBlob: Blob, filename: string): Promise<stri
     formData.append("time", expiry);
     formData.append("fileToUpload", fileBlob, filename);
 
-    const response = await fetchWithTimeout(`${CORS_PROXY}?url=${encodeURIComponent("https://litterbox.catbox.moe/resources/internals/api.php")}`, {
+    const response = await fetchWithTimeout("https://litterbox.catbox.moe/resources/internals/api.php", {
         method: "POST",
         body: formData
     });
@@ -499,8 +494,7 @@ async function uploadToGofile(fileBlob: Blob, filename: string): Promise<string>
     formData.append("file", fileBlob, filename);
 
     const uploadUrl = "https://upload.gofile.io/uploadfile";
-    const requestUrl = Native ? uploadUrl : `${CORS_PROXY}?url=${encodeURIComponent(uploadUrl)}`;
-    const response = await fetchWithTimeout(requestUrl, {
+    const response = await fetchWithTimeout(uploadUrl, {
         method: "POST",
         body: formData
     });
@@ -535,7 +529,7 @@ async function uploadToTmpfiles(fileBlob: Blob, filename: string): Promise<strin
     formData.append("file", fileBlob, filename);
 
     const uploadUrl = "https://tmpfiles.org/api/v1/upload";
-    const response = await fetchWithTimeout(`${CORS_PROXY}?url=${encodeURIComponent(uploadUrl)}`, {
+    const response = await fetchWithTimeout(uploadUrl, {
         method: "POST",
         body: formData
     });
@@ -563,7 +557,7 @@ async function uploadToBuzzheavier(fileBlob: Blob, filename: string): Promise<st
     }
 
     const uploadUrl = `https://w.buzzheavier.com/${encodeURIComponent(filename)}`;
-    const response = await fetchWithTimeout(`${CORS_PROXY}?url=${encodeURIComponent(uploadUrl)}`, {
+    const response = await fetchWithTimeout(uploadUrl, {
         method: "PUT",
         body: fileBlob
     });
@@ -598,7 +592,7 @@ async function uploadToTempSh(fileBlob: Blob, filename: string): Promise<string>
     formData.append("file", fileBlob, filename);
 
     const uploadUrl = "https://temp.sh/upload";
-    const response = await fetchWithTimeout(`${CORS_PROXY}?url=${encodeURIComponent(uploadUrl)}`, {
+    const response = await fetchWithTimeout(uploadUrl, {
         method: "POST",
         body: formData
     });
@@ -630,7 +624,7 @@ async function uploadToFilebin(fileBlob: Blob, filename: string): Promise<string
     const formData = new FormData();
     formData.append("file", fileBlob, filename);
 
-    const response = await fetchWithTimeout(`${CORS_PROXY}?url=${encodeURIComponent(uploadUrl)}`, {
+    const response = await fetchWithTimeout(uploadUrl, {
         method: "POST",
         body: formData
     });
@@ -926,7 +920,9 @@ export async function uploadFile(url: string): Promise<void> {
                 blob = await response.blob();
             }
         } else {
-            const response = await fetch(fetchUrl);
+            const response = await fetchWithTimeout(fetchUrl, {
+                method: "GET"
+            });
             if (!response.ok) {
                 throw new Error(`Failed to fetch file: ${response.status}`);
             }
