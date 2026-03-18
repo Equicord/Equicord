@@ -750,10 +750,20 @@ function finalizeUploadedUrl(url: string): string {
     }
 }
 
-function notifyUploadSuccess(finalUrl: string): void {
+async function notifyUploadSuccess(finalUrl: string): Promise<void> {
     if (settings.store.autoCopy) {
-        copyToClipboard(finalUrl);
-        showToast("Upload successful, URL copied to clipboard", Toasts.Type.SUCCESS);
+        if (!finalUrl.trim()) {
+            showToast("Upload successful, but no URL was available to copy", Toasts.Type.MESSAGE);
+            return;
+        }
+
+        try {
+            await copyToClipboard(finalUrl);
+            showToast("Upload successful, URL copied to clipboard", Toasts.Type.SUCCESS);
+        } catch (error) {
+            logger.warn("Upload succeeded but clipboard copy failed", error);
+            showToast("Upload successful, but failed to copy URL", Toasts.Type.MESSAGE);
+        }
     } else {
         showToast("Upload successful", Toasts.Type.SUCCESS);
     }
@@ -869,7 +879,7 @@ async function uploadPreparedBlob(blob: Blob, sourceUrl?: string): Promise<void>
     setUploadState({ fileName: filename, status: "File ready, starting upload...", percent: 4 });
     const uploadedUrl = await uploadWithFallbacks(normalizedBlob, filename, primary);
     const finalUrl = finalizeUploadedUrl(uploadedUrl);
-    notifyUploadSuccess(finalUrl);
+    await notifyUploadSuccess(finalUrl);
 }
 
 export async function uploadFile(url: string): Promise<void> {
