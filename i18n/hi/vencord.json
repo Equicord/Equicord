@@ -85,7 +85,7 @@
         "defaultName": "एप्पल संगीत",
         "defaultSmallText": "{artist}",
         "defaultState": "{artist} · {album}",
-        "description": "Discord आपके Apple Music के लिए समृद्ध उपस्थिति!",
+        "description": "Discord rich presence आपके Apple Music के लिए !",
         "name": "AppleMusicRichPresence",
         "settings": {
             "activityType": "किस प्रकार की गतिविधि",
@@ -110,11 +110,11 @@
         "statusDisplayTypes": {
             "artist": "कलाकार का नाम दिखाएँ",
             "off": "न दिखाएं (सामान्य श्रवण संदेश दिखाता है)",
-            "track": "ट्रैक नाम दिखाएँ"
+            "track": "Track का नाम दिखाएँ"
         }
     },
     "arRPC": {
-        "connected": "एआरआरपीसी से जुड़ा",
+        "connected": "Connected to arRPC",
         "connectionFailed": "ArRPC से कनेक्ट करने में विफल, क्या यह चल रहा है?",
         "retry": "पुन: प्रयास करें",
         "settingsAbout": {
@@ -171,7 +171,7 @@
         }
     },
     "betterRoleContext": {
-        "copyRoleColor": "भूमिका का रंग कॉपी करें",
+        "copyRoleColor": "भूमिका का रंग Copy करें",
         "description": "उपयोगकर्ता प्रोफ़ाइल में भूमिकाओं पर राइट क्लिक करने पर भूमिका का रंग कॉपी करने/भूमिका संपादित करने/भूमिका आइकन देखने के विकल्प जोड़ता है",
         "editRole": "भूमिका संपादित करें",
         "name": "BetterRoleContext",
@@ -193,8 +193,8 @@
         "rename": "नाम बदलें",
         "renameModal": {
             "newDeviceName": "नये उपकरण का नाम",
-            "resetName": "नाम रीसेट करें",
-            "save": "बचाना",
+            "resetName": "नाम reset करें",
+            "save": "Save",
             "title": "नाम बदलें"
         },
         "settings": {
@@ -221,7 +221,7 @@
         "description": "hover करने तक NSFW channels में attachments को धुंधला करें",
         "settings": {
             "blurAllChannels": "सभी चैनलों में अनुलग्नकों को धुंधला करें (सिर्फ NSFW नहीं)",
-            "blurAmount": "धुंधला राशि (पिक्सेल में)"
+            "blurAmount": "धुंधलेपन की मात्रा (in pixels)"
         }
     },
     "callTimer": {
