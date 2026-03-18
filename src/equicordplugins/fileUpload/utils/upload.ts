@@ -66,6 +66,19 @@ const uploadStateListeners = new Set<() => void>();
 let activeAbortController: AbortController | null = null;
 let cancelRequested = false;
 
+function isUploadCancelledError(error: unknown): boolean {
+    if (cancelRequested) {
+        return true;
+    }
+
+    if (!(error instanceof Error)) {
+        return false;
+    }
+
+    const message = error.message.toLowerCase();
+    return message.includes("cancelled") || message.includes("canceled") || message.includes("aborted") || message.includes("aborterror");
+}
+
 function emitUploadState() {
     for (const listener of uploadStateListeners) {
         listener();
@@ -793,6 +806,10 @@ async function uploadWithFallbacks(fileBlob: Blob, filename: string, primary: Se
     });
 
     for (const service of uploadOrder) {
+        if (cancelRequested) {
+            throw new Error("Upload cancelled by user");
+        }
+
         const attempt = attempted.length + 1;
         setUploadState({
             phase: attempt === 1 ? "uploading" : "retrying",
@@ -823,10 +840,11 @@ async function uploadWithFallbacks(fileBlob: Blob, filename: string, primary: Se
 
             return uploadedUrl;
         } catch (error) {
-            const message = error instanceof Error ? error.message : "Unknown error";
-            if (message === "Upload cancelled by user") {
+            if (isUploadCancelledError(error)) {
                 throw error;
             }
+
+            const message = error instanceof Error ? error.message : "Unknown error";
 
             attempted.push(serviceLabels[service]);
             lastError = message;
@@ -947,7 +965,7 @@ export async function uploadFile(url: string): Promise<void> {
         await uploadPreparedBlob(blob, url);
     } catch (error) {
         const message = error instanceof Error ? error.message : "Unknown error";
-        if (message === "Upload cancelled by user") {
+        if (isUploadCancelledError(error)) {
             showToast("Upload cancelled", Toasts.Type.MESSAGE);
             setUploadState({ phase: "cancelled", status: "Upload cancelled.", canCancel: false, percent: 0 });
         } else {
@@ -963,6 +981,15 @@ export async function uploadFile(url: string): Promise<void> {
 }
 
 export async function uploadPickedFile(): Promise<void> {
+    const file = await chooseFile("*/*");
+    if (!file) {
+        return;
+    }
+
+    await uploadProvidedFiles([file]);
+}
+
+export async function uploadProvidedFiles(files: readonly File[]): Promise<void> {
     if (isUploading) {
         showToast("Upload already in progress", Toasts.Type.MESSAGE);
         return;
@@ -973,30 +1000,41 @@ export async function uploadPickedFile(): Promise<void> {
         return;
     }
 
-    const file = await chooseFile("*/*");
-    if (!file) {
+    if (!files.length) {
+        return;
+    }
+
+    const uploadFiles = files.filter(file => Boolean(file));
+    if (!uploadFiles.length) {
         return;
     }
 
     isUploading = true;
     cancelRequested = false;
-    setUploadState({
-        phase: "preparing",
-        fileName: file.name,
-        currentService: null,
-        currentServiceLabel: "",
-        attempt: 0,
-        totalAttempts: 0,
-        percent: 2,
-        status: `Preparing ${file.name}...`,
-        canCancel: true
-    });
 
     try {
-        await uploadPreparedBlob(file);
+        for (let i = 0; i < uploadFiles.length; i++) {
+            const file = uploadFiles[i];
+            const current = i + 1;
+            const suffix = uploadFiles.length > 1 ? ` (${current}/${uploadFiles.length})` : "";
+
+            setUploadState({
+                phase: "preparing",
+                fileName: file.name,
+                currentService: null,
+                currentServiceLabel: "",
+                attempt: 0,
+                totalAttempts: 0,
+                percent: 2,
+                status: `Preparing ${file.name}${suffix}...`,
+                canCancel: true
+            });
+
+            await uploadPreparedBlob(file);
+        }
     } catch (error) {
         const message = error instanceof Error ? error.message : "Unknown error";
-        if (message === "Upload cancelled by user") {
+        if (isUploadCancelledError(error)) {
             showToast("Upload cancelled", Toasts.Type.MESSAGE);
             setUploadState({ phase: "cancelled", status: "Upload cancelled.", canCancel: false, percent: 0 });
         } else {
