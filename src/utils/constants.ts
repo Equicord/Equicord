@@ -747,6 +747,10 @@ export const EquicordDevs = Object.freeze({
         name: "MaxHerbold",
         id: 1189527130611138663n
     },
+    dpassaggio: {
+        name: "dpassaggio",
+        id: 364072523052089366n
+    },
     Combatmaster: {
         name: "Combatmaster331",
         id: 790562534503612437n
