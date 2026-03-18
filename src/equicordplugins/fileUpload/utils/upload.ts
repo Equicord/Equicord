@@ -67,13 +67,8 @@ let activeAbortController: AbortController | null = null;
 let cancelRequested = false;
 
 function isUploadCancelledError(error: unknown): boolean {
-    if (cancelRequested) {
-        return true;
-    }
-
-    if (!(error instanceof Error)) {
-        return false;
-    }
+    if (cancelRequested) return true;
+    if (!(error instanceof Error)) return false;
 
     const message = error.message.toLowerCase();
     return message.includes("cancelled") || message.includes("canceled") || message.includes("aborted") || message.includes("aborterror");
@@ -765,7 +760,7 @@ function finalizeUploadedUrl(url: string): string {
 
 async function notifyUploadSuccess(finalUrl: string): Promise<void> {
     if (settings.store.autoCopy) {
-        if (!finalUrl.trim()) {
+        if (!finalUrl || !finalUrl.trim()) {
             showToast("Upload successful, but no URL was available to copy", Toasts.Type.MESSAGE);
             return;
         }
@@ -806,9 +801,7 @@ async function uploadWithFallbacks(fileBlob: Blob, filename: string, primary: Se
     });
 
     for (const service of uploadOrder) {
-        if (cancelRequested) {
-            throw new Error("Upload cancelled by user");
-        }
+        if (cancelRequested) throw new Error("Upload cancelled by user");
 
         const attempt = attempted.length + 1;
         setUploadState({
@@ -982,9 +975,7 @@ export async function uploadFile(url: string): Promise<void> {
 
 export async function uploadPickedFile(): Promise<void> {
     const file = await chooseFile("*/*");
-    if (!file) {
-        return;
-    }
+    if (!file) return;
 
     await uploadProvidedFiles([file]);
 }
@@ -1000,14 +991,10 @@ export async function uploadProvidedFiles(files: readonly File[]): Promise<void>
         return;
     }
 
-    if (!files.length) {
-        return;
-    }
+    if (!files.length) return;
 
     const uploadFiles = files.filter(file => Boolean(file));
-    if (!uploadFiles.length) {
-        return;
-    }
+    if (!uploadFiles.length) return;
 
     isUploading = true;
     cancelRequested = false;

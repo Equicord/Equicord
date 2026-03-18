@@ -9,7 +9,7 @@ import "./styles.css";
 import { findGroupChildrenByChildId, NavContextMenuPatchCallback } from "@api/ContextMenu";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { OpenExternalIcon } from "@components/Icons";
-import { EquicordDevs } from "@utils/constants";
+import { Devs, EquicordDevs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
 import definePlugin from "@utils/types";
 import { DraftType, FluxDispatcher, Menu, PermissionsBits, PermissionStore, React, useEffect, useState } from "@webpack/common";
@@ -31,54 +31,34 @@ type UploadAddFilesEvent = {
 };
 
 function extractFilesFromValue(value: unknown): File[] {
-    if (value instanceof File) {
-        return [value];
-    }
+    if (value instanceof File) return [value];
 
-    if (!Array.isArray(value)) {
-        return [];
-    }
+    if (!Array.isArray(value)) return [];
 
     return value.flatMap(entry => {
-        if (entry instanceof File) {
-            return [entry];
-        }
+        if (entry instanceof File) return [entry];
 
-        if (!entry || typeof entry !== "object") {
-            return [];
-        }
+        if (!entry || typeof entry !== "object") return [];
 
         const uploadFile = "file" in entry ? entry.file : null;
-        if (uploadFile instanceof File) {
-            return [uploadFile];
-        }
+        if (uploadFile instanceof File) return [uploadFile];
 
         const item = "item" in entry && entry.item && typeof entry.item === "object" ? entry.item : null;
-        if (!item || !("file" in item)) {
-            return [];
-        }
+        if (!item || !("file" in item)) return [];
 
         return item.file instanceof File ? [item.file] : [];
     });
 }
 
 function interceptUploadAddFiles(event: unknown): void {
-    if (!event || typeof event !== "object" || !("type" in event)) {
-        return;
-    }
+    if (!event || typeof event !== "object" || !("type" in event)) return;
 
     const payload = event as UploadAddFilesEvent;
-    if (payload.type !== "UPLOAD_ATTACHMENT_ADD_FILES") {
-        return;
-    }
+    if (payload.type !== "UPLOAD_ATTACHMENT_ADD_FILES") return;
 
-    if (payload.draftType !== DraftType.ChannelMessage) {
-        return;
-    }
+    if (payload.draftType !== DraftType.ChannelMessage) return;
 
-    if (!Boolean((settings.store as { interceptDiscordUpload?: boolean; }).interceptDiscordUpload) || !isConfigured()) {
-        return;
-    }
+    if (!Boolean((settings.store as { interceptDiscordUpload?: boolean; }).interceptDiscordUpload) || !isConfigured()) return;
 
     const files = [
         ...extractFilesFromValue(payload.files),
@@ -87,9 +67,7 @@ function interceptUploadAddFiles(event: unknown): void {
     ];
     const uniqueFiles = Array.from(new Set(files));
 
-    if (!uniqueFiles.length) {
-        return;
-    }
+    if (!uniqueFiles.length) return;
 
     payload.files = [];
     payload.uploads = [];
@@ -102,9 +80,7 @@ const ProgressBarInner = () => {
 
     useEffect(() => subscribeUploadState(() => setState(getUploadState())), []);
 
-    if (state.phase === "idle") {
-        return null;
-    }
+    if (state.phase === "idle") return null;
 
     const percentage = Math.max(0, Math.min(100, state.percent));
 
@@ -224,7 +200,7 @@ const channelAttachMenuPatch: NavContextMenuPatchCallback = (children, props) =>
 export default definePlugin({
     name: "FileUpload",
     description: "Upload images and videos to file hosting services like Zipline and Nest",
-    authors: [EquicordDevs.creations, EquicordDevs.keircn, EquicordDevs.scattrdblade],
+    authors: [EquicordDevs.creations, EquicordDevs.keircn, Devs.ScattrdBlade],
     settings,
     patches: [
         {
@@ -236,9 +212,9 @@ export default definePlugin({
         },
         // forces an early return on the file size limit nitro upsell modal
         {
-            find: "tRuxk9",
+            find: "#{intl::tRuxk9::raw}",
             replacement: {
-                match: /Array\.from\(\i\)\.some\(\i\s*=>\s*\i\.size\s*>\s*\i\)/,
+                match: /(?<=\.limits\.fileSize.{0,50})Array\.from\(\i\)\.some/,
                 replace: "$self.shouldBypassDiscordUploadSizeCheck()?false:$&"
             }
         },
