@@ -23,7 +23,7 @@ function makeColorRule(char: string, regex: RegExp, color: string) {
 }
 
 export default definePlugin({
-    name: "greenText",
+    name: "Greentext",
     description: "Renders imageboard-style colored text (>, <, ^).",
     authors: [EquicordDevs.NonsensicalOne],
 
