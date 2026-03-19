@@ -28,6 +28,7 @@ import {
 import { wordsToTitle } from "@utils/text";
 import definePlugin, { OptionType } from "@utils/types";
 import type { User } from "@vencord/discord-types";
+import { ChannelType } from "@vencord/discord-types/enums";
 import {
     Button as DiscordButton,
     ChannelStore,
@@ -929,7 +930,7 @@ export default definePlugin({
                 return filterMode === "whitelist" ? inList : !inList;
             };
 
-            if (myChanId && ChannelStore.getChannel(myChanId)?.type === 13) return;
+            if (myChanId && ChannelStore.getChannel(myChanId)?.type === ChannelType.GUILD_STAGE_VOICE) return;
 
             if (!myChanId) {
                 trackedChannelId = null;
