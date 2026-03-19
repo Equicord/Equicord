@@ -434,7 +434,7 @@ function normalizeState(state: VoiceState): NormalizedVoiceState {
     return {
         muted: !!(state.mute || state.selfMute),
         deaf: !!(state.deaf || state.selfDeaf),
-        streaming: !!((state as any).selfStream || (state as any).stream),
+        streaming: !!(state.selfStream || state.stream),
     };
 }
 
@@ -558,7 +558,7 @@ function playSample(tempSettings: any, type: string) {
             settingsobj[type + "Message"],
             currentUser.username,
             "general",
-            (currentUser as any).globalName ?? currentUser.username,
+            currentUser.globalName ?? currentUser.username,
             (myGuildId ? GuildMemberStore.getNick(myGuildId, currentUser.id) : null) ?? currentUser.username,
             settingsobj.latinOnly
         )
@@ -704,7 +704,7 @@ function VoiceSelectModal({ modalProps, user }: { modalProps: ModalProps; user: 
         setCurrentValue(map.get(user.id) ?? DEFAULT_VALUE);
     }, [user.id, settings.store.userVoiceMap]);
 
-    const displayName = (user as any).globalName ?? user.username;
+    const displayName = user.globalName ?? user.username;
 
     const previewVoice = async (text: string) => {
         setBusy(true);
@@ -991,7 +991,7 @@ export default definePlugin({
                         if (!throttled) {
                             const template = settings.store[type + "Message"];
                             const u = isMe && !settings.store.sayOwnName ? "" : UserStore.getUser(userId).username;
-                            const displayName = u && ((UserStore.getUser(userId) as any).globalName ?? u);
+                            const displayName = u && (UserStore.getUser(userId).globalName ?? u);
                             const nickname = u && ((myGuildId ? GuildMemberStore.getNick(myGuildId, userId) : null) ?? displayName);
                             const channel = ChannelStore.getChannel(id)?.name ?? "channel";
 
@@ -1018,7 +1018,7 @@ export default definePlugin({
                 if (!allowStateChange(userId, isMe)) continue;
 
                 const userObj = isMe && !settings.store.sayOwnName ? "" : UserStore.getUser(userId).username;
-                const displayName = userObj && ((UserStore.getUser(userId) as any).globalName ?? userObj);
+                const displayName = userObj && (UserStore.getUser(userId).globalName ?? userObj);
                 const nickname = userObj && ((myGuildId ? GuildMemberStore.getNick(myGuildId, userId) : null) ?? displayName);
                 const preferredName = nickname || displayName || userObj || (isMe ? "You" : "Someone");
 
