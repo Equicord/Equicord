@@ -4,10 +4,9 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { EquicordDevs } from "@utils/constants";
 import definePlugin from "@utils/types";
 import { Parser } from "@webpack/common";
-
-import { equicordDevs } from "../../../scripts/utils";
 
 function makeColorRule(char: string, regex: RegExp, color: string) {
     return {
@@ -26,7 +25,7 @@ function makeColorRule(char: string, regex: RegExp, color: string) {
 export default definePlugin({
     name: "greenText",
     description: "Renders imageboard-style colored text (>, <, ^).",
-    authors: [equicordDevs.NonsensicalOne],
+    authors: [EquicordDevs.NonsensicalOne],
 
     start() {
         Parser.defaultRules.greentext = makeColorRule(">", /^>[^\n]*/, "#789922");
