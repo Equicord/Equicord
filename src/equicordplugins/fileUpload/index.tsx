@@ -19,8 +19,8 @@ import { settings } from "./settings";
 import { serviceLabels, ServiceType } from "./types";
 import { getMediaUrl } from "./utils/getMediaUrl";
 import { cancelCurrentUpload, getUploadState, isConfigured, subscribeUploadState, uploadFile, uploadPickedFile, uploadProvidedFiles } from "./utils/upload";
-
 const cl = classNameFactory("vc-file-upload-");
+const { getUserMaxFileSize } = findByProps("getUserMaxFileSize");
 let uploadAddFilesInterceptor: ((event: unknown) => void) | null = null;
 
 type UploadAddFilesEvent = {
@@ -40,7 +40,7 @@ function shouldInterceptUploadFiles(files: readonly File[], payload: UploadAddFi
     if (!settings.store.interceptDiscordUploadOnlyOverLimit) return true;
 
     const directLimit = [payload.maxFileSize, payload.fileSizeLimit, payload.limits?.fileSize].find(limit => Number.isFinite(limit)) as number | undefined;
-    const fallbackLimit = findByProps("getUserMaxFileSize").getUserMaxFileSize(UserStore.getCurrentUser());
+    const fallbackLimit = getUserMaxFileSize.getUserMaxFileSize(UserStore.getCurrentUser());
     const discordLimit = Math.max(0, directLimit ?? fallbackLimit);
 
     return files.some(file => file.size > discordLimit);
