@@ -46,7 +46,7 @@ function getDiscordUploadLimitFromPremium(): number {
         return 50 * 1024 * 1024;
     }
 
-    return 10 * 1024 * 1024;
+    return 8 * 1024 * 1024;
 }
 
 function getDiscordUploadLimitFromEvent(payload: UploadAddFilesEvent): number {
