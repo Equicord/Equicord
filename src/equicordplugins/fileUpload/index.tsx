@@ -40,7 +40,7 @@ function shouldInterceptUploadFiles(files: readonly File[], payload: UploadAddFi
     if (!settings.store.interceptDiscordUploadOnlyOverLimit) return true;
 
     const directLimit = [payload.maxFileSize, payload.fileSizeLimit, payload.limits?.fileSize].find(limit => Number.isFinite(limit)) as number | undefined;
-    const fallbackLimit = getUserMaxFileSize.getUserMaxFileSize(UserStore.getCurrentUser());
+    const fallbackLimit = getUserMaxFileSize(UserStore.getCurrentUser());
     const discordLimit = Math.max(0, directLimit ?? fallbackLimit);
 
     return files.some(file => file.size > discordLimit);
