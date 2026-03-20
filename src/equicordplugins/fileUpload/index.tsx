@@ -12,7 +12,7 @@ import { OpenExternalIcon } from "@components/Icons";
 import { Devs, EquicordDevs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
 import definePlugin from "@utils/types";
-import { findByProps } from "@webpack";
+import { findByPropsLazy } from "@webpack";
 import { DraftType, FluxDispatcher, Menu, PermissionsBits, PermissionStore, React, useEffect, UserStore, useState } from "@webpack/common";
 
 import { settings } from "./settings";
@@ -20,7 +20,7 @@ import { serviceLabels, ServiceType } from "./types";
 import { getMediaUrl } from "./utils/getMediaUrl";
 import { cancelCurrentUpload, getUploadState, isConfigured, subscribeUploadState, uploadFile, uploadPickedFile, uploadProvidedFiles } from "./utils/upload";
 const cl = classNameFactory("vc-file-upload-");
-const { getUserMaxFileSize } = findByProps("getUserMaxFileSize");
+const { getUserMaxFileSize } = findByPropsLazy("getUserMaxFileSize");
 let uploadAddFilesInterceptor: ((event: unknown) => void) | null = null;
 
 type UploadAddFilesEvent = {
