@@ -12,7 +12,7 @@ import { OpenExternalIcon } from "@components/Icons";
 import { Devs, EquicordDevs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
 import definePlugin from "@utils/types";
-import { DraftType, FluxDispatcher, Menu, PermissionsBits, PermissionStore, React, useEffect, useState } from "@webpack/common";
+import { DraftType, FluxDispatcher, Menu, PermissionsBits, PermissionStore, React, useEffect, UserStore, useState } from "@webpack/common";
 
 import { settings } from "./settings";
 import { serviceLabels, ServiceType } from "./types";
@@ -28,7 +28,47 @@ type UploadAddFilesEvent = {
     uploads?: unknown;
     items?: unknown;
     draftType?: unknown;
+    maxFileSize?: unknown;
+    fileSizeLimit?: unknown;
+    limits?: {
+        fileSize?: unknown;
+    };
 };
+
+function getDiscordUploadLimitFromPremium(): number {
+    const premiumType = UserStore.getCurrentUser()?.premiumType ?? 0;
+
+    if (premiumType === 2) {
+        return 500 * 1024 * 1024;
+    }
+
+    if (premiumType > 0) {
+        return 50 * 1024 * 1024;
+    }
+
+    return 10 * 1024 * 1024;
+}
+
+function getDiscordUploadLimitFromEvent(payload: UploadAddFilesEvent): number {
+    const directLimit = [payload.maxFileSize, payload.fileSizeLimit, payload.limits?.fileSize]
+        .find(limit => typeof limit === "number" && Number.isFinite(limit));
+
+    if (typeof directLimit === "number") {
+        return Math.max(0, directLimit);
+    }
+
+    return getDiscordUploadLimitFromPremium();
+}
+
+function shouldInterceptUploadFiles(files: readonly File[], payload: UploadAddFilesEvent): boolean {
+    const onlyOverLimit = Boolean((settings.store as { interceptDiscordUploadOnlyOverLimit?: boolean; }).interceptDiscordUploadOnlyOverLimit);
+    if (!onlyOverLimit) {
+        return true;
+    }
+
+    const discordLimit = getDiscordUploadLimitFromEvent(payload);
+    return files.some(file => file.size > discordLimit);
+}
 
 function extractFilesFromValue(value: unknown): File[] {
     if (value instanceof File) return [value];
@@ -68,6 +108,7 @@ function interceptUploadAddFiles(event: unknown): void {
     const uniqueFiles = Array.from(new Set(files));
 
     if (!uniqueFiles.length) return;
+    if (!shouldInterceptUploadFiles(uniqueFiles, payload)) return;
 
     payload.files = [];
     payload.uploads = [];
