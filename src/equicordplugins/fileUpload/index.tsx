@@ -35,11 +35,29 @@ type UploadAddFilesEvent = {
     };
 };
 
-function shouldInterceptUploadFiles(files: readonly File[], payload: UploadAddFilesEvent): boolean {
-    const onlyOverLimit = Boolean((settings.store as { interceptDiscordUploadOnlyOverLimit?: boolean; }).interceptDiscordUploadOnlyOverLimit);
-    if (!onlyOverLimit) {
-        return true;
+function getDiscordUploadLimitFromPremium(): number {
+    const premiumType = UserStore.getCurrentUser()?.premiumType ?? 0;
+
+    if (premiumType === 2) {
+        return 500 * 1024 * 1024;
     }
+
+    if (premiumType > 0) {
+        return 50 * 1024 * 1024;
+    }
+
+    return 8 * 1024 * 1024;
+}
+
+function getDiscordUploadLimitFromEvent(payload: UploadAddFilesEvent): number {
+    const directLimit = [payload.maxFileSize, payload.fileSizeLimit, payload.limits?.fileSize].find(Number.isFinite) as number | null | undefined;
+    if (directLimit) return Math.max(0, directLimit);
+
+    return getDiscordUploadLimitFromPremium();
+}
+
+function shouldInterceptUploadFiles(files: readonly File[], payload: UploadAddFilesEvent): boolean {
+    if (!settings.store.interceptDiscordUploadOnlyOverLimit) return true;
 
     const discordLimit = Math.max(0, ([payload.maxFileSize, payload.fileSizeLimit, payload.limits?.fileSize].find(limit => typeof limit === "number") as number ?? 0) || ({ 2: 500, 1: 50 }[UserStore.getCurrentUser()?.premiumType ?? 0] || 10) * 1024 * 1024); // happy now thor?
     return files.some(file => file.size > discordLimit);

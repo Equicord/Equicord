@@ -526,8 +526,8 @@ export function SettingsComponent() {
 
             <SettingsSection tag="label" name="Only Intercept Over Discord File Size Limit" description="Use FileUpload only for files larger than your current Discord upload limit" inlineSetting>
                 <Switch
-                    checked={Boolean((store as { interceptDiscordUploadOnlyOverLimit?: boolean; }).interceptDiscordUploadOnlyOverLimit)}
-                    onChange={v => (store as { interceptDiscordUploadOnlyOverLimit?: boolean; }).interceptDiscordUploadOnlyOverLimit = v}
+                    checked={store.interceptDiscordUploadOnlyOverLimit}
+                    onChange={v => store.interceptDiscordUploadOnlyOverLimit = v}
                 />
             </SettingsSection>
 
