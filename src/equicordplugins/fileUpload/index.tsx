@@ -12,6 +12,7 @@ import { OpenExternalIcon } from "@components/Icons";
 import { Devs, EquicordDevs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
 import definePlugin from "@utils/types";
+import { findByProps } from "@webpack";
 import { DraftType, FluxDispatcher, Menu, PermissionsBits, PermissionStore, React, useEffect, UserStore, useState } from "@webpack/common";
 
 import { settings } from "./settings";
@@ -39,9 +40,7 @@ function shouldInterceptUploadFiles(files: readonly File[], payload: UploadAddFi
     if (!settings.store.interceptDiscordUploadOnlyOverLimit) return true;
 
     const directLimit = [payload.maxFileSize, payload.fileSizeLimit, payload.limits?.fileSize].find(limit => Number.isFinite(limit)) as number | undefined;
-    const premiumType = UserStore.getCurrentUser()?.premiumType ?? 0;
-    const uploadLimit = premiumType === 2 ? 500 : premiumType > 0 ? 50 : 10;
-    const fallbackLimit = uploadLimit * 1024 * 1024;
+    const fallbackLimit = findByProps("getUserMaxFileSize").getUserMaxFileSize(UserStore.getCurrentUser());
     const discordLimit = Math.max(0, directLimit ?? fallbackLimit);
 
     return files.some(file => file.size > discordLimit);
