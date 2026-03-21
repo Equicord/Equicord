@@ -4,7 +4,9 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { isPluginEnabled } from "@api/PluginManager";
 import { definePluginSettings } from "@api/Settings";
+import fakeNitro from "@plugins/fakeNitro";
 import { EquicordDevs } from "@utils/constants";
 import { localStorage } from "@utils/localStorage";
 import definePlugin, { OptionType } from "@utils/types";
@@ -125,7 +127,7 @@ export default definePlugin({
                 match: /canStreamQuality:\i,/,
                 replace: "canStreamQuality:()=>true,",
             },
-            predicate: () => settings.store.unlockQualityOptions,
+            predicate: () => settings.store.unlockQualityOptions && !isPluginEnabled(fakeNitro.name),
         },
         // allow resolutions above 720p at 60fps
         {
