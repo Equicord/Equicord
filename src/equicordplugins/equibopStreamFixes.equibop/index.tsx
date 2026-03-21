@@ -13,8 +13,18 @@ interface StreamQualityOpts {
 	bitrateMin?: number;
 	bitrateMax?: number;
 	bitrateTarget?: number;
-	capture?: { width?: number; height?: number; framerate?: number; pixelCount?: number; };
-	encode?: { width?: number; height?: number; framerate?: number; pixelCount?: number; };
+	capture?: {
+		width?: number;
+		height?: number;
+		framerate?: number;
+		pixelCount?: number;
+	};
+	encode?: {
+		width?: number;
+		height?: number;
+		framerate?: number;
+		pixelCount?: number;
+	};
 }
 
 const settings = definePluginSettings({
@@ -63,13 +73,15 @@ const settings = definePluginSettings({
 	},
 	raiseBitrateCaps: {
 		type: OptionType.BOOLEAN,
-		description: "Raise default desktop bitrate caps (600kbps target → 10Mbps, 3.5Mbps max → 40Mbps)",
+		description:
+			"Raise default desktop bitrate caps (600kbps target → 10Mbps, 3.5Mbps max → 40Mbps)",
 		default: true,
 		restartNeeded: true,
 	},
 	preventFramerateReduction: {
 		type: OptionType.BOOLEAN,
-		description: "Prevent Discord from reducing stream framerate when not speaking",
+		description:
+			"Prevent Discord from reducing stream framerate when not speaking",
 		default: true,
 		restartNeeded: true,
 	},
@@ -87,7 +99,6 @@ export default definePlugin({
 	description:
 		"Tries to fix stream quality on Equibop by patching Discord's encoder and quality restrictions.",
 	authors: [EquicordDevs.creations],
-	hidden: !IS_EQUIBOP,
 	settings,
 
 	patches: [
@@ -101,13 +112,15 @@ export default definePlugin({
 				},
 				// inject configured quality when stream settings change mid-stream
 				{
-					match: /setGoliveQuality\((\i)\)\{/,
+					match: /setGoliveQuality\((i)\)\{/,
 					replace: "setGoliveQuality($1){$1=$self.patchGoliveArgs($1);",
 				},
 				// override encoder min/max bitrate limits
 				{
-					match: /(\i)\.encodingVideoMinBitRate=\i\.bitrateMin,\i\.encodingVideoMaxBitRate=\i\.bitrateMax/,
-					replace: "$1.encodingVideoMinBitRate=$self.getMinBitrate(),$1.encodingVideoMaxBitRate=$self.getBitrateMax()",
+					match:
+						/(i)\.encodingVideoMinBitRate=i\.bitrateMin,i\.encodingVideoMaxBitRate=i\.bitrateMax/,
+					replace:
+						"$1.encodingVideoMinBitRate=$self.getMinBitrate(),$1.encodingVideoMaxBitRate=$self.getBitrateMax()",
 				},
 			],
 		},
@@ -115,7 +128,7 @@ export default definePlugin({
 		{
 			find: "canUseCustomStickersEverywhere:",
 			replacement: {
-				match: /canStreamQuality:\i,/,
+				match: /canStreamQuality:i,/,
 				replace: "canStreamQuality:()=>true,",
 			},
 			predicate: () => settings.store.unlockQualityOptions,
@@ -124,7 +137,7 @@ export default definePlugin({
 		{
 			find: ".RESOLUTION_720&&",
 			replacement: {
-				match: /\i===\i\.\i\.RESOLUTION_720&&\i!==\i\.\i\.FPS_60/,
+				match: /i===i\.i\.RESOLUTION_720&&i!==i\.i\.FPS_60/,
 				replace: "false",
 			},
 			predicate: () => settings.store.removeResolutionCap,
@@ -134,7 +147,7 @@ export default definePlugin({
 			find: "}setDesktopEncodingOptions(",
 			replacement: [
 				{
-					match: /setDesktopEncodingOptions\((\i),(\i),(\i)\)\{/,
+					match: /setDesktopEncodingOptions\((i),(i),(i)\)\{/,
 					replace:
 						"$&$1=$self.getWidth();$2=$self.getHeight();$3=$self.getFps();",
 					predicate: () => settings.store.forceEncoderSettings,
@@ -151,7 +164,7 @@ export default definePlugin({
 		{
 			find: "Attempting to downgrade to LQ simulcast",
 			replacement: {
-				match: /"LQ"===\i&&!\i&&\i&&\(/,
+				match: /"LQ"===i&&!i&&i&&\(/,
 				replace: "false&&(",
 			},
 			predicate: () => settings.store.preventLqDowngrade,
@@ -174,7 +187,6 @@ export default definePlugin({
 			},
 			predicate: () => settings.store.preventFramerateReduction,
 		},
-
 	],
 
 	getStreamConfig() {
@@ -211,7 +223,7 @@ export default definePlugin({
 	getBitrateMax() {
 		return this.getStreamConfig().bitrateMax;
 	},
-	coerceResolution(res: { height?: number; width?: number; }) {
+	coerceResolution(res: { height?: number; width?: number }) {
 		if (!res) return res;
 		const config = this.getStreamConfig();
 		return {
@@ -268,7 +280,7 @@ export default definePlugin({
 				pixelCount: config.pixelCount,
 			});
 		}
-		Object.assign(opts.capture ??= {}, {
+		Object.assign((opts.capture ??= {}), {
 			framerate: config.framerate,
 			width: config.width,
 			height: config.height,
