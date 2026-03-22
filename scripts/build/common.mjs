@@ -23,16 +23,37 @@ import "../checkNodeVersion.js";
 
 import { exec, execSync } from "child_process";
 import esbuild, { build, context } from "esbuild";
-import { constants as FsConstants, readFileSync } from "fs";
+import { constants as FsConstants, existsSync, readFileSync } from "fs";
 import { access, readdir, readFile } from "fs/promises";
 import { minify as minifyHtml } from "html-minifier-terser";
 import { dirname, join, relative, resolve } from "path";
 import { fileURLToPath } from "url";
 import { promisify } from "util";
+import { createInterface } from "readline";
 
 import { getPluginTarget } from "../utils.mjs";
 
-const PackageJSON = JSON.parse(readFileSync(join(dirname(fileURLToPath(import.meta.url)), "../../package.json"), "utf-8"));
+const root = join(dirname(fileURLToPath(import.meta.url)), "../..");
+
+const PackageJSON = JSON.parse(readFileSync(join(root, "package.json"), "utf-8"));
+
+const requiredDeps = [
+    ...Object.keys(PackageJSON.dependencies || {}),
+    ...Object.keys(PackageJSON.devDependencies || {})
+];
+
+const missing = requiredDeps.filter(d => {
+    const v = PackageJSON.dependencies?.[d] ?? PackageJSON.devDependencies?.[d];
+    return !v?.startsWith("link:") && !v?.startsWith("workspace:") && !existsSync(join(root, "node_modules", d, "package.json"));
+});
+
+if (missing.length) {
+    console.error(`\x1b[31mMissing ${missing.length} package(s): ${missing.join(", ")}\x1b[0m`);
+    const rl = createInterface({ input: process.stdin, output: process.stderr });
+    const ans = await new Promise(r => rl.question("\x1b[33mRun 'pnpm install'? [Y/n]\x1b[0m", r));
+    rl.close();
+    if (!ans || /^y/i.test(ans)) execSync("pnpm install", { cwd: root, stdio: "inherit" });
+}
 
 export const VERSION = PackageJSON.version;
 // https://reproducible-builds.org/docs/source-date-epoch/
