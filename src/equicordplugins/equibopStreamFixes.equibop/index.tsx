@@ -109,7 +109,7 @@ export default definePlugin({
                 },
                 // inject configured quality when stream settings change mid-stream
                 {
-                    match: /setGoliveQuality\((i)\)\{/,
+                    match: /setGoliveQuality\((\i)\)\{/,
                     replace: "setGoliveQuality($1){$1=$self.patchGoliveArgs($1);",
                 },
                 // override encoder min/max bitrate limits
@@ -123,9 +123,24 @@ export default definePlugin({
         // unlock stream quality options for all users regardless of nitro
         {
             find: "canUseCustomStickersEverywhere:",
+            replacement: [
+                {
+                    match: /canStreamQuality:\i,/,
+                    replace: "canStreamQuality:()=>true,",
+                },
+                {
+                    match: /canUseHighVideoUploadQuality:\i,/,
+                    replace: "canUseHighVideoUploadQuality:()=>true,",
+                },
+            ],
+            predicate: () => settings.store.unlockQualityOptions && !isPluginEnabled(fakeNitro.name),
+        },
+        // remove guild premium tier restriction from stream fps options
+        {
+            find: "#{intl::STREAM_FPS_OPTION}",
             replacement: {
-                match: /canStreamQuality:\i,/,
-                replace: "canStreamQuality:()=>true,",
+                match: /guildPremiumTier:\i\.\i\.TIER_\d,?/g,
+                replace: "",
             },
             predicate: () => settings.store.unlockQualityOptions && !isPluginEnabled(fakeNitro.name),
         },
