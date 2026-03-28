@@ -4,316 +4,311 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import "./style.css";
-
 import { definePluginSettings } from "@api/Settings";
 import { EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
-import { showToast, Toasts } from "@webpack/common";
+import { React, showToast, Toasts } from "@webpack/common";
 
-const fileSizeLimit = 12e6;
-
-function parseFileSize(size: string) {
-    const [value, unit] = size.split(" ");
-    const multiplier = {
-        B: 1,
-        KB: 1024,
-        MB: 1024 ** 2,
-        GB: 1024 ** 3,
-        TB: 1024 ** 4,
-    }[unit];
-    if (!multiplier) return;
-    return parseFloat(value) * multiplier;
-}
-
-function getMetadata(audioElement: HTMLElement) {
-    const metadataElement = audioElement.querySelector("[class*='metadataContent']");
-    const nameElement = metadataElement?.querySelector("a");
-    const sizeElement = audioElement.querySelector("[class*='metadataContent'] [class*='metadataSize']");
-    const url = nameElement?.getAttribute("href");
-    const audioElementLink = audioElement.querySelector("audio");
-
-    if (!sizeElement?.textContent || !nameElement?.textContent || !url || !audioElementLink) return false;
-
-    const name = nameElement.textContent;
-    const size = parseFileSize(sizeElement.textContent);
-
-    if (size && size > fileSizeLimit) {
-        return false;
-    }
-
-    const elements = [metadataElement?.parentElement, audioElement.querySelector("[class*='audioControls']")];
-
-    const computedStyle = getComputedStyle(audioElement);
-    const parentBorderRadius = computedStyle.borderRadius;
-
-    if (settings.store.forceMoveBelow) {
-        elements.forEach(element => {
-            if (element) (element as HTMLElement).style.zIndex = "2";
-        });
-    }
-
-    return {
-        name,
-        size,
-        url,
-        audio: audioElementLink,
-        parentBorderRadius: parentBorderRadius,
-    };
-}
-
-async function addListeners(audioElement: HTMLAudioElement, url: string, parentBorderRadius: string) {
-    const madeURL = new URL(url);
-    madeURL.searchParams.set("t", Date.now().toString());
-
-    const corsProxyUrl = "https://cors.keiran0.workers.dev?url=" + encodeURIComponent(madeURL.href);
-    const response = await fetch(corsProxyUrl);
-    const blob = await response.blob();
-    const blobUrl = URL.createObjectURL(blob);
-
-    const audioContext = new AudioContext();
-    const analyser = audioContext.createAnalyser();
-    analyser.fftSize = 2048;
-    const bufferLength = analyser.frequencyBinCount;
-    const dataArray = new Uint8Array(bufferLength);
-    const frequencyData = new Uint8Array(bufferLength);
-
-    const source = audioContext.createMediaElementSource(audioElement);
-    source.connect(analyser);
-    analyser.connect(audioContext.destination);
-
-    const canvas = document.createElement("canvas");
-    const canvasContext = canvas.getContext("2d");
-    if (!canvasContext) return;
-
-    canvas.classList.add("better-audio-visualizer");
-    audioElement.parentElement?.appendChild(canvas);
-
-    if (parentBorderRadius) canvas.style.borderRadius = parentBorderRadius;
-
-    function drawVisualizer() {
-        if (!audioElement.paused) {
-            requestAnimationFrame(drawVisualizer);
-        }
-
-        analyser.getByteTimeDomainData(dataArray);
-        analyser.getByteFrequencyData(frequencyData);
-
-        if (!canvasContext) return;
-        canvasContext.clearRect(0, 0, canvas.width, canvas.height);
-
-        if (settings.store.oscilloscope) drawOscilloscope(canvasContext, canvas, dataArray, bufferLength);
-        if (settings.store.spectrograph) drawSpectrograph(canvasContext, canvas, frequencyData, bufferLength);
-    }
-
-    audioElement.src = blobUrl;
-    audioElement.addEventListener("play", () => {
-        if (audioContext.state === "suspended") {
-            audioContext.resume();
-        }
-        drawVisualizer();
-    });
-
-    audioElement.addEventListener("pause", () => {
-        audioContext.suspend();
-    });
-}
-
-function drawOscilloscope(canvasContext, canvas, dataArray, bufferLength) {
-    const sliceWidth = canvas.width / bufferLength;
-    let x = 0;
-
-    const { oscilloscopeSolidColor, oscilloscopeColor } = settings.store;
-
-    const [r, g, b] = oscilloscopeColor.split(",").map(Number);
-
-    canvasContext.lineWidth = 2;
-    canvasContext.clearRect(0, 0, canvas.width, canvas.height);
-    canvasContext.beginPath();
-
-    for (let i = 0; i < bufferLength; i++) {
-        const v = dataArray[i] / 128.0;
-        const y = (v * canvas.height) / 2;
-
-        if (oscilloscopeSolidColor) {
-            canvasContext.strokeStyle = `rgb(${r}, ${g}, ${b})`;
-        } else {
-            const red = Math.min(r + (v * 100) + (i / bufferLength) * 155, 255);
-            const green = Math.min(g + (v * 50) + (i / bufferLength) * 155, 255);
-            const blue = Math.min(b + (v * 150) + (i / bufferLength) * 155, 255);
-
-            canvasContext.strokeStyle = `rgb(${red}, ${green}, ${blue})`;
-        }
-
-        if (i === 0) {
-            canvasContext.moveTo(x, y);
-        } else {
-            canvasContext.lineTo(x, y);
-        }
-
-        x += sliceWidth;
-    }
-
-    canvasContext.stroke();
-}
-
-function drawSpectrograph(canvasContext, canvas, frequencyData, bufferLength) {
-    const { spectrographSolidColor, spectrographColor } = settings.store;
-    const maxHeight = canvas.height;
-    const barWidth = canvas.width / bufferLength;
-    let x = 0;
-
-    const maxFrequencyValue = Math.max(...frequencyData);
-
-    if (maxFrequencyValue === 0 || !isFinite(maxFrequencyValue)) {
-        return;
-    }
-
-    for (let i = 0; i < bufferLength; i++) {
-        const normalizedHeight = (frequencyData[i] / maxFrequencyValue) * maxHeight;
-
-        if (spectrographSolidColor) {
-            canvasContext.fillStyle = `rgb(${spectrographColor})`;
-        } else {
-            const [r, g, b] = spectrographColor.split(",").map(Number);
-
-            const red = Math.min(r + (i / bufferLength) * 155, 255);
-            const green = Math.min(g + (i / bufferLength) * 155, 255);
-            const blue = Math.min(b + (i / bufferLength) * 155, 255);
-
-            const gradient = canvasContext.createLinearGradient(x, canvas.height - normalizedHeight, x, canvas.height);
-            gradient.addColorStop(0, `rgb(${red}, ${green}, ${blue})`);
-
-            const darkerColor = `rgb(${Math.max(red - 50, 0)},${Math.max(green - 50, 0)},${Math.max(blue - 50, 0)})`;
-
-            gradient.addColorStop(1, darkerColor);
-            canvasContext.fillStyle = gradient;
-        }
-
-        canvasContext.fillRect(x, canvas.height - normalizedHeight, barWidth, normalizedHeight);
-        x += barWidth + 0.5;
-    }
-}
-
-function scanForAudioElements(element: HTMLElement) {
-    element.querySelectorAll("[class*='wrapperAudio']:not([data-better-audio-processed])").forEach(audioElement => {
-        (audioElement as HTMLElement).dataset.betterAudioProcessed = "true";
-        const metadata = getMetadata(audioElement as HTMLElement);
-
-        if (!metadata) return;
-
-        addListeners(metadata.audio, metadata.url, metadata.parentBorderRadius);
-    });
-}
-
-function createObserver(targetNode: HTMLElement) {
-    const observer = new MutationObserver(mutations => {
-        mutations.forEach(mutation => {
-            if (mutation.type === "childList") {
-                mutation.addedNodes.forEach(addedNode => {
-                    if (addedNode instanceof HTMLElement) {
-                        scanForAudioElements(addedNode);
-                    }
-                });
-            }
-        });
-    });
-    observer.observe(targetNode, {
-        childList: true,
-        subtree: true,
-    });
-    return observer;
-}
-
-function tryHexToRgb(hex) {
+function tryHexToRgb(hex: string): string {
     if (hex.startsWith("#")) {
-        const hexMatch = hex.match(/\w\w/g);
-        if (hexMatch) {
-            const [r, g, b] = hexMatch.map(x => parseInt(x, 16));
+        const match = hex.match(/\w\w/g);
+        if (match) {
+            const [r, g, b] = match.map(x => parseInt(x, 16));
             return `${r}, ${g}, ${b}`;
         }
     }
     return hex;
 }
 
-function handleColorChange(value, settingKey, defaultValue) {
-    const rgbPattern = /^(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})$/;
+function validateColor(value: string, key: string, fallback: string) {
+    const rgbPattern = /^\d{1,3}\s*,\s*\d{1,3}\s*,\s*\d{1,3}$/;
+    if (rgbPattern.test(value)) return;
 
-    if (!value.match(rgbPattern)) {
-        const rgb = tryHexToRgb(value);
-
-        if (rgb.match(rgbPattern)) {
-            settings.store[settingKey] = rgb;
-        } else {
-            showToast(`Invalid color format for ${settingKey}, make sure it's in the format 'R, G, B' or '#RRGGBB'`, Toasts.Type.FAILURE);
-            settings.store[settingKey] = defaultValue;
-        }
+    const rgb = tryHexToRgb(value);
+    if (rgbPattern.test(rgb)) {
+        settings.store[key] = rgb;
     } else {
-        settings.store[settingKey] = value;
+        showToast(`Invalid color format for ${key}, use "R, G, B" or "#RRGGBB"`, Toasts.Type.FAILURE);
+        settings.store[key] = fallback;
     }
 }
 
 const settings = definePluginSettings({
     oscilloscope: {
         type: OptionType.BOOLEAN,
-        description: "Enable oscilloscope visualizer",
+        description: "Enable oscilloscope visualizer.",
         default: true,
     },
     spectrograph: {
         type: OptionType.BOOLEAN,
-        description: "Enable spectrograph visualizer",
+        description: "Enable spectrograph visualizer.",
         default: true,
     },
     oscilloscopeSolidColor: {
         type: OptionType.BOOLEAN,
-        description: "Use solid color for oscilloscope",
+        description: "Use a solid color for the oscilloscope.",
         default: false,
     },
     oscilloscopeColor: {
         type: OptionType.STRING,
-        description: "Color for oscilloscope",
+        description: "Color for the oscilloscope (R, G, B or #hex).",
         default: "255, 255, 255",
-        onChange: value => handleColorChange(value, "oscilloscopeColor", "255, 255, 255"),
+        onChange: value => validateColor(value, "oscilloscopeColor", "255, 255, 255"),
     },
     spectrographSolidColor: {
         type: OptionType.BOOLEAN,
-        description: "Use solid color for spectrograph",
+        description: "Use a solid color for the spectrograph.",
         default: false,
     },
     spectrographColor: {
         type: OptionType.STRING,
-        description: "Color for spectrograph",
+        description: "Color for the spectrograph (R, G, B or #hex).",
         default: "33, 150, 243",
-        onChange: value => handleColorChange(value, "spectrographColor", "33, 150, 243"),
-    },
-    forceMoveBelow: {
-        type: OptionType.BOOLEAN,
-        description: "Force the visualizer below the audio player",
-        default: true,
+        onChange: value => validateColor(value, "spectrographColor", "33, 150, 243"),
     },
 });
 
-let observer: MutationObserver | null = null;
+interface PlayerInstance {
+    mediaRef: React.RefObject<HTMLAudioElement>;
+    props: { src: string; type: string; };
+}
+
+function maxTypedArray(arr: Uint8Array<ArrayBufferLike>): number {
+    let max = 0;
+    for (let i = 0; i < arr.length; i++) {
+        if (arr[i] > max) max = arr[i];
+    }
+    return max;
+}
+
+function getCssDimensions(canvas: HTMLCanvasElement): { w: number; h: number; } {
+    const rect = canvas.getBoundingClientRect();
+    return { w: rect.width, h: rect.height };
+}
+
+function drawOscilloscope(ctx: CanvasRenderingContext2D, w: number, h: number, dataArray: Uint8Array<ArrayBufferLike>, bufferLength: number) {
+    const sliceWidth = w / bufferLength;
+    const [r, g, b] = settings.store.oscilloscopeColor.split(",").map(Number);
+    const amp = 3;
+    let x = 0;
+
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+
+    for (let i = 0; i < bufferLength; i++) {
+        const v = (dataArray[i] - 128) / 128;
+        const y = (h / 2) - (v * amp * h / 2);
+
+        if (settings.store.oscilloscopeSolidColor) {
+            ctx.strokeStyle = `rgb(${r}, ${g}, ${b})`;
+        } else {
+            const absV = Math.abs(v);
+            ctx.strokeStyle = `rgb(${Math.min(r + absV * 100 + (i / bufferLength) * 155, 255)}, ${Math.min(g + absV * 50 + (i / bufferLength) * 155, 255)}, ${Math.min(b + absV * 150 + (i / bufferLength) * 155, 255)})`;
+        }
+
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+        x += sliceWidth;
+    }
+    ctx.stroke();
+}
+
+function drawSpectrograph(ctx: CanvasRenderingContext2D, w: number, h: number, frequencyData: Uint8Array<ArrayBufferLike>, bufferLength: number) {
+    const barWidth = w / bufferLength;
+    const maxVal = maxTypedArray(frequencyData);
+    if (maxVal === 0) return;
+
+    const [r, g, b] = settings.store.spectrographColor.split(",").map(Number);
+    let x = 0;
+
+    for (let i = 0; i < bufferLength; i++) {
+        const barH = (frequencyData[i] / maxVal) * h;
+
+        if (settings.store.spectrographSolidColor) {
+            ctx.fillStyle = `rgb(${r}, ${g}, ${b})`;
+        } else {
+            const red = Math.min(r + (i / bufferLength) * 155, 255);
+            const green = Math.min(g + (i / bufferLength) * 155, 255);
+            const blue = Math.min(b + (i / bufferLength) * 155, 255);
+            const gradient = ctx.createLinearGradient(x, h - barH, x, h);
+            gradient.addColorStop(0, `rgb(${red}, ${green}, ${blue})`);
+            gradient.addColorStop(1, `rgb(${Math.max(red - 50, 0)}, ${Math.max(green - 50, 0)}, ${Math.max(blue - 50, 0)})`);
+            ctx.fillStyle = gradient;
+        }
+
+        ctx.fillRect(x, h - barH, barWidth, barH);
+        x += barWidth + 0.5;
+    }
+}
+
+const CORS_PROXY = "https://cors.keiran0.workers.dev?url=";
+const MAX_FILE_SIZE = 12e6;
+
+async function fetchAudioBlob(src: string): Promise<string | null> {
+    const url = new URL(src);
+    url.searchParams.set("t", Date.now().toString());
+
+    const response = await fetch(CORS_PROXY + encodeURIComponent(url.href));
+    const contentLength = response.headers.get("content-length");
+    if (contentLength && Number(contentLength) > MAX_FILE_SIZE) return null;
+
+    const blob = await response.blob();
+    return URL.createObjectURL(blob);
+}
+
+function Visualizer({ playerRef, src }: { playerRef: React.RefObject<HTMLAudioElement>; src: string; }) {
+    const canvasRef = React.useRef<HTMLCanvasElement>(null);
+    const audioCtxRef = React.useRef<AudioContext | null>(null);
+    const analyserRef = React.useRef<AnalyserNode | null>(null);
+    const animFrameRef = React.useRef(0);
+    const setupDoneRef = React.useRef(false);
+    const blobUrlRef = React.useRef<string | null>(null);
+
+    React.useEffect(() => {
+        const audio = playerRef.current;
+        const canvas = canvasRef.current;
+        if (!audio || !canvas) return () => {};
+
+        let cancelled = false;
+
+        const init = async () => {
+            const blobUrl = await fetchAudioBlob(src).catch(() => null);
+            if (cancelled || !blobUrl) return;
+
+            blobUrlRef.current = blobUrl;
+
+            const wasPlaying = !audio.paused;
+            const { currentTime } = audio;
+            audio.src = blobUrl;
+            audio.currentTime = currentTime;
+
+            const audioCtx = new AudioContext();
+            const analyser = audioCtx.createAnalyser();
+            analyser.fftSize = 2048;
+            const source = audioCtx.createMediaElementSource(audio);
+            source.connect(analyser);
+            analyser.connect(audioCtx.destination);
+            audioCtxRef.current = audioCtx;
+            analyserRef.current = analyser;
+            setupDoneRef.current = true;
+
+            if (wasPlaying) {
+                audio.play().catch(() => {});
+            }
+        };
+
+        const canvasCtx = canvas.getContext("2d");
+        let dataArray: Uint8Array<ArrayBuffer> | null = null;
+        let frequencyData: Uint8Array<ArrayBuffer> | null = null;
+
+        const draw = () => {
+            const analyser = analyserRef.current;
+            if (!canvasCtx || !analyser) return;
+
+            if (!dataArray || !frequencyData) {
+                const bufferLength = analyser.frequencyBinCount;
+                dataArray = new Uint8Array(bufferLength);
+                frequencyData = new Uint8Array(bufferLength);
+            }
+
+            if (!audio.paused) animFrameRef.current = requestAnimationFrame(draw);
+
+            analyser.getByteTimeDomainData(dataArray);
+            analyser.getByteFrequencyData(frequencyData);
+
+            const { w, h } = getCssDimensions(canvas);
+            canvasCtx.clearRect(0, 0, w, h);
+            if (settings.store.oscilloscope) drawOscilloscope(canvasCtx, w, h, dataArray, dataArray.length);
+            if (settings.store.spectrograph) drawSpectrograph(canvasCtx, w, h, frequencyData, frequencyData.length);
+        };
+
+        const onPlay = () => {
+            if (!setupDoneRef.current) return;
+            if (audioCtxRef.current?.state === "suspended") {
+                audioCtxRef.current.resume();
+            }
+            draw();
+        };
+
+        const onPause = () => {
+            audioCtxRef.current?.suspend();
+            cancelAnimationFrame(animFrameRef.current);
+        };
+
+        audio.addEventListener("play", onPlay);
+        audio.addEventListener("pause", onPause);
+        init();
+
+        return () => {
+            cancelled = true;
+            audio.removeEventListener("play", onPlay);
+            audio.removeEventListener("pause", onPause);
+            cancelAnimationFrame(animFrameRef.current);
+            audioCtxRef.current?.close();
+            audioCtxRef.current = null;
+            analyserRef.current = null;
+            setupDoneRef.current = false;
+            if (blobUrlRef.current) {
+                URL.revokeObjectURL(blobUrlRef.current);
+                blobUrlRef.current = null;
+            }
+        };
+    }, [playerRef]);
+
+    React.useEffect(() => {
+        const canvas = canvasRef.current;
+        if (!canvas) return () => {};
+
+        const resize = () => {
+            const rect = canvas.getBoundingClientRect();
+            canvas.width = rect.width * window.devicePixelRatio;
+            canvas.height = rect.height * window.devicePixelRatio;
+            const ctx = canvas.getContext("2d");
+            ctx?.scale(window.devicePixelRatio, window.devicePixelRatio);
+        };
+
+        resize();
+        const observer = new ResizeObserver(resize);
+        observer.observe(canvas);
+        return () => observer.disconnect();
+    }, []);
+
+    return (
+        <canvas
+            ref={canvasRef}
+            style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                width: "100%",
+                height: "100%",
+                pointerEvents: "none",
+                zIndex: 1,
+                border: "none",
+                borderRadius: "inherit",
+            }}
+        />
+    );
+}
 
 export default definePlugin({
     name: "BetterAudioPlayer",
-    description: "Adds a spectrograph and oscilloscope visualizer to audio attachment players",
+    description: "Adds a spectrograph and oscilloscope visualizer to audio attachment players.",
     authors: [EquicordDevs.creations],
     settings,
-    start() {
-        const waitForContent = () => {
-            const targetNode = document.querySelector("[class*='content']");
-            if (targetNode) {
-                scanForAudioElements(targetNode as HTMLElement);
-                observer = createObserver(targetNode as HTMLElement);
-            } else {
-                requestAnimationFrame(waitForContent);
-            }
-        };
-        waitForContent();
-    },
-    stop() {
-        observer?.disconnect();
-        observer = null;
+
+    patches: [
+        {
+            find: "}renderPlayIcon(){",
+            replacement: {
+                match: /(\i===\i\.AUDIO\?)(this\.renderAudio\(\))/,
+                replace: "$1[$2,$self.renderVisualizer(this)]",
+            },
+        },
+    ],
+
+    renderVisualizer(player: PlayerInstance) {
+        if (player.props.type !== "AUDIO") return null;
+        return <Visualizer playerRef={player.mediaRef} src={player.props.src} key={player.props.src} />;
     },
 });
