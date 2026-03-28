@@ -7,30 +7,22 @@
 import { definePluginSettings } from "@api/Settings";
 import { EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
-import { React, showToast, Toasts } from "@webpack/common";
-
-function tryHexToRgb(hex: string): string {
-    if (hex.startsWith("#")) {
-        const match = hex.match(/\w\w/g);
-        if (match) {
-            const [r, g, b] = match.map(x => parseInt(x, 16));
-            return `${r}, ${g}, ${b}`;
-        }
-    }
-    return hex;
-}
+import { ColorUtils, React, showToast, Toasts } from "@webpack/common";
 
 function validateColor(value: string, key: string, fallback: string) {
     const rgbPattern = /^\d{1,3}\s*,\s*\d{1,3}\s*,\s*\d{1,3}$/;
     if (rgbPattern.test(value)) return;
 
-    const rgb = tryHexToRgb(value);
-    if (rgbPattern.test(rgb)) {
-        settings.store[key] = rgb;
-    } else {
-        showToast(`Invalid color format for ${key}, use "R, G, B" or "#RRGGBB"`, Toasts.Type.FAILURE);
-        settings.store[key] = fallback;
+    if (value.startsWith("#")) {
+        const rgb = ColorUtils.hexToRgb(value);
+        if (rgb) {
+            settings.store[key] = `${rgb.r}, ${rgb.g}, ${rgb.b}`;
+            return;
+        }
     }
+
+    showToast(`Invalid color format for ${key}, use "R, G, B" or "#RRGGBB"`, Toasts.Type.FAILURE);
+    settings.store[key] = fallback;
 }
 
 const settings = definePluginSettings({
@@ -308,7 +300,6 @@ export default definePlugin({
     ],
 
     renderVisualizer(player: PlayerInstance) {
-        if (player.props.type !== "AUDIO") return null;
         return <Visualizer playerRef={player.mediaRef} src={player.props.src} key={player.props.src} />;
     },
 });
