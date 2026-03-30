@@ -431,8 +431,8 @@ export default definePlugin({
                     replace: "canDrop:e=>$self.canDropOnFolder(e,arguments[1],arguments[3])"
                 },
                 {
-                    match: /drop\(\i\)\{(?=.{0,25}!==\i\.\i\.FOLDER)/,
-                    replace: "$&if($self.handleFolderDrop(e,t,n,i))return;"
+                    match: /(\i),(\i)\)\{let (\i)=arguments.*?,(\i)=arguments.{0,250}drop\(\i\)\{(?=.{0,25}!==\i\.\i\.FOLDER)/,
+                    replace: "$&if($self.handleFolderDrop($1,$2,$3,$4))return;"
                 },
                 {
                     match: /\[\i\.\i\.GUILD\](?=.{0,250}#{intl::DND_DROP_COMBINE})/,
