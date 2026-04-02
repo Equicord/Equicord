@@ -179,7 +179,7 @@ export async function getResponse(payload: ContentPayload): Promise<string> {
             return "";
         }
 
-        return response ?? "";
+        return response;
     } catch (e) {
         logger.error("Error getting response from AI model", e);
         showToast("Error getting response from AI model", Toasts.Type.FAILURE);
