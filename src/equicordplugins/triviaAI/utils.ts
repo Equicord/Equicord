@@ -116,13 +116,7 @@ export async function handleResponse(message: Message, response: string): Promis
             insertTextIntoChatInputBox(response);
             break;
         case "bot":
-            sendBotMessage(message.channel_id, {
-                content: response,
-                messageReference: {
-                    channel_id: message.channel_id,
-                    message_id: message.id
-                }
-            });
+            sendBotMessage(message.channel_id, { content: response });
             break;
     }
 
