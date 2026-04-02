@@ -167,7 +167,7 @@ export async function getResponse(payload: ContentPayload): Promise<string> {
         try { data = JSON.parse(rawBody); } catch (e) { }
 
         if (!req.ok || data.error) {
-            const errorMsg = data.error?.message || rawBody || `Status ${req.status}`;
+            const errorMsg = data.error?.message ?? rawBody ?? `Status ${req.status}`;
             logger.error(`API Error: ${errorMsg}`);
             showToast(errorMsg, Toasts.Type.FAILURE);
             return "";
