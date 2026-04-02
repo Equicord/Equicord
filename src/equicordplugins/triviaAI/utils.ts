@@ -163,8 +163,10 @@ export async function getResponse(payload: ContentPayload): Promise<string> {
         });
 
         const rawBody = await req.text();
-        let data: any = {};
-        try { data = JSON.parse(rawBody); } catch (e) { }
+        const data: { error?: { message?: string; }, choices?: { message: { content: string; }; }[]; } = (() => {
+            try { return JSON.parse(rawBody); }
+            catch { return {}; }
+        })();
 
         if (!req.ok || data.error) {
             const errorMsg = data.error?.message ?? rawBody ?? `Status ${req.status}`;
