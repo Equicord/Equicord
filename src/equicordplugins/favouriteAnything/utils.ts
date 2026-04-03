@@ -70,21 +70,25 @@ function defineItems<T extends Record<CustomItemFormat, CustomItemDef>>(def: Ite
 // Stringify returns a simple string representation used for thumbnail text and expression picker search.
 export const defs = defineItems({
     [CustomItemFormat.ATTACHMENT]: defineItem({
-        encode: ({ id, filename, size, url, content_type = "" }: MessageAttachment) => [
+        encode: ({ id, filename, size, url, content_type = "", title, description }: MessageAttachment) => [
             id,
             filename,
             size,
             new URL(url).pathname,
-            content_type
+            content_type,
+            title ?? null,
+            description ?? null
         ],
-        decode: ([id, filename, size, path, content_type]) => ({
+        decode: ([id, filename, size, path, content_type, title, description]) => ({
             id: id ?? "0",
             filename: filename ?? "UNKNOWN",
             size: +size! || 0,
             url: `${new URL(path!, `https://${window.GLOBAL_ENV.CDN_HOST}`)}`,
             proxy_url: `${new URL(path!, `https://${window.GLOBAL_ENV.MEDIA_PROXY_ENDPOINT}`)}`,
             content_type: content_type ?? "application/octet-stream",
-            spoiler: filename?.startsWith("SPOILER_") ?? false
+            spoiler: filename?.startsWith("SPOILER_") ?? false,
+            title: title ?? undefined,
+            description: description ?? undefined
         }),
         stringify: ({ filename }) => filename
     })
