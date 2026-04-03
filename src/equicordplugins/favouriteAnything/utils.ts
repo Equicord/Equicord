@@ -90,7 +90,7 @@ export const defs = defineItems({
             title: title ?? undefined,
             description: description ?? undefined
         }),
-        stringify: ({ filename }) => filename
+        stringify: ({ title, filename }) => title?.trim() || filename
     })
     // This could be expanded in the future with other item types (e.g. voice messages)
 });
@@ -153,23 +153,15 @@ async function fetchAttachment(attachment: MessageAttachment): Promise<File> {
 }
 
 export async function sendAttachment(attachment: MessageAttachment, channel: Channel) {
-    const file = await fetchAttachment(attachment)
-        .catch(() =>
-            Toasts.show({
-                message: `Couldn't fetch ${attachment.filename}`,
-                id: Toasts.genId(),
-                type: Toasts.Type.FAILURE
-            })
-        );
+    const { filename, title, description } = attachment;
+    const file = await fetchAttachment(attachment).catch(() =>
+        Toasts.show({ message: `Couldn't fetch ${filename}`, id: Toasts.genId(), type: Toasts.Type.FAILURE })
+    );
     if (!file) return;
 
     // Using promptToUpload instead of addFiles directly since it has file size checks with error popups
     await UploadHandler.promptToUpload([file], channel, DraftType.ChannelMessage).catch(() =>
-        Toasts.show({
-            message: `Couldn't upload ${attachment.filename}`,
-            id: Toasts.genId(),
-            type: Toasts.Type.FAILURE
-        })
+        Toasts.show({ message: `Couldn't upload ${filename}`, id: Toasts.genId(), type: Toasts.Type.FAILURE })
     );
 
     const uploads = [...UploadAttachmentStore.getUploads(channel.id, DraftType.ChannelMessage)];
@@ -177,8 +169,13 @@ export async function sendAttachment(attachment: MessageAttachment, channel: Cha
     if (uploadIdx === -1) return;
 
     const reply = PendingReplyStore.getPendingReply(channel.id);
+
     const [upload] = uploads.splice(uploadIdx);
     UploadManager.setUploads({ uploads, channelId: channel.id, draftType: DraftType.ChannelMessage });
+    // Empty titles and descriptions are allowed
+    if (title != null) upload.filename = title;
+    if (description != null) upload.description = description;
+
     FluxDispatcher.dispatch({ type: "DELETE_PENDING_REPLY", channelId: channel.id });
 
     void sendMessage(channel.id, {}, false, {
