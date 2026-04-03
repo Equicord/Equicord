@@ -30,7 +30,7 @@ export default definePlugin({
     patches: [
         // EMBEDS
         {
-            find: "#{intl::SUPPRESS_ALL_EMBEDS}",
+            find: "this.renderInlineMediaEmbed",
             replacement: [
                 {
                     // Wrap the embed component's render method in a custom context to avoid having to drill props
