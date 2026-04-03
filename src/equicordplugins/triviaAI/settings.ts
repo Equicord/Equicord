@@ -43,10 +43,9 @@ export const settings = definePluginSettings({
     mode: {
         type: OptionType.SELECT,
         description: "How should answers be handled?",
-        default: "chatbar",
         options: [
             { label: "Auto Reply", value: "autoreply" },
-            { label: "Replace Chatbar Text", value: "chatbar" },
+            { label: "Replace Chatbar Text", value: "chatbar", default: true },
             { label: "Clyde", value: "bot" }
         ]
     },
