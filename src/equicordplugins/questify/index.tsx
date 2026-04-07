@@ -968,12 +968,10 @@ function getQuestUnacceptedButtonText(quest: Quest): string | null {
     const isPlay = task?.type === QuestTaskType.PLAY_ON_DESKTOP || task?.type === QuestTaskType.PLAY_ON_XBOX || task?.type === QuestTaskType.PLAY_ON_PLAYSTATION || task?.type === QuestTaskType.PLAY_ACTIVITY;
     const isAchievement = task?.type === QuestTaskType.ACHIEVEMENT_IN_ACTIVITY;
 
-    if (target > 0) {
-        if ((isPlay && completeGameQuestsInBackground && IS_DISCORD_DESKTOP) || (isWatch && completeVideoQuestsInBackground)) {
-            return `Complete (${targetFormatted})`;
-        } else if (isAchievement && completeAchievementQuestsInBackground) {
-            return "Complete (Immediate)";
-        }
+    if ((isPlay && completeGameQuestsInBackground && IS_DISCORD_DESKTOP) || (isWatch && completeVideoQuestsInBackground && target > 0)) {
+        return `Complete (${targetFormatted})`;
+    } else if ((isAchievement && completeAchievementQuestsInBackground) || (isWatch && completeVideoQuestsInBackground && target === 0)) {
+        return "Complete (Immediate)";
     }
 
     return null;
