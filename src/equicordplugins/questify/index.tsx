@@ -1586,7 +1586,7 @@ export default definePlugin({
             // Whether preloading assets is enabled or not, the placeholders loading
             // before the assets causes a lot of element shifting, whereas if
             // the elements load immediately instead, it doesn't.
-            find: ".LEARN_MORE_CTA_AND_EXPRESSIVE_BUTTON_TREATMENT_FOUR_OPEN_GAME_LINK,sourceQuestContent:",
+            find: ".QUEST_HOME_TILE_HEADER_WATCH_VIDEO})},",
             replacement: {
                 match: /showPlaceholder:!\i/,
                 replace: "showPlaceholder:false"
@@ -1635,7 +1635,7 @@ export default definePlugin({
         },
         {
             // Adds support for dev://experiment/2025-12-quest-cta-refactor-rollout
-            find: '"primary",preClickCallback:',
+            find: "WATCH_VIDEO?async()=>{await",
             replacement: [
                 {
                     match: /(?=let{quest:)/,
@@ -1653,7 +1653,7 @@ export default definePlugin({
         },
         {
             // Sets intervals to progress Video Quests in the background.
-            find: "CAPTCHA_FAILED:",
+            find: "questContentRowIndex});",
             replacement: {
                 match: /(?<=SUCCESS:)(\i\({)/,
                 replace: "!$self.processQuestForAutoComplete(arguments[0])&&$1"
