@@ -276,6 +276,8 @@ function QuestTileContextMenu(children: React.ReactNode[], props: { quest: any; 
                         const interval = activeQuestIntervals.get(props.quest.id);
 
                         if (interval) {
+                            QuestifyLogger.info(`[${getFormattedNow()}] Auto-Complete for Quest ${normalizeQuestName(props.quest.config.messages.questName)} stopped via context menu.`);
+                            resetQuestsToResume(props.quest);
                             clearInterval(interval.progressTimeout);
                             clearTimeout(interval.rerenderTimeout);
                             activeQuestIntervals.delete(props.quest.id);
@@ -1190,6 +1192,16 @@ function getQuestAcceptedButtonProps(quest: Quest, text: string, disabled: boole
     };
 }
 
+function resetQuestsToResume(quest?: Quest): void {
+    if (quest) {
+        settings.store.resumeQuestIDs.play = settings.store.resumeQuestIDs.play.filter(id => id !== quest.id);
+        settings.store.resumeQuestIDs.watch = settings.store.resumeQuestIDs.watch.filter(id => id !== quest.id);
+        settings.store.resumeQuestIDs.achievement = settings.store.resumeQuestIDs.achievement.filter(id => id !== quest.id);
+    } else {
+        settings.store.resumeQuestIDs = settings.def.resumeQuestIDs.default;
+    }
+}
+
 // Drop support for QuestCompleter and migrate to Questify settings.
 migratePluginToSettings(true, "Questify", "QuestCompleter", "completeVideoQuestsInBackground", "completeGameQuestsInBackground", "completeAchievementQuestsInBackground");
 
@@ -1650,6 +1662,24 @@ export default definePlugin({
             ]
         },
         {
+            // Same thing as above, maybe? Different location though.
+            find: ".ACCEPT_QUEST),",
+            replacement: [
+                {
+                    match: /(?=let{quest:)/,
+                    replace: "const questifyText=$self.getQuestUnacceptedButtonText(arguments[0].quest);"
+                },
+                {
+                    match: /(?<=,text:)(\i)/g,
+                    replace: "questifyText??$1"
+                },
+                {
+                    match: /(?<="primary",onClick:)(\i)/,
+                    replace: "!$self.processQuestForAutoComplete(arguments[0].quest)&&$1"
+                }
+            ]
+        },
+        {
             // Sets intervals to progress Video Quests in the background.
             find: "questContentRowIndex});",
             replacement: {
@@ -1781,7 +1811,7 @@ export default definePlugin({
         const maybeResumable = !(settings.store.disableQuestsEverything || settings.store.disableQuestsFetchingQuests);
 
         if (!wasReload || !maybeResumable) {
-            settings.store.resumeQuestIDs = settings.def.resumeQuestIDs.default;
+            resetQuestsToResume();
             return;
         }
 
@@ -1819,7 +1849,7 @@ export default definePlugin({
         stopAutoFetchingQuests();
 
         if (!Settings.plugins.Questify.enabled) {
-            settings.store.resumeQuestIDs = settings.def.resumeQuestIDs.default;
+            resetQuestsToResume();
         }
 
         activeQuestIntervals.forEach((intervalData, questId) => {
