@@ -22,6 +22,19 @@ import { Logger } from "@utils/Logger";
 
 const logger = new Logger("DataStore");
 let loggedFailure = false;
+const memoryDatabases = new Map<string, Map<string, Map<IDBValidKey, unknown>>>();
+
+interface MemoryStore {
+    __memoryStore: true;
+    data: Map<IDBValidKey, unknown>;
+    get(key: IDBValidKey): unknown;
+    put(value: unknown, key: IDBValidKey): void;
+    delete(key: IDBValidKey): void;
+    clear(): void;
+    getAllKeys(): IDBValidKey[];
+    getAll(): unknown[];
+    entries(): [IDBValidKey, unknown][];
+}
 
 function handleFailure(error: unknown) {
     if (loggedFailure) return;
@@ -34,6 +47,36 @@ function withFailureFallback<T>(promise: Promise<T>, fallback: T): Promise<T> {
         handleFailure(error);
         return fallback;
     });
+}
+
+function getMemoryStore(dbName: string, storeName: string): MemoryStore {
+    let database = memoryDatabases.get(dbName);
+    if (!database) {
+        database = new Map();
+        memoryDatabases.set(dbName, database);
+    }
+
+    let data = database.get(storeName);
+    if (!data) {
+        data = new Map<IDBValidKey, unknown>();
+        database.set(storeName, data);
+    }
+
+    return {
+        __memoryStore: true,
+        data,
+        get: key => data.get(key),
+        put: (value, key) => { data.set(key, value); },
+        delete: key => { data.delete(key); },
+        clear: () => { data.clear(); },
+        getAllKeys: () => Array.from(data.keys()),
+        getAll: () => Array.from(data.values()),
+        entries: () => Array.from(data.entries())
+    };
+}
+
+function isMemoryStore(store: IDBObjectStore | MemoryStore): store is MemoryStore {
+    return (store as MemoryStore).__memoryStore === true;
 }
 
 export function promisifyRequest<T = undefined>(
@@ -49,16 +92,17 @@ export function promisifyRequest<T = undefined>(
 export function createStore(dbName: string, storeName: string): UseStore {
     const request = indexedDB.open(dbName);
     request.onupgradeneeded = () => request.result.createObjectStore(storeName);
-    const dbp = promisifyRequest(request);
+    const dbp = promisifyRequest(request).catch(error => {
+        handleFailure(error);
+        return null;
+    });
+    const memoryStore = getMemoryStore(dbName, storeName);
 
     return async (txMode, callback) => {
-        try {
-            const db = await dbp;
-            return await callback(db.transaction(storeName, txMode).objectStore(storeName));
-        } catch (error) {
-            handleFailure(error);
-            throw error;
-        }
+        const db = await dbp;
+        if (!db) return callback(memoryStore as unknown as IDBObjectStore);
+
+        return callback(db.transaction(storeName, txMode).objectStore(storeName));
     };
 }
 
@@ -80,7 +124,10 @@ export function get<T = any>(
     key: IDBValidKey,
     customStore = defaultGetStore(),
 ): Promise<T | undefined> {
-    return withFailureFallback(customStore("readonly", store => promisifyRequest(store.get(key))), undefined);
+    return withFailureFallback(customStore("readonly", store => {
+        if (isMemoryStore(store)) return store.get(key) as T | undefined;
+        return promisifyRequest(store.get(key));
+    }), undefined);
 }
 
 export function set(
@@ -89,6 +136,11 @@ export function set(
     customStore = defaultGetStore(),
 ): Promise<void> {
     return withFailureFallback(customStore("readwrite", store => {
+        if (isMemoryStore(store)) {
+            store.put(value, key);
+            return;
+        }
+
         store.put(value, key);
         return promisifyRequest(store.transaction);
     }), undefined);
@@ -99,6 +151,11 @@ export function setMany(
     customStore = defaultGetStore(),
 ): Promise<void> {
     return withFailureFallback(customStore("readwrite", store => {
+        if (isMemoryStore(store)) {
+            entries.forEach(entry => store.put(entry[1], entry[0]));
+            return;
+        }
+
         entries.forEach(entry => store.put(entry[1], entry[0]));
         return promisifyRequest(store.transaction);
     }), undefined);
@@ -108,9 +165,13 @@ export function getMany<T = any>(
     keys: IDBValidKey[],
     customStore = defaultGetStore(),
 ): Promise<T[]> {
-    return withFailureFallback(customStore("readonly", store =>
-        Promise.all(keys.map(key => promisifyRequest(store.get(key)))),
-    ), []);
+    return withFailureFallback(customStore("readonly", store => {
+        if (isMemoryStore(store)) {
+            return keys.map(key => store.get(key) as T | undefined);
+        }
+
+        return Promise.all(keys.map(key => promisifyRequest(store.get(key))));
+    }), []);
 }
 
 export function update<T = any>(
@@ -120,8 +181,13 @@ export function update<T = any>(
 ): Promise<void> {
     return withFailureFallback(customStore(
         "readwrite",
-        store =>
-            new Promise((resolve, reject) => {
+        store => {
+            if (isMemoryStore(store)) {
+                store.put(updater(store.get(key) as T | undefined), key);
+                return;
+            }
+
+            return new Promise((resolve, reject) => {
                 store.get(key).onsuccess = function () {
                     try {
                         store.put(updater(this.result), key);
@@ -130,8 +196,9 @@ export function update<T = any>(
                         reject(err);
                     }
                 };
-            }),
-    ), undefined as void);
+            });
+        },
+    ), undefined);
 }
 
 export function del(
@@ -139,9 +206,14 @@ export function del(
     customStore = defaultGetStore(),
 ): Promise<void> {
     return withFailureFallback(customStore("readwrite", store => {
+        if (isMemoryStore(store)) {
+            store.delete(key);
+            return;
+        }
+
         store.delete(key);
         return promisifyRequest(store.transaction);
-    }), undefined as void);
+    }), undefined);
 }
 
 export function delMany(
@@ -149,16 +221,26 @@ export function delMany(
     customStore = defaultGetStore(),
 ): Promise<void> {
     return withFailureFallback(customStore("readwrite", store => {
+        if (isMemoryStore(store)) {
+            keys.forEach(key => store.delete(key));
+            return;
+        }
+
         keys.forEach(key => store.delete(key));
         return promisifyRequest(store.transaction);
-    }), undefined as void);
+    }), undefined);
 }
 
 export function clear(customStore = defaultGetStore()): Promise<void> {
     return withFailureFallback(customStore("readwrite", store => {
+        if (isMemoryStore(store)) {
+            store.clear();
+            return;
+        }
+
         store.clear();
         return promisifyRequest(store.transaction);
-    }), undefined as void);
+    }), undefined);
 }
 
 function eachCursor(
@@ -177,23 +259,33 @@ export function keys<KeyType extends IDBValidKey>(
     customStore = defaultGetStore(),
 ): Promise<KeyType[]> {
     return withFailureFallback(customStore("readonly", store => {
+        if (isMemoryStore(store)) return store.getAllKeys() as unknown as KeyType[];
+
         if (store.getAllKeys) {
-            return promisifyRequest(store.getAllKeys() as unknown as IDBRequest<KeyType[]>);
+            return promisifyRequest(
+                store.getAllKeys() as unknown as IDBRequest<KeyType[]>,
+            );
         }
 
         const items: KeyType[] = [];
-        return eachCursor(store, cursor => items.push(cursor.key as KeyType)).then(() => items);
+        return eachCursor(store, cursor =>
+            items.push(cursor.key as KeyType),
+        ).then(() => items);
     }), [] as KeyType[]);
 }
 
 export function values<T = any>(customStore = defaultGetStore()): Promise<T[]> {
     return withFailureFallback(customStore("readonly", store => {
+        if (isMemoryStore(store)) return store.getAll() as unknown as T[];
+
         if (store.getAll) {
             return promisifyRequest(store.getAll() as IDBRequest<T[]>);
         }
 
         const items: T[] = [];
-        return eachCursor(store, cursor => items.push(cursor.value as T)).then(() => items);
+        return eachCursor(store, cursor => items.push(cursor.value as T)).then(
+            () => items,
+        );
     }), [] as T[]);
 }
 
@@ -201,14 +293,20 @@ export function entries<KeyType extends IDBValidKey, ValueType = any>(
     customStore = defaultGetStore(),
 ): Promise<[KeyType, ValueType][]> {
     return withFailureFallback(customStore("readonly", store => {
+        if (isMemoryStore(store)) return store.entries() as [KeyType, ValueType][];
+
         if (store.getAll && store.getAllKeys) {
             return Promise.all([
-                promisifyRequest(store.getAllKeys() as unknown as IDBRequest<KeyType[]>),
+                promisifyRequest(
+                    store.getAllKeys() as unknown as IDBRequest<KeyType[]>,
+                ),
                 promisifyRequest(store.getAll() as IDBRequest<ValueType[]>),
             ]).then(([keys, values]) => keys.map((key, i) => [key, values[i]] as [KeyType, ValueType]));
         }
 
         const items: [KeyType, ValueType][] = [];
-        return eachCursor(store, cursor => items.push([cursor.key as KeyType, cursor.value])).then(() => items);
+        return eachCursor(store, cursor =>
+            items.push([cursor.key as KeyType, cursor.value]),
+        ).then(() => items);
     }), [] as [KeyType, ValueType][]);
 }
