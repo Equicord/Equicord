@@ -573,6 +573,7 @@ function shouldPreloadQuestAssets(): boolean {
 }
 
 async function startVideoProgressTracking(quest: Quest, target: { raw: number; adjusted: number; }): Promise<void> {
+    quest = refreshQuest(quest);
     const questName = normalizeQuestName(quest.config.messages.questName);
     const task = getQuestTask(quest);
     const { completeVideoQuestsQuicker } = settings.store;
@@ -769,6 +770,7 @@ async function startVideoProgressTracking(quest: Quest, target: { raw: number; a
 }
 
 async function startPlayGameProgressTracking(quest: Quest, target: { raw: number; adjusted: number; }): Promise<void> {
+    quest = refreshQuest(quest);
     const questName = normalizeQuestName(quest.config.messages.questName);
     const questEnrolledAt = quest.userStatus?.enrolledAt ? new Date(quest.userStatus.enrolledAt) : null;
     const task = getQuestTask(quest);
@@ -1151,9 +1153,9 @@ function getQuestAcceptedButtonText(quest: Quest, prepositional: boolean = false
 function getQuestPanelPercentComplete({ quest, percentCompleteText }: { quest: Quest; percentCompleteText?: string; }): { percentComplete: number; } | { percentComplete: number; percentCompleteText: string; } | null {
     if (!quest) { return null; }
 
+    quest = refreshQuest(quest);
     const task = getQuestTask(quest);
     const intervalData = activeQuestIntervals.get(quest.id);
-    quest = refreshQuest(quest);
 
     if (!task) { return null; }
 
