@@ -27,6 +27,7 @@ const AuthorizedAppsStore = findStoreLazy("AuthorizedAppsStore");
 let initialQuestDataFetched = false;
 const QuestifyNative = VencordNative.pluginHelpers.Questify as PluginNative<typeof import("./native")>;
 const patchedMobileQuests = new Set<string>();
+const manuallyStoppedQuestIDs = new Set<string>();
 export const activeQuestIntervals = new ActiveQuestIntervalsMap();
 
 function questMenuUnignoreAllClicked(): void {
@@ -276,11 +277,12 @@ function QuestTileContextMenu(children: React.ReactNode[], props: { quest: any; 
                         const interval = activeQuestIntervals.get(props.quest.id);
 
                         if (interval) {
+                            manuallyStoppedQuestIDs.add(props.quest.id);
                             QuestifyLogger.info(`[${getFormattedNow()}] Auto-Complete for Quest ${normalizeQuestName(props.quest.config.messages.questName)} stopped via context menu.`);
-                            resetQuestsToResume(props.quest);
                             clearInterval(interval.progressTimeout);
                             clearTimeout(interval.rerenderTimeout);
                             activeQuestIntervals.delete(props.quest.id);
+                            resetQuestsToResume(props.quest);
                             rerenderQuests();
                         }
                     }}
@@ -288,7 +290,7 @@ function QuestTileContextMenu(children: React.ReactNode[], props: { quest: any; 
                     <Menu.MenuItem
                         id={q("start-auto-complete")}
                         label="Start Auto-Complete"
-                        action={() => { processQuestForAutoComplete(props.quest); }}
+                        action={() => { processQuestForAutoComplete(props.quest, true); }}
                     />) : null
             }
             <Menu.MenuItem
@@ -576,12 +578,11 @@ async function startVideoProgressTracking(quest: Quest, target: { raw: number; a
     const { completeVideoQuestsQuicker } = settings.store;
     const questEnrolledAt = quest.userStatus?.enrolledAt ? new Date(quest.userStatus.enrolledAt) : null;
     const initialProgress = completeVideoQuestsQuicker
-        ? Math.floor(((new Date()).getTime() - (questEnrolledAt ?? new Date()).getTime()) / 1000) || 1
+        ? Number(Math.max(1, ((new Date()).getTime() - (questEnrolledAt ?? new Date()).getTime()) / 1000).toFixed(6))
         : Math.max(0, getQuestProgress(quest, task) || 0);
     activeQuestIntervals.set(quest.id, { progressTimeout: null as any, rerenderTimeout: null as any, progress: initialProgress, type: "watch" });
     // Max up to ~25 seconds into the future can be reported.
     const { raw: reportTarget, adjusted: questTargetWithLeeway } = target;
-    const videoQuestOffset = reportTarget - questTargetWithLeeway;
     let currentProgress = initialProgress;
     let currentProgressScaled = initialProgress;
     const timeRemaining = Math.max(0, questTargetWithLeeway - currentProgressScaled);
@@ -604,11 +605,16 @@ async function startVideoProgressTracking(quest: Quest, target: { raw: number; a
         return;
     }
 
-    const minimumReportDelay = 7;
-    const maximumReportDelay = 10;
+    const playbackTickMs = 250;
+    const minimumReportDelta = 6;
+    const maximumReportDelta = 8;
     const floatPrecision = 6;
     let progressIntervalId: NodeJS.Timeout | null = null;
-    let lastReportedProgress = initialProgress;
+    let renderIntervalId: NodeJS.Timeout | null = null;
+    let maximumPlaybackTimestamp = Math.floor(initialProgress);
+    let nextReportThreshold = 0;
+    let hasReportedInitialProgress = currentProgressScaled <= 0;
+    let lastPlaybackTickAt = performance.now();
 
     function clampFloat(value: number): number {
         return Number(value.toFixed(floatPrecision));
@@ -618,23 +624,43 @@ async function startVideoProgressTracking(quest: Quest, target: { raw: number; a
         return clampFloat(min + Math.random() * (max - min));
     }
 
-    function getProgressToReport(baseProgress: number): number {
-        const variedProgress = baseProgress + randomBetween(-0.45, 0.45);
-
-        return clampFloat(Math.min(reportTarget, Math.max(lastReportedProgress + 0.01, variedProgress)));
+    function getNextReportThreshold(currentPlaybackPosition: number): number {
+        return clampFloat(currentPlaybackPosition + randomBetween(minimumReportDelta, maximumReportDelta));
     }
 
-    function getFinalProgressToReport(): number {
-        return clampFloat(randomBetween(reportTarget, reportTarget + 1));
+    function getProgressToReport(currentPlaybackPosition: number): number {
+        const cappedProgress = clampFloat(Math.min(reportTarget, currentPlaybackPosition));
+        const lowerBound = nextReportThreshold > 0
+            ? nextReportThreshold
+            : clampFloat(Math.min(cappedProgress, 0.05));
+        const overshootAvailable = clampFloat(Math.max(0, cappedProgress - lowerBound));
+
+        return overshootAvailable > 0
+            ? clampFloat(lowerBound + randomBetween(0, overshootAvailable))
+            : lowerBound;
+    }
+
+    function updateQuestIntervalProgress(progress: number): void {
+        const intervalData = activeQuestIntervals.get(quest.id);
+
+        if (intervalData) {
+            intervalData.progress = Math.floor(progress);
+        }
+    }
+
+    function clearTrackingTimers(): void {
+        if (progressIntervalId) {
+            clearTimeout(progressIntervalId);
+        }
+
+        if (renderIntervalId) {
+            clearInterval(renderIntervalId);
+        }
     }
 
     async function handleSendComplete() {
-        if (progressIntervalId) {
-            clearInterval(progressIntervalId);
-        }
-
-        clearTimeout(renderIntervalId);
-        const success = await reportVideoQuestProgress(quest, getFinalProgressToReport(), QuestifyLogger);
+        clearTrackingTimers();
+        const success = await reportVideoQuestProgress(quest, maximumPlaybackTimestamp, QuestifyLogger);
         activeQuestIntervals.delete(quest.id);
         resetQuestsToResume(quest);
 
@@ -657,33 +683,42 @@ async function startVideoProgressTracking(quest: Quest, target: { raw: number; a
     const simulatedProgressToCover = reportTarget - currentProgressScaled;
     const speedFactor = timeRemaining > 0 ? simulatedProgressToCover / timeRemaining : 0;
 
-    async function scheduleNextReport(remainingTime: number): Promise<void> {
-        const nextDelay = Math.min(remainingTime, randomBetween(minimumReportDelay, maximumReportDelay));
-
+    async function scheduleNextPlaybackTick(): Promise<void> {
         progressIntervalId = setTimeout(async () => {
             if (!activeQuestIntervals.has(quest.id)) {
                 return;
             }
 
-            currentProgress += nextDelay;
-            currentProgressScaled += nextDelay * speedFactor;
+            const now = performance.now();
+            const playbackElapsedSeconds = clampFloat((now - lastPlaybackTickAt) / 1000);
+            lastPlaybackTickAt = now;
 
-            const updatedRemainingTime = Math.max(0, questTargetWithLeeway - currentProgress);
-            const shouldSendIntermediate = updatedRemainingTime > 0 && currentProgress < reportTarget - videoQuestOffset - (nextDelay / 2);
+            currentProgress = clampFloat(Math.min(questTargetWithLeeway, currentProgress + playbackElapsedSeconds));
+            currentProgressScaled = clampFloat(Math.min(reportTarget, currentProgressScaled + playbackElapsedSeconds * speedFactor));
+            maximumPlaybackTimestamp = Math.max(maximumPlaybackTimestamp, Math.floor(currentProgressScaled));
+            updateQuestIntervalProgress(currentProgress);
 
-            if (shouldSendIntermediate) {
-                const progressToReport = getProgressToReport(Math.min(currentProgressScaled, reportTarget));
-                lastReportedProgress = progressToReport;
-                await reportVideoQuestProgress(quest, progressToReport, QuestifyLogger);
+            if (hasReportedInitialProgress && currentProgressScaled >= nextReportThreshold && currentProgress < questTargetWithLeeway) {
+                const progressToReport = getProgressToReport(currentProgressScaled);
+                const reported = await reportVideoQuestProgress(quest, progressToReport, QuestifyLogger);
+
+                if (!reported) {
+                    clearTrackingTimers();
+                    activeQuestIntervals.delete(quest.id);
+                    QuestifyLogger.error(`[${getFormattedNow()}] Failed to report progress for Quest ${questName}.`);
+                    return;
+                }
+
+                nextReportThreshold = getNextReportThreshold(progressToReport);
             }
 
-            if (updatedRemainingTime <= 0) {
+            if (currentProgress >= questTargetWithLeeway) {
                 await handleSendComplete();
                 return;
             }
 
-            await scheduleNextReport(updatedRemainingTime);
-        }, nextDelay * 1000);
+            await scheduleNextPlaybackTick();
+        }, playbackTickMs);
 
         const intervalData = activeQuestIntervals.get(quest.id);
 
@@ -692,34 +727,45 @@ async function startVideoProgressTracking(quest: Quest, target: { raw: number; a
         }
     }
 
-    if (initialProgress > 0) {
-        const initialProgressToReport = clampFloat(Math.min(reportTarget, initialProgress + randomBetween(0.05, 0.95)));
-        lastReportedProgress = initialProgressToReport;
-        reportVideoQuestProgress(quest, initialProgressToReport, QuestifyLogger);
-    }
-
-    await scheduleNextReport(timeRemaining);
-
-    const renderIntervalId = setInterval(() => {
-        const intervalData = activeQuestIntervals.get(quest.id);
-
-        if (!!intervalData) {
-            intervalData.progress += 1;
-        } else {
-            clearInterval(renderIntervalId);
-        }
-
-        rerenderQuests();
-    }, 1000);
+    updateQuestIntervalProgress(currentProgress);
+    renderIntervalId = setInterval(() => rerenderQuests(), 1000);
 
     const intervalData = activeQuestIntervals.get(quest.id);
 
-    if (intervalData && progressIntervalId) {
-        intervalData.progressTimeout = progressIntervalId;
-        intervalData.rerenderTimeout = renderIntervalId;
-    } else if (intervalData) {
+    if (intervalData) {
         intervalData.rerenderTimeout = renderIntervalId;
     }
+
+    if (timeRemaining <= 0) {
+        await handleSendComplete();
+        return;
+    }
+
+    if (currentProgressScaled > 0) {
+        const initialProgressToReport = clampFloat(Math.min(reportTarget, currentProgressScaled));
+
+        void (async () => {
+            const reported = await reportVideoQuestProgress(quest, initialProgressToReport, QuestifyLogger);
+
+            if (!activeQuestIntervals.has(quest.id)) {
+                return;
+            }
+
+            if (!reported) {
+                clearTrackingTimers();
+                activeQuestIntervals.delete(quest.id);
+                QuestifyLogger.error(`[${getFormattedNow()}] Failed to report initial progress for Quest ${questName}.`);
+                return;
+            }
+
+            hasReportedInitialProgress = true;
+            nextReportThreshold = getNextReportThreshold(initialProgressToReport);
+        })();
+    }
+
+    lastPlaybackTickAt = performance.now();
+
+    await scheduleNextPlaybackTick();
 }
 
 async function startPlayGameProgressTracking(quest: Quest, target: { raw: number; adjusted: number; }): Promise<void> {
@@ -729,7 +775,8 @@ async function startPlayGameProgressTracking(quest: Quest, target: { raw: number
     const questTarget = target.adjusted;
     const initialProgress = getQuestProgress(quest, task) || 0;
     const remaining = Math.max(0, questTarget - initialProgress);
-    const heartbeatInterval = 20; // Heartbeats must be at most 2 minutes apart.
+    const maximumHeartbeatDurationMs = 60 * 1000;
+    const heartbeatBufferMs = 1 * 1000;
     activeQuestIntervals.set(quest.id, { progressTimeout: null as any, rerenderTimeout: null as any, progress: initialProgress, type: "play" });
 
     QuestifyLogger.info(`[${getFormattedNow()}] Quest ${questName} will be completed in the background in ${remaining} seconds.`);
@@ -750,76 +797,93 @@ async function startPlayGameProgressTracking(quest: Quest, target: { raw: number
         return;
     }
 
+    let progressTimeoutId: NodeJS.Timeout | null = null;
+    let renderIntervalId: NodeJS.Timeout | null = null;
+
+    function getHeartbeatDurationMs(progress: number): number {
+        const remainingMs = Math.max(0, (questTarget - progress) * 1000);
+
+        return remainingMs <= maximumHeartbeatDurationMs
+            ? remainingMs + heartbeatBufferMs
+            : maximumHeartbeatDurationMs;
+    }
+
+    function clearTrackingTimers(): void {
+        if (progressTimeoutId) {
+            clearTimeout(progressTimeoutId);
+        }
+
+        if (renderIntervalId) {
+            clearTimeout(renderIntervalId);
+        }
+    }
+
+    function handleQuestComplete(): void {
+        clearTrackingTimers();
+        activeQuestIntervals.delete(quest.id);
+        QuestifyLogger.info(`[${getFormattedNow()}] Quest ${questName} completed.`);
+
+        if (settings.store.notifyOnQuestComplete) {
+            showNotification({
+                title: "Quest Completed!",
+                body: `The ${questName} Quest has completed.`,
+                dismissOnClick: true,
+                onClick: () => NavigationRouter.transitionTo(`${questPath}#${quest.id}`),
+            });
+        }
+    }
+
+    async function scheduleNextHeartbeat(progress: number): Promise<void> {
+        const heartbeatDurationMs = getHeartbeatDurationMs(progress);
+
+        progressTimeoutId = setTimeout(async () => {
+            const result = await reportPlayGameQuestProgress(quest, false, QuestifyLogger, { attempts: 3, delay: 2500 });
+
+            if (result.progress === null) {
+                clearTrackingTimers();
+                activeQuestIntervals.delete(quest.id);
+                QuestifyLogger.error(`[${getFormattedNow()}] Failed to send heartbeat for Quest ${questName}.`);
+                return;
+            }
+
+            const intervalData = activeQuestIntervals.get(quest.id);
+
+            if (intervalData) {
+                intervalData.progress = result.progress;
+            }
+
+            if (result.completed || result.progress >= questTarget) {
+                handleQuestComplete();
+                return;
+            }
+
+            await scheduleNextHeartbeat(result.progress);
+        }, heartbeatDurationMs);
+
+        const intervalData = activeQuestIntervals.get(quest.id);
+
+        if (intervalData && progressTimeoutId) {
+            intervalData.progressTimeout = progressTimeoutId;
+        }
+    }
+
     const initial = await reportPlayGameQuestProgress(quest, false, QuestifyLogger, { attempts: 3, delay: 2500 });
 
-    const progressIntervalId = setInterval(async () => {
-        const result = await reportPlayGameQuestProgress(quest, false, QuestifyLogger, { attempts: 3, delay: 2500 });
+    if (initial.progress === null) {
+        activeQuestIntervals.delete(quest.id);
+        QuestifyLogger.error(`[${getFormattedNow()}] Failed to send heartbeat for Quest ${questName}.`);
+        return;
+    }
 
-        if (result.progress === null) {
-            clearInterval(progressIntervalId);
-            activeQuestIntervals.delete(quest.id);
-            QuestifyLogger.error(`[${getFormattedNow()}] Failed to send heartbeat for Quest ${questName}.`);
-            return;
-        }
-
-        const isComplete = result.progress >= questTarget;
-        const timeRemaining = questTarget - result.progress;
-        const intervalData = activeQuestIntervals.get(quest.id);
-        intervalData && (intervalData.progress = result.progress);
-
-        if (isComplete) {
-            clearInterval(progressIntervalId);
-            clearTimeout(renderIntervalId);
-            const success = await reportPlayGameQuestProgress(quest, true, QuestifyLogger, { attempts: 3, delay: 2500 });
-            activeQuestIntervals.delete(quest.id);
-
-            if (success) {
-                QuestifyLogger.info(`[${getFormattedNow()}] Quest ${questName} completed.`);
-
-                if (settings.store.notifyOnQuestComplete) {
-                    showNotification({
-                        title: "Quest Completed!",
-                        body: `The ${questName} Quest has completed.`,
-                        dismissOnClick: true,
-                        onClick: () => NavigationRouter.transitionTo(`${questPath}#${quest.id}`),
-                    });
-                }
-            } else {
-                QuestifyLogger.error(`[${getFormattedNow()}] Failed to complete Quest ${questName}.`);
-            }
-        } else if (timeRemaining < heartbeatInterval) {
-            clearInterval(progressIntervalId);
-            clearTimeout(renderIntervalId);
-
-            setTimeout(async () => {
-                const success = await reportPlayGameQuestProgress(quest, true, QuestifyLogger, { attempts: 3, delay: 2500 });
-                activeQuestIntervals.delete(quest.id);
-
-                if (success) {
-                    QuestifyLogger.info(`[${getFormattedNow()}] Quest ${questName} completed.`);
-
-                    if (settings.store.notifyOnQuestComplete) {
-                        showNotification({
-                            title: "Quest Completed!",
-                            body: `The ${questName} Quest has completed.`,
-                            dismissOnClick: true,
-                            onClick: () => NavigationRouter.transitionTo(`${questPath}#${quest.id}`),
-                        });
-                    }
-                } else {
-                    QuestifyLogger.error(`[${getFormattedNow()}] Failed to complete Quest ${questName}.`);
-                }
-            }, (timeRemaining + 1) * 1000);
-        }
-    }, heartbeatInterval * 1000);
-
-    const renderIntervalId = setInterval(() => {
+    renderIntervalId = setInterval(() => {
         const intervalData = activeQuestIntervals.get(quest.id);
 
         if (!!intervalData) {
             intervalData.progress += 1;
         } else {
-            clearInterval(renderIntervalId);
+            if (renderIntervalId) {
+                clearInterval(renderIntervalId);
+            }
         }
 
         rerenderQuests();
@@ -829,9 +893,15 @@ async function startPlayGameProgressTracking(quest: Quest, target: { raw: number
 
     if (intervalData) {
         intervalData.progress = initial.progress || initialProgress;
-        intervalData.progressTimeout = progressIntervalId;
         intervalData.rerenderTimeout = renderIntervalId;
     }
+
+    if (initial.completed || initial.progress >= questTarget) {
+        handleQuestComplete();
+        return;
+    }
+
+    await scheduleNextHeartbeat(initial.progress);
 }
 
 async function startAchievementActivityProgressTracking(quest: Quest, target: { raw: number; adjusted: number; }): Promise<void> {
@@ -954,7 +1024,7 @@ function canQuestAutoComplete(quest: Quest): boolean {
     return false;
 }
 
-function processQuestForAutoComplete(quest: Quest): boolean {
+function processQuestForAutoComplete(quest: Quest, force: boolean = false): boolean {
     const questName = normalizeQuestName(quest.config.messages.questName);
 
     const task = getQuestTask(quest);
@@ -965,6 +1035,12 @@ function processQuestForAutoComplete(quest: Quest): boolean {
     const isPlay = task?.type === QuestTaskType.PLAY_ON_DESKTOP || task?.type === QuestTaskType.PLAY_ON_XBOX || task?.type === QuestTaskType.PLAY_ON_PLAYSTATION || task?.type === QuestTaskType.PLAY_ACTIVITY;
     const isAchievement = task?.type === QuestTaskType.ACHIEVEMENT_IN_ACTIVITY;
     const canAutoComplete = canQuestAutoComplete(quest);
+
+    if (force) {
+        manuallyStoppedQuestIDs.delete(quest.id);
+    } else if (manuallyStoppedQuestIDs.has(quest.id)) {
+        return false;
+    }
 
     if (quest.userStatus?.completedAt || existingInterval) {
         return false;
@@ -1004,6 +1080,10 @@ function shouldDisableQuestAcceptedButton(quest: Quest): boolean | null {
 function getQuestUnacceptedButtonText(quest: Quest): string | null {
     const { completeGameQuestsInBackground, completeVideoQuestsInBackground, completeAchievementQuestsInBackground } = settings.store;
 
+    if (activeQuestIntervals.has(quest.id) || !!quest.userStatus?.enrolledAt) {
+        return null;
+    }
+
     const task = getQuestTask(quest);
     const { adjusted: target } = getQuestTarget(task);
     const targetFormatted = `${String(Math.floor(target / 60)).padStart(2, "0")}:${String(target % 60).padStart(2, "0")}`;
@@ -1023,9 +1103,11 @@ function getQuestUnacceptedButtonText(quest: Quest): string | null {
 
 function getQuestAcceptedButtonText(quest: Quest, prepositional: boolean = false): string | null {
     const { completeVideoQuestsQuicker, completeGameQuestsInBackground, completeVideoQuestsInBackground, completeAchievementQuestsInBackground } = settings.store;
-    const questEnrolledAt = quest.userStatus?.enrolledAt ? new Date(quest.userStatus.enrolledAt) : null;
+
+    quest = refreshQuest(quest);
     const task = getQuestTask(quest);
     const intervalData = activeQuestIntervals.get(quest.id);
+    const questEnrolledAt = quest.userStatus?.enrolledAt ? new Date(quest.userStatus.enrolledAt) : null;
 
     const isWatch = task?.type === QuestTaskType.WATCH_VIDEO || task?.type === QuestTaskType.WATCH_VIDEO_ON_MOBILE;
     const isPlay = task?.type === QuestTaskType.PLAY_ON_DESKTOP || task?.type === QuestTaskType.PLAY_ON_XBOX || task?.type === QuestTaskType.PLAY_ON_PLAYSTATION || task?.type === QuestTaskType.PLAY_ACTIVITY;
@@ -1034,7 +1116,7 @@ function getQuestAcceptedButtonText(quest: Quest, prepositional: boolean = false
     if (questEnrolledAt) {
         if (((isPlay && completeGameQuestsInBackground && IS_DISCORD_DESKTOP) || (isWatch && completeVideoQuestsInBackground))) {
             const { adjusted: durationWithLeeway } = getQuestTarget(task);
-            const currentProgress = getQuestProgress(quest, task) || 0;
+            const currentProgress = intervalData?.progress ?? getQuestProgress(quest, task) ?? 0;
             const progress = Math.min(currentProgress, durationWithLeeway);
             const timeRemaining = Math.max(0, durationWithLeeway - progress);
             const canCompleteImmediately = isWatch && (
@@ -1070,11 +1152,13 @@ function getQuestPanelPercentComplete({ quest, percentCompleteText }: { quest: Q
     if (!quest) { return null; }
 
     const task = getQuestTask(quest);
+    const intervalData = activeQuestIntervals.get(quest.id);
+    quest = refreshQuest(quest);
 
     if (!task) { return null; }
 
     const { adjusted: questTarget } = getQuestTarget(task);
-    const questProgress = getQuestProgress(quest, task);
+    const questProgress = intervalData?.progress ?? getQuestProgress(quest, task);
 
     if (!questTarget || questProgress === null) { return null; }
 
@@ -1233,7 +1317,7 @@ function getQuestAcceptedButtonProps(quest: Quest, text: string, disabled: boole
     return {
         disabled: shouldDisableQuestAcceptedButton(quest) ?? disabled,
         text: getQuestAcceptedButtonText(quest) ?? text,
-        onClick: () => { const startingAutocomplete = processQuestForAutoComplete(quest); !startingAutocomplete && onClick ? onClick() : null; },
+        onClick: () => { const startingAutocomplete = processQuestForAutoComplete(quest, true); !startingAutocomplete && onClick ? onClick() : null; },
         icon: () => { }
     };
 }
@@ -1244,7 +1328,11 @@ function resetQuestsToResume(quest?: Quest): void {
         settings.store.resumeQuestIDs.watch = settings.store.resumeQuestIDs.watch.filter(id => id !== quest.id);
         settings.store.resumeQuestIDs.achievement = settings.store.resumeQuestIDs.achievement.filter(id => id !== quest.id);
     } else {
-        settings.store.resumeQuestIDs = settings.def.resumeQuestIDs.default;
+        settings.store.resumeQuestIDs = {
+            watch: [],
+            play: [],
+            achievement: [],
+        };
     }
 }
 
@@ -1658,14 +1746,14 @@ export default definePlugin({
                 {
                     // Resume Video Quest.
                     match: /(tooltipText:\i.intl.string\(\i.\i.\i\),onClick:\(\)=>)(\(0,\i.\i\)\({quest)/,
-                    replace: "$1!$self.processQuestForAutoComplete(arguments[0].quest)&&$2"
+                    replace: "$1!$self.processQuestForAutoComplete(arguments[0].quest,true)&&$2"
                 },
                 {
                     // Start Play Game and Play Activity Quests.
                     // Video Quests are handled in the next patch group.
                     // Also set the unaccepted button text to "Complete".
                     match: /(\i,tooltipText:null,onClick:async\(\)=>{)/,
-                    replace: "$self.getQuestUnacceptedButtonText(arguments[0].quest)??$1const startingAutoComplete=arguments[0].isVideoQuest?false:$self.processQuestForAutoComplete(arguments[0].quest);"
+                    replace: "$self.getQuestUnacceptedButtonText(arguments[0].quest)??$1const startingAutoComplete=arguments[0].isVideoQuest?false:$self.processQuestForAutoComplete(arguments[0].quest,true);"
                 },
                 {
                     // Set the accepted button text to "Complete", "Completing", or "Resume" based on progress.
@@ -1695,11 +1783,11 @@ export default definePlugin({
             replacement: [
                 {
                     match: /(?=let{quest:)/,
-                    replace: "const questifyText=$self.getQuestUnacceptedButtonText(arguments[0].quest);"
+                    replace: "const questifyText=$self.getQuestUnacceptedButtonText(arguments[0].quest)??$self.getQuestAcceptedButtonText(arguments[0].quest);"
                 },
                 {
                     match: /(?<=}\),)(\i\?\.\(\))/,
-                    replace: "!$self.processQuestForAutoComplete(arguments[0].quest)&&($1)"
+                    replace: "!$self.processQuestForAutoComplete(arguments[0].quest,true)&&($1)"
                 },
                 {
                     match: /(?<=,text:)(\i),icon:\i/,
@@ -1713,7 +1801,7 @@ export default definePlugin({
             replacement: [
                 {
                     match: /(?=let{quest:)/,
-                    replace: "const questifyText=$self.getQuestUnacceptedButtonText(arguments[0].quest);"
+                    replace: "const questifyText=$self.getQuestUnacceptedButtonText(arguments[0].quest)??$self.getQuestAcceptedButtonText(arguments[0].quest);"
                 },
                 {
                     match: /(?<=,text:)(\i)/g,
@@ -1721,7 +1809,7 @@ export default definePlugin({
                 },
                 {
                     match: /(?<="primary",onClick:)(\i)/,
-                    replace: "!$self.processQuestForAutoComplete(arguments[0].quest)&&$1"
+                    replace: "()=>{!$self.processQuestForAutoComplete(arguments[0].quest,true)&&$1}"
                 }
             ]
         },
@@ -1742,7 +1830,7 @@ export default definePlugin({
                 {
                     // Initial and subsequent select drop down for picking or changing a platform.
                     match: /(select:)(\i)(,serialize:\i=>{)/g,
-                    replace: "$1(platform)=>{$self.processQuestForAutoComplete(arguments[0].quest),$2(platform)}$3"
+                    replace: "$1(platform)=>{$self.processQuestForAutoComplete(arguments[0].quest,true),$2(platform)}$3"
                 },
                 {
                     // The Quest Accepted button is disabled by default. If the user reloads the client, they need a way
