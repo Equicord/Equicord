@@ -1118,7 +1118,7 @@ function getQuestAcceptedButtonText(quest: Quest, prepositional: boolean = false
     if (questEnrolledAt) {
         if (((isPlay && completeGameQuestsInBackground && IS_DISCORD_DESKTOP) || (isWatch && completeVideoQuestsInBackground))) {
             const { adjusted: durationWithLeeway } = getQuestTarget(task);
-            const currentProgress = intervalData?.progress ?? getQuestProgress(quest, task) ?? 0;
+            const currentProgress = getQuestProgress(quest, task) ?? 0;
             const progress = Math.min(currentProgress, durationWithLeeway);
             const timeRemaining = Math.max(0, durationWithLeeway - progress);
             const canCompleteImmediately = isWatch && (
@@ -1155,12 +1155,11 @@ function getQuestPanelPercentComplete({ quest, percentCompleteText }: { quest: Q
 
     quest = refreshQuest(quest);
     const task = getQuestTask(quest);
-    const intervalData = activeQuestIntervals.get(quest.id);
 
     if (!task) { return null; }
 
     const { adjusted: questTarget } = getQuestTarget(task);
-    const questProgress = intervalData?.progress ?? getQuestProgress(quest, task);
+    const questProgress = getQuestProgress(quest, task);
 
     if (!questTarget || questProgress === null) { return null; }
 
