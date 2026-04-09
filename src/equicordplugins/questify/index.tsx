@@ -21,7 +21,7 @@ import { JSX } from "react";
 
 import { addIgnoredQuest, addRerenderCallback, autoFetchCompatible, fetchAndAlertQuests, maximumAutoFetchIntervalValue, minimumAutoFetchIntervalValue, questIsIgnored, removeIgnoredQuest, rerenderQuests, settings, startAutoFetchingQuests, stopAutoFetchingQuests, validateAndOverwriteIgnoredQuests } from "./settings";
 import { ActiveQuestIntervalsMap, ExcludedQuestMap, GuildlessServerListItem, Quest, QuestIcon, QuestMap, QuestStatus, QuestTaskType, RGB } from "./utils/components";
-import { adjustRGB, decimalToRGB, fetchAndDispatchQuests, formatLowerBadge, getFormattedNow, getIgnoredQuestIDs, getQuestProgress, getQuestStatus, getQuestTarget, getQuestTask, isDarkish, leftClick, middleClick, normalizeQuestName, q, QuestifyLogger, questPath, QuestsStore, refreshQuest, reportPlayGameQuestProgress, reportVideoQuestProgress, rightClick, setIgnoredQuestIDs, videoQuestLeeway, waitUntilEnrolled } from "./utils/misc";
+import { adjustRGB, decimalToRGB, fetchAndDispatchQuests, formatLowerBadge, getFormattedNow, getIgnoredQuestIDs, getQuestProgress, getQuestStatus, getQuestTarget, getQuestTask, isDarkish, leftClick, middleClick, normalizeQuestName, q, QuestifyLogger, questPath, QuestsStore, refreshQuest, reportPlayGameQuestProgress, reportVideoQuestProgress, rightClick, setIgnoredQuestIDs, waitUntilEnrolled } from "./utils/misc";
 
 const AuthorizedAppsStore = findStoreLazy("AuthorizedAppsStore");
 let initialQuestDataFetched = false;
@@ -572,11 +572,16 @@ function shouldPreloadQuestAssets(): boolean {
 
 async function startVideoProgressTracking(quest: Quest, target: { raw: number; adjusted: number; }): Promise<void> {
     const questName = normalizeQuestName(quest.config.messages.questName);
+    const task = getQuestTask(quest);
+    const { completeVideoQuestsQuicker } = settings.store;
     const questEnrolledAt = quest.userStatus?.enrolledAt ? new Date(quest.userStatus.enrolledAt) : null;
-    const initialProgress = Math.floor(((new Date()).getTime() - (questEnrolledAt ?? new Date()).getTime()) / 1000) || 1;
+    const initialProgress = completeVideoQuestsQuicker
+        ? Math.floor(((new Date()).getTime() - (questEnrolledAt ?? new Date()).getTime()) / 1000) || 1
+        : Math.max(0, getQuestProgress(quest, task) || 0);
     activeQuestIntervals.set(quest.id, { progressTimeout: null as any, rerenderTimeout: null as any, progress: initialProgress, type: "watch" });
     // Max up to ~25 seconds into the future can be reported.
     const { raw: reportTarget, adjusted: questTargetWithLeeway } = target;
+    const videoQuestOffset = reportTarget - questTargetWithLeeway;
     let currentProgress = initialProgress;
     let currentProgressScaled = initialProgress;
     const timeRemaining = Math.max(0, questTargetWithLeeway - currentProgressScaled);
@@ -599,14 +604,39 @@ async function startVideoProgressTracking(quest: Quest, target: { raw: number; a
         return;
     }
 
-    const reportEverySec = 10;
-    let progressIntervalId: NodeJS.Timeout;
+    const minimumReportDelay = 7;
+    const maximumReportDelay = 10;
+    const floatPrecision = 6;
+    let progressIntervalId: NodeJS.Timeout | null = null;
+    let lastReportedProgress = initialProgress;
+
+    function clampFloat(value: number): number {
+        return Number(value.toFixed(floatPrecision));
+    }
+
+    function randomBetween(min: number, max: number): number {
+        return clampFloat(min + Math.random() * (max - min));
+    }
+
+    function getProgressToReport(baseProgress: number): number {
+        const variedProgress = baseProgress + randomBetween(-0.45, 0.45);
+
+        return clampFloat(Math.min(reportTarget, Math.max(lastReportedProgress + 0.01, variedProgress)));
+    }
+
+    function getFinalProgressToReport(): number {
+        return clampFloat(randomBetween(reportTarget, reportTarget + 1));
+    }
 
     async function handleSendComplete() {
-        clearInterval(progressIntervalId);
+        if (progressIntervalId) {
+            clearInterval(progressIntervalId);
+        }
+
         clearTimeout(renderIntervalId);
-        const success = await reportVideoQuestProgress(quest, reportTarget, QuestifyLogger);
+        const success = await reportVideoQuestProgress(quest, getFinalProgressToReport(), QuestifyLogger);
         activeQuestIntervals.delete(quest.id);
+        resetQuestsToResume(quest);
 
         if (success) {
             QuestifyLogger.info(`[${getFormattedNow()}] Quest ${questName} completed.`);
@@ -624,41 +654,51 @@ async function startVideoProgressTracking(quest: Quest, target: { raw: number; a
         }
     }
 
-    if (timeRemaining < reportEverySec) {
+    const simulatedProgressToCover = reportTarget - currentProgressScaled;
+    const speedFactor = timeRemaining > 0 ? simulatedProgressToCover / timeRemaining : 0;
+
+    async function scheduleNextReport(remainingTime: number): Promise<void> {
+        const nextDelay = Math.min(remainingTime, randomBetween(minimumReportDelay, maximumReportDelay));
+
         progressIntervalId = setTimeout(async () => {
-            await handleSendComplete();
-        }, timeRemaining * 1000);
-    } else {
-        const simulatedProgressToCover = reportTarget - currentProgressScaled;
-        const speedFactor = simulatedProgressToCover / timeRemaining;
-        const progressIncrementPerInterval = reportEverySec * speedFactor;
-        const numberOfIntervals = Math.floor(timeRemaining / reportEverySec);
-        let intervalsRun = 0;
+            if (!activeQuestIntervals.has(quest.id)) {
+                return;
+            }
 
-        reportVideoQuestProgress(quest, initialProgress, QuestifyLogger);
+            currentProgress += nextDelay;
+            currentProgressScaled += nextDelay * speedFactor;
 
-        progressIntervalId = setInterval(async () => {
-            intervalsRun++;
-            currentProgress += reportEverySec;
-            currentProgressScaled += progressIncrementPerInterval;
-            const progressToReport = Math.min(Math.floor(currentProgressScaled), reportTarget);
+            const updatedRemainingTime = Math.max(0, questTargetWithLeeway - currentProgress);
+            const shouldSendIntermediate = updatedRemainingTime > 0 && currentProgress < reportTarget - videoQuestOffset - (nextDelay / 2);
 
-            if (intervalsRun < numberOfIntervals || (currentProgress < reportTarget - videoQuestLeeway - (reportEverySec / 2))) {
+            if (shouldSendIntermediate) {
+                const progressToReport = getProgressToReport(Math.min(currentProgressScaled, reportTarget));
+                lastReportedProgress = progressToReport;
                 await reportVideoQuestProgress(quest, progressToReport, QuestifyLogger);
             }
 
-            if (intervalsRun >= numberOfIntervals) {
-                clearInterval(progressIntervalId);
-
-                const timeSpentInIntervals = numberOfIntervals * reportEverySec;
-                const finalWaitTime = Math.max(0, timeRemaining - timeSpentInIntervals);
-                progressIntervalId = setTimeout(handleSendComplete, finalWaitTime * 1000);
-
-                const intervalData = activeQuestIntervals.get(quest.id);
-                if (intervalData) intervalData.progressTimeout = progressIntervalId;
+            if (updatedRemainingTime <= 0) {
+                await handleSendComplete();
+                return;
             }
-        }, reportEverySec * 1000);
+
+            await scheduleNextReport(updatedRemainingTime);
+        }, nextDelay * 1000);
+
+        const intervalData = activeQuestIntervals.get(quest.id);
+
+        if (intervalData && progressIntervalId) {
+            intervalData.progressTimeout = progressIntervalId;
+        }
     }
+
+    if (initialProgress > 0) {
+        const initialProgressToReport = clampFloat(Math.min(reportTarget, initialProgress + randomBetween(0.05, 0.95)));
+        lastReportedProgress = initialProgressToReport;
+        reportVideoQuestProgress(quest, initialProgressToReport, QuestifyLogger);
+    }
+
+    await scheduleNextReport(timeRemaining);
 
     const renderIntervalId = setInterval(() => {
         const intervalData = activeQuestIntervals.get(quest.id);
@@ -674,8 +714,10 @@ async function startVideoProgressTracking(quest: Quest, target: { raw: number; a
 
     const intervalData = activeQuestIntervals.get(quest.id);
 
-    if (intervalData) {
+    if (intervalData && progressIntervalId) {
         intervalData.progressTimeout = progressIntervalId;
+        intervalData.rerenderTimeout = renderIntervalId;
+    } else if (intervalData) {
         intervalData.rerenderTimeout = renderIntervalId;
     }
 }
@@ -980,7 +1022,7 @@ function getQuestUnacceptedButtonText(quest: Quest): string | null {
 }
 
 function getQuestAcceptedButtonText(quest: Quest, prepositional: boolean = false): string | null {
-    const { completeGameQuestsInBackground, completeVideoQuestsInBackground, completeAchievementQuestsInBackground } = settings.store;
+    const { completeVideoQuestsQuicker, completeGameQuestsInBackground, completeVideoQuestsInBackground, completeAchievementQuestsInBackground } = settings.store;
     const questEnrolledAt = quest.userStatus?.enrolledAt ? new Date(quest.userStatus.enrolledAt) : null;
     const task = getQuestTask(quest);
     const intervalData = activeQuestIntervals.get(quest.id);
@@ -995,7 +1037,11 @@ function getQuestAcceptedButtonText(quest: Quest, prepositional: boolean = false
             const currentProgress = getQuestProgress(quest, task) || 0;
             const progress = Math.min(currentProgress, durationWithLeeway);
             const timeRemaining = Math.max(0, durationWithLeeway - progress);
-            const canCompleteImmediately = isWatch && questEnrolledAt && ((new Date().getTime() - questEnrolledAt.getTime()) / 1000) >= durationWithLeeway;
+            const canCompleteImmediately = isWatch && (
+                completeVideoQuestsQuicker
+                    ? !!questEnrolledAt && ((new Date().getTime() - questEnrolledAt.getTime()) / 1000) >= durationWithLeeway
+                    : !timeRemaining
+            );
             const progressFormatted = `${String(Math.floor(timeRemaining / 60)).padStart(2, "0")}:${String(timeRemaining % 60).padStart(2, "0")}`;
             const progressFormattedAsPreposition = timeRemaining >= 60
                 ? `${Math.floor(timeRemaining / 60)}m ${timeRemaining % 60}s`

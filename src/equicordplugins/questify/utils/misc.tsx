@@ -76,8 +76,9 @@ export function getQuestProgress(quest: Quest, task: QuestTask) {
 
 export function getQuestTarget(task: QuestTask) {
     const isWatch = task.type === QuestTaskType.WATCH_VIDEO || task.type === QuestTaskType.WATCH_VIDEO_ON_MOBILE;
+    const { completeVideoQuestsQuicker } = settings.store;
     const raw = task.target;
-    const adjusted = Math.max(0, raw - (isWatch ? videoQuestLeeway : 0));
+    const adjusted = Math.max(0, raw - (isWatch && completeVideoQuestsQuicker ? videoQuestLeeway : 0));
     return { raw, adjusted };
 }
 
