@@ -26,15 +26,16 @@ const memoryDatabases = new Map<string, Map<string, Map<IDBValidKey, unknown>>>(
 
 interface MemoryStore {
     __memoryStore: true;
-    data: Map<IDBValidKey, unknown>;
-    get(key: IDBValidKey): unknown;
+    get<T>(key: IDBValidKey): T | undefined;
     put(value: unknown, key: IDBValidKey): void;
     delete(key: IDBValidKey): void;
     clear(): void;
-    getAllKeys(): IDBValidKey[];
-    getAll(): unknown[];
-    entries(): [IDBValidKey, unknown][];
+    getAllKeys<KeyType extends IDBValidKey>(): KeyType[];
+    getAll<T>(): T[];
+    entries<KeyType extends IDBValidKey, ValueType>(): [KeyType, ValueType][];
 }
+
+type StoreLike = IDBObjectStore | MemoryStore;
 
 function handleFailure(error: unknown) {
     if (loggedFailure) return;
@@ -64,19 +65,18 @@ function getMemoryStore(dbName: string, storeName: string): MemoryStore {
 
     return {
         __memoryStore: true,
-        data,
-        get: key => data.get(key),
+        get: <T>(key: IDBValidKey) => data.get(key) as T | undefined,
         put: (value, key) => { data.set(key, value); },
         delete: key => { data.delete(key); },
         clear: () => { data.clear(); },
-        getAllKeys: () => Array.from(data.keys()),
-        getAll: () => Array.from(data.values()),
-        entries: () => Array.from(data.entries())
+        getAllKeys: <KeyType extends IDBValidKey>() => Array.from(data.keys()) as KeyType[],
+        getAll: <T>() => Array.from(data.values()) as T[],
+        entries: <KeyType extends IDBValidKey, ValueType>() => Array.from(data.entries()) as [KeyType, ValueType][]
     };
 }
 
-function isMemoryStore(store: IDBObjectStore | MemoryStore): store is MemoryStore {
-    return (store as MemoryStore).__memoryStore === true;
+function isMemoryStore(store: StoreLike): store is MemoryStore {
+    return "__memoryStore" in store;
 }
 
 export function promisifyRequest<T = undefined>(
@@ -100,7 +100,7 @@ export function createStore(dbName: string, storeName: string): UseStore {
 
     return async (txMode, callback) => {
         const db = await dbp;
-        if (!db) return callback(memoryStore as unknown as IDBObjectStore);
+        if (!db) return callback(memoryStore);
 
         return callback(db.transaction(storeName, txMode).objectStore(storeName));
     };
@@ -108,7 +108,7 @@ export function createStore(dbName: string, storeName: string): UseStore {
 
 export type UseStore = <T>(
     txMode: IDBTransactionMode,
-    callback: (store: IDBObjectStore) => T | PromiseLike<T>,
+    callback: (store: StoreLike) => T | PromiseLike<T>,
 ) => Promise<T>;
 
 let defaultGetStoreFunc: UseStore | undefined;
@@ -136,12 +136,9 @@ export function set(
     customStore = defaultGetStore(),
 ): Promise<void> {
     return withFailureFallback(customStore("readwrite", store => {
-        if (isMemoryStore(store)) {
-            store.put(value, key);
-            return;
-        }
-
         store.put(value, key);
+        if (isMemoryStore(store)) return;
+
         return promisifyRequest(store.transaction);
     }), undefined);
 }
@@ -151,12 +148,9 @@ export function setMany(
     customStore = defaultGetStore(),
 ): Promise<void> {
     return withFailureFallback(customStore("readwrite", store => {
-        if (isMemoryStore(store)) {
-            entries.forEach(entry => store.put(entry[1], entry[0]));
-            return;
-        }
-
         entries.forEach(entry => store.put(entry[1], entry[0]));
+        if (isMemoryStore(store)) return;
+
         return promisifyRequest(store.transaction);
     }), undefined);
 }
@@ -206,12 +200,9 @@ export function del(
     customStore = defaultGetStore(),
 ): Promise<void> {
     return withFailureFallback(customStore("readwrite", store => {
-        if (isMemoryStore(store)) {
-            store.delete(key);
-            return;
-        }
-
         store.delete(key);
+        if (isMemoryStore(store)) return;
+
         return promisifyRequest(store.transaction);
     }), undefined);
 }
@@ -221,24 +212,18 @@ export function delMany(
     customStore = defaultGetStore(),
 ): Promise<void> {
     return withFailureFallback(customStore("readwrite", store => {
-        if (isMemoryStore(store)) {
-            keys.forEach(key => store.delete(key));
-            return;
-        }
-
         keys.forEach(key => store.delete(key));
+        if (isMemoryStore(store)) return;
+
         return promisifyRequest(store.transaction);
     }), undefined);
 }
 
 export function clear(customStore = defaultGetStore()): Promise<void> {
     return withFailureFallback(customStore("readwrite", store => {
-        if (isMemoryStore(store)) {
-            store.clear();
-            return;
-        }
-
         store.clear();
+        if (isMemoryStore(store)) return;
+
         return promisifyRequest(store.transaction);
     }), undefined);
 }
@@ -259,7 +244,7 @@ export function keys<KeyType extends IDBValidKey>(
     customStore = defaultGetStore(),
 ): Promise<KeyType[]> {
     return withFailureFallback(customStore("readonly", store => {
-        if (isMemoryStore(store)) return store.getAllKeys() as unknown as KeyType[];
+        if (isMemoryStore(store)) return store.getAllKeys<KeyType>();
 
         if (store.getAllKeys) {
             return promisifyRequest(
@@ -276,7 +261,7 @@ export function keys<KeyType extends IDBValidKey>(
 
 export function values<T = any>(customStore = defaultGetStore()): Promise<T[]> {
     return withFailureFallback(customStore("readonly", store => {
-        if (isMemoryStore(store)) return store.getAll() as unknown as T[];
+        if (isMemoryStore(store)) return store.getAll<T>();
 
         if (store.getAll) {
             return promisifyRequest(store.getAll() as IDBRequest<T[]>);
@@ -293,7 +278,7 @@ export function entries<KeyType extends IDBValidKey, ValueType = any>(
     customStore = defaultGetStore(),
 ): Promise<[KeyType, ValueType][]> {
     return withFailureFallback(customStore("readonly", store => {
-        if (isMemoryStore(store)) return store.entries() as [KeyType, ValueType][];
+        if (isMemoryStore(store)) return store.entries<KeyType, ValueType>();
 
         if (store.getAll && store.getAllKeys) {
             return Promise.all([
