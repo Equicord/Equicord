@@ -36,6 +36,35 @@ const discordPkg = require(join(asarPath, "package.json"));
 require.main!.filename = join(asarPath, discordPkg.main);
 if (IS_VESKTOP || IS_EQUIBOP) require.main!.filename = join(dirname(injectorPath), "..", "..", "package.json");
 
+try {
+    const analytics = require(join(asarPath, "common/analytics"));
+    if (analytics?.DesktopTTIAnalytics?.prototype) {
+        const proto = analytics.DesktopTTIAnalytics.prototype;
+        const methods = [
+            "trackMainWindowCreated",
+            "trackMainWindowShown",
+            "trackMainWindowDocumentLoad",
+            "trackMainWindowLoadStart",
+            "trackMainWindowLoadDuration",
+            "trackMainWindowJSAppLoadDuration",
+            "trackMainWindowJSAppInteractiveDuration",
+            "trackDetailedTTI",
+            "trackFullTTI",
+            "trackMainAppTimeToInit",
+            "trackMainAppReady",
+            "trackSplashWindowCreated",
+            "trackSplashWindowShown",
+            "trackSplashWindowDuration",
+            "trackSplashWindowRestart",
+            "getRestartAndFullTTIDuration",
+            "trackFullInteractiveTTI"
+        ];
+        for (const method of methods) {
+            if (!proto[method]) proto[method] = () => {};
+        }
+    }
+} catch (e) {}
+
 // @ts-expect-error Untyped method? Dies from cringe
 app.setAppPath(asarPath);
 
