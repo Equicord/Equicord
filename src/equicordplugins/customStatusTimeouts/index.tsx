@@ -138,17 +138,14 @@ function isForeverPresetEntry(entry: PresetEntry | StoredPresetEntry): entry is 
 }
 
 function clonePresetEntries(entries: PresetEntry[]) {
-    return entries.map(entry => isForeverPresetEntry(entry)
-        ? { ...entry }
-        : { ...entry, amount: entry.amount }
-    );
+    return entries.map(entry => ({ ...entry }));
 }
 
-function sanitizePresetEntries(entries: StoredPresetEntry[] | undefined): PresetEntry[] {
+function sanitizePresetEntries(entries: StoredPresetEntry[]): PresetEntry[] {
     const presets: PresetEntry[] = [];
     let hasForever = false;
 
-    for (const entry of entries ?? defaultPresetEntries) {
+    for (const entry of entries) {
         if (isForeverPresetEntry(entry)) {
             if (hasForever) continue;
 
@@ -178,7 +175,7 @@ function sanitizePresetEntries(entries: StoredPresetEntry[] | undefined): Preset
     return presets;
 }
 
-const getPresetEntries = () => sanitizePresetEntries(settings.store.presets as StoredPresetEntry[] | undefined);
+const getPresetEntries = () => sanitizePresetEntries(settings.store.presets);
 
 function toTimeoutPreset(entry: PresetEntry): TimeoutPreset | null {
     if (isForeverPresetEntry(entry)) return foreverPreset;
@@ -202,7 +199,7 @@ const getTimeoutPresets = (entries = getPresetEntries()) => entries
     .filter((preset): preset is TimeoutPreset => preset != null);
 
 const getStoredDefaultPresetIds = () => Object.fromEntries(
-    statusConfigs.map(({ id, setting }) => [id, String(settings.store[setting] ?? "")])
+    statusConfigs.map(({ id, setting }) => [id, String(settings.store[setting])])
 ) as Record<TimedStatus, string>;
 
 const storeDefaultPresetIds = (defaultPresetIds: Record<TimedStatus, string>) => {
