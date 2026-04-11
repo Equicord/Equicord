@@ -14,7 +14,7 @@ import { Settings } from "Vencord";
 import { Native } from ".";
 import { ImageCacheDir, LogsDir } from "./components/FolderSelectInput";
 import { openLogModal } from "./components/LogsModal";
-import { clearMessagesIDB } from "./db";
+import { clearLogs } from ".";
 import { blockedExts } from "./list";
 import { DEFAULT_IMAGE_CACHE_DIR } from "./utils/constants";
 import { exportLogs, importLogs } from "./utils/settingsUtils";
@@ -260,6 +260,13 @@ export const settings = definePluginSettings({
         component: ExportLogsButton
     },
 
+    clearLogsOnRestart: {
+        type: OptionType.BOOLEAN,
+        description: "Clear logs when Discord restarts.",
+        default: false,
+        restartNeeded: true,
+    },
+
     openLogs: {
         type: OptionType.COMPONENT,
         description: "Open Logs",
@@ -298,7 +305,7 @@ export const settings = definePluginSettings({
                     confirmText: "Clear",
                     cancelText: "Cancel",
                     onConfirm: async () => {
-                        await clearMessagesIDB();
+                        await clearLogs();
                     },
                 })}
             >
