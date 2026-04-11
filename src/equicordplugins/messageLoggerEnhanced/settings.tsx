@@ -11,10 +11,9 @@ import { OptionType } from "@utils/types";
 import { Alerts, useState } from "@webpack/common";
 import { Settings } from "Vencord";
 
-import { Native } from ".";
+import { clearLogs, Native } from ".";
 import { ImageCacheDir, LogsDir } from "./components/FolderSelectInput";
 import { openLogModal } from "./components/LogsModal";
-import { clearLogs } from ".";
 import { blockedExts } from "./list";
 import { DEFAULT_IMAGE_CACHE_DIR } from "./utils/constants";
 import { exportLogs, importLogs } from "./utils/settingsUtils";
