@@ -1,0 +1,73 @@
+.vc-custom-presence-timeouts-editor {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.vc-custom-presence-timeouts-toolbar {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.vc-custom-presence-timeouts-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.vc-custom-presence-timeouts-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 160px auto;
+    gap: 8px;
+    align-items: center;
+}
+
+.vc-custom-presence-timeouts-input [data-mana-component="text-input"],
+.vc-custom-presence-timeouts-select [data-mana-component="select"],
+.vc-custom-presence-timeouts-forever {
+    min-height: 30px;
+}
+
+.vc-custom-presence-timeouts-select {
+    min-width: 0;
+}
+
+.vc-custom-presence-timeouts-forever {
+    grid-column: 1 / span 2;
+    display: flex;
+    align-items: center;
+    padding: 0 12px;
+    border: 1px solid var(--control-secondary-border-default);
+    border-radius: var(--radius-sm, 8px);
+    background-color: var(--control-secondary-background-default);
+    color: var(--control-secondary-text-default);
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.vc-custom-presence-timeouts-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.vc-custom-presence-timeouts-defaults {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+@media (width <= 700px) {
+    .vc-custom-presence-timeouts-row {
+        grid-template-columns: 1fr;
+    }
+
+    .vc-custom-presence-timeouts-forever {
+        grid-column: auto;
+    }
+
+    .vc-custom-presence-timeouts-actions {
+        justify-content: flex-start;
+        flex-wrap: wrap;
+    }
+}
