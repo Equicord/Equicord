@@ -56,7 +56,7 @@ export default definePlugin({
 
     patches: [
         {
-            find: ".CUSTOM_GIFT?\"\"",
+            find: '.CUSTOM_GIFT?""',
             replacement: [
                 {
                     match: /message:(\i),message:\{id:\i\}.{0,200}renderContentOnly:\i\}=\i;/,
