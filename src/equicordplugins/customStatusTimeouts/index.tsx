@@ -9,11 +9,13 @@ import { EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 
 const Millis = {
+    HALF_SECOND: 500,
     SECOND: 1e3,
     MINUTE: 6e4,
     HOUR: 36e5,
     DAY: 864e5,
-    WEEK: 6048e5
+    WEEK: 6048e5,
+    DAYS_30: 2592e6
 };
 
 const settings = definePluginSettings({
@@ -47,18 +49,6 @@ const settings = definePluginSettings({
         restartNeeded: true,
         default: "1, 2"
     },
-    extraWeeks: {
-        type: OptionType.STRING,
-        description: "Extra weeks to add, separated by a comma (e.g. 1, 2, 3)",
-        restartNeeded: true,
-        default: "1, 2, 3"
-    },
-    extraMonths: {
-        type: OptionType.STRING,
-        description: "Extra months to add, separated by a comma (e.g. 1, 2, 3, 6)",
-        restartNeeded: true,
-        default: "1, 2, 3, 6"
-    },
 });
 
 export default definePlugin({
@@ -82,8 +72,12 @@ export default definePlugin({
         const minutes = parse(settings.store.extraMinutes);
         const hours = parse(settings.store.extraHours);
         const days = parse(settings.store.extraDays);
-        const weeks = parse(settings.store.extraWeeks);
-        const months = parse(settings.store.extraMonths);
+        // I was testing weeks and months and for some reason random ones didnt apply look below for the working ones
+        // tested weeks between 1-12 working weeks were 1, 2, 3, 8, 9, 10 the rest didnt work
+        // tested months between 1-12 working months were 2, 4, 10, 12 the rest didnt work
+        // for months I only tested evens except for 1 so I hardcoded them to avoid user complaints
+        const weeks = [1, 2, 3];
+        const months = [2, 4];
 
         const extra = [
             ...seconds.map(s => ({
@@ -107,7 +101,7 @@ export default definePlugin({
                 label: () => `For ${w} ${w === 1 ? "Week" : "Weeks"}`
             })),
             ...months.map(m => ({
-                duration: m * 30 * Millis.DAY,
+                duration: m * Millis.DAYS_30,
                 label: () => `For ${m} ${m === 1 ? "Month" : "Months"}`
             })),
         ];
