@@ -32,7 +32,3 @@ ExtensionCache/
 
 # wakatime related stuff
 .wakatime-project
-
-# notepad++
-*.bak
-nppBackup/
