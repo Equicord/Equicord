@@ -127,7 +127,7 @@ export default definePlugin({
             : colorString;
 
         // guarantee minimum difference in dms
-        if (context?.channel?.isPrivate() && dmColor && userId) {
+        if (context?.channel?.isPrivate?.() && dmColor && userId) {
             const currentUserId = UserStore.getCurrentUser()?.id;
             if (currentUserId && userId !== currentUserId) {
                 const currentUserColor = Number(h64(currentUserId) % 360n);
