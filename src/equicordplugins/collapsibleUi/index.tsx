@@ -124,14 +124,14 @@ export default definePlugin({
         {
             find: ".DISPLAY_NAME_STYLES_COACHMARK)",
             replacement: {
-                match: /className:(\i\.\i),style:(\i),children:\[/,
-                replace: "className:$self.userAreaControlsClass($1),style:$2,children:["
+                match: /className:(\i\.\i),(?=style:(\i),children:\[)/,
+                replace: "className:$self.userAreaControlsClass($1),"
             }
         },
         {
-            find: "\"sticker\")",
+            find: '"sticker")',
             replacement: {
-                match: /(?<="div",\{.{0,15}children:)(.{0,200}?)\}/,
+                match: /(?<="div",\{.{0,15}children:)(.+?)\}/,
                 replace: "$self.wrapChatButtons($1)}"
             }
         }
