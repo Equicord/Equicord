@@ -1,0 +1,27 @@
+.vc-muteAlert-audioPlayerWrapper-disabled {
+    opacity: 0.5;
+    pointer-events: none;
+    cursor: not-allowed;
+}
+
+.vc-muteAlert-audioPlayerWrapper > * > [class^="playbackRateContainer"] {
+    display: none;
+}
+
+.vc-muteAlert-audioPlayerWrapper > audio {
+    flex: 1;
+}
+
+.vc-muteAlert-audioPlayerWrapper:has(> audio) {
+    display: flex;
+}
+
+div.vc-muteAlert-buttonContainer {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+div.vc-muteAlert-buttonContainer > button {
+    flex: 1;
+}
