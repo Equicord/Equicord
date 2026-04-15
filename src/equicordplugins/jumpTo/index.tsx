@@ -121,7 +121,7 @@ const MessageMenuPatch: NavContextMenuPatchCallback = (children, { message }: { 
 export default definePlugin({
     name: "JumpTo",
     description: "Adds context menu options to jump to the start or bottom of a channel/DM.",
-    authors: [Devs.Samwich, Devs.thororen],
+    authors: [Devs.Samwich, Devs.thororen, Devs.rz30],
     contextMenus: {
         "channel-context": ChannelMenuPatch,
         "gdm-context": ChannelMenuPatch,
