@@ -880,32 +880,20 @@ async function normalizeUploadBlob(blob: Blob, sourceUrl?: string): Promise<{ bl
     }
 
     const mimeType = getMimeFromExtension(ext);
-    const preserveOriginalFilename = Boolean((settings.store as { preserveOriginalFilename?: boolean; }).preserveOriginalFilename);
-    const sourceFileName = (() => {
-        if (blob instanceof File && blob.name) return blob.name;
-        if (!sourceUrl) return "";
+    const { preserveOriginalFilename } = settings.store;
+    let sourceFileName = "";
+    if (blob instanceof File && blob.name) {
+        sourceFileName = blob.name;
+    } else if (sourceUrl && URL.canParse(sourceUrl)) {
+        const segment = new URL(sourceUrl).pathname.split("/").pop();
+        if (segment) sourceFileName = decodeURIComponent(segment);
+    }
 
-        try {
-            const pathname = new URL(sourceUrl).pathname;
-            const lastSegment = pathname.split("/").pop();
-            return lastSegment ? decodeURIComponent(lastSegment) : "";
-        } catch {
-            return "";
-        }
-    })();
-
-    const filename = (() => {
-        if (!preserveOriginalFilename || !sourceFileName) {
-            return `upload.${ext}`;
-        }
-
+    let filename = `upload.${ext}`;
+    if (preserveOriginalFilename && sourceFileName) {
         const dotIndex = sourceFileName.lastIndexOf(".");
-        if (dotIndex < 0) {
-            return `${sourceFileName}.${ext}`;
-        }
-
-        return `${sourceFileName.slice(0, dotIndex)}.${ext}`;
-    })();
+        filename = `${sourceFileName.slice(0, dotIndex < 0 ? undefined : dotIndex)}.${ext}`;
+    }
 
     return {
         blob: new Blob([blob], { type: mimeType }),
