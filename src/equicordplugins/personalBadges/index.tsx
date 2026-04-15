@@ -7,7 +7,7 @@
 import { classNameFactory } from "@utils/css";
 import { openModal } from "@utils/modal";
 import definePlugin from "@utils/types";
-
+import { Devs } from "@utils/constants";
 import { addPatchContext_manageBadges, importCategory, removePatchContext_manageBadges } from "./components/context";
 import { BadgeModal } from "./components/modals/BadgeModal";
 import { BadgeHandler, CategoryHandler } from "./utils/badge/data";
@@ -21,10 +21,7 @@ export const cl = classNameFactory("pb-");
 export default definePlugin({
     name: "PersonalBadges",
     description: "Create profile badges that are exclusively visible to you through locally stored data.",
-    authors: [{
-        name: "YLohkuhl",
-        id: 1204700402235478078n
-    }],
+    authors: [Devs.rz30],
     dependencies: ["BadgeAPI"],
     settings: pluginSettings,
 
