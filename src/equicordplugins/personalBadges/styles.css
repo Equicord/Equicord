@@ -1,0 +1,30 @@
+.pb-button-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+}
+
+.pb-form-divider {
+    margin-top: 16px;
+    margin-bottom: 16px;
+}
+
+.pb-form-title {
+    text-align: center;
+    user-select: none;
+    margin-bottom: 16px;
+    gap: 13px;
+}
+
+.pb-flex-menu-item {
+    align-items: center;
+    gap: 0.3em;
+}
+
+/* .pb-fixed-select-width {
+    width: 22.2%;
+} */
+
+/* .pb-quick-css-testing {
+    width: 47%;
+} */

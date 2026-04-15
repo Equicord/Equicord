@@ -1,0 +1,14 @@
+.pb-modal-form {
+    display: flex;
+    margin: 20px;
+    gap: 13px;
+}
+
+.pb-modal-header {
+    gap: 13px;
+}
+
+.pb-modal-footer {
+    padding: 9px;
+    gap: 6px;
+}
