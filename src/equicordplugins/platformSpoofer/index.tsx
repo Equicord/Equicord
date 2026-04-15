@@ -52,7 +52,7 @@ const settings = definePluginSettings({
 export default definePlugin({
     name: "PlatformSpoofer",
     description: "Spoof what platform or device you're on",
-    authors: [EquicordDevs.Drag, EquicordDevs.neoarz],
+    authors: [EquicordDevs.Drag, EquicordDevs.neoarz, Devs.rz30],
     settingsAboutComponent: () => (
         <Notice.Warning>
             We can't guarantee this plugin won't get you warned or banned.
