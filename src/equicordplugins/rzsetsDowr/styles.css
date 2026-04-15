@@ -1,0 +1,22 @@
+.server-assets-downloader-modal {
+    background-color: var(--background-primary);
+    border-radius: 8px;
+    padding: 16px;
+    width: 400px;
+}
+
+.server-assets-downloader-title {
+    color: var(--header-primary);
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    text-align: center;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--background-modifier-accent);
+}
+
+.server-assets-downloader-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
