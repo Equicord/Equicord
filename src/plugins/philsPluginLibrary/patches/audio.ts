@@ -20,45 +20,29 @@ import { Logger } from "@utils/Logger";
 import { lodash } from "@webpack/common";
 
 import { MicrophoneProfile, MicrophoneStore } from "../../betterMicrophone.desktop/stores";
-import { ProfilableStore, replaceObjectValuesIfExist, types } from "../../philsPluginLibrary";
+import { ProfilableStore, types } from "../../philsPluginLibrary";
 
 export function getDefaultAudioTransportationOptions(connection: types.Connection) {
     return {
-        audioEncoder: {
-            ...connection.getCodecOptions("opus").audioEncoder,
-        },
+        audioEncoder: { ...connection.getCodecOptions("opus").audioEncoder },
         encodingVoiceBitRate: 64000
     };
 }
 
-export function getReplaceableAudioTransportationOptions(connection: types.Connection, get: ProfilableStore<MicrophoneStore, MicrophoneProfile>["get"]) {
+export function getReplaceableAudioTransportationOptions(
+    connection: types.Connection,
+    get: ProfilableStore<MicrophoneStore, MicrophoneProfile>["get"]
+) {
     const { currentProfile } = get();
-    const {
-        channels,
-        channelsEnabled,
-        freq,
-        freqEnabled,
-        pacsize,
-        pacsizeEnabled,
-        rate,
-        rateEnabled,
-        voiceBitrate,
-        voiceBitrateEnabled
-    } = currentProfile;
-
+    const { channels, channelsEnabled, freq, freqEnabled, pacsize, pacsizeEnabled, rate, rateEnabled, voiceBitrate, voiceBitrateEnabled } = currentProfile;
     return {
-        ...(voiceBitrateEnabled && voiceBitrate
-            ? {
-                encodingVoiceBitRate: voiceBitrate * 1000
-            }
-            : {}
-        ),
+        ...(voiceBitrateEnabled && voiceBitrate ? { encodingVoiceBitRate: voiceBitrate * 1000 } : {}),
         audioEncoder: {
             ...connection.getCodecOptions("opus").audioEncoder,
-            ...(rateEnabled && rate ? { rate } : {}),
-            ...(pacsizeEnabled && pacsize ? { pacsize } : {}),
-            ...(freqEnabled && freq ? { freq } : {}),
-            ...(channelsEnabled && channels ? { channels } : {})
+            ...(rateEnabled && rate        ? { rate }    : {}),
+            ...(pacsizeEnabled && pacsize  ? { pacsize } : {}),
+            ...(freqEnabled && freq        ? { freq }    : {}),
+            ...(channelsEnabled && channels ? { channels } : { channels: 1 })
         }
     };
 }
@@ -71,16 +55,19 @@ export function patchConnectionAudioTransportOptions(
     const oldSetTransportOptions = connection.conn.setTransportOptions;
 
     connection.conn.setTransportOptions = function (this: any, options: Record<string, any>) {
-        replaceObjectValuesIfExist(options, getReplaceableAudioTransportationOptions(connection, get));
-
+        const replaceable = getReplaceableAudioTransportationOptions(connection, get);
+        if (replaceable.encodingVoiceBitRate !== undefined) options.encodingVoiceBitRate = replaceable.encodingVoiceBitRate;
+        if (!options.audioEncoder) options.audioEncoder = {};
+        Object.assign(options.audioEncoder, replaceable.audioEncoder);
         return Reflect.apply(oldSetTransportOptions, this, [options]);
     };
 
     const forceUpdateTransportationOptions = () => {
-        const transportOptions = lodash.merge({ ...getDefaultAudioTransportationOptions(connection) }, getReplaceableAudioTransportationOptions(connection, get));
-
+        const transportOptions = lodash.merge(
+            { ...getDefaultAudioTransportationOptions(connection) },
+            getReplaceableAudioTransportationOptions(connection, get)
+        );
         logger?.info("Overridden Transport Options", transportOptions);
-
         oldSetTransportOptions(transportOptions);
     };
 
