@@ -26,7 +26,7 @@ import { MicrophonePatcher } from "@plugins/betterMicrophone.desktop/patchers";
 import { initMicrophoneStore } from "@plugins/betterMicrophone.desktop/stores";
 
 export default definePlugin({
-    name: "تعديل المايك",
+    name: "betterMicrophone",
     description: "This plugin allows you to further customize your microphone.",
     authors: [Devs.rz30,],
     dependencies: ["PhilsPluginLibrary"],
