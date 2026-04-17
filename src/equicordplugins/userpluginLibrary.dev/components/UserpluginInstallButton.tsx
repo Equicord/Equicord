@@ -7,8 +7,9 @@
 import { Button } from "@components/Button";
 import { Alerts, ChannelStore, useEffect, useState } from "@webpack/common";
 
-import userpluginInstaller, { Native, OpenSettingsModule, settings } from "..";
+import userpluginInstaller, { Native, OpenSettingsModule } from "..";
 import { CLONE_LINK_REGEX, showInstallFinishedAlert, WHITELISTED_SHARE_CHANNELS } from "../misc/constants";
+import { settings } from "../settings";
 
 export default function UserpluginInstallButton({ props }: any) {
     const [plugins, setPlugins] = useState<{

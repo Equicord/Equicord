@@ -7,49 +7,24 @@
 import "./misc/style.css";
 
 import { showNotification } from "@api/Notifications";
-import { definePluginSettings, migratePluginSettings } from "@api/Settings";
-import { Button } from "@components/Button";
+import { migratePluginSettings } from "@api/Settings";
 import { Notice } from "@components/Notice";
 import plSettings from "@plugins/_core/settings";
 import { Devs } from "@utils/constants";
 import { relaunch } from "@utils/native";
-import definePlugin, { OptionType, PluginNative } from "@utils/types";
+import definePlugin, { PluginNative } from "@utils/types";
 import { findByPropsLazy } from "@webpack";
 import { Alerts } from "@webpack/common";
 
 import SettingsTab from "./components/SettingsTab";
 import UserpluginInstallButton from "./components/UserpluginInstallButton";
 import { AppsIcon } from "./misc/constants";
+import { settings } from "./settings";
 import { VariableWithCallbacks } from "./VariableWithCallbacks";
 
 // @ts-ignore
 export const Native = VencordNative.pluginHelpers.UserpluginLibrary as PluginNative<typeof import("./native")>;
 export const OpenSettingsModule = findByPropsLazy("openUserSettings");
-
-export const settings = definePluginSettings({
-    allowlistedChannels: {
-        type: OptionType.STRING,
-        description: "Comma separated list of channels where the Install Plugin button should be displayed. It is always displayed in the Vencord Userplugin channels"
-    },
-    notifyIfUpdate: {
-        type: OptionType.BOOLEAN,
-        description: "Show a Vencord notification if UserPlugins need to be updated",
-        default: true
-    },
-    neverNotifyForPlugins: {
-        type: OptionType.STRING,
-        description: "Never show update notifications for these plugins (you can still update them from the UserPlugins tab)",
-        default: ""
-    },
-    setGitPath: {
-        type: OptionType.COMPONENT,
-        component: () => <Button onClick={() => {
-            Native.openGitPathModal();
-        }} variant="secondary">
-            Set Git path
-        </Button>
-    }
-});
 
 migratePluginSettings("UserpluginLibrary", "UserpluginInstaller");
 export default definePlugin({
