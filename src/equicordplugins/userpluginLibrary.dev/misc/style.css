@@ -48,13 +48,8 @@
     margin-top: 10px;
     display: flex;
     flex-wrap: wrap;
+    align-items: center;
     gap: 5px;
-
-    div {
-        flex-basis: 100%;
-        margin-top: 5px;
-        font-size: 0.9rem;
-    }
 }
 
 .vc-userplugininstaller-outdated-list {
@@ -70,9 +65,20 @@
     background: transparent;
     margin-right: 8px;
     color: var(--icon-muted);
-    transition: background-color .2s ease;
+    transition: background-color 0.2s ease;
 
     &:hover {
-        color: var(--red-new-46)
+        color: var(--red-new-46);
+    }
+}
+
+.vc-userplugininstaller-reputation {
+    display: flex;
+    width: 20px;
+}
+
+.vc-userplugininstaller-unverified-plugin {
+    path {
+        fill: rgb(255, 192, 78);
     }
 }

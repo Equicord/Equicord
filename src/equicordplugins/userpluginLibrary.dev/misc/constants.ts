@@ -4,14 +4,18 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { classNameFactory } from "@api/Styles";
+import { classNameFactory } from "@utils/css";
 import { relaunch } from "@utils/native";
+import { findComponentByCodeLazy, findExportedComponentLazy } from "@webpack";
 import { Alerts } from "@webpack/common";
 
 // if edited, also edit in native.ts!!!
 export const CLONE_LINK_REGEX = /https:\/\/(?:((?:git(?:hub|lab)\.com|git\.(?:[a-zA-Z0-9]|\.)+|codeberg\.org))\/(?!user-attachments)((?:[a-zA-Z0-9]|-)+)\/((?:[a-zA-Z0-9]|-|\.)+)(?:\.git)?|(plugins\.(nin0)\.dev)\/((?:[a-zA-Z0-9]|-|\.)+))(?:\/)?/;
 export const WHITELISTED_SHARE_CHANNELS = ["1256395889354997771", "1032200195582197831", "1301947896601509900", "1322935137591365683"];
 export const cl = classNameFactory("vc-userplugininstaller-");
+
+export const CircleQuestionIcon = findExportedComponentLazy("CircleQuestionIcon");
+export const AppsIcon = findComponentByCodeLazy("2.95H20a2 2 0");
 
 export function showInstallFinishedAlert(pluginToEnable: string, native: boolean) {
     Alerts.show({
