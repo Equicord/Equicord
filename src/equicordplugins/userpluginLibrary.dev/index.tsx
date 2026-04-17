@@ -7,7 +7,7 @@
 import "./misc/style.css";
 
 import { showNotification } from "@api/Notifications";
-import { definePluginSettings } from "@api/Settings";
+import { definePluginSettings, migratePluginSettings } from "@api/Settings";
 import { Button } from "@components/Button";
 import { Notice } from "@components/Notice";
 import plSettings from "@plugins/_core/settings";
@@ -51,9 +51,10 @@ export const settings = definePluginSettings({
     }
 });
 
+migratePluginSettings("UserpluginLibrary", "UserpluginInstaller");
 export default definePlugin({
-    name: "UserpluginInstaller",
-    description: "Install userplugins with a simple button click",
+    name: "UserpluginLibrary",
+    description: "Install userplugins directly from settings/plugin threads",
     settingsAboutComponent: () => (
         <Notice.Warning>
             Equicord does not moderate userplugins and takes no responsibility for anything that may result from installing them.
