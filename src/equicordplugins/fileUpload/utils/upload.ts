@@ -699,7 +699,8 @@ const EXE_BLOCKED_SERVICES = new Set<ServiceType>([
 
 function getEmbedProxyService(): EmbedProxyService {
     const service = settings.store.embedProxyService;
-    return service === "nfp" || service === "embeddr" || service === "x266" ? service : "x266";
+    return service === "nfp" || service === "embeddr" ? service : "x266"
+
 }
 
 function shouldProxyEmbedUrl(url: string): boolean {
