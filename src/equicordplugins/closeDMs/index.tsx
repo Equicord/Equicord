@@ -236,7 +236,7 @@ export default definePlugin({
         {
             find: "renderSection=e=>{let{section:t}=e;return 0===t?null:(0,i.jsxs)(E.A,{className:D._e",
             replacement: {
-                match: /children:\[(\(0,\i\.jsx\)\("span",\{className:(\i)\.TK,children:\i\.intl\.string\(\i\.t\.YUU0RF\)\}\)),(\(0,\i\.jsx\)\(\i\.Ay,\{tooltip:\i\.intl\.string\(\i\.t\.bA875g\),tooltipPosition:\"top\",className:\2\.U2,iconClassName:\2\.Br,icon:\i\.TIR,subscribeToGlobalHotkey:!0\}\))\]/,
+                match: /children:\[(\(0,\i\.jsx\)\("span",\{className:(\i)\.TK,children:\i\.intl\.string\(\i\.t\.YUU0RF\)\}\)),(\(0,\i\.jsx\)\(\i\.Ay,\{tooltip:\i\.intl\.string\(\i\.t\.bA875g\),tooltipPosition:"top",className:\2\.U2,iconClassName:\2\.Br,icon:\i\.TIR,subscribeToGlobalHotkey:!0\}\))\]/,
                 replace: "children:[$1,$self.renderHeaderButton($2),$3]"
             }
         }
