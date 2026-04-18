@@ -1960,15 +1960,22 @@ export default definePlugin({
             startAutoFetchingQuests();
         }
 
-        const wasReload = window?.navigation?.activation?.navigationType === "reload";
         const maybeResumable = !(settings.store.disableQuestsEverything || settings.store.disableQuestsFetchingQuests);
 
-        if (!wasReload || !maybeResumable) {
+        if (!maybeResumable) {
             resetQuestsToResume();
             return;
         }
 
         onceReady.then(() => {
+            const hasQuestsToResume = settings.store.resumeQuestIDs.play.length
+                || settings.store.resumeQuestIDs.watch.length
+                || settings.store.resumeQuestIDs.achievement.length;
+
+            if (hasQuestsToResume) {
+                void fetchAndDispatchQuests("Questify-Resume", QuestifyLogger);
+            }
+
             const interval = setInterval(() => {
                 if (initialQuestDataFetched) {
                     clearInterval(interval);
@@ -2017,7 +2024,8 @@ export default definePlugin({
 
             clearInterval(intervalData.progressTimeout);
             clearTimeout(intervalData.rerenderTimeout);
-            activeQuestIntervals.delete(questId);
         });
+
+        activeQuestIntervals.clear();
     }
 });
