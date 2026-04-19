@@ -38,7 +38,7 @@ export function getPayload(message: Message): ApiMessage[] | null {
     const prevMessages = getPreviousMessages(message, settings.store.context);
     const allMessages = [...prevMessages, message];
 
-    const currentUserId = UserStore?.getCurrentUser?.()?.id;
+    const currentUserId = UserStore.getCurrentUser().id;
 
     const payload: ApiMessage[] = [];
 
@@ -183,9 +183,9 @@ export async function handleResponse(message: Message, response: string): Promis
     return response;
 }
 
-async function getSystemPrompt() {
+function getSystemPrompt() {
     const currentUser = UserStore.getCurrentUser();
-    const currentTime = new Date().toLocaleString();
+    const currentTime = new Date().toString();
 
     return settings.store.systemPrompt
         .replace(/{current_user}/g, currentUser?.username ?? "Unknown User")
@@ -210,7 +210,7 @@ export async function getResponse(payload: ApiMessage[]): Promise<string> {
                 messages: [
                     {
                         role: "system",
-                        content: await getSystemPrompt()
+                        content: getSystemPrompt()
                     },
                     ...payload
                 ],
