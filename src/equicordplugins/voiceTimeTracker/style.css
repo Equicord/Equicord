@@ -1,0 +1,183 @@
+.vc-vtt-head {
+    justify-content: space-between;
+}
+
+.vc-vtt-tab-bar {
+    margin-bottom: 16px;
+}
+
+.vc-vtt-contents {
+    padding: 16px;
+}
+
+.vc-vtt-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
+    border-radius: 8px;
+    background: var(--background-secondary);
+    margin-bottom: 6px;
+}
+
+.vc-vtt-row:hover {
+    background: var(--background-secondary-alt);
+}
+
+.vc-vtt-row-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+}
+
+.vc-vtt-guild-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    object-fit: cover;
+}
+
+.vc-vtt-guild-icon-fallback {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    background: var(--background-accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--header-primary);
+}
+
+.vc-vtt-row-info {
+    min-width: 0;
+}
+
+.vc-vtt-row-name {
+    font-weight: 600;
+    color: var(--header-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.vc-vtt-row-time {
+    color: var(--text-muted);
+    font-size: 14px;
+    flex-shrink: 0;
+}
+
+.vc-vtt-empty {
+    text-align: center;
+    color: var(--text-muted);
+    padding: 40px 0;
+}
+
+.vc-vtt-total {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px;
+    margin-bottom: 12px;
+    border-radius: 8px;
+    background: var(--background-accent);
+    font-weight: 600;
+    color: var(--header-primary);
+}
+
+.vc-vtt-footer {
+    justify-content: space-between;
+    align-items: center;
+}
+
+.vc-vtt-channel-section {
+    margin-bottom: 16px;
+}
+
+.vc-vtt-channel-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    background: var(--background-secondary);
+    margin-bottom: 4px;
+}
+
+.vc-vtt-channel-header-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.vc-vtt-channel-name {
+    font-weight: 600;
+    color: var(--header-primary);
+    font-size: 14px;
+}
+
+.vc-vtt-user-row {
+    list-style-type: none;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 16px 8px 54px;
+    min-height: 44px;
+    border-radius: 4px;
+}
+
+.vc-vtt-user-row:hover {
+    background-color: var(--background-modifier-hover);
+}
+
+.vc-vtt-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    flex-shrink: 0;
+    object-fit: cover;
+}
+
+.vc-vtt-avatar:hover {
+    opacity: 0.8;
+}
+
+.vc-vtt-user-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+    flex: 1;
+}
+
+.vc-vtt-user-name {
+    font-weight: 600;
+    font-size: 0.875rem;
+    color: var(--text-strong);
+    cursor: pointer;
+    width: fit-content;
+}
+
+.vc-vtt-user-name:hover {
+    text-decoration: underline;
+}
+
+.vc-vtt-user-description {
+    font-size: 0.8125rem;
+    color: var(--text-subtle);
+}
+
+.vc-vtt-user-time {
+    color: var(--text-muted);
+    font-size: 0.8125rem;
+    flex-shrink: 0;
+}
+
+.vc-vtt-no-users {
+    padding: 8px 16px 8px 54px;
+    color: var(--text-muted);
+    font-size: 0.8125rem;
+}
