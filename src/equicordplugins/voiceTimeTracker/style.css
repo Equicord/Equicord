@@ -59,14 +59,14 @@
 
 .vc-vtt-row-name {
     font-weight: 600;
-    color: var(--header-primary);
+    color: var(--text-strong);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
 .vc-vtt-row-time {
-    color: var(--text-muted);
+    color: var(--text-strong);
     font-size: 14px;
     flex-shrink: 0;
 }
@@ -80,7 +80,7 @@
 }
 
 .vc-vtt-row-messages {
-    color: var(--text-muted);
+    color: var(--text-subtle);
     font-size: 12px;
 }
 
@@ -117,7 +117,7 @@
 .vc-vtt-total-value {
     font-size: 20px;
     font-weight: 700;
-    color: var(--header-primary);
+    color: var(--text-strong);
 }
 
 .vc-vtt-footer {
@@ -146,7 +146,7 @@
 
 .vc-vtt-channel-name {
     font-weight: 600;
-    color: var(--header-primary);
+    color: var(--text-strong);
     font-size: 14px;
 }
 
@@ -203,7 +203,7 @@
 }
 
 .vc-vtt-user-time {
-    color: var(--text-muted);
+    color: var(--text-strong);
     font-size: 0.8125rem;
     flex-shrink: 0;
 }
