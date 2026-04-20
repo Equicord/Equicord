@@ -17,7 +17,7 @@ import { classes } from "@utils/misc";
 import { ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot, ModalSize, openModal } from "@utils/modal";
 import definePlugin from "@utils/types";
 import { VoiceState } from "@vencord/discord-types";
-import { Button, ChannelStore, GuildStore, IconUtils, SelectedChannelStore, TabBar, Text, Tooltip, useEffect, UserStore, useState, VoiceStateStore } from "@webpack/common";
+import { Button, ChannelStore, GuildStore, IconUtils, RelationshipStore, SelectedChannelStore, TabBar, Text, Tooltip, useEffect, UserStore, useState, VoiceStateStore } from "@webpack/common";
 
 const cl = classNameFactory("vc-vtt-");
 const logger = new Logger("VoiceTimeTracker");
@@ -140,6 +140,11 @@ interface UserChannelRow {
     totalMs: number;
 }
 
+interface FriendRow {
+    userId: string;
+    totalMs: number;
+}
+
 function getServerStats(): GuildRow[] {
     const guildTotals = new Map<string, number>();
 
@@ -206,6 +211,26 @@ function getTotalMessages(): number {
     let total = 0;
     for (const count of Object.values(messageCountData)) total += count;
     return total;
+}
+
+function getFriendsStats(): FriendRow[] {
+    const friendIds: string[] = RelationshipStore.getFriendIDs();
+    const friendSet = new Set(friendIds);
+    const totals = new Map<string, number>();
+
+    for (const [key, ms] of Object.entries(userTimeData)) {
+        const separatorIdx = key.indexOf(":");
+        const userId = key.slice(0, separatorIdx);
+        if (!friendSet.has(userId)) continue;
+        totals.set(userId, (totals.get(userId) ?? 0) + ms);
+    }
+
+    const rows: FriendRow[] = [];
+    for (const [userId, totalMs] of totals) {
+        rows.push({ userId, totalMs });
+    }
+
+    return rows.sort((a, b) => b.totalMs - a.totalMs);
 }
 
 function ServerTab({ stats }: { stats: GuildRow[]; }) {
@@ -299,6 +324,34 @@ function UsersTab({ channelStats, userStats }: { channelStats: ChannelRow[]; use
     );
 }
 
+function FriendsTab({ stats }: { stats: FriendRow[]; }) {
+    if (stats.length === 0) return <div className={cl("empty")}>No friend voice time recorded yet.</div>;
+
+    return (
+        <>
+            {stats.map(row => {
+                const user = UserStore.getUser(row.userId);
+                const username = user?.globalName ?? user?.username ?? "Unknown";
+                return (
+                    <div key={row.userId} className={cl("user-row", "friend-row")}>
+                        <UserAvatar userId={row.userId} />
+                        <div className={cl("user-content")}>
+                            <span
+                                className={cl("user-name")}
+                                onClick={() => openUserProfile(row.userId)}
+                            >
+                                {username}
+                            </span>
+                            <span className={cl("user-description")}>Total time in voice together</span>
+                        </div>
+                        <span className={cl("user-time")}>{formatDuration(row.totalMs)}</span>
+                    </div>
+                );
+            })}
+        </>
+    );
+}
+
 function VoiceTimeModal({ modalProps }: { modalProps: ModalProps; }) {
     const [tab, setTab] = useState<string>("servers");
     const [, forceUpdate] = useState(0);
@@ -314,6 +367,7 @@ function VoiceTimeModal({ modalProps }: { modalProps: ModalProps; }) {
     const serverStats = getServerStats();
     const channelStats = getChannelStats();
     const userStats = getUserStats();
+    const friendsStats = getFriendsStats();
     const totalTime = getTotalTime();
 
     return (
@@ -351,11 +405,15 @@ function VoiceTimeModal({ modalProps }: { modalProps: ModalProps; }) {
                     <TabBar.Item className="vc-settings-tab-bar-item" id="users">
                         Users
                     </TabBar.Item>
+                    <TabBar.Item className="vc-settings-tab-bar-item" id="friends">
+                        Friends
+                    </TabBar.Item>
                 </TabBar>
 
                 {tab === "servers" && <ServerTab stats={serverStats} />}
                 {tab === "channels" && <ChannelTab stats={channelStats} />}
                 {tab === "users" && <UsersTab channelStats={channelStats} userStats={userStats} />}
+                {tab === "friends" && <FriendsTab stats={friendsStats} />}
             </ModalContent>
 
             <ModalFooter>

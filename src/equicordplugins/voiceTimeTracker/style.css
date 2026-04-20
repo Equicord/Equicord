@@ -213,3 +213,7 @@
     color: var(--text-muted);
     font-size: 0.8125rem;
 }
+
+.vc-vtt-friend-row {
+    padding: 8px 16px;
+}
