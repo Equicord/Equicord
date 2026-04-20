@@ -45,7 +45,7 @@ export function VoiceTimeModal({ modalProps }: { modalProps: ModalProps; }) {
     return (
         <ModalRoot {...modalProps} size={ModalSize.MEDIUM}>
             <ModalHeader className={cl("head")}>
-                <Text variant="heading-lg/semibold" style={{ flexGrow: 1 }}>Voice Time Tracker</Text>
+                <Text variant="heading-lg/semibold" style={{ flexGrow: 1 }}>Insights</Text>
                 <ModalCloseButton onClick={modalProps.onClose} />
             </ModalHeader>
 

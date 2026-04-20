@@ -21,6 +21,8 @@ function getEventDescription(entry: LogEntry): string {
             return "Moved from another channel";
         case "server_mute": return entry.enabled ? "Server muted" : "Server unmuted";
         case "server_deafen": return entry.enabled ? "Server deafened" : "Server undeafened";
+        case "self_mute": return entry.enabled ? "Muted" : "Unmuted";
+        case "self_deafen": return entry.enabled ? "Deafened" : "Undeafened";
         case "self_video": return entry.enabled ? "Turned on camera" : "Turned off camera";
         case "self_stream": return entry.enabled ? "Started screensharing" : "Stopped screensharing";
     }

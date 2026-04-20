@@ -18,6 +18,7 @@ import {
     channelTimeData,
     currentChannelId,
     currentVoiceUsers,
+    dmMessageCountData,
     flushCurrentSession,
     flushUserSessions,
     joinTimestamp,
@@ -29,24 +30,34 @@ import {
     setJoinTimestamp,
     userTimeData,
 } from "./store";
-import { PreviousVoiceState } from "./types";
+import { LogEntry, PreviousVoiceState } from "./types";
 
 const previousStates = new Map<string, PreviousVoiceState>();
+const existingUsers = new Set<string>();
+let clientOldChannelId: string | undefined;
+
+function isMyChannel(channelId?: string): boolean {
+    return !!channelId && SelectedChannelStore.getVoiceChannelId() === channelId;
+}
 
 function shouldLog(userId: string): boolean {
     return !(settings.store.ignoreBlockedUsers && RelationshipStore.isBlocked(userId));
 }
 
+function log(entry: Omit<LogEntry, "timestamp">) {
+    addLogEntry({ ...entry, timestamp: new Date() });
+}
+
 export default definePlugin({
-    name: "VoiceTimeTracker",
-    description: "Track how much time you spend in voice channels. Shows stats broken down by server, channel, and the people you talk to most.",
+    name: "Insights",
+    description: "Track voice time, message counts, and activity across servers, channels, friends, and users — all in one dashboard.",
     tags: ["Voice", "Utility"],
     authors: [EquicordDevs.NOobzy],
     settings,
 
     settingsAboutComponent: () => (
         <Notice.Info>
-            This plugin tracks the time you spend in voice channels and shows detailed stats by server, channel, and user.
+            This plugin tracks voice time, messages, and activity across servers, channels, and friends.
         </Notice.Info>
     ),
 
@@ -58,21 +69,29 @@ export default definePlugin({
     async start() {
         await loadData();
         previousStates.clear();
+        existingUsers.clear();
 
-        const voiceChannelId = SelectedChannelStore.getVoiceChannelId();
-        if (voiceChannelId) {
-            setCurrentChannelId(voiceChannelId);
+        clientOldChannelId = SelectedChannelStore.getVoiceChannelId() ?? undefined;
+        if (clientOldChannelId) {
+            setCurrentChannelId(clientOldChannelId);
             setJoinTimestamp(Date.now());
             seedExistingUsers();
 
-            const states = VoiceStateStore.getVoiceStatesForChannel(voiceChannelId);
+            if (settings.store.logJoinLeave) {
+                log({ type: "join", userId: UserStore.getCurrentUser().id, channelId: clientOldChannelId });
+            }
+
+            const states = VoiceStateStore.getVoiceStatesForChannel(clientOldChannelId);
             for (const [userId, s] of Object.entries(states)) {
+                existingUsers.add(userId);
                 previousStates.set(userId, {
                     mute: s.mute,
                     deaf: s.deaf,
+                    selfMute: s.selfMute,
+                    selfDeaf: s.selfDeaf,
                     selfVideo: s.selfVideo,
                     selfStream: s.selfStream ?? false,
-                    channelId: voiceChannelId,
+                    channelId: clientOldChannelId,
                 });
             }
         }
@@ -84,6 +103,7 @@ export default definePlugin({
         setCurrentChannelId(null);
         currentVoiceUsers.clear();
         previousStates.clear();
+        existingUsers.clear();
     },
 
     flux: {
@@ -93,13 +113,41 @@ export default definePlugin({
             if (!currentUser || message.author?.id !== currentUser.id) return;
 
             const channel = ChannelStore.getChannel(message.channel_id);
-            if (!channel?.guild_id) return;
+            if (!channel) return;
 
-            messageCountData[channel.guild_id] = (messageCountData[channel.guild_id] ?? 0) + 1;
+            if (channel.guild_id) {
+                messageCountData[channel.guild_id] = (messageCountData[channel.guild_id] ?? 0) + 1;
+            }
+
+            if (channel.isDM()) {
+                const recipientId = channel.getRecipientId();
+                if (recipientId) {
+                    dmMessageCountData[recipientId] = (dmMessageCountData[recipientId] ?? 0) + 1;
+                }
+            }
+
             save();
         },
 
-        VOICE_STATE_UPDATES({ voiceStates }: { voiceStates: { userId: string; channelId?: string | null; oldChannelId?: string; mute: boolean; deaf: boolean; selfVideo: boolean; selfStream?: boolean; }[]; }) {
+        VOICE_CHANNEL_SELECT({ channelId, currentVoiceChannelId }: { channelId: string | null; currentVoiceChannelId: string | null; }) {
+            const leaving = channelId == null && currentVoiceChannelId != null;
+            const joining = channelId != null && currentVoiceChannelId == null;
+            const oldChannel = currentVoiceChannelId ?? clientOldChannelId;
+
+            clientOldChannelId = channelId ?? undefined;
+
+            if (leaving && oldChannel) {
+                if (settings.store.logJoinLeave) {
+                    log({ type: "leave", userId: UserStore.getCurrentUser().id, channelId: oldChannel });
+                }
+            } else if (joining && channelId && channelId !== oldChannel) {
+                if (settings.store.logJoinLeave) {
+                    log({ type: "join", userId: UserStore.getCurrentUser().id, channelId });
+                }
+            }
+        },
+
+        VOICE_STATE_UPDATES({ voiceStates }: { voiceStates: { userId: string; channelId?: string | null; oldChannelId?: string; mute: boolean; deaf: boolean; selfMute: boolean; selfDeaf: boolean; selfVideo: boolean; selfStream?: boolean; }[]; }) {
             const currentUser = UserStore.getCurrentUser();
             if (!currentUser) return;
 
@@ -134,55 +182,81 @@ export default definePlugin({
                 }
 
                 if (!shouldLog(state.userId)) continue;
+                if (!("oldChannelId" in state)) continue;
+
+                const { channelId, oldChannelId } = state;
+
+                if (oldChannelId === channelId && !previousStates.has(state.userId)) {
+                    previousStates.set(state.userId, {
+                        mute: state.mute,
+                        deaf: state.deaf,
+                        selfMute: state.selfMute,
+                        selfDeaf: state.selfDeaf,
+                        selfVideo: state.selfVideo,
+                        selfStream: state.selfStream ?? false,
+                        channelId: channelId ?? undefined,
+                    });
+                    continue;
+                }
 
                 const prev = previousStates.get(state.userId);
-                const channelId = state.channelId ?? undefined;
-                const { oldChannelId } = state;
+                const inMyChannel = isMyChannel(channelId ?? undefined) || isMyChannel(oldChannelId);
 
                 if (oldChannelId !== channelId) {
-                    if (!oldChannelId && channelId && channelId === currentChannelId) {
-                        if (settings.store.logJoinLeave) {
-                            addLogEntry({ type: "join", userId: state.userId, channelId, timestamp: new Date() });
+                    if (!oldChannelId && channelId) {
+                        const skipJoin = existingUsers.delete(state.userId);
+                        if (!skipJoin && settings.store.logJoinLeave && isMyChannel(channelId)) {
+                            log({ type: "join", userId: state.userId, channelId });
                         }
-                    } else if (oldChannelId && !channelId && oldChannelId === currentChannelId) {
-                        if (settings.store.logJoinLeave) {
-                            addLogEntry({ type: "leave", userId: state.userId, channelId: oldChannelId, timestamp: new Date() });
+                    } else if (oldChannelId && !channelId) {
+                        if (settings.store.logJoinLeave && isMyChannel(oldChannelId)) {
+                            log({ type: "leave", userId: state.userId, channelId: oldChannelId });
                         }
                     } else if (oldChannelId && channelId) {
                         if (settings.store.logJoinLeave) {
-                            if (oldChannelId === currentChannelId) {
-                                addLogEntry({ type: "move", userId: state.userId, channelId: oldChannelId, oldChannelId, newChannelId: channelId, timestamp: new Date() });
+                            if (isMyChannel(oldChannelId)) {
+                                log({ type: "move", userId: state.userId, channelId: oldChannelId, oldChannelId, newChannelId: channelId });
                             }
-                            if (channelId === currentChannelId) {
-                                addLogEntry({ type: "move", userId: state.userId, channelId, oldChannelId, newChannelId: channelId, timestamp: new Date() });
+                            if (isMyChannel(channelId)) {
+                                log({ type: "move", userId: state.userId, channelId, oldChannelId, newChannelId: channelId });
                             }
                         }
                     }
                 }
 
-                if (prev && channelId && channelId === currentChannelId) {
+                if (prev && channelId && inMyChannel) {
                     if (settings.store.logMuteDeafen) {
                         if (state.mute !== prev.mute) {
-                            addLogEntry({ type: "server_mute", userId: state.userId, channelId, enabled: state.mute, timestamp: new Date() });
+                            log({ type: "server_mute", userId: state.userId, channelId, enabled: state.mute });
                         }
                         if (state.deaf !== prev.deaf) {
-                            addLogEntry({ type: "server_deafen", userId: state.userId, channelId, enabled: state.deaf, timestamp: new Date() });
+                            log({ type: "server_deafen", userId: state.userId, channelId, enabled: state.deaf });
+                        }
+                    }
+                    if (settings.store.logSelfMuteDeafen) {
+                        if (state.selfMute !== prev.selfMute) {
+                            log({ type: "self_mute", userId: state.userId, channelId, enabled: state.selfMute });
+                        }
+                        if (state.selfDeaf !== prev.selfDeaf) {
+                            log({ type: "self_deafen", userId: state.userId, channelId, enabled: state.selfDeaf });
                         }
                     }
                     if (settings.store.logVideo && state.selfVideo !== prev.selfVideo) {
-                        addLogEntry({ type: "self_video", userId: state.userId, channelId, enabled: state.selfVideo, timestamp: new Date() });
+                        log({ type: "self_video", userId: state.userId, channelId, enabled: state.selfVideo });
                     }
                     if (settings.store.logStream && (state.selfStream ?? false) !== prev.selfStream) {
-                        addLogEntry({ type: "self_stream", userId: state.userId, channelId, enabled: state.selfStream ?? false, timestamp: new Date() });
+                        log({ type: "self_stream", userId: state.userId, channelId, enabled: state.selfStream ?? false });
                     }
                 }
 
                 previousStates.set(state.userId, {
                     mute: state.mute,
                     deaf: state.deaf,
+                    selfMute: state.selfMute,
+                    selfDeaf: state.selfDeaf,
                     selfVideo: state.selfVideo,
                     selfStream: state.selfStream ?? false,
-                    channelId,
+                    channelId: channelId ?? undefined,
                 });
 
                 if (!channelId) {

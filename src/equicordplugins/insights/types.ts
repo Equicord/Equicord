@@ -10,6 +10,8 @@ export type LogEventType =
     | "move"
     | "server_mute"
     | "server_deafen"
+    | "self_mute"
+    | "self_deafen"
     | "self_video"
     | "self_stream";
 
@@ -26,6 +28,8 @@ export interface LogEntry {
 export interface PreviousVoiceState {
     mute: boolean;
     deaf: boolean;
+    selfMute: boolean;
+    selfDeaf: boolean;
     selfVideo: boolean;
     selfStream: boolean;
     channelId?: string;
@@ -54,4 +58,5 @@ export interface UserChannelRow {
 export interface FriendRow {
     userId: string;
     totalMs: number;
+    messageCount: number;
 }

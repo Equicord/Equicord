@@ -11,16 +11,18 @@ import { ChannelStore, GuildStore, IconUtils, RelationshipStore, UserStore, Voic
 
 import { ChannelRow, FriendRow, GuildRow, UserChannelRow } from "./types";
 
-export const cl = classNameFactory("vc-vtt-");
-export const logger = new Logger("VoiceTimeTracker");
+export const cl = classNameFactory("vc-ins-");
+export const logger = new Logger("Insights");
 
-const CHANNEL_STORE_KEY = "VoiceTimeTracker_channels";
-const USER_STORE_KEY = "VoiceTimeTracker_users";
-const MESSAGES_STORE_KEY = "VoiceTimeTracker_messages";
+const CHANNEL_STORE_KEY = "Insights_channels";
+const USER_STORE_KEY = "Insights_users";
+const MESSAGES_STORE_KEY = "Insights_messages";
+const DM_MESSAGES_STORE_KEY = "Insights_dmMessages";
 
 export let channelTimeData: Record<string, number> = {};
 export let userTimeData: Record<string, number> = {};
 export let messageCountData: Record<string, number> = {};
+export let dmMessageCountData: Record<string, number> = {};
 export let joinTimestamp: number | null = null;
 export let currentChannelId: string | null = null;
 export const currentVoiceUsers = new Map<string, number>();
@@ -55,6 +57,7 @@ export function save() {
     DataStore.set(CHANNEL_STORE_KEY, channelTimeData).catch(e => logger.error("Failed to save channel time data", e));
     DataStore.set(USER_STORE_KEY, userTimeData).catch(e => logger.error("Failed to save user time data", e));
     DataStore.set(MESSAGES_STORE_KEY, messageCountData).catch(e => logger.error("Failed to save message count data", e));
+    DataStore.set(DM_MESSAGES_STORE_KEY, dmMessageCountData).catch(e => logger.error("Failed to save DM message count data", e));
 }
 
 export function flushCurrentSession() {
@@ -86,6 +89,7 @@ export function clearAllData() {
     channelTimeData = {};
     userTimeData = {};
     messageCountData = {};
+    dmMessageCountData = {};
     save();
 }
 
@@ -98,6 +102,9 @@ export async function loadData() {
 
     const storedMessages = await DataStore.get<Record<string, number>>(MESSAGES_STORE_KEY);
     if (storedMessages) messageCountData = storedMessages;
+
+    const storedDmMessages = await DataStore.get<Record<string, number>>(DM_MESSAGES_STORE_KEY);
+    if (storedDmMessages) dmMessageCountData = storedDmMessages;
 }
 
 export function getGuildIconUrl(guildId: string): string | null {
@@ -186,10 +193,19 @@ export function getFriendsStats(): FriendRow[] {
         totals.set(userId, (totals.get(userId) ?? 0) + ms);
     }
 
+    const seen = new Set<string>();
     const rows: FriendRow[] = [];
+
     for (const [userId, totalMs] of totals) {
-        rows.push({ userId, totalMs });
+        seen.add(userId);
+        rows.push({ userId, totalMs, messageCount: dmMessageCountData[userId] ?? 0 });
     }
 
-    return rows.sort((a, b) => b.totalMs - a.totalMs);
+    for (const [userId, count] of Object.entries(dmMessageCountData)) {
+        if (count > 0 && friendSet.has(userId) && !seen.has(userId)) {
+            rows.push({ userId, totalMs: 0, messageCount: count });
+        }
+    }
+
+    return rows.sort((a, b) => b.totalMs - a.totalMs || b.messageCount - a.messageCount);
 }

@@ -26,7 +26,7 @@ function VoiceTimeIcon({ className }: { className?: string; }) {
 export function ToolBarButton() {
     return (
         <HeaderBarButton
-            tooltip="Voice Time Tracker"
+            tooltip="Insights"
             icon={VoiceTimeIcon}
             onClick={() => openModal(props => <VoiceTimeModal modalProps={props} />)}
         />

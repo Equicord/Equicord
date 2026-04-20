@@ -6,7 +6,7 @@
 
 import { LogEntry } from "./types";
 
-const voiceLogs: LogEntry[] = [];
+let voiceLogs: LogEntry[] = [];
 let logSubscriptions: (() => void)[] = [];
 
 export function getLogs(): LogEntry[] {
@@ -14,12 +14,12 @@ export function getLogs(): LogEntry[] {
 }
 
 export function addLogEntry(entry: LogEntry) {
-    voiceLogs.push(entry);
+    voiceLogs = [...voiceLogs, entry];
     logSubscriptions.forEach(fn => fn());
 }
 
 export function clearLogs() {
-    voiceLogs.length = 0;
+    voiceLogs = [];
     logSubscriptions.forEach(fn => fn());
 }
 

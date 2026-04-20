@@ -43,9 +43,10 @@ export function ServerTab({ stats }: { stats: GuildRow[]; }) {
 
     return (
         <>
-            {stats.map(row => (
+            {stats.map((row, i) => (
                 <div key={row.guildId} className={cl("row")}>
                     <div className={cl("row-left")}>
+                        <span className={cl("rank")}>#{i + 1}</span>
                         <GuildIcon guildId={row.guildId} name={row.name} />
                         <div className={cl("row-info")}>
                             <div className={cl("row-name")}>{row.name}</div>
@@ -66,9 +67,10 @@ export function ChannelTab({ stats }: { stats: ChannelRow[]; }) {
 
     return (
         <>
-            {stats.map(row => (
+            {stats.map((row, i) => (
                 <div key={row.channelId} className={cl("row")}>
                     <div className={cl("row-left")}>
+                        <span className={cl("rank")}>#{i + 1}</span>
                         <GuildIcon guildId={row.guildId} name={row.guildName} />
                         <div className={cl("row-info")}>
                             <div className={cl("row-name")}>{row.channelName}</div>
@@ -102,11 +104,12 @@ export function UsersTab({ channelStats, userStats }: { channelStats: ChannelRow
                         </div>
                         {users.length === 0
                             ? <div className={cl("no-users")}>No users tracked in this channel.</div>
-                            : users.map(u => {
+                            : users.map((u, i) => {
                                 const user = UserStore.getUser(u.userId);
                                 const username = user?.globalName ?? user?.username ?? "Unknown";
                                 return (
                                     <div key={u.userId} className={cl("user-row")}>
+                                        <span className={cl("rank")}>#{i + 1}</span>
                                         <UserAvatar userId={u.userId} guildId={ch.guildId} />
                                         <div className={cl("user-content")}>
                                             <span
@@ -130,15 +133,16 @@ export function UsersTab({ channelStats, userStats }: { channelStats: ChannelRow
 }
 
 export function FriendsTab({ stats }: { stats: FriendRow[]; }) {
-    if (stats.length === 0) return <div className={cl("empty")}>No friend voice time recorded yet.</div>;
+    if (stats.length === 0) return <div className={cl("empty")}>No friend activity recorded yet.</div>;
 
     return (
         <>
-            {stats.map(row => {
+            {stats.map((row, i) => {
                 const user = UserStore.getUser(row.userId);
                 const username = user?.globalName ?? user?.username ?? "Unknown";
                 return (
                     <div key={row.userId} className={cl("user-row", "friend-row")}>
+                        <span className={cl("rank")}>#{i + 1}</span>
                         <UserAvatar userId={row.userId} />
                         <div className={cl("user-content")}>
                             <span
@@ -149,7 +153,10 @@ export function FriendsTab({ stats }: { stats: FriendRow[]; }) {
                             </span>
                             <span className={cl("user-description")}>Total time in voice together</span>
                         </div>
-                        <span className={cl("user-time")}>{formatDuration(row.totalMs)}</span>
+                        <div className={cl("row-stats")}>
+                            <span className={cl("user-time")}>{formatDuration(row.totalMs)}</span>
+                            <span className={cl("row-messages")}>{row.messageCount.toLocaleString()} messages</span>
+                        </div>
                     </div>
                 );
             })}

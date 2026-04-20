@@ -54,6 +54,8 @@ const iconMap: Record<LogEventType, () => React.ReactNode> = {
     move: MoveIcon,
     server_mute: MuteIcon,
     server_deafen: DeafenIcon,
+    self_mute: MuteIcon,
+    self_deafen: DeafenIcon,
     self_video: VideoIcon,
     self_stream: StreamIcon,
 };
@@ -64,6 +66,8 @@ const colorMap: Record<LogEventType, string> = {
     move: "warning",
     server_mute: "danger",
     server_deafen: "danger",
+    self_mute: "warning",
+    self_deafen: "warning",
     self_video: "positive",
     self_stream: "brand",
 };

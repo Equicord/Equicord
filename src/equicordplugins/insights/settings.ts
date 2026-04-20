@@ -18,6 +18,11 @@ const settings = definePluginSettings({
         description: "Log when users are server muted or deafened.",
         default: true
     },
+    logSelfMuteDeafen: {
+        type: OptionType.BOOLEAN,
+        description: "Log when users mute or deafen themselves.",
+        default: true
+    },
     logVideo: {
         type: OptionType.BOOLEAN,
         description: "Log when users turn their camera on or off.",
