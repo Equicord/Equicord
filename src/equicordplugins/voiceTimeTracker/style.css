@@ -71,6 +71,19 @@
     flex-shrink: 0;
 }
 
+.vc-vtt-row-stats {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 2px;
+    flex-shrink: 0;
+}
+
+.vc-vtt-row-messages {
+    color: var(--text-muted);
+    font-size: 12px;
+}
+
 .vc-vtt-empty {
     text-align: center;
     color: var(--text-muted);
@@ -79,12 +92,31 @@
 
 .vc-vtt-total {
     display: flex;
-    justify-content: space-between;
-    padding: 12px;
-    margin-bottom: 12px;
+    justify-content: space-around;
+    padding: 16px;
+    margin-bottom: 16px;
     border-radius: 8px;
     background: var(--background-accent);
+    color: var(--header-primary);
+}
+
+.vc-vtt-total-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.vc-vtt-total-label {
+    font-size: 12px;
     font-weight: 600;
+    text-transform: uppercase;
+    color: var(--text-muted);
+}
+
+.vc-vtt-total-value {
+    font-size: 20px;
+    font-weight: 700;
     color: var(--header-primary);
 }
 

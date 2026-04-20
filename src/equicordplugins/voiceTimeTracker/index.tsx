@@ -23,9 +23,11 @@ const cl = classNameFactory("vc-vtt-");
 const logger = new Logger("VoiceTimeTracker");
 const CHANNEL_STORE_KEY = "VoiceTimeTracker_channels";
 const USER_STORE_KEY = "VoiceTimeTracker_users";
+const MESSAGES_STORE_KEY = "VoiceTimeTracker_messages";
 
 let channelTimeData: Record<string, number> = {};
 let userTimeData: Record<string, number> = {};
+let messageCountData: Record<string, number> = {};
 let joinTimestamp: number | null = null;
 let currentChannelId: string | null = null;
 const currentVoiceUsers = new Map<string, number>();
@@ -67,6 +69,7 @@ function flushUserSessions() {
 function save() {
     DataStore.set(CHANNEL_STORE_KEY, channelTimeData).catch(e => logger.error("Failed to save channel time data", e));
     DataStore.set(USER_STORE_KEY, userTimeData).catch(e => logger.error("Failed to save user time data", e));
+    DataStore.set(MESSAGES_STORE_KEY, messageCountData).catch(e => logger.error("Failed to save message count data", e));
 }
 
 function getGuildIconUrl(guildId: string): string | null {
@@ -199,6 +202,12 @@ function getTotalTime(): number {
     return total;
 }
 
+function getTotalMessages(): number {
+    let total = 0;
+    for (const count of Object.values(messageCountData)) total += count;
+    return total;
+}
+
 function ServerTab({ stats }: { stats: GuildRow[]; }) {
     if (stats.length === 0) return <div className={cl("empty")}>No voice time recorded yet.</div>;
 
@@ -212,7 +221,10 @@ function ServerTab({ stats }: { stats: GuildRow[]; }) {
                             <div className={cl("row-name")}>{row.name}</div>
                         </div>
                     </div>
-                    <span className={cl("row-time")}>{formatDuration(row.totalMs)}</span>
+                    <div className={cl("row-stats")}>
+                        <span className={cl("row-time")}>{formatDuration(row.totalMs)}</span>
+                        <span className={cl("row-messages")}>{(messageCountData[row.guildId] ?? 0).toLocaleString()} messages</span>
+                    </div>
                 </div>
             ))}
         </>
@@ -313,8 +325,14 @@ function VoiceTimeModal({ modalProps }: { modalProps: ModalProps; }) {
 
             <ModalContent className={cl("contents")}>
                 <div className={cl("total")}>
-                    <span>Total Voice Time</span>
-                    <span>{formatDuration(totalTime)}</span>
+                    <div className={cl("total-item")}>
+                        <span className={cl("total-label")}>Total Voice Time</span>
+                        <span className={cl("total-value")}>{formatDuration(totalTime)}</span>
+                    </div>
+                    <div className={cl("total-item")}>
+                        <span className={cl("total-label")}>Total Messages</span>
+                        <span className={cl("total-value")}>{getTotalMessages().toLocaleString()}</span>
+                    </div>
                 </div>
 
                 <TabBar
@@ -346,6 +364,7 @@ function VoiceTimeModal({ modalProps }: { modalProps: ModalProps; }) {
                     onClick={() => {
                         channelTimeData = {};
                         userTimeData = {};
+                        messageCountData = {};
                         save();
                         forceUpdate(n => n + 1);
                     }}
@@ -405,6 +424,9 @@ export default definePlugin({
         const storedUsers = await DataStore.get<typeof userTimeData>(USER_STORE_KEY);
         if (storedUsers) userTimeData = storedUsers;
 
+        const storedMessages = await DataStore.get<Record<string, number>>(MESSAGES_STORE_KEY);
+        if (storedMessages) messageCountData = storedMessages;
+
         const voiceChannelId = SelectedChannelStore.getVoiceChannelId();
         if (voiceChannelId) {
             currentChannelId = voiceChannelId;
@@ -421,6 +443,18 @@ export default definePlugin({
     },
 
     flux: {
+        MESSAGE_CREATE({ message, optimistic }: { message: { author: { id: string; }; channel_id: string; }; optimistic?: boolean; }) {
+            if (optimistic) return;
+            const currentUser = UserStore.getCurrentUser();
+            if (!currentUser || message.author?.id !== currentUser.id) return;
+
+            const channel = ChannelStore.getChannel(message.channel_id);
+            if (!channel?.guild_id) return;
+
+            messageCountData[channel.guild_id] = (messageCountData[channel.guild_id] ?? 0) + 1;
+            DataStore.set(MESSAGES_STORE_KEY, messageCountData).catch(e => logger.error("Failed to save message count", e));
+        },
+
         VOICE_STATE_UPDATES({ voiceStates }: { voiceStates: VoiceState[]; }) {
             const currentUser = UserStore.getCurrentUser();
             if (!currentUser) return;
