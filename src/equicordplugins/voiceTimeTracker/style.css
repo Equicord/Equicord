@@ -10,10 +10,7 @@
     padding: 16px 16px 0;
 }
 
-.vc-vtt-top-bar {
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
+.vc-vtt-total {
     margin-bottom: 16px;
 }
 
@@ -232,4 +229,108 @@
 
 .vc-vtt-friend-row {
     padding: 8px 16px;
+}
+
+.vc-vtt-entry {
+    list-style-type: none;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 16px;
+    min-height: 44px;
+    border-radius: 4px;
+}
+
+.vc-vtt-entry:hover {
+    background-color: var(--background-modifier-hover);
+}
+
+.vc-vtt-entry-timestamp {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    min-width: 72px;
+    flex-shrink: 0;
+}
+
+.vc-vtt-timestamp {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    line-height: 1.3;
+}
+
+.vc-vtt-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 20px;
+}
+
+.vc-vtt-icon-brand {
+    color: var(--brand-experiment);
+}
+
+.vc-vtt-icon-danger {
+    color: var(--status-danger);
+}
+
+.vc-vtt-icon-positive {
+    color: var(--status-positive);
+}
+
+.vc-vtt-icon-warning {
+    color: var(--status-warning);
+}
+
+.vc-vtt-log-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+    flex: 1;
+}
+
+.vc-vtt-log-username {
+    font-weight: 600;
+    font-size: 0.875rem;
+    color: var(--text-strong);
+    cursor: pointer;
+    width: fit-content;
+}
+
+.vc-vtt-log-username:hover {
+    text-decoration: underline;
+}
+
+.vc-vtt-log-description {
+    font-size: 0.8125rem;
+    color: var(--text-subtle);
+}
+
+.vc-vtt-date-separator {
+    display: flex;
+    align-items: center;
+    margin: 8px 16px;
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+}
+
+.vc-vtt-date-separator::before,
+.vc-vtt-date-separator::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--border-subtle);
+}
+
+.vc-vtt-date-separator span {
+    padding: 0 8px;
+}
+
+.vc-vtt-scroller {
+    padding: 8px 0;
 }
