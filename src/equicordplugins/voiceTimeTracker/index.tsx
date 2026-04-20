@@ -14,7 +14,7 @@ import { classNameFactory } from "@utils/css";
 import { openUserProfile } from "@utils/discord";
 import { Logger } from "@utils/Logger";
 import { classes } from "@utils/misc";
-import { ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot, ModalSize, openModal } from "@utils/modal";
+import { ModalCloseButton, ModalContent, ModalHeader, ModalProps, ModalRoot, ModalSize, openModal } from "@utils/modal";
 import definePlugin from "@utils/types";
 import { VoiceState } from "@vencord/discord-types";
 import { Button, ChannelStore, GuildStore, IconUtils, RelationshipStore, SelectedChannelStore, TabBar, Text, Tooltip, useEffect, UserStore, useState, VoiceStateStore } from "@webpack/common";
@@ -377,16 +377,31 @@ function VoiceTimeModal({ modalProps }: { modalProps: ModalProps; }) {
                 <ModalCloseButton onClick={modalProps.onClose} />
             </ModalHeader>
 
-            <ModalContent className={cl("contents")}>
-                <div className={cl("total")}>
-                    <div className={cl("total-item")}>
-                        <span className={cl("total-label")}>Total Voice Time</span>
-                        <span className={cl("total-value")}>{formatDuration(totalTime)}</span>
+            <div className={cl("sticky")}>
+                <div className={cl("top-bar")}>
+                    <div className={cl("total")}>
+                        <div className={cl("total-item")}>
+                            <span className={cl("total-label")}>Total Voice Time</span>
+                            <span className={cl("total-value")}>{formatDuration(totalTime)}</span>
+                        </div>
+                        <div className={cl("total-item")}>
+                            <span className={cl("total-label")}>Total Messages</span>
+                            <span className={cl("total-value")}>{getTotalMessages().toLocaleString()}</span>
+                        </div>
                     </div>
-                    <div className={cl("total-item")}>
-                        <span className={cl("total-label")}>Total Messages</span>
-                        <span className={cl("total-value")}>{getTotalMessages().toLocaleString()}</span>
-                    </div>
+                    <Button
+                        color={Button.Colors.RED}
+                        size={Button.Sizes.SMALL}
+                        onClick={() => {
+                            channelTimeData = {};
+                            userTimeData = {};
+                            messageCountData = {};
+                            save();
+                            forceUpdate(n => n + 1);
+                        }}
+                    >
+                        Clear data
+                    </Button>
                 </div>
 
                 <TabBar
@@ -409,27 +424,14 @@ function VoiceTimeModal({ modalProps }: { modalProps: ModalProps; }) {
                         Friends
                     </TabBar.Item>
                 </TabBar>
+            </div>
 
+            <ModalContent className={cl("contents")}>
                 {tab === "servers" && <ServerTab stats={serverStats} />}
                 {tab === "channels" && <ChannelTab stats={channelStats} />}
                 {tab === "users" && <UsersTab channelStats={channelStats} userStats={userStats} />}
                 {tab === "friends" && <FriendsTab stats={friendsStats} />}
             </ModalContent>
-
-            <ModalFooter>
-                <Button
-                    color={Button.Colors.RED}
-                    onClick={() => {
-                        channelTimeData = {};
-                        userTimeData = {};
-                        messageCountData = {};
-                        save();
-                        forceUpdate(n => n + 1);
-                    }}
-                >
-                    Clear data
-                </Button>
-            </ModalFooter>
         </ModalRoot>
     );
 }
