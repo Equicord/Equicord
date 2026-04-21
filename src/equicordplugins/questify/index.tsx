@@ -1973,7 +1973,7 @@ export default definePlugin({
                 || settings.store.resumeQuestIDs.achievement.length;
 
             if (hasQuestsToResume) {
-                void fetchAndDispatchQuests("Questify-Resume", QuestifyLogger);
+                void fetchAndDispatchQuests("Questify", QuestifyLogger);
             }
 
             const interval = setInterval(() => {
