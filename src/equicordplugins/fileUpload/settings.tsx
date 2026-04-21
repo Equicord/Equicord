@@ -40,9 +40,7 @@ const litterboxOptions = [
 ];
 
 const embedProxyOptions = [
-    { label: "x266.mov", value: "x266", default: true },
-    { label: "discord.nfp.is", value: "nfp" },
-    { label: "embeddr.top", value: "embeddr" }
+    { label: "discord.nfp.is", value: "nfp" }
 ];
 
 export const settings = definePluginSettings({
