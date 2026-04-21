@@ -10,24 +10,29 @@ import {
     findGroupChildrenByChildId,
     NavContextMenuPatchCallback,
 } from "@api/ContextMenu";
+import type { MessageOptions } from "@api/MessageEvents";
 import { updateMessage } from "@api/MessageUpdater";
 import { isPluginEnabled } from "@api/PluginManager";
 import { definePluginSettings } from "@api/Settings";
 import { disableStyle, enableStyle } from "@api/Styles";
 import ErrorBoundary from "@components/ErrorBoundary";
+import { ReplyIcon } from "@components/Icons";
+import NoReplyMentionPlugin from "@plugins/noReplyMention";
 import { Devs, EQUIBOT_USER_ID, EquicordDevs, SUPPORT_CHANNEL_ID, VC_SUPPORT_CATEGORY_ID, VENBOT_USER_ID } from "@utils/constants";
 import { getIntlMessage } from "@utils/discord";
 import { Logger } from "@utils/Logger";
 import { classes } from "@utils/misc";
-import definePlugin, { OptionType } from "@utils/types";
+import definePlugin, { type IconComponent, OptionType } from "@utils/types";
 import { Message } from "@vencord/discord-types";
-import { findCssClassesLazy } from "@webpack";
-import { ChannelStore, FluxDispatcher, Menu, MessageStore, Parser, SelectedChannelStore, Timestamp, UserStore, useStateFromStores } from "@webpack/common";
+import { MessageFlags } from "@vencord/discord-types/enums";
+import { findByPropsLazy, findCssClassesLazy } from "@webpack";
+import { ChannelStore, ComponentDispatch, FluxDispatcher, Menu, MessageStore, MessageTypeSets, Parser, PermissionStore, PermissionsBits, SelectedChannelStore, Timestamp, UserStore, useStateFromStores } from "@webpack/common";
 
 import overlayStyle from "./deleteStyleOverlay.css?managed";
 import textStyle from "./deleteStyleText.css?managed";
 import { createMessageDiff, DiffPart } from "./diffUtils";
 import { openHistoryModal } from "./HistoryModal";
+import type { ComponentType } from "react";
 
 interface MLMessage extends Message {
     deleted?: boolean;
@@ -38,8 +43,94 @@ interface MLMessage extends Message {
 
 const MessageClasses = findCssClassesLazy("edited", "communicationDisabled", "isSystemMessage");
 
+/** Discord’s message toolbar Reply icon (same asset as the native hover bar). */
+const BuiltinMessageIcons = findByPropsLazy("ReplyIcon", "ForwardIcon", "PinIcon") as Record<string, ComponentType<any>>;
+function getBuiltinReplyIcon(): ComponentType<any> {
+    return BuiltinMessageIcons.ReplyIcon ?? ReplyIcon;
+}
+
 // track messages where the user disabled diffs for this session
 const disabledDiffMessages = new Set<string>();
+
+const MAX_DELETED_REPLY_QUOTE_LENGTH = 1500;
+
+function getAuthorDisplayName(message: Message): string {
+    const user = UserStore.getUser(message.author.id);
+    return user?.globalName ?? user?.username ?? message.author.username ?? "Unknown";
+}
+
+function getDeletedMessageQuoteText(message: Message): string {
+    let text = (message.content ?? "").trim();
+    if (!text && message.attachments?.length) {
+        const names = message.attachments.map(a => a.filename).filter(Boolean);
+        text = names.length ? `[${names.join(", ")}]` : "(attachment)";
+    }
+    if (!text) text = "(no text)";
+    if (text.length > MAX_DELETED_REPLY_QUOTE_LENGTH) {
+        text = `${text.slice(0, MAX_DELETED_REPLY_QUOTE_LENGTH)}…`;
+    }
+    return text;
+}
+
+function buildDeletedReplyPrefix(referenced: Message): string {
+    const name = getAuthorDisplayName(referenced);
+    const quotedBody = getDeletedMessageQuoteText(referenced)
+        .split("\n")
+        .map(line => `> ${line}`)
+        .join("\n");
+    return `> replying to ${name}'s deleted message:\n${quotedBody}\n\n`;
+}
+
+function onBeforeMessageSend(_channelId: string, messageObj: { content: string; }, options: MessageOptions) {
+    const replyOpts = options.replyOptions;
+    const ref = replyOpts?.messageReference;
+    if (!ref?.channel_id || !ref?.message_id) return;
+
+    const referenced = MessageStore.getMessage(ref.channel_id, ref.message_id) as MLMessage | undefined;
+    if (!referenced?.deleted) return;
+
+    messageObj.content = buildDeletedReplyPrefix(referenced) + messageObj.content;
+    replyOpts.messageReference = undefined;
+}
+
+function canReplyToMessageLoggedDeleted(message: Message): boolean {
+    const ml = message as MLMessage;
+    if (!ml.deleted) return false;
+    if (!MessageTypeSets.REPLYABLE.has(message.type) || message.hasFlag(MessageFlags.EPHEMERAL)) return false;
+    const channel = ChannelStore.getChannel(message.channel_id);
+    if (!channel) return false;
+    if (channel.guild_id && !PermissionStore.can(PermissionsBits.SEND_MESSAGES, channel)) return false;
+    return true;
+}
+
+function dispatchReplyToDeletedMessage(message: Message) {
+    const channel = ChannelStore.getChannel(message.channel_id);
+    if (!channel) return;
+    const shouldMention = isPluginEnabled(NoReplyMentionPlugin.name)
+        ? NoReplyMentionPlugin.shouldMention(message, false)
+        : true;
+    FluxDispatcher.dispatch({
+        type: "CREATE_PENDING_REPLY",
+        channel,
+        message,
+        shouldMention,
+        showMentionToggle: channel.guild_id !== null,
+    });
+    ComponentDispatch.dispatchToLastSubscribed("TEXTAREA_FOCUS");
+}
+
+function renderDeletedMessageReplyButton(message: Message) {
+    if (!canReplyToMessageLoggedDeleted(message)) return null;
+    const channel = ChannelStore.getChannel(message.channel_id)!;
+    const Icon = getBuiltinReplyIcon();
+    return {
+        label: getIntlMessage("MESSAGE_ACTION_REPLY"),
+        icon: Icon,
+        message,
+        channel,
+        onClick: () => dispatchReplyToDeletedMessage(message),
+    };
+}
 
 function scheduleMicrotask(fn: () => void) {
     if (typeof queueMicrotask === "function") queueMicrotask(fn);
@@ -418,10 +509,17 @@ export default definePlugin({
     name: "MessageLogger",
     description: "Temporarily logs deleted and edited messages.",
     tags: ["Chat", "Utility"],
-    authors: [Devs.rushii, Devs.Ven, Devs.AutumnVN, Devs.Nickyux, Devs.Kyuuhachi, EquicordDevs.justjxke],
-    dependencies: ["MessageUpdaterAPI"],
+    authors: [Devs.rushii, Devs.Ven, Devs.AutumnVN, Devs.Nickyux, Devs.Kyuuhachi, EquicordDevs.justjxke, EquicordDevs.Aureal],
+    dependencies: ["MessageUpdaterAPI", "MessageEventsAPI", "MessagePopoverAPI"],
     isModified: true,
     settings,
+
+    onBeforeMessageSend,
+
+    messagePopoverButton: {
+        icon: getBuiltinReplyIcon() as IconComponent,
+        render: renderDeletedMessageReplyButton,
+    },
 
     contextMenus: {
         message: patchMessageContextMenu,
@@ -794,7 +892,7 @@ export default definePlugin({
             // Message content renderer
             find: ".SEND_FAILED,",
             replacement: {
-                // Render editHistory behind the message content
+                // Render editHistory behind the message content; reply row for ML-deleted (native hover is suppressed by Discord)
                 match: /\]:\i.isUnsupported.{0,20}?,children:\[/,
                 replace: "$&arguments[0]?.message?.editHistory?.length>0&&$self.renderEdits(arguments[0]),"
             }
@@ -824,17 +922,6 @@ export default definePlugin({
             ]
         },
 
-        {
-            // Message context base menu
-            find: ".MESSAGE,commandTargetId:",
-            replacement: [
-                {
-                    // Remove the first section if message is deleted
-                    match: /children:(\[""===.+?\])/,
-                    replace: "children:arguments[0].message.deleted?[]:$1",
-                },
-            ],
-        },
         {
             // Message grouping
             find: "NON_COLLAPSIBLE.has(",

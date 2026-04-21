@@ -1,5 +1,9 @@
-.messagelogger-deleted [class*="buttons"] {
-    display: none;
+/* Do not hide [class*="buttons"] on deleted rows: Discord's hover toolbar (and Vencord popover
+ * buttons) use that substring in class names, which made Reply / quick actions invisible. */
+
+/* Hover toolbar: only show Reply (aria-label from MESSAGE_ACTION_REPLY; English "Reply", etc.) */
+.messagelogger-deleted [class*="buttons"] > *:not(:has([aria-label*="Reply" i])):not([aria-label*="Reply" i]) {
+    display: none !important;
 }
 
 .messagelogger-deleted :is(.messagelogger-deleted-attachment,
