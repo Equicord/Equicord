@@ -7,9 +7,7 @@
 import { definePluginSettings } from "@api/Settings";
 import { EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
-import { findByPropsLazy } from "@webpack";
-
-const FluxDispatcher = findByPropsLazy("dispatch", "subscribe", "addInterceptor");
+import { FluxDispatcher } from "@webpack/common";
 
 const settings = definePluginSettings({
     mutedUserIds: {
@@ -21,18 +19,15 @@ const settings = definePluginSettings({
 });
 
 function getMutedIds(): Set<string> {
-    return new Set(
-        settings.store.mutedUserIds
-            .split(",")
-            .map((id: string) => id.trim())
-            .filter((id: string) => id.length > 0)
-    );
+    const { mutedUserIds } = settings.store;
+    const ids = mutedUserIds.split(",").map(id => id.trim()).filter(Boolean);
+    return new Set(ids);
 }
 
 function interceptor(event: any) {
     try {
         const mutedIds = getMutedIds();
-        if (mutedIds.size === 0) return;
+        if (!mutedIds.size) return;
 
         if (event.type === "MESSAGE_CREATE" || event.type === "MESSAGE_UPDATE") {
             const msg = event.message;
@@ -47,17 +42,15 @@ function interceptor(event: any) {
         }
 
         if (event.type === "NOTIFICATION_CREATE") {
-            const msg = event.message ?? event.notification?.message;
+            const msg = event?.message ?? event?.notification?.message;
             if (!msg) return;
 
-            const authorId = String(msg.author?.id ?? "");
+            const authorId = String(msg?.author?.id ?? "");
             if (!authorId || !mutedIds.has(authorId)) return;
 
             return false;
         }
-
-    } catch {
-    }
+    } catch { }
 }
 
 export default definePlugin({
@@ -65,16 +58,11 @@ export default definePlugin({
     description: "Silences @mention pings and server badge counts from specific users. Regular messages and DMs are untouched.",
     authors: [EquicordDevs.dka],
     settings,
-
     start() {
         FluxDispatcher.addInterceptor(interceptor);
     },
-
     stop() {
-        const list: Function[] =
-            FluxDispatcher._interceptors ??
-            FluxDispatcher.interceptors ??
-            [];
+        const list = FluxDispatcher._interceptors ?? [];
         const idx = list.indexOf(interceptor);
         if (idx !== -1) list.splice(idx, 1);
     },
