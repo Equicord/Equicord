@@ -1,10 +1,11 @@
 /*
  * Vencord, a Discord client mod
- * Copyright (c) 2024 Vendicated and contributors
+ * Copyright (c) 2026 Vendicated and contributors
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 import { definePluginSettings } from "@api/Settings";
+import { EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 import { findByPropsLazy } from "@webpack";
 
@@ -63,11 +64,18 @@ export default definePlugin({
     name: "SilenceUsers",
     description: "Silences @mention pings and server badge counts from specific users. Regular messages and DMs are untouched.",
     authors: [EquicordDevs.dka],
-});
+    settings,
+
+    start() {
+        FluxDispatcher.addInterceptor(interceptor);
+    },
 
     stop() {
         const list: Function[] =
             FluxDispatcher._interceptors ??
             FluxDispatcher.interceptors ??
+            [];
+        const idx = list.indexOf(interceptor);
+        if (idx !== -1) list.splice(idx, 1);
     },
 });
