@@ -1292,7 +1292,6 @@ export const EquicordDevs = Object.freeze({
         name: "pointy",
         id: 99914384989519872n
     },
-,
     dka: {
         name: "DKA",
         id: 119386840624005121n
