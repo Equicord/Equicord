@@ -10,7 +10,12 @@ import {
     findGroupChildrenByChildId,
     NavContextMenuPatchCallback,
 } from "@api/ContextMenu";
-import type { MessageOptions } from "@api/MessageEvents";
+import {
+    addMessagePreSendListener,
+    type MessageObject,
+    type MessageOptions,
+    removeMessagePreSendListener,
+} from "@api/MessageEvents";
 import { updateMessage } from "@api/MessageUpdater";
 import { isPluginEnabled } from "@api/PluginManager";
 import { definePluginSettings } from "@api/Settings";
@@ -23,7 +28,7 @@ import { getIntlMessage } from "@utils/discord";
 import { Logger } from "@utils/Logger";
 import { classes } from "@utils/misc";
 import definePlugin, { type IconComponent, OptionType } from "@utils/types";
-import { Message } from "@vencord/discord-types";
+import { Channel, Message } from "@vencord/discord-types";
 import { MessageFlags } from "@vencord/discord-types/enums";
 import { findByPropsLazy, findCssClassesLazy } from "@webpack";
 import { ChannelStore, ComponentDispatch, FluxDispatcher, Menu, MessageStore, MessageTypeSets, Parser, PermissionStore, PermissionsBits, SelectedChannelStore, Timestamp, UserStore, useStateFromStores } from "@webpack/common";
@@ -81,7 +86,7 @@ function buildDeletedReplyPrefix(referenced: Message): string {
     return `> replying to ${name}'s deleted message:\n${quotedBody}\n\n`;
 }
 
-function onBeforeMessageSend(_channelId: string, messageObj: { content: string; }, options: MessageOptions) {
+function onBeforeMessageSend(_channelId: string, messageObj: MessageObject, options: MessageOptions) {
     const replyOpts = options.replyOptions;
     const ref = replyOpts?.messageReference;
     if (!ref?.channel_id || !ref?.message_id) return;
@@ -93,18 +98,19 @@ function onBeforeMessageSend(_channelId: string, messageObj: { content: string; 
     replyOpts.messageReference = undefined;
 }
 
-function canReplyToMessageLoggedDeleted(message: Message): boolean {
+/** Channel usable for replying to this MessageLogger-deleted message, or null if reply is not allowed. */
+function getChannelForDeletedReply(message: Message): Channel | null {
     const ml = message as MLMessage;
-    if (!ml.deleted) return false;
-    if (!MessageTypeSets.REPLYABLE.has(message.type) || message.hasFlag(MessageFlags.EPHEMERAL)) return false;
+    if (!ml.deleted) return null;
+    if (!MessageTypeSets.REPLYABLE.has(message.type) || message.hasFlag(MessageFlags.EPHEMERAL)) return null;
     const channel = ChannelStore.getChannel(message.channel_id);
-    if (!channel) return false;
-    if (channel.guild_id && !PermissionStore.can(PermissionsBits.SEND_MESSAGES, channel)) return false;
-    return true;
+    if (!channel) return null;
+    if (channel.guild_id && !PermissionStore.can(PermissionsBits.SEND_MESSAGES, channel)) return null;
+    return channel;
 }
 
 function dispatchReplyToDeletedMessage(message: Message) {
-    const channel = ChannelStore.getChannel(message.channel_id);
+    const channel = getChannelForDeletedReply(message);
     if (!channel) return;
     const shouldMention = isPluginEnabled(NoReplyMentionPlugin.name)
         ? NoReplyMentionPlugin.shouldMention(message, false)
@@ -114,14 +120,14 @@ function dispatchReplyToDeletedMessage(message: Message) {
         channel,
         message,
         shouldMention,
-        showMentionToggle: channel.guild_id !== null,
+        showMentionToggle: !!channel.guild_id,
     });
     ComponentDispatch.dispatchToLastSubscribed("TEXTAREA_FOCUS");
 }
 
 function renderDeletedMessageReplyButton(message: Message) {
-    if (!canReplyToMessageLoggedDeleted(message)) return null;
-    const channel = ChannelStore.getChannel(message.channel_id)!;
+    const channel = getChannelForDeletedReply(message);
+    if (!channel) return null;
     const Icon = getBuiltinReplyIcon();
     return {
         label: getIntlMessage("MESSAGE_ACTION_REPLY"),
@@ -514,8 +520,6 @@ export default definePlugin({
     isModified: true,
     settings,
 
-    onBeforeMessageSend,
-
     messagePopoverButton: {
         icon: getBuiltinReplyIcon() as IconComponent,
         render: renderDeletedMessageReplyButton,
@@ -531,6 +535,11 @@ export default definePlugin({
 
     start() {
         addDeleteStyle();
+        addMessagePreSendListener(onBeforeMessageSend);
+    },
+
+    stop() {
+        removeMessagePreSendListener(onBeforeMessageSend);
     },
 
     renderEdits: ErrorBoundary.wrap(
