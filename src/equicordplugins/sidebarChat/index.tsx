@@ -38,6 +38,7 @@ import {
     RelationshipStore,
     SelectedChannelStore,
     SelectedGuildStore,
+    ThemeStore,
     useCallback,
     useEffect,
     useLayoutEffect,
@@ -57,6 +58,14 @@ import {
 } from "./store";
 
 const cl = classNameFactory("vc-sidebar-chat-");
+
+const themeParents: Record<string, string> = { darker: "dark", midnight: "dark" };
+function getThemeClasses(theme: string) {
+    const parent = themeParents[theme];
+    return parent
+        ? `theme-${parent} theme-${theme} images-${parent}`
+        : `theme-${theme} images-${theme}`;
+}
 
 const HeaderBar = findComponentByCodeLazy("toolbarClassName:", "}),onDoubleClick:");
 const ForumView = findComponentByCodeLazy("sidebarState");
@@ -529,6 +538,8 @@ const RenderPopout = ErrorBoundary.wrap(({ channel, name, windowKey }: { channel
         });
     }, [channel?.id]);
 
+    const theme = useStateFromStores([ThemeStore], () => ThemeStore?.theme ?? "dark");
+
     return (
         <PopoutWindow
             withTitleBar
@@ -537,7 +548,7 @@ const RenderPopout = ErrorBoundary.wrap(({ channel, name, windowKey }: { channel
             channelId={channel.id}
             contentClassName={cl("popout")}
         >
-            <div className={cl("window")}>
+            <div className={`${getThemeClasses(theme)} ${cl("window")}`}>
                 <FullChannelView providedChannel={channel} />
             </div>
         </PopoutWindow>
