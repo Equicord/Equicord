@@ -68,28 +68,73 @@ const FolderItem = findComponentByCodeLazy("FolderItem", "onExpandCollapse", "fo
 
 const MAX_TREE_FILTER_DEPTH = 1000;
 let dispatchingFoldersClose = false;
+let pendingNavigationGuildId: string | null | undefined;
+let pendingNavigationCloseServerFolder = false;
+let navigationExpandTimeout: ReturnType<typeof setTimeout> | undefined;
 
 function getGuildFolder(id: string) {
     return SortedGuildStore.getGuildFolders().find((folder: GuildFolder) => folder.guildIds.includes(id));
 }
 
-function expandGuildNavigationPath(guildId: string | null | undefined) {
-    if (!guildId || guildId === "@me") return;
+function getGuildNavigationPathTargets(guildId: string | null | undefined): string[] {
+    if (!guildId || guildId === "@me") return [];
 
-    for (const folderId of getGuildNavigationExpandTargets(
+    return getGuildNavigationExpandTargets(
         getNestedFolderMap(),
         SortedGuildStore.getGuildFolders(),
         guildId,
         ExpandedGuildFolderStore.getExpandedFolders()
-    )) {
+    );
+}
+
+function expandGuildNavigationPathNow(guildId: string | null | undefined) {
+    for (const folderId of getGuildNavigationPathTargets(guildId)) {
         if (!ExpandedGuildFolderStore.isFolderExpanded(folderId)) {
             FolderUtils.toggleGuildFolderExpand(folderId);
         }
     }
 }
 
+function flushGuildNavigationPath() {
+    navigationExpandTimeout = undefined;
+
+    const guildId = pendingNavigationGuildId;
+    const shouldCloseServerFolder = pendingNavigationCloseServerFolder;
+    pendingNavigationGuildId = undefined;
+    pendingNavigationCloseServerFolder = false;
+
+    if (!guildId || guildId === "@me") return;
+
+    const folderIds = getGuildNavigationPathTargets(guildId);
+    const guildFolder = getGuildFolder(guildId);
+    const folderId = guildFolder?.folderId?.toString();
+    const shouldCloseTargetFolder = shouldCloseServerFolder
+        && folderId != null
+        && folderIds.length === 0
+        && ExpandedGuildFolderStore.isFolderExpanded(folderId);
+
+    expandGuildNavigationPathNow(guildId);
+
+    if (shouldCloseTargetFolder) {
+        FolderUtils.toggleGuildFolderExpand(folderId);
+    }
+}
+
+function scheduleGuildNavigationPath(guildId: string | null | undefined, closeServerFolder = false) {
+    const isSamePendingGuild = pendingNavigationGuildId === guildId;
+
+    pendingNavigationGuildId = guildId;
+    pendingNavigationCloseServerFolder = isSamePendingGuild
+        ? pendingNavigationCloseServerFolder || closeServerFolder
+        : closeServerFolder;
+
+    if (navigationExpandTimeout != null) return;
+
+    navigationExpandTimeout = setTimeout(flushGuildNavigationPath, 0);
+}
+
 function closeFolders() {
-    for (const id of ExpandedGuildFolderStore.getExpandedFolders())
+    for (const id of Array.from(ExpandedGuildFolderStore.getExpandedFolders()))
         FolderUtils.toggleGuildFolderExpand(id);
 }
 
@@ -260,6 +305,14 @@ export default definePlugin({
     settings,
     start() {
         settings.store.nestedFolders = getNestedFolderMap();
+    },
+    stop() {
+        if (navigationExpandTimeout != null) {
+            clearTimeout(navigationExpandTimeout);
+            navigationExpandTimeout = undefined;
+        }
+        pendingNavigationGuildId = undefined;
+        pendingNavigationCloseServerFolder = false;
     },
 
     patches: [
@@ -446,27 +499,34 @@ export default definePlugin({
                 match: /return \i\.type!==\i\.\i\.GUILD/,
                 replace: "return $self.renderFolderChild(arguments[0],arguments[1],arguments[2])"
             }
+        },
+        {
+            find: "`transitionToGuild - Transitioning to",
+            replacement: {
+                match: /(`transitionToGuild - Transitioning to .{0,80}?guildId:(\i),channelId:\i,messageId:\i.{0,40}?`\),)(\i\(\i\.\i\.CHANNEL\(\2,\i,\i\),\i\)\})/,
+                replace: "$1$self.handleGuildNavigation($2),$3"
+            }
+        },
+        {
+            find: "`transitionTo - Transitioning to",
+            replacement: {
+                match: /(function \i\((\i),\i\)\{if\(\i\(\2,"assign"\)\)return;\i\.log\(`transitionTo - Transitioning to \$\{\2\}`\);)/,
+                replace: "$1$self.handleRouteNavigation($2);"
+            }
         }
     ],
 
     flux: {
         GUILD_SELECT({ guildId }: { guildId: string | null; }) {
             if (guildId == null) return;
-            expandGuildNavigationPath(guildId);
+            scheduleGuildNavigationPath(guildId);
         },
 
         CHANNEL_SELECT(data) {
             const guildFolder = getGuildFolder(data.guildId);
 
             if (guildFolder?.folderId) {
-                expandGuildNavigationPath(data.guildId);
-
-                if (settings.store.forceOpen && !ExpandedGuildFolderStore.isFolderExpanded(guildFolder.folderId)) {
-                    FolderUtils.toggleGuildFolderExpand(guildFolder.folderId);
-                }
-                if (settings.store.closeServerFolder && ExpandedGuildFolderStore.isFolderExpanded(guildFolder.folderId)) {
-                    FolderUtils.toggleGuildFolderExpand(guildFolder.folderId);
-                }
+                scheduleGuildNavigationPath(data.guildId, settings.store.closeServerFolder);
             } else if (settings.store.closeAllFolders) {
                 closeFolders();
             }
@@ -500,6 +560,15 @@ export default definePlugin({
 
     FolderSideBar,
     closeFolders,
+    handleGuildNavigation(guildId: string | null | undefined) {
+        expandGuildNavigationPathNow(guildId);
+    },
+    handleRouteNavigation(route: unknown) {
+        if (typeof route !== "string") return;
+
+        const guildId = route.match(/^\/channels\/([^/]+)/)?.[1];
+        expandGuildNavigationPathNow(guildId);
+    },
     getGuildMentionCount(guildId: string): number {
         const mentionChannelIds = ReadStateStore.getMentionChannelIds() ?? [];
         let count = 0;
