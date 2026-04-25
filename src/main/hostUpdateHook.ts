@@ -21,7 +21,7 @@
  */
 
 import Module from "module";
-import { dirname, join, resolve as resolvePath, sep } from "path";
+import { basename, dirname, join, resolve as resolvePath, sep } from "path";
 
 import { findStaleSibling, patchResourcesDir } from "./applyHostPatch";
 
@@ -232,8 +232,7 @@ export const installHostUpdateHook = () => {
         const result = origRequire.call(this, id);
         if (!id.includes("discord_desktop_core")) return result;
 
-        const normalised = id.replace(/\\/g, "/");
-        if (id === "discord_desktop_core" || normalised.endsWith("/discord_desktop_core")) {
+        if (basename(id.replace(/\\/g, "/")) === "discord_desktop_core") {
             try { wrapStartup(result?.default ?? result); } catch (e) { error(e); }
             Module.prototype.require = origRequire;
         }
