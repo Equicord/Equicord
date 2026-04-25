@@ -69,9 +69,11 @@ export const patchResourcesDir = (resources: string, patcherJsPath: string): boo
     }
 };
 
+const parsePart = (s: string) => parseInt(s, 10) || 0;
+
 const isNewer = ($new: string, old: string): boolean => {
-    const newParts = $new.slice(VERSION_PREFIX.length).split(".").map(Number);
-    const oldParts = old.slice(VERSION_PREFIX.length).split(".").map(Number);
+    const newParts = $new.slice(VERSION_PREFIX.length).split(".").map(parsePart);
+    const oldParts = old.slice(VERSION_PREFIX.length).split(".").map(parsePart);
     const len = Math.max(newParts.length, oldParts.length);
     for (let i = 0; i < len; i++) {
         const n = newParts[i] ?? 0;
