@@ -30,9 +30,7 @@ const error = (...args: unknown[]) => console.error("[Equicord:HostUpdate]", ...
 const hookedUpdaters = new WeakSet<object>();
 let hooked = false;
 
-function getPatcherJsPath(): string {
-    return join(__dirname, "patcher.js");
-}
+const getPatcherJsPath = () => join(__dirname, "patcher.js");
 
 /**
  * resolve `resources/` for a given discord version directory.
@@ -42,7 +40,7 @@ function getPatcherJsPath(): string {
  * in `common/updater.js#_getHostExePath`. iterates from the end so a
  * nested `.app` segment near the binary wins over an outer one.
  */
-function resourcesPathFor(versionDir: string): string {
+const resourcesPathFor = (versionDir: string): string => {
     if (process.platform !== "darwin") return join(versionDir, "resources");
 
     const segs = process.execPath.split(sep);
@@ -52,7 +50,7 @@ function resourcesPathFor(versionDir: string): string {
         }
     }
     return join(versionDir, "Contents", "Resources");
-}
+};
 
 /**
  * resolve the version dir the current process runs from.
@@ -60,12 +58,12 @@ function resourcesPathFor(versionDir: string): string {
  * on darwin, execPath sits four levels deep inside the version dir,
  * at `<versionDir>/<AppName>.app/Contents/MacOS/<bin>`.
  */
-function currentVersionDir(): string {
+const currentVersionDir = (): string => {
     if (process.platform === "darwin") {
         return resolvePath(process.execPath, "..", "..", "..", "..");
     }
     return dirname(process.execPath);
-}
+};
 
 /**
  * resolve the new host version array.
@@ -74,7 +72,7 @@ function currentVersionDir(): string {
  * runs, so during `host-updated` we have to query the native side
  * directly to get fresh state.
  */
-function resolveCommittedVersion(updater: any): number[] | undefined {
+const resolveCommittedVersion = (updater: any): number[] | undefined => {
     if (Array.isArray(updater?.committedHostVersion)) return updater.committedHostVersion;
     try {
         const versions = updater?.queryCurrentVersionsSync?.();
@@ -83,9 +81,9 @@ function resolveCommittedVersion(updater: any): number[] | undefined {
         error("queryCurrentVersionsSync failed", err);
     }
     return undefined;
-}
+};
 
-function retainEquicord(updater: any, reason: string) {
+const retainEquicord = (updater: any, reason: string) => {
     try {
         const committed = resolveCommittedVersion(updater);
         const rootPath: string | undefined = updater?.rootPath;
@@ -109,9 +107,9 @@ function retainEquicord(updater: any, reason: string) {
     } catch (err) {
         error(`[${reason}] retain failed:`, err);
     }
-}
+};
 
-function attachToUpdater(updater: any) {
+const attachToUpdater = (updater: any) => {
     if (!updater || hookedUpdaters.has(updater)) return;
     try {
         hookedUpdaters.add(updater);
@@ -149,9 +147,9 @@ function attachToUpdater(updater: any) {
             return result;
         };
     }
-}
+};
 
-function wrapStartup(coreExports: any) {
+const wrapStartup = (coreExports: any) => {
     if (!coreExports?.startup || coreExports.__equicordStartupWrapped) return;
     coreExports.__equicordStartupWrapped = true;
 
@@ -180,26 +178,27 @@ function wrapStartup(coreExports: any) {
         }
         return origStartup.call(this, opts, ...rest);
     };
-}
+};
 
-export function installHostUpdateHook() {
+export const installHostUpdateHook = () => {
     if (hooked) return;
     hooked = true;
 
     /*
      * intercept `require` to catch the first `discord_desktop_core` load
      * before vanilla bootstrap calls its `startup`. normalise separators
-     * so absolute requires resolve correctly on windows.
+     * so absolute requires resolve correctly on windows. once we have
+     * wrapped startup we restore the original require to avoid taxing
+     * every subsequent require call.
      */
     const origRequire = Module.prototype.require;
     Module.prototype.require = function (this: Module, id: string) {
         const result = origRequire.call(this, id);
-        if (typeof id === "string") {
-            const normalised = id.replace(/\\/g, "/");
-            if (id === "discord_desktop_core" || normalised.endsWith("/discord_desktop_core")) {
-                try { wrapStartup(result?.default ?? result); } catch (e) { error(e); }
-            }
+        const normalised = id.replace(/\\/g, "/");
+        if (id === "discord_desktop_core" || normalised.endsWith("/discord_desktop_core")) {
+            try { wrapStartup(result?.default ?? result); } catch (e) { error(e); }
+            Module.prototype.require = origRequire;
         }
         return result;
     } as typeof Module.prototype.require;
-}
+};

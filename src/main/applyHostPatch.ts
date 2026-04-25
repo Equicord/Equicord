@@ -10,14 +10,12 @@ import { basename, dirname, join } from "path";
 const STUB_PACKAGE = JSON.stringify({ name: "discord", main: "index.js" });
 const VERSION_PREFIX = "app-";
 
-function makeStubIndex(patcherPath: string) {
-    return `require(${JSON.stringify(patcherPath)});`;
-}
+const makeStubIndex = (patcherPath: string) =>
+    `require(${JSON.stringify(patcherPath)});`;
 
 /** `_app.asar` next to `app.asar` marks any patched install. */
-export function isAlreadyPatched(resources: string) {
-    return existsSync(join(resources, "_app.asar"));
-}
+export const isAlreadyPatched = (resources: string) =>
+    existsSync(join(resources, "_app.asar"));
 
 /**
  * apply the folder-shim patch to a discord `resources/` directory.
@@ -30,7 +28,7 @@ export function isAlreadyPatched(resources: string) {
  * has no vanilla `app.asar`. throws on partial failure after rolling
  * back any disk changes already made.
  */
-export function patchResourcesDir(resources: string, patcherJsPath: string): boolean {
+export const patchResourcesDir = (resources: string, patcherJsPath: string): boolean => {
     const app = join(resources, "app.asar");
     const _app = join(resources, "_app.asar");
 
@@ -69,9 +67,9 @@ export function patchResourcesDir(resources: string, patcherJsPath: string): boo
         }
         throw err;
     }
-}
+};
 
-function isNewer($new: string, old: string) {
+const isNewer = ($new: string, old: string): boolean => {
     const newParts = $new.slice(VERSION_PREFIX.length).split(".").map(Number);
     const oldParts = old.slice(VERSION_PREFIX.length).split(".").map(Number);
     const len = Math.max(newParts.length, oldParts.length);
@@ -82,7 +80,7 @@ function isNewer($new: string, old: string) {
         if (n < o) return false;
     }
     return false;
-}
+};
 
 /**
  * find the newest sibling `app-VERSION` directory's `resources/` path.
@@ -90,7 +88,7 @@ function isNewer($new: string, old: string) {
  * squirrel-only layout. returns `null` on non-win32 platforms, or when
  * the running process is already in the newest sibling.
  */
-export function findStaleSibling(currentExeDir: string): string | null {
+export const findStaleSibling = (currentExeDir: string): string | null => {
     if (process.platform !== "win32") return null;
 
     const discordPath = dirname(currentExeDir);
@@ -117,4 +115,4 @@ export function findStaleSibling(currentExeDir: string): string | null {
 
     if (latest === currentVersion) return null;
     return join(discordPath, latest, "resources");
-}
+};
