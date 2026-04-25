@@ -4,10 +4,11 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { existsSync, lstatSync, mkdirSync, readdirSync, renameSync, statSync, unlinkSync, writeFileSync } from "original-fs";
+import { existsSync, lstatSync, mkdirSync, readdirSync, renameSync, rmdirSync, statSync, unlinkSync, writeFileSync } from "original-fs";
 import { basename, dirname, join } from "path";
 
 const STUB_PACKAGE = JSON.stringify({ name: "discord", main: "index.js" });
+const VERSION_PREFIX = "app-";
 
 function makeStubIndex(patcherPath: string) {
     return `require(${JSON.stringify(patcherPath)});`;
@@ -48,15 +49,11 @@ export function patchResourcesDir(resources: string, patcherJsPath: string): boo
 
         mkdirSync(app);
         undo.push(() => {
-            try {
-                const indexPath = join(app, "index.js");
-                const pkgPath = join(app, "package.json");
-                if (existsSync(indexPath)) unlinkSync(indexPath);
-                if (existsSync(pkgPath)) unlinkSync(pkgPath);
-                require("original-fs").rmdirSync(app);
-            } catch {
-                /* eat it */
-            }
+            const indexPath = join(app, "index.js");
+            const pkgPath = join(app, "package.json");
+            if (existsSync(indexPath)) unlinkSync(indexPath);
+            if (existsSync(pkgPath)) unlinkSync(pkgPath);
+            rmdirSync(app);
         });
 
         writeFileSync(join(app, "package.json"), STUB_PACKAGE);
@@ -64,15 +61,19 @@ export function patchResourcesDir(resources: string, patcherJsPath: string): boo
         return true;
     } catch (err) {
         for (let i = undo.length - 1; i >= 0; i--) {
-            try { undo[i](); } catch { /* eat this too */ }
+            try {
+                undo[i]();
+            } catch (cleanupErr) {
+                console.error("[Equicord] Rollback step failed", cleanupErr);
+            }
         }
         throw err;
     }
 }
 
 function isNewer($new: string, old: string) {
-    const newParts = $new.slice(4).split(".").map(Number);
-    const oldParts = old.slice(4).split(".").map(Number);
+    const newParts = $new.slice(VERSION_PREFIX.length).split(".").map(Number);
+    const oldParts = old.slice(VERSION_PREFIX.length).split(".").map(Number);
     const len = Math.max(newParts.length, oldParts.length);
     for (let i = 0; i < len; i++) {
         const n = newParts[i] ?? 0;
@@ -98,13 +99,21 @@ export function findStaleSibling(currentExeDir: string): string | null {
     let latest = currentVersion;
     try {
         for (const name of readdirSync(discordPath)) {
-            if (!name.startsWith("app-")) continue;
+            if (!name.startsWith(VERSION_PREFIX)) continue;
+            let isDir = false;
             try {
-                if (!statSync(join(discordPath, name)).isDirectory()) continue;
-            } catch { continue; }
+                isDir = statSync(join(discordPath, name)).isDirectory();
+            } catch (statErr) {
+                console.error("[Equicord] Skipping unreadable sibling", name, statErr);
+                continue;
+            }
+            if (!isDir) continue;
             if (isNewer(name, latest)) latest = name;
         }
-    } catch { return null; }
+    } catch (err) {
+        console.error("[Equicord] Failed to scan for sibling versions", err);
+        return null;
+    }
 
     if (latest === currentVersion) return null;
     return join(discordPath, latest, "resources");

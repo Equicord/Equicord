@@ -25,7 +25,6 @@ import { dirname, join, resolve as resolvePath, sep } from "path";
 
 import { findStaleSibling, patchResourcesDir } from "./applyHostPatch";
 
-const log = (...args: unknown[]) => console.log("[Equicord:HostUpdate]", ...args);
 const error = (...args: unknown[]) => console.error("[Equicord:HostUpdate]", ...args);
 
 const hookedUpdaters = new WeakSet<object>();
@@ -80,8 +79,8 @@ function resolveCommittedVersion(updater: any): number[] | undefined {
     try {
         const versions = updater?.queryCurrentVersionsSync?.();
         if (Array.isArray(versions?.current_host)) return versions.current_host;
-    } catch {
-        /* native query can fail mid-install */
+    } catch (err) {
+        error("queryCurrentVersionsSync failed", err);
     }
     return undefined;
 }
@@ -106,11 +105,7 @@ function retainEquicord(updater: any, reason: string) {
         const versionDir = join(rootPath, `app-${committed.join(".")}`);
         if (resolvePath(versionDir) === resolvePath(currentVersionDir())) return;
 
-        const newResources = resourcesPathFor(versionDir);
-        log(`[${reason}] retaining into`, newResources);
-        if (patchResourcesDir(newResources, getPatcherJsPath())) {
-            log("retained successfully");
-        }
+        patchResourcesDir(resourcesPathFor(versionDir), getPatcherJsPath());
     } catch (err) {
         error(`[${reason}] retain failed:`, err);
     }
@@ -120,7 +115,8 @@ function attachToUpdater(updater: any) {
     if (!updater || hookedUpdaters.has(updater)) return;
     try {
         hookedUpdaters.add(updater);
-    } catch {
+    } catch (err) {
+        error("Failed to track updater instance", err);
         return;
     }
 
