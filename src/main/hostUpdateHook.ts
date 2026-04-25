@@ -25,9 +25,49 @@ import { dirname, join, resolve as resolvePath, sep } from "path";
 
 import { findStaleSibling, patchResourcesDir } from "./applyHostPatch";
 
+interface DiscordVersions {
+    current_host?: number[];
+    current_modules?: Record<string, string>;
+    last_successful_update?: unknown;
+}
+
+interface StartCurrentVersionOptions {
+    allowObsoleteHost?: boolean;
+}
+
+interface DiscordBuildInfo {
+    releaseChannel: string;
+    version: string;
+}
+
+interface DiscordHostUpdater {
+    committedHostVersion?: number[];
+    rootPath?: string;
+    on?(event: "host-updated", handler: () => void): void;
+    queryCurrentVersionsSync?(): DiscordVersions;
+    startCurrentVersion?(queryOptions?: object, options?: StartCurrentVersionOptions): Promise<void>;
+    startCurrentVersionSync?(options?: StartCurrentVersionOptions): void;
+}
+
+interface DiscordUpdaterModule {
+    getUpdater?(): DiscordHostUpdater | null | undefined;
+    tryInitUpdater?(buildInfo: DiscordBuildInfo, repositoryUrl: string, useRustBspatch: boolean): boolean;
+    __equicordTryInitWrapped?: boolean;
+}
+
+interface DiscordDesktopCoreStartupOpts {
+    updater?: DiscordUpdaterModule;
+    [key: string]: unknown;
+}
+
+interface DiscordDesktopCore {
+    startup?(opts: DiscordDesktopCoreStartupOpts): void;
+    __equicordStartupWrapped?: boolean;
+}
+
 const error = (...args: unknown[]) => console.error("[Equicord:HostUpdate]", ...args);
 
-const hookedUpdaters = new WeakSet<object>();
+const hookedUpdaters = new WeakSet<DiscordHostUpdater>();
 let hooked = false;
 
 const getPatcherJsPath = () => join(__dirname, "patcher.js");
@@ -72,10 +112,10 @@ const currentVersionDir = (): string => {
  * runs, so during `host-updated` we have to query the native side
  * directly to get fresh state.
  */
-const resolveCommittedVersion = (updater: any): number[] | undefined => {
-    if (Array.isArray(updater?.committedHostVersion)) return updater.committedHostVersion;
+const resolveCommittedVersion = (updater: DiscordHostUpdater): number[] | undefined => {
+    if (Array.isArray(updater.committedHostVersion)) return updater.committedHostVersion;
     try {
-        const versions = updater?.queryCurrentVersionsSync?.();
+        const versions = updater.queryCurrentVersionsSync?.();
         if (Array.isArray(versions?.current_host)) return versions.current_host;
     } catch (err) {
         error("queryCurrentVersionsSync failed", err);
@@ -83,10 +123,10 @@ const resolveCommittedVersion = (updater: any): number[] | undefined => {
     return undefined;
 };
 
-const retainEquicord = (updater: any, reason: string) => {
+const retainEquicord = (updater: DiscordHostUpdater, reason: string) => {
     try {
         const committed = resolveCommittedVersion(updater);
-        const rootPath: string | undefined = updater?.rootPath;
+        const { rootPath } = updater;
 
         if (!committed || !rootPath) {
             /*
@@ -109,7 +149,7 @@ const retainEquicord = (updater: any, reason: string) => {
     }
 };
 
-const attachToUpdater = (updater: any) => {
+const attachToUpdater = (updater: DiscordHostUpdater | null | undefined) => {
     if (!updater || hookedUpdaters.has(updater)) return;
     try {
         hookedUpdaters.add(updater);
@@ -118,9 +158,7 @@ const attachToUpdater = (updater: any) => {
         return;
     }
 
-    if (typeof updater.on === "function") {
-        updater.on("host-updated", () => retainEquicord(updater, "host-updated"));
-    }
+    updater.on?.("host-updated", () => retainEquicord(updater, "host-updated"));
 
     /*
      * wrap the post-update relaunch entrypoints. retain runs after the
@@ -132,29 +170,27 @@ const attachToUpdater = (updater: any) => {
     const sync = updater.startCurrentVersionSync;
     if (typeof sync === "function") {
         const bound = sync.bind(updater);
-        updater.startCurrentVersionSync = function (...args: any[]) {
-            const result = bound(...args);
+        updater.startCurrentVersionSync = (options?: StartCurrentVersionOptions) => {
+            bound(options);
             try { retainEquicord(updater, "startCurrentVersionSync"); } catch (e) { error(e); }
-            return result;
         };
     }
     const async_ = updater.startCurrentVersion;
     if (typeof async_ === "function") {
         const bound = async_.bind(updater);
-        updater.startCurrentVersion = async function (...args: any[]) {
-            const result = await bound(...args);
+        updater.startCurrentVersion = async (queryOptions?: object, options?: StartCurrentVersionOptions) => {
+            await bound(queryOptions, options);
             try { retainEquicord(updater, "startCurrentVersion"); } catch (e) { error(e); }
-            return result;
         };
     }
 };
 
-const wrapStartup = (coreExports: any) => {
+const wrapStartup = (coreExports: DiscordDesktopCore | null | undefined) => {
     if (!coreExports?.startup || coreExports.__equicordStartupWrapped) return;
     coreExports.__equicordStartupWrapped = true;
 
     const origStartup = coreExports.startup;
-    coreExports.startup = function (opts: any, ...rest: any[]) {
+    coreExports.startup = function (opts, ...rest) {
         try {
             const updaterModule = opts?.updater;
             const inst = updaterModule?.getUpdater?.();
@@ -167,8 +203,8 @@ const wrapStartup = (coreExports: any) => {
                  */
                 updaterModule.__equicordTryInitWrapped = true;
                 const origTry = updaterModule.tryInitUpdater.bind(updaterModule);
-                updaterModule.tryInitUpdater = function (...a: any[]) {
-                    const ok = origTry(...a);
+                updaterModule.tryInitUpdater = (buildInfo, repositoryUrl, useRustBspatch) => {
+                    const ok = origTry(buildInfo, repositoryUrl, useRustBspatch);
                     try { attachToUpdater(updaterModule.getUpdater?.()); } catch (e) { error(e); }
                     return ok;
                 };
