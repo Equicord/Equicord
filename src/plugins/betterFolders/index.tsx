@@ -19,7 +19,7 @@
 import "./style.css";
 
 import { definePluginSettings } from "@api/Settings";
-import { Devs } from "@utils/constants";
+import { Devs, EquicordDevs } from "@utils/constants";
 import { getIntlMessage } from "@utils/discord";
 import definePlugin, { OptionType } from "@utils/types";
 import type { GuildFolder } from "@vencord/discord-types";
@@ -64,7 +64,7 @@ type FolderMentionProps = {
 export const ExpandedGuildFolderStore = findStoreLazy("ExpandedGuildFolderStore");
 export const SortedGuildStore = findStoreLazy("SortedGuildStore");
 const FolderUtils = findByPropsLazy("move", "toggleGuildFolderExpand");
-const FolderItem = findComponentByCodeLazy("FolderItem", "onExpandCollapse", "folderButtonSize");
+const FolderItem = findComponentByCodeLazy("folderButtonContent", "onHoverChange", "treeItemProps");
 
 const MAX_TREE_FILTER_DEPTH = 1000;
 let dispatchingFoldersClose = false;
@@ -87,10 +87,19 @@ function getGuildNavigationPathTargets(guildId: string | null | undefined): stri
     );
 }
 
+export function getExpandedFolderIdSet() {
+    return new Set(Array.from(ExpandedGuildFolderStore.getExpandedFolders(), id => Number(id)));
+}
+
+function isFolderExpanded(folderId: string | number) {
+    return getExpandedFolderIdSet().has(Number(folderId));
+}
+
 function expandGuildNavigationPathNow(guildId: string | null | undefined) {
     for (const folderId of getGuildNavigationPathTargets(guildId)) {
-        if (!ExpandedGuildFolderStore.isFolderExpanded(folderId)) {
-            FolderUtils.toggleGuildFolderExpand(folderId);
+        const numericFolderId = Number(folderId);
+        if (!isFolderExpanded(numericFolderId)) {
+            FolderUtils.toggleGuildFolderExpand(numericFolderId);
         }
     }
 }
@@ -107,11 +116,11 @@ function flushGuildNavigationPath() {
 
     const folderIds = getGuildNavigationPathTargets(guildId);
     const guildFolder = getGuildFolder(guildId);
-    const folderId = guildFolder?.folderId?.toString();
+    const folderId = guildFolder?.folderId;
     const shouldCloseTargetFolder = shouldCloseServerFolder
         && folderId != null
         && folderIds.length === 0
-        && ExpandedGuildFolderStore.isFolderExpanded(folderId);
+        && isFolderExpanded(folderId);
 
     expandGuildNavigationPathNow(guildId);
 
@@ -134,7 +143,7 @@ function scheduleGuildNavigationPath(guildId: string | null | undefined, closeSe
 }
 
 function closeFolders() {
-    for (const id of Array.from(ExpandedGuildFolderStore.getExpandedFolders()))
+    for (const id of getExpandedFolderIdSet())
         FolderUtils.toggleGuildFolderExpand(id);
 }
 
@@ -300,7 +309,7 @@ export default definePlugin({
     name: "BetterFolders",
     description: "Shows server folders on dedicated sidebar and adds folder related improvements",
     tags: ["Organisation", "Servers", "Appearance"],
-    authors: [Devs.juby, Devs.AutumnVN, Devs.Nuckyz],
+    authors: [Devs.juby, Devs.AutumnVN, Devs.Nuckyz, EquicordDevs.justjxke],
     isModified: true,
     settings,
     start() {
@@ -526,7 +535,9 @@ export default definePlugin({
             const guildFolder = getGuildFolder(data.guildId);
 
             if (guildFolder?.folderId) {
-                scheduleGuildNavigationPath(data.guildId, settings.store.closeServerFolder);
+                if (settings.store.forceOpen || settings.store.closeServerFolder) {
+                    scheduleGuildNavigationPath(data.guildId, settings.store.closeServerFolder);
+                }
             } else if (settings.store.closeAllFolders) {
                 closeFolders();
             }
@@ -567,6 +578,10 @@ export default definePlugin({
         if (typeof route !== "string") return;
 
         const guildId = route.match(/^\/channels\/([^/]+)/)?.[1];
+        if (!guildId) return;
+
+        if (!settings.store.forceOpen && !settings.store.closeServerFolder) return;
+
         expandGuildNavigationPathNow(guildId);
     },
     getGuildMentionCount(guildId: string): number {
@@ -688,8 +703,6 @@ export default definePlugin({
         props: FolderRenderProps | undefined,
         baseClassName: string
     ): string {
-        if (props?.isBetterFolders) return baseClassName;
-
         const folderNode = props?.folderNode;
         if (folderNode == null) return baseClassName;
 
@@ -784,7 +797,7 @@ export default definePlugin({
 
         if (
             !isBetterFolders ||
-            node.type === "folder" && expandedFolderIds?.has(node.id) ||
+            node.type === "folder" && (node.isBetterFoldersNested === true || expandedFolderIds?.has(node.id)) ||
             node.type === "guild" && node.parentId != null && expandedFolderIds?.has(node.parentId)
         ) {
             return originalComponent();
