@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { isPluginEnabled } from "@api/PluginManager";
 import "./style.css";
 
 import { definePluginSettings, migrateOldSettingToNewPlugin, migratePluginSetting, migratePluginSettings } from "@api/Settings";
@@ -13,6 +14,7 @@ import { Notice } from "@components/Notice";
 import { classNameFactory } from "@utils/css";
 import { Devs, EquicordDevs } from "@utils/index";
 import definePlugin, { OptionType } from "@utils/types";
+import { Alerts } from "@webpack/common";
 
 migratePluginSettings("Declutter", "BetterUserArea", "Anammox");
 migrateOldSettingToNewPlugin("Declutter", "removeClanTag", "GuildTagSettings", "hideTags");
@@ -40,7 +42,8 @@ export const settings = definePluginSettings({
     removeAvatarDecoration: {
         type: OptionType.BOOLEAN,
         description: "Remove avatar decorations.",
-        default: true,
+        default: false,
+        disabled: () => isPluginEnabled("Decor") || false,
         restartNeeded: true,
     },
     removeNameplate: {
@@ -149,6 +152,18 @@ export default definePlugin({
     description: "Cleans up Discord by removing non-essential UI elements like profile effects, shop tabs, boosts, and more.",
     tags: ["Appearance", "Customisation"],
     authors: [EquicordDevs.Leon135, Devs.prism, Devs.Kyuuhachi],
+    start() {
+        if (isPluginEnabled("Decor")) {
+            settings.store.removeAvatarDecoration = false;
+            Alerts.show({
+                title: "Declutter",
+                body: "Avatar decoration removal has been disabled to prevent conflicts with Decor plugin.",
+                confirmText: "OK",
+                // @ts-expect-error not typed
+                confirmVariant: "critical-primary"
+            });
+        }
+    },
     settings,
     patches: [
         {
@@ -158,7 +173,7 @@ export default definePlugin({
                 match: /(?<=function \i\((\i)\){)(?=.{0,150}let{avatarDecoration)/,
                 replace: "$&return null;"
             },
-            predicate: () => settings.store.removeAvatarDecoration,
+            predicate: () => settings.store.removeAvatarDecoration && !isPluginEnabled("Decor"),
         },
         {
             // Nameplate
