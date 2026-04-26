@@ -185,6 +185,8 @@ function filterTreeWithTargetNode(children: any, predicate: (node: any) => boole
 }
 
 function getNestedFolderMap(): Record<string, string> {
+    if (!settings.store.enableNestedFolders) return {};
+
     const nestedFolders = settings.store.nestedFolders ?? {};
     const validFolderIds = new Set<string>(
         SortedGuildStore.getGuildFolders()
@@ -280,6 +282,11 @@ export const settings = definePluginSettings({
         type: OptionType.BOOLEAN,
         description: "Force a folder to open when switching to a server of that folder",
         default: false
+    },
+    enableNestedFolders: {
+        type: OptionType.BOOLEAN,
+        description: "Allow nesting folders inside other folders by dragging.",
+        default: true
     },
     keepIcons: {
         type: OptionType.BOOLEAN,
@@ -733,6 +740,7 @@ export default definePlugin({
 
     handleFolderDrop(dragItem: FolderDragItem, targetNode: GuildTreeNode, _moveToBelow: boolean, isCombine: boolean): boolean {
         if (dragItem.type !== "folder") return false;
+        if (!settings.store.enableNestedFolders) return false;
 
         if (targetNode.type === "folder") {
             const childId = dragItem.nodeId?.toString();
@@ -760,13 +768,14 @@ export default definePlugin({
 
     shouldShowCombineTarget(noCombine: boolean, targetNode: GuildTreeNode): boolean {
         if (noCombine) return false;
+        if (!settings.store.enableNestedFolders) return targetNode.parentId == null;
         return targetNode.parentId == null || targetNode.type === "folder";
     },
 
     getFolderAcceptTypes(targetNode: GuildTreeNode): string[] {
         const GUILD = "guild";
         const FOLDER = "folder";
-        if (targetNode?.type === FOLDER) return [GUILD, FOLDER];
+        if (settings.store.enableNestedFolders && targetNode?.type === FOLDER) return [GUILD, FOLDER];
         return [GUILD];
     },
 
@@ -774,6 +783,7 @@ export default definePlugin({
         if (dragItem.nodeId === targetNode.id) return false;
 
         if (dragItem.type === "folder" && targetNode.type === "folder") {
+            if (!settings.store.enableNestedFolders) return false;
             return !hasParentInChain(targetNode.id?.toString(), dragItem.nodeId?.toString());
         }
 
