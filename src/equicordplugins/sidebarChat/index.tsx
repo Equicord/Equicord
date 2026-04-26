@@ -311,25 +311,24 @@ export default definePlugin({
     dependencies: ["HeaderBarAPI"],
     patches: [
         {
+            find: "this.renderThreadSidebar()",
+            replacement: {
+                match: /(this\.renderThreadSidebar\(\))\]/,
+                replace: "$1,(0,l.jsx)($self.renderSidebar,{})]"
+            }
+        },
+        {
             find: 'case"pendingFriends":',
             group: true,
             replacement: [
                 {
-                    match: /ChannelRenderer"\),/,
-                    replace: "$&vc_SidebarChat=$self.renderSidebar(),"
-                },
-                {
-                    match: /return(\(0,\i\.jsxs?\)\(\i,{}\))}/,
-                    replace: "return [$1, vc_SidebarChat]}"
-                },
-                {
-                    match: /(?<=guild_products.{0,1600})(case \i\.\i.{0,50}return)(.+?\}\));(?=.+?params\.messageId)/g,
-                    replace: "$1[$2, vc_SidebarChat];",
+                    match: /(?<=guild_products.{0,1600})(case \i\.\i.{0,50}return)(\(0,\i\.jsxs?\)\([^;]{0,200}\}\));(?=.{0,500}params\.messageId)/g,
+                    replace: "$1[$2, (0,l.jsx)($self.renderSidebar,{})];",
                     predicate: () => settings.store.patchCommunity,
                 },
                 {
-                    match: /(case \i\.\i\.GAME_SERVERS:.{0,50}\.CHANNEL.{0,25}return)(.*?);/,
-                    replace: "$1[$2, vc_SidebarChat];",
+                    match: /(case \i\.\i\.GAME_SERVERS:.{0,100}\.CHANNEL.{0,50}return)(\(0,\i\.jsxs?\)\([^;]{0,200}\));/,
+                    replace: "$1[$2, (0,l.jsx)($self.renderSidebar,{})];",
                     predicate: () => settings.store.patchCommunity,
                 },
             ],
