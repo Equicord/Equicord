@@ -22,6 +22,7 @@ export default definePlugin({
     patches: [
         {
             find: '"],{numberOfBlockedUsers:',
+            group: true,
             replacement: [
                 {
                     match: /(?<=listType:\i,numberOfUsers:\i\}=(\i).{0,800}numberOfIgnoredUsers:\i\}\)\}\)\]\}\))/,
@@ -32,7 +33,7 @@ export default definePlugin({
                     replace: "$self.renderUser($1,$2)",
                 },
                 {
-                    match: /(?<=\}=(\i).{0,10}(\i).useState.{0,5};)/,
+                    match: /(?<=\}=(\i).{0,30}(\i)\.useState\([^)]{0,20}\);)/,
                     replace: "let [searchResults,setSearchResults]=$2.useState([]);$self.setUpdateFunc($1,setSearchResults);"
                 },
                 {
