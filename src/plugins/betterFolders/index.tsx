@@ -512,15 +512,15 @@ export default definePlugin({
         {
             find: "`transitionToGuild - Transitioning to",
             replacement: {
-                match: /(`transitionToGuild - Transitioning to .{0,80}?guildId:(\i),channelId:\i,messageId:\i.{0,40}?`\),)(\i\(\i\.\i\.CHANNEL\(\2,\i,\i\),\i\)\})/,
-                replace: "$1$self.handleGuildNavigation($2),$3"
+                match: /(`transitionToGuild - Transitioning to .{0,80}?guildId:\i,channelId:\i,messageId:\i.{0,40}?`\),)/,
+                replace: "$&$self.handleGuildNavigation(arguments[0]),"
             }
         },
         {
             find: "`transitionTo - Transitioning to",
             replacement: {
-                match: /(function \i\((\i),\i\)\{if\(\i\(\2,"assign"\)\)return;\i\.log\(`transitionTo - Transitioning to \$\{\2\}`\);)/,
-                replace: "$1$self.handleRouteNavigation($2);"
+                match: /`transitionTo - Transitioning to \$\{\i\}`\);/,
+                replace: "$&$self.handleRouteNavigation(arguments[0]);"
             }
         }
     ],
