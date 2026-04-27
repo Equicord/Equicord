@@ -327,8 +327,8 @@ export default definePlugin({
                     predicate: () => settings.store.patchCommunity,
                 },
                 {
-                    match: /(case \i\.\i\.GAME_SERVERS:.{0,100}\.CHANNEL.{0,50}return)(\(0,\i\.jsxs?\)\([^;]{0,200}\));/,
-                    replace: "$1[$2, (0,l.jsx)($self.renderSidebar,{})];",
+                    match: /(?<=GAME_SERVERS:.{0,150};return)(\(0,\i\.jsxs?\)\([^;]{0,200}\));/,
+                    replace: "[$1, (0,l.jsx)($self.renderSidebar,{})];",
                     predicate: () => settings.store.patchCommunity,
                 },
             ],
