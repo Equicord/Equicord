@@ -138,16 +138,10 @@ async function createActivity(): Promise<Activity | undefined> {
         case TimestampMode.CUSTOM:
             if (startTime || endTime) {
                 activity.timestamps = {};
-                if (startTime && endTime) {
-                    const duration = endTime - startTime;
-                    if (duration > 0) {
-                        const anchor = getLoopAnchor();
-                        activity.timestamps.start = anchor;
-                        activity.timestamps.end = anchor + duration;
-                    } else {
-                        activity.timestamps.start = startTime;
-                        activity.timestamps.end = endTime;
-                    }
+                if (startTime && endTime && endTime > startTime) {
+                    const anchor = getLoopAnchor();
+                    activity.timestamps.start = anchor;
+                    activity.timestamps.end = anchor + (endTime - startTime);
                 } else {
                     if (startTime) activity.timestamps.start = startTime;
                     if (endTime) activity.timestamps.end = endTime;
@@ -227,7 +221,7 @@ export async function setRpc(disable?: boolean) {
 let loopInterval: ReturnType<typeof setInterval> | undefined;
 let loopAnchor = 0;
 
-export function getLoopAnchor() {
+function getLoopAnchor() {
     return loopAnchor;
 }
 
@@ -243,12 +237,10 @@ function startTimestampLoop() {
         const duration = endTime - startTime;
         if (duration <= 0) return;
 
-        // Reset the anchor each time a cycle completes so the next one starts fresh
         if (Date.now() >= loopAnchor + duration) {
             loopAnchor = Date.now();
+            setRpc();
         }
-
-        setRpc();
     }, 1000);
 }
 
@@ -271,8 +263,8 @@ export default definePlugin({
     settings,
 
     start() {
+		startTimestampLoop();
         setRpc();
-        startTimestampLoop();
     },
     stop() {
         setRpc(true);
