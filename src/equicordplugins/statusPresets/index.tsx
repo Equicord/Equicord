@@ -22,12 +22,11 @@ import { definePluginSettings } from "@api/Settings";
 import { getUserSettingLazy } from "@api/UserSettings";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { EquicordDevs } from "@utils/constants";
-import { proxyLazy } from "@utils/lazy";
 import { classes } from "@utils/misc";
 import { openModalLazy } from "@utils/modal";
 import { useForceUpdater } from "@utils/react";
 import definePlugin, { OptionType, StartAt } from "@utils/types";
-import { extractAndLoadChunksLazy, findComponentByCodeLazy, findModuleId, wreq } from "@webpack";
+import { extractAndLoadChunksLazy, findComponentByCode, findComponentByCodeLazy } from "@webpack";
 import { Clickable, Menu, OverridePremiumTypeStore, Toasts, useState } from "@webpack/common";
 
 import managedStyle from "./fixActionBar.css?managed";
@@ -57,21 +56,15 @@ interface DiscordStatus {
 }
 
 // TODO: find clearCustomStatusHint original css/svg or replace
-const PMenu = findComponentByCodeLazy("#{intl::MORE_OPTIONS}", ",renderSubmenu:");
 const EmojiComponent = findComponentByCodeLazy(/\.translateSurrogatesToInlineEmoji\(\i\.name\);/);
 
 const CustomStatusSettings = getUserSettingLazy("status", "customStatus")!;
-const StatusModule = proxyLazy(() => {
-    const id = findModuleId(".customStatusInputTitle,");
-    return wreq(Number(id));
-});
 
-const requireCustomStatusModal = extractAndLoadChunksLazy(["action:\"PRESS_ADD_CUSTOM_STATUS\"", /\i\.\i\i\)/]);
+const requireCustomStatusModal = extractAndLoadChunksLazy(["action:\"PRESS_ADD_CUSTOM_STATUS\""]);
 
 const openCustomStatusModalLazy = () => openModalLazy(async () => {
     await requireCustomStatusModal();
-    const key = Object.keys(StatusModule)[0];
-    const Component = StatusModule[key];
+    const Component = findComponentByCode(".customStatusInputTitle,");
     return props => <Component {...props} />;
 });
 
@@ -166,36 +159,35 @@ export default definePlugin({
         },
     ],
     render() {
+        const presets = settings.store.StatusPresets as { [k: string]: DiscordStatus | undefined; };
+        if (!Object.values(presets).some(p => p != null)) return null;
+
         const status = CustomStatusSettings.getSetting();
         return (
             <ErrorBoundary>
                 <div />
                 {status == null ?
-                    <PMenu
+                    <Menu.MenuItem
                         id="sp-custom/presets-status"
                         action="PRESS_SET_STATUS"
                         onClick={openCustomStatusModalLazy}
-                        icon={
-                            () => <div />
-                        }
+                        icon={() => <div />}
                         label="Set Custom Status"
                         renderSubmenu={StatusSubMenuComponent}
                     />
                     :
-                    <PMenu
+                    <Menu.MenuItem
                         id="sp-edit/presets-status"
                         action="PRESS_EDIT_CUSTOM_STATUS"
                         onClick={openCustomStatusModalLazy}
                         hint={<ClearStatusButton />}
-                        icon={
-                            () => status.emoji != null ? (
-                                <EmojiComponent
-                                    emoji={status.emoji}
-                                    animate={false}
-                                    hideTooltip={false}
-                                />
-                            ) : null
-                        }
+                        icon={() => status.emoji != null ? (
+                            <EmojiComponent
+                                emoji={status.emoji}
+                                animate={false}
+                                hideTooltip={false}
+                            />
+                        ) : null}
                         label="Edit Custom Status"
                         renderSubmenu={StatusSubMenuComponent}
                     />}
