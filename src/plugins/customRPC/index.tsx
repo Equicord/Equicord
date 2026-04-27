@@ -138,8 +138,20 @@ async function createActivity(): Promise<Activity | undefined> {
         case TimestampMode.CUSTOM:
             if (startTime || endTime) {
                 activity.timestamps = {};
-                if (startTime) activity.timestamps.start = startTime;
-                if (endTime) activity.timestamps.end = endTime;
+                if (startTime && endTime) {
+                    const duration = endTime - startTime;
+                    if (duration > 0) {
+                        const anchor = getLoopAnchor();
+                        activity.timestamps.start = anchor;
+                        activity.timestamps.end = anchor + duration;
+                    } else {
+                        activity.timestamps.start = startTime;
+                        activity.timestamps.end = endTime;
+                    }
+                } else {
+                    if (startTime) activity.timestamps.start = startTime;
+                    if (endTime) activity.timestamps.end = endTime;
+                }
             }
             break;
         case TimestampMode.NONE:
@@ -212,6 +224,42 @@ export async function setRpc(disable?: boolean) {
     });
 }
 
+let loopInterval: ReturnType<typeof setInterval> | undefined;
+let loopAnchor = 0;
+
+export function getLoopAnchor() {
+    return loopAnchor;
+}
+
+function startTimestampLoop() {
+    stopTimestampLoop();
+    loopAnchor = Date.now();
+
+    loopInterval = setInterval(() => {
+        const { timestampMode, startTime, endTime } = settings.store;
+
+        if (timestampMode !== TimestampMode.CUSTOM || !startTime || !endTime) return;
+
+        const duration = endTime - startTime;
+        if (duration <= 0) return;
+
+        // Reset the anchor each time a cycle completes so the next one starts fresh
+        if (Date.now() >= loopAnchor + duration) {
+            loopAnchor = Date.now();
+        }
+
+        setRpc();
+    }, 1000);
+}
+
+function stopTimestampLoop() {
+    if (loopInterval !== undefined) {
+        clearInterval(loopInterval);
+        loopInterval = undefined;
+    }
+    loopAnchor = 0;
+}
+
 export default definePlugin({
     name: "CustomRPC",
     description: "Add a fully customisable Rich Presence (Game status) to your Discord profile",
@@ -222,8 +270,14 @@ export default definePlugin({
     requiresRestart: false,
     settings,
 
-    start: setRpc,
-    stop: () => setRpc(true),
+    start() {
+        setRpc();
+        startTimestampLoop();
+    },
+    stop() {
+        setRpc(true);
+        stopTimestampLoop();
+    },
 
     // Discord hides buttons on your own Rich Presence for some reason. This patch disables that behaviour
     patches: [
