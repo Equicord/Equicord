@@ -175,7 +175,7 @@ export const settings = definePluginSettings({
     bypassDiscordUpload: {
         type: OptionType.BOOLEAN,
         description: "Bypass Discord uploads and use FileUpload instead.",
-        default: false,
+        default: true,
         hidden: true
     },
     bypassDiscordUploadOnlyOverLimit: {
