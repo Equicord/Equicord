@@ -101,7 +101,7 @@ const settings = definePluginSettings({
     },
     isTextInputDefault: {
         type: OptionType.BOOLEAN,
-        description: "Shows a text input instead of a select menu by default. (Equivalent to clicking the \"Other\" option)"
+        description: 'Shows a text input instead of a select menu by default. (Equivalent to clicking the "Other" option)'
     }
 });
 
