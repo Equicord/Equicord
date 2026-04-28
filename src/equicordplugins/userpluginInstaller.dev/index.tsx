@@ -95,6 +95,8 @@ export default definePlugin({
             cancelText: "Later"
         });
 
+        await Native.ensurePluginsDirectory();
+
         plSettings.customEntries.push(this.section);
 
         this.pluginsWithUpdates.registerCallback((value, id) => {
