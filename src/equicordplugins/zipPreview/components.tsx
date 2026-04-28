@@ -23,6 +23,7 @@ import {
     getCodeLanguage,
     isZipFile,
     makeDownload,
+    MAX_ENTRIES,
     readTextEntry,
     ZipEntry,
     ZipPreviewAttachmentProps,
@@ -67,63 +68,55 @@ function getVisibleEntries(entries: ZipEntry[], currentPath: string): VisibleEnt
 export function ZipPreviewInline(props: ZipPreviewAttachmentProps) {
     const fileName = getAttachmentFileName(props);
     const url = getAttachmentUrl(props);
-    const [cacheState, setCacheState] = useState<ZipPreviewCacheState | null>(() => url ? getCachedZip(url) : null);
+    const [cacheState, setCacheState] = useState<ZipPreviewCacheState | null>(null);
     const [isExpanded, setIsExpanded] = useState(false);
     const [isContentMounted, setIsContentMounted] = useState(false);
     const [currentPath, setCurrentPath] = useState("");
     const animationFrameRef = useRef<number | null>(null);
     const animationTimeoutRef = useRef<number | null>(null);
+    const loadRequestIdRef = useRef(0);
 
     useEffect(() => {
-        if (!url) {
-            setCacheState(null);
-            return;
-        }
+        loadRequestIdRef.current++;
+        setCacheState(null);
+        setCurrentPath("");
+        setIsExpanded(false);
+        setIsContentMounted(false);
+    }, [url]);
 
-        let cancelled = false;
+    useEffect(() => () => {
+        loadRequestIdRef.current++;
+        if (animationFrameRef.current != null) cancelAnimationFrame(animationFrameRef.current);
+        if (animationTimeoutRef.current != null) clearTimeout(animationTimeoutRef.current);
+    }, []);
+
+    if (!isZipFile(fileName) || !url) return null;
+
+    const loadPreview = () => {
+        const loadRequestId = ++loadRequestIdRef.current;
         const state = getCachedZip(url);
         setCacheState(state);
 
         if (state.status === "pending") {
             state.promise
                 .then(() => {
-                    if (!cancelled) setCacheState(getCachedZip(url));
+                    if (loadRequestIdRef.current === loadRequestId) setCacheState(getCachedZip(url));
                 })
-                .catch(() => {
-                    if (!cancelled) setCacheState(getCachedZip(url));
+                .catch(error => {
+                    if (loadRequestIdRef.current !== loadRequestId) return;
+
+                    const message = error instanceof Error ? error.message : "Failed to preview ZIP.";
+                    setCacheState({ status: "rejected", message });
                 });
         }
-
-        return () => {
-            cancelled = true;
-        };
-    }, [url]);
-
-    useEffect(() => () => {
-        if (animationFrameRef.current != null) cancelAnimationFrame(animationFrameRef.current);
-        if (animationTimeoutRef.current != null) clearTimeout(animationTimeoutRef.current);
-    }, []);
-
-    if (!isZipFile(fileName) || !url || !cacheState) return null;
-
-    if (cacheState.status === "pending") {
-        return <div className={cl("inline", "state")}>Loading ZIP preview...</div>;
-    }
-
-    if (cacheState.status === "rejected") {
-        return <div className={cl("inline", "state")}>{cacheState.message}</div>;
-    }
-
-    const { entries } = cacheState.result;
-    if (entries.length === 0) {
-        return <div className={cl("inline", "state")}>This ZIP is empty.</div>;
-    }
+    };
 
     const setExpanded = (nextIsExpanded: boolean) => {
         if (animationFrameRef.current != null) cancelAnimationFrame(animationFrameRef.current);
         if (animationTimeoutRef.current != null) clearTimeout(animationTimeoutRef.current);
 
         if (nextIsExpanded) {
+            if (!cacheState || cacheState.status === "rejected") loadPreview();
             setIsContentMounted(true);
             animationFrameRef.current = requestAnimationFrame(() => {
                 animationFrameRef.current = null;
@@ -144,10 +137,7 @@ export function ZipPreviewInline(props: ZipPreviewAttachmentProps) {
             {isContentMounted && (
                 <div className={cl("content")} aria-hidden={!isExpanded}>
                     <div className={cl("content-inner")}>
-                        <ZipPreviewBreadcrumb path={currentPath} onNavigate={setCurrentPath} />
-                        <div className={cl("entries")}>
-                            <ZipPreviewFileList entries={entries} currentPath={currentPath} onNavigate={setCurrentPath} />
-                        </div>
+                        <ZipPreviewContent cacheState={cacheState} currentPath={currentPath} onNavigate={setCurrentPath} />
                     </div>
                 </div>
             )}
@@ -167,6 +157,39 @@ export function ZipPreviewInline(props: ZipPreviewAttachmentProps) {
                     : <ChevronSmallDownIcon className={cl("toggle-icon")} />}
             </button>
         </div>
+    );
+}
+
+function ZipPreviewContent({
+    cacheState,
+    currentPath,
+    onNavigate
+}: {
+    cacheState: ZipPreviewCacheState | null;
+    currentPath: string;
+    onNavigate: (path: string) => void;
+}) {
+    if (!cacheState || cacheState.status === "pending") {
+        return <div className={cl("state")}>Loading ZIP preview...</div>;
+    }
+
+    if (cacheState.status === "rejected") {
+        return <div className={cl("state")}>{cacheState.message}</div>;
+    }
+
+    const { entries, truncated } = cacheState.result;
+    if (entries.length === 0) {
+        return <div className={cl("state")}>This ZIP is empty.</div>;
+    }
+
+    return (
+        <>
+            <ZipPreviewBreadcrumb path={currentPath} onNavigate={onNavigate} />
+            {truncated && <div className={cl("state")}>Only showing first {MAX_ENTRIES} entries.</div>}
+            <div className={cl("entries")}>
+                <ZipPreviewFileList entries={entries} currentPath={currentPath} onNavigate={onNavigate} />
+            </div>
+        </>
     );
 }
 

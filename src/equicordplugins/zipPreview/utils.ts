@@ -14,7 +14,10 @@ export const MAX_ZIP_BYTES = 50 * 1024 * 1024;
 export const MAX_ENTRIES = 1000;
 export const MAX_PREVIEW_BYTES = 10 * 1024 * 1024;
 
+const CANCELLED_PREVIEW_MESSAGE = "ZIP preview was cancelled.";
+const NATIVE_UNAVAILABLE_MESSAGE = "Native helper is unavailable.";
 const IMAGE_EXTENSIONS = new Set(["png", "jpg", "jpeg", "gif", "webp", "avif", "bmp"]);
+const DISCORD_ATTACHMENT_HOSTS = new Set(["cdn.discordapp.com", "media.discordapp.net"]);
 const TEXT_EXTENSIONS = new Set([
     "c",
     "cpp",
@@ -57,23 +60,8 @@ export interface ZipEntry {
     extension: string;
 }
 
-export interface ZipDirectoryEntry {
-    path: string;
-    name: string;
-    depth: number;
-    type: "directory";
-}
-
-export interface ZipFileEntry extends ZipEntry {
-    depth: number;
-    type: "file";
-}
-
-export type ZipTreeEntry = ZipDirectoryEntry | ZipFileEntry;
-
 export interface ZipPreviewResult {
     entries: ZipEntry[];
-    treeEntries: ZipTreeEntry[];
     truncated: boolean;
 }
 
@@ -81,6 +69,12 @@ export type ZipPreviewCacheState =
     | { status: "pending"; promise: Promise<ZipPreviewResult>; }
     | { status: "resolved"; result: ZipPreviewResult; }
     | { status: "rejected"; message: string; };
+
+interface NativeFetchResult {
+    success: boolean;
+    data?: ArrayBuffer;
+    error?: string;
+}
 
 const zipCache = new Map<string, ZipPreviewCacheState>();
 
@@ -107,7 +101,8 @@ export function getCachedZip(url: string): ZipPreviewCacheState {
         })
         .catch(error => {
             const message = error instanceof Error ? error.message : "Failed to preview ZIP.";
-            zipCache.set(url, { status: "rejected", message });
+            if (message === CANCELLED_PREVIEW_MESSAGE || message === NATIVE_UNAVAILABLE_MESSAGE) zipCache.delete(url);
+            else zipCache.set(url, { status: "rejected", message });
             throw error;
         });
 
@@ -150,12 +145,16 @@ export function getCodeLanguage(entry: ZipEntry): string {
 }
 
 async function loadZip(url: string): Promise<ZipPreviewResult> {
-    if (Native) {
-        const nativeResult = await Native.fetchFile(url);
+    const attachmentPath = getDiscordAttachmentPath(url);
+
+    if (attachmentPath) {
+        const nativeResult = await fetchNativeDiscordAttachment(attachmentPath);
         if (nativeResult.success && nativeResult.data) {
             if (nativeResult.data.byteLength > MAX_ZIP_BYTES) throw new Error("ZIP is too large to preview.");
             return parseZipBuffer(nativeResult.data);
         }
+
+        throw new Error(nativeResult.error || "Could not fetch ZIP through native Discord attachment fetch.");
     }
 
     const response = await fetch(url);
@@ -170,6 +169,38 @@ async function loadZip(url: string): Promise<ZipPreviewResult> {
     if (buffer.byteLength > MAX_ZIP_BYTES) throw new Error("ZIP is too large to preview.");
 
     return parseZipBuffer(buffer);
+}
+
+async function fetchNativeDiscordAttachment(attachmentPath: string): Promise<NativeFetchResult> {
+    if (!Native) return { success: false, error: NATIVE_UNAVAILABLE_MESSAGE };
+    if (typeof Native.fetchDiscordAttachment === "function") return Native.fetchDiscordAttachment(attachmentPath);
+    return { success: false, error: "Native helper does not support attachment fetch." };
+}
+
+export function getDiscordAttachmentPath(url: string): string | null {
+    try {
+        const parsedUrl = new URL(url);
+        if (parsedUrl.protocol !== "https:") return null;
+        if (!DISCORD_ATTACHMENT_HOSTS.has(parsedUrl.hostname)) return null;
+        if (!parsedUrl.pathname.startsWith("/attachments/")) return null;
+
+        const attachmentPath = parsedUrl.pathname.slice("/attachments/".length);
+        if (!isValidDiscordAttachmentPath(attachmentPath)) return null;
+
+        return `${attachmentPath}${parsedUrl.search}`;
+    } catch {
+        return null;
+    }
+}
+
+function isValidDiscordAttachmentPath(path: string): boolean {
+    if (path.includes("\\") || path.includes("..") || path.startsWith("/") || path.startsWith("//")) return false;
+
+    const parts = path.split("/");
+    return parts.length >= 3
+        && /^\d+$/.test(parts[0])
+        && /^\d+$/.test(parts[1])
+        && parts.slice(2).every(part => part.length > 0);
 }
 
 function parseZipBuffer(buffer: ArrayBuffer): ZipPreviewResult {
@@ -195,47 +226,8 @@ function parseZipBuffer(buffer: ArrayBuffer): ZipPreviewResult {
 
     return {
         entries,
-        treeEntries: buildTreeEntries(entries, truncated),
         truncated
     };
-}
-
-function buildTreeEntries(entries: ZipEntry[], truncated: boolean): ZipTreeEntry[] {
-    const directories = new Set<string>();
-
-    for (const entry of entries) {
-        const parts = entry.path.split("/");
-        for (let index = 1; index < parts.length; index++) {
-            directories.add(parts.slice(0, index).join("/"));
-        }
-    }
-
-    const directoryEntries = Array.from(directories, path => ({
-        path,
-        name: `${getFileName(path)}/`,
-        depth: path.split("/").length - 1,
-        type: "directory" as const
-    }));
-
-    const fileEntries = entries.map(entry => ({
-        ...entry,
-        depth: entry.path.split("/").length - 1,
-        type: "file" as const
-    }));
-
-    const treeEntries: ZipTreeEntry[] = [...directoryEntries, ...fileEntries]
-        .sort((a, b) => a.path.localeCompare(b.path));
-
-    if (truncated) {
-        treeEntries.push({
-            path: "__zip_preview_truncated__",
-            name: `Only showing first ${MAX_ENTRIES} entries`,
-            depth: 0,
-            type: "directory"
-        });
-    }
-
-    return treeEntries;
 }
 
 function getPreviewKind(extension: string, size: number): ZipPreviewKind {
