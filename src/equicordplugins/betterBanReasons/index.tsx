@@ -126,12 +126,12 @@ export default definePlugin({
                     replace: "useState($self.getDefaultState())"
                 },
                 {
-                    match: /\[(\i),(\i)\]=(\i)\.useState\(null!=(\i)\?(\i):(\i)\)/,
-                    replace: "[$1,$2]=$self.captureDeleteState($3.useState,null!=$4?$5:$6)"
+                    match: /(\[\i,\i\])=(\i)\.useState\((null!=\i\?\i:\i)\)/,
+                    replace: "$1=$self.captureDeleteState($2.useState,$3)"
                 },
                 {
-                    match: /(\i)=(\i)\.useCallback\((\i)=>\{(\i)\(\3\),(\i)\(!1\),(\i)\(null\)\},\[\]\)/,
-                    replace: "$1=$2.useCallback($3=>{$4($3),$5(!1),$6(null),$self.onReasonSelect($3)},[])"
+                    match: /\i=\i\.useCallback\((\i)=>\{.{0,10},\i\(null\)(?=\},\[\]\))/,
+                    replace: "$&,$self.onReasonSelect($1)"
                 }
             ]
         }
