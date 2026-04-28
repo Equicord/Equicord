@@ -2,6 +2,11 @@
     opacity: 0.5;
 }
 
+.vc-sp-item {
+    position: relative;
+    align-items: center;
+}
+
 .vc-sp-item:hover {
     background-color: var(--menu-item-default-hover-bg) !important;
     color: var(--white) !important;
@@ -9,5 +14,15 @@
 
 .vc-sp-icon {
     transform: rotate(45deg);
-    margin-top: 4px;
+    width: 16px;
+    height: 16px;
+    color: var(--interactive-normal);
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    translate: 0 -50%;
+}
+
+.vc-sp-icon:hover {
+    color: var(--status-danger);
 }

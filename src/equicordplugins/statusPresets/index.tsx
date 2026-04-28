@@ -53,16 +53,15 @@ interface DiscordStatus {
     emojiInfo: Emoji | null;
     text: string;
     clearAfter: "TODAY" | number | null;
-    status: "online" | "dnd" | "idle" | "invisible";
 }
 
 // TODO: find clearCustomStatusHint original css/svg or replace
-let PMenu;
+const PMenu = findComponentByCodeLazy("#{intl::MORE_OPTIONS}", ",renderSubmenu:");
 const EmojiComponent = findComponentByCodeLazy(/\.translateSurrogatesToInlineEmoji\(\i\.name\);/);
 
 const CustomStatusSettings = getUserSettingLazy("status", "customStatus")!;
 const StatusModule = proxyLazy(() => {
-    const id = findModuleId(".customStatusInputTitle,");
+    const id = findModuleId("#{intl::SAVE}", '"custom-status-input"', '"Invalid custom status clear timeout"),');
     return wreq(Number(id));
 });
 
@@ -102,25 +101,29 @@ function StatusIcon({ isHovering, status }: { isHovering: boolean; status: Disco
 
 const RenderStatusMenuItem = ({ status, update, disabled }: { status: DiscordStatus; update: () => void; disabled: boolean; }) => {
     const [isHovering, setIsHovering] = useState(false);
-    const handleMouseOver = () => {
-        setIsHovering(true);
-    };
 
-    const handleMouseOut = () => {
-        setIsHovering(false);
-    };
-
-    return <div className={classes("vc-sp-item", disabled ? "vc-sp-disabled" : null)}
-        onMouseOver={handleMouseOver}
-        onMouseOut={handleMouseOut}>
-        <Clickable
-            onClick={e => {
-                e.stopPropagation();
-                settings.store.StatusPresets[status.text] = undefined; // setting to undefined to remove it.
-                update();
-            }}><StatusIcon isHovering={isHovering} status={status} /></Clickable>
-        <div style={{ marginLeft: "2px" }}>{status.text}</div>
-    </div >;
+    return (
+        <div
+            className={classes("vc-sp-item", disabled ? "vc-sp-disabled" : null)}
+            onMouseOver={() => setIsHovering(true)}
+            onMouseOut={() => setIsHovering(false)}
+        >
+            <StatusIcon isHovering={false} status={status} />
+            <span className="vc-sp-text">{status.text}</span>
+            {isHovering && (
+                <Clickable onClick={e => {
+                    e.stopPropagation();
+                    settings.store.StatusPresets = {
+                        ...settings.store.StatusPresets,
+                        [status.text]: undefined
+                    };
+                    update();
+                }}>
+                    <PlusSmallIcon className="vc-sp-icon" />
+                </Clickable>
+            )}
+        </div>
+    );
 };
 
 const StatusSubMenuComponent = () => {
@@ -130,8 +133,8 @@ const StatusSubMenuComponent = () => {
         {Object.entries((settings.store.StatusPresets as { [k: string]: DiscordStatus | undefined; })).map(([index, status]) => status != null ? <Menu.MenuItem
             key={"status-presets-" + index}
             id={"status-presets-" + index}
-            label={status.status}
-            action={() => (status.emojiInfo?.id != null && premiumType > 0 || status.emojiInfo?.id == null) && setStatus(status)}
+            label=""
+            action={() => (status.emojiInfo?.id == null || premiumType > 0) && setStatus(status)}
             render={() => <RenderStatusMenuItem
                 status={status}
                 update={update}
@@ -146,15 +149,15 @@ export default definePlugin({
     description: "Allows you to remember your statuses and set them later",
     tags: ["Activity", "Utility"],
     authors: [EquicordDevs.iamme],
-    settings: settings,
+    settings,
     dependencies: ["UserSettingsAPI"],
     managedStyle,
     patches: [
         {
             find: '="custom-status-input";',
             replacement: {
-                match: /(?<=(\i)\?\.state\?\?.*?)\{text:\i\.\i\.\i\(\i\.\i#{intl::SAVE}\)/,
-                replace: "$self.renderRememberButton($1),$&"
+                match: /(?<=\[(\i).{0,6}\.useState\(\i\?\.state\?\?""\),\[(\i).{0,25}\?\?null\),\[(\i).*?)\{text:\i\.\i\.\i\(\i\.\i#{intl::SAVE}\)/,
+                replace: "$self.renderRememberButton({text:$1,emojiInfo:$2,clearAfter:$3}),$&"
             }
         },
         {
@@ -167,14 +170,12 @@ export default definePlugin({
         {
             find: "#{intl::MORE_OPTIONS}),...",
             replacement: {
-                match: /(?<=targetElementRef:\i,spacing:.{0,150}className:\i\.\i,children:(\i)\(\)\}\)\})/,
-                replace: "$self.PMenu=$1;"
+                match: /\i:\(\)=>\i,(?=.*?function (\i).{0,100}renderSubmenu:\i,ref:)/,
+                replace: "$&PMenu:()=>$1,"
             }
         },
     ],
-    set PMenu(value: any) {
-        PMenu = value;
-    },
+
     render() {
         const status = CustomStatusSettings.getSetting();
         return (
