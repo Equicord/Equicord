@@ -226,14 +226,13 @@ function getLoopAnchor() {
 }
 
 function startTimestampLoop() {
+    const { timestampMode, startTime, endTime } = settings.store;
+    if (timestampMode !== TimestampMode.CUSTOM || !startTime || !endTime) return;
+    
     stopTimestampLoop();
     loopAnchor = Date.now();
 
     loopInterval = setInterval(() => {
-        const { timestampMode, startTime, endTime } = settings.store;
-
-        if (timestampMode !== TimestampMode.CUSTOM || !startTime || !endTime) return;
-
         const duration = endTime - startTime;
         if (duration <= 0) return;
 
