@@ -1,0 +1,217 @@
+.vc-zip-preview-file {
+    flex-wrap: wrap;
+}
+
+.vc-zip-preview-inline {
+    flex: 0 0 100%;
+    order: 3;
+    box-sizing: border-box;
+    min-width: 0;
+    padding-left: 0;
+    color: var(--text-normal);
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+}
+
+.vc-zip-preview-collapsed {
+    display: flex;
+    justify-content: center;
+    height: 18px;
+    margin-top: 4px;
+}
+
+.vc-zip-preview-expanded {
+    margin-top: 14px;
+}
+
+.vc-zip-preview-content {
+    display: grid;
+    grid-template-rows: 0fr;
+    overflow: hidden;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-4px);
+    transition:
+        grid-template-rows 180ms ease,
+        opacity 140ms ease,
+        transform 180ms ease;
+}
+
+.vc-zip-preview-content-inner {
+    min-height: 0;
+    overflow: hidden;
+}
+
+.vc-zip-preview-open .vc-zip-preview-content {
+    grid-template-rows: 1fr;
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+}
+
+.vc-zip-preview-state {
+    color: var(--text-muted);
+}
+
+.vc-zip-preview-entries {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.vc-zip-preview-row {
+    appearance: none;
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 0;
+    border: 0;
+    border-radius: 4px;
+    background: none;
+    color: var(--text-link);
+    font: inherit;
+    line-height: 1.25rem;
+    text-align: left;
+    outline: none;
+}
+
+.vc-zip-preview-row:hover,
+.vc-zip-preview-row:focus,
+.vc-zip-preview-row:active {
+    background: none !important;
+    background-color: transparent !important;
+}
+
+.vc-zip-preview-directory {
+    color: var(--text-link);
+}
+
+.vc-zip-preview-button {
+    cursor: pointer;
+    text-decoration: underline;
+    color: var(--text-link);
+}
+
+.vc-zip-preview-button:hover,
+.vc-zip-preview-button:focus,
+.vc-zip-preview-button:active {
+    color: var(--text-link);
+    background: none !important;
+    background-color: transparent !important;
+}
+
+.vc-zip-preview-unsupported {
+    color: var(--text-muted);
+}
+
+.vc-zip-preview-modal-title {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.vc-zip-preview-modal-content {
+    min-height: 240px;
+}
+
+.vc-zip-preview-code-wrap {
+    padding: 16px 0;
+}
+
+.vc-zip-preview-image-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 360px;
+    padding: 16px 0;
+}
+
+.vc-zip-preview-image {
+    display: block;
+    max-width: 100%;
+    max-height: 70vh;
+    object-fit: contain;
+}
+
+.vc-zip-preview-toggle {
+    appearance: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 18px;
+    margin: 0 auto;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: color 0.15s ease;
+    outline: none;
+}
+
+.vc-zip-preview-toggle:hover,
+.vc-zip-preview-toggle:focus,
+.vc-zip-preview-toggle:active {
+    background: none !important;
+    background-color: transparent !important;
+    color: var(--text-link);
+}
+
+.vc-zip-preview-toggle-icon {
+    width: 16px;
+    height: 16px;
+}
+
+.vc-zip-preview-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-bottom: 4px;
+    color: var(--text-normal);
+}
+
+.vc-zip-preview-breadcrumb-icon {
+    flex-shrink: 0;
+    width: 16px;
+    height: 16px;
+    color: var(--text-normal);
+}
+
+.vc-zip-preview-breadcrumb-segment {
+    display: inline;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--text-link);
+    font: inherit;
+    line-height: 1.25rem;
+    text-decoration: underline;
+    cursor: pointer;
+    outline: none;
+}
+
+.vc-zip-preview-breadcrumb-segment:hover,
+.vc-zip-preview-breadcrumb-segment:focus,
+.vc-zip-preview-breadcrumb-segment:active {
+    background: none !important;
+    background-color: transparent !important;
+    color: var(--text-link-low-saturation);
+}
+
+.vc-zip-preview-breadcrumb-current {
+    color: var(--text-normal);
+}
+
+.vc-zip-preview-size {
+    color: var(--text-muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .vc-zip-preview-content {
+        transition: none;
+        transform: none;
+    }
+}
