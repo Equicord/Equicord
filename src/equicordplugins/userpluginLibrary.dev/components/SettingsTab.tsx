@@ -21,10 +21,11 @@ import {
 import { classes, isObjectEmpty } from "@utils/misc";
 import { closeAllModals } from "@utils/modal";
 import { relaunch } from "@utils/native";
-import { Alerts, NavigationRouter, Toasts, useEffect, useState } from "@webpack/common";
+import { Alerts, NavigationRouter, Toasts, Tooltip, useEffect, useState } from "@webpack/common";
 
 import userpluginInstaller, { Native } from "..";
 import {
+    CircleQuestionIcon,
     cl,
     CLONE_LINK_REGEX,
     showInstallFinishedAlert,
@@ -248,6 +249,25 @@ function UserPluginsTab() {
                                     }}
                                     footer={(
                                         <div className={cl("plugin-footer")}>
+                                            <Tooltip text={"Unverified Plugin"}>
+                                                {({ onMouseEnter, onMouseLeave }) => (
+                                                    <div
+                                                        className={cl("unverified-plugin", "reputation")}
+                                                        onMouseEnter={onMouseEnter}
+                                                        onMouseLeave={onMouseLeave}
+                                                        onClick={() => {
+                                                            Alerts.show({
+                                                                title: "Unverified Plugin",
+                                                                body: "This plugin is not necessarily malicious, but it is not necessarily safe. Review the plugin's source code before using it.",
+                                                                confirmText: "OK",
+                                                                cancelText: "Request Review"
+                                                            });
+                                                        }}
+                                                    >
+                                                        <CircleQuestionIcon />
+                                                    </div>
+                                                )}
+                                            </Tooltip>
                                             {Object.keys(
                                                 pluginsWithUpdates,
                                             ).includes(plugin.directory!) && (
