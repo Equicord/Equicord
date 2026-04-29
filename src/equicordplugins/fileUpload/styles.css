@@ -71,3 +71,38 @@
 .vc-file-upload-progress-wrap[data-phase="success"] .vc-file-upload-progress-fill {
     background: var(--status-positive);
 }
+
+.vc-file-upload-settings-fallback-order-list {
+    display: grid;
+    gap: 6px;
+}
+
+.vc-file-upload-settings-fallback-order-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 8px 10px;
+    border-radius: 8px;
+    border: 1px solid var(--border-subtle);
+    background: var(--background-secondary);
+    color: var(--text-default);
+    cursor: grab;
+}
+
+.vc-file-upload-settings-fallback-order-item[data-dragging="true"] {
+    background: var(--background-modifier-hover);
+}
+
+.vc-file-upload-settings-fallback-order-label {
+    color: var(--text-default);
+}
+
+.vc-file-upload-settings-fallback-order-handle {
+    color: var(--text-muted);
+    font-size: 12px;
+}
+
+.vc-file-upload-settings-fallback-order-actions {
+    margin-top: 8px;
+}

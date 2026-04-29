@@ -8,15 +8,17 @@ import { definePluginSettings } from "@api/Settings";
 import { Button } from "@components/Button";
 import { SettingsSection } from "@components/settings/tabs/plugins/components/Common";
 import { Switch } from "@components/Switch";
+import { classNameFactory } from "@utils/css";
 import { useForceUpdater } from "@utils/react";
 import { OptionType } from "@utils/types";
 import { React, Select, showToast, TextArea, TextInput, Toasts } from "@webpack/common";
 
 import { CORS_PROXY } from "./constants";
-import { fallbackServiceOrder, ServiceType } from "./types";
+import { fallbackServiceOrder, serviceLabels, ServiceType } from "./types";
 import { parseShareXConfig } from "./utils/sharex";
 
 const defaultFallbackOrder = fallbackServiceOrder.join(",");
+const cl = classNameFactory("vc-file-upload-settings-");
 
 const serviceOptions = [
     { label: "Zipline", value: ServiceType.ZIPLINE, default: true },
@@ -34,26 +36,6 @@ const serviceOptions = [
     { label: "PixelVault", value: ServiceType.PIXELVAULT },
     { label: "ShareX Custom Uploader", value: ServiceType.SHAREX }
 ];
-
-function parseFallbackOrder(value: string): ServiceType[] | null {
-    const entries = value
-        .split(/[\n,]/)
-        .map(entry => entry.trim())
-        .filter(Boolean);
-
-    if (entries.length !== fallbackServiceOrder.length) return null;
-
-    const unique = new Set<ServiceType>();
-    for (const entry of entries) {
-        if (!Object.values(ServiceType).includes(entry as ServiceType)) {
-            return null;
-        }
-
-        unique.add(entry as ServiceType);
-    }
-
-    return unique.size === fallbackServiceOrder.length ? entries as ServiceType[] : null;
-}
 
 const litterboxOptions = [
     { label: "1 hour", value: "1h" },
@@ -306,11 +288,76 @@ function SettingTextInput(props: {
     );
 }
 
+function FallbackOrderSettings() {
+    const update = useForceUpdater();
+    const { store } = settings;
+    const [dragIndex, setDragIndex] = React.useState<number | null>(null);
+    const [order, setOrder] = React.useState<ServiceType[]>(() => {
+        const configured = (store.fallbackOrder || defaultFallbackOrder)
+            .split(/[\n,]/)
+            .map(entry => entry.trim())
+            .filter((entry): entry is ServiceType => Object.values(ServiceType).includes(entry as ServiceType));
+
+        return configured.length === fallbackServiceOrder.length && new Set(configured).size === fallbackServiceOrder.length
+            ? configured
+            : fallbackServiceOrder;
+    });
+
+    const commitOrder = (nextOrder: ServiceType[]) => {
+        setOrder(nextOrder);
+        store.fallbackOrder = nextOrder.join(",");
+        update();
+    };
+
+    return (
+        <SettingsSection name="Fallback Order" description="Drag hosts to reorder fallback attempts. The selected host is tried first, then this order is used.">
+            <div className={cl("fallback-order-list")}>
+                {order.map((service, index) => (
+                    <div
+                        key={service}
+                        className={cl("fallback-order-item")}
+                        draggable
+                        onDragStart={event => {
+                            setDragIndex(index);
+                            event.dataTransfer.effectAllowed = "move";
+                            event.dataTransfer.setData("text/plain", String(index));
+                        }}
+                        onDragOver={event => event.preventDefault()}
+                        onDrop={event => {
+                            event.preventDefault();
+                            const sourceIndex = dragIndex ?? Number(event.dataTransfer.getData("text/plain"));
+                            if (!Number.isInteger(sourceIndex) || sourceIndex === index || sourceIndex < 0 || sourceIndex >= order.length) {
+                                setDragIndex(null);
+                                return;
+                            }
+
+                            const nextOrder = [...order];
+                            const [moved] = nextOrder.splice(sourceIndex, 1);
+                            nextOrder.splice(index, 0, moved);
+                            setDragIndex(null);
+                            commitOrder(nextOrder);
+                        }}
+                        onDragEnd={() => setDragIndex(null)}
+                        data-dragging={dragIndex === index}
+                    >
+                        <span className={cl("fallback-order-label")}>{serviceLabels[service]}</span>
+                        <span className={cl("fallback-order-handle")}>Drag</span>
+                    </div>
+                ))}
+            </div>
+            <div className={cl("fallback-order-actions")}>
+                <Button size="small" onClick={() => commitOrder(fallbackServiceOrder)}>
+                    Reset to default
+                </Button>
+            </div>
+        </SettingsSection>
+    );
+}
+
 export function SettingsComponent() {
     const update = useForceUpdater();
     const { store } = settings;
     const sharexFileInputRef = React.useRef<HTMLInputElement>(null);
-    const fallbackOrder = store.fallbackOrder || defaultFallbackOrder;
     const isNest = store.serviceType === ServiceType.NEST;
     const isEzHost = store.serviceType === ServiceType.EZHOST;
     const isS3 = store.serviceType === ServiceType.S3;
@@ -320,7 +367,6 @@ export function SettingsComponent() {
     const isGofile = store.serviceType === ServiceType.GOFILE;
     const isPixelVault = store.serviceType === ServiceType.PIXELVAULT;
     const isShareX = store.serviceType === ServiceType.SHAREX;
-    const isFallbackOrderValid = Boolean(parseFallbackOrder(fallbackOrder));
 
     const validateShareXConfig = () => {
         try {
@@ -559,28 +605,6 @@ export function SettingsComponent() {
                 </>
             )}
 
-            <SettingsSection name="Fallback Order" description="Comma-separated list of all hosts used when the selected host fails. Include every host exactly once.">
-                <TextArea
-                    value={fallbackOrder}
-                    rows={4}
-                    placeholder={defaultFallbackOrder}
-                    onChange={v => {
-                        store.fallbackOrder = v;
-                        update();
-                    }}
-                />
-                {!isFallbackOrderValid && (
-                    <div style={{ marginTop: 8 }}>
-                        <Button size="small" onClick={() => {
-                            store.fallbackOrder = defaultFallbackOrder;
-                            update();
-                        }}>
-                            Reset to default
-                        </Button>
-                    </div>
-                )}
-            </SettingsSection>
-
             <SettingsSection tag="label" name="Strip Query Parameters" description="Strip query parameters from the uploaded file URL" inlineSetting>
                 <Switch
                     checked={store.stripQueryParams}
@@ -706,6 +730,8 @@ export function SettingsComponent() {
                     placeholder="Select timeout"
                 />
             </SettingsSection>
+
+            <FallbackOrderSettings />
         </>
     );
 }
