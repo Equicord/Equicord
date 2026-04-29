@@ -376,6 +376,48 @@ export async function uploadToFilebin(
     }
 }
 
+export async function uploadToPixelVault(
+    _: IpcMainInvokeEvent,
+    fileBuffer: ArrayBuffer,
+    filename: string,
+    uploadKey: string
+): Promise<NativeUploadResult> {
+    try {
+        const formData = new FormData();
+        formData.append("file", new Blob([fileBuffer]), filename);
+
+        const response = await fetch("https://pixelvault.co/", {
+            method: "POST",
+            headers: {
+                Authorization: uploadKey
+            },
+            body: formData
+        });
+
+        const text = await response.text();
+        let data: { resource?: string; url?: string; } | null = null;
+
+        try {
+            data = text ? JSON.parse(text) : null;
+        } catch {
+            data = null;
+        }
+
+        if (!response.ok) {
+            return { success: false, error: `Upload failed: ${response.status} ${text}` };
+        }
+
+        const url = data?.resource || data?.url || text.trim();
+        if (!url) {
+            return { success: false, error: "No URL returned from upload" };
+        }
+
+        return { success: true, url };
+    } catch (e) {
+        return { success: false, error: e instanceof Error ? e.message : "Unknown error" };
+    }
+}
+
 export async function fetchFile(
 
     _: IpcMainInvokeEvent,

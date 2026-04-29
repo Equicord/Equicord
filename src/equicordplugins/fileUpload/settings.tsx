@@ -13,8 +13,10 @@ import { OptionType } from "@utils/types";
 import { React, Select, showToast, TextArea, TextInput, Toasts } from "@webpack/common";
 
 import { CORS_PROXY } from "./constants";
-import { ServiceType } from "./types";
+import { fallbackServiceOrder, ServiceType } from "./types";
 import { parseShareXConfig } from "./utils/sharex";
+
+const defaultFallbackOrder = fallbackServiceOrder.join(",");
 
 const serviceOptions = [
     { label: "Zipline", value: ServiceType.ZIPLINE, default: true },
@@ -29,8 +31,29 @@ const serviceOptions = [
     { label: "buzzheavier.com", value: ServiceType.BUZZHEAVIER },
     { label: "temp.sh", value: ServiceType.TEMPSH },
     { label: "filebin.net", value: ServiceType.FILEBIN },
+    { label: "PixelVault", value: ServiceType.PIXELVAULT },
     { label: "ShareX Custom Uploader", value: ServiceType.SHAREX }
 ];
+
+function parseFallbackOrder(value: string): ServiceType[] | null {
+    const entries = value
+        .split(/[\n,]/)
+        .map(entry => entry.trim())
+        .filter(Boolean);
+
+    if (entries.length !== fallbackServiceOrder.length) return null;
+
+    const unique = new Set<ServiceType>();
+    for (const entry of entries) {
+        if (!Object.values(ServiceType).includes(entry as ServiceType)) {
+            return null;
+        }
+
+        unique.add(entry as ServiceType);
+    }
+
+    return unique.size === fallbackServiceOrder.length ? entries as ServiceType[] : null;
+}
 
 const litterboxOptions = [
     { label: "1 hour", value: "1h" },
@@ -190,6 +213,18 @@ export const settings = definePluginSettings({
         default: "",
         hidden: true
     },
+    fallbackOrder: {
+        type: OptionType.STRING,
+        description: "Fallback uploader order",
+        default: defaultFallbackOrder,
+        hidden: true
+    },
+    pixelVaultKey: {
+        type: OptionType.STRING,
+        description: "PixelVault upload key",
+        default: "",
+        hidden: true
+    },
     uploadTimeoutMs: {
         type: OptionType.NUMBER,
         description: "Upload timeout in milliseconds",
@@ -275,6 +310,7 @@ export function SettingsComponent() {
     const update = useForceUpdater();
     const { store } = settings;
     const sharexFileInputRef = React.useRef<HTMLInputElement>(null);
+    const fallbackOrder = store.fallbackOrder || defaultFallbackOrder;
     const isNest = store.serviceType === ServiceType.NEST;
     const isEzHost = store.serviceType === ServiceType.EZHOST;
     const isS3 = store.serviceType === ServiceType.S3;
@@ -282,7 +318,9 @@ export function SettingsComponent() {
     const isCatbox = store.serviceType === ServiceType.CATBOX;
     const isLitterbox = store.serviceType === ServiceType.LITTERBOX;
     const isGofile = store.serviceType === ServiceType.GOFILE;
+    const isPixelVault = store.serviceType === ServiceType.PIXELVAULT;
     const isShareX = store.serviceType === ServiceType.SHAREX;
+    const isFallbackOrderValid = Boolean(parseFallbackOrder(fallbackOrder));
 
     const validateShareXConfig = () => {
         try {
@@ -482,6 +520,16 @@ export function SettingsComponent() {
                 />
             )}
 
+            {isPixelVault && (
+                <SettingTextInput
+                    name="PixelVault Upload Key"
+                    description="Your PixelVault authorization key"
+                    value={store.pixelVaultKey}
+                    onChange={v => store.pixelVaultKey = v}
+                    placeholder="Your PixelVault upload key"
+                />
+            )}
+
             {isShareX && (
                 <>
                     <SettingsSection
@@ -510,6 +558,28 @@ export function SettingsComponent() {
                     </SettingsSection>
                 </>
             )}
+
+            <SettingsSection name="Fallback Order" description="Comma-separated list of all hosts used when the selected host fails. Include every host exactly once.">
+                <TextArea
+                    value={fallbackOrder}
+                    rows={4}
+                    placeholder={defaultFallbackOrder}
+                    onChange={v => {
+                        store.fallbackOrder = v;
+                        update();
+                    }}
+                />
+                {!isFallbackOrderValid && (
+                    <div style={{ marginTop: 8 }}>
+                        <Button size="small" onClick={() => {
+                            store.fallbackOrder = defaultFallbackOrder;
+                            update();
+                        }}>
+                            Reset to default
+                        </Button>
+                    </div>
+                )}
+            </SettingsSection>
 
             <SettingsSection tag="label" name="Strip Query Parameters" description="Strip query parameters from the uploaded file URL" inlineSetting>
                 <Switch

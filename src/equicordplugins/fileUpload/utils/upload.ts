@@ -6,7 +6,7 @@
 
 import { normalizeCorsProxyUrl, toProxiedUrl } from "@equicordplugins/fileUpload/constants";
 import { settings } from "@equicordplugins/fileUpload/settings";
-import { serviceLabels, ServiceType, ShareXUploaderConfig, UploadResponse } from "@equicordplugins/fileUpload/types";
+import { fallbackServiceOrder, serviceLabels, ServiceType, ShareXUploaderConfig, UploadResponse } from "@equicordplugins/fileUpload/types";
 import { copyToClipboard } from "@utils/clipboard";
 import { insertTextIntoChatInputBox } from "@utils/discord";
 import { Logger } from "@utils/Logger";
@@ -75,6 +75,18 @@ function isUploadCancelledError(error: unknown): boolean {
 
     const message = error.message.toLowerCase();
     return message.includes("cancelled") || message.includes("canceled") || message.includes("aborted") || message.includes("aborterror");
+}
+
+function getFallbackServices(): ServiceType[] {
+    const configuredOrder = (settings.store as { fallbackOrder?: string; }).fallbackOrder || fallbackServiceOrder.join(",");
+    const services = configuredOrder
+        .split(/[\n,]/)
+        .map(service => service.trim())
+        .filter((service): service is ServiceType => Object.values(ServiceType).includes(service as ServiceType));
+
+    return services.length === fallbackServiceOrder.length && new Set(services).size === fallbackServiceOrder.length
+        ? services
+        : fallbackServiceOrder;
 }
 
 function emitUploadState() {
@@ -363,6 +375,8 @@ export function isConfigured(): boolean {
         case ServiceType.TEMPSH:
         case ServiceType.FILEBIN:
             return true;
+        case ServiceType.PIXELVAULT:
+            return Boolean((settings.store as { pixelVaultKey?: string; }).pixelVaultKey);
         case ServiceType.SHAREX:
             try {
                 parseShareXConfigFromSettings();
@@ -647,6 +661,59 @@ async function uploadToFilebin(fileBlob: Blob, filename: string): Promise<string
     return `https://filebin.net/${binId}/${encodeURIComponent(filename)}`;
 }
 
+async function uploadToPixelVault(fileBlob: Blob, filename: string): Promise<string> {
+    const { pixelVaultKey } = settings.store as { pixelVaultKey?: string; };
+
+    if (!pixelVaultKey?.trim()) {
+        throw new Error("PixelVault upload key is required");
+    }
+
+    if (Native) {
+        const result = await Native.uploadToPixelVault(await fileBlob.arrayBuffer(), filename, pixelVaultKey.trim());
+
+        if (!result.success) {
+            throw new Error(result.error || "Upload failed");
+        }
+
+        if (!result.url) {
+            throw new Error("No URL returned from upload");
+        }
+
+        return result.url;
+    }
+
+    const formData = new FormData();
+    formData.append("file", fileBlob, filename);
+
+    const response = await fetchWithTimeout("https://pixelvault.co/", {
+        method: "POST",
+        headers: {
+            Authorization: pixelVaultKey.trim()
+        },
+        body: formData
+    });
+
+    const text = await response.text();
+    let data: { resource?: string; url?: string; } | null = null;
+
+    try {
+        data = text ? JSON.parse(text) : null;
+    } catch {
+        data = null;
+    }
+
+    if (!response.ok) {
+        throw new Error(`Upload failed: ${response.status} ${text}`);
+    }
+
+    const url = data?.resource || data?.url || text.trim();
+    if (!url) {
+        throw new Error("No URL returned from upload");
+    }
+
+    return url;
+}
+
 async function uploadToService(serviceType: ServiceType, fileBlob: Blob, filename: string): Promise<string> {
     switch (serviceType) {
         case ServiceType.ZIPLINE:
@@ -675,21 +742,12 @@ async function uploadToService(serviceType: ServiceType, fileBlob: Blob, filenam
             return uploadToTempSh(fileBlob, filename);
         case ServiceType.FILEBIN:
             return uploadToFilebin(fileBlob, filename);
+        case ServiceType.PIXELVAULT:
+            return uploadToPixelVault(fileBlob, filename);
         default:
             throw new Error("Unknown service type");
     }
 }
-
-const FALLBACK_SERVICES: ServiceType[] = [
-    ServiceType.CATBOX,
-    ServiceType.LITTERBOX,
-    ServiceType.ZEROX0,
-    ServiceType.TMPFILES,
-    ServiceType.GOFILE,
-    ServiceType.BUZZHEAVIER,
-    ServiceType.TEMPSH,
-    ServiceType.FILEBIN
-];
 
 const EXE_BLOCKED_SERVICES = new Set<ServiceType>([
     ServiceType.CATBOX,
@@ -768,12 +826,12 @@ function buildUploadOrder(primary: ServiceType, fileName: string): ServiceType[]
     const disableFallbacks = Boolean((settings.store as { disableFallbacks?: boolean; }).disableFallbacks);
     const effectivePrimary = normalizePrimaryService(primary, fileName);
 
-    if (disableFallbacks || effectivePrimary === ServiceType.SHAREX || effectivePrimary === ServiceType.S3 || effectivePrimary === ServiceType.ZIPLINE || effectivePrimary === ServiceType.NEST || effectivePrimary === ServiceType.EZHOST) {
-        return [effectivePrimary];
+    const order: ServiceType[] = [effectivePrimary];
+    if (disableFallbacks) {
+        return order;
     }
 
-    const order: ServiceType[] = [effectivePrimary];
-    for (const fallback of FALLBACK_SERVICES) {
+    for (const fallback of getFallbackServices()) {
         if (fallback !== effectivePrimary && canServiceHandleFile(fallback, fileName)) {
             order.push(fallback);
         }
