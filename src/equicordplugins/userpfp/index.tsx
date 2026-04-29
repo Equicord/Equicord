@@ -130,6 +130,10 @@ export default definePlugin({
         if (settings.store.preferNitro && user.avatar?.startsWith("a_")) return original(user, animated, size);
         if (!data.avatars[user.id]) return original(user, animated, size);
 
+        const avatarUrl = data.avatars[user.id];
+
+        if (avatarUrl.startsWith("data:")) return avatarUrl;
+
         const res = new URL(data.avatars[user.id]);
         res.searchParams.set("animated", animated ? "true" : "false");
         if (res && !animated) {

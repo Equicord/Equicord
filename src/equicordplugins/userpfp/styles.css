@@ -10,3 +10,63 @@
 .vc-userpfp-settings-heart {
     margin-left: 6px;
 }
+
+.vc-userpfp-preview-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    gap: 24px;
+    margin: 12px 0;
+}
+
+.vc-userpfp-preview-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+}
+
+.vc-userpfp-preview-label {
+    font-size: 11px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.vc-userpfp-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--background-modifier-accent);
+}
+
+.vc-userpfp-avatar-active {
+    border: 3px solid var(--brand-experiment);
+    box-shadow: 0 0 12px var(--brand-experiment-30a);
+}
+
+.vc-userpfp-arrow {
+    font-size: 24px;
+    color: var(--text-muted);
+    margin-top: 20px;
+}
+
+.vc-userpfp-dropzone {
+    border: 2px dashed var(--background-modifier-accent);
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.15s, border-color 0.15s;
+    user-select: none;
+    color: var(--text-muted);
+    font-size: 14px;
+    margin-top: 8px;
+}
+
+.vc-userpfp-dropzone-active {
+    border-color: var(--brand-experiment);
+    background: var(--brand-experiment-10a);
+}
