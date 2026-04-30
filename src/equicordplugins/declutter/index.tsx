@@ -168,10 +168,10 @@ export default definePlugin({
     patches: [
         {
             // Avatar decoration
-            find: "getAvatarDecorationURL:",
+            find: "{avatarDecoration:void 0!==",
             replacement: {
-                match: /(?<=function \i\(\i\){)(?=.{0,150}let{avatarDecoration)/,
-                replace: "$&return null;"
+                match: /\{avatarDecoration:void 0!==(\i)\?\1:\i,canAnimate:/,
+                replace: "{avatarDecoration:void 0!==$1?$1:null,canAnimate:"
             },
             predicate: () => settings.store.removeAvatarDecoration && !isPluginEnabled("Decor"),
         },
