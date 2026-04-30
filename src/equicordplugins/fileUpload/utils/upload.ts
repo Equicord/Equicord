@@ -854,6 +854,14 @@ function finalizeUploadedUrl(url: string): string {
     }
 }
 
+function getFilenameExtension(filename: string): string | undefined {
+    const dotIndex = filename.lastIndexOf(".");
+    if (dotIndex < 1 || dotIndex === filename.length - 1) return undefined;
+
+    const ext = filename.slice(dotIndex + 1).toLowerCase();
+    return ext.length <= 10 ? ext : undefined;
+}
+
 async function notifyUploadSuccess(finalUrl: string): Promise<void> {
     if (settings.store.autoCopy) {
         if (!finalUrl || !finalUrl.trim()) {
@@ -960,8 +968,20 @@ async function uploadWithFallbacks(fileBlob: Blob, filename: string, primary: Se
 }
 
 async function normalizeUploadBlob(blob: Blob, sourceUrl?: string): Promise<{ blob: Blob; filename: string; }> {
+    let sourceFileName = "";
+    if (blob instanceof File && blob.name) {
+        sourceFileName = blob.name;
+    } else if (sourceUrl && URL.canParse(sourceUrl)) {
+        const segment = new URL(sourceUrl).pathname.split("/").pop();
+        if (segment) sourceFileName = decodeURIComponent(segment);
+    }
+
     const extGuessFromSource = sourceUrl ? getUrlExtension(sourceUrl) : undefined;
-    let ext = await getExtensionFromBytes(blob) || getExtensionFromMime(blob.type) || extGuessFromSource || "png";
+    let ext = await getExtensionFromBytes(blob)
+        || getExtensionFromMime(blob.type)
+        || getFilenameExtension(sourceFileName)
+        || extGuessFromSource
+        || "bin";
 
     if (ext === "apng" && settings.store.apngToGif) {
         const gifBlob = await convertApngToGif(blob);
@@ -975,14 +995,6 @@ async function normalizeUploadBlob(blob: Blob, sourceUrl?: string): Promise<{ bl
 
     const mimeType = getMimeFromExtension(ext);
     const { preserveOriginalFilename } = settings.store;
-    let sourceFileName = "";
-    if (blob instanceof File && blob.name) {
-        sourceFileName = blob.name;
-    } else if (sourceUrl && URL.canParse(sourceUrl)) {
-        const segment = new URL(sourceUrl).pathname.split("/").pop();
-        if (segment) sourceFileName = decodeURIComponent(segment);
-    }
-
     let filename = `upload.${ext}`;
     if (preserveOriginalFilename && sourceFileName) {
         const dotIndex = sourceFileName.lastIndexOf(".");
