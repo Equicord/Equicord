@@ -17,14 +17,11 @@
 */
 
 import ErrorBoundary from "@components/ErrorBoundary";
-import { Logger } from "@utils/Logger";
 import { IconComponent } from "@utils/types";
 import { Channel, Message } from "@vencord/discord-types";
 import type { ComponentType, MouseEventHandler } from "react";
 
 import { useSettings } from "./Settings";
-
-const logger = new Logger("MessagePopover");
 
 export interface MessagePopoverButtonItem {
     key?: string,
@@ -64,6 +61,19 @@ export function removeMessagePopoverButton(identifier: string) {
     MessagePopoverButtonMap.delete(identifier);
 }
 
+function MessagePopoverButtonRenderer(props: {
+    Component: ComponentType<MessagePopoverButtonItem>;
+    message: Message;
+    render: MessagePopoverButtonFactory;
+}) {
+    const { Component, message, render } = props;
+
+    const item = render(message);
+    if (!item) return null;
+
+    return <Component {...item} />;
+}
+
 function VencordPopoverButtons(props: { Component: React.ComponentType<MessagePopoverButtonItem>, message: Message; }) {
     const { Component, message } = props;
 
@@ -71,22 +81,15 @@ function VencordPopoverButtons(props: { Component: React.ComponentType<MessagePo
 
     const elements = Array.from(MessagePopoverButtonMap.entries())
         .filter(([key]) => messagePopoverButtons[key]?.enabled !== false)
-        .map(([key, { render }]) => {
-            try {
-                // FIXME: this should use proper React to ensure hooks work
-                const item = render(message);
-                if (!item) return null;
-
-                return (
-                    <ErrorBoundary noop>
-                        <Component key={key} {...item} />
-                    </ErrorBoundary>
-                );
-            } catch (err) {
-                logger.error(`[${key}]`, err);
-                return null;
-            }
-        });
+        .map(([key, { render }]) => (
+            <ErrorBoundary noop key={key} message={`Failed to render message popover button ${key}`}>
+                <MessagePopoverButtonRenderer
+                    Component={Component}
+                    message={message}
+                    render={render}
+                />
+            </ErrorBoundary>
+        ));
 
     return <>{elements}</>;
 }
