@@ -33,6 +33,7 @@ export default function ChannelsTabsContainer(props: BasicChannelTabsProps) {
         showBookmarkBar,
         widerTabsAndBookmarks,
         tabWidthScale,
+        tabHeightScale,
         enableNumberKeySwitching,
         numberKeySwitchCount,
         enableCloseTabShortcut,
@@ -65,6 +66,7 @@ export default function ChannelsTabsContainer(props: BasicChannelTabsProps) {
         "showBookmarkBar",
         "widerTabsAndBookmarks",
         "tabWidthScale",
+        "tabHeightScale",
         "enableNumberKeySwitching",
         "numberKeySwitchCount",
         "enableCloseTabShortcut",
@@ -322,7 +324,7 @@ export default function ChannelsTabsContainer(props: BasicChannelTabsProps) {
                 !compactAutoExpandOnHover && cl("no-compact-hover-expand")
             )}
             ref={ref}
-            style={{ "--tab-width-scale": tabWidthScale / 100 } as React.CSSProperties}
+            style={{ "--tab-width-scale": tabWidthScale / 100, "--tab-height-scale": tabHeightScale / 100 } as React.CSSProperties}
             onContextMenu={e => ContextMenuApi.openContextMenu(e, () => <BasicContextMenu />)}
         >
             {showBookmarkBar && <>

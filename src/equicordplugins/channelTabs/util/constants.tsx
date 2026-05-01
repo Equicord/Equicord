@@ -179,6 +179,12 @@ export const settings = definePluginSettings({
         hidden: true,
         restartNeeded: false
     },
+    tabHeightScale: {
+        type: OptionType.NUMBER,
+        description: "Tab height scale (percentage).",
+        default: 100,
+        restartNeeded: false
+    },
     renderAllTabs: {
         type: OptionType.BOOLEAN,
         description: "Keep all tabs cached in memory for faster switching (caches scroll position and state)",
