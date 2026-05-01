@@ -18,7 +18,8 @@ export enum ServiceType {
     BUZZHEAVIER = "buzzheavier",
     TEMPSH = "tempsh",
     FILEBIN = "filebin",
-    PIXELVAULT = "pixelvault"
+    PIXELVAULT = "pixelvault",
+    PIXELDRAIN = "pixeldrain"
 }
 
 export const serviceLabels: Record<ServiceType, string> = {
@@ -35,7 +36,8 @@ export const serviceLabels: Record<ServiceType, string> = {
     [ServiceType.BUZZHEAVIER]: "buzzheavier.com",
     [ServiceType.TEMPSH]: "temp.sh",
     [ServiceType.FILEBIN]: "filebin.net",
-    [ServiceType.PIXELVAULT]: "PixelVault"
+    [ServiceType.PIXELVAULT]: "PixelVault",
+    [ServiceType.PIXELDRAIN]: "PixelDrain"
 };
 
 export const fallbackServiceOrder: ServiceType[] = [
@@ -52,6 +54,7 @@ export const fallbackServiceOrder: ServiceType[] = [
     ServiceType.TEMPSH,
     ServiceType.FILEBIN,
     ServiceType.PIXELVAULT,
+    ServiceType.PIXELDRAIN,
     ServiceType.SHAREX
 ];
 

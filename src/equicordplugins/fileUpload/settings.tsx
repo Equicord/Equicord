@@ -34,6 +34,7 @@ const serviceOptions = [
     { label: "temp.sh", value: ServiceType.TEMPSH },
     { label: "filebin.net", value: ServiceType.FILEBIN },
     { label: "PixelVault", value: ServiceType.PIXELVAULT },
+    { label: "PixelDrain", value: ServiceType.PIXELDRAIN },
     { label: "ShareX Custom Uploader", value: ServiceType.SHAREX }
 ];
 
@@ -207,6 +208,12 @@ export const settings = definePluginSettings({
         default: "",
         hidden: true
     },
+    pixelDrainKey: {
+        type: OptionType.STRING,
+        description: "Optional PixelDrain API key",
+        default: "",
+        hidden: true
+    },
     uploadTimeoutMs: {
         type: OptionType.NUMBER,
         description: "Upload timeout in milliseconds",
@@ -366,6 +373,7 @@ export function SettingsComponent() {
     const isLitterbox = store.serviceType === ServiceType.LITTERBOX;
     const isGofile = store.serviceType === ServiceType.GOFILE;
     const isPixelVault = store.serviceType === ServiceType.PIXELVAULT;
+    const isPixelDrain = store.serviceType === ServiceType.PIXELDRAIN;
     const isShareX = store.serviceType === ServiceType.SHAREX;
 
     const validateShareXConfig = () => {
@@ -573,6 +581,16 @@ export function SettingsComponent() {
                     value={store.pixelVaultKey}
                     onChange={v => store.pixelVaultKey = v}
                     placeholder="Your PixelVault upload key"
+                />
+            )}
+
+            {isPixelDrain && (
+                <SettingTextInput
+                    name="PixelDrain API Key"
+                    description="Optional PixelDrain API key for authenticated uploads. Leave empty for anonymous uploads."
+                    value={store.pixelDrainKey}
+                    onChange={v => store.pixelDrainKey = v}
+                    placeholder="Your PixelDrain API key"
                 />
             )}
 
