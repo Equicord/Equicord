@@ -74,7 +74,7 @@ function interceptUploadAddFiles(event: unknown): void {
 
     if (payload.draftType !== DraftType.ChannelMessage) return;
 
-    if (!Boolean((settings.store as { interceptDiscordUpload?: boolean; }).interceptDiscordUpload) || !isConfigured()) return;
+    if (!settings.store.bypassDiscordUpload || !isConfigured()) return;
 
     const files = [
         ...extractFilesFromValue(payload.files),
@@ -283,7 +283,7 @@ export default definePlugin({
         }
     },
     shouldBypassDiscordUploadSizeCheck(): boolean {
-        return Boolean((settings.store as { interceptDiscordUpload?: boolean; }).interceptDiscordUpload) && isConfigured();
+        return Boolean(settings.store.bypassDiscordUpload) && isConfigured();
     },
     renderUploadProgress() {
         return <ProgressBar />;
