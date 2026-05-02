@@ -285,7 +285,7 @@ function SettingTextInput(props: {
     const { description, name, onChange, placeholder, value } = props;
 
     return (
-        <SettingsSection name={name} description={description}>
+        <SettingsSection name={name} description={description ?? ""}>
             <TextInput
                 value={value}
                 onChange={onChange}
@@ -303,7 +303,7 @@ function SettingGroup(props: {
     const { children, description, name } = props;
 
     return (
-        <SettingsSection name={name} description={description}>
+        <SettingsSection name={name} description={description ?? ""}>
             <div className={cl("group")}>
                 {children}
             </div>

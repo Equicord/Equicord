@@ -213,7 +213,7 @@ class XhrResponse {
     }
 }
 
-function setXhrUploadProgress(event: ProgressEvent<XMLHttpRequestEventTarget>) {
+function setXhrUploadProgress(event: ProgressEvent) {
     if (!event.lengthComputable || event.total <= 0) {
         setUploadState({
             status: uploadState.currentServiceLabel
@@ -261,7 +261,7 @@ async function uploadRequestWithTimeout(url: string, options: RequestInit): Prom
             }
         };
 
-        const body = options.body;
+        const { body } = options;
         xhr.send(body instanceof ReadableStream ? null : body as XMLHttpRequestBodyInit | null);
     });
 }
@@ -535,7 +535,9 @@ async function uploadToEzHost(fileBlob: Blob, filename: string): Promise<string>
         throw new Error(data?.error || "Upload failed");
     }
 
-    return data.imageUrl || data.rawUrl;
+    const url = data.imageUrl || data.rawUrl;
+    if (!url) throw new Error("No URL returned from upload");
+    return url;
 }
 
 async function uploadToCatbox(fileBlob: Blob, filename: string): Promise<string> {
