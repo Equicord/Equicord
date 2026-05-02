@@ -8,8 +8,7 @@ import * as DataStore from "@api/DataStore";
 
 import { removeRecentStickerByPackId } from "./components";
 import { DynamicPackSetMeta, DynamicStickerPackMeta, StickerPack, StickerPackMeta } from "./types";
-import { Mutex } from "./utils";
-import { corsFetch } from "./utils";
+import { corsFetch,Mutex } from "./utils";
 
 const mutex = new Mutex();
 
