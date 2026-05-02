@@ -34,7 +34,7 @@
 
 .vc-file-upload-progress-percent {
     font-size: 12px;
-    color: var(--text-muted);
+    color: var(--text-default);
     white-space: nowrap;
 }
 

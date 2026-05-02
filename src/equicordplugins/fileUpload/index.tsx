@@ -128,7 +128,7 @@ const ProgressBarInner = () => {
 
     const percentage = Math.max(0, Math.min(100, state.percent));
     const progressLabel = state.totalBytes > 0
-        ? `${Math.round(percentage)}% • ${formatBytes(state.transferredBytes)} of ${formatBytes(state.totalBytes)}`
+        ? `${Math.round(percentage)}% - ${formatBytes(state.transferredBytes)} of ${formatBytes(state.totalBytes)}`
         : `${Math.round(percentage)}%`;
 
     return (

@@ -73,8 +73,6 @@ const uploadStateListeners = new Set<() => void>();
 let activeAbortController: AbortController | null = null;
 let activeXhr: XMLHttpRequest | null = null;
 let cancelRequested = false;
-let uploadProgressStart = 0;
-let uploadProgressEnd = 95;
 
 function isUploadCancelledError(error: unknown): boolean {
     if (cancelRequested) return true;
@@ -225,11 +223,10 @@ function setXhrUploadProgress(event: ProgressEvent<XMLHttpRequestEventTarget>) {
         return;
     }
 
-    const transferPercent = Math.max(0, Math.min(1, event.loaded / event.total));
-    const percent = Math.round(uploadProgressStart + (uploadProgressEnd - uploadProgressStart) * transferPercent);
+    const percent = Math.round(Math.max(0, Math.min(100, event.loaded / event.total * 100)));
     setUploadState({
         phase: "uploading",
-        percent: Math.min(95, percent),
+        percent,
         transferredBytes: event.loaded,
         totalBytes: event.total,
         status: uploadState.currentServiceLabel
@@ -1058,8 +1055,6 @@ async function uploadWithFallbacks(fileBlob: Blob, filename: string, primary: Se
         if (cancelRequested) throw new Error("Upload cancelled by user");
 
         const attempt = attempted.length + 1;
-        uploadProgressStart = 10 + ((attempt - 1) / uploadOrder.length) * 80;
-        uploadProgressEnd = 10 + (attempt / uploadOrder.length) * 80;
 
         setUploadState({
             phase: attempt === 1 ? "uploading" : "retrying",
@@ -1068,7 +1063,7 @@ async function uploadWithFallbacks(fileBlob: Blob, filename: string, primary: Se
             currentServiceLabel: serviceLabels[service],
             transferredBytes: 0,
             totalBytes: fileBlob.size,
-            percent: Math.min(90, 10 + Math.round((attempt / uploadOrder.length) * 70)),
+            percent: 0,
             status: attempt === 1
                 ? `Uploading via ${serviceLabels[service]}...`
                 : `Retrying with ${serviceLabels[service]} (${attempt}/${uploadOrder.length})...`
