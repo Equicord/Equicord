@@ -52,6 +52,13 @@ const settings = definePluginSettings({
         description: "Save as GIF by default",
         default: false,
         hidden: true
+    },
+    gifCommand: {
+        type: OptionType.STRING,
+        description: "Custom command for GIF conversion. Use {input} and {output} placeholders.",
+        placeholder: "magick {input} {output}",
+        default: "",
+        hidden: !IS_DISCORD_DESKTOP
     }
 });
 
@@ -96,7 +103,7 @@ function QuoteModal({ message, ...props }: ModalProps & { message: Message; }) {
     const [watermarkText, setWatermarkText] = useState(settings.store.watermark);
     const [quoteImage, setQuoteImage] = useState<Blob | null>(null);
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-    const { quoteFont } = settings.store;
+    const { gifCommand, quoteFont } = settings.store;
 
     useEffect(() => {
         settings.store.grayscale = gray;
@@ -113,6 +120,7 @@ function QuoteModal({ message, ...props }: ModalProps & { message: Message; }) {
             watermark: watermarkText,
             showWatermark,
             saveAsGif,
+            gifCommand,
             quoteFont
         });
         setQuoteImage(image);
@@ -124,7 +132,7 @@ function QuoteModal({ message, ...props }: ModalProps & { message: Message; }) {
         document.getElementById("quoterPreview")?.setAttribute("src", newUrl);
     };
 
-    useEffect(() => { generateImage(); }, [gray, showWatermark, saveAsGif, watermarkText, quoteFont]);
+    useEffect(() => { generateImage(); }, [gray, showWatermark, saveAsGif, watermarkText, gifCommand, quoteFont]);
 
     useEffect(() => {
         return () => {

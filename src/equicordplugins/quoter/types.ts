@@ -22,6 +22,7 @@ export interface QuoteImageOptions {
     watermark: string;
     showWatermark: boolean;
     saveAsGif: boolean;
+    gifCommand: string;
     quoteFont: QuoteFont;
 }
 

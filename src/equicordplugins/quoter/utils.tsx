@@ -4,11 +4,16 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { PluginNative } from "@utils/types";
 import { User } from "@vencord/discord-types";
 import { IconUtils, UserStore } from "@webpack/common";
 import { applyPalette, GIFEncoder, quantize } from "gifenc";
 
 import { CANVAS_CONFIG, CanvasConfig, FONT_SIZES, FontSizeCalculation, QuoteFont, QuoteImageOptions, SPACING } from "./types";
+
+const Native = IS_DISCORD_DESKTOP
+    ? VencordNative.pluginHelpers.Quoter as PluginNative<typeof import("./native")> | undefined
+    : undefined;
 
 const CUSTOM_EMOJI_REGEX = /<a?:(\w+):(\d+)>/g;
 const CUSTOM_EMOJI_PLACEHOLDER = "\uFFFC";
@@ -91,7 +96,13 @@ export function resetFontLoading() {
     fontLoadingPromise = null;
 }
 
-async function canvasToGif(canvas: HTMLCanvasElement): Promise<Blob> {
+async function canvasToGif(canvas: HTMLCanvasElement, gifCommand: string): Promise<Blob> {
+    if (gifCommand.trim() && Native) {
+        const png = await canvasToBlob(canvas);
+        const data = await Native.convertPngToGif(await png.arrayBuffer(), gifCommand);
+        return new Blob([new Uint8Array(data)], { type: "image/gif" });
+    }
+
     const gif = GIFEncoder();
     const ctx = canvas.getContext("2d");
     if (!ctx) throw new Error("Failed to get 2D rendering context");
@@ -401,7 +412,7 @@ function drawWatermark(
 }
 
 export async function createQuoteImage(options: QuoteImageOptions): Promise<Blob> {
-    const { avatarUrl, quote: rawQuote, grayScale, author, watermark, showWatermark, saveAsGif, quoteFont } = options;
+    const { avatarUrl, quote: rawQuote, grayScale, author, watermark, showWatermark, saveAsGif, gifCommand, quoteFont } = options;
 
     await ensureFontLoaded();
 
@@ -435,5 +446,5 @@ export async function createQuoteImage(options: QuoteImageOptions): Promise<Blob
         drawWatermark(ctx, watermark, CANVAS_CONFIG);
     }
 
-    return saveAsGif ? await canvasToGif(canvas) : await canvasToBlob(canvas);
+    return saveAsGif ? await canvasToGif(canvas, gifCommand) : await canvasToBlob(canvas);
 }
