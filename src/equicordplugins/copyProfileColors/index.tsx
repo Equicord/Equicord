@@ -7,14 +7,20 @@
 import { NavContextMenuPatchCallback } from "@api/ContextMenu";
 import { copyToClipboard } from "@utils/clipboard";
 import { EquicordDevs } from "@utils/constants";
+import { Logger } from "@utils/Logger";
 import definePlugin from "@utils/types";
-import { Menu, Toasts, UserProfileStore } from "@webpack/common";
+import { User } from "@vencord/discord-types";
+import { Menu, SelectedGuildStore, Toasts, UserProfileStore } from "@webpack/common";
 
-function getProfileColors(userId) {
+const logger = new Logger("CopyProfileColors");
+
+function getProfileColors(userId: string, guildId?: string) {
     try {
-        const profile = UserProfileStore.getUserProfile(userId);
+        const profile = guildId
+            ? UserProfileStore.getGuildMemberProfile(userId, guildId)
+            : UserProfileStore.getUserProfile(userId);
 
-        if (!profile || !profile.themeColors || profile.themeColors.length < 2) {
+        if (!profile?.themeColors || profile.themeColors.length < 2) {
             return null;
         }
 
@@ -23,13 +29,13 @@ function getProfileColors(userId) {
 
         return { primaryColor, secondaryColor };
     } catch (e) {
-        console.error("Failed to get profile colors:", e);
+        logger.error("Failed to get profile colors:", e);
         return null;
     }
 }
 
-function copyProfileColors(userId) {
-    const colors = getProfileColors(userId);
+function copyProfileColors(userId: string, guildId?: string) {
+    const colors = getProfileColors(userId, guildId);
 
     if (!colors) {
         Toasts.show({
@@ -53,7 +59,7 @@ function copyProfileColors(userId) {
             id: Toasts.genId()
         });
     } catch (e) {
-        console.error("Failed to copy to clipboard:", e);
+        logger.error("Failed to copy to clipboard:", e);
         Toasts.show({
             type: Toasts.Type.FAILURE,
             message: "Error copying profile colors!",
@@ -75,8 +81,15 @@ export function ColorIcon() {
     );
 }
 // spawn in the context menu
-const userContextMenuPatch: NavContextMenuPatchCallback = (children, { user }) => {
+const userContextMenuPatch: NavContextMenuPatchCallback = (children, { user, guildId }: { user?: User; guildId?: string; }) => {
     if (!user) return;
+
+    const effectiveGuildId = guildId ?? SelectedGuildStore.getGuildId();
+    const guildProfile = effectiveGuildId
+        ? UserProfileStore.getGuildMemberProfile(user.id, effectiveGuildId)
+        : null;
+    const hasGuildColors = guildProfile?.themeColors && guildProfile.themeColors.length >= 2;
+
     children.push(
         <Menu.MenuItem
             id="CopyProfileColors"
@@ -85,13 +98,24 @@ const userContextMenuPatch: NavContextMenuPatchCallback = (children, { user }) =
             action={() => copyProfileColors(user.id)}
         />
     );
+
+    if (hasGuildColors && effectiveGuildId) {
+        children.push(
+            <Menu.MenuItem
+                id="CopyServerProfileColors"
+                icon={ColorIcon}
+                label="Copy Server Profile Colors"
+                action={() => copyProfileColors(user.id, effectiveGuildId)}
+            />
+        );
+    }
 };
 
 export default definePlugin({
     name: "CopyProfileColors",
     description: "A plugin to copy people's profile gradient colors to clipboard.",
     tags: ["Appearance", "Customisation"],
-    authors: [EquicordDevs.Crxa, EquicordDevs.Cortex],
+    authors: [EquicordDevs.Crxa, EquicordDevs.Cortex, EquicordDevs.Gir0fa],
     contextMenus: {
         "user-context": userContextMenuPatch,
         "user-profile-actions": userContextMenuPatch
