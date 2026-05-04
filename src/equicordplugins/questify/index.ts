@@ -586,10 +586,10 @@ export default definePlugin({
 
     start() {
         initializeRestartTracking(settings);
+        addServerListElement(ServerListRenderPosition.Above, this.renderQuestifyButton);
 
         onceReady.then(() => {
             if (!settings.store.disableQuestsEverything) {
-                addServerListElement(ServerListRenderPosition.Above, this.renderQuestifyButton);
                 startPerAccountTasks("PLUGIN_START");
             }
         });
