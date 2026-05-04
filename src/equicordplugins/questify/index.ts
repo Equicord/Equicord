@@ -369,8 +369,8 @@ export default definePlugin({
                 },
                 {
                     // Let completed-but-expired claimable Quests with CTAs use the CTA-aware completed branch.
-                    match: /(?<=return\()(\i).enabled&&(\i)===(\i\.\i).EXPIRED_CLAIMABLE&&(\i\.\i).has\((\i)\)(?=\?\i=\(0,\i\.jsx\)\("div",\{className:\i\.\i,children:\(0,\i\.jsx\)\(\i\.A,\{quest:\i,surface:\i\.\i\.QUEST_HOME_TILE_FOOTER)/,
-                    replace: "!arguments[0].quest.config.ctaConfig&&$1.enabled&&$2===$3.EXPIRED_CLAIMABLE&&$4?.has?.($5)"
+                    match: /(?<=return\()(?=\i.enabled&&\i===\i\.\i\.EXPIRED_CLAIMABLE&&\i\.\i\.has\(\i\))/,
+                    replace: "!arguments[0].quest.config.ctaConfig&&"
                 },
                 {
                     // Force the CTA-aware complete branch.
