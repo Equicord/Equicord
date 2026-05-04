@@ -373,14 +373,19 @@ export default definePlugin({
                     replace: "!!arguments[0].quest.config.ctaConfig"
                 },
                 {
-                    // Let completed-but-expired claimable Quests with CTAs use the CTA-aware completed branch.
+                    // Let completed/claimed expired Quests with CTAs use the CTA-aware completed branch.
                     match: /(?<=return\()(?=\i.enabled&&\i===\i\.\i\.EXPIRED_CLAIMABLE&&\i\.\i\.has\(\i\))/,
                     replace: "!arguments[0].quest.config.ctaConfig&&"
                 },
                 {
+                    // Let completed/claimed expired Quests with CTAs use the CTA-aware completed branch.
+                    match: /(?<=\):\i\?\i=)(\i)(?=\?\(0,\i\.jsx\)\(\i,\{quest:\i,sourceQuestContent:\i,onClick:\i,text:\i\}\):\(0,\i\.\i\)\(\i\)\?)/,
+                    replace: "arguments[0].quest.config.ctaConfig||$1"
+                },
+                {
                     // Force the CTA-aware complete branch.
                     match: /(?<=analyticsCtxQuestContentRowIndex:\i}\)}\):\i&&\i)(.{0,200}?fullWidth:!0}\)}\):)(\i.enabled)(.{0,50}?CLAIMED\))&&\i.\i.has\(\i\)(\?\i=)\i/,
-                    replace: "&&false$1arguments[0].quest.config.ctaConfig&&arguments[0].quest.userStatus?.completedAt&&!arguments[0].quest.userStatus?.claimedAt&&($2||true)$3$4true"
+                    replace: "&&false$1arguments[0].quest.config.ctaConfig&&arguments[0].quest.userStatus?.completedAt&&($2||true)$3$4true"
                 }
             ]
         },
