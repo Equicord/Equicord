@@ -213,7 +213,7 @@ export function QuestNotificationsSetting(): JSX.Element {
                         value={questNotifications.questCompletedAlertSound}
                         playingSound={playingSound}
                         onPreview={sound => previewSound(sound, questNotifications.questCompletedAlertVolume)}
-                        onChange={value => { settings.store.questCompletedAlertSound = value as any; }}
+                        onChange={value => { settings.store.questCompletedAlertSound = value; }}
                     />
                 </SettingsRowItem>
                 <SettingsRowItem className="volume-slider-row-item">
@@ -247,7 +247,7 @@ export function QuestNotificationsSetting(): JSX.Element {
                         playingSound={playingSound}
                         onPreview={sound => previewSound(sound, questNotifications.newQuestAlertVolume)}
                         onChange={value => {
-                            settings.store.newQuestAlertSound = value as any;
+                            settings.store.newQuestAlertSound = value;
                             startAutoFetchingQuests(true);
                         }}
                     />
@@ -288,7 +288,7 @@ export function QuestNotificationsSetting(): JSX.Element {
                         playingSound={playingSound}
                         onPreview={sound => previewSound(sound, questNotifications.newExcludedQuestAlertVolume)}
                         onChange={value => {
-                            settings.store.newExcludedQuestAlertSound = value as any;
+                            settings.store.newExcludedQuestAlertSound = value;
                             startAutoFetchingQuests(true);
                         }}
                         tooltip={{

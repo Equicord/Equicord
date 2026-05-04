@@ -211,7 +211,7 @@ export function QuestTilesSetting(): JSX.Element {
 
     function updateColor(key: QuestTileColorKey, nextColor: QuestTileColorSetting): void {
         setPreviewColorKey(key);
-        settings.store[key] = nextColor as any;
+        settings.store[key] = nextColor;
     }
 
     function updateColorValue(key: QuestTileColorKey, setting: QuestTileColorSetting, value: number | null): void {

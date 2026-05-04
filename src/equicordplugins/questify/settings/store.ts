@@ -172,7 +172,7 @@ export const settings = definePluginSettings({
     questButtonBadgeColor: {
         type: OptionType.NUMBER | OptionType.CUSTOM,
         description: "The color of the Quest button badge in the server list.",
-        default: defaultQuestButtonBadgeColor,
+        default: defaultQuestButtonBadgeColor as number | null,
         hidden: true,
     },
     questButtonLeftClickAction: {

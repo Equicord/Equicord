@@ -110,7 +110,7 @@ export function ReorderQuestsSetting(): JSX.Element {
         }
 
         nextOrder[index] = nextStatus;
-        settings.store.questOrder = nextOrder as any;
+        settings.store.questOrder = nextOrder;
         rerenderQuests();
     }
 

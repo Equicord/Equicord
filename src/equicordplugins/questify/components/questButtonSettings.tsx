@@ -120,7 +120,7 @@ export function QuestButtonSetting(): JSX.Element {
     }
 
     function updateBadgeColor(value: number | null) {
-        settings.store.questButtonBadgeColor = value as any;
+        settings.store.questButtonBadgeColor = value;
     }
 
     function updateIncludedTypes(options: readonly QuestButtonIncludedTypeOption[], value: string | string[] | null) {
