@@ -77,6 +77,17 @@ export const autoCompleteQuestTaskTypes = [
     QuestTaskType.ACHIEVEMENT_IN_ACTIVITY,
 ] as const satisfies readonly QuestTaskType[];
 
+const desktopOnlyAutoCompleteQuestTypes = new Set<QuestTaskType>([
+    QuestTaskType.PLAY_ON_DESKTOP,
+    QuestTaskType.PLAY_ON_PLAYSTATION,
+    QuestTaskType.PLAY_ON_XBOX,
+    QuestTaskType.PLAY_ACTIVITY,
+]);
+
+export function isDesktopCompatible(questType: QuestTaskType): boolean {
+    return IS_DISCORD_DESKTOP || !desktopOnlyAutoCompleteQuestTypes.has(questType);
+}
+
 export type AutoCompleteQuestTypes = Partial<Record<QuestTaskType, boolean>>;
 
 export const defaultAutoCompleteQuestTypes = Object.fromEntries(

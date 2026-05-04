@@ -10,7 +10,7 @@ import { QuestTaskType } from "@vencord/discord-types/enums";
 import { findByCodeLazy, findLazy } from "@webpack";
 import { FluxDispatcher, QuestStore, RestAPI, showToast, Toasts } from "@webpack/common";
 
-import { autoCompleteQuestTaskTypes } from "../settings/def";
+import { autoCompleteQuestTaskTypes, isDesktopCompatible } from "../settings/def";
 import { resetQuestsToResume } from "../settings/fetching";
 import { getIgnoredQuestIDs } from "../settings/ignoredQuests";
 import { rerenderQuests } from "../settings/rerender";
@@ -111,13 +111,6 @@ const QuestifyNative = VencordNative?.pluginHelpers?.Questify as PluginNative<ty
 
 const videoQuestLeeway = 24;
 const resumeExpiryMs = 60 * 60 * 1000;
-const desktopOnlyAutoCompleteQuestTypes = new Set<QuestTaskType>([
-    QuestTaskType.PLAY_ON_DESKTOP,
-    QuestTaskType.PLAY_ON_PLAYSTATION,
-    QuestTaskType.PLAY_ON_XBOX,
-    QuestTaskType.PLAY_ACTIVITY,
-]);
-
 export type AutoCompleteQuestKind = "watch" | "play" | "achievement";
 export type AutoCompleteQuestStatus = "queued" | "running";
 export type AutoCompleteStartSource = "manual" | "resume" | "auto";
@@ -291,10 +284,6 @@ function getQuestAutoCompleteKind(task: QuestTask): AutoCompleteQuestKind | null
         default:
             return null;
     }
-}
-
-export function isDesktopCompatible(questType: QuestTaskType): boolean {
-    return IS_DISCORD_DESKTOP || !desktopOnlyAutoCompleteQuestTypes.has(questType);
 }
 
 function getEffectiveAutoCompleteTaskType(task: QuestTask, quest: Quest): QuestTaskType {

@@ -360,7 +360,7 @@ export default definePlugin({
                     replace: "!$self.canAutoCompleteQuest(arguments[0].quest)&&"
                 },
                 // If this group becomes unruly due to Discord refactoring and is unfixable,
-                // the 2nd, 3rd, and 4th can be commented out in favor of just the 1st at the expense
+                // the 2nd & 3rd can be commented out in favor of just the 1st at the expense
                 // of not seeing CTA buttons on completed but unclaimed Quests.
                 {
                     // Always expose the CTA button when available instead of only for videos and activities.
@@ -369,18 +369,13 @@ export default definePlugin({
                 },
                 {
                     // Let completed-but-expired claimable Quests with CTAs use the CTA-aware completed branch.
-                    match: /(?<=return\()(?=\i.enabled&&\i===\i\.\i\.EXPIRED_CLAIMABLE&&\i\.\i\.has\(\i\))/,
-                    replace: "!arguments[0].quest.config.ctaConfig&&"
+                    match: /(?<=return\()(\i).enabled&&(\i)===(\i\.\i).EXPIRED_CLAIMABLE&&(\i\.\i).has\((\i)\)(?=\?\i=\(0,\i\.jsx\)\("div",\{className:\i\.\i,children:\(0,\i\.jsx\)\(\i\.A,\{quest:\i,surface:\i\.\i\.QUEST_HOME_TILE_FOOTER)/,
+                    replace: "!arguments[0].quest.config.ctaConfig&&$1.enabled&&$2===$3.EXPIRED_CLAIMABLE&&$4?.has?.($5)"
                 },
                 {
                     // Force the CTA-aware complete branch.
                     match: /(?<=analyticsCtxQuestContentRowIndex:\i}\)}\):\i&&\i)(.{0,200}?fullWidth:!0}\)}\):)(\i.enabled)(.{0,50}?CLAIMED\))&&\i.\i.has\(\i\)(\?\i=)\i/,
                     replace: "&&false$1arguments[0].quest.config.ctaConfig&&arguments[0].quest.userStatus?.completedAt&&!arguments[0].quest.userStatus?.claimedAt&&($2||true)$3$4true"
-                },
-                {
-                    // Guard against potentially unavailable set due to previous patches.
-                    match: /(?<=\i.enabledQuestStates)(.has)/g,
-                    replace: "?$1?."
                 }
             ]
         },
