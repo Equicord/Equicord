@@ -13,7 +13,7 @@ import { ErrorBoundary } from "@components/index";
 import { EquicordDevs } from "@utils/constants";
 import definePlugin, { StartAt } from "@utils/types";
 import type { Quest, QuestUserStatus } from "@vencord/discord-types";
-import { findByCodeLazy, findComponentByCodeLazy, onceReady } from "@webpack";
+import { onceReady } from "@webpack";
 import { QuestStore } from "@webpack/common";
 
 import { disguiseHomeButton, QuestButton, showQuestButton } from "./components/questButton";
@@ -81,8 +81,8 @@ function resumeAutoCompletesIfReady(): void {
     resumeInterruptedAutoCompletes();
 }
 
-const JSX = findByCodeLazy("null;if(void 0");
-const Button = findComponentByCodeLazy("BUTTON_LOADING_STARTED_LABEL)),");
+// const JSX = findByCodeLazy("null;if(void 0");
+// const Button = findComponentByCodeLazy("BUTTON_LOADING_STARTED_LABEL)),");
 
 export default definePlugin({
     name: "Questify",
@@ -93,8 +93,8 @@ export default definePlugin({
     startAt: StartAt.Init, // Needed in order to beat Read All Messages to inserting above the server list.
     settings,
 
-    JSX,
-    Button,
+    // JSX,
+    // Button,
 
     canOpenDevToolsWindow,
     canAutoCompleteQuest,
@@ -333,6 +333,11 @@ export default definePlugin({
             predicate: () => !settings.store.disableQuestsEverything && hasEnabledAutoCompleteQuestTypes(),
             replacement: [
                 {
+                    // Export JSX and Button for patch 3.
+                    match: /(?<="use strict";.{0,200}?var (\i)=\i\(\d+\),(\i)=\i\(\d+\),)/,
+                    replace: "questifyJSX=$1,questifyButton=$2,",
+                },
+                {
                     // Overwrite button props for UNENROLLED Quests.
                     match: /(?<=onClick:(\(\)=>{.[^}]+}),text:(\i),icon:\i,fullWidth:!0)/,
                     replace: ",...($self.getQuestButtonProps(arguments[0])??{})"
@@ -340,7 +345,7 @@ export default definePlugin({
                 {
                     // Overwrite button props for ENROLLED/INCOMPLETE Quests.
                     match: /(?<=return\(0,\i.\i\)\(\i.(\i).{0,350}?)(?=let{quest:\i,taskType:\i,surface:\i)/,
-                    replace: "const questifyButtonProps=$self.getQuestButtonProps(arguments[0]);if(questifyButtonProps){return (0,$self.JSX)($self.Button,{size:arguments[0].size,variant:'secondary',disabled:!1,fullWidth:!0,...questifyButtonProps})};"
+                    replace: "const questifyButtonProps=$self.getQuestButtonProps(arguments[0]);if(questifyButtonProps){return (0,questifyJSX.jsx)(questifyButton.$1,{size:arguments[0].size,variant:'secondary',disabled:!1,fullWidth:!0,...questifyButtonProps})};"
                 }
             ]
         },
