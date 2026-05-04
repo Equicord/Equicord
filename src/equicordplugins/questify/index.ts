@@ -591,6 +591,8 @@ export default definePlugin({
         onceReady.then(() => {
             if (!settings.store.disableQuestsEverything) {
                 startPerAccountTasks("PLUGIN_START");
+            } else {
+                removeServerListElement(ServerListRenderPosition.Above, this.renderQuestifyButton);
             }
         });
     },
