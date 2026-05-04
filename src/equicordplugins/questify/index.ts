@@ -379,8 +379,8 @@ export default definePlugin({
                 },
                 {
                     // Guard against potentially unavailable set due to previous patches.
-                    match: /(?<=\i.enabledQuestStates)(?=.has)/g,
-                    replace: "?"
+                    match: /(?<=\i.enabledQuestStates)(.has)/g,
+                    replace: "?$1?."
                 }
             ]
         },
