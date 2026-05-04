@@ -56,7 +56,7 @@ function startPerAccountTasks(source: string): void {
     setOnQuestsPage();
     startAutoFetchingQuests();
     resumeAutoCompletesIfReady();
-    onceReady.then(() => { fetchAndDispatchQuests(); });
+    fetchAndDispatchQuests();
 
     QL.info(`START_TASKS-${source.toUpperCase()}`, { startedAt });
 }
@@ -587,10 +587,12 @@ export default definePlugin({
     start() {
         initializeRestartTracking(settings);
 
-        if (!settings.store.disableQuestsEverything) {
-            addServerListElement(ServerListRenderPosition.Above, this.renderQuestifyButton);
-            startPerAccountTasks("PLUGIN_START");
-        }
+        onceReady.then(() => {
+            if (!settings.store.disableQuestsEverything) {
+                addServerListElement(ServerListRenderPosition.Above, this.renderQuestifyButton);
+                startPerAccountTasks("PLUGIN_START");
+            }
+        });
     },
 
     stop() {
