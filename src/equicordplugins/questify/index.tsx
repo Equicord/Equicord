@@ -372,8 +372,8 @@ export default definePlugin({
                     replace: "!$self.canAutoCompleteQuest(arguments[0].quest)&&"
                 },
                 // If this group becomes unruly due to Discord refactoring and is unfixable,
-                // the 2nd & 3rd can be commented out in favor of just the 1st at the expense
-                // of not seeing CTA buttons on completed but unclaimed Quests.
+                // the 2nd, 3rd, and 4th can be commented out in favor of just the 1st at the
+                // expense of not seeing CTA buttons on completed but unclaimed Quests.
                 {
                     // Always expose the CTA button when available instead of only for videos and activities.
                     match: /(?<=wrap:!1,children:\[)\i&&[^?]+/,
