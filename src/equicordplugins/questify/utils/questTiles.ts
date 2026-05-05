@@ -253,13 +253,14 @@ export function sortQuests(quests: Quest[], skip?: boolean): Quest[] {
         "claimedSubsort",
         "ignoredSubsort",
         "expiredSubsort",
+        "autoCompleteQuestTypes",
     ]);
 
     if (questSorting.disableQuestsEverything) {
         return quests;
     }
 
-    if (questSorting.makeMobileVideoQuestsDesktopCompatible) {
+    if (questSorting.makeMobileVideoQuestsDesktopCompatible || !!questSorting.autoCompleteQuestTypes.WATCH_VIDEO_ON_MOBILE) {
         injectDesktopVideoQuestTasks(quests);
     }
 

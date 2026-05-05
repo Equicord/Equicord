@@ -300,7 +300,7 @@ export function QuestFeaturesSetting(): JSX.Element {
                             position: "top",
                             text: "Some mobile-only Video Quests can be enrolled in on desktop, but still must be completed on mobile. This setting will allow those to be completed on desktop."
                                 + "\n\nSome mobile-only Video Quests are only enrollable on mobile. For this setting to affect those, you must enroll in those Quests on your mobile device before returning to desktop and refreshing your Quests."
-                                + "\n\nThis setting will only apply to manually completing Video Quests. Auto-completing mobile Video Quests from desktop relies on the auto-complete setting below."
+                                + "\n\nThis setting, when enabled independently, applies only to manually completing Video Quests. Auto-completing mobile Video Quests from desktop relies on the auto-complete setting below, and will implicitly enable this setting as well."
                         }}
                     />
                     <SettingsSubtleSwitch
