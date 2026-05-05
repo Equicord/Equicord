@@ -13,8 +13,9 @@ import { ErrorBoundary } from "@components/index";
 import { EquicordDevs } from "@utils/constants";
 import definePlugin, { StartAt } from "@utils/types";
 import type { Quest, QuestUserStatus } from "@vencord/discord-types";
-import { onceReady } from "@webpack";
+import { findComponentByCodeLazy, onceReady } from "@webpack";
 import { QuestStore } from "@webpack/common";
+import { JSX } from "react";
 
 import { disguiseHomeButton, QuestButton, showQuestButton } from "./components/questButton";
 import { QuestTileContextMenu } from "./components/questTileContextMenu";
@@ -23,7 +24,7 @@ import { validateIgnoredQuests } from "./settings/ignoredQuests";
 import { rerenderQuests, useQuestRerender } from "./settings/rerender";
 import { disposeRestartTracking, initializeRestartTracking, promptToRestartIfDirty } from "./settings/restartTracking";
 import { settings } from "./settings/store";
-import { canAutoCompleteQuest, getActiveAutoCompletes, getQuestAutoCompleteProgress, getQuestButtonProps, getQuestPanelSubtitleText, hasEnabledAutoCompleteQuestTypes, processQuestForAutoComplete, resumeInterruptedAutoCompletes, setHeartbeatStackTracePatchSucceeded, setVideoProgressStackTracePatchSucceeded, stopAllAutoCompletes, stopAutoCompletesForRunningGames, stopQuestAutoComplete } from "./utils/completion";
+import { canAutoCompleteQuest, getActiveAutoCompletes, getQuestAutoCompleteProgress, getQuestButtonProps, getQuestPanelSubtitleText, hasEnabledAutoCompleteQuestTypes, processQuestForAutoComplete, QuestButtonPatchProps, resumeInterruptedAutoCompletes, setHeartbeatStackTracePatchSucceeded, setVideoProgressStackTracePatchSucceeded, stopAllAutoCompletes, stopAutoCompletesForRunningGames, stopQuestAutoComplete } from "./utils/completion";
 import { canOpenDevToolsWindow, fetchAndDispatchQuests, openDevToolsWindow, snakeToCamel } from "./utils/fetching";
 import { normalizeQuestName } from "./utils/filtering";
 import { notifyQuestCompletion, QL } from "./utils/logging";
@@ -81,8 +82,19 @@ function resumeAutoCompletesIfReady(): void {
     resumeInterruptedAutoCompletes();
 }
 
-// const JSX = findByCodeLazy("null;if(void 0");
-// const Button = findComponentByCodeLazy("BUTTON_LOADING_STARTED_LABEL)),");
+const Button = findComponentByCodeLazy("BUTTON_LOADING_STARTED_LABEL)),");
+
+function enrolledIncompleteButton(questifyButtonProps: QuestButtonPatchProps, size: string): JSX.Element {
+    return (
+        <Button
+            size={size}
+            variant="secondary"
+            disabled={false}
+            fullWidth={false}
+            {...questifyButtonProps}
+        />
+    );
+}
 
 export default definePlugin({
     name: "Questify",
@@ -93,12 +105,10 @@ export default definePlugin({
     startAt: StartAt.Init, // Needed in order to beat Read All Messages to inserting above the server list.
     settings,
 
-    // JSX,
-    // Button,
-
     canOpenDevToolsWindow,
     canAutoCompleteQuest,
     disguiseHomeButton,
+    enrolledIncompleteButton,
     formatLowerBadge,
     getActiveAutoCompletes,
     getLastFilterChoices,
@@ -333,19 +343,14 @@ export default definePlugin({
             predicate: () => !settings.store.disableQuestsEverything && hasEnabledAutoCompleteQuestTypes(),
             replacement: [
                 {
-                    // Export JSX and Button for patch 3.
-                    match: /(?<="use strict";.{0,200}?var (\i)=\i\(\d+\),(\i)=\i\(\d+\),)/,
-                    replace: "questifyJSX=$1,questifyButton=$2,",
-                },
-                {
                     // Overwrite button props for UNENROLLED Quests.
                     match: /(?<=onClick:(\(\)=>{.[^}]+}),text:(\i),icon:\i,fullWidth:!0)/,
                     replace: ",...($self.getQuestButtonProps(arguments[0])??{})"
                 },
                 {
                     // Overwrite button props for ENROLLED/INCOMPLETE Quests.
-                    match: /(?<=return\(0,\i.\i\)\(\i.(\i).{0,350}?)(?=let{quest:\i,taskType:\i,surface:\i)/,
-                    replace: "const questifyButtonProps=$self.getQuestButtonProps(arguments[0]);if(questifyButtonProps){return (0,questifyJSX.jsx)(questifyButton.$1,{size:arguments[0].size,variant:'secondary',disabled:!1,fullWidth:!0,...questifyButtonProps})};"
+                    match: /(?=let{quest:\i,taskType:\i,surface:\i)/,
+                    replace: "const questifyButtonProps=$self.getQuestButtonProps(arguments[0]);if(questifyButtonProps){return $self.enrolledIncompleteButton(questifyButtonProps,arguments[0].size)};"
                 }
             ]
         },
