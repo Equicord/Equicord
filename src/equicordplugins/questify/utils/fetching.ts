@@ -46,7 +46,7 @@ const formatQuestData = findByCodeLazy("config),userStatus:null==");
 async function fetchQuestById(questId: string): Promise<Quest | null> {
     try {
         const { body } = await RestAPI.get({ url: `/quests/${questId}`, retries: 3 });
-        const valid = !!parseQuestConfig(body);
+        const valid = !!parseQuestConfig({ config: body });
 
         if (!valid) {
             QL.warn("FETCH_QUEST_BY_ID_INVALID_BODY", { questId, body });
