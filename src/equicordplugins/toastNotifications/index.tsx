@@ -12,7 +12,7 @@ import { Channel, Message } from "@vencord/discord-types";
 import { findByPropsLazy, findStore } from "@webpack";
 import { ChannelStore, IconUtils, MessageStore, NavigationRouter, PresenceStore, RelationshipStore, SelectedChannelStore, StreamerModeStore, UserStore } from "@webpack/common";
 
-import { showNotification, teardownNotifications } from "./components/Notifications";
+import { setContainerPosition, showNotification, teardownNotifications } from "./components/Notifications";
 
 const MuteStore = findByPropsLazy("isSuppressEveryoneEnabled");
 const SelectedChannelActionCreators = findByPropsLazy("selectPrivateChannel");
@@ -52,10 +52,7 @@ export const settings = definePluginSettings({
                 value: "bottom-right"
             },
         ],
-        onChange: value => {
-            const container = document.getElementById("vc-toast-notifications-container");
-            if (container) container.className = `vc-toast-notifications-position-${value || "bottom-left"}`;
-        },
+        onChange: value => setContainerPosition(value),
     },
     timeout: {
         type: OptionType.SLIDER,

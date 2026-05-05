@@ -28,10 +28,14 @@ function getNotificationContainer() {
 
     // Keep the container's position class in sync with the user's setting.
     if (ToastContainer) {
-        ToastContainer.className = `vc-toast-notifications-position-${PluginSettings.store.position || "bottom-left"}`;
+        ToastContainer.className = `vc-toast-notifications-position-${PluginSettings.store.position ?? "bottom-left"}`;
     }
 
     return RootContainer;
+}
+
+export function setContainerPosition(position: string) {
+    if (ToastContainer) ToastContainer.className = `vc-toast-notifications-position-${position ?? "bottom-left"}`;
 }
 
 interface BaseNotification {
