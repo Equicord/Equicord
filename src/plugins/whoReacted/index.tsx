@@ -96,8 +96,8 @@ export default definePlugin({
         {
             find: ",reactionRef:",
             replacement: {
-                match: /(\i)\?null:\(0,\i\.jsx\)\(\i\.\i,{className:\i\.reactionCount,.*?}\),/,
-                replace: "$&$1?null:$self.renderUsers(this.props),"
+                match: /(?<=renderPopout:function\(\)\{return\(0,\i\.jsx\)\(\i,\{emoji:(\i),message:(\i),type:(\i),[\s\S]{0,3000})(\i)\?null:\(0,\i\.jsx\)\(\i\.\i,\{className:\i\.reactionCount,.{0,100}\}\),/,
+                replace: "$&$4?null:$self.renderUsers({message:$2,emoji:$1,type:$3}),"
             }
         },
         {
@@ -122,6 +122,7 @@ export default definePlugin({
     },
 
     renderUsers(props: RootObject) {
+        if (!props?.message) return null;
         return props.message.reactions.length > 10 ? null : (
             <ErrorBoundary noop>
                 <this.UsersComponent {...props} />
