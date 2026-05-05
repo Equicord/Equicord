@@ -53,8 +53,8 @@ export const settings = definePluginSettings({
             },
         ],
         onChange: value => {
-            const container = document.getElementById("toastnotifications-container");
-            if (container) container.className = `toastnotifications-position-${value || "bottom-left"}`;
+            const container = document.getElementById("vc-toast-notifications-container");
+            if (container) container.className = `vc-toast-notifications-position-${value || "bottom-left"}`;
         },
     },
     timeout: {

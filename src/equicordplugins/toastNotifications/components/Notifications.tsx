@@ -21,14 +21,14 @@ function getNotificationContainer() {
     // If the root container doesn't exist, create it.
     if (!RootContainer) {
         ToastContainer = document.createElement("div");
-        ToastContainer.id = "toastnotifications-container";
+        ToastContainer.id = "vc-toast-notifications-container";
         document.body.append(ToastContainer);
         RootContainer = createRoot(ToastContainer);
     }
 
     // Keep the container's position class in sync with the user's setting.
     if (ToastContainer) {
-        ToastContainer.className = `toastnotifications-position-${PluginSettings.store.position || "bottom-left"}`;
+        ToastContainer.className = `vc-toast-notifications-position-${PluginSettings.store.position || "bottom-left"}`;
     }
 
     return RootContainer;

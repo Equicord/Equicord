@@ -8,11 +8,13 @@ import "./styles.css";
 
 import ErrorBoundary from "@components/ErrorBoundary";
 import { settings as PluginSettings } from "@equicordplugins/toastNotifications/index";
+import { classNameFactory } from "@utils/css";
 import { findComponentByCodeLazy } from "@webpack";
 import { FluxDispatcher, GuildStore, IconUtils, React, useEffect, useMemo, useRef, useState } from "@webpack/common";
 
 import { MessageNotification, NotificationData } from "./Notifications";
 
+export const cl = classNameFactory("vc-toast-notifications-");
 const MessageComponent = findComponentByCodeLazy("childrenExecutedCommand:", ".hideAccessories");
 
 function isMessageNotification(props: NotificationData): props is MessageNotification {
@@ -27,9 +29,9 @@ function renderContextHeader(channel: MessageNotification["channel"]): React.Rea
         const rawName = channel.name?.trim() || channel.rawRecipients.slice(0, 3).map(e => e.username).join(", ");
         const name = rawName.length > 20 ? rawName.substring(0, 20) + "..." : rawName;
         return (
-            <div className="toastnotifications-context-header">
-                {icon && <img className="toastnotifications-context-header-icon" src={icon} alt="" />}
-                <span className="toastnotifications-context-header-name">{name}</span>
+            <div className={cl("context-header")}>
+                {icon && <img className={cl("context-header-icon")} src={icon} alt="" />}
+                <span className={cl("context-header-name")}>{name}</span>
             </div>
         );
     }
@@ -40,14 +42,14 @@ function renderContextHeader(channel: MessageNotification["channel"]): React.Rea
             ? IconUtils.getGuildIconURL({ id: guild.id, icon: guild.icon, size: 32 })
             : undefined;
         return (
-            <div className="toastnotifications-context-header">
-                {icon && <img className="toastnotifications-context-header-icon" src={icon} alt="" />}
-                <span className="toastnotifications-context-header-name">
+            <div className={cl("context-header")}>
+                {icon && <img className={cl("context-header-icon")} src={icon} alt="" />}
+                <span className={cl("context-header-name")}>
                     {guild?.name ?? "Unknown Server"}
                     {channel.name && (
                         <>
-                            <span className="toastnotifications-context-header-separator">{" \u203A "}</span>
-                            <span className="toastnotifications-context-header-channel">#{channel.name}</span>
+                            <span className={cl("context-header-separator")}>{" \u203A "}</span>
+                            <span className={cl("context-header-channel")}>#{channel.name}</span>
                         </>
                     )}
                 </span>
@@ -111,15 +113,15 @@ export default ErrorBoundary.wrap(function NotificationComponent(props: Notifica
 
     const closeButton = useMemo(() => (
         <button
-            className="toastnotifications-notification-close-btn"
+            className={cl("notification-close-btn")}
             onClick={e => {
                 e.preventDefault();
                 e.stopPropagation();
                 props.onClose!();
             }}
         >
-            <svg width="24" height="24" viewBox="0 0 24 24" role="img" aria-labelledby="toastnotifications-notification-dismiss-title">
-                <title id="toastnotifications-notification-dismiss-title">Dismiss Notification</title>
+            <svg width="24" height="24" viewBox="0 0 24 24" role="img" aria-labelledby="vc-toast-notifications-dismiss-title">
+                <title id="vc-toast-notifications-dismiss-title">Dismiss Notification</title>
                 <path fill="currentColor" d="M18.4 4L12 10.4L5.6 4L4 5.6L10.4 12L4 18.4L5.6 20L12 13.6L18.4 20L20 18.4L13.6 12L20 5.6L18.4 4Z" />
             </svg>
         </button>
@@ -128,7 +130,7 @@ export default ErrorBoundary.wrap(function NotificationComponent(props: Notifica
     let content: React.ReactNode;
     if (isMessageNotification(props)) {
         content = (
-            <div className="toastnotifications-notification-content">
+            <div className={cl("notification-content")}>
                 {renderContextHeader(props.channel)}
                 <MessageComponent
                     id={`toastnotification-mock-${props.message.id}`}
@@ -141,14 +143,14 @@ export default ErrorBoundary.wrap(function NotificationComponent(props: Notifica
     } else {
         const { title, body, icon } = props;
         content = (
-            <div className="toastnotifications-notification toastnotifications-notification-system">
-                {icon && <img className="toastnotifications-notification-icon" src={icon} alt="" />}
-                <div className="toastnotifications-notification-content">
-                    <div className="toastnotifications-notification-header">
-                        <h2 className="toastnotifications-notification-title">{title}</h2>
+            <div className={cl("notification-system")}>
+                {icon && <img className={cl("notification-icon")} src={icon} alt="" />}
+                <div className={cl("notification-content")}>
+                    <div className={cl("notification-header")}>
+                        <h2 className={cl("notification-title")}>{title}</h2>
                     </div>
                     {body && (
-                        <p className="toastnotifications-notification-p">
+                        <p className={cl("notification-p")}>
                             {body.length > 500 ? body.slice(0, 500) + "..." : body}
                         </p>
                     )}
@@ -160,7 +162,7 @@ export default ErrorBoundary.wrap(function NotificationComponent(props: Notifica
     return (
         <button
             style={{ opacity }}
-            className="toastnotifications-notification-root"
+            className={cl("notification-root")}
             onClick={handleClick}
             onContextMenu={handleContextMenu}
             onMouseEnter={() => setIsHover(true)}
@@ -170,7 +172,7 @@ export default ErrorBoundary.wrap(function NotificationComponent(props: Notifica
             {content}
             {timeout !== 0 && !props.permanent && (
                 <div
-                    className="toastnotifications-notification-progressbar"
+                    className={cl("notification-progressbar")}
                     style={{ width: `${(1 - timeoutProgress) * 100}%` }}
                 />
             )}

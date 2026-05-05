@@ -82,26 +82,27 @@ This plugin supports theming and exposes a number of CSS variables to allow you 
 
 | CSS Variable                                      | Description                                                                |
 | ------------------------------------------------- | -------------------------------------------------------------------------- |
-| `--toastnotifications-background-color`           | Background color of the notification card.                                 |
-| `--toastnotifications-text-color`                 | Default text color inside notifications.                                   |
-| `--toastnotifications-border-radius`              | Border radius of the notification card.                                    |
-| `--toastnotifications-width`                      | Width of the card. Defaults to `fit-content`.                              |
-| `--toastnotifications-min-width`                  | Minimum width to use regardless of content.                                |
-| `--toastnotifications-max-width`                  | Maximum width a single notification can grow to.                           |
-| `--toastnotifications-min-height`                 | Minimum height to use regardless of content.                               |
-| `--toastnotifications-max-height`                 | Maximum height a single notification can grow to.                          |
-| `--toastnotifications-padding`                    | Inner padding of the notification card.                                    |
-| `--toastnotifications-position-offset`            | Distance from the screen corner the stack is anchored at.                  |
-| `--toastnotifications-title-color`                | Color of titles (system notifications) and context headers (group/server). |
-| `--toastnotifications-title-font-size`            | Font size of titles and context headers.                                   |
-| `--toastnotifications-title-font-weight`          | Font weight of titles and context headers.                                 |
-| `--toastnotifications-title-line-height`          | Line height of titles and context headers.                                 |
-| `--toastnotifications-image-height`               | Height of the avatar/icon shown in system notifications.                   |
-| `--toastnotifications-image-width`                | Width of the avatar/icon shown in system notifications.                    |
-| `--toastnotifications-image-border-radius`        | Border radius of the avatar/icon in system notifications.                  |
-| `--toastnotifications-close-button-color`         | Color of the dismiss (X) button.                                           |
-| `--toastnotifications-close-button-hover-color`   | Color of the dismiss (X) button on hover.                                  |
-| `--toastnotifications-close-button-opacity`       | Opacity of the dismiss (X) button at rest.                                 |
-| `--toastnotifications-close-button-hover-opacity` | Opacity of the dismiss (X) button on hover.                                |
-| `--toastnotifications-progressbar-height`         | Height of the progress bar shown at the bottom of notifications.           |
-| `--toastnotifications-progressbar-color`          | Color of the progress bar.                                                 |
+| `--vc-toast-notifications-background-color`           | Background color of the notification card.                                 |
+| `--vc-toast-notifications-text-color`                 | Default text color inside notifications.                                   |
+| `--vc-toast-notifications-border-radius`              | Border radius of the notification card.                                    |
+| `--vc-toast-notifications-width`                      | Width of the card. Defaults to `fit-content`.                              |
+| `--vc-toast-notifications-min-width`                  | Minimum width to use regardless of content.                                |
+| `--vc-toast-notifications-max-width`                  | Maximum width a single notification can grow to.                           |
+| `--vc-toast-notifications-min-height`                 | Minimum height to use regardless of content.                               |
+| `--vc-toast-notifications-max-height`                 | Maximum height a single notification can grow to.                          |
+| `--vc-toast-notifications-padding`                    | Inner padding of the notification card.                                    |
+| `--vc-toast-notifications-position-offset`            | Distance from the screen corner the stack is anchored at.                  |
+| `--vc-toast-notifications-title-color`                | Color of titles (system notifications) and context headers (group/server). |
+| `--vc-toast-notifications-title-font-size`            | Font size of titles and context headers.                                   |
+| `--vc-toast-notifications-title-font-weight`          | Font weight of titles and context headers.                                 |
+| `--vc-toast-notifications-title-line-height`          | Line height of titles and context headers.                                 |
+| `--vc-toast-notifications-image-height`               | Height of the avatar/icon shown in system notifications.                   |
+| `--vc-toast-notifications-image-width`                | Width of the avatar/icon shown in system notifications.                    |
+| `--vc-toast-notifications-image-border-radius`        | Border radius of the avatar/icon in system notifications.                  |
+| `--vc-toast-notifications-close-button-color`         | Color of the dismiss (X) button.                                           |
+| `--vc-toast-notifications-close-button-hover-color`   | Color of the dismiss (X) button on hover.                                  |
+| `--vc-toast-notifications-close-button-opacity`       | Opacity of the dismiss (X) button at rest.                                 |
+| `--vc-toast-notifications-close-button-hover-opacity` | Opacity of the dismiss (X) button on hover.                                |
+| `--vc-toast-notifications-progressbar-height`         | Height of the progress bar shown at the bottom of notifications.           |
+| `--vc-toast-notifications-progressbar-color`          | Color of the progress bar.                                                 |
+
