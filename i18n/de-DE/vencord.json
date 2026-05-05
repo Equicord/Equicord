@@ -330,7 +330,7 @@
     },
     "copyStickerLinks": {
         "copyLink": "Link kopieren",
-        "description": "Integriert die Möglichkeit, Sticker-Links zu kopieren und zu öffnen",
+        "description": "Fügt die Möglichkeit, Sticker-Links zu kopieren und zu öffnen",
         "linkCopied": "Link kopiert!",
         "openLink": "Link öffnen"
     },
@@ -344,7 +344,7 @@
             "crashedBody": "Awn :( Discord ist zweimal schnell abgestürzt und hat keinen Wiederherstellungsversuch unternommen. Klicken Sie hier, um unserem Support-Server beizutreten!",
             "crashedTitle": "Discord ist abgestürzt!",
             "invalidInvite": "Ungültige oder abgelaufene Einladung",
-            "recoveringBody": "Wiederherstellungsversuch... Klicken Sie hier, um unserem Support-Server beizutreten!"
+            "recoveringBody": "Wiederherstellungsversuch... Klicken Sie hier, um unseren Support-Server beitreten!"
         },
         "settings": {
             "attemptToNavigateToHome": "Ob versucht werden soll, zur Startseite zu navigieren, um Discord-Abstürze zu verhindern.",
@@ -365,7 +365,7 @@
         }
     },
     "customIdle": {
-        "description": "Ermöglicht Ihnen, die Zeit festzulegen, bevor Discord in den Ruhezustand wechselt (oder die automatische Ruhephase zu deaktivieren).",
+        "description": "Ermöglicht Ihnen, die Zeit festzulegen, nach der Discord in den Leerlauf wechselt (oder den automatischen Leerlauf zu deaktivieren).",
         "settings": {
             "idleTimeout": "Minuten bevor Discord in den Leerlauf geht (0, um den automatischen Leerlauf zu deaktivieren)",
             "remainInIdle": "Wenn Sie zu Discord zurückkehren, bleiben Sie inaktiv, bis Sie bestätigen, dass Sie online gehen möchten"
