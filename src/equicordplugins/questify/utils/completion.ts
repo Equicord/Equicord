@@ -914,7 +914,7 @@ async function runAchievementQuest(quest: Quest, entry: AutoCompleteEntry, targe
         const deauthToken = AuthorizedAppsStore.getNewestTokenForApplication(appId)?.id;
 
         if (deauthToken) {
-            await RestAPI.del({ url: `/oauth2/tokens/${deauthToken}/` });
+            await RestAPI.del({ url: `/oauth2/tokens/${deauthToken}` });
         }
     } catch (error) {
         QL.error("AUTO_COMPLETE_ACHIEVEMENT_DEAUTH_FAILED", { questId: quest.id, questName: entry.questName, error });
