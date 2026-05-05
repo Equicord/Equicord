@@ -96,7 +96,7 @@ export default definePlugin({
         {
             find: ",reactionRef:",
             replacement: {
-                match: /(?<=renderPopout:function\(\)\{return\(0,\i\.jsx\)\(\i,\{emoji:(\i),message:(\i),type:(\i),[\s\S]{0,3000})(\i)\?null:\(0,\i\.jsx\)\(\i\.\i,\{className:\i\.reactionCount,.{0,100}\}\),/,
+                match: /(?<=renderPopout:function\(\)\{return\(0,\i\.jsx\)\(\i,\{emoji:(\i),message:(\i),type:(\i),[\s\S]{0,1500})(\i)\?null:\(0,\i\.jsx\)\(\i\.\i,\{className:\i\.reactionCount,.{0,60}\}\),/,
                 replace: "$&$4?null:$self.renderUsers({message:$2,emoji:$1,type:$3}),"
             }
         },
