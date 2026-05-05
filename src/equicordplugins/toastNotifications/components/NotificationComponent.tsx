@@ -64,7 +64,7 @@ export default ErrorBoundary.wrap(function NotificationComponent(props: Notifica
     const [isHover, setIsHover] = useState(false);
     const [elapsed, setElapsed] = useState(0);
 
-    const timeout = (PluginSettings.store.timeout * 1000) || 5000;
+    const timeout = (PluginSettings.store.timeout ?? 5) * 1000;
     const opacity = PluginSettings.store.opacity / 100;
     const startRef = useRef(Date.now());
 
