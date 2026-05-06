@@ -113,7 +113,11 @@ function ReactionUsers({ message, emoji, type }: ReactionProps) {
         <div
             style={{ marginLeft: "0.5em", transform: "scale(0.9)" }}
         >
-            <div onClick={handleClickAvatar} onKeyDown={handleClickAvatar}>
+            <div
+                onClick={handleClickAvatar}
+                onKeyDown={handleClickAvatar}
+                style={settings.store.avatarClick ? {} : { pointerEvents: "none" }}
+            >
                 <UserSummaryItem
                     users={users}
                     guildId={ChannelStore.getChannel(message.channel_id)?.guild_id}

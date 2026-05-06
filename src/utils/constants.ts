@@ -1305,9 +1305,21 @@ export const EquicordDevs = Object.freeze({
         name: "DKA",
         id: 119386840624005121n
     },
+    Gir0fa: {
+        name: "gir0fa",
+        id: 1282734265955520545n,
+    },
     yonn2222: {
         name: "yonn2222",
         id: 821835831844012103n
+    },
+    Moowi: {
+        name: "Moowi",
+        id: 246128594756173824n
+    },
+    sketchmyname: {
+        name: "sketchmyname",
+        id: 1412164910443663491n
     },
 } satisfies Record<string, Dev>);
 

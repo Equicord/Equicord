@@ -43,6 +43,7 @@ export { Plugins as plugins };
 import { addAudioProcessor, removeAudioProcessor } from "./AudioPlayer";
 import { addChannelToolbarButton, addHeaderBarButton, removeChannelToolbarButton, removeHeaderBarButton } from "./HeaderBar";
 import { addProfileCollection, removeProfileCollection } from "./ProfileCollections";
+import { addProfileSection, removeProfileSection } from "./ProfileSections";
 import { addUserAreaButton, removeUserAreaButton } from "./UserArea";
 
 const logger = new Logger("PluginManager", "#a6d189");
@@ -220,7 +221,8 @@ export const startPlugin = traceFunction("startPlugin", function startPlugin(p: 
         onBeforeMessageEdit, onBeforeMessageSend, onMessageClick,
         chatBarButton, renderMemberListDecorator, renderMessageAccessory, renderMessageDecoration, messagePopoverButton,
         // Custom
-        renderNicknameIcon, headerBarButton, audioProcessor, userAreaButton, renderProfileCollection, chatBarButtonWrapper
+        renderNicknameIcon, headerBarButton, audioProcessor, userAreaButton, renderProfileCollection, chatBarButtonWrapper,
+        renderProfileSection
     } = p;
 
     if (p.start) {
@@ -289,6 +291,7 @@ export const startPlugin = traceFunction("startPlugin", function startPlugin(p: 
     if (userAreaButton) addUserAreaButton(name, userAreaButton.render, userAreaButton.priority);
     if (renderProfileCollection) addProfileCollection(name, renderProfileCollection);
     if (chatBarButtonWrapper) addChatBarButtonWrapper(name, chatBarButtonWrapper);
+    if (renderProfileSection) addProfileSection(name, renderProfileSection);
 
     return true;
 }, p => `startPlugin ${p.name}`);
@@ -299,7 +302,8 @@ export const stopPlugin = traceFunction("stopPlugin", function stopPlugin(p: Plu
         onBeforeMessageEdit, onBeforeMessageSend, onMessageClick,
         chatBarButton, renderMemberListDecorator, renderMessageAccessory, renderMessageDecoration, messagePopoverButton,
         // Custom
-        renderNicknameIcon, headerBarButton, audioProcessor, userAreaButton, renderProfileCollection, chatBarButtonWrapper
+        renderNicknameIcon, headerBarButton, audioProcessor, userAreaButton, renderProfileCollection, chatBarButtonWrapper,
+        renderProfileSection
     } = p;
 
     if (p.stop) {
@@ -366,6 +370,7 @@ export const stopPlugin = traceFunction("stopPlugin", function stopPlugin(p: Plu
     if (userAreaButton) removeUserAreaButton(name);
     if (renderProfileCollection) removeProfileCollection(name);
     if (chatBarButtonWrapper) removeChatBarButtonWrapper(name);
+    if (renderProfileSection) removeProfileSection(name);
 
     return true;
 }, p => `stopPlugin ${p.name}`);
@@ -422,6 +427,7 @@ export const initPluginManager = onlyOnce(function init() {
         if (p.userAreaButton) neededApiPlugins.add("UserAreaAPI");
         if (p.renderProfileCollection) neededApiPlugins.add("ProfileCollectionsAPI");
         if (p.chatBarButtonWrapper) neededApiPlugins.add("ChatInputButtonAPI");
+        if (p.renderProfileSection) neededApiPlugins.add("ProfileSectionsAPI");
 
         for (const key of pluginKeysToBind) {
             p[key] &&= p[key].bind(p) as any;
