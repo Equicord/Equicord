@@ -425,7 +425,7 @@ export function getQuestCompletionState(quest: Quest, options: QuestButtonTextOp
     const progress = Math.min(target, Math.max(storedProgress, elapsedProgress));
     const timeRemaining = Math.max(0, target - progress);
     const formattedTime = formatQuestTime(timeRemaining, options.prepositional);
-    const immediate = kind === "achievement" || timeRemaining <= 0;
+    const immediate = kind === "achievement" || timeRemaining <= 1;
 
     if (activeEntry?.status === "running") {
         const text = immediate
