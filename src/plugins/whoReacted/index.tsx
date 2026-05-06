@@ -96,8 +96,8 @@ export default definePlugin({
         {
             find: ",reactionRef:",
             replacement: {
-                match: /(\i)\?null:\(0,\i\.jsx\)\(\i\.\i,{className:\i\.reactionCount,.*?}\),/,
-                replace: "$&$1?null:$self.renderUsers(this.props),"
+                match: /(\i)\?null:\(0,\i\.jsx\)\(\i\.\i,{className:\i\.reactionCount,.*?}\),(?<=(emoji:\i,message:\i,type:\i).+?)/,
+                replace: "$&$1?null:$self.renderUsers({$2}),"
             }
         },
         {
@@ -122,6 +122,7 @@ export default definePlugin({
     },
 
     renderUsers(props: RootObject) {
+        if (!props?.message || props.hideCount) return null;
         return props.message.reactions.length > 10 ? null : (
             <ErrorBoundary noop>
                 <this.UsersComponent {...props} />
@@ -197,6 +198,7 @@ interface RootObject {
     burst_me: boolean;
     me: boolean;
     type: number;
+    hideCount: boolean;
     hideEmoji: boolean;
     remainingBurstCurrency: number;
 }
