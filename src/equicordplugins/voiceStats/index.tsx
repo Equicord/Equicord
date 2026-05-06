@@ -87,7 +87,7 @@ function formatDuration(seconds: number): string {
     return `${s}s`;
 }
 
-const VoiceStatsComponent = ErrorBoundary.wrap(({ userId, isSidebar }: { userId: string; isSidebar: boolean; }) => {
+const VoiceStatsSection = ErrorBoundary.wrap(({ userId, isSideBar }: { userId: string; isSideBar: boolean; }) => {
     const isLive = sessionStarts.has(userId);
     useTimer({ interval: isLive ? 1000 : 0 });
 
@@ -96,7 +96,7 @@ const VoiceStatsComponent = ErrorBoundary.wrap(({ userId, isSidebar }: { userId:
 
     const text = formatDuration(seconds);
 
-    if (isSidebar) {
+    if (isSideBar) {
         return (
             <Section
                 heading="Voice Time"
@@ -139,33 +139,8 @@ export default definePlugin({
     description: "Shows how long you've spent in voice with each user in their profile",
     tags: ["Voice", "Friends"],
     authors: [EquicordDevs.Moowi],
-
-    patches: [
-        {
-            find: "#{intl::PREMIUM_GIFTING_BUTTON}),action:",
-            replacement: {
-                match: /#{intl::USER_PROFILE_MEMBER_SINCE}\),.{0,100}userId:(\i\.id)}\)}\)/,
-                replace: "$&,$self.VoiceStatsComponent({userId:$1,isSidebar:true})"
-            }
-        },
-        {
-            find: ",applicationRoleConnection:",
-            replacement: {
-                match: /#{intl::USER_PROFILE_MEMBER_SINCE}\),.{0,100}userId:(\i\.id),.{0,100}}\)}\),/,
-                replace: "$&,$self.VoiceStatsComponent({userId:$1,isSidebar:false}),"
-            }
-        },
-        {
-            find: ".MODAL_V2,onClose:",
-            replacement: {
-                match: /#{intl::USER_PROFILE_MEMBER_SINCE}\),.{0,100}userId:(\i\.id),.{0,100}}\)}\),/,
-                replace: "$&,$self.VoiceStatsComponent({userId:$1,isSidebar:false}),"
-            }
-        }
-    ],
-
-    VoiceStatsComponent,
-
+    dependencies: ["ProfileSectionsAPI"],
+    renderProfileSection: VoiceStatsSection,
     flux: {
         VOICE_STATE_UPDATES({ voiceStates }: { voiceStates: VoiceState[]; }) {
             const myId = UserStore.getCurrentUser()?.id;
