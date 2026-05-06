@@ -227,6 +227,14 @@ export function getQuestPanelOverride(quest: Quest | null): Quest | null {
     return nextQuest ?? (panelState.disableAccountPanelPromo ? null : quest);
 }
 
+export function shouldForceQuestPanelVisible(quest: Quest | null): boolean {
+    if (!quest || settings.store.disableQuestsEverything || settings.store.disableAccountPanelQuestProgress) {
+        return false;
+    }
+
+    return getQuestAutoCompleteEntry(refreshQuest(quest)) !== null;
+}
+
 export function getQuestPanelPercentComplete({
     quest,
     percentCompleteText,

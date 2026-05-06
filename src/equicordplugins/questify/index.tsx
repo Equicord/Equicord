@@ -24,11 +24,11 @@ import { validateIgnoredQuests } from "./settings/ignoredQuests";
 import { rerenderQuests, useQuestRerender } from "./settings/rerender";
 import { disposeRestartTracking, initializeRestartTracking, promptToRestartIfDirty } from "./settings/restartTracking";
 import { settings } from "./settings/store";
-import { canAutoCompleteQuest, getActiveAutoCompletes, getQuestAutoCompleteProgress, getQuestButtonProps, getQuestPanelSubtitleText, hasEnabledAutoCompleteQuestTypes, processQuestForAutoComplete, QuestButtonPatchProps, resumeInterruptedAutoCompletes, setHeartbeatStackTracePatchSucceeded, setVideoProgressStackTracePatchSucceeded, stopAllAutoCompletes, stopAutoCompletesForRunningGames, stopQuestAutoComplete } from "./utils/completion";
+import { canAutoCompleteQuest, getActiveAutoCompletes, getQuestAutoCompleteProgress, getQuestButtonProps, getQuestPanelSubtitleText, hasEnabledAutoCompleteQuestTypes, processQuestForAutoComplete, resumeInterruptedAutoCompletes, setHeartbeatStackTracePatchSucceeded, setVideoProgressStackTracePatchSucceeded, stopAllAutoCompletes, stopAutoCompletesForRunningGames, stopQuestAutoComplete } from "./utils/completion";
 import { canOpenDevToolsWindow, fetchAndDispatchQuests, openDevToolsWindow, snakeToCamel } from "./utils/fetching";
 import { normalizeQuestName } from "./utils/filtering";
 import { notifyQuestCompletion, QL } from "./utils/logging";
-import { getQuestPanelOverride, getQuestPanelPercentComplete } from "./utils/questState";
+import { getQuestPanelOverride, getQuestPanelPercentComplete, shouldForceQuestPanelVisible } from "./utils/questState";
 import { getLastFilterChoices, getLastSortChoice, getQuestTileClasses, getQuestTileStyle, setLastFilterChoices, setLastSortChoice, shouldPreloadQuestAssets, sortQuests } from "./utils/questTiles";
 import { formatLowerBadge, QUEST_PAGE } from "./utils/ui";
 
@@ -84,15 +84,21 @@ function resumeAutoCompletesIfReady(): void {
 
 const Button = findComponentByCodeLazy("BUTTON_LOADING_STARTED_LABEL)),");
 
-function enrolledIncompleteButton(questifyButtonProps: QuestButtonPatchProps, size: string): JSX.Element {
+function enrolledIncompleteButton(args: { quest: Quest, size: string; }): JSX.Element | null {
+    const props = getQuestButtonProps({ quest: args.quest });
+
+    if (!props) {
+        return null;
+    }
+
     return (
         <ErrorBoundary noop>
             <Button
-                size={size}
+                size={args.size}
                 variant="secondary"
                 disabled={false}
                 fullWidth={true}
-                {...questifyButtonProps}
+                {...props}
             />
         </ErrorBoundary>
     );
@@ -132,6 +138,7 @@ export default definePlugin({
     setLastFilterChoices,
     setLastSortChoice,
     setVideoProgressStackTracePatchSucceeded,
+    shouldForceQuestPanelVisible,
     shouldPreloadQuestAssets,
     sortQuests,
     stopQuestAutoComplete,
@@ -351,10 +358,28 @@ export default definePlugin({
                 },
                 {
                     // Overwrite button props for ENROLLED/INCOMPLETE Quests.
-                    match: /(?=let{quest:\i,taskType:\i,surface:\i)/,
-                    replace: "const questifyButtonProps=$self.getQuestButtonProps(arguments[0]);if(questifyButtonProps){return $self.enrolledIncompleteButton(questifyButtonProps,arguments[0].size)};"
+                    match: /(?<=let{quest:\i,taskType:\i,surface:\i.{0,150}?size:\i}=\i;return)(.{0,300}?taskType:\i,size:\i,analyticsCtxQuestContent:\i,analyticsCtxSourceQuestContent:\i}\))/,
+                    replace: " $self.enrolledIncompleteButton(arguments[0])||($1)"
                 }
             ]
+        },
+        {
+            // Overwrite button props for Quest bar.
+            find: "QUESTS_BAR,questId",
+            predicate: () => !settings.store.disableQuestsEverything && hasEnabledAutoCompleteQuestTypes(),
+            replacement: {
+                match: /(?<=SELECT&&!\i&&!\i,(\i)=null;)(return )(\i\?\i=\(0,\i.\i\)\(\i,{quest:(\i))/,
+                replace: "const questifyButton=$self.enrolledIncompleteButton({quest:$4});$2questifyButton?$1=questifyButton:$3"
+            }
+        },
+        {
+            // Keeps Questify completion progress visible when Discord marks the native Quest bar dismissed.
+            find: "prevIsQuestAccepted:",
+            predicate: () => !settings.store.disableQuestsEverything && !settings.store.disableAccountPanelQuestProgress,
+            replacement: {
+                match: /(?<=isLoading:\i}=\(0,\i.\i\)\(\),\i=\i\.useContext\(\i\.\i\)\|\|\i&&)(\i)/,
+                replace: "($1||$self.shouldForceQuestPanelVisible(arguments[0].quest))"
+            }
         },
         {
             find: ".rowIndex,trackGuildAndChannelMetadata",
@@ -539,14 +564,18 @@ export default definePlugin({
             QL.log("QUESTS_USER_STATUS_UPDATE", data);
 
             const userStatus = snakeToCamel(data).userStatus as QuestUserStatus | undefined;
+            const claimedAt = !!userStatus?.claimedAt;
+            const completedRecently = userStatus?.completedAt
+                ? Date.now() - new Date(userStatus.completedAt).getTime() <= 5000
+                : false;
 
             validateIgnoredQuests();
 
-            if (!!userStatus?.completedAt && !userStatus?.claimedAt && !notifiedCompletedQuests.has(userStatus?.questId)) {
-                notifiedCompletedQuests.add(userStatus.questId);
+            if (completedRecently && !claimedAt && !notifiedCompletedQuests.has(userStatus!.questId)) {
+                notifiedCompletedQuests.add(userStatus!.questId);
 
                 if (settings.store.notifyOnQuestComplete) {
-                    notifyQuestCompletion(QuestStore.getQuest(userStatus.questId));
+                    notifyQuestCompletion(QuestStore.getQuest(userStatus!.questId));
                 }
 
                 if (settings.store.questCompletedAlertSound) {

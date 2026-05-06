@@ -1,3 +1,5 @@
+/* Miscellaneous */
+
 /* Fix to overwrite bad CSS in callTimer/alignedChatInputFix.css */
 [class*="panels"] [class*="questProgressWrapper"] [class*="outer"] > [class*="inner"] {
     height: 100% !important;
@@ -11,6 +13,12 @@
 /* Fix oversized confetti blocking Quest buttons. */
 [class*="rewardDescriptionContainer"] [class*="progressWrapper"] > [class*="confetti"] {
     pointer-events: none;
+}
+
+/* Fix Questify button text clipping. */
+.questify-quest-item-restyle button [class*="buttonChildren"],
+.questify-quest-item-restyle button span {
+    overflow: visible;
 }
 
 /* Settings */
