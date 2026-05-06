@@ -50,9 +50,9 @@ export function SetAvatarModal({ userId, modalProps }: { userId: string; modalPr
     async function handleFile(file: File) {
         if (!file.type.startsWith("image/")) return;
 
-        if (file.type === "image/gif" && file.size > 2 * 1024 * 1024) {
+        if (file.type === "image/gif" || file.type === "image/webp") {
             Toasts.show({
-                message: "GIF too large! Maximum size is 2MB. For larger GIFs, use a URL instead (image hosting service).",
+                message: "GIFs/WebP must be added via URL. Upload your GIF/WebP to a image hosting service and paste the link.",
                 type: Toasts.Type.FAILURE,
                 id: Toasts.genId(),
             });
@@ -130,11 +130,11 @@ export function SetAvatarModal({ userId, modalProps }: { userId: string; modalPr
                     }}
                     onClick={() => fileInputRef.current?.click()}
                 >
-                    {isDragging ? "Drop here!" : "⬆ Drag a file or click to upload"}
+                    {isDragging ? "Drop here!" : "⬆ Drag an image or click to upload (for GIFs or WebP use a URL instead)"}
                     <input
                         ref={fileInputRef}
                         type="file"
-                        accept="image/*"
+                        accept="image/png,image/jpeg"
                         style={{ display: "none" }}
                         onChange={e => {
                             const file = e.currentTarget.files?.[0];

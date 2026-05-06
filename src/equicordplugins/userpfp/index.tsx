@@ -66,7 +66,7 @@ export default definePlugin({
     name: "UserPFP",
     description: "Allows you to use an animated avatar without Nitro",
     tags: ["Appearance", "Customisation", "Servers"],
-    authors: [EquicordDevs.nexpid, Devs.thororen, EquicordDevs.soapphia],
+    authors: [EquicordDevs.nexpid, Devs.thororen, EquicordDevs.soapphia, EquicordDevs.sketchmyname],
     settings,
     data,
     settingsAboutComponent: () => (
@@ -134,13 +134,16 @@ export default definePlugin({
 
         if (avatarUrl.startsWith("data:")) return avatarUrl;
 
-        const res = new URL(data.avatars[user.id]);
-        res.searchParams.set("animated", animated ? "true" : "false");
-        if (res && !animated) {
-            res.pathname = res.pathname.replaceAll(/\.gifv?/g, ".png");
+        try {
+            const res = new URL(avatarUrl);
+            res.searchParams.set("animated", animated ? "true" : "false");
+            if (!animated) {
+                res.pathname = res.pathname.replaceAll(/\.gifv?/g, ".png");
+            }
+            return res.toString();
+        } catch {
+            return original(user, animated, size);
         }
-
-        return res.toString();
     },
     getAvatarServerHook: (original: any) => (config: any) => {
         const { userId, avatar, size, canAnimate } = config;
