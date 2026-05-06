@@ -42,11 +42,11 @@ interface QuestCTAConstants {
 }
 
 interface QuestButtonAnalyticsArgs {
-    taskType: QuestTaskType;
-    analyticsCtxQuestContent: QuestEnrollmentMetadata["questContent"];
-    analyticsCtxSourceQuestContent: QuestEnrollmentMetadata["sourceQuestContent"];
-    analyticsCtxQuestContentPosition: QuestEnrollmentMetadata["questContentPosition"];
-    analyticsCtxQuestContentRowIndex: QuestEnrollmentMetadata["questContentRowIndex"];
+    taskType?: QuestTaskType;
+    analyticsCtxQuestContent?: QuestEnrollmentMetadata["questContent"];
+    analyticsCtxSourceQuestContent?: QuestEnrollmentMetadata["sourceQuestContent"];
+    analyticsCtxQuestContentPosition?: QuestEnrollmentMetadata["questContentPosition"];
+    analyticsCtxQuestContentRowIndex?: QuestEnrollmentMetadata["questContentRowIndex"];
 }
 
 export interface QuestButtonPropsArgs extends Partial<QuestButtonAnalyticsArgs> {
@@ -92,16 +92,8 @@ export const enrollInQuest = findByCodeLazy('type:"QUESTS_ENROLL_BEGIN",') as (q
 
 const QuestCTA = findLazy(m => !!m?.START_QUEST && !!m?.ACCEPT_QUEST) as QuestCTAConstants;
 
-function resolveQuestCTA(taskType: QuestTaskType): string {
-    return [QuestTaskType.ACHIEVEMENT_IN_ACTIVITY, QuestTaskType.PLAY_ACTIVITY, QuestTaskType.WATCH_VIDEO].includes(taskType) ? QuestCTA.START_QUEST : QuestCTA.ACCEPT_QUEST;
-}
-
-function hasQuestButtonAnalyticsArgs(args: QuestButtonPropsArgs): args is QuestButtonPropsArgs & QuestButtonAnalyticsArgs {
-    return args.taskType !== undefined
-        && args.analyticsCtxQuestContent !== undefined
-        && args.analyticsCtxSourceQuestContent !== undefined
-        && args.analyticsCtxQuestContentPosition !== undefined
-        && args.analyticsCtxQuestContentRowIndex !== undefined;
+function resolveQuestCTA(taskType?: QuestTaskType): string | undefined {
+    return !taskType ? undefined : [QuestTaskType.ACHIEVEMENT_IN_ACTIVITY, QuestTaskType.PLAY_ACTIVITY, QuestTaskType.WATCH_VIDEO].includes(taskType) ? QuestCTA.START_QUEST : QuestCTA.ACCEPT_QUEST;
 }
 
 export function makeEnrollmentData(args: QuestButtonAnalyticsArgs): QuestEnrollmentMetadata {
@@ -482,12 +474,6 @@ export function getQuestButtonProps(args: QuestButtonPropsArgs): QuestButtonPatc
         text: label,
         onClick: async () => {
             if (completionState === QuestCompletionState.Unenrolled) {
-                if (!hasQuestButtonAnalyticsArgs(args)) {
-                    showToast(`Enrollment in ${normalizeQuestName(args.quest)} Quest failed.`, Toasts.Type.FAILURE);
-
-                    return;
-                }
-
                 args.preClickCallback?.();
                 const enrollment = await enrollInQuest(args.quest.id, makeEnrollmentData(args));
 
