@@ -9,9 +9,9 @@ import { Button } from "@components/Button";
 import { Flex } from "@components/Flex";
 import { Heading } from "@components/Heading";
 import { Margins } from "@components/margins";
-import { ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot } from "@utils/modal";
 import { classNameFactory } from "@utils/css";
-import { React, TextInput, Toasts, UserStore, useState } from "@webpack/common";
+import { ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot } from "@utils/modal";
+import { IconUtils, React, TextInput, Toasts, UserStore, useState } from "@webpack/common";
 
 import { data, KEY_DATASTORE } from ".";
 
@@ -29,9 +29,7 @@ function fileToDataUrl(file: File): Promise<string> {
 export function SetAvatarModal({ userId, modalProps }: { userId: string; modalProps: ModalProps; }) {
     const { avatars } = data;
     const user = UserStore.getUser(userId);
-
-    const avatarHash = (user as any)?.avatar ?? "";
-    const originalAvatar = `https://cdn.discordapp.com/avatars/${userId}/${avatarHash}.webp?size=128`;
+    const originalAvatar = IconUtils.getUserAvatarURL(user, true, 128) || "";
 
     const [url, setUrl] = useState(avatars[userId] || "");
     const [preview, setPreview] = useState<string>(avatars[userId] || "");
