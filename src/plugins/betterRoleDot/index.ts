@@ -33,7 +33,7 @@ const settings = definePluginSettings({
         description: "Allow click on role dot in profile popout to copy role color",
         restartNeeded: true,
         default: false
-    },
+    }
 });
 
 export default definePlugin({

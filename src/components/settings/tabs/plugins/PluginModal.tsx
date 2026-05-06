@@ -19,6 +19,7 @@
 import "./PluginModal.css";
 
 import { generateId } from "@api/Commands";
+import { hasAnyVisibleSettings, isSettingHidden } from "@api/PluginManager";
 import { useSettings } from "@api/Settings";
 import { BaseText } from "@components/BaseText";
 import { Button } from "@components/Button";
@@ -86,7 +87,7 @@ function PluginTags({ tags }: { tags: PluginTag[]; }) {
 
 export default function PluginModal({ plugin, onRestartNeeded, onClose, transitionState }: PluginModalProps) {
     const pluginSettings = useSettings([`plugins.${plugin.name}.*`]).plugins[plugin.name];
-    const hasSettings = Boolean(pluginSettings && plugin.options && !isObjectEmpty(plugin.options));
+    const hasSettings = hasAnyVisibleSettings(plugin);
 
     // avoid layout shift by showing dummy users while loading users
     const fallbackAuthors = useMemo(() => [makeDummyUser({ username: "Loading...", id: "-1465912127305809920" })], []);
@@ -114,14 +115,17 @@ export default function PluginModal({ plugin, onRestartNeeded, onClose, transiti
     }
 
     function renderSettings() {
-        if (!hasSettings || !plugin.options)
+        const { settings } = plugin;
+        if (!hasSettings || !settings)
             return <Paragraph>There are no settings for this plugin.</Paragraph>;
 
-        const options = Object.entries(plugin.options).map(([key, setting]) => {
-            if (setting.type === OptionType.CUSTOM || setting.hidden) return null;
+        const options = Object.entries(settings.def).map(([key, setting]) => {
+            if (setting.type === OptionType.CUSTOM) return null;
+
+            if (isSettingHidden(settings, setting)) return null;
 
             function onChange(newValue: any) {
-                const option = plugin.options?.[key];
+                const option = plugin.settings!.def[key];
                 if (!option || option.type === OptionType.CUSTOM) return;
 
                 pluginSettings[key] = newValue;
@@ -134,10 +138,10 @@ export default function PluginModal({ plugin, onRestartNeeded, onClose, transiti
                 <ErrorBoundary noop key={key}>
                     <Component
                         id={key}
-                        option={setting}
+                        setting={setting}
                         onChange={debounce(onChange)}
                         pluginSettings={pluginSettings}
-                        definedSettings={plugin.settings}
+                        definedSettings={settings}
                     />
                 </ErrorBoundary>
             );
