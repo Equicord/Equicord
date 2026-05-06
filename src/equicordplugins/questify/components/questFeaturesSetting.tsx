@@ -14,6 +14,7 @@ import { ManaButton, type ManaSelectOption, SettingsCard, SettingsDescription, S
 
 type QuestDisableSettingKey =
     | "disableAccountPanelPromo"
+    | "disableAccountPanelQuestProgress"
     | "disableFriendsListPromo"
     | "disableMembersListPromo"
     | "disableOrbsAndQuestsBadges"
@@ -51,6 +52,10 @@ const disableFeatureOptions = [
     {
         key: "disableAccountPanelPromo",
         label: "Account Panel Promo",
+    },
+    {
+        key: "disableAccountPanelQuestProgress",
+        label: "Account Panel Progress",
     },
     {
         key: "disableOrbsAndQuestsBadges",
@@ -121,6 +126,7 @@ export function QuestFeaturesSetting(): JSX.Element {
         "disableFriendsListPromo",
         "disableMembersListPromo",
         "disableAccountPanelPromo",
+        "disableAccountPanelQuestProgress",
         "disableOrbsAndQuestsBadges",
         "resumeInterruptedQuests",
         "allowChangingDangerousSettings",
@@ -239,7 +245,7 @@ export function QuestFeaturesSetting(): JSX.Element {
                 options={disableManaOptions}
                 value={selectedDisableValues}
                 closeOnSelect={false}
-                maxOptionsVisible={6}
+                maxOptionsVisible={7}
                 selectionMode="multiple"
                 disabled={questFeatures.disableQuestsEverything}
                 onSelectionChange={updateDisableValue}
@@ -249,7 +255,8 @@ export function QuestFeaturesSetting(): JSX.Element {
                         + "\n\nRelocation Notices are indicators such as in the Discovery page about Quests moving to DMs."
                         + "\n\nFriends List Promo is a card that displays on the \"Active Now\" section of your Friends List while a user you share a server with is playing a game with an active Quest."
                         + "\n\nMembers List Promo is an icon that displays on members in a server's Members List while they are playing a game with an active Quest."
-                        + "\n\nAccount Panel Promo is a paid-for Quest promotion that appears above your user account panel. Completed Quests prompting you to claim the reward will still show here."
+                        + "\n\nAccount Panel Promo is a paid-for Quest promotion that appears above your user account panel."
+                        + "\n\nAccount Panel Progress is the active or completed Quest progress shown above your user account panel."
                         + "\n\nQuest & Orbs Badges are badges on user profiles for when someone has completed at least one Quest or bought the Orbs badge respectively."
                 }}
             />

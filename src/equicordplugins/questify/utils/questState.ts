@@ -208,19 +208,23 @@ function getMostRecentlyCompletedUnclaimedQuest(): Quest | null {
 }
 
 export function getQuestPanelOverride(quest: Quest | null): Quest | null {
-    const panelState = settings.use(["disableQuestsEverything", "disableAccountPanelPromo"]);
+    const panelState = settings.use(["disableQuestsEverything", "disableAccountPanelPromo", "disableAccountPanelQuestProgress"]);
 
     if (panelState.disableQuestsEverything) {
         return null;
     }
 
-    const nextQuest = getAutoCompleteShowcaseQuest() ?? getMostRecentlyCompletedUnclaimedQuest();
-
-    if (nextQuest) {
-        return nextQuest;
+    if (panelState.disableAccountPanelPromo && panelState.disableAccountPanelQuestProgress) {
+        return null;
     }
 
-    return panelState.disableAccountPanelPromo ? null : quest;
+    if (panelState.disableAccountPanelQuestProgress) {
+        return quest;
+    }
+
+    const nextQuest = getAutoCompleteShowcaseQuest() ?? getMostRecentlyCompletedUnclaimedQuest();
+
+    return nextQuest ?? (panelState.disableAccountPanelPromo ? null : quest);
 }
 
 export function getQuestPanelPercentComplete({

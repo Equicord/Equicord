@@ -232,12 +232,12 @@ export default definePlugin({
             ]
         },
         {
-            // Hides the new Quest popup above the account panel for
-            // promotions while still allowing in-progress Quests to show.
+            // Overrides the account panel Quest popup and progress display.
             find: "QUESTS_BAR,questId",
+            predicate: () => settings.store.disableAccountPanelPromo || !settings.store.disableAccountPanelQuestProgress,
             replacement: {
-                match: /(?<=function\(\){let (\i)=\(0,\i.\i\)\(\);)/,
-                replace: "$1=$self.getQuestPanelOverride($1);"
+                match: /(?<=function\(\){)(let (\i)=\(0,\i.\i\)\(\);)/,
+                replace: "void $self.useQuestRerender();$1$2=$self.getQuestPanelOverride($2);"
             }
         },
         {

@@ -40,6 +40,7 @@ export const defaultDisableQuestsEverything = false;
 export const defaultDisableRelocationNotices = true;
 export const defaultDisableSponsoredBanner = false;
 export const defaultDisableAccountPanelPromo = true;
+export const defaultDisableAccountPanelQuestProgress = false;
 export const defaultDisableOrbsAndQuestsBadges = false;
 export const defaultDisableFriendsListPromo = true;
 export const defaultDisableMembersListPromo = true;

@@ -439,13 +439,17 @@ export function getQuestCompletionState(quest: Quest, options: QuestButtonTextOp
         return [`Queued (${getQueuedAutoCompletePosition(quest.id) ?? "?"})`, QuestCompletionState.Queued];
     }
 
-    if (enrolledAt && progress >= 1) {
+    if (enrolledAt) {
+        if (isQuestQueuedForResume(quest.id)) {
+            return ["Resuming...", QuestCompletionState.Queued];
+        }
+
+        const meaningfulProgress = progress >= 1;
+
         return [
-            immediate ? "Complete Now" : `Resume (${formatQuestTime(timeRemaining)})`,
+            immediate ? "Complete Now" : `${meaningfulProgress ? "Resume" : "Complete"} (${formatQuestTime(timeRemaining)})`,
             QuestCompletionState.Accepted,
         ];
-    } else if (isQuestQueuedForResume(quest.id)) {
-        return ["Resuming...", QuestCompletionState.Queued];
     }
 
     return [
