@@ -26,6 +26,17 @@ import definePlugin, { OptionType } from "@utils/types";
 import { CustomEmoji, Message, ReactionEmoji, User } from "@vencord/discord-types";
 import { ChannelStore, Constants, FluxDispatcher, React, RestAPI, useEffect, useLayoutEffect, UserStore, UserSummaryItem } from "@webpack/common";
 
+interface ReactionCacheEntry {
+    fetched: boolean;
+    users: Map<string, User>;
+}
+
+interface ReactionProps {
+    message: Message;
+    emoji: CustomEmoji;
+    type: number;
+}
+
 let Scroll: any = null;
 const queue = new Queue();
 let reactions: Record<string, ReactionCacheEntry> = {};
@@ -76,6 +87,46 @@ function handleClickAvatar(event: React.UIEvent<HTMLElement, Event>) {
     event.stopPropagation();
 }
 
+function ReactionUsers({ message, emoji, type }: ReactionProps) {
+    const forceUpdate = useForceUpdater();
+
+    useLayoutEffect(() => { // bc need to prevent autoscrolling
+        if (Scroll?.scrollCounter > 0) {
+            Scroll.setAutomaticAnchor(null);
+        }
+    });
+
+    useEffect(() => {
+        const cb = (e: any) => {
+            if (e?.messageId === message.id)
+                forceUpdate();
+        };
+        FluxDispatcher.subscribe("MESSAGE_REACTION_ADD_USERS", cb);
+
+        return () => FluxDispatcher.unsubscribe("MESSAGE_REACTION_ADD_USERS", cb);
+    }, [message.id, forceUpdate]);
+
+    const reactions = getReactionsWithQueue(message, emoji, type);
+    const users = Array.from(reactions, ([id]) => UserStore.getUser(id)).filter(Boolean);
+
+    return (
+        <div
+            style={{ marginLeft: "0.5em", transform: "scale(0.9)" }}
+        >
+            <div onClick={handleClickAvatar} onKeyDown={handleClickAvatar}>
+                <UserSummaryItem
+                    users={users}
+                    guildId={ChannelStore.getChannel(message.channel_id)?.guild_id}
+                    renderIcon={false}
+                    max={5}
+                    showDefaultAvatarsForNullUsers
+                    showUserPopout
+                />
+            </div>
+        </div>
+    );
+}
+
 const settings = definePluginSettings({
     avatarClick: {
         description: "Toggle clicking avatars in reactions",
@@ -117,10 +168,17 @@ export default definePlugin({
         }
     ],
 
+    renderUsers: ErrorBoundary.wrap((props: ReactionProps) => {
+        return props.message.reactions.length > 10
+            ? null
+            : <ReactionUsers {...props} />;
+    }, { noop: true }),
+
     setScrollObj(scroll: any) {
         Scroll = scroll;
     },
 
+<<<<<<< plugin/voicestats
     renderUsers(props: RootObject) {
         if (!props?.message || props.hideCount) return null;
         return props.message.reactions.length > 10 ? null : (
@@ -174,10 +232,13 @@ export default definePlugin({
         );
     },
 
+=======
+>>>>>>> dev
     set reactions(value: any) {
         reactions = value;
     }
 });
+<<<<<<< plugin/voicestats
 
 interface ReactionCacheEntry {
     fetched: boolean;
@@ -202,3 +263,5 @@ interface RootObject {
     hideEmoji: boolean;
     remainingBurstCurrency: number;
 }
+=======
+>>>>>>> dev

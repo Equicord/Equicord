@@ -285,13 +285,67 @@ function SettingTextInput(props: {
     const { description, name, onChange, placeholder, value } = props;
 
     return (
-        <SettingsSection name={name} description={description}>
+        <SettingsSection name={name} description={description ?? ""}>
             <TextInput
                 value={value}
                 onChange={onChange}
                 placeholder={placeholder}
             />
         </SettingsSection>
+    );
+}
+
+function SettingGroup(props: {
+    children: React.ReactNode;
+    description?: string;
+    name: string;
+}) {
+    const { children, description, name } = props;
+
+    return (
+        <SettingsSection name={name} description={description ?? ""}>
+            <div className={cl("group")}>
+                {children}
+            </div>
+        </SettingsSection>
+    );
+}
+
+function SettingSwitch(props: {
+    checked: boolean;
+    description: string;
+    name: string;
+    onChange: (value: boolean) => void;
+}) {
+    const { checked, description, name, onChange } = props;
+
+    return (
+        <SettingsSection tag="label" name={name} description={description} inlineSetting>
+            <Switch checked={checked} onChange={onChange} />
+        </SettingsSection>
+    );
+}
+
+function ServicePicker(props: {
+    onChange: (service: ServiceType) => void;
+    value: ServiceType;
+}) {
+    const { onChange, value } = props;
+
+    return (
+        <div className={cl("service-grid")}>
+            {serviceOptions.map(option => (
+                <button
+                    key={option.value}
+                    type="button"
+                    className={cl("service-option")}
+                    data-selected={option.value === value}
+                    onClick={() => onChange(option.value)}
+                >
+                    <span className={cl("service-option-label")}>{option.label}</span>
+                </button>
+            ))}
+        </div>
     );
 }
 
@@ -413,21 +467,18 @@ export function SettingsComponent() {
 
     return (
         <>
-            <SettingsSection name="Service Type" description="The upload service to use">
-                <Select
-                    options={serviceOptions}
-                    isSelected={v => v === store.serviceType}
-                    select={v => {
-                        store.serviceType = v;
+            <SettingsSection name="Upload Service" description="Choose where FileUpload sends new files.">
+                <ServicePicker
+                    value={store.serviceType as ServiceType}
+                    onChange={service => {
+                        store.serviceType = service;
                         update();
                     }}
-                    serialize={v => v}
-                    placeholder="Select a service"
                 />
             </SettingsSection>
 
             {isZipline && (
-                <>
+                <SettingGroup name="Zipline" description="Connection details for your Zipline instance.">
                     <SettingTextInput
                         name="Service URL"
                         description="The URL of your Zipline instance"
@@ -449,31 +500,35 @@ export function SettingsComponent() {
                         onChange={v => store.folderId = v}
                         placeholder="Leave empty for no folder"
                     />
-                </>
+                </SettingGroup>
             )}
 
             {isEzHost && (
-                <SettingTextInput
-                    name="E-Z Host API Key"
-                    description="Your E-Z Host API key"
-                    value={store.ezHostKey}
-                    onChange={v => store.ezHostKey = v}
-                    placeholder="Your E-Z Host API key"
-                />
+                <SettingGroup name="E-Z Host" description="Connection details for E-Z Host uploads.">
+                    <SettingTextInput
+                        name="E-Z Host API Key"
+                        description="Your E-Z Host API key"
+                        value={store.ezHostKey}
+                        onChange={v => store.ezHostKey = v}
+                        placeholder="Your E-Z Host API key"
+                    />
+                </SettingGroup>
             )}
 
             {isNest && (
-                <SettingTextInput
-                    name="Nest Token"
-                    description="Your Nest API authorization token"
-                    value={store.nestToken}
-                    onChange={v => store.nestToken = v}
-                    placeholder="Your Nest API token"
-                />
+                <SettingGroup name="Nest" description="Connection details for Nest uploads.">
+                    <SettingTextInput
+                        name="Nest Token"
+                        description="Your Nest API authorization token"
+                        value={store.nestToken}
+                        onChange={v => store.nestToken = v}
+                        placeholder="Your Nest API token"
+                    />
+                </SettingGroup>
             )}
 
             {isS3 && (
-                <>
+                <SettingGroup name="S3-Compatible Storage" description="Connection details and object naming for your bucket.">
                     <SettingTextInput
                         name="S3 Endpoint URL"
                         description="S3-compatible endpoint (e.g. https://<accountid>.r2.cloudflarestorage.com)"
@@ -530,23 +585,25 @@ export function SettingsComponent() {
                         onChange={v => store.s3Prefix = v}
                         placeholder="uploads/discord"
                     />
-                    <SettingsSection tag="label" name="Use Path-Style Endpoint" description="Use endpoint/bucket/key format (recommended for R2)" inlineSetting>
-                        <Switch
-                            checked={store.s3ForcePathStyle}
-                            onChange={v => store.s3ForcePathStyle = v}
-                        />
-                    </SettingsSection>
-                </>
+                    <SettingSwitch
+                        name="Use Path-Style Endpoint"
+                        description="Use endpoint/bucket/key format, recommended for R2."
+                        checked={store.s3ForcePathStyle}
+                        onChange={v => store.s3ForcePathStyle = v}
+                    />
+                </SettingGroup>
             )}
 
             {isCatbox && (
-                <SettingTextInput
-                    name="Catbox Userhash"
-                    description="Your Catbox userhash for account binding (leave empty for anonymous uploads)"
-                    value={store.catboxUserhash}
-                    onChange={v => store.catboxUserhash = v}
-                    placeholder="Your Catbox userhash"
-                />
+                <SettingGroup name="Catbox" description="Optional account binding for Catbox uploads.">
+                    <SettingTextInput
+                        name="Catbox Userhash"
+                        description="Your Catbox userhash for account binding, leave empty for anonymous uploads."
+                        value={store.catboxUserhash}
+                        onChange={v => store.catboxUserhash = v}
+                        placeholder="Your Catbox userhash"
+                    />
+                </SettingGroup>
             )}
 
             {isLitterbox && (
@@ -565,37 +622,43 @@ export function SettingsComponent() {
             )}
 
             {isGofile && (
-                <SettingTextInput
-                    name="GoFile Token"
-                    description="Optional GoFile token to upload into your account"
-                    value={store.gofileToken}
-                    onChange={v => store.gofileToken = v}
-                    placeholder="Optional GoFile token"
-                />
+                <SettingGroup name="GoFile" description="Optional account binding for GoFile uploads.">
+                    <SettingTextInput
+                        name="GoFile Token"
+                        description="Optional GoFile token to upload into your account."
+                        value={store.gofileToken}
+                        onChange={v => store.gofileToken = v}
+                        placeholder="Optional GoFile token"
+                    />
+                </SettingGroup>
             )}
 
             {isPixelVault && (
-                <SettingTextInput
-                    name="PixelVault Upload Key"
-                    description="Your PixelVault authorization key"
-                    value={store.pixelVaultKey}
-                    onChange={v => store.pixelVaultKey = v}
-                    placeholder="Your PixelVault upload key"
-                />
+                <SettingGroup name="PixelVault" description="Connection details for PixelVault uploads.">
+                    <SettingTextInput
+                        name="PixelVault Upload Key"
+                        description="Your PixelVault authorization key."
+                        value={store.pixelVaultKey}
+                        onChange={v => store.pixelVaultKey = v}
+                        placeholder="Your PixelVault upload key"
+                    />
+                </SettingGroup>
             )}
 
             {isPixelDrain && (
-                <SettingTextInput
-                    name="PixelDrain API Key"
-                    description="Optional PixelDrain API key for authenticated uploads. Leave empty for anonymous uploads."
-                    value={store.pixelDrainKey}
-                    onChange={v => store.pixelDrainKey = v}
-                    placeholder="Your PixelDrain API key"
-                />
+                <SettingGroup name="PixelDrain" description="Optional account binding for PixelDrain uploads.">
+                    <SettingTextInput
+                        name="PixelDrain API Key"
+                        description="Optional PixelDrain API key for authenticated uploads. Leave empty for anonymous uploads."
+                        value={store.pixelDrainKey}
+                        onChange={v => store.pixelDrainKey = v}
+                        placeholder="Your PixelDrain API key"
+                    />
+                </SettingGroup>
             )}
 
             {isShareX && (
-                <>
+                <SettingGroup name="ShareX Custom Uploader" description="Paste, import, or validate a ShareX custom uploader config.">
                     <SettingsSection
                         name="ShareX Custom Uploader Config"
                         description="Paste your ShareX custom uploader JSON (.sxcu/.json). DestinationType must include FileUploader or ImageUploader."
@@ -608,7 +671,7 @@ export function SettingsComponent() {
                         />
                     </SettingsSection>
                     <SettingsSection name="ShareX Config Actions" description="Import from file or validate pasted config">
-                        <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+                        <div className={cl("actions")}>
                             <Button size="small" onClick={triggerShareXFileUpload}>Import .sxcu/.json</Button>
                             <Button size="small" onClick={validateShareXConfig}>Validate</Button>
                         </div>
@@ -620,134 +683,140 @@ export function SettingsComponent() {
                             onChange={handleShareXFileUpload}
                         />
                     </SettingsSection>
-                </>
+                </SettingGroup>
             )}
 
-            <SettingsSection tag="label" name="Strip Query Parameters" description="Strip query parameters from the uploaded file URL" inlineSetting>
-                <Switch
+            <SettingGroup name="Upload Behavior" description="Control what FileUpload does after a host returns a URL.">
+                <SettingSwitch
+                    name="Strip Query Parameters"
+                    description="Strip query parameters from the uploaded file URL."
                     checked={store.stripQueryParams}
                     onChange={v => store.stripQueryParams = v}
                 />
-            </SettingsSection>
 
-            <SettingsSection tag="label" name="Use Embed Proxy" description="Wrap uploaded video links with an embed proxy service for better Discord previews" inlineSetting>
-                <Switch
+                <SettingSwitch
+                    name="Use Embed Proxy"
+                    description="Wrap uploaded video links with an embed proxy service for better Discord previews."
                     checked={store.embedProxyEnabled}
                     onChange={v => {
                         store.embedProxyEnabled = v;
                         update();
                     }}
                 />
-            </SettingsSection>
 
-            {store.embedProxyEnabled && (
-                <SettingsSection name="Embed Proxy Service" description="Choose which embed proxy service to use for uploaded video links">
-                    <Select
-                        options={embedProxyOptions}
-                        isSelected={v => v === store.embedProxyService}
-                        select={v => {
-                            store.embedProxyService = v;
-                            update();
-                        }}
-                        serialize={v => v}
-                        placeholder="Select an embed proxy service"
-                    />
-                </SettingsSection>
-            )}
+                {store.embedProxyEnabled && (
+                    <SettingsSection name="Embed Proxy Service" description="Choose which embed proxy service to use for uploaded video links">
+                        <Select
+                            options={embedProxyOptions}
+                            isSelected={v => v === store.embedProxyService}
+                            select={v => {
+                                store.embedProxyService = v;
+                                update();
+                            }}
+                            serialize={v => v}
+                            placeholder="Select an embed proxy service"
+                        />
+                    </SettingsSection>
+                )}
 
-            <SettingTextInput
-                name="CORS Proxy URL"
-                description="CORS proxy used for web uploads. Leave empty to use the default proxy"
-                value={store.corsProxyUrl || ""}
-                onChange={v => store.corsProxyUrl = v}
-                placeholder="https://your-cors-proxy.example.com"
-            />
-
-            <SettingsSection name="Default CORS Proxy Source" description="Source code for the default CORS proxy">
-                <a href="https://codeberg.org/key/corsproxy" target="_blank" rel="noreferrer">codeberg.org/key/corsproxy</a>
-            </SettingsSection>
-
-            <SettingsSection tag="label" name="Convert APNG to GIF" description="Convert APNG files to GIF format" inlineSetting>
-                <Switch
+                <SettingSwitch
+                    name="Convert APNG to GIF"
+                    description="Convert APNG files to GIF format."
                     checked={store.apngToGif}
                     onChange={v => store.apngToGif = v}
                 />
-            </SettingsSection>
 
-            <SettingsSection tag="label" name="Preserve Original Filename" description="Use the original filename instead of naming uploads as upload.ext" inlineSetting>
-                <Switch
+                <SettingSwitch
+                    name="Preserve Original Filename"
+                    description="Use the original filename instead of naming uploads as upload.ext."
                     checked={Boolean((store as { preserveOriginalFilename?: boolean; }).preserveOriginalFilename)}
                     onChange={v => (store as { preserveOriginalFilename?: boolean; }).preserveOriginalFilename = v}
                 />
-            </SettingsSection>
 
-            <SettingsSection tag="label" name="Auto Copy URL" description="Automatically copy the uploaded file URL to clipboard" inlineSetting>
-                <Switch
+                <SettingSwitch
+                    name="Auto Copy URL"
+                    description="Automatically copy the uploaded file URL to clipboard."
                     checked={store.autoCopy}
                     onChange={v => store.autoCopy = v}
                 />
-            </SettingsSection>
 
-            <SettingsSection tag="label" name="Disable Fallback Uploaders" description="Only use the selected uploader without trying fallback hosts" inlineSetting>
-                <Switch
+                <SettingSwitch
+                    name="Disable Fallback Uploaders"
+                    description="Only use the selected uploader without trying fallback hosts."
                     checked={store.disableFallbacks}
                     onChange={v => store.disableFallbacks = v}
                 />
-            </SettingsSection>
 
-            <SettingsSection tag="label" name="Insert URL into Chat Input" description="After upload, insert the resulting URL into the current chat input" inlineSetting>
-                <Switch
+                <SettingSwitch
+                    name="Insert URL into Chat Input"
+                    description="After upload, insert the resulting URL into the current chat input."
                     checked={store.autoSend}
                     onChange={v => store.autoSend = v}
                 />
-            </SettingsSection>
 
-            <SettingsSection tag="label" name="Format Inserted URL" description="Wrap inserted URLs in angle brackets to avoid Discord preview embedding" inlineSetting>
-                <Switch
+                <SettingSwitch
+                    name="Format Inserted URL"
+                    description="Wrap inserted URLs in angle brackets to avoid Discord preview embedding."
                     checked={store.autoFormat}
                     onChange={v => store.autoFormat = v}
                 />
-            </SettingsSection>
+            </SettingGroup>
 
-            <SettingsSection tag="label" name="Bypass Discord Upload Button" description="Use FileUpload when uploading through Discord's file picker" inlineSetting>
-                <Switch
+            <SettingGroup name="Discord Integration" description="Choose when FileUpload takes over Discord file handling.">
+                <SettingSwitch
+                    name="Bypass Discord Upload Button"
+                    description="Use FileUpload when uploading through Discord's file picker."
                     checked={Boolean((store as { bypassDiscordUpload?: boolean; }).bypassDiscordUpload)}
                     onChange={v => (store as { bypassDiscordUpload?: boolean; }).bypassDiscordUpload = v}
                 />
-            </SettingsSection>
 
-            <SettingsSection tag="label" name="Auto Upload Pasted Files" description="Automatically upload files from clipboard to image host when pasting in chat input" inlineSetting>
-                <Switch
+                <SettingSwitch
+                    name="Auto Upload Pasted Files"
+                    description="Automatically upload files from clipboard to image host when pasting in chat input."
                     checked={store.autoUploadPastedFiles}
                     onChange={v => store.autoUploadPastedFiles = v}
                 />
-            </SettingsSection>
 
-            <SettingsSection tag="label" name="Respect Discord File Size Limit" description="Use FileUpload only for files larger than your current Discord upload limit" inlineSetting>
-                <Switch
+                <SettingSwitch
+                    name="Respect Discord File Size Limit"
+                    description="Use FileUpload only for files larger than your current Discord upload limit."
                     checked={store.bypassDiscordUploadOnlyOverLimit}
                     onChange={v => store.bypassDiscordUploadOnlyOverLimit = v}
                 />
-            </SettingsSection>
+            </SettingGroup>
 
-            <SettingsSection name="Upload Timeout" description="Maximum time to wait per upload attempt before switching to fallback">
-                <Select
-                    options={[
-                        { label: "30 seconds", value: 30000 },
-                        { label: "1 minute", value: 60000 },
-                        { label: "2 minutes", value: 120000 },
-                        { label: "5 minutes", value: 300000, default: true },
-                        { label: "10 minutes", value: 600000 }
-                    ]}
-                    isSelected={v => v === (store.uploadTimeoutMs || 300000)}
-                    select={v => {
-                        store.uploadTimeoutMs = v;
-                        update();
-                    }}
-                    serialize={v => v}
-                    placeholder="Select timeout"
+            <SettingGroup name="Network" description="Configure browser upload proxying and timeouts.">
+                <SettingTextInput
+                    name="CORS Proxy URL"
+                    description="CORS proxy used for web uploads. Leave empty to use the default proxy."
+                    value={store.corsProxyUrl || ""}
+                    onChange={v => store.corsProxyUrl = v}
+                    placeholder="https://your-cors-proxy.example.com"
                 />
-            </SettingsSection>
+
+                <SettingsSection name="Default CORS Proxy Source" description="Source code for the default CORS proxy">
+                    <a href="https://codeberg.org/key/corsproxy" target="_blank" rel="noreferrer">codeberg.org/key/corsproxy</a>
+                </SettingsSection>
+
+                <SettingsSection name="Upload Timeout" description="Maximum time to wait per upload attempt before switching to fallback">
+                    <Select
+                        options={[
+                            { label: "30 seconds", value: 30000 },
+                            { label: "1 minute", value: 60000 },
+                            { label: "2 minutes", value: 120000 },
+                            { label: "5 minutes", value: 300000, default: true },
+                            { label: "10 minutes", value: 600000 }
+                        ]}
+                        isSelected={v => v === (store.uploadTimeoutMs || 300000)}
+                        select={v => {
+                            store.uploadTimeoutMs = v;
+                            update();
+                        }}
+                        serialize={v => v}
+                        placeholder="Select timeout"
+                    />
+                </SettingsSection>
+            </SettingGroup>
 
             <FallbackOrderSettings />
         </>

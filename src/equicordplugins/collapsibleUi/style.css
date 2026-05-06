@@ -108,11 +108,12 @@ body:has(.vc-collapsible-ui-guild-bar-collapsed) nav[class*="guilds_"]:not(:is(.
 }
 
 body:has(.vc-collapsible-ui-guild-bar-collapsed) nav[class*="guilds_"]:not(:is(.vc-betterFolders-sidebar nav[class*="guilds_"])):is(:hover, :focus-within) {
-    z-index: 3;
-    transition-delay: var(--vc-cui-hover-delay)
+    z-index: 3
 }
 
 body:has(.vc-collapsible-ui-guild-bar-collapsed) nav[class*="guilds_"]:not(:is(.vc-betterFolders-sidebar nav[class*="guilds_"]), :is(:hover, :focus-within), :is(.vc-betterFolders-sidebar-grid:has(.vc-betterFolders-sidebar:is(:hover, :focus-within)) nav[class*="guilds_"])) {
+    background: var(--background-gradient-low, var(--background-base-lowest)) !important;
+    border-start-end-radius: var(--radius-sm, 8px);
     width: var(--vc-cui-collapsed-size) !important;
     inline-size: var(--vc-cui-collapsed-size) !important;
     min-width: var(--vc-cui-collapsed-size) !important;
@@ -352,7 +353,11 @@ body:has(.vc-collapsible-ui-guild-bar-collapsed) nav[class*="guilds_"]:not(:is(.
     opacity: 1;
     pointer-events: auto;
     transition: var(--vc-cui-fade-transition);
-    transition-delay: var(--vc-cui-hover-delay)
+    transition-delay: calc(var(--vc-cui-hover-delay) + var(--vc-cui-transition))
+}
+
+body:has(.vc-collapsible-ui-guild-bar-collapsed) nav[class*="guilds_"]:not(:is(.vc-betterFolders-sidebar nav[class*="guilds_"])):is(:hover, :focus-within) > [class*="unreadMentionsIndicator"] {
+    pointer-events: none
 }
 
 body:has(.vc-collapsible-ui-guild-bar-collapsed) .vc-betterFolders-sidebar-grid:not(:has(nav[class*="guilds_"]:is(:hover, :focus-within), .vc-betterFolders-sidebar:is(:hover, :focus-within))) .vc-betterFolders-sidebar > *,

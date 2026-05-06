@@ -4,6 +4,7 @@ on:
     push:
         branches:
             - "**"
+            - "!pr-**"
     workflow_dispatch:
         inputs:
             branch:
