@@ -6,12 +6,13 @@
 
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Logger } from "@utils/Logger";
+import { User } from "@vencord/discord-types";
 import { useEffect, useState } from "@webpack/common";
 import type { ReactNode } from "react";
 
 const logger = new Logger("ProfileCollectionAPI");
 
-export type ProfileCollectionFactory = (props: any) => ReactNode | null;
+export type ProfileCollectionFactory = (props: { user: User; isSideBar: boolean; }) => ReactNode | Promise<ReactNode> | null;
 
 interface CollectionEntry {
     render: ProfileCollectionFactory;
