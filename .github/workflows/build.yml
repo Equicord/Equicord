@@ -19,12 +19,12 @@ jobs:
         runs-on: ubuntu-latest
 
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v6
 
-            - uses: pnpm/action-setup@v3
+            - uses: pnpm/action-setup@v6
 
             - name: Use Node.js 24
-              uses: actions/setup-node@v4
+              uses: actions/setup-node@v6
               with:
                   node-version: 24
                   cache: "pnpm"
@@ -68,12 +68,12 @@ jobs:
                   rm release/*.map
 
             - name: Upload Equicord Stable
-              if: ${{ !vars.ACT }}
+              if: ${{ vars.ACT == 'false' }}
               run: |
                   gh release upload latest --clobber dist/release/*
 
             - name: Upload Plugin JSONs to Equibored repo
-              if: github.repository == 'Equicord/Equicord' && !vars.ACT
+              if: github.repository == 'Equicord/Equicord' && !vars.ACT == 'false'
               run: |
                   git config --global user.name "GitHub-Actions"
                   git config --global user.email actions@github.com

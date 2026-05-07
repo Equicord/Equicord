@@ -18,7 +18,12 @@ const settings = definePluginSettings({
         description: "Blur Amount (in pixels)",
         default: 10,
         onChange: setCss
-    }
+    },
+    blurAllChannels: {
+        type: OptionType.BOOLEAN,
+        description: "Blur attachments in all channels (not just NSFW)",
+        default: false
+    },
 });
 
 function setCss() {

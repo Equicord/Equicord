@@ -32,16 +32,16 @@ jobs:
         if: github.repository == 'Equicord/Equicord'
 
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v6
               with:
                   ref: ${{ github.event.inputs.branch || github.ref }}
 
-            - uses: pnpm/action-setup@v3
+            - uses: pnpm/action-setup@v6
               if: github.ref_name != 'bun'
 
             - name: Use Node.js 24
               if: github.ref_name != 'bun'
-              uses: actions/setup-node@v4
+              uses: actions/setup-node@v6
               with:
                   node-version: 24
                   cache: "pnpm"
@@ -91,7 +91,7 @@ jobs:
                   bun run generateDevsList dist/devs.json
 
             - name: Upload to Equibuilds repo
-              if: ${{ !vars.ACT }}
+              if: ${{ vars.ACT == 'false' }}
               run: |
                   BRANCH="${{ github.event.inputs.branch || github.ref_name }}"
                   COMMIT_SHA=$(git rev-parse --short HEAD)
