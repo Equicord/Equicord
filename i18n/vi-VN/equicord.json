@@ -2114,7 +2114,7 @@
         "description": "Một plugin giúp bạn trả lời các câu đố bằng AI.",
         "settings": {
             "apiKey": "Khóa API.",
-            "autoRespond": "Tự động trả lời tin nhắn khi nhận được phản hồi.",
+            "autoRespond": "Tự động trả lời tin nhắn khi nhận được phản hồi.  ”",
             "endpoint": "Điểm cuối AI tương thích OpenAI.",
             "maxTokens": "Số lượng token tối đa trong phản hồi.",
             "model": "Mô hình AI để sử dụng.",
