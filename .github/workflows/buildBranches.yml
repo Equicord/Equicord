@@ -91,6 +91,7 @@ jobs:
                   bun run generateDevsList dist/devs.json
 
             - name: Upload to Equibuilds repo
+              if: ${{ !vars.ACT }}
               run: |
                   BRANCH="${{ github.event.inputs.branch || github.ref_name }}"
                   COMMIT_SHA=$(git rev-parse --short HEAD)

@@ -69,6 +69,7 @@ jobs:
               run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
 
             - name: Upload Equicord Stable
+              if: ${{ !vars.ACT }}
               run: |
                   gh release create ${{ steps.date.outputs.date }} --latest=false
                   gh release upload ${{ steps.date.outputs.date }} --clobber dist/release/*

@@ -7,7 +7,7 @@
 import { BaseText } from "@components/BaseText";
 import { ChannelTabsProps, closeTab, ensureUnreadFallbackCountsLoaded, getNotificationDotState, getUnreadFallbackCounts, isTabSelected, moveDraggedTabs, moveToTab, openedTabs, settings, updateUnreadFallbackCounts } from "@equicordplugins/channelTabs/util";
 import { ActivityIcon, CircleQuestionIcon, DiscoveryIcon, EnvelopeIcon, FriendsIcon, ICYMIIcon, NitroIcon, QuestIcon, ShopIcon } from "@equicordplugins/channelTabs/util/icons";
-import { activeQuestIntervals } from "@equicordplugins/questify"; // sorry murphy!
+import { getActiveAutoCompletes } from "@equicordplugins/questify/utils/completion";
 import { classNameFactory } from "@utils/css";
 import { getGuildAcronym, getIntlMessage, getUniqueUsername } from "@utils/discord";
 import { classes } from "@utils/misc";
@@ -467,20 +467,19 @@ export default function ChannelTab(props: ChannelTabsProps & { index: number; })
     }), []);
     drag(drop(ref));
 
-    // check if quests running (questify momentLet)
-    const hasActiveQuests = activeQuestIntervals.size > 0;
+    const hasActiveQuests = getActiveAutoCompletes().length > 0;
     return <div
         className={cl("tab", {
-                "tab-compact": compact,
-                "tab-selected": isTabSelected(id),
-                "tab-entering": isEntering,
-                "tab-closing": isClosing,
-                "tab-dragging": isDragging,
-                "tab-drop-target": isDropTarget,
-                "tab-nitro": channelId === "__nitro__",
-                "tab-quests-active": channelId === "__quests__" && hasActiveQuests,
-                wider: settings.store.widerTabsAndBookmarks
-            })}
+            "tab-compact": compact,
+            "tab-selected": isTabSelected(id),
+            "tab-entering": isEntering,
+            "tab-closing": isClosing,
+            "tab-dragging": isDragging,
+            "tab-drop-target": isDropTarget,
+            "tab-nitro": channelId === "__nitro__",
+            "tab-quests-active": channelId === "__quests__" && hasActiveQuests,
+            wider: settings.store.widerTabsAndBookmarks
+        })}
         key={index}
         ref={ref}
         onMouseEnter={() => setIsHovered(true)}
