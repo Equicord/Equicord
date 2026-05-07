@@ -32,6 +32,12 @@
     color: var(--text-muted);
 }
 
+.vc-file-upload-progress-percent {
+    font-size: 12px;
+    color: var(--text-default);
+    white-space: nowrap;
+}
+
 .vc-file-upload-progress-cancel {
     border: none;
     border-radius: 6px;
@@ -105,4 +111,46 @@
 
 .vc-file-upload-settings-fallback-order-actions {
     margin-top: 8px;
+}
+
+.vc-file-upload-settings-group {
+    display: grid;
+    gap: 10px;
+}
+
+.vc-file-upload-settings-service-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 8px;
+}
+
+.vc-file-upload-settings-service-option {
+    min-height: 38px;
+    border: 1px solid var(--border-subtle);
+    border-radius: 8px;
+    background: var(--background-secondary);
+    color: var(--text-default);
+    cursor: pointer;
+    padding: 8px 10px;
+    text-align: left;
+}
+
+.vc-file-upload-settings-service-option:hover {
+    background: var(--background-modifier-hover);
+}
+
+.vc-file-upload-settings-service-option[data-selected="true"] {
+    border-color: var(--brand-500);
+    background: var(--background-modifier-selected);
+}
+
+.vc-file-upload-settings-service-option-label {
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.vc-file-upload-settings-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
 }

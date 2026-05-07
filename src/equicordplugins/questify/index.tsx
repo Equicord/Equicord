@@ -1517,7 +1517,7 @@ export default definePlugin({
             group: true,
             replacement: [
                 {
-                    match: /(let{party)/,
+                    match: /(let{party:\i,onChannelContextMenu)/,
                     replace: "const shouldHideFriendsListActiveNowPromotion=$self.shouldHideFriendsListActiveNowPromotion();$1"
                 },
                 {

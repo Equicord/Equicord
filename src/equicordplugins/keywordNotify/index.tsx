@@ -323,23 +323,21 @@ export default definePlugin({
     patches: [
         {
             find: "#{intl::UNREADS_TAB_LABEL})}",
+            group: true,
             replacement: [
                 {
                     match: /#{intl::Fn6Odn::raw}\)\}\):null/,
                     replace: "$&,$self.keywordTabBar()"
                 },
                 {
-                    match: /:(\i)===\i\.\i\.MENTIONS\?/,
+                    match: /:(\i)===\i\.\i\.MENTIONS\?\(0,.{0,500}null}/,
                     replace: ": $1 === 8 ? $self.keywordClearButton() $&"
+                },
+                {
+                    match: /:(\i)===\i\.\i\.MENTIONS\?\(0,.{0,500}onJump:(\i)}\)/,
+                    replace: ": $1 === 8 ? $self.tryKeywordMenu($2) $&"
                 }
             ]
-        },
-        {
-            find: /.FOR_YOU\?.{0,30}\.MENTIONS\?/,
-            replacement: {
-                match: /:(\i)===\i\.\i\.MENTIONS\?\(0,.+?onJump:(\i)}\)/,
-                replace: ": $1 === 8 ? $self.tryKeywordMenu($2) $&"
-            }
         },
         {
             find: ".guildFilter:null",

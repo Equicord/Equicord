@@ -1,151 +1,226 @@
 :root {
     /* Body */
-    --toastnotifications-background-color: var(--background-base-lower-alt);
-    --toastnotifications-text-color: var(--text-default);
-    --toastnotifications-border-radius: 6px;
-    --toastnotifications-width: 25vw;
-    --toastnotifications-padding: 1.25rem;
+    --vc-toast-notifications-background-color: var(--background-base-lower-alt);
+    --vc-toast-notifications-text-color: var(--text-default);
+    --vc-toast-notifications-border-radius: 6px;
+    --vc-toast-notifications-width: fit-content;
+    --vc-toast-notifications-min-width: 25rem;
+    --vc-toast-notifications-max-width: 50%;
+    --vc-toast-notifications-min-height: 10vh;
+    --vc-toast-notifications-max-height: 50%;
+    --vc-toast-notifications-padding: 1rem;
 
     /* Title */
-    --toastnotifications-title-color: var(--text-strong);
-    --toastnotifications-title-font-size: 1rem;
-    --toastnotifications-title-font-weight: 600;
-    --toastnotifications-title-line-height: 1.25rem;
+    --vc-toast-notifications-title-color: var(--text-strong);
+    --vc-toast-notifications-title-font-size: 1rem;
+    --vc-toast-notifications-title-font-weight: 600;
+    --vc-toast-notifications-title-line-height: 1.25rem;
 
     /* Close Button */
-    --toastnotifications-close-button-color: var(--interactive-icon-default);
-    --toastnotifications-close-button-hover-color: var(--interactive-icon-hover);
-    --toastnotifications-close-button-opacity: 0.5;
-    --toastnotifications-close-button-hover-opacity: 1;
+    --vc-toast-notifications-close-button-color: var(--interactive-icon-default);
+    --vc-toast-notifications-close-button-hover-color: var(--interactive-icon-hover);
+    --vc-toast-notifications-close-button-opacity: 0.5;
+    --vc-toast-notifications-close-button-hover-opacity: 1;
 
     /* Message Author Image */
-    --toastnotifications-image-height: 4rem;
-    --toastnotifications-image-width: var(--toastnotifications-image-height);
-    --toastnotifications-image-border-radius: 6px;
+    --vc-toast-notifications-image-height: 4rem;
+    --vc-toast-notifications-image-width: var(--vc-toast-notifications-image-height);
+    --vc-toast-notifications-image-border-radius: 6px;
 
     /* Progress Bar */
-    --toastnotifications-progressbar-height: 0.25rem;
-    --toastnotifications-progressbar-color: var(--brand-500);
+    --vc-toast-notifications-progressbar-height: 0.25rem;
+    --vc-toast-notifications-progressbar-color: var(--brand-500);
 
     /* Position Offset - Global inherited offset by all positions */
-    --toastnotifications-position-offset: 1rem;
+    --vc-toast-notifications-position-offset: 1rem;
 }
 
-.toastnotifications-notification-root {
+#vc-toast-notifications-container {
+    position: fixed;
+    z-index: 2147483647;
+    display: flex;
+    gap: 0.75rem;
+    pointer-events: none;
+    max-height: calc(100vh - var(--vc-toast-notifications-position-offset) * 2);
+}
+
+#vc-toast-notifications-container.vc-toast-notifications-position-bottom-left,
+#vc-toast-notifications-container.vc-toast-notifications-position-bottom-right {
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+#vc-toast-notifications-container.vc-toast-notifications-position-top-left,
+#vc-toast-notifications-container.vc-toast-notifications-position-top-right {
+    flex-direction: column-reverse;
+    justify-content: flex-start;
+}
+
+.vc-toast-notifications-notification-root {
     all: unset;
+    pointer-events: auto;
+    position: relative;
     display: flex;
     flex-direction: column;
-    color: var(--toastnotifications-text-color);
-    background-color: var(--toastnotifications-background-color);
-    border-radius: var(--toastnotifications-border-radius);
+    color: var(--vc-toast-notifications-text-color);
+    background-color: var(--vc-toast-notifications-background-color);
+    border-radius: var(--vc-toast-notifications-border-radius);
     overflow: hidden;
     cursor: pointer;
-    position: absolute;
-    z-index: 2147483647;
-    right: 1rem;
-    width: var(--toastnotifications-width);
-    min-height: 10vh;
-    bottom: calc(1rem + var(--notification-index) * 12vh);
+    min-width: var(--vc-toast-notifications-min-width);
+    width: var(--vc-toast-notifications-width);
+    max-width: var(--vc-toast-notifications-max-width);
+    min-height: var(--vc-toast-notifications-min-height);
+    max-height: var(--vc-toast-notifications-max-height);
+    flex-shrink: 0;
 }
 
-.toastnotifications-notification {
+.vc-toast-notifications-notification-content {
     display: flex;
-    flex-direction: row;
-    padding: var(--toastnotifications-padding);
-    gap: 1.25rem;
-}
-
-.toastnotifications-notification-content {
+    flex-direction: column;
+    padding: var(--vc-toast-notifications-padding) 0.2rem;
     width: 100%;
 }
 
-.toastnotifications-notification-header {
+.vc-toast-notifications-context-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--vc-toast-notifications-title-color);
+    font-size: var(--vc-toast-notifications-title-font-size);
+    font-weight: var(--vc-toast-notifications-title-font-weight);
+    line-height: var(--vc-toast-notifications-title-line-height);
+    padding: 0 0.8rem 0.5rem;
+}
+
+.vc-toast-notifications-context-header-icon {
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.vc-toast-notifications-context-header-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-width: 0;
+}
+
+.vc-toast-notifications-context-header-separator {
+    color: var(--text-muted);
+    font-weight: 400;
+}
+
+.vc-toast-notifications-context-header-channel {
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+/* System-mode notifications (friend activity, example) */
+.vc-toast-notifications-notification-system {
+    display: flex;
+    flex-direction: row;
+    padding: var(--vc-toast-notifications-padding);
+    gap: 1.25rem;
+    width: 100%;
+}
+
+.vc-toast-notifications-notification-system .vc-toast-notifications-notification-content {
+    display: block;
+    padding: 0;
+    flex: 1;
+    min-width: 0;
+}
+
+.vc-toast-notifications-notification-header {
     display: flex;
     justify-content: space-between;
+    align-items: flex-start;
+    gap: 0.5rem;
 }
 
-.toastnotifications-notification-title {
-    color: var(--toastnotifications-title-color);
-    font-size: var(--toastnotifications-title-font-size);
-    font-weight: var(--toastnotifications-title-font-weight);
-    line-height: var(--toastnotifications-title-line-height);
+.vc-toast-notifications-notification-title {
+    color: var(--vc-toast-notifications-title-color);
+    font-size: var(--vc-toast-notifications-title-font-size);
+    font-weight: var(--vc-toast-notifications-title-font-weight);
+    line-height: var(--vc-toast-notifications-title-line-height);
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-.toastnotifications-notification-close-btn {
+.vc-toast-notifications-notification-close-btn {
     all: unset;
     cursor: pointer;
-    color: var(--toastnotifications-close-button-color);
-    opacity: var(--toastnotifications-close-button-opacity);
+    color: var(--vc-toast-notifications-close-button-color);
+    opacity: var(--vc-toast-notifications-close-button-opacity);
     transition: opacity 0.2s ease-in-out, color 0.2s ease-in-out;
+    position: absolute;
+    top: 0.4rem;
+    right: 0.4rem;
+    z-index: 1;
+    width: 1.5rem;
+    height: 1.5rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background-color: var(--vc-toast-notifications-background-color);
 }
 
-.toastnotifications-notification-close-btn:hover {
-    color: var(--toastnotifications-close-button-hover-color);
-    opacity: var(--toastnotifications-close-button-hover-opacity);
+.vc-toast-notifications-notification-close-btn svg {
+    width: 1.25rem;
+    height: 1.25rem;
 }
 
-.toastnotifications-notification-icon {
-    height: var(--toastnotifications-image-height);
-    width: var(--toastnotifications-image-width);
-    border-radius: var(--toastnotifications-image-border-radius);
+.vc-toast-notifications-notification-close-btn:hover {
+    color: var(--vc-toast-notifications-close-button-hover-color);
+    opacity: var(--vc-toast-notifications-close-button-hover-opacity);
 }
 
-.toastnotifications-notification-progressbar {
-    height: var(--toastnotifications-progressbar-height);
+.vc-toast-notifications-notification-icon {
+    height: var(--vc-toast-notifications-image-height);
+    width: var(--vc-toast-notifications-image-width);
+    border-radius: var(--vc-toast-notifications-image-border-radius);
+}
+
+.vc-toast-notifications-notification-progressbar {
+    height: var(--vc-toast-notifications-progressbar-height);
+    background-color: var(--vc-toast-notifications-progressbar-color);
     border-radius: 5px;
     margin-top: auto;
 }
 
-.toastnotifications-notification-p {
+.vc-toast-notifications-notification-p {
     margin: 0.5rem 0 0;
     margin-bottom: 3px;
     line-height: 140%;
-    word-break: break-all;
+    overflow-wrap: anywhere;
 }
 
-.toastnotifications-notification-footer {
-    margin: 0;
-    margin-top: 4px;
-    line-height: 140%;
-    font-size: 10px;
+/* Container positioning. */
+#vc-toast-notifications-container.vc-toast-notifications-position-bottom-left {
+    bottom: var(--vc-toast-notifications-position-offset);
+    left: var(--vc-toast-notifications-position-offset);
 }
 
-.toastnotifications-notification-img {
-    width: 75%;
-    border-radius: 3px;
+#vc-toast-notifications-container.vc-toast-notifications-position-top-left {
+    top: var(--vc-toast-notifications-position-offset);
+    left: var(--vc-toast-notifications-position-offset);
 }
 
-/* Notification Positioning CSS */
-.toastnotifications-position-bottom-left {
-    bottom: var(--toastnotifications-position-offset);
-    left: var(--toastnotifications-position-offset);
+#vc-toast-notifications-container.vc-toast-notifications-position-top-right {
+    top: var(--vc-toast-notifications-position-offset);
+    right: var(--vc-toast-notifications-position-offset);
 }
 
-.toastnotifications-position-top-left {
-    top: var(--toastnotifications-position-offset);
-    left: var(--toastnotifications-position-offset);
+#vc-toast-notifications-container.vc-toast-notifications-position-bottom-right {
+    bottom: var(--vc-toast-notifications-position-offset);
+    right: var(--vc-toast-notifications-position-offset);
 }
 
-.toastnotifications-position-top-right {
-    top: var(--toastnotifications-position-offset);
-    right: var(--toastnotifications-position-offset);
-}
-
-.toastnotifications-position-bottom-right {
-    bottom: var(--toastnotifications-position-offset);
-    right: var(--toastnotifications-position-offset);
-}
-
-/* Rich Body classes */
-.toastnotifications-mention-class {
-    color: var(--mention-foreground);
-    background: var(--mention-background);
-    /* stylelint-disable-next-line value-no-vendor-prefix */
-    unicode-bidi: -moz-plaintext;
-    unicode-bidi: plaintext;
-    font-weight: 500;
-}
-
-.visual-refresh .toastnotifications-notification-root {
+.visual-refresh .vc-toast-notifications-notification-root {
     background-color: var(--background-base-low);
 }

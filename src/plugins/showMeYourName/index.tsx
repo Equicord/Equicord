@@ -244,6 +244,8 @@ function validTemplate(value: string) {
     if (invalidOptions) {
         return false;
     }
+
+    return true;
 }
 
 function getProcessedNames(
