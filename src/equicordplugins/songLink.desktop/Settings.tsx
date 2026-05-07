@@ -8,7 +8,7 @@ import { FormSwitch } from "@components/FormSwitch";
 import { HeadingTertiary } from "@components/Heading";
 
 import { settings } from ".";
-import Providers from "./Providers";
+import { Providers } from "./Providers";
 
 export function Settings() {
     const blazinglyFastSettings = settings.use(["servicesSettings"]);

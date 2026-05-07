@@ -10,7 +10,7 @@ import { HeadphonesIcon } from "@components/Icons";
 import { Button, useEffect, useState } from "@webpack/common";
 
 import pl, { Native, settings, SongLinkResult } from ".";
-import Providers from "./Providers";
+import { Providers } from "./Providers";
 
 export default function SongLinker({ url }: { url: string; }) {
     const [songData, setSongData] = useState<SongLinkResult>();
