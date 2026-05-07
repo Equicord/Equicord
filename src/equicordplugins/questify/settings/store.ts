@@ -9,11 +9,6 @@ import ErrorBoundary from "@components/ErrorBoundary";
 import { OptionType } from "@utils/types";
 import { UserStore } from "@webpack/common";
 
-import { QuestButtonSetting } from "../components/questButtonSettings";
-import { QuestFeaturesSetting } from "../components/questFeaturesSetting";
-import { QuestNotificationsSetting } from "../components/questNotificationsSetting";
-import { QuestTilesSetting } from "../components/questTilesSetting";
-import { ReorderQuestsSetting } from "../components/reorderQuestsSetting";
 import { defaultAllowChangingDangerousSettings, defaultAutoCompleteQuestsSimultaneously, defaultAutoCompleteQuestTypes, defaultClaimedSubsort, defaultCompleteVideoQuestsQuicker, defaultDisableAccountPanelPromo, defaultDisableAccountPanelQuestProgress, defaultDisableFriendsListPromo, defaultDisableMembersListPromo, defaultDisableOrbsAndQuestsBadges, defaultDisableQuestsEverything, defaultDisableRelocationNotices, defaultDisableSponsoredBanner, defaultExpiredSubsort, defaultIgnoredQuestIDs, defaultIgnoredSubsort, defaultIsOnQuestsPage, defaultLastQuestPageFilters, defaultLastQuestPageSort, defaultLeftClickAction, defaultMakeMobileVideoQuestsDesktopCompatible, defaultMiddleClickAction, defaultNewExcludedQuestAlertSound, defaultNewExcludedQuestAlertVolume, defaultNewQuestAlertSound, defaultNewQuestAlertVolume, defaultNotifyOnNewExcludedQuests, defaultNotifyOnNewQuests, defaultNotifyOnQuestComplete, defaultQuestButtonBadgeColor, defaultQuestButtonBadgeCount, defaultQuestButtonDisplay, defaultQuestButtonIncludedTypes, defaultQuestButtonIndicator, defaultQuestCompletedAlertSound, defaultQuestCompletedAlertVolume, defaultQuestFetchInterval, defaultQuestOrder, defaultQuestTileClaimedColorSetting, defaultQuestTileExpiredColorSetting, defaultQuestTileGradient, defaultQuestTileIgnoredColorSetting, defaultQuestTilePreload, defaultQuestTileUnclaimedColorSetting, defaultRememberQuestPageFilters, defaultRememberQuestPageSort, defaultResumeInterruptedQuests, defaultResumeQuestIDs, defaultRightClickAction, defaultUnclaimedSubsort, type QuestButtonAction, type QuestButtonDisplayMode, type QuestButtonIncludedTypes, type QuestButtonIndicatorMode, type QuestOrderStatus } from "./def";
 
 export function getCurrentUserId(userId?: string): string | null {
@@ -46,7 +41,7 @@ export const settings = definePluginSettings({
     },
     questFeatures: {
         type: OptionType.COMPONENT,
-        component: ErrorBoundary.wrap(QuestFeaturesSetting) as any,
+        component: ErrorBoundary.wrap(() => { const { QuestFeaturesSetting } = require("../components/questFeaturesSetting"); return QuestFeaturesSetting(); }) as any,
         description: "Select which Quest features to disable.",
     },
     disableQuestsEverything: {
@@ -148,7 +143,7 @@ export const settings = definePluginSettings({
     },
     questButton: {
         type: OptionType.COMPONENT,
-        component: ErrorBoundary.wrap(QuestButtonSetting) as any,
+        component: ErrorBoundary.wrap(() => { const { QuestButtonSetting } = require("../components/questButtonSettings"); return QuestButtonSetting(); }) as any,
         description: "Customize the Quest button in the server list.",
     },
     questButtonDisplay: {
@@ -202,7 +197,7 @@ export const settings = definePluginSettings({
     },
     questNotifications: {
         type: OptionType.COMPONENT,
-        component: ErrorBoundary.wrap(QuestNotificationsSetting) as any,
+        component: ErrorBoundary.wrap(() => { const { QuestNotificationsSetting } = require("../components/questNotificationsSetting"); return QuestNotificationsSetting(); }) as any,
         description: "Configure Quest completed and new Quest detected notifications.",
     },
     notifyOnQuestComplete: {
@@ -267,7 +262,7 @@ export const settings = definePluginSettings({
     },
     questTiles: {
         type: OptionType.COMPONENT,
-        component: ErrorBoundary.wrap(QuestTilesSetting) as any,
+        component: ErrorBoundary.wrap(() => { const { QuestTilesSetting } = require("../components/questTilesSetting"); return QuestTilesSetting(); }) as any,
         description: "Customize the appearance of Quest tiles in the Quests page.",
     },
     questTileUnclaimedColor: {
@@ -309,7 +304,7 @@ export const settings = definePluginSettings({
     reorderQuests: {
         type: OptionType.COMPONENT,
         description: "Sort Quests by their status.",
-        component: ErrorBoundary.wrap(ReorderQuestsSetting) as any,
+        component: ErrorBoundary.wrap(() => { const { ReorderQuestsSetting } = require("../components/reorderQuestsSetting"); return ReorderQuestsSetting(); }) as any,
     },
     questOrder: {
         type: OptionType.CUSTOM,
