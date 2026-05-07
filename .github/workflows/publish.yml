@@ -15,7 +15,7 @@ jobs:
         runs-on: ubuntu-latest
 
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v6
               with:
                   fetch-depth: 0
 
@@ -60,11 +60,11 @@ jobs:
 
             - name: Setup PNPM
               if: steps.check.outputs.release == 'true'
-              uses: pnpm/action-setup@v3
+              uses: pnpm/action-setup@v6
 
             - name: Use Node.js 24
               if: steps.check.outputs.release == 'true'
-              uses: actions/setup-node@v4
+              uses: actions/setup-node@v6
               with:
                   node-version: 24
                   cache: "pnpm"
@@ -83,7 +83,7 @@ jobs:
                   ".git/*"
 
             - name: Publish extension
-              if: steps.check.outputs.release == 'true' && !vars.ACT
+              if: steps.check.outputs.release == 'true' && !vars.ACT == 'false'
               run: pnpx @equicord/publish-browser-extension@latest --chrome-zip
                   dist/extension-chrome.zip --firefox-zip
                   dist/extension-firefox.zip --firefox-sources-zip
