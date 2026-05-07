@@ -144,6 +144,10 @@ export default definePlugin({
                     return;
                 }
 
+                sendBotMessage(ctx.channel.id, {
+                    content: "This will take a moment...",
+                });
+
                 try {
                     const data = await Native.getTrackData(url);
                     const formatted = formatMessage(data);
@@ -158,26 +162,8 @@ export default definePlugin({
 
                     sendMessage(ctx.channel.id, { content: formatted });
                 } catch (e: any) {
-                    let errorMsg = e?.message || String(e);
-                    errorMsg = errorMsg.replace(
-                        /Error invoking remote method '[^']+':\s*Error:\s*/,
-                        "",
-                    );
-
-                    let userFriendlyMsg = `Failed to resolve music link: ${errorMsg}`;
-                    if (errorMsg.includes("400")) {
-                        userFriendlyMsg =
-                            "Failed to resolve music link: The provided URL is invalid or not supported.";
-                    } else if (errorMsg.includes("429")) {
-                        userFriendlyMsg =
-                            "Failed to resolve music link: You are being rate-limited by the service. Please try again later.";
-                    } else if (errorMsg.includes("500")) {
-                        userFriendlyMsg =
-                            "Failed to resolve music link: The streaming service is currently unavailable.";
-                    }
-
                     sendBotMessage(ctx.channel.id, {
-                        content: userFriendlyMsg,
+                        content: "Failed to resolve music link",
                     });
                 }
             },
