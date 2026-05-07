@@ -1,22 +1,22 @@
 {
     "absRPC": {
         "about": {
-            "automaticAuth": "Le plugin authentifiera automatiquement votre compte et récupérera votre progression d'écoute.",
-            "description": "Entrez l'URL de votre serveur AudioBookShelf, votre pseudo et votre mot de passe pour afficher les livres audio que vous écoutez actuellement sous forme de Rich Presence Discord.",
+            "automaticAuth": "Le plugin se connectera automatiquement à votre compte et récupérera votre progression d'écoute.",
+            "description": "Entrez l'URL de votre serveur AudioBookShelf, votre pseudo et votre mot de passe pour afficher les livres audio que vous écoutez actuellement sous forme d'activité sur votre profil.",
             "title": "Comment se connecter à AudioBookShelf"
         },
         "description": "Rich Presence pour le serveur multimédia AudioBookShelf",
         "settings": {
             "password": "Mot de passe AudioBookShelf",
             "serverUrl": "URL du serveur AudioBookShelf (ex., https://abs.example.com)",
-            "username": "Pseudo AudioBookShelf"
+            "username": "Nom d'utilisateur AudioBookShelf"
         },
         "toasts": {
             "notConfigured": "AudioBookShelf RPC n'est pas configuré."
         }
     },
     "altKrispSwitch": {
-        "description": "Fait en sorte que le pop‑up de suppression de bruit bascule entre Aucun et Krisp au lieu de Krisp et Standard"
+        "description": "Fait en sorte que le menu de suppression de bruit aie Aucun et Krisp au lieu de Standard et Krisp"
     },
     "alwaysExpandProfiles": {
         "description": "Toujours agrandir les fenêtres de profil en grand"
@@ -55,6 +55,9 @@
         },
         "description": "Mentionne quelqu'un au hasard"
     },
+    "audioPlayerAPI": {
+        "description": "API pour lire des fichiers audio Discord internes ou des liens audio externes."
+    },
     "autoZipper": {
         "description": "Compresse automatiquement en zip les types de fichiers et dossiers spécifiés avant leur envois vers Discord",
         "settings": {
@@ -62,25 +65,25 @@
         }
     },
     "bannersEverywhere": {
-        "description": "Affiche les bannières dans la liste des membres. ",
+        "description": "Afficher les bannières dans la liste des membres ",
         "settings": {
             "animate": "Animer les bannières",
-            "preferNameplate": "préférer la plaque de nom a la bannière"
+            "preferNameplate": "Favoriser les plaques nominatives au lieu des bannières"
         }
     },
     "baseDecoder": {
         "description": "Décoder le contenu base64 de n'importe quel message et copier le contenu décodé.",
         "settings": {
-            "clickMethod": "Modifie le bouton pour décoder le contenu base64 de n'importe quel message.",
+            "clickMethod": "Changer le bouton de la souris pour décoder le contenu base64",
             "clickMethodOptions": {
-                "left": "Clique gauche pour décoder le contenu base64.",
-                "right": "Clique droit pour décoder le contenu base64."
+                "left": "Clic gauche",
+                "right": "Clic droit"
             }
         },
         "ui": {
             "copiedToast": "Contenu décodé copié dans le presse-papiers !",
             "copyDecoded": "Copier le contenu décodé",
-            "decodedContent": "Contenu decodé",
+            "decodedContent": "Contenu décodé",
             "modalTitle": "Contenu Base64 décodé",
             "tooltipLeft": "Copier décodé (clic gauche) / Décoder Base64 (clic droit)",
             "tooltipRight": "Décoder Base64 (clic gauche) / Copier le résultat décodé (clic droit)"
@@ -111,7 +114,7 @@
             "oscilloscopeColor": "Couleur de l'oscilloscope",
             "oscilloscopeSolidColor": "Utiliser une couleur unie pour l'oscilloscope",
             "spectrograph": "Activer le visualiseur spectrographe",
-            "spectrographColor": "Couleur du spectrographe",
+            "spectrographColor": "Couleur du spectrographe (R, G, B ou #hex)",
             "spectrographSolidColor": "Utiliser une couleur unie pour le spectrographe"
         },
         "toasts": {
@@ -146,7 +149,7 @@
                 "userOption": "utilisateur spécifique à essayer d'actualiser"
             }
         },
-        "description": "Renforce le système de commandes avec plusieurs améliorations.",
+        "description": "Rafraîchit localement les commandes des applications spécifiées.",
         "settings": {
             "allowNewlinesInCommands": "Autoriser les nouvelles lignes dans les entrées de commande (CTRL + Maj + Entrée)",
             "autoFillArguments": "Remplir automatiquement la commande avec tous les arguments au lieu des seuls arguments obligatoires"
@@ -268,7 +271,7 @@
         "tooltips": {
             "lockedChannel": "Cette chaîne est verrouillée.",
             "nsfwChannel": "Cette chaîne est marquée comme NSFW.",
-            "rulesChannel": "Ce canal est le canal des règles du serveur."
+            "rulesChannel": "Ce salon est le salon des règles du serveur."
         }
     },
     "channelTabs": {
@@ -334,6 +337,8 @@
     "commandPalette": {
         "description": "Exécutez rapidement des actions via une palette de commandes consultable",
         "settings": {
+            "closeAfterExecute": "Ferme la palette après exécution d'une commande.",
+            "compactStartEnabled": "Ouvre la palette en mode compact d’abord.",
             "customCommands": "Gérer les entrées de la palette de commandes personnalisées",
             "enableTagFilter": "Afficher la barre de filtre de balises",
             "hotkey": "Hotkey utilisé pour ouvrir la palette de commandes",
@@ -452,14 +457,14 @@
         "description": "Vous permet d’ajouter une couleur personnalisée à n’importe quel utilisateur, n’importe où ! Il est fortement recommandé de l'utiliser avec typingTweaks et roleColorEverywhere",
         "settings": {
             "colorInServers": "Si les couleurs des noms doivent être modifiées au sein des serveurs",
-            "dmList": "Les utilisateurs avec des couleurs personnalisées définies verront leur nom dans la liste DM coloré"
+            "dmList": "Les utilisateurs avec des couleurs personnalisées définies verront leur nom dans la liste MP coloré"
         }
     },
     "declutter": {
         "description": "Nettoie Discord en supprimant les éléments UI non essentiels tels que les effets de profil, les onglets de boutique, les boosts, etc.",
         "headers": {
             "accessibilityNotice": "Discord dispose déjà d'une option de style de nom d'utilisateur intégrée dans les paramètres d'accessibilité.",
-            "friendsList": "Au-dessus de la liste d'amis/DM",
+            "friendsList": "Au-dessus de la liste d'amis/MP",
             "misc": "Divers",
             "userProfile": "Profil utilisateur"
         },
@@ -473,9 +478,9 @@
             "removeGiftButton": "Supprimer le bouton cadeau.",
             "removeNameplate": "Supprimez le style de la plaque signalétique.",
             "removeProfileEffect": "Supprimez les effets d’animation du profil à l’ouverture.",
-            "removeQuestsAboveDM": "Supprimez les quêtes au-dessus de la liste des DM.",
+            "removeQuestsAboveDM": "Supprimez les quêtes au-dessus de la liste des MP.",
             "removeServerBoostInfo": "Supprimez les informations de boost du serveur au-dessus de la liste des chaînes.",
-            "removeShopAboveDM": "Supprimez les boutiques au-dessus de la liste des DM.",
+            "removeShopAboveDM": "Supprimez les boutiques au-dessus de la liste des MP.",
             "removeUnavailableEmojiPicker": "Supprimez les catégories indisponibles du sélecteur d'emoji."
         }
     },
@@ -492,7 +497,7 @@
         "description": "Déposez des utilisateurs, des canaux ou des serveurs dans le chat pour insérer des mentions ou des invitations.",
         "settings": {
             "allowChatBodyDrop": "Autoriser le passage dans le corps principal du chat pour insérer du texte.",
-            "channelOutput": "Sortie de suppression de canal.",
+            "channelOutput": "Sortie de suppression de salon.",
             "channelOutputOptions": {
                 "link": "Lien de chaîne",
                 "mention": "mention de la #chaîne"
@@ -551,12 +556,17 @@
             "reset": "Réinitialiser"
         }
     },
+    "equicordDonor": {
+        "description": "Ce badge est un avantage spécial pour les donateurs Equicord (et non Vencord)",
+        "description2": "Veuillez envisager de soutenir le développement d'Equicord en devenant donateur. Cela signifierait beaucoup !!",
+        "title": "Donateur Equicord"
+    },
     "equicordHelper": {
         "alerts": {
             "equicordSupport": "Equicord Assistance",
             "okayContinue": "Ok continue",
             "supportWarningBody": "Avant de demander de l'aide. Vérifiez les mises à jour et si ce problème est réellement causé par Equicord !",
-            "supportWarningTitle": "Vencord Avertissement du canal de support"
+            "supportWarningTitle": "Vencord Avertissement du salon de support"
         },
         "commands": {
             "refreshCommands": "Actualiser les commandes Slash",
@@ -583,7 +593,7 @@
         }
     },
     "equicordToolbox": {
-        "description": "Ajoute un bouton à côté du bouton de la boîte de réception dans l'en-tête du canal qui héberge les actions rapides Equicord",
+        "description": "Ajoute un bouton à côté du bouton de la boîte de réception dans l'en-tête du salon qui héberge les actions rapides Equicord",
         "settings": {
             "showPluginMenu": "Afficher le menu des plugins dans la boîte à outils"
         },
@@ -598,6 +608,10 @@
             "themes": "Thèmes",
             "tooltip": "Equicord Boîte à outils"
         }
+    },
+    "equicordTranslator": {
+        "description": "Attribué aux contributeurs qui étendent la prise en charge linguistique d'Equicord en traduisant du contenu pour la communauté.",
+        "title": "Traducteur Equicord"
     },
     "equissant": {
         "description": "Croissant à chaque nombre de clics spécifié :trolley:",
@@ -657,7 +671,7 @@
         }
     },
     "findReply": {
-        "description": "Passe à la première réponse à un message dans un canal (vous permet de suivre plus facilement les conversations passées).",
+        "description": "Passe à la première réponse à un message dans un salon (vous permet de suivre plus facilement les conversations passées).",
         "settings": {
             "hideButtonIfNoReply": "Masque le bouton s'il n'y a pas de réponse au message",
             "includeAuthor": "Recherchera également les messages qui répondent à l'auteur en général, pas seulement ce message exact",
@@ -679,8 +693,8 @@
         "description": "Suivez un ami dans le chat vocal.",
         "info": "Ce plugin est utilisé pour suivre un ou plusieurs amis dans des discussions vocales.",
         "settings": {
-            "leaveWhenUserLeaves": "Quittez le canal vocal lorsque l'utilisateur quitte. (Cela peut vous amener parfois à entrer dans une boucle infinie de sortie/rejoindre)",
-            "onlyWhenInVoice": "Suivez l'utilisateur uniquement lorsque vous êtes dans un canal vocal"
+            "leaveWhenUserLeaves": "Quittez le salon vocal lorsque l'utilisateur quitte. (Cela peut vous amener parfois à entrer dans une boucle infinie de sortie/rejoindre)",
+            "onlyWhenInVoice": "Suivez l'utilisateur uniquement lorsque vous êtes dans un salon vocal"
         },
         "ui": {
             "followUser": "Suivre l'utilisateur"
@@ -798,12 +812,12 @@
         }
     },
     "ghosted": {
-        "description": "Un joli fantôme apparaîtra si vous ne répondez pas à leurs DM",
+        "description": "Un joli fantôme apparaîtra si vous ne répondez pas à leurs MP",
         "settings": {
-            "exemptedChannels": "Liste des ID de canal séparés par des virgules à exempter du ghosting (cliquez avec le bouton droit sur un canal DM pour copier son ID)",
-            "ignoreBots": "Ignorer les DM des robots",
+            "exemptedChannels": "Liste des ID de salon séparés par des virgules à exempter du ghosting (cliquez avec le bouton droit sur un salon MP pour copier son ID)",
+            "ignoreBots": "Ignorer les MP des robots",
             "ignoreGroupDms": "Exclure tous les SMS de groupe des images fantômes",
-            "showDmIcons": "Afficher les icônes fantômes à côté des DM individuels",
+            "showDmIcons": "Afficher les icônes fantômes à côté des MP individuels",
             "showIndicator": "Afficher le compteur de fantômes en haut de la liste des serveurs"
         },
         "ui": {
@@ -889,6 +903,7 @@
     },
     "githubRepos": {
         "description": "Affiche les référentiels GitHub publics d'un utilisateur dans son profil",
+        "githubRepos": "Dépôts GitHub",
         "settings": {
             "showInMiniProfile": "Afficher l'interface utilisateur complète dans le mini profil au lieu d'un simple bouton",
             "showLanguage": "Afficher la langue du référentiel",
@@ -934,6 +949,9 @@
             "hideTags": "Masquer les balises"
         }
     },
+    "headerBarAPI": {
+        "description": "API pour ajouter des boutons à la barre d'en-tête et à la barre d'outils du salon."
+    },
     "hideChatButtons": {
         "description": "Capable de masquer les boutons de discussion",
         "settings": {
@@ -976,7 +994,7 @@
         "description": "Transforme le bouton d'accueil en indicateur de saisie si quelqu'un dans votre SMS est en train de taper"
     },
     "hopOn": {
-        "description": "Montez sur Fortnite ou Montez sur bloons :3",
+        "description": "Monte dessus ! Ouvre une URL configurable quand un message correspond à une expressions régulières personnalisée dans le salon actuel.",
         "settings": {
             "regex": "Regex à déclencher",
             "url": "URL pour ouvrir"
@@ -1018,7 +1036,7 @@
         }
     },
     "ignoreCalls": {
-        "description": "Vous permet d'ignorer les appels d'utilisateurs ou de groupes DM spécifiques.",
+        "description": "Vous permet d'ignorer les appels d'utilisateurs ou de groupes MP spécifiques.",
         "settings": {
             "permanentlyIgnoredUsers": "ID utilisateur (virgule + espace) qui doivent être définitivement ignorés"
         },
@@ -1073,7 +1091,7 @@
         }
     },
     "instantScreenshare": {
-        "description": "Partage d'écran instantané lorsque vous rejoignez un canal vocal avec prise en charge des sources de bureau, de Windows et des périphériques d'entrée vidéo (caméras, cartes de capture)",
+        "description": "Partage d'écran instantané lorsque vous rejoignez un salon vocal avec prise en charge des sources de bureau, de Windows et des périphériques d'entrée vidéo (caméras, cartes de capture)",
         "info": {
             "linux": "Pour Linux",
             "soundPreview": "Concernant les paramètres de son et d'aperçu",
@@ -1176,7 +1194,7 @@
         }
     },
     "jumpTo": {
-        "description": "Ajoute des options de menu contextuel pour accéder au début ou au bas d'un canal/DM.",
+        "description": "Ajoute des options de menu contextuel pour accéder au début ou au bas d'un salon/MP.",
         "errors": {
             "channelNotAvailable": "Les informations sur la chaîne ne sont pas disponibles.",
             "failedJump": "Échec de l'accès au message. Consultez la console pour plus de détails.",
@@ -1245,7 +1263,7 @@
         }
     },
     "lastActive": {
-        "description": "Un plugin pour accéder au dernier message actif de vous-même ou d'un autre utilisateur dans un canal/serveur.",
+        "description": "Un plugin pour accéder au dernier message actif de vous-même ou d'un autre utilisateur dans un salon/serveur.",
         "errors": {
             "channelNotAvailable": "Les informations sur la chaîne ne sont pas disponibles.",
             "findFailed": "Impossible de trouver les messages. Consultez la console pour plus de détails.",
@@ -1314,6 +1332,10 @@
             "enableAndRestart": "Activez le plugin et redémarrez votre client pour scanner un code QR de connexion",
             "scanQrCode": "Scanner le code QR"
         }
+    },
+    "mainWindowFrameless": {
+        "description": "Supprime le cadre de fenêtre natif pour un look plus épuré. Vous pouvez toujours déplacer la fenêtre en faisant glisser la zone de la barre de titre.",
+        "title": "Désactiver le cadre de la fenêtre principale"
     },
     "mediaPlaybackSpeed": {
         "description": "Contrôlez la vitesse de lecture des médias pour les messages vocaux, les vidéos et les pièces jointes audio",
@@ -1387,8 +1409,8 @@
             "emptyLogs": "Vide hein",
             "filterMessages": "Filtrer les messages",
             "fromChannel": "De {channel} à {guild}",
-            "fromDms": "Depuis les DM de {username}",
-            "fromGroupDm": "De {name} Group DM",
+            "fromDms": "Depuis les MP de {username}",
+            "fromGroupDm": "De {name} Group MP",
             "ghostPinged": "Cinglement fantôme",
             "importLogs": "Importer des journaux",
             "importLogsTooltip": "ML Enhanced stocke désormais les journaux dans indexeddb. Vous devez importer vos anciens journaux depuis le répertoire des journaux. L'importation n'écrasera pas les journaux existants",
@@ -1402,12 +1424,12 @@
         },
         "settings": {
             "alwaysLogCurrentChannel": "Enregistrez toujours la chaîne actuellement sélectionnée. Les chaînes/utilisateurs sur liste noire seront toujours ignorés.",
-            "alwaysLogDirectMessages": "Enregistrez toujours les DM",
+            "alwaysLogDirectMessages": "Enregistrez toujours les MP",
             "attachmentFileExtensions": "Liste des extensions de fichiers à enregistrer, séparées par des virgules. Les pièces jointes dont les extensions de fichier ne figurent pas dans cette liste ne seront pas enregistrées. Laissez vide pour enregistrer toutes les pièces jointes.",
             "attachmentSizeLimitInMegabytes": "Taille maximale d'une pièce jointe en mégaoctets à enregistrer. Les pièces jointes supérieures à cette taille ne seront pas enregistrées.",
-            "blacklistedIds": "ID de serveur, de canal ou d'utilisateur sur liste noire.",
+            "blacklistedIds": "ID de serveur, de salon ou d'utilisateur sur liste noire.",
             "cacheLimit": "Nombre maximum de messages à stocker dans le cache. Les messages plus anciens sont supprimés lorsque la limite est atteinte. Cela permet de réduire l’utilisation de la mémoire et d’améliorer les performances. 0 signifie qu'il n'y a pas de limite",
-            "cacheMessagesFromServers": "Habituellement, l'enregistreur de messages enregistre uniquement les identifiants et les DM sur liste blanche, ce qui signifie qu'il enregistrerait également les messages de tous les serveurs. Notez que cela peut entraîner un dépassement de la limite du cache, entraînant la perte de certains messages. Si vous utilisez de nombreux serveurs, cela peut augmenter considérablement les chances que les messages soient enregistrés, ce qui peut entraîner un enregistrement de messages volumineux et l'inclusion de messages non pertinents.",
+            "cacheMessagesFromServers": "Habituellement, l'enregistreur de messages enregistre uniquement les identifiants et les MP sur liste blanche, ce qui signifie qu'il enregistrerait également les messages de tous les serveurs. Notez que cela peut entraîner un dépassement de la limite du cache, entraînant la perte de certains messages. Si vous utilisez de nombreux serveurs, cela peut augmenter considérablement les chances que les messages soient enregistrés, ce qui peut entraîner un enregistrement de messages volumineux et l'inclusion de messages non pertinents.",
             "exportLogsFromIndexedDB": "Exporter les journaux depuis IndexedDB",
             "hideMessageFromMessageLoggers": "Lorsqu'il est activé, un bouton de menu contextuel sera ajouté aux messages pour vous permettre de supprimer des messages sans qu'ils soient enregistrés par d'autres enregistreurs. Peut-être pas sûr, utilisez-le à vos propres risques.",
             "hideMessageFromMessageLoggersDeletedMessage": "Contenu du message par lequel remplacer le message lors de l'utilisation de la fonctionnalité Masquer le message dans les enregistreurs de messages.",
@@ -1423,16 +1445,16 @@
             "openImageCacheFolder": "Ouvre le répertoire du cache d'images",
             "openLogs": "Journaux ouverts",
             "permanentlyRemoveLogByDefault": "Le bouton de suppression du journal de MessageLogger de base de Vencord supprimera les journaux de manière permanente",
-            "preserveCurrentChannel": "Lorsqu'il est activé, les messages de votre canal actuellement sélectionné ne sont pas affectés par le nettoyage temporel.",
+            "preserveCurrentChannel": "Lorsqu'il est activé, les messages de votre salon actuellement sélectionné ne sont pas affectés par le nettoyage temporel.",
             "saveImages": "Enregistrez les pièces jointes supprimées.",
             "saveMessages": "S'il faut enregistrer les messages supprimés et modifiés.",
             "selectImageCacheDir": "Sélectionnez le répertoire des images enregistrées",
             "selectLogsDir": "Sélectionnez le répertoire des journaux",
             "showLogsButton": "Basculer pour afficher ou non la boîte à outils",
-            "showWhereMessageIsFrom": "Afficher le nom du canal de message/de l'auteur et le nom du serveur",
+            "showWhereMessageIsFrom": "Afficher le nom du salon de message/de l'auteur et le nom du serveur",
             "sortNewest": "Trier les journaux par plus récent.",
             "timeBasedCleanupMinutes": "Supprimez automatiquement les messages des serveurs datant de plus de ce nombre de minutes. Définissez sur 0 pour désactiver le nettoyage temporel.",
-            "whitelistedIds": "ID de serveur, de canal ou d'utilisateur sur liste blanche."
+            "whitelistedIds": "ID de serveur, de salon ou d'utilisateur sur liste blanche."
         }
     },
     "messageNotifier": {
@@ -1442,7 +1464,7 @@
         }
     },
     "messagePeek": {
-        "description": "Jetez un œil au dernier message dans les canaux DM sans les ouvrir"
+        "description": "Jetez un œil au dernier message dans les canaux MP sans les ouvrir"
     },
     "messageTranslate": {
         "description": "Traduisez automatiquement les messages dans votre langue préférée",
@@ -1496,7 +1518,7 @@
         }
     },
     "moyai": {
-        "description": "Jouez l'effet sonore moyai lorsque 🗿 emoji est utilisé",
+        "description": "Joue un effet sonore 🗿 chaque fois qu'un émoji moyai est envoyé, utilisé en réaction ou comme effet vocal dans votre salon actuel.",
         "settings": {
             "ignoreBlocked": "Ignorer les messages des utilisateurs bloqués",
             "ignoreBots": "Ignorer les messages des robots",
@@ -1562,7 +1584,7 @@
         "description": "Normalise les liens de message Discord en supprimant les sous-domaines Canary/ptb pour plus de cohérence"
     },
     "notificationTitle": {
-        "description": "Ajoute des titres de notification détaillés affichant les informations sur l'expéditeur, le canal et le serveur"
+        "description": "Ajoute des titres de notification détaillés affichant les informations sur l'expéditeur, le salon et le serveur"
     },
     "orbolayBridge": {
         "description": "Plugin Bridge pour l'intégration de la superposition Orbolay, permettant la synchronisation de l'état vocal et les notifications de messages",
@@ -1596,9 +1618,9 @@
         "description": "Ajoute une icône d'épingle aux messages épinglés"
     },
     "pingNotifications": {
-        "description": "Paramètres de notification personnalisés pour les pings, les DM et les messages d'amis",
+        "description": "Paramètres de notification personnalisés pour les pings, les MP et les messages d'amis",
         "settings": {
-            "dms": "Notifier les messages DM et DM de groupe",
+            "dms": "Notifier les messages MP et MP de groupe",
             "friends": "Avertir lorsque des amis envoient des messages sur les serveurs",
             "ignoreMuted": "Ignorer les chaînes, les guildes et les utilisateurs bloqués",
             "mentions": "Avertir lorsque mentionné (@username)",
@@ -1700,10 +1722,10 @@
         },
         "settings": {
             "Servers": "ID de serveur à inclure (séparés par des virgules)",
-            "UserAmount": "Nombre d'utilisateurs cibles dans le canal",
+            "UserAmount": "Nombre d'utilisateurs cibles dans le salon",
             "UserAmountOperation": "Opérateur de comparaison du nombre d'utilisateurs",
             "autoCamera": "Allumer automatiquement la caméra",
-            "autoNavigate": "Accédez automatiquement au canal vocal",
+            "autoNavigate": "Accédez automatiquement au salon vocal",
             "autoStream": "Démarrer automatiquement le streaming",
             "avoidAfk": "Évitez les chaînes AFK",
             "avoidStages": "Évitez les canaux de scène",
@@ -1714,25 +1736,25 @@
             "mute": "Rechercher des utilisateurs muets",
             "selfDeafen": "Assourdissement automatique lors de l'adhésion",
             "selfMute": "Mise en sourdine automatique lors de la connexion",
-            "spacesLeft": "Espaces minimum restants dans le canal",
+            "spacesLeft": "Espaces minimum restants dans le salon",
             "spacesLeftOperation": "Opérateur de comparaison des espaces restants",
             "stream": "Recherchez des chaînes avec des flux",
-            "vcLimit": "Limite d'utilisateurs du canal vocal",
+            "vcLimit": "Limite d'utilisateurs du salon vocal",
             "vcLimitOperation": "Opérateur de comparaison de limites de canaux",
             "video": "Rechercher des chaînes avec la vidéo activée"
         }
     },
     "recentDMSwitcher": {
-        "description": "Basculez rapidement entre les DM récents en utilisant Ctrl+Tab (style Alt+Tab)",
+        "description": "Basculez rapidement entre les MP récents en utilisant Ctrl+Tab (style Alt+Tab)",
         "overlayModes": {
-            "current": "DM actuel uniquement",
-            "row": "Rangée de DM récents"
+            "current": "MP actuel uniquement",
+            "row": "Rangée de MP récents"
         },
         "settings": {
             "amountOfUsers": "Nombre d'utilisateurs à suivre",
-            "clearRdms": "Effacer l'historique RDMS",
+            "clearRdms": "Effacer l'historique RMPS",
             "overlayMode": "Mode contenu superposé",
-            "overlayRowLength": "Nombre de DM à afficher dans la ligne de superposition",
+            "overlayRowLength": "Nombre de MP à afficher dans la ligne de superposition",
             "overlayShowAvatars": "Afficher les avatars en superposition",
             "toastDurationMs": "Durée de notification Toast (ms)",
             "visualStyle": "Style d'indicateur visuel pendant le cyclisme"
@@ -1801,7 +1823,7 @@
         "description": "Programmer des messages à envoyer plus tard",
         "settings": {
             "checkIntervalSeconds": "À quelle fréquence vérifier les messages à envoyer (secondes)",
-            "maxMessagesPerMinute": "Nombre maximum de messages programmés par canal pouvant être déclenchés dans la même minute",
+            "maxMessagesPerMinute": "Nombre maximum de messages programmés par salon pouvant être déclenchés dans la même minute",
             "showNotifications": "Afficher les notifications toast lorsque des messages sont envoyés",
             "showPhantomMessages": "Afficher les messages programmés sous forme de messages fantômes dans le chat"
         }
@@ -1942,7 +1964,7 @@
     "statusWhileActive": {
         "description": "Définir automatiquement le statut lorsqu'il est actif dans les canaux vocaux",
         "settings": {
-            "statusToSet": "Statut à définir dans un canal vocal"
+            "statusToSet": "Statut à définir dans un salon vocal"
         }
     },
     "steamStatusSync": {
@@ -2091,7 +2113,10 @@
         "description": "Un plugin qui vous aide à répondre à des questions triviales en utilisant l'IA.",
         "settings": {
             "apiKey": "API Clé.",
-            "autoRespond": "Répondez automatiquement aux messages dès réception d'une réponse.",
+            "autoReply": "Réponse automatique",
+            "autoRespond": "Comment les réponses doivent-elles être gérées ?",
+            "bot": "Clyde",
+            "chatbar": "Remplacer le texte de la barre de discussion",
             "endpoint": "Point de terminaison IA compatible OpenAI.",
             "maxTokens": "Nombre maximum de jetons dans la réponse.",
             "model": "Modèle d'IA à utiliser.",
@@ -2119,7 +2144,7 @@
         "description": "Mentionnez les utilisateurs de n’importe quel serveur en utilisant un format universel",
         "settings": {
             "globalMention": "Mentionnez les utilisateurs de n'importe quel serveur, pas seulement celui actuel",
-            "onlyDMUsers": "Montrez uniquement aux utilisateurs avec lesquels vous avez eu des DM"
+            "onlyDMUsers": "Montrez uniquement aux utilisateurs avec lesquels vous avez eu des MP"
         },
         "warning": "L'utilisation de Global Mention peut entraîner des problèmes de performances et afficher un nombre absurde d'utilisateurs dans la saisie semi-automatique."
     },
@@ -2149,6 +2174,9 @@
             "urlPatterns": "URL Modèles"
         }
     },
+    "userAreaAPI": {
+        "description": "API pour ajouter des boutons au panneau de la zone utilisateur."
+    },
     "userpfp": {
         "avatarOptions": {
             "nitro": "Nitro",
@@ -2175,7 +2203,7 @@
             "vcNarrator": "Narrateur de CV",
             "voice": "Voix"
         },
-        "description": "Narrateur de canal vocal personnalisé avec TTS pour les connexions/sorties d'utilisateurs et les changements d'état",
+        "description": "Narrateur de salon vocal personnalisé avec TTS pour les connexions/sorties d'utilisateurs et les changements d'état",
         "filterOptions": {
             "blacklist": "Liste noire (annoncer tout le monde sauf la liste)",
             "off": "Désactivé",
@@ -2257,7 +2285,7 @@
         }
     },
     "voiceButtons": {
-        "description": "Ajoute des boutons d'action rapide (discussion, sourdine, assourdissement) aux utilisateurs du canal vocal",
+        "description": "Ajoute des boutons d'action rapide (discussion, sourdine, assourdissement) aux utilisateurs du salon vocal",
         "options": {
             "both": "Les deux",
             "disable": "Désactiver",
@@ -2273,7 +2301,7 @@
             "disableVideo": "Bascule leur vidéo en cliquant sur le bouton sourd.",
             "muteSoundboard": "Bascule leur table d'harmonie en cliquant sur le bouton sourd.",
             "serverSelf": "Deafen / Mettez-vous en sourdine sur le serveur lorsque vous utilisez mute/deafen.",
-            "showButtonsSelf": "Si vous souhaitez afficher des boutons pour votre propre utilisateur. Même fonctionnalité que les autres boutons, sauf qu'il ouvrira le panneau DM et vous coupera le son en cliquant sur le ou les boutons.",
+            "showButtonsSelf": "Si vous souhaitez afficher des boutons pour votre propre utilisateur. Même fonctionnalité que les autres boutons, sauf qu'il ouvrira le panneau MP et vous coupera le son en cliquant sur le ou les boutons.",
             "showChatButton": "Si vous souhaitez afficher le bouton de discussion",
             "showDeafenButton": "Si vous souhaitez afficher le bouton sourd",
             "showMuteButton": "Si vous souhaitez afficher le bouton muet",
@@ -2285,7 +2313,7 @@
         "contextMenu": {
             "viewChannelLogs": "Afficher les journaux des chaînes"
         },
-        "description": "Enregistrer les événements de connexion/sortie/déplacement du canal vocal",
+        "description": "Enregistrer les événements de connexion/sortie/déplacement du salon vocal",
         "modeOptions": {
             "both": "Connectez-vous au menu de discussion et de journalisation",
             "logMenu": "Menu Journal",
@@ -2293,10 +2321,10 @@
         },
         "settings": {
             "ignoreBlockedUsers": "Ne pas enregistrer les utilisateurs bloqués",
-            "mode": "Comment afficher le journal du canal vocal",
-            "voiceChannelChatSelf": "Enregistrez vos propres événements de canal vocal dans les canaux vocaux",
+            "mode": "Comment afficher le journal du salon vocal",
+            "voiceChannelChatSelf": "Enregistrez vos propres événements de salon vocal dans les canaux vocaux",
             "voiceChannelChatSilent": "Rejoindre/quitter/déplacer les messages dans les discussions vocales sera silencieux",
-            "voiceChannelChatSilentSelf": "Rejoindre/quitter/déplacer des messages dans les discussions du canal vocal seront silencieux si vous êtes dans le canal vocal"
+            "voiceChannelChatSilentSelf": "Rejoindre/quitter/déplacer des messages dans les discussions du salon vocal seront silencieux si vous êtes dans le salon vocal"
         }
     },
     "voiceChatUtils": {
@@ -2320,11 +2348,11 @@
         "description": "Recevez des notifications lorsque des amis rejoignent des canaux vocaux",
         "settings": {
             "allowedFriends": "Liste séparée par des virgules ou des espaces des identifiants d'utilisateurs de vos amis dont vous souhaitez recevoir des messages de participation",
-            "friendDirectMessages": "Recevez des notifications dans les DM de vos amis lorsqu'ils rejoignent un canal vocal",
-            "friendDirectMessagesSelf": "Recevez des notifications dans les DM de vos amis même si vous êtes sur le même canal vocal qu'eux",
-            "friendDirectMessagesShowMemberCount": "Afficher le nombre d'autres membres dans le canal vocal lors de la réception d'une notification DM",
-            "friendDirectMessagesShowMembers": "Afficher une liste des autres membres du canal vocal lors de la réception d'une notification DM",
-            "friendDirectMessagesSilent": "Rejoignez les messages de vos amis. Les DM seront silencieux",
+            "friendDirectMessages": "Recevez des notifications dans les MP de vos amis lorsqu'ils rejoignent un salon vocal",
+            "friendDirectMessagesSelf": "Recevez des notifications dans les MP de vos amis même si vous êtes sur le même salon vocal qu'eux",
+            "friendDirectMessagesShowMemberCount": "Afficher le nombre d'autres membres dans le salon vocal lors de la réception d'une notification MP",
+            "friendDirectMessagesShowMembers": "Afficher une liste des autres membres du salon vocal lors de la réception d'une notification MP",
+            "friendDirectMessagesSilent": "Rejoignez les messages de vos amis. Les MP seront silencieux",
             "ignoreBlockedUsers": "N'envoyez pas de messages concernant les utilisateurs bloqués rejoignant/quittant/déplaçant des canaux vocaux"
         }
     },
@@ -2366,15 +2394,15 @@
     "voiceRejoin": {
         "description": "Rejoignez automatiquement les canaux vocaux après une interruption de la connexion",
         "preventionOptions": {
-            "both": "DM et serveurs",
-            "dms": "DM uniquement",
+            "both": "MP et serveurs",
+            "dms": "MP uniquement",
             "none": "Aucun",
             "servers": "Serveurs uniquement"
         },
         "settings": {
-            "applyOnlyToDms": "S'applique uniquement aux DM",
-            "preventReconnectIfCallEnded": "Ne vous reconnectez pas si l'appel est terminé ou si le canal vocal est vide ou n'existe pas",
-            "rejoinDelay": "Définir le délai avant de rejoindre le canal vocal",
+            "applyOnlyToDms": "S'applique uniquement aux MP",
+            "preventReconnectIfCallEnded": "Ne vous reconnectez pas si l'appel est terminé ou si le salon vocal est vide ou n'existe pas",
+            "rejoinDelay": "Définir le délai avant de rejoindre le salon vocal",
             "rejoinTimeout": "N'essayez pas de vous rejoindre après autant de secondes écoulées depuis la déconnexion"
         }
     },
@@ -2385,7 +2413,7 @@
         },
         "description": "Faites la queue pour les canaux vocaux complets et soyez averti lorsqu'un créneau s'ouvre",
         "notices": {
-            "channelFull": "Le canal vocal {channel} est plein. Attendre un créneau ?",
+            "channelFull": "Le salon vocal {channel} est plein. Attendre un créneau ?",
             "join": "Rejoindre",
             "slotAvailable": "Hé, quelqu'un vient de quitter #{channel} et il y a une place pour vous maintenant !",
             "wait": "Attendez"

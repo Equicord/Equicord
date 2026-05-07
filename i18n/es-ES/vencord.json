@@ -116,6 +116,7 @@
     "arRPC": {
         "connected": "Conectado a arRPC",
         "connectionFailed": "No se pudo conectar a arRPC, ¿está funcionando?",
+        "description": "Plugin de cliente para arRPC que habilita RPC en Discord Web (experimental)",
         "retry": "Rever",
         "settingsAbout": {
             "description": "Siga las instrucciones en el repositorio GitHub para ejecutar el servidor y luego habilite el complemento.",
@@ -139,6 +140,7 @@
         "description": "API para añadir insignias a los usuarios."
     },
     "betterFolders": {
+        "description": "Muestra las carpetas de servidores en una barra lateral dedicada y añade mejoras relacionadas con las carpetas.",
         "settings": {
             "closeAllFolders": "Cierre todas las carpetas al seleccionar un servidor que no esté en una carpeta",
             "closeAllHomeButton": "Cierra todas las carpetas al hacer clic en el botón de inicio.",
@@ -188,6 +190,7 @@
         }
     },
     "betterSessions": {
+        "description": "Mejora el menú de sesiones (dispositivos). Permite ver las marcas de tiempo exactas, dar a cada sesión un nombre personalizado y recibir notificaciones sobre nuevas sesiones.",
         "newBadge": "NUEVO",
         "newSession": "Nueva sesión:",
         "rename": "Rebautizar",
@@ -203,6 +206,7 @@
         }
     },
     "betterSettings": {
+        "description": "Mejora tu experiencia al abrir el menú de configuración",
         "settings": {
             "disableFade": "Deshabilitar la animación de fundido cruzado.",
             "eagerLoad": "Elimina el retraso de carga al abrir el menú por primera vez.",
@@ -272,13 +276,15 @@
             "failedToDelete": "No se pudieron borrar los ajustes ({e}).",
             "failedToSync": "No se pudo sincronizar los ajustes a la nube ({e}).",
             "header": "Configuración de la nube",
+            "manifest": "No se pudo obtener el manifiesto para su eliminación (la API devolvió {e}).",
             "newerThanCloud": "Tus ajustes locales son más recientes que los de la nube.",
             "noSettings": "No hay ajustes en la nube.",
             "success": "¡Ajustes sincronizados a la nube!",
             "syncFromCloud": "No se pudieron sincronizar los ajustes desde la nube ({e}).",
+            "syncedCloud": "Datos sincronizados con la nube.",
             "upToDate": "Tus ajustes están actualizados.",
             "updated": "¡Su configuración ha sido actualizada! ¡Haga clic aquí para reiniciarlo completamente para aplicar los cambios!",
-            "updatedRemote": "¡Su configuración ha sido actualizada! ¡Haga clic aquí para reiniciarlo completamente para aplicar los cambios!"
+            "updatedRemote": "¡Ajustes sincronizados en la nube!"
         }
     },
     "colorSighted": {

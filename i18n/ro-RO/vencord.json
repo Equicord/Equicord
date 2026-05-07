@@ -139,6 +139,7 @@
         "description": "API pentru a adăuga insigne utilizatorilor"
     },
     "betterFolders": {
+        "description": "Afișează folderele serverului într-o bară laterală dedicată și introduce îmbunătățiri legate de foldere",
         "settings": {
             "closeAllFolders": "Închideți toate folderele când selectați un server care nu se află într-un folder",
             "closeAllHomeButton": "Închideți toate folderele când faceți clic pe butonul de pornire",
@@ -188,6 +189,7 @@
         }
     },
     "betterSessions": {
+        "description": "Îmbunătățește meniul sesiunilor sau dispozitivelor. Îți permite să vizualizezi data și ora exacte, să atribui fiecărei sesiuni un nume personalizat și să primești notificări cu privire la sesiunile noi.",
         "newBadge": "NOU",
         "newSession": "Sesiune nouă:",
         "rename": "Redenumiți",
@@ -203,6 +205,7 @@
         }
     },
     "betterSettings": {
+        "description": "Îmbunătățește experiența de deschidere a meniului de setări",
         "settings": {
             "disableFade": "Dezactivați animația de crossfade",
             "eagerLoad": "Elimină întârzierea de încărcare la deschiderea meniului pentru prima dată",
@@ -384,6 +387,7 @@
         "button1Url": "Butonul 1 [[PH0]]]",
         "button2Text": "Buton2 Text",
         "button2Url": "Butonul 2 [[PH0]]]",
+        "description": "Adaugă o funcție „Rich Presence” (Stare joc) complet personalizabilă la profilul tău Discord",
         "detailLine1": "Detaliu (linia 1)",
         "detailUrl": "Detaliu [[PH0]]]",
         "endTimestamp": "Timp de sfârșit (în milisecunde)",

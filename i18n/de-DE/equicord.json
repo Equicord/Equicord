@@ -55,6 +55,9 @@
         },
         "description": "Erwähnen Sie jemanden zufällig"
     },
+    "audioPlayerAPI": {
+        "description": "API zum Abspielen internen Discord Audiodateien oder externen Audiolinks."
+    },
     "autoZipper": {
         "description": "Komprimiert bestimmte Dateitypen und Ordner automatisch vor dem Hochladen nach Discord",
         "settings": {
@@ -111,7 +114,7 @@
             "oscilloscopeColor": "Farbe für das Oszilloskop",
             "oscilloscopeSolidColor": "Einfarbige Darstellung für das Oszilloskop verwenden",
             "spectrograph": "Spektrogramm-Visualizer aktivieren",
-            "spectrographColor": "Farbe für das Spektrogramm",
+            "spectrographColor": "Farbe für Spektrograph (R, G, B oder #hex)",
             "spectrographSolidColor": "Einfarbige Darstellung für das Spektrogramm verwenden"
         },
         "toasts": {
@@ -146,7 +149,7 @@
                 "userOption": "Bestimmter Benutzer zum Ausprobieren und Aktualisieren"
             }
         },
-        "description": "Verbessert das Befehlssystem durch verschiedene Verbesserungen.",
+        "description": "Aktualisiert die angegebenen App-Befehle lokal.",
         "settings": {
             "allowNewlinesInCommands": "Zeilenumbrüche in Befehlseingaben zulassen (STRG + Umschalt + Eingabetaste)",
             "autoFillArguments": "Füllen Sie den Befehl automatisch mit allen Argumenten statt nur mit den erforderlichen aus"
@@ -334,6 +337,8 @@
     "commandPalette": {
         "description": "Führen Sie Aktionen schnell über eine durchsuchbare Befehlspalette aus",
         "settings": {
+            "closeAfterExecute": "Palette nach dem Befehl schließen.",
+            "compactStartEnabled": "Palette kompakt öffnen.",
             "customCommands": "Verwalten Sie benutzerdefinierte Befehlspaletteneinträge",
             "enableTagFilter": "Zeigt die Tag-Filterleiste an",
             "hotkey": "Hotkey zum Öffnen der Befehlspalette",
@@ -551,6 +556,11 @@
             "reset": "Zurücksetzen"
         }
     },
+    "equicordDonor": {
+        "description": "Diese Badge ist ein besonderer Vorteil für Equicord (nicht Vencord) Spender",
+        "description2": "Bitte unterstütze die Entwicklung von Equicord, indem du ein Spender wirst. Es würde uns sehr viel bedeuten!!",
+        "title": "Equicord Spender"
+    },
     "equicordHelper": {
         "alerts": {
             "equicordSupport": "Equicord Support",
@@ -598,6 +608,10 @@
             "themes": "Themes",
             "tooltip": "Equicord Toolbox"
         }
+    },
+    "equicordTranslator": {
+        "description": "Wird Mitwirkenden verliehen, die die Sprachunterstützung von Equicord erweitern, indem sie Inhalte für die Community übersetzen.",
+        "title": "Equicord Übersetzer"
     },
     "equissant": {
         "description": "Croissant jede angegebene Anzahl an Klicks :trolley:",
@@ -889,6 +903,7 @@
     },
     "githubRepos": {
         "description": "Zeigt die öffentlichen GitHub-Repositorys eines Benutzers in seinem Profil an",
+        "githubRepos": "GitHub-Repositorys",
         "settings": {
             "showInMiniProfile": "Zeigen Sie im Miniprofil die vollständige Benutzeroberfläche anstelle nur einer Schaltfläche an",
             "showLanguage": "Repository-Sprache anzeigen",
@@ -934,6 +949,9 @@
             "hideTags": "Tags ausblenden"
         }
     },
+    "headerBarAPI": {
+        "description": "API zum Hinzufügen von Schaltflächen zur Header Leiste und Kanal Symbolleiste."
+    },
     "hideChatButtons": {
         "description": "Die Chat-Schaltflächen können ausgeblendet werden",
         "settings": {
@@ -976,7 +994,7 @@
         "description": "Ändert die Home-Taste in eine Tippanzeige, wenn jemand in Ihrem DMS gerade tippt"
     },
     "hopOn": {
-        "description": "Hop on Fortnite oder Hop on bloons :3",
+        "description": "Spring auf! Öffnet eine konfigurierbare URL, wenn eine Nachricht mit einem benutzerdefinierten RegEx im aktuellen Kanal übereinstimmt.",
         "settings": {
             "regex": "Regex, auf den getriggert werden soll",
             "url": "URL zum Öffnen"
@@ -1315,6 +1333,10 @@
             "scanQrCode": "QR-Code scannen"
         }
     },
+    "mainWindowFrameless": {
+        "description": "Entferne den nativen Fensterrahmen für eine sauberere Optik. Du kannst das Fenster weiterhin verschieben, indem du den Bereich der Titelleiste ziehst.",
+        "title": "Hauptfenster Rahmen deaktivieren"
+    },
     "mediaPlaybackSpeed": {
         "description": "Steuern Sie die Medienwiedergabegeschwindigkeit für Sprachnachrichten, Videos und Audioanhänge",
         "settings": {
@@ -1496,7 +1518,7 @@
         }
     },
     "moyai": {
-        "description": "Spielen Sie den Moyai-Soundeffekt ab, wenn das Emoji 🗿 verwendet wird",
+        "description": "Spielt einen 🗿 Soundeffekt ab, wann immer ein Moyai-Emoji im aktuellen Kanal gesendet, als Reaktion verwendet oder als Voice-Effekt benutzt wird.",
         "settings": {
             "ignoreBlocked": "Ignorieren Sie Nachrichten von blockierten Benutzern",
             "ignoreBots": "Nachrichten von Bots ignorieren",
@@ -2091,7 +2113,10 @@
         "description": "Ein Plugin, das Ihnen hilft, Quizfragen mithilfe von KI zu beantworten.",
         "settings": {
             "apiKey": "API-Taste.",
-            "autoRespond": "Reagieren Sie automatisch auf Nachrichten, wenn Sie eine Antwort erhalten.",
+            "autoReply": "Auto-Antwort",
+            "autoRespond": "Wie sollen Antworten behandelt werden?",
+            "bot": "Clyde",
+            "chatbar": "Chatbar-Text ersetzen",
             "endpoint": "OpenAI-kompatibler KI-Endpunkt.",
             "maxTokens": "Maximale Anzahl von Tokens in der Antwort.",
             "model": "Zu verwendendes KI-Modell.",
@@ -2148,6 +2173,9 @@
             "patternPlaceholder": "*.example.com",
             "urlPatterns": "URL Muster"
         }
+    },
+    "userAreaAPI": {
+        "description": "API zum Hinzufügen von Schaltflächen zum Benutzerbereich Panel."
     },
     "userpfp": {
         "avatarOptions": {

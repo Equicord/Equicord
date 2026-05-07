@@ -116,6 +116,7 @@
     "arRPC": {
         "connected": "Connected to arRPC",
         "connectionFailed": "Failed to connect to arRPC, is it running?",
+        "description": "Client plugin for arRPC to enable RPC on Discord Web (experimental)",
         "retry": "Retry",
         "settingsAbout": {
             "description": "Follow the instructions in the GitHub repo to get the server running, and then enable the plugin.",
@@ -139,6 +140,7 @@
         "description": "API to add badges to users"
     },
     "betterFolders": {
+        "description": "Shows server folders on dedicated sidebar and adds folder related improvements",
         "settings": {
             "closeAllFolders": "Close all folders when selecting a server not in a folder",
             "closeAllHomeButton": "Close all folders when clicking on the home button",
@@ -188,6 +190,7 @@
         }
     },
     "betterSessions": {
+        "description": "Enhances the sessions (devices) menu. Allows you to view exact timestamps, give each session a custom name, and receive notifications about new sessions.",
         "newBadge": "NEW",
         "newSession": "New session:",
         "rename": "Rename",
@@ -203,6 +206,7 @@
         }
     },
     "betterSettings": {
+        "description": "Enhances your settings-menu-opening experience.",
         "settings": {
             "disableFade": "Disable the crossfade animation",
             "eagerLoad": "Removes the loading delay when opening the menu for the first time",
@@ -272,10 +276,12 @@
             "failedToDelete": "Could not delete settings ({e}).",
             "failedToSync": "Could not synchronize settings to the cloud ({e}).",
             "header": "Cloud Settings",
+            "manifest": "Could not fetch manifest for deletion (API returned {e}).",
             "newerThanCloud": "Your local settings are newer than the cloud ones.",
             "noSettings": "There are no settings in the cloud.",
             "success": "Synchronized settings to the cloud!",
             "syncFromCloud": "Could not synchronize settings from the cloud ({e}).",
+            "syncedCloud": "Cloud data synchronised.",
             "upToDate": "Your settings are up to date.",
             "updated": "Your settings have been updated! Click here to restart to fully apply changes!",
             "updatedRemote": "Your settings have been updated! Click here to restart to fully apply changes!"

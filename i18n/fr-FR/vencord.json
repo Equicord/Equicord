@@ -1,37 +1,37 @@
 {
     "accountPanelServerProfile": {
-        "description": "Faites un clic droit sur le panneau de votre compte en bas à gauche pour afficher votre profil sur le serveur actuel",
-        "prioritizeServerProfile": "Prioriser le profil du serveur",
-        "prioritizeServerProfileDescription": "Donnez la priorité au profil du serveur lorsque vous cliquez avec le bouton gauche sur le panneau de votre compte",
-        "viewAccountProfile": "Afficher le profil du compte",
-        "viewServerProfile": "Afficher le profil du serveur"
+        "description": "Afficher le profil de serveur au lieu du profil global en bas à gauche avec un clic droit",
+        "prioritizeServerProfile": "Prioriser le profil de serveur",
+        "prioritizeServerProfileDescription": "Afficher le profil de serveur avec un clic gauche sur la section du compte",
+        "viewAccountProfile": "Afficher le profil global",
+        "viewServerProfile": "Afficher le profil de serveur"
     },
     "addonCard": {
-        "new": "NOUVEAU"
+        "new": "NOUV"
     },
     "alwaysAnimate": {
         "description": "Anime tout ce qui peut être animé",
         "settings": {
-            "icons": "Animez toujours les icônes du serveur, les avatars, le décor et plus encore",
-            "nameplates": "Toujours animer les plaques signalétiques",
-            "roleGradients": "Toujours animer les dégradés de rôles",
-            "serverBanners": "Animez toujours les bannières du serveur",
-            "statusEmojis": "Animez toujours les émojis de statut"
+            "icons": "Animez toujours les icônes de serveur, les avatars, les décorations d'avatar et plus",
+            "nameplates": "Toujours animer les plaques nominatives",
+            "roleGradients": "Toujours animer les dégradés de rôle",
+            "serverBanners": "Toujours animer les bannières de serveur",
+            "statusEmojis": "Toujours animer les émojis de statut"
         }
     },
     "alwaysExpandRoles": {
-        "description": "Développe toujours la liste des rôles dans les fenêtres contextuelles du profil",
+        "description": "Toujours afficher la liste de rôles complète dans les profils",
         "settings": {
             "hideArrow": "Masquer la flèche"
         }
     },
     "alwaysTrust": {
-        "description": "Supprime le domaine non fiable ennuyeux et la fenêtre contextuelle de fichier suspect",
+        "description": "Supprime l'alerte de site web inconnu et de fichier suspect",
         "settings": {
-            "confirmModal": "Un modal « êtes-vous sûr de vouloir supprimer » doit-il s'afficher ?",
-            "domain": "Supprimez la fenêtre contextuelle de domaine non fiable lors de l'ouverture de liens",
-            "file": "Supprimez la fenêtre contextuelle « Téléchargement potentiellement dangereux » lors de l'ouverture de liens",
-            "noDeleteSafety": "Supprime l'exigence de saisie du nom du serveur lors de la suppression d'un serveur"
+            "confirmModal": "Afficher la confirmation de suppression",
+            "domain": "Supprimer l'alerte de site web inconnu à l'ouverture de liens",
+            "file": "Supprime l'alerte de fichier suspect quand un lien est ouvert",
+            "noDeleteSafety": "Retire la saisie du nom du serveur lors de la suppression de celui-ci"
         },
         "ui": {
             "deleteServerBody": "C'est permanent, si ce n'était pas évident.",
@@ -116,6 +116,7 @@
     "arRPC": {
         "connected": "Connecté à arRPC",
         "connectionFailed": "Échec de la connexion à arRPC, est-il en cours d'exécution ?",
+        "description": "Plugin client pour arRPC permettant d'activer le RPC sur Discord Web (expérimental)",
         "retry": "Réessayer",
         "settingsAbout": {
             "description": "Suivez les instructions du dépôt GitHub pour faire fonctionner le serveur, puis activez le plugin.",
@@ -139,6 +140,7 @@
         "description": "API pour ajouter des badges aux utilisateurs"
     },
     "betterFolders": {
+        "description": "Affiche les dossiers des serveurs dans une barre latérale dédiée et ajoute des améliorations liées aux dossiers",
         "settings": {
             "closeAllFolders": "Fermez tous les dossiers lors de la sélection d'un serveur qui ne se trouve pas dans un dossier",
             "closeAllHomeButton": "Fermez tous les dossiers en cliquant sur le bouton d'accueil",
@@ -188,6 +190,7 @@
         }
     },
     "betterSessions": {
+        "description": "Améliore le menu des sessions (appareils). Permet d'afficher les horodatages exacts, de donner un nom personnalisé à chaque session et de recevoir des notifications lors de nouvelles sessions.",
         "newBadge": "NOUVEAU",
         "newSession": "Nouvelle séance :",
         "rename": "Rebaptiser",
@@ -203,6 +206,7 @@
         }
     },
     "betterSettings": {
+        "description": "Améliore votre expérience d'ouverture du menu des paramètres",
         "settings": {
             "disableFade": "Désactiver l'animation de fondu enchaîné",
             "eagerLoad": "Supprime le délai de chargement lors de la première ouverture du menu",
@@ -227,7 +231,7 @@
     "callTimer": {
         "description": "Ajoutez des minuteries d'appel pour tous les utilisateurs dans les canaux vocaux et dans l'état de connexion.",
         "settings": {
-            "allCallTimers": "Ajouter une minuterie d'appel à tous les utilisateurs d'un canal vocal de serveur",
+            "allCallTimers": "Ajouter une minuterie d'appel à tous les utilisateurs d'un salon vocal de serveur",
             "format": "Format compact ou lisible par l'homme :",
             "showRoleColor": "Afficher la couleur du rôle de l'utilisateur (si ce plugin est activé)",
             "showSeconds": "Afficher les secondes dans la minuterie",
@@ -272,13 +276,15 @@
             "failedToDelete": "Impossible de supprimer les paramètres ({e}).",
             "failedToSync": "Impossible de synchroniser les paramètres avec le cloud ({e}).",
             "header": "Paramètres cloud",
+            "manifest": "Impossible de récupérer le manifeste pour suppression (l’API a retourné {e}).",
             "newerThanCloud": "Vos paramètres locaux sont plus récents que ceux du cloud.",
             "noSettings": "Il n'y a aucun paramètre dans le cloud.",
             "success": "Paramètres synchronisés avec le cloud !",
             "syncFromCloud": "Impossible de synchroniser les paramètres depuis le cloud ({e}).",
+            "syncedCloud": "Données cloud synchronisées.",
             "upToDate": "Vos paramètres sont à jour.",
             "updated": "Vos paramètres ont été mis à jour ! Cliquez ici pour redémarrer et appliquer pleinement les modifications !",
-            "updatedRemote": "Vos paramètres ont été mis à jour ! Cliquez ici pour redémarrer et appliquer pleinement les modifications !"
+            "updatedRemote": "Paramètres synchronisés dans le cloud !"
         }
     },
     "colorSighted": {
@@ -384,6 +390,7 @@
         "button1Url": "Bouton 1 URL",
         "button2Text": "Texte du bouton 2",
         "button2Url": "Bouton2 URL",
+        "description": "Ferme la palette après exécution d'une commande",
         "detailLine1": "Détail (ligne 1)",
         "detailUrl": "Détail URL",
         "endTimestamp": "Horodatage de fin (en millisecondes)",
@@ -449,6 +456,8 @@
     },
     "decor": {
         "accessFromProfiles": "Vous pouvez également accéder aux décorations Décor depuis la page {link}.",
+        "agreedToGuidelines": "Accepté les directives",
+        "baseUrl": "URL de l’API de Decor",
         "changeDecoration": "Changer la décoration",
         "description": "Créez et utilisez vos propres décorations d'avatar personnalisées ou choisissez votre favori parmi les préréglages.",
         "enableAndRestart": "Activez Décor et redémarrez votre client pour modifier la décoration de votre avatar.",
@@ -465,7 +474,7 @@
         }
     },
     "disableCallIdle": {
-        "description": "Désactive l'expulsion automatique des appels vocaux DM après 3 minutes, désactive aussi le déplacement vers un salon AFK."
+        "description": "Désactive l'expulsion automatique des appels vocaux MP après 3 minutes, désactive aussi le déplacement vers un salon AFK."
     },
     "donate": "Faire un don",
     "donorCard": {
@@ -505,6 +514,7 @@
         "cloneTo": "Cloner vers {guild}",
         "clonedSuccess": "Clonage réussi de {name} vers {guild} !",
         "customName": "Nom personnalisé",
+        "description": "Permet de cloner les émojis et autocollants sur ton propre serveur (clic droit dessus).",
         "failedToClone": "Échec du clonage : {error}",
         "nameValidation": "Le nom doit comporter entre 2 et 32 caractères",
         "somethingWentWrong": "Quelque chose s'est mal passé (vérifiez la console !)"
@@ -699,6 +709,7 @@
         "description": "Ne cachez pas les messages des « spammeurs probables »"
     },
     "ignoreActivities": {
+        "description": "Ignore les activités dans ton statut UNIQUEMENT. Tu peux configurer celles qui sont spécifiquement ignorées via les onglets Jeux enregistrés et Activités, ou utiliser les paramètres généraux ci-dessous.",
         "disableActivity": "Désactiver l'activité",
         "enableActivity": "Activer l'activité",
         "filterList": {
@@ -732,6 +743,7 @@
         "description": "Ne cachez jamais les liens d’images dans les messages, même s’il s’agit du seul contenu"
     },
     "imageZoom": {
+        "description": "Te permet de zoomer sur les images et GIFs. Utilise la molette de défilement pour zoomer et Maj + molette pour augmenter le rayon/taille de la loupe",
         "lensSize": "Taille de l'objectif",
         "nearestNeighbour": "Voisin le plus proche",
         "settings": {
@@ -840,6 +852,7 @@
         "showLogs": "Afficher les journaux"
     },
     "memberCount": {
+        "description": "Affiche le nombre de membres en ligne, membres totaux et utilisateurs dans les salons vocaux sur le serveur dans la liste des membres et l'infobulle",
         "settings": {
             "memberList": "Afficher le nombre de membres dans la liste des membres",
             "toolTip": "Afficher le nombre de membres dans l'info-bulle du serveur",
@@ -890,7 +903,7 @@
             "clickTimeout": "Délai d'attente pour distinguer les doubles/triples clics (ms)",
             "deferDoubleClickForTriple": "Retarder le double-clic pour autoriser les actions du triple-clic (désactive le triple-clic lorsqu'il est désactivé)",
             "disableInDms": "Désactivez toutes les actions de clic dans les messages directs",
-            "disableInSystemDms": "Désactivez toutes les actions de clic dans les DM du système",
+            "disableInSystemDms": "Désactivez toutes les actions de clic dans les MP du système",
             "doubleClickAction": "Action sur double-clic (vos messages)",
             "doubleClickHoldThreshold": "Temps de maintien maximum pour les actions de double-clic (ms). Maintenir plus longtemps permet la sélection de texte",
             "doubleClickModifier": "Modificateur requis pour l'action de double-clic",
@@ -930,6 +943,7 @@
     "messageLatency": {
         "clockAhead": "L'horloge de cet utilisateur est en avance de {delta}.",
         "delayedMessage": "Message retardé",
+        "description": "Affiche un indicateur pour les messages qui ont pris ≥n secondes à envoyer",
         "messageDelayed": "Ce message a été envoyé avec un délai de {delta}.",
         "oldAndroidClient": "Ancien client Android Discord",
         "oldDiscordAndroid": "L'utilisateur est soupçonné d'utiliser un ancien client Android Discord",
@@ -960,7 +974,7 @@
         },
         "channelLabels": {
             "directMessage": "Message privé",
-            "groupDM": "Group DM",
+            "groupDM": "Group MP",
             "server": "Serveur"
         },
         "description": "Ajoute un aperçu aux messages qui relient un autre message",
@@ -979,7 +993,7 @@
         "settings": {
             "automodEmbeds": "Utilisez les intégrations automod au lieu des intégrations riches (plus petites mais moins d'informations)",
             "clearMessageCache": "Vider le cache des messages liés",
-            "idList": "ID de guilde/canal/utilisateur à mettre sur liste noire ou sur liste blanche (séparés par une virgule)",
+            "idList": "ID de guilde/salon/utilisateur à mettre sur liste noire ou sur liste blanche (séparés par une virgule)",
             "listMode": "S'il faut utiliser la liste d'identification comme liste noire ou liste blanche",
             "messageBackgroundColor": "Couleur d’arrière-plan pour les messages intégrés enrichis"
         }
@@ -989,6 +1003,7 @@
         "deletedMessages_one": "{count} message supprimé",
         "deletedMessages_other": "{count} messages supprimés",
         "deletedMessages_zero": "Aucun message supprimé",
+        "description": "Enregistre temporairement les messages supprimés et modifiés.",
         "disableDiffView": "Désactiver la vue différentielle",
         "editHistory": "Historique des modifications des messages",
         "enableDiffView": "Activer la vue différentielle",
@@ -1001,7 +1016,7 @@
             "deleteStyleRedOverlay": "Superposition rouge",
             "deleteStyleRedText": "Texte rouge",
             "ignoreBots": "S'il faut ignorer les messages des robots",
-            "ignoreChannels": "Liste des ID de canal séparés par des virgules à ignorer",
+            "ignoreChannels": "Liste des ID de salon séparés par des virgules à ignorer",
             "ignoreGuilds": "Liste des identifiants de guilde séparés par des virgules à ignorer",
             "ignoreSelf": "S'il faut ignorer les messages par vous-même",
             "ignoreUsers": "Liste des ID utilisateur séparés par des virgules à ignorer",
@@ -1157,6 +1172,12 @@
     "noSystemBadge": {
         "description": "Désactive le badge de nombre non lu de la barre des tâches et de la barre d’état système."
     },
+    "noTrack": {
+        "description": "Désactive le suivi de Discord (analyses/'science'), les métriques et les rapports de crash Sentry",
+        "settings": {
+            "disableAnalytics": "Désactiver le suivi de Discord (analyses/'science')"
+        }
+    },
     "noTypingAnimation": {
         "description": "Désactive l'animation des points de saisie gourmande en CPU"
     },
@@ -1173,16 +1194,16 @@
         }
     },
     "onePingPerDM": {
-        "description": "Si des messages non lus sont envoyés plusieurs fois par un utilisateur dans des DM, vous ne recevrez qu'un seul ping audio.",
+        "description": "Si des messages non lus sont envoyés plusieurs fois par un utilisateur dans des MP, vous ne recevrez qu'un seul ping audio.",
         "settings": {
-            "allowEveryone": "Recevez des pings audio pour @everyone et @here dans les DM de groupe",
+            "allowEveryone": "Recevez des pings audio pour @everyone et @here dans les MP de groupe",
             "allowMentions": "Recevez des pings audio pour les @mentions",
             "alwaysPlaySound": "Jouer le son de notification de message même lorsqu'il est désactivé",
-            "channelToAffect": "Sélectionnez le type de DM que le plugin doit affecter",
+            "channelToAffect": "Sélectionnez le type de MP que le plugin doit affecter",
             "channelToAffectOptions": {
                 "both": "Les deux",
-                "groupDm": "Group DM",
-                "userDm": "DM des utilisateurs"
+                "groupDm": "Group MP",
+                "userDm": "MP des utilisateurs"
             },
             "ignoreUsers": "ID utilisateur (virgule + espace) dont les pings ne doivent JAMAIS être limités"
         }
@@ -1202,7 +1223,7 @@
         }
     },
     "overrideForumDefaults": {
-        "description": "Vous permet de remplacer la disposition/ordre de tri par défaut du forum. vous pouvez toujours le modifier canal par canal",
+        "description": "Vous permet de remplacer la disposition/ordre de tri par défaut du forum. vous pouvez toujours le modifier salon par salon",
         "layouts": {
             "gallery": "Galerie",
             "list": "Liste"
@@ -1223,13 +1244,14 @@
         "pauseIndefinitely": "Pause indéfiniment."
     },
     "permissionFreeWill": {
-        "description": "Désactive les restrictions côté client pour la gestion des autorisations de canal.",
+        "description": "Désactive les restrictions côté client pour la gestion des autorisations de salon.",
         "settings": {
             "lockout": "Contourner la prévention du verrouillage des autorisations (\"Je suis presque sûr que vous ne voulez pas faire ça\")",
             "onboarding": "Contournez les exigences d'intégration (\"Effectuer cette modification rendra votre serveur incompatible [...]\")"
         }
     },
     "permissionsViewer": {
+        "description": "Affiche les permissions d'un utilisateur ou d'un salon, ainsi que les rôles d'un serveur",
         "noPermissions": "Aucune autorisation d'affichage !",
         "owner": "propriétaire",
         "permissions": "Autorisations",
@@ -1280,6 +1302,7 @@
         "color": "Couleur",
         "create": "Créer",
         "deleteCategory": "Supprimer la catégorie",
+        "description": "Permet d'épingler des salons privés en haut de ta liste de MP. Pour épingler/désépingler ou réorganiser les épingles, clic droit sur les MP.",
         "editCategory": "Modifier la catégorie",
         "editCategoryTitle": "Modifier la catégorie",
         "moveDown": "Descendre",
@@ -1287,16 +1310,16 @@
         "name": "Nom",
         "newCategory": "Nouvelle catégorie",
         "pinCategory": "Catégorie de broche {index}",
-        "pinDms": "Épingler les DM",
+        "pinDms": "Épingler les MP",
         "save": "Enregistrer",
         "settings": {
-            "canCollapseDmSection": "Autoriser la réduction de la section DM non catégorisée",
+            "canCollapseDmSection": "Autoriser la réduction de la section MP non catégorisée",
             "customOrder": "Personnalisé (cliquez avec le bouton droit sur les chaînes pour les réorganiser)",
-            "dmSectionCollapsed": "Réduire la section DM",
+            "dmSectionCollapsed": "Réduire la section MP",
             "mostRecentMessage": "Message le plus récent",
-            "pinOrder": "Dans quel ordre les DM épinglés doivent-ils être affichés ?"
+            "pinOrder": "Dans quel ordre les MP épinglés doivent-ils être affichés ?"
         },
-        "unpinDm": "Désépingler DM"
+        "unpinDm": "Désépingler MP"
     },
     "plainFolderIcon": {
         "description": "Ne pas afficher les petites icônes de guilde dans les dossiers"
@@ -1414,6 +1437,7 @@
         "confirmDelete": "Voulez-vous vraiment supprimer cet avis ?",
         "confirmReport": "Voulez-vous vraiment signaler cet avis ?",
         "delete": "Supprimer",
+        "description": "Consulter les avis des autres utilisateurs (Ajoute un nouveau paramètre aux profils)",
         "failedToFetchBlocks": "Échec de la récupération des blocs : {error}",
         "mustBeLoggedInBlock": "Vous devez être connecté pour bloquer les utilisateurs.",
         "mustBeLoggedInDelete": "Vous devez être connecté pour supprimer les avis.",
@@ -1446,6 +1470,7 @@
         },
         "system": "Système",
         "unblockUser": "Débloquer l'utilisateur",
+        "userReviews": "Avis des utilisateurs",
         "viewReviews": "Voir les avis"
     },
     "roleColorEverywhere": {
@@ -1604,7 +1629,7 @@
         },
         "frameless": {
             "description": "Retirez le cadre de fenêtre natif pour un look plus propre. Vous pouvez toujours déplacer la fenêtre en faisant glisser la zone de la barre de titre.",
-            "title": "Désactiver le cadre de la fenêtre"
+            "title": "Désactiver les cadres de la fenêtre"
         },
         "hint": "Astuce : Vous pouvez modifier la position de cette section de paramètres dans les <0>paramètres du plugin Paramètres</0> !",
         "macosVibrancyStyle": {
@@ -1654,6 +1679,16 @@
             "title": "Utiliser la barre de titre native de Windows au lieu de celle personnalisée de Discord"
         }
     },
+    "settingsPlugin": {
+        "aboveActivity": "Au-dessus des paramètres d'activité",
+        "aboveNitro": "Au-dessus de la section Nitro",
+        "belowActivity": "En-dessous des paramètres d'activité",
+        "belowNitro": "En-dessous de la section Nitro",
+        "bottom": "Tout en bas",
+        "description": "Ajoute l'interface des paramètres et les informations de débogage",
+        "settingsLocation": "Où placer la section des paramètres Equicord",
+        "top": "Tout en haut"
+    },
     "settingsSync": {
         "failedToImport": "Échec de l'importation des paramètres : {e}",
         "imported": "Paramètres importés avec succès. Redémarrez pour appliquer les modifications !"
@@ -1701,7 +1736,7 @@
         "archiveDuration": "Durée d'inactivité par défaut avant l'archivage {type} : {duration}",
         "availableTags": "Balises disponibles :",
         "bitrate": "Débit : {bitrate} bits",
-        "cannotSeeMessages": "Vous ne pouvez pas voir le {type} de ce canal.",
+        "cannotSeeMessages": "Vous ne pouvez pas voir le {type} de ce salon.",
         "channelTypes": {
             "announcement": "annonce",
             "forum": "forum",
@@ -1724,12 +1759,12 @@
             "listView": "Vue en liste",
             "notSet": "Non défini"
         },
-        "hiddenChannel": "Il s'agit d'un canal caché {type}",
+        "hiddenChannel": "Il s'agit d'un salon caché {type}",
         "hiddenChannelTooltip": "Canal caché",
         "hideAllowedUsersAndRoles": "Masquer les utilisateurs et les rôles autorisés",
         "lastMessageCreated": "Dernier {type} créé :",
         "lastMessagePin": "Épingle du dernier message :",
-        "lockedChannel": "Il s'agit d'un canal {type} verrouillé.",
+        "lockedChannel": "Il s'agit d'un salon {type} verrouillé.",
         "nsfw": "NSFW",
         "permissionDetails": "Détails de l'autorisation",
         "region": "Région : {region}",
@@ -1830,14 +1865,14 @@
         "clickActions": {
             "openPluginSettings": "Ouvrir les paramètres du plugin",
             "toggleTypingGlobally": "Basculer la saisie globale",
-            "toggleTypingInChannel": "Activer/Désactiver la saisie dans le canal",
+            "toggleTypingInChannel": "Activer/Désactiver la saisie dans le salon",
             "toggleTypingInGuild": "Activer la saisie dans la guilde"
         },
         "command": {
             "chatBarIndicatorsOption": "Masquez les indicateurs de saisie des autres utilisateurs au-dessus de la barre de discussion.",
             "chatContextMenuOption": "Affichez une liste déroulante dans le menu contextuel du chat pour basculer les paramètres du plugin lors de vos déplacements.",
             "chatIconOption": "Afficher une icône dans la barre de discussion pour activer le plugin lors de vos déplacements.",
-            "defaultHiddenOption": "S'il faut masquer la saisie dans les DM/canaux/guildes par défaut ou non.",
+            "defaultHiddenOption": "S'il faut masquer la saisie dans les MP/canaux/guildes par défaut ou non.",
             "description": "Masquez votre indicateur de saisie du chat.",
             "membersListIndicatorsOption": "Masquez les indicateurs de saisie des autres utilisateurs de la liste des membres.",
             "toggleChannel": "Salon",
@@ -1853,6 +1888,7 @@
             "membersListIndicators": "Indicateurs de la liste des membres",
             "silentTyping": "Saisie silencieuse"
         },
+        "description": "Masquez votre indicateur de saisie du chat.",
         "noChanges": "Aucune modification apportée aux paramètres de saisie silencieuse.",
         "settings": {
             "chatContextMenu": "Affichez une liste déroulante dans le menu contextuel du chat pour modifier les paramètres du plugin lors de vos déplacements.",
@@ -1860,10 +1896,10 @@
             "chatIconLeftClickAction": "Que faire en cliquant sur l'icône de discussion.",
             "chatIconMiddleClickAction": "Que faire en cliquant avec le milieu sur l'icône de discussion.",
             "chatIconRightClickAction": "Que faire en cliquant avec le bouton droit sur l'icône de discussion.",
-            "defaultHidden": "S'il est activé, le plugin masquera votre saisie aux autres dans tous les DM/canaux/guildes non répertoriés dans « Emplacements désactivés » ci-dessous. S'il est désactivé, le plugin montrera votre saisie aux autres pour tous les DM/canaux/guildes non répertoriés dans « Emplacements activés » ci-dessous.",
-            "disabledLocations": "Désactivez la fonctionnalité pour ces identifiants. Accepte une liste d'identifiants DM, d'identifiants de canal et d'identifiants de guilde séparés par des virgules. Utilisé uniquement si « Masqué par défaut » est activé.",
+            "defaultHidden": "S'il est activé, le plugin masquera votre saisie aux autres dans tous les MP/canaux/guildes non répertoriés dans « Emplacements désactivés » ci-dessous. S'il est désactivé, le plugin montrera votre saisie aux autres pour tous les MP/canaux/guildes non répertoriés dans « Emplacements activés » ci-dessous.",
+            "disabledLocations": "Désactivez la fonctionnalité pour ces identifiants. Accepte une liste d'identifiants MP, d'identifiants de salon et d'identifiants de guilde séparés par des virgules. Utilisé uniquement si « Masqué par défaut » est activé.",
             "enabledGlobally": "Basculez la fonctionnalité de votre propre indicateur de saisie de manière globale.",
-            "enabledLocations": "Activez la fonctionnalité pour ces identifiants. Accepte une liste d'identifiants DM, d'identifiants de canal et d'identifiants de guilde séparés par des virgules. Utilisé uniquement si « Masqué par défaut » est désactivé.",
+            "enabledLocations": "Activez la fonctionnalité pour ces identifiants. Accepte une liste d'identifiants MP, d'identifiants de salon et d'identifiants de guilde séparés par des virgules. Utilisé uniquement si « Masqué par défaut » est désactivé.",
             "hideChatBoxTypingIndicators": "Masquez les indicateurs de saisie des autres utilisateurs au-dessus de la barre de discussion.",
             "hideMembersListTypingIndicators": "Masquez les indicateurs de saisie des autres utilisateurs de la liste des membres."
         },
@@ -1914,21 +1950,34 @@
             "unlimitedSuperReactionPlaying": "Supprimer la limite sur le nombre de Super Réactions pouvant être jouées simultanément"
         }
     },
+    "supportHelper": {
+        "debug": "Envoyer les informations de débogage Equicord",
+        "description": "Nous aide à vous fournir de l'assistance",
+        "plugins": "Envoyer la liste des plugins Equicord"
+    },
     "tabs": {
         "settings": "Equicord Paramètres"
     },
     "textReplace": {
+        "description": "Remplacez du texte dans vos messages ou ceux des autres. Vous pouvez trouver des règles pré-faites dans le salon #textreplace-rules du serveur Vencord.",
         "find": "Trouver",
+        "findDesc": "Le texte à remplacer",
+        "findDescRegex": "Le motif regex",
         "messageWithRules": "Message avec règles appliquées",
         "onlyIfIncludes": "Seulement si inclut",
+        "onlyIfIncludesDesc": "Cette règle ne sera appliquée que si le message inclut ce texte. Ceci est optionnel",
+        "regexRules": "Remplacements plus puissants utilisant les expressions régulières. Cette section est destinée aux utilisateurs avancés. Si vous ne la comprenez pas, ignorez-la simplement",
         "replace": "Remplacer",
+        "replaceDesc": "Le texte avec lequel remplacer le texte trouvé",
         "scope.allMessages": "Apply to all messages",
         "scope.myMessages": "Apply to your messages (visible to everyone)",
         "scope.othersMessages": "Apply to others' messages (only visible to you)",
+        "stringRules": "Règles simples de recherche et remplacement. Par exemple, cherchez 'brb' et remplacez-le par 'be right back'",
+        "testMessage": "Tapez un message pour tester les règles",
         "testRules": "Règles de test",
         "typeMessage": "Tapez un message",
-        "usingRegex": "Utiliser l'expression régulière",
-        "usingString": "Utiliser une chaîne"
+        "usingRegex": "Remplacements par expressions régulières",
+        "usingString": "Remplacements Simples"
     },
     "themeAttributes": {
         "description": "Ajoute des attributs de données à divers éléments à des fins de personnalisation"
@@ -1940,6 +1989,7 @@
             "title": "Equicord Traduction automatique activée"
         },
         "autoTranslateEnabledLabel": "Traduction automatique activée",
+        "description": "Traduisez les messages avec Google Translate ou DeepL",
         "disableAutoTranslate": "Désactiver la traduction automatique",
         "dontShowAgain": "Ne plus montrer",
         "gotIt": "J'ai compris",
@@ -1948,6 +1998,16 @@
         "selectLanguage": "Sélectionnez une langue",
         "translate": "Traduire"
     },
+    "translation": {
+        "description": "Aide à la traduction d'Equicord",
+        "settings": {
+            "forceLocale": {
+                "description": "Forcer une autre langue pour Equicord",
+                "followDiscord": "Par défaut (suivre Discord)"
+            },
+            "showMissingKeys": "Si la langue actuelle ne dispose pas des traductions, afficher les clés au lieu de revenir à l'anglais"
+        }
+    },
     "typingIndicator": {
         "description": "Ajoute un indicateur si quelqu'un tape sur une chaîne.",
         "settings": {
@@ -1955,7 +2015,7 @@
             "avatars": "Avatars",
             "avatarsAndDots": "Avatars et points animés",
             "includeBlockedUsers": "S'il faut afficher l'indicateur de saisie pour les utilisateurs bloqués.",
-            "includeCurrentChannel": "S'il faut afficher l'indicateur de saisie pour le canal actuellement sélectionné",
+            "includeCurrentChannel": "S'il faut afficher l'indicateur de saisie pour le salon actuellement sélectionné",
             "includeIgnoredUsers": "S'il faut afficher l'indicateur de saisie pour les utilisateurs ignorés.",
             "includeMutedChannels": "S'il faut afficher l'indicateur de saisie pour les canaux muets.",
             "indicatorMode": "Comment l’indicateur doit-il être affiché ?"
@@ -2000,13 +2060,13 @@
         "description": "Modifie les paramètres utilisateur de Discord pour afficher leur groupe et leur nom."
     },
     "userVoiceShow": {
-        "cannotJoinChannel": "Vous ne pouvez pas rejoindre le canal vocal de l'utilisateur",
-        "description": "Affiche un indicateur lorsqu'un utilisateur est dans un canal vocal",
+        "cannotJoinChannel": "Vous ne pouvez pas rejoindre le salon vocal de l'utilisateur",
+        "description": "Affiche un indicateur lorsqu'un utilisateur est dans un salon vocal",
         "inVoiceChat": "Dans Voix Chat",
         "settings": {
-            "showInMemberList": "Afficher l'indicateur de canal vocal d'un utilisateur dans la liste des membres et des DM",
-            "showInMessages": "Afficher l'indicateur de canal vocal d'un utilisateur dans les messages",
-            "showInUserProfileModal": "Afficher l'indicateur de canal vocal d'un utilisateur dans son profil à côté de son nom"
+            "showInMemberList": "Afficher l'indicateur de salon vocal d'un utilisateur dans la liste des membres et des MP",
+            "showInMessages": "Afficher l'indicateur de salon vocal d'un utilisateur dans les messages",
+            "showInUserProfileModal": "Afficher l'indicateur de salon vocal d'un utilisateur dans son profil à côté de son nom"
         }
     },
     "usrbg": {
@@ -2061,8 +2121,13 @@
         },
         "speechSynthesisNotSupported": "La synthèse vocale n'est pas prise en charge ou aucune voix du narrateur n'a été trouvée. Ainsi, ce plugin ne fonctionnera pas. Vérifiez mes paramètres pour plus d'informations"
     },
+    "vencordDonor": {
+        "description": "Ce badge est un avantage spécial pour les donateurs Vencord",
+        "description2": "Veuillez envisager de soutenir le développement de Vencord en devenant donateur. Cela signifierait beaucoup !!",
+        "title": "Donateur Vencord"
+    },
     "viewIcons": {
-        "description": "Rend les avatars et les bannières dans les profils utilisateur cliquables, ajoute des entrées Afficher l'icône/la bannière dans le menu contextuel du canal de l'utilisateur, du serveur et du groupe.",
+        "description": "Rend les avatars et les bannières dans les profils utilisateur cliquables, ajoute des entrées Afficher l'icône/la bannière dans le menu contextuel du salon de l'utilisateur, du serveur et du groupe.",
         "settings": {
             "formatDescription": "Choisissez le format d'image à utiliser pour les images non animées. Les images animées utiliseront toujours .gif",
             "imgSizeDescription": "La taille de l'image à utiliser"
@@ -2080,7 +2145,7 @@
         "copyRawLeftViewRawRight": "Copier brut (clic gauche) / Afficher brut (clic droit)",
         "data": "Données",
         "dataCopied": "{type} données copiées dans le presse-papier !",
-        "description": "Copiez et affichez le contenu/les données bruts de n'importe quel message, canal ou guilde",
+        "description": "Copiez et affichez le contenu/les données bruts de n'importe quel message, salon ou guilde",
         "settings": {
             "clickMethodDescription": "Modifiez le bouton pour afficher le contenu/les données brutes de n'importe quel message.",
             "leftClick": "Clic gauche pour afficher le contenu brut.",
@@ -2094,6 +2159,7 @@
         "downloadVoiceMessage": "Télécharger le message vocal"
     },
     "voiceMessages": {
+        "description": "Permet d'envoyer des messages vocaux comme sur mobile. Pour ce faire, faites un clic droit sur le bouton de téléversement et cliquez sur Envoyer un message vocal.",
         "echoCancellation": "Annulation d'écho",
         "failedToParse": "Échec de l'analyse du fichier audio sélectionné : {error}",
         "failedToUpload": "Échec du téléchargement du message vocal",
@@ -2126,6 +2192,7 @@
         "description": "Supprime la limite de débit de 2500 kbps sur les clients Chromium et Vesktop."
     },
     "whoReacted": {
+        "description": "Affiche les avatars des utilisateurs ayant réagi à un message",
         "settings": {
             "avatarClick": "Activer/désactiver les avatars en cliquant dans les réactions"
         }
@@ -2138,7 +2205,7 @@
         "description": "Transfère les notifications Discord à XSOverlay, pour une visualisation facile en VR",
         "dmNotifications": "Autoriser les notifications par message direct",
         "embed": "intégration",
-        "groupDmNotifications": "Autoriser les notifications DM Group",
+        "groupDmNotifications": "Autoriser les notifications MP Group",
         "helloFromVendor": "Bonjour du vendeur !",
         "image": "image",
         "incomingCall": "Appel entrant",
@@ -2154,7 +2221,7 @@
         "serverNotifications": "Autoriser les notifications du serveur",
         "soundPath": "Son de notification (par défaut/avertissement/erreur)",
         "sticker": "autocollant",
-        "testNotification": "Ceci est une notification de test ! exploser",
+        "testNotification": "Ceci est une notification de test ! exploser",
         "timeout": "Durée de notification (secondes)",
         "volume": "Volume",
         "webSocketPort": "Port Websocket"
