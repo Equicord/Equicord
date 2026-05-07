@@ -8,7 +8,7 @@
         "description": "Rich presence para el servidor multimedia de AudioBookShelf",
         "settings": {
             "password": "Contraseña de AudioBookShelf",
-            "serverUrl": "URL del servidor AudioBookShelf (p. ej. https://abs.example.com)",
+            "serverUrl": "URL del servidor AudioBookShelf  (p. ej. https://abs.example.com)",
             "username": "Usuario de AudioBookShelf"
         },
         "toasts": {
@@ -146,7 +146,7 @@
                 "userOption": "usuario específico para intentar actualizar"
             }
         },
-        "description": "Mejora el sistema de comando con mejoras diversas.",
+        "description": "Actualiza localmente los comandos de las aplicaciones especificadas.",
         "settings": {
             "allowNewlinesInCommands": "Permitir nuevas líneas en las entradas de comandos (CTRL + Shift + Enter)",
             "autoFillArguments": "Complete automáticamente el comando con todos los argumentos en lugar de solo los requeridos"
@@ -334,6 +334,8 @@
     "commandPalette": {
         "description": "Ejecute acciones rápidamente a través de una paleta de comandos con capacidad de búsqueda",
         "settings": {
+            "closeAfterExecute": "Cierra la paleta después de ejecutar un comando.",
+            "compactStartEnabled": "Abre la paleta en modo compacto primero.",
             "customCommands": "Administrar entradas de paleta de comandos personalizadas",
             "enableTagFilter": "Mostrar la barra de filtro de etiquetas",
             "hotkey": "Tecla de acceso rápido utilizada para abrir la paleta de comandos",

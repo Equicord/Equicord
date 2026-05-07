@@ -1,25 +1,25 @@
 {
     "absRPC": {
         "about": {
-            "automaticAuth": "प्लगइन स्वचालित रूप से प्रमाणित करेगा और आपकी सुनने की प्रगति प्राप्त करेगा।",
-            "description": "अपनी वर्तमान में चल रही ऑडियोबुक को Discord रिच प्रेजेंस के रूप में प्रदर्शित करने के लिए अपना ऑडियोबुकशेल्फ़ सर्वर URL, उपयोगकर्ता नाम और पासवर्ड दर्ज करें।",
-            "title": "ऑडियोबुकशेल्फ़ से कैसे जुड़ें"
+            "automaticAuth": "प्लगइन अपने-आप authenticate करेगा और आपकी listening progress को प्राप्त कर लेगा।",
+            "description": "अपने AudioBookShelf server URL, username, और password दर्ज करें ताकि आपकी अभी चल रही audiobooks को Discord Rich Presence के रूप में दिखाया जा सके।",
+            "title": "AudioBookShelf से कैसे जुड़ें"
         },
-        "description": "ऑडियोबुकशेल्फ़ मीडिया सर्वर के लिए समृद्ध उपस्थिति",
+        "description": "AudioBookShelf मीडिया सर्वर के लिए Rich presence",
         "settings": {
-            "password": "ऑडियोबुकशेल्फ़ पासवर्ड",
-            "serverUrl": "ऑडियोबुकशेल्फ़ सर्वर URL (उदाहरण के लिए, https://abs.example.com)",
-            "username": "ऑडियोबुकशेल्फ़ उपयोक्तानाम"
+            "password": "AudioBookShelf का पासवर्ड",
+            "serverUrl": "AudioBookShelf सर्वर URL (उदा., https://abs.example.com)",
+            "username": "AudioBookShelf उपयोगकर्ता नाम"
         },
         "toasts": {
-            "notConfigured": "ऑडियोबुकशेल्फ़ RPC कॉन्फ़िगर नहीं है।"
+            "notConfigured": "AudioBookShelf RPC configured नहीं है।"
         }
     },
     "altKrispSwitch": {
-        "description": "क्रिस्प और स्टैंडर्ड के बजाय कोई नहीं और क्रिस्प के बीच शोर दमन पॉपआउट स्विच बनाता है"
+        "description": "Krisp और Standard के बजाय None और Krisp को Noise Suppression Popout switch बनाता है"
     },
     "alwaysExpandProfiles": {
-        "description": "प्रोफ़ाइल पॉपआउट को हमेशा पूर्ण मोडल तक विस्तारित करता है"
+        "description": "Profile popouts को हमेशा पूर्ण modal में विस्तारित करता है"
     },
     "anammox": {
         "description": "नाइट्रो और स्टोर से संबंधित विभिन्न विशेषताएं छुपाता है",
@@ -42,7 +42,7 @@
         },
         "settings": {
             "messageLengthLimit": "संसाधित करने के लिए संदेश की अधिकतम लंबाई",
-            "pitch": "पिच गुणक",
+            "pitch": "Pitch multiplier",
             "processOwnMessages": "अपने स्वयं के संदेशों को भी याप करने में सक्षम करें",
             "soundQuality": "उपयोग हेतु ध्वनि की गुणवत्ता",
             "speed": "पाशविक ध्वनि की गति",
@@ -51,9 +51,9 @@
     },
     "atSomeone": {
         "contextMenu": {
-            "someone": "बेतरतीब ढंग से किसी का उल्लेख करें"
+            "someone": "Mention someone randomly"
         },
-        "description": "बेतरतीब ढंग से किसी का उल्लेख करें"
+        "description": "Mention someone randomly"
     },
     "autoZipper": {
         "description": "Discord पर अपलोड करने से पहले निर्दिष्ट फ़ाइल प्रकारों और फ़ोल्डरों को स्वचालित रूप से ज़िप करता है",
@@ -62,28 +62,28 @@
         }
     },
     "bannersEverywhere": {
-        "description": "सदस्य सूची में बैनर प्रदर्शित करता है ",
+        "description": "सदस्य सूची में banners प्रदर्शित करे। ",
         "settings": {
-            "animate": "चेतन बैनर",
-            "preferNameplate": "बैनर के स्थान पर नेमप्लेट को प्राथमिकता दें"
+            "animate": "Animate banners",
+            "preferNameplate": "banner के स्थान पर nameplate को प्राथमिकता दें"
         }
     },
     "baseDecoder": {
-        "description": "किसी भी संदेश की बेस64 सामग्री को डिकोड करें और डिकोड की गई सामग्री को कॉपी करें।",
+        "description": "किसी भी संदेश की base64 content को decoded करें और decoded content को कॉपी करें।",
         "settings": {
-            "clickMethod": "किसी भी संदेश की बेस64 सामग्री को डीकोड करने के लिए बटन बदलें।",
+            "clickMethod": "किसी भी संदेश की base64 content को decode करने वाला button बदलें।",
             "clickMethodOptions": {
-                "left": "बेस64 सामग्री को डीकोड करने के लिए बायाँ-क्लिक करें।",
-                "right": "बेस64 सामग्री को डीकोड करने के लिए राइट क्लिक करें।"
+                "left": "base64 content को decode करने के लिए बायाँ-क्लिक करें।",
+                "right": "base64 content को decode करने के लिए दायाँ क्लिक करें।"
             }
         },
         "ui": {
-            "copiedToast": "डिकोड की गई सामग्री को क्लिपबोर्ड पर कॉपी किया गया!",
-            "copyDecoded": "डिकोड की गई सामग्री की प्रतिलिपि बनाएँ",
-            "decodedContent": "डिकोड की गई सामग्री",
-            "modalTitle": "डीकोडेड बेस64 सामग्री",
-            "tooltipLeft": "कॉपी डिकोडेड (बायाँ क्लिक) / डिकोड बेस64 (राइट क्लिक)",
-            "tooltipRight": "डिकोड बेस64 (बायाँ क्लिक) / कॉपी डिकोडेड (दायाँ क्लिक)"
+            "copiedToast": "Decode किया गया content clipboard पर copy हो गया है !",
+            "copyDecoded": "Decoded Content को कॉपी करें",
+            "decodedContent": "Decoded Content",
+            "modalTitle": "Decoded Base64 Content",
+            "tooltipLeft": "Copy Decoded (Left Click) / Decode Base64 (Right Click)",
+            "tooltipRight": "Decode Base64 (Left Click) / Copy Decoded (Right Click)"
         }
     },
     "betterActivities": {
@@ -94,28 +94,28 @@
         },
         "settings": {
             "allActivitiesStyle": "सभी गतिविधियों को प्रदर्शित करने की शैली",
-            "hideTooltip": "गतिविधि आइकन पर टूलटिप छुपाएं",
+            "hideTooltip": "गतिविधि icons पर tooltip छुपाएं",
             "iconSize": "गतिविधि चिह्न का आकार",
             "memberList": "सदस्य सूची में गतिविधियाँ दिखाएँ",
             "removeGameActivityStatus": "गेम गतिविधि स्थिति संकेतक हटाएं",
             "renderGifs": "गतिविधि आइकन में GIF प्रस्तुत करें",
             "specialFirst": "पहले विशेष गतिविधियाँ दिखाएँ",
-            "userPopout": "उपयोगकर्ता पॉपआउट में सभी गतिविधियां दिखाएं"
+            "userPopout": "उपयोगकर्ता popout में सभी गतिविधियां दिखाएं"
         }
     },
     "betterAudioPlayer": {
-        "description": "ऑडियो अटैचमेंट प्लेयर्स में एक स्पेक्ट्रोग्राफ और ऑसिलोस्कोप विज़ुअलाइज़र जोड़ता है",
+        "description": "audio attachment players में एक spectrograph और oscilloscope visualizer जोड़ता है",
         "settings": {
-            "forceMoveBelow": "ऑडियो प्लेयर के नीचे विज़ुअलाइज़र को बाध्य करें",
-            "oscilloscope": "आस्टसीलस्कप विज़ुअलाइज़र सक्षम करें",
-            "oscilloscopeColor": "आस्टसीलस्कप के लिए रंग",
-            "oscilloscopeSolidColor": "आस्टसीलस्कप के लिए ठोस रंग का प्रयोग करें",
-            "spectrograph": "स्पेक्ट्रोग्राफ़ विज़ुअलाइज़र सक्षम करें",
-            "spectrographColor": "स्पेक्ट्रोग्राफ के लिए रंग",
-            "spectrographSolidColor": "स्पेक्ट्रोग्राफ के लिए ठोस रंग का प्रयोग करें"
+            "forceMoveBelow": "audio player के नीचे visualizer को force करें",
+            "oscilloscope": "oscilloscope visualizer को सक्षम करें",
+            "oscilloscopeColor": "Oscilloscope के लिए रंग",
+            "oscilloscopeSolidColor": "oscilloscope के लिए solid color का प्रयोग करें",
+            "spectrograph": "Spectrograph visualizer सक्षम करें",
+            "spectrographColor": "Spectrograph के लिए रंग",
+            "spectrographSolidColor": "Spectrograph के लिए solid color का प्रयोग करें"
         },
         "toasts": {
-            "invalidColor": "{settingKey} के लिए अमान्य रंग प्रारूप, सुनिश्चित करें कि यह 'R, G, B' या '#RRGGBB' प्रारूप में है"
+            "invalidColor": "{settingKey} के लिए गलत रंग प्रारूप, सुनिश्चित करें कि यह 'R, G, B' या '#RRGGBB' प्रारूप में है"
         }
     },
     "betterBanReasons": {
@@ -155,10 +155,10 @@
     "betterInvites": {
         "description": "नाम पर क्लिक करके शामिल होने से पहले आमंत्रण की समाप्ति तिथि देखें, आमंत्रितकर्ता प्रोफ़ाइल देखें और सर्वर का पूर्वावलोकन करें",
         "ui": {
-            "expireTooltip": "यह आमंत्रण {expiry} होगा",
-            "expireWill": "समय सीमा समाप्त",
+            "expireTooltip": "यह आमंत्रण {expiry}",
+            "expireWill": "expire",
             "invitedYouTo": "{inviter} ने आपको {guild} में आमंत्रित किया है",
-            "notExpire": "समाप्त नहीं होता"
+            "notExpire": "not expire"
         }
     },
     "betterPlusReacts": {
@@ -192,8 +192,8 @@
     },
     "bypassStatus": {
         "contextMenu": {
-            "addStatusBypass": "स्टेटस बायपास जोड़ें",
-            "removeStatusBypass": "स्टेटस बायपास हटाएँ"
+            "addStatusBypass": "Status Bypass जोड़ें",
+            "removeStatusBypass": "Status Bypass हटाएँ"
         },
         "description": "डिस्टर्ब न करें मोड में होने पर भी विशिष्ट स्रोतों से सूचनाएं प्राप्त होती हैं। उपयोगकर्ताओं/चैनलों/गिल्डों को डिस्टर्ब न करें मोड को बायपास करने के लिए सेट करने के लिए उन पर राइट-क्लिक करें।",
         "placeholder": {
@@ -209,61 +209,61 @@
             "users": "उपयोगकर्ताओं को बायपास करने दें (डीएम में भेजे गए सभी संदेशों के लिए अधिसूचित)"
         },
         "statusOptions": {
-            "dnd": "परेशान मत करो",
-            "idle": "निठल्ला",
-            "invisible": "अदृश्य",
-            "online": "ऑनलाइन"
+            "dnd": "परेशान मत करना",
+            "idle": "खाली",
+            "invisible": "Invisible",
+            "online": "Online"
         }
     },
     "channelBadges": {
         "description": "चैनलों में उनके प्रकार के आधार पर बैज जोड़ता है",
         "settings": {
             "announcementBadgeColor": "घोषणा बैज का रंग",
-            "announcementBadgeLabel": "घोषणा बैज लेबल",
+            "announcementBadgeLabel": "घोषणा badge label",
             "announcementThreadBadgeColor": "घोषणा थ्रेड बैज रंग",
-            "announcementThreadBadgeLabel": "घोषणा थ्रेड बैज लेबल",
+            "announcementThreadBadgeLabel": "घोषणा Thread badge label",
             "categoryBadgeColor": "श्रेणी बैज रंग",
-            "categoryBadgeLabel": "श्रेणी बैज लेबल",
+            "categoryBadgeLabel": "श्रेणी badge label",
             "directoryBadgeColor": "निर्देशिका बैज रंग",
-            "directoryBadgeLabel": "निर्देशिका बैज लेबल",
+            "directoryBadgeLabel": "निर्देशिका badge label",
             "forumBadgeColor": "फ़ोरम बैज रंग",
-            "forumBadgeLabel": "फ़ोरम बैज लेबल",
+            "forumBadgeLabel": "Forum badge label",
             "lockedBadgeColor": "लॉक्ड बैज रंग",
-            "lockedBadgeLabel": "लॉक किया गया बैज लेबल",
+            "lockedBadgeLabel": "Locked badge label",
             "mediaBadgeColor": "मीडिया बैज का रंग",
-            "mediaBadgeLabel": "मीडिया बैज लेबल",
+            "mediaBadgeLabel": "Media badge label",
             "nsfwBadgeColor": "NSFW बैज रंग",
-            "nsfwBadgeLabel": "NSFW बैज लेबल",
+            "nsfwBadgeLabel": "NSFW badge label",
             "oneBadgePerChannel": "प्रति चैनल केवल एक बैज दिखाएं",
             "privateThreadBadgeColor": "निजी थ्रेड बैज रंग",
             "privateThreadBadgeLabel": "निजी थ्रेड बैज लेबल",
             "publicThreadBadgeColor": "सार्वजनिक थ्रेड बैज रंग",
-            "publicThreadBadgeLabel": "सार्वजनिक थ्रेड बैज लेबल",
+            "publicThreadBadgeLabel": "सार्वजनिक Thread badge label",
             "rulesBadgeColor": "नियम बैज रंग",
-            "rulesBadgeLabel": "नियम बैज लेबल",
+            "rulesBadgeLabel": "नियम badge label",
             "showAnnouncementBadge": "घोषणा बैज दिखाएँ",
             "showAnnouncementThreadBadge": "घोषणा थ्रेड बैज दिखाएँ",
             "showCategoryBadge": "श्रेणी बैज दिखाएँ",
             "showDirectoryBadge": "निर्देशिका बैज दिखाएँ",
             "showForumBadge": "फ़ोरम बैज दिखाएँ",
-            "showLockedBadge": "लॉक्ड बैज दिखाएँ",
+            "showLockedBadge": "बंद badge दिखाएँ",
             "showMediaBadge": "मीडिया बैज दिखाएँ",
             "showNSFWBadge": "NSFW बैज दिखाएँ",
-            "showPrivateThreadBadge": "निजी थ्रेड बैज दिखाएँ",
-            "showPublicThreadBadge": "सार्वजनिक थ्रेड बैज दिखाएँ",
-            "showRulesBadge": "नियम बैज दिखाएँ",
+            "showPrivateThreadBadge": "निजी Thread badge दिखाएँ",
+            "showPublicThreadBadge": "सार्वजनिक Thread badge दिखाएँ",
+            "showRulesBadge": "नियम badge दिखाएँ",
             "showStageBadge": "स्टेज बैज दिखाएँ",
-            "showTextBadge": "टेक्स्ट बैज दिखाएँ",
-            "showUnknownBadge": "अज्ञात बैज दिखाएँ",
-            "showVoiceBadge": "वॉइस बैज दिखाएँ",
+            "showTextBadge": "Text badge दिखाएँ",
+            "showUnknownBadge": "अज्ञात badge दिखाएँ",
+            "showVoiceBadge": "Voice badge दिखाएँ",
             "stageBadgeColor": "स्टेज बैज का रंग",
-            "stageBadgeLabel": "स्टेज बैज लेबल",
-            "textBadgeColor": "टेक्स्ट बैज का रंग",
-            "textBadgeLabel": "टेक्स्ट बैज लेबल",
+            "stageBadgeLabel": "Stage badge label",
+            "textBadgeColor": "Text badge का रंग",
+            "textBadgeLabel": "Text badge label",
             "unknownBadgeColor": "अज्ञात बैज रंग",
-            "unknownBadgeLabel": "अज्ञात बैज लेबल",
+            "unknownBadgeLabel": "अज्ञात badge label",
             "voiceBadgeColor": "आवाज बैज रंग",
-            "voiceBadgeLabel": "वॉयस बैज लेबल"
+            "voiceBadgeLabel": "Voice badge label"
         },
         "tooltips": {
             "lockedChannel": "यह चैनल बंद है।",
@@ -788,7 +788,7 @@
         }
     },
     "fullVcPfp": {
-        "description": "अवतारों को संपूर्ण वीसी टाइल पर ले जाता है"
+        "description": "avatars को संपूर्ण vc tile पर दिखाता है"
     },
     "gensokyoRadioRPC": {
         "description": "Discord जेनसोक्यो रेडियो की समृद्ध उपस्थिति!",
@@ -1623,7 +1623,7 @@
     "profileSets": {
         "description": "प्रोफ़ाइल अनुकूलन प्रीसेट सहेजें और प्रबंधित करें",
         "settings": {
-            "avatarSize": "प्रीसेट मैनेजर में अवतार का आकार"
+            "avatarSize": "Preset manager में avatar size"
         }
     },
     "questify": {
@@ -1721,7 +1721,7 @@
             "clearRdms": "आरडीएमएस इतिहास साफ़ करें",
             "overlayMode": "ओवरले सामग्री मोड",
             "overlayRowLength": "ओवरले पंक्ति में दिखाने के लिए डीएम की संख्या",
-            "overlayShowAvatars": "ओवरले में अवतार दिखाएं",
+            "overlayShowAvatars": "Overlay में avatars दिखाएं",
             "toastDurationMs": "टोस्ट अधिसूचना अवधि (एमएस)",
             "visualStyle": "साइकिल चलाते समय दृश्य संकेतक शैली"
         },
@@ -1767,7 +1767,7 @@
         "settings": {
             "RPCTitle": "आरपीसी के लिए शीर्षक पाठ",
             "albumCoverImage": "एल्बम कवर को RPC छवि के रूप में उपयोग करें (Last.fm मोड)",
-            "assetURL": "RPC के लिए कस्टम छवि URL (डिफ़ॉल्ट: आपका अवतार)",
+            "assetURL": "RPC के लिए custom image URL (default: your avatar)",
             "lastFMApiKey": "Last.fm API कुंजी (last.fm/api से प्राप्त करें)",
             "lastFMStatFormat": "Last.fm स्टेट के लिए प्रारूप ($एल्बम, $कलाकार)",
             "lastFMUsername": "Last.fm उपयोक्तानाम",
@@ -2139,22 +2139,22 @@
     },
     "userpfp": {
         "avatarOptions": {
-            "nitro": "नाइट्रो",
-            "userpfp": "उपयोक्तापीएफपी"
+            "nitro": "Nitro",
+            "userpfp": "UserPFP"
         },
         "buttons": {
             "joinServer": "UserPFP सर्वर से जुड़ें",
             "support": "यहां यूजरपीएफपी का समर्थन करें"
         },
         "contextMenu": {
-            "setAvatar": "अवतार सेट करें"
+            "setAvatar": "Set Avatar"
         },
         "description": "UserPFP डेटाबेस से कस्टम प्रोफ़ाइल चित्रों का उपयोग करें या अपना स्वयं का सेट करें",
-        "notice": "सेट अवतार सुविधा का उपयोग केवल स्थानीय है जिसका अर्थ है कि आप केवल इसमें परिवर्तन देख सकते हैं।",
+        "notice": "set avatar feature का उपयोग केवल local है जिसका अर्थ है कि सिर्फ आप इसमें परिवर्तन देख सकते हैं।",
         "settings": {
             "databaseSource": "URL से डेटाबेस लोड करने के लिए",
-            "overrideServerAvatars": "यदि कोई कस्टम अवतार सेट नहीं है, तो कस्टम अवतार या डिफ़ॉल्ट उपयोगकर्ता अवतार के साथ सर्वर अवतार को ओवरराइड करें",
-            "preferNitro": "यदि डिफ़ॉल्ट एनिमेटेड (नाइट्रो) पीएफपी और उपयोगकर्ता पीएफपी दोनों अवतार मौजूद हैं तो किस अवतार का उपयोग करें"
+            "overrideServerAvatars": "यदि कोई custom avatar सेट नहीं है, तो custom avatar या default user avatar के साथ server avatars को override करें",
+            "preferNitro": "अगर default animated (Nitro) pfp और UserPFP avatars दोनों मौजूद हों, तो कौनसा avatar इस्तेमाल किया जाए"
         }
     },
     "vcNarratorCustom": {
