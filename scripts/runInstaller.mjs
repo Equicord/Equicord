@@ -38,7 +38,7 @@ function getFilename() {
         case "win32":
             return "EquilotlCli.exe";
         case "darwin":
-            return "Equilotl.MacOS.zip";
+            return process.arch === "arm64" ? "Equilotl-darwin-arm64.zip" : "Equilotl-darwin-x64.zip";
         case "linux":
             return "EquilotlCli-linux";
         default:
