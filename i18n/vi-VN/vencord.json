@@ -116,6 +116,7 @@
     "arRPC": {
         "connected": "Đã kết nối với arRPC",
         "connectionFailed": "Không kết nối được với arRPC, nó có đang chạy không?",
+        "description": "إضافة عميل لـ arRPC لتمكين RPC على متصفح Discord (تجريبي)",
         "retry": "Thử lại",
         "settingsAbout": {
             "description": "Làm theo hướng dẫn trong repo GitHub để chạy máy chủ, sau đó kích hoạt plugin.",
