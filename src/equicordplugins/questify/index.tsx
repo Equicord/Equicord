@@ -11,7 +11,7 @@ import { addServerListElement, removeServerListElement, ServerListRenderPosition
 import { Settings } from "@api/Settings";
 import { ErrorBoundary } from "@components/index";
 import { EquicordDevs } from "@utils/constants";
-import definePlugin, { StartAt } from "@utils/types";
+import definePlugin from "@utils/types";
 import type { Quest, QuestUserStatus } from "@vencord/discord-types";
 import { findComponentByCodeLazy, onceReady } from "@webpack";
 import { QuestStore } from "@webpack/common";
@@ -101,7 +101,6 @@ export default definePlugin({
     tags: ["Appearance", "Customisation", "Privacy", "Utility"],
     authors: [EquicordDevs.Etorix],
     dependencies: ["AudioPlayerAPI", "ServerListAPI"],
-    startAt: StartAt.Init, // Needed in order to beat Read All Messages to inserting above the server list.
     settings,
 
     canOpenDevToolsWindow,
@@ -623,7 +622,7 @@ export default definePlugin({
 
     start() {
         initializeRestartTracking(settings);
-        addServerListElement(ServerListRenderPosition.Above, this.renderQuestifyButton);
+        addServerListElement(ServerListRenderPosition.Above, this.renderQuestifyButton, 1);
 
         onceReady.then(() => {
             if (!getQuestifySettings().disableQuestsEverything) {

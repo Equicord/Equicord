@@ -4,11 +4,13 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { ApplicationCommandInputType, ApplicationCommandOptionType, findOption, sendBotMessage } from "@api/Commands";
 import { definePluginSettings } from "@api/Settings";
-import { Devs } from "@utils/constants";
+import { Devs, EquicordDevs } from "@utils/constants";
+import { sendMessage } from "@utils/discord";
 import definePlugin, { OptionType, PluginNative } from "@utils/types";
 
-import Providers from "./Providers";
+import { Providers } from "./Providers";
 import { Settings } from "./Settings";
 import SongLinker from "./SongLinker";
 
@@ -26,6 +28,11 @@ export const settings = definePluginSettings({
         type: OptionType.STRING,
         description: "Country used for lookup (Two letter country code)",
         default: "US"
+    },
+    includeMetadata: {
+        type: OptionType.BOOLEAN,
+        description: "Include the track title and artist name as a header.",
+        default: true,
     },
     servicesComponent: {
         type: OptionType.COMPONENT,
@@ -48,12 +55,40 @@ export type SongLinkResult = {
 
 export const Native = VencordNative.pluginHelpers.SongLink as PluginNative<typeof import("./native")>;
 
+function formatMessage(data: SongLinkResult): string | null {
+    const lines: string[] = [];
+
+    for (const [serviceKey, service] of Object.entries(settings.store.servicesSettings)) {
+        if (!service.enabled) continue;
+
+        const platformData = data.links[serviceKey];
+        if (!platformData?.url) continue;
+
+        const provider = Providers[serviceKey];
+        const name = provider?.name ?? serviceKey;
+
+        lines.push(`- [${name}](<${platformData.url}>)`);
+    }
+
+    if (lines.length === 0) return null;
+
+    const parts: string[] = [];
+
+    if (settings.store.includeMetadata && data.info?.title && data.info?.artist) {
+        parts.push(`### **${data.info.title}** — *${data.info.artist}*`);
+    }
+
+    parts.push(lines.join("\n"));
+
+    return parts.join("\n");
+}
+
 export default definePlugin({
     name: "SongLink",
     description: "Adds streaming service buttons below song links",
     dependencies: ["MessageAccessoriesAPI"],
     tags: ["Media", "Utility"],
-    authors: [Devs.nin0dev],
+    authors: [Devs.nin0dev, EquicordDevs.NassCT],
     settings,
     Providers,
     cache: ({} as Record<string, SongLinkResult>),
@@ -85,5 +120,53 @@ export default definePlugin({
                 musicLinks.map(item => <SongLinker key={item} url={item} />)
             }
         </div>;
-    }
+    },
+    commands: [
+        {
+            name: "musiclink",
+            description: "Convert a music link to other streaming platforms.",
+            inputType: ApplicationCommandInputType.BUILT_IN,
+            options: [
+                {
+                    name: "url",
+                    description: "Music link (Spotify, Deezer, YouTube, Tidal, Apple Music, SoundCloud)",
+                    type: ApplicationCommandOptionType.STRING,
+                    required: true,
+                },
+            ],
+            execute: async (opts, ctx) => {
+                const url = findOption<string>(opts, "url", "");
+
+                if (!url) {
+                    sendBotMessage(ctx.channel.id, {
+                        content: "Please provide a music link.",
+                    });
+                    return;
+                }
+
+                sendBotMessage(ctx.channel.id, {
+                    content: "This will take a moment...",
+                });
+
+                try {
+                    const data = await Native.getTrackData(url);
+                    const formatted = formatMessage(data);
+
+                    if (!formatted) {
+                        sendBotMessage(ctx.channel.id, {
+                            content:
+                                "No alternative platforms found for this link.",
+                        });
+                        return;
+                    }
+
+                    sendMessage(ctx.channel.id, { content: formatted });
+                } catch (e: any) {
+                    sendBotMessage(ctx.channel.id, {
+                        content: "Failed to resolve music link",
+                    });
+                }
+            },
+        },
+    ],
 });
