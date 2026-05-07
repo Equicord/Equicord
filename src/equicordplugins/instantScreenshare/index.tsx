@@ -62,9 +62,10 @@ async function autoStartStream(instant = true) {
 export default definePlugin({
     name: "InstantScreenshare",
     description: "Instantly screenshare when joining a voice channel with support for desktop sources, windows, and video input devices (cameras, capture cards)",
+    tags: ["Media", "Voice"],
     authors: [Devs.HAHALOSAH, Devs.thororen, EquicordDevs.mart],
     dependencies: ["EquicordToolbox"],
-    tags: ["ScreenshareKeybind"],
+    searchTerms: ["ScreenshareKeybind"],
     autoStartStream,
     settings,
 
@@ -99,7 +100,7 @@ export default definePlugin({
             },
         },
         {
-            find: "keybindActionTypes()",
+            find: '"push-to-talk-priority"',
             predicate: () => settings.store.keybindScreenshare,
             replacement: {
                 match: /=\[(\{id:.{0,25}value:\i\.\i\.UNASSIGNED)/,

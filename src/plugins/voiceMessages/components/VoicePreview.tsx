@@ -17,18 +17,16 @@
 */
 
 import { useTimer } from "@utils/react";
-import { findComponentByCodeLazy } from "@webpack";
 
-import { cl } from "..";
+import { cl, VoiceMessage } from "..";
 
 const PREVIEW_IDLE_LABEL = "----";
 const PREVIEW_RECORDING_LABEL = "RECORDING";
 
-interface VoiceMessageProps {
+export interface VoiceMessageProps {
     src: string;
     waveform: string;
 }
-const VoiceMessage = findComponentByCodeLazy<VoiceMessageProps>("waveform:", "onVolumeChange");
 
 export type VoicePreviewOptions = {
     src?: string;

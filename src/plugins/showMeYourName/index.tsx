@@ -26,7 +26,7 @@ import { JSX } from "react";
 const SMYNC = classNameFactory();
 const UserStore = findStoreLazy("UserStore");
 const wrapEmojis = findByCodeLazy("lastIndex;return");
-const adjustColor = findByCodeLazy("light1", "dark1", "toonStroke");
+const adjustColor = findByCodeLazy("light1", '.get("hsl.s"))');
 const AccessibilityStore = findStoreLazy("AccessibilityStore");
 
 const roleColorPattern = /^role((?:\+|-)\d{0,4})?$/iu;
@@ -244,6 +244,8 @@ function validTemplate(value: string) {
     if (invalidOptions) {
         return false;
     }
+
+    return true;
 }
 
 function getProcessedNames(
@@ -765,10 +767,12 @@ function handleHoveringMessage(message: any, isHovering: boolean) {
     const repliedId = message?.messageReference?.message_id;
     const groupId = message?.showMeYourNameGroupId ?? "";
 
+    const effectiveIsHovering = settings.store.alwaysShowEffects || isHovering;
+
     useEffect(() => {
         if (!message) return;
 
-        if (isHovering) {
+        if (effectiveIsHovering) {
             addHoveringMessage(messageId);
             addHoveringMessage(groupId);
             addHoveringReply(repliedId);
@@ -777,7 +781,7 @@ function handleHoveringMessage(message: any, isHovering: boolean) {
             removeHoveringMessage(groupId);
             removeHoveringReply(repliedId);
         }
-    }, [messageId, groupId, isHovering]);
+    }, [messageId, groupId, effectiveIsHovering]);
 }
 
 function addHoveringMessage(id: string) {
@@ -1021,6 +1025,11 @@ const settings = definePluginSettings({
         default: false,
         description: "Only display custom names when in DMs, and not in servers.",
     },
+    alwaysShowEffects: {
+        type: OptionType.BOOLEAN,
+        default: false,
+        description: "Always show effects as if you were hovering.",
+    },
     includedNames: {
         type: OptionType.STRING,
         description: "The order to display usernames, display names, nicknames, friend names, and custom names. Use the following placeholders: {user}, {display}, {nick}, {friend}, {custom}. You can provide multiple name options to use as fallbacks if one is unavailable by separating them with commas as such: {custom, friend, nick}. You can have up to three prefixes and three suffixes per name.",
@@ -1069,7 +1078,8 @@ export default definePlugin({
     name: "ShowMeYourName",
     description: "Display any permutation of custom nicknames, friend nicknames, server nicknames, display names, and usernames in chat.",
     authors: [EquicordDevs.Etorix, Devs.Rini, Devs.TheKodeToad, Devs.sadan, Devs.prism],
-    tags: ["SMYN", "Nicknames", "Custom Nicknames",],
+    tags: ["Appearance", "Customisation"],
+    searchTerms: ["SMYN", "Nicknames", "Custom Nicknames"],
     isModified: true,
     settings,
 
@@ -1121,7 +1131,7 @@ export default definePlugin({
             // because the name is the same as the username.
             find: "location:\"DiscordTag\"});",
             replacement: {
-                match: /(?<=forceUsername:(\i),.{0,550}?displayNameStyles:)\i!==\i\?(\i.displayNameStyles):null/,
+                match: /(?<=,forceUsername:(\i),.*?displayNameStyles:)\i!==\i\?(\i.displayNameStyles):null/,
                 replace: "!$1?$2:null"
             },
         },
@@ -1137,10 +1147,12 @@ export default definePlugin({
             // Track hovering on messages to animate gradients.
             // Attach the group ID to their messages to allow animating gradients within a group.
             find: "CUSTOM_GIFT?\"\":",
-            replacement: {
-                match: /(isHovered:(\i).{0,1300}?\(\i,\i,\i\);)(let \i=\i.id===\i)/,
-                replace: "$1arguments[0].message.showMeYourNameGroupId=!!arguments[0].groupId?`g-${arguments[0].groupId}`:null;$self.handleHoveringMessage(arguments[0].message,$2);$3"
-            },
+            replacement: [
+                {
+                    match: /(hasHovered:\i,isHovered:(\i).{0,2000})(let \i=\i.id===\i,\i=)/,
+                    replace: "$1arguments[0].message.showMeYourNameGroupId=!!arguments[0].groupId?`g-${arguments[0].groupId}`:null;$self.handleHoveringMessage(arguments[0].message,$2);$3",
+                },
+            ],
         },
         {
             // Replace names in mentions.
@@ -1178,8 +1190,8 @@ export default definePlugin({
             // Replace names in profile popouts.
             find: "shouldWrap:!0,loop:!0,inProfile:!0",
             replacement: {
-                match: /(tags:\i,)nickname:(\i)/,
-                replace: "$1showMeYourNameNickname:$2=$self.getTypingMemberListProfilesReactionsVoiceNameText({...arguments[0],type:\"profilesPopout\"})??(arguments[0].nickname)"
+                match: /displayName:(\i),(?=trailing:\i,|size:\i=|displayNameSize:\i)/g,
+                replace: "showMeYourNameNickname:$1=$self.getTypingMemberListProfilesReactionsVoiceNameText({...arguments[0],type:\"profilesPopout\"})??(arguments[0].nickname),"
             },
         },
         {

@@ -25,6 +25,7 @@ migratePluginSetting("GlobalBadges", "showRaincord", "showRa1ncord");
 export default definePlugin({
     name: "GlobalBadges",
     description: "Adds global badges from other client mods",
+    tags: ["Appearance"],
     authors: [Devs.HypedDomi, EquicordDevs.Wolfie, Devs.thororen],
     settings,
     settingsAboutComponent: () => (
@@ -60,7 +61,8 @@ export default definePlugin({
         return GlobalBadges;
     },
     getGlobalBadges(userId: string) {
-        return GlobalBadges[userId]?.map(badge => ({
+        return GlobalBadges[userId]?.map((badge, idx) => ({
+            id: `global_badges_badge_${idx}`,
             iconSrc: badge.badge,
             description: badge.tooltip,
             position: BadgePosition.START,

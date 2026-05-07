@@ -60,21 +60,28 @@ const settings = definePluginSettings({
     randomisedLength: {
         description: "Random characters length",
         type: OptionType.NUMBER,
-        default: 7,
-        disabled: () => settings.store.method !== Methods.Random,
+        default: 7
     },
     consistent: {
         description: "Consistent filename",
         type: OptionType.STRING,
-        default: "image",
-        disabled: () => settings.store.method !== Methods.Consistent,
+        default: "image"
     },
+}, {
+    randomisedLength: {
+        disabled() { return this.store.method !== Methods.Random; },
+    },
+    consistent: {
+        disabled() { return this.store.method !== Methods.Consistent; },
+    }
 });
 
 export default definePlugin({
     name: "AnonymiseFileNames",
     authors: [Devs.fawn],
     description: "Anonymise uploaded file names",
+    dependencies: ["CommandsAPI"],
+    tags: ["Privacy", "Utility"],
     isModified: true,
     settings,
 

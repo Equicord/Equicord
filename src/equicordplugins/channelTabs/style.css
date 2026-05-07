@@ -212,7 +212,8 @@
         border-color 0.15s ease,
         box-shadow 0.15s ease,
         opacity 0.15s ease;
-    padding: 6px 8px;
+    min-height: calc(38px * var(--tab-height-scale, 1));
+    padding: calc(6px * var(--tab-height-scale, 1)) 8px;
     position: relative;
     cursor: grab;
     flex-shrink: 0;

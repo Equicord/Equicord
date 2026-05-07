@@ -48,6 +48,7 @@ function DefaultRoleIcon() {
 export default definePlugin({
     name: "MentionAvatars",
     description: "Shows user avatars and role icons inside mentions",
+    tags: ["Appearance", "Customisation"],
     authors: [Devs.Ven, Devs.SerStars],
     patches: [{
         // HEY THOR UPDATE SHOW ME YOUR NAME IF THIS SHIT CHANGES TY :)
@@ -66,7 +67,7 @@ export default definePlugin({
     },
     {
         // show avatar in the chat input box
-        find: ".hasUniqueUsername()?null:`#",
+        find: '"text":"locked"',
         replacement: {
             match: /(?<=,(\i)\).{0,55})`@\$\{(\i)\}`/,
             replace: "$self.renderInputMention($2,$1)"

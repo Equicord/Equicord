@@ -44,9 +44,23 @@ if (!IS_VANILLA) {
 
     patchTrayMenu();
 
-    // Repatch after host updates on Windows
-    if (process.platform === "win32") {
+    /*
+     * re-apply the patch when discord ships a new host version. skipped
+     * on vesktop and equibop because they manage their own updates.
+     */
+    if (!IS_VESKTOP && !IS_EQUIBOP) {
+        try {
+            require("./hostUpdateHook").installHostUpdateHook();
+        } catch (err) {
+            console.error("[Equicord] Failed to install host update hook", err);
+        }
+    }
+
+    if (process.platform === "win32" && !IS_VESKTOP && !IS_EQUIBOP) {
+        /* before-quit fallback for the rare case the hook above never sees discord_desktop_core get required */
         require("./patchWin32Updater");
+    }
+    if (process.platform === "win32") {
 
         if (settings.winCtrlQ) {
             const originalBuild = Menu.buildFromTemplate;

@@ -29,13 +29,13 @@ import definePlugin, { OptionType } from "@utils/types";
 import type { Guild, RoleOrUserPermission } from "@vencord/discord-types";
 import { PermissionOverwriteType } from "@vencord/discord-types/enums";
 import { findCssClassesLazy } from "@webpack";
-import { Button, ChannelStore, Dialog, GuildMemberStore, GuildRoleStore, GuildStore, match, Menu, PermissionsBits, Popout, useRef, UserStore } from "@webpack/common";
+import { Button, ChannelStore, Dialog, GuildMemberStore, GuildRoleStore, GuildStore, match, Menu, PermissionsBits, Popout, useEffect, useRef, UserStore } from "@webpack/common";
 
 import openRolesAndUsersPermissionsModal from "./components/RolesAndUsersPermissions";
 import UserPermissions from "./components/UserPermissions";
-import { getSortedRolesForMember, sortPermissionOverwrites } from "./utils";
+import { getSortedRolesForMember, loadGetGuildPermissionSpecMap, sortPermissionOverwrites } from "./utils";
 
-const PopoutClasses = findCssClassesLazy("container", "scroller", "list");
+const PopoutClasses = findCssClassesLazy("container", "popoutRoleDot");
 
 export const enum PermissionsSortOrder {
     HighestRole,
@@ -160,6 +160,7 @@ function makeContextMenuPatch(childId: string | string[], type?: MenuItemParentT
 export default definePlugin({
     name: "PermissionsViewer",
     description: "View the permissions a user or channel has, and the roles of a server",
+    tags: ["Servers", "Roles", "Utility"],
     authors: [Devs.Nuckyz, Devs.Ven],
     settings,
 
@@ -174,10 +175,11 @@ export default definePlugin({
     ],
 
     ViewPermissionsButton: ErrorBoundary.wrap(({ className, guild, userId }: { className: string; guild: Guild; userId: string; }) => {
+        const buttonRef = useRef(null);
+        useEffect(() => void loadGetGuildPermissionSpecMap(), []);
+
         const guildMember = GuildMemberStore.getMember(guild.id, userId);
         if (!guildMember) return null;
-
-        const buttonRef = useRef(null);
 
         return (
             <Popout

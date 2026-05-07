@@ -1,0 +1,416 @@
+@property --vc-cui-collapsed-size {
+    syntax: "<length>";
+    inherits: true;
+    initial-value: 12px;
+}
+
+@property --vc-cui-transition {
+    syntax: "<time>";
+    inherits: true;
+    initial-value: 160ms;
+}
+
+:root {
+    --vc-cui-chat-buttons-width: min(320px, 36vw);
+    --vc-cui-hover-peek: var(--vc-cui-collapsed-size);
+    --vc-cui-hover-delay: 120ms;
+    --vc-cui-header-bar-height: 32px;
+    --vc-cui-user-area-collapsed-width: 52px;
+    --vc-cui-ease: cubic-bezier(.2, 0, 0, 1);
+    --vc-cui-fade-transition: opacity var(--vc-cui-transition) var(--vc-cui-ease);
+    --vc-cui-inline-transition:
+        width var(--vc-cui-transition) var(--vc-cui-ease),
+        inline-size var(--vc-cui-transition) var(--vc-cui-ease),
+        min-width var(--vc-cui-transition) var(--vc-cui-ease),
+        min-inline-size var(--vc-cui-transition) var(--vc-cui-ease),
+        max-width var(--vc-cui-transition) var(--vc-cui-ease),
+        max-inline-size var(--vc-cui-transition) var(--vc-cui-ease),
+        flex-basis var(--vc-cui-transition) var(--vc-cui-ease);
+    --vc-cui-block-transition:
+        height var(--vc-cui-transition) var(--vc-cui-ease),
+        block-size var(--vc-cui-transition) var(--vc-cui-ease),
+        min-height var(--vc-cui-transition) var(--vc-cui-ease),
+        min-block-size var(--vc-cui-transition) var(--vc-cui-ease),
+        max-height var(--vc-cui-transition) var(--vc-cui-ease),
+        max-block-size var(--vc-cui-transition) var(--vc-cui-ease),
+        padding var(--vc-cui-transition) var(--vc-cui-ease)
+}
+
+body:has(.vc-collapsible-ui-collapsed-size-8) {
+    --vc-cui-collapsed-size: 8px
+}
+
+body:has(.vc-collapsible-ui-collapsed-size-12) {
+    --vc-cui-collapsed-size: 12px
+}
+
+body:has(.vc-collapsible-ui-collapsed-size-16) {
+    --vc-cui-collapsed-size: 16px
+}
+
+body:has(.vc-collapsible-ui-collapsed-size-20) {
+    --vc-cui-collapsed-size: 20px
+}
+
+body:has(.vc-collapsible-ui-collapsed-size-24) {
+    --vc-cui-collapsed-size: 24px
+}
+
+body:has(.vc-collapsible-ui-collapsed-size-28) {
+    --vc-cui-collapsed-size: 28px
+}
+
+body:has(.vc-collapsible-ui-collapsed-size-32) {
+    --vc-cui-collapsed-size: 32px
+}
+
+body:has(.vc-collapsible-ui-collapsed-size-40) {
+    --vc-cui-collapsed-size: 40px
+}
+
+body:has(.vc-collapsible-ui-collapsed-size-48) {
+    --vc-cui-collapsed-size: 48px
+}
+
+body:has(.vc-collapsible-ui-transition-0) {
+    --vc-cui-transition: 0ms
+}
+
+body:has(.vc-collapsible-ui-transition-80) {
+    --vc-cui-transition: 80ms
+}
+
+body:has(.vc-collapsible-ui-transition-120) {
+    --vc-cui-transition: 120ms
+}
+
+body:has(.vc-collapsible-ui-transition-160) {
+    --vc-cui-transition: 160ms
+}
+
+body:has(.vc-collapsible-ui-transition-200) {
+    --vc-cui-transition: 200ms
+}
+
+body:has(.vc-collapsible-ui-transition-260) {
+    --vc-cui-transition: 260ms
+}
+
+body:has(.vc-collapsible-ui-transition-320) {
+    --vc-cui-transition: 320ms
+}
+
+body:has(.vc-collapsible-ui-guild-bar-collapsed) nav[class*="guilds_"]:not(:is(.vc-betterFolders-sidebar nav[class*="guilds_"])) {
+    position: relative;
+    z-index: 1;
+    overflow: hidden !important;
+    transition: var(--vc-cui-inline-transition) !important
+}
+
+body:has(.vc-collapsible-ui-guild-bar-collapsed) nav[class*="guilds_"]:not(:is(.vc-betterFolders-sidebar nav[class*="guilds_"])):is(:hover, :focus-within) {
+    z-index: 3
+}
+
+body:has(.vc-collapsible-ui-guild-bar-collapsed) nav[class*="guilds_"]:not(:is(.vc-betterFolders-sidebar nav[class*="guilds_"]), :is(:hover, :focus-within), :is(.vc-betterFolders-sidebar-grid:has(.vc-betterFolders-sidebar:is(:hover, :focus-within)) nav[class*="guilds_"])) {
+    background: var(--background-gradient-low, var(--background-base-lowest)) !important;
+    border-start-end-radius: var(--radius-sm, 8px);
+    width: var(--vc-cui-collapsed-size) !important;
+    inline-size: var(--vc-cui-collapsed-size) !important;
+    min-width: var(--vc-cui-collapsed-size) !important;
+    min-inline-size: var(--vc-cui-collapsed-size) !important;
+    max-width: var(--vc-cui-collapsed-size) !important;
+    max-inline-size: var(--vc-cui-collapsed-size) !important;
+    flex: 0 0 var(--vc-cui-collapsed-size) !important
+}
+
+body:has(.vc-collapsible-ui-guild-bar-collapsed) .vc-betterFolders-sidebar {
+    position: relative;
+    z-index: 1;
+    overflow: hidden !important;
+    transition: var(--vc-cui-inline-transition) !important
+}
+
+body:has(.vc-collapsible-ui-guild-bar-collapsed) .vc-betterFolders-sidebar-grid:has(nav[class*="guilds_"]:is(:hover, :focus-within), .vc-betterFolders-sidebar:is(:hover, :focus-within)) .vc-betterFolders-sidebar {
+    z-index: 3;
+    transition-delay: var(--vc-cui-hover-delay)
+}
+
+body:has(.vc-collapsible-ui-guild-bar-collapsed) .vc-betterFolders-sidebar-grid:not(:has(nav[class*="guilds_"]:is(:hover, :focus-within), .vc-betterFolders-sidebar:is(:hover, :focus-within))) .vc-betterFolders-sidebar {
+    width: 0 !important;
+    inline-size: 0 !important;
+    min-width: 0 !important;
+    min-inline-size: 0 !important;
+    max-width: 0 !important;
+    max-inline-size: 0 !important;
+    flex: 0 0 0 !important
+}
+
+body:has(.vc-collapsible-ui-channel-list-collapsed) [class*="sidebarList_"] {
+    overflow: hidden !important;
+    transition: var(--vc-cui-inline-transition) !important
+}
+
+body:has(.vc-collapsible-ui-channel-list-collapsed) [class*="sidebarList_"]:is(:hover, :focus-within) {
+    transition-delay: var(--vc-cui-hover-delay)
+}
+
+body:has(.vc-collapsible-ui-channel-list-collapsed) [class*="sidebarList_"]:is(:hover, :focus-within) > * {
+    opacity: 1;
+    pointer-events: auto;
+    transition: var(--vc-cui-fade-transition);
+    transition-delay: var(--vc-cui-hover-delay)
+}
+
+body:has(.vc-collapsible-ui-channel-list-collapsed):not(:has([class*="sidebar_"] > [class*="panels_"]:is(:hover, :focus-within))) [class*="sidebarList_"]:not(:is(:hover, :focus-within)) {
+    width: var(--vc-cui-collapsed-size) !important;
+    inline-size: var(--vc-cui-collapsed-size) !important;
+    min-width: var(--vc-cui-collapsed-size) !important;
+    min-inline-size: var(--vc-cui-collapsed-size) !important;
+    max-width: var(--vc-cui-collapsed-size) !important;
+    max-inline-size: var(--vc-cui-collapsed-size) !important;
+    flex: 0 0 var(--vc-cui-collapsed-size) !important
+}
+
+body:has(.vc-collapsible-ui-channel-list-collapsed) [class*="sidebar_"] > [class*="panels_"] {
+    overflow: hidden !important;
+    transition: var(--vc-cui-inline-transition) !important
+}
+
+body:has(.vc-collapsible-ui-channel-list-collapsed) [class*="sidebar_"] > [class*="panels_"]:not(:is(:hover, :focus-within)) {
+    width: var(--vc-cui-user-area-collapsed-width) !important;
+    inline-size: var(--vc-cui-user-area-collapsed-width) !important;
+    min-width: var(--vc-cui-user-area-collapsed-width) !important;
+    min-inline-size: var(--vc-cui-user-area-collapsed-width) !important;
+    max-width: var(--vc-cui-user-area-collapsed-width) !important;
+    max-inline-size: var(--vc-cui-user-area-collapsed-width) !important
+}
+
+body:has(.vc-collapsible-ui-channel-list-collapsed) [class*="sidebar_"] > [class*="panels_"]:not(:is(:hover, :focus-within)) .vc-collapsible-ui-user-area-controls {
+    max-width: 0 !important;
+    min-width: 0 !important;
+    overflow: hidden !important;
+    opacity: 0;
+    pointer-events: none;
+    transition:
+        max-width var(--vc-cui-transition) var(--vc-cui-ease),
+        opacity var(--vc-cui-transition) var(--vc-cui-ease) !important
+}
+
+body:has(.vc-collapsible-ui-channel-list-collapsed) [class*="sidebar_"] > [class*="panels_"]:is(:hover, :focus-within) .vc-collapsible-ui-user-area-controls {
+    opacity: 1;
+    pointer-events: auto
+}
+
+body:has(.vc-collapsible-ui-members-list-collapsed) [class*="membersWrap"] {
+    overflow: hidden !important;
+    transition: var(--vc-cui-inline-transition) !important
+}
+
+body:has(.vc-collapsible-ui-members-list-collapsed) [class*="membersWrap"]:is(:hover, :focus-within) {
+    transition-delay: var(--vc-cui-hover-delay)
+}
+
+body:has(.vc-collapsible-ui-members-list-collapsed) [class*="membersWrap"]:is(:hover, :focus-within) > * {
+    opacity: 1;
+    pointer-events: auto;
+    transition: var(--vc-cui-fade-transition);
+    transition-delay: var(--vc-cui-hover-delay)
+}
+
+body:has(.vc-collapsible-ui-members-list-collapsed) [class*="membersWrap"]:not(:is(:hover, :focus-within)) {
+    width: var(--vc-cui-collapsed-size) !important;
+    min-width: var(--vc-cui-collapsed-size) !important;
+    max-width: var(--vc-cui-collapsed-size) !important
+}
+
+body:has(.vc-collapsible-ui-members-list-collapsed) [class*="membersWrap"]:not(:is(:hover, :focus-within)) > * {
+    opacity: 0;
+    pointer-events: none;
+    transition: var(--vc-cui-fade-transition)
+}
+
+body:has(.vc-collapsible-ui-user-area-collapsed) [class*="sidebar_"] > [class*="panels_"]:is(:hover, :focus-within) > * {
+    opacity: 1;
+    pointer-events: auto;
+    transition: var(--vc-cui-fade-transition)
+}
+
+body:has(.vc-collapsible-ui-user-area-collapsed) [class*="sidebar_"] > [class*="panels_"]:not(:is(:hover, :focus-within)) {
+    height: var(--vc-cui-hover-peek) !important;
+    block-size: var(--vc-cui-hover-peek) !important;
+    min-height: var(--vc-cui-hover-peek) !important;
+    min-block-size: var(--vc-cui-hover-peek) !important;
+    max-height: var(--vc-cui-hover-peek) !important;
+    max-block-size: var(--vc-cui-hover-peek) !important;
+    overflow: hidden !important;
+    border-top-width: 0 !important;
+    padding-block: 0 !important;
+    transition: var(--vc-cui-block-transition) !important
+}
+
+body:has(.vc-collapsible-ui-user-area-collapsed) [class*="sidebar_"] > [class*="panels_"]:not(:is(:hover, :focus-within)) > * {
+    opacity: 0;
+    pointer-events: none;
+    transition: var(--vc-cui-fade-transition)
+}
+
+body:has(.vc-collapsible-ui-guild-bar-collapsed):has(.vc-collapsible-ui-channel-list-collapsed) [class*="sidebar_"] > [class*="panels_"]:not(:is(:hover, :focus-within)) {
+    width: calc(var(--vc-cui-hover-peek) + 4px) !important;
+    inline-size: calc(var(--vc-cui-hover-peek) + 4px) !important;
+    min-width: calc(var(--vc-cui-hover-peek) + 4px) !important;
+    min-inline-size: calc(var(--vc-cui-hover-peek) + 4px) !important;
+    max-width: calc(var(--vc-cui-hover-peek) + 4px) !important;
+    max-inline-size: calc(var(--vc-cui-hover-peek) + 4px) !important
+}
+
+body:has(.vc-collapsible-ui-title-bar-collapsed) section[class*="title_"][class*="container__"] {
+    overflow: hidden !important;
+    transition: var(--vc-cui-block-transition) !important
+}
+
+body:has(.vc-collapsible-ui-title-bar-collapsed) section[class*="title_"][class*="container__"]:is(:hover, :focus-within) {
+    transition-delay: var(--vc-cui-hover-delay)
+}
+
+body:has(.vc-collapsible-ui-title-bar-collapsed) section[class*="title_"][class*="container__"]:is(:hover, :focus-within) > * {
+    opacity: 1;
+    pointer-events: auto;
+    transition: var(--vc-cui-fade-transition);
+    transition-delay: var(--vc-cui-hover-delay)
+}
+
+body:has(.vc-collapsible-ui-title-bar-collapsed) section[class*="title_"][class*="container__"]:not(:is(:hover, :focus-within)) {
+    height: var(--vc-cui-hover-peek) !important;
+    block-size: var(--vc-cui-hover-peek) !important;
+    min-height: var(--vc-cui-hover-peek) !important;
+    min-block-size: var(--vc-cui-hover-peek) !important;
+    max-height: var(--vc-cui-hover-peek) !important;
+    max-block-size: var(--vc-cui-hover-peek) !important;
+    padding-block: 0 !important
+}
+
+body:has(.vc-collapsible-ui-title-bar-collapsed) section[class*="title_"][class*="container__"]:not(:is(:hover, :focus-within)) > * {
+    opacity: 0;
+    pointer-events: none;
+    transition: var(--vc-cui-fade-transition)
+}
+
+/* stylelint-disable no-descending-specificity */
+body:has(.vc-collapsible-ui-header-bar-collapsed) [class*="bar_"]:has(> [class*="title_"]) {
+    position: relative;
+    z-index: 3;
+    overflow: hidden !important;
+    transition: var(--vc-cui-block-transition) !important
+}
+
+body:has(.vc-collapsible-ui-header-bar-collapsed) [class*="base_"]:has(> [class*="bar_"] > [class*="title_"]) {
+    /* stylelint-disable-next-line value-keyword-case */
+    grid-template-rows: [top] var(--vc-cui-hover-peek) [titleBarEnd] auto [noticeEnd] minmax(0, 1fr) [end] !important
+}
+
+body:has(.vc-collapsible-ui-header-bar-collapsed) [class*="base_"]:has(> [class*="bar_"]:is(:hover, :focus-within) > [class*="title_"]) {
+    /* stylelint-disable-next-line value-keyword-case */
+    grid-template-rows: [top] var(--vc-cui-header-bar-height) [titleBarEnd] auto [noticeEnd] minmax(0, 1fr) [end] !important
+}
+
+body:has(.vc-collapsible-ui-header-bar-collapsed) [class*="bar_"]:has(> [class*="title_"]):is(:hover, :focus-within) {
+    height: var(--vc-cui-header-bar-height) !important;
+    block-size: var(--vc-cui-header-bar-height) !important;
+    min-height: var(--vc-cui-header-bar-height) !important;
+    min-block-size: var(--vc-cui-header-bar-height) !important;
+    max-height: var(--vc-cui-header-bar-height) !important;
+    max-block-size: var(--vc-cui-header-bar-height) !important;
+    transition-delay: var(--vc-cui-hover-delay)
+}
+
+body:has(.vc-collapsible-ui-header-bar-collapsed) [class*="bar_"]:has(> [class*="title_"]):is(:hover, :focus-within) > * {
+    opacity: 1;
+    pointer-events: auto;
+    transition: var(--vc-cui-fade-transition);
+    transition-delay: var(--vc-cui-hover-delay)
+}
+
+body:has(.vc-collapsible-ui-header-bar-collapsed) [class*="bar_"]:has(> [class*="title_"]):not(:is(:hover, :focus-within)) {
+    height: var(--vc-cui-hover-peek) !important;
+    block-size: var(--vc-cui-hover-peek) !important;
+    min-height: var(--vc-cui-hover-peek) !important;
+    min-block-size: var(--vc-cui-hover-peek) !important;
+    max-height: var(--vc-cui-hover-peek) !important;
+    max-block-size: var(--vc-cui-hover-peek) !important;
+    padding-block: 0 !important
+}
+
+body:has(.vc-collapsible-ui-header-bar-collapsed) [class*="bar_"]:has(> [class*="title_"]):not(:is(:hover, :focus-within)) > * {
+    opacity: 0;
+    pointer-events: none;
+    transition: var(--vc-cui-fade-transition)
+}
+/* stylelint-enable no-descending-specificity */
+
+/* stylelint-disable no-descending-specificity */
+body:has(.vc-collapsible-ui-guild-bar-collapsed) .vc-betterFolders-sidebar-grid:has(nav[class*="guilds_"]:is(:hover, :focus-within), .vc-betterFolders-sidebar:is(:hover, :focus-within)) .vc-betterFolders-sidebar > *,
+body:has(.vc-collapsible-ui-guild-bar-collapsed) nav[class*="guilds_"]:not(:is(.vc-betterFolders-sidebar nav[class*="guilds_"])):is(:hover, :focus-within) > * {
+    opacity: 1;
+    pointer-events: auto;
+    transition: var(--vc-cui-fade-transition);
+    transition-delay: calc(var(--vc-cui-hover-delay) + var(--vc-cui-transition))
+}
+
+body:has(.vc-collapsible-ui-guild-bar-collapsed) nav[class*="guilds_"]:not(:is(.vc-betterFolders-sidebar nav[class*="guilds_"])):is(:hover, :focus-within) > [class*="unreadMentionsIndicator"] {
+    pointer-events: none
+}
+
+body:has(.vc-collapsible-ui-guild-bar-collapsed) .vc-betterFolders-sidebar-grid:not(:has(nav[class*="guilds_"]:is(:hover, :focus-within), .vc-betterFolders-sidebar:is(:hover, :focus-within))) .vc-betterFolders-sidebar > *,
+body:has(.vc-collapsible-ui-guild-bar-collapsed) nav[class*="guilds_"]:not(:is(.vc-betterFolders-sidebar nav[class*="guilds_"]), :is(:hover, :focus-within), :is(.vc-betterFolders-sidebar-grid:has(.vc-betterFolders-sidebar:is(:hover, :focus-within)) nav[class*="guilds_"])) > * {
+    opacity: 0;
+    pointer-events: none;
+    transition: var(--vc-cui-fade-transition)
+}
+
+body:has(.vc-collapsible-ui-channel-list-collapsed):not(:has([class*="sidebar_"] > [class*="panels_"]:is(:hover, :focus-within))) [class*="sidebarList_"]:not(:is(:hover, :focus-within)) > * {
+    opacity: 0;
+    pointer-events: none;
+    transition: var(--vc-cui-fade-transition)
+}
+/* stylelint-enable no-descending-specificity */
+
+.vc-collapsible-ui-chat-buttons {
+    display: flex;
+    align-items: center;
+    min-inline-size: 0
+}
+
+.vc-collapsible-ui-chat-buttons-collapsed {
+    min-inline-size: var(--vc-cui-hover-peek)
+}
+
+.vc-collapsible-ui-chat-buttons-items {
+    display: flex;
+    align-items: center;
+    min-inline-size: 0;
+    max-inline-size: var(--vc-cui-chat-buttons-width);
+    overflow: hidden;
+    transition:
+        max-inline-size var(--vc-cui-transition) var(--vc-cui-ease),
+        opacity var(--vc-cui-transition) var(--vc-cui-ease),
+        margin var(--vc-cui-transition) var(--vc-cui-ease)
+}
+
+.vc-collapsible-ui-chat-buttons-collapsed .vc-collapsible-ui-chat-buttons-items {
+    max-inline-size: 0;
+    opacity: 0;
+    pointer-events: none
+}
+
+.vc-collapsible-ui-chat-buttons-collapsed:is(:hover, :focus-within) .vc-collapsible-ui-chat-buttons-items {
+    max-inline-size: var(--vc-cui-chat-buttons-width);
+    opacity: 1;
+    pointer-events: auto;
+    transition-delay: var(--vc-cui-hover-delay)
+}
+
+@media (prefers-reduced-motion: reduce) {
+    body:has(.vc-collapsible-ui-state) {
+        --vc-cui-transition: 0ms
+    }
+}

@@ -113,7 +113,7 @@ export default function SekaiStickersModal({ modalProps, settings }: { modalProp
                     </div>
                     <div style={{ marginRight: 10, width: "30vw" }}>
                         <Heading>Text</Heading>
-                        <TextArea onChange={setText} placeholder={text} rows={4} spellCheck={false} />
+                        <TextArea onChange={setText} placeholder={text} rows={4} />
                         <Heading>Rotation</Heading>
                         <Slider markers={[-10, -5, 0, 5, 10]} stickToMarkers={false} minValue={-10} maxValue={10} asValueChanges={val => setRotate(val)} initialValue={rotate} keyboardStep={0.2} orientation={"horizontal"} onValueRender={(v: number) => String(v.toFixed(2))} />
                         <Heading>Font Size</Heading>

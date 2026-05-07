@@ -25,11 +25,11 @@ export const enum ServerListRenderPosition {
     Below,
 }
 
-const componentsIn = new Set<ComponentType>();
-const componentsAbove = new Set<ComponentType>();
-const componentsBelow = new Set<ComponentType>();
+const componentsIn = new Map<ComponentType, number>();
+const componentsAbove = new Map<ComponentType, number>();
+const componentsBelow = new Map<ComponentType, number>();
 
-function getRenderFunctions(position: ServerListRenderPosition) {
+function getRenderMap(position: ServerListRenderPosition) {
     switch (position) {
         case ServerListRenderPosition.Above:
             return componentsAbove;
@@ -40,21 +40,20 @@ function getRenderFunctions(position: ServerListRenderPosition) {
     }
 }
 
-export function addServerListElement(position: ServerListRenderPosition, renderFunction: ComponentType) {
-    getRenderFunctions(position).add(renderFunction);
+export function addServerListElement(position: ServerListRenderPosition, renderFunction: ComponentType, priority = 0) {
+    getRenderMap(position).set(renderFunction, priority);
 }
 
 export function removeServerListElement(position: ServerListRenderPosition, renderFunction: ComponentType) {
-    getRenderFunctions(position).delete(renderFunction);
+    getRenderMap(position).delete(renderFunction);
 }
 
 export const renderAll = (position: ServerListRenderPosition) => {
-    return Array.from(
-        getRenderFunctions(position),
-        (Component, i) => (
+    return Array.from(getRenderMap(position).entries())
+        .sort((a, b) => b[1] - a[1])
+        .map(([Component], i) => (
             <ErrorBoundary noop key={i}>
                 <Component />
             </ErrorBoundary>
-        )
-    );
+        ));
 };

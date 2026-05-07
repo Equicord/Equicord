@@ -20,17 +20,33 @@ import { ManifestEntry, SyncRequest, SyncResponse } from "./types";
 const logger = new Logger("SettingsSync:Cloud", "#39b7e0");
 
 const MANIFEST_STORE_KEY = "Vencord_cloudManifest";
+const API_VERSION_STORE_KEY = "Vencord_cloudApiVersions";
 
 type ApiVersion = "v2" | "v1";
 
-let apiVersion: ApiVersion = "v2";
+const SYNC_DIRECTION_KEY = "Vencord_cloudSyncDirection";
+const SETTINGS_DIRTY_KEY = "Vencord_settingsDirty";
+export const getCloudSyncDirection = () => localStorage.getItem(SYNC_DIRECTION_KEY) || "both";
+export const setCloudSyncDirection = (direction: "push" | "pull" | "both" | "manual") => localStorage.setItem(SYNC_DIRECTION_KEY, direction);
+export const areLocalSettingsDirty = () => localStorage.getItem(SETTINGS_DIRTY_KEY) === "true";
+export const markLocalSettingsDirty = () => localStorage.setItem(SETTINGS_DIRTY_KEY, "true");
+export const markLocalSettingsClean = () => localStorage.removeItem(SETTINGS_DIRTY_KEY);
+
+async function loadApiVersionMap(): Promise<Record<string, ApiVersion>> {
+    return await DataStore.get<Record<string, ApiVersion>>(API_VERSION_STORE_KEY) ?? {};
+}
 
 async function getApiVersion(): Promise<ApiVersion> {
-    return apiVersion;
+    const map = await loadApiVersionMap();
+    return map[getCloudUrl().origin] ?? "v2";
 }
 
 async function setApiVersion(version: ApiVersion) {
-    apiVersion = version;
+    await DataStore.update<Record<string, ApiVersion>>(API_VERSION_STORE_KEY, map => {
+        map ??= {};
+        map[getCloudUrl().origin] = version;
+        return map;
+    });
 }
 
 function toBase64(data: Uint8Array): string {

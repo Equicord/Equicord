@@ -20,6 +20,8 @@ import WidgetSongs from "./ui/songs/WidgetSongs";
 export default definePlugin({
     name: "SongSpotlight",
     description: "Show off songs on your profile",
+    dependencies: ["ProfileCollectionsAPI"],
+    tags: ["Appearance", "Media"],
     authors: [EquicordDevs.nexpid],
     settings,
     patches: [
@@ -27,7 +29,7 @@ export default definePlugin({
         {
             find: ".MUTUAL_GUILDS})),",
             replacement: {
-                match: /(\i).push\({text.{0,50}}\);/,
+                match: /(\i).push\({text.{0,50}.ACTIVITY\}\);/,
                 replace: '$&$1.push({text:"Song Spotlight",section:"SONG_SPOTLIGHT"});',
             },
         },

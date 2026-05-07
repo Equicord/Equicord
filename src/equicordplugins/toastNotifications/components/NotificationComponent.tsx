@@ -1,144 +1,179 @@
 /*
- * Vencord, a modification for Discord's desktop app
- * Copyright (c) 2023 Vendicated and contributors
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
+ * Vencord, a Discord client mod
+ * Copyright (c) 2026 Vendicated and contributors
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
 
 import "./styles.css";
 
 import ErrorBoundary from "@components/ErrorBoundary";
 import { settings as PluginSettings } from "@equicordplugins/toastNotifications/index";
-import { classes } from "@utils/misc";
-import { React, useEffect, useMemo, useState } from "@webpack/common";
+import { classNameFactory } from "@utils/css";
+import { findComponentByCodeLazy } from "@webpack";
+import { FluxDispatcher, GuildStore, IconUtils, React, useEffect, useMemo, useRef, useState } from "@webpack/common";
 
-import { NotificationData } from "./Notifications";
+import { MessageNotification, NotificationData } from "./Notifications";
 
-export default ErrorBoundary.wrap(function NotificationComponent({
-    title,
-    body,
-    richBody,
-    icon,
-    image,
-    permanent,
-    dismissOnClick,
-    index,
-    onClick,
-    onClose,
-    attachments
-}: NotificationData & { index?: number; }) {
+export const cl = classNameFactory("vc-toast-notifications-");
+const MessageComponent = findComponentByCodeLazy("childrenExecutedCommand:", ".hideAccessories");
+
+function isMessageNotification(props: NotificationData): props is MessageNotification {
+    return "mockedMessage" in props;
+}
+
+function renderContextHeader(channel: MessageNotification["channel"]): React.ReactNode {
+    if (channel.isGroupDM()) {
+        const icon = channel.icon
+            ? IconUtils.getChannelIconURL?.({ id: channel.id, icon: channel.icon, size: 32 })
+            : undefined;
+        const rawName = channel.name?.trim() || channel.rawRecipients.slice(0, 3).map(e => e.username).join(", ");
+        const name = rawName.length > 20 ? rawName.substring(0, 20) + "..." : rawName;
+        return (
+            <div className={cl("context-header")}>
+                {icon && <img className={cl("context-header-icon")} src={icon} alt="" />}
+                <span className={cl("context-header-name")}>{name}</span>
+            </div>
+        );
+    }
+
+    if (channel.guild_id) {
+        const guild = GuildStore.getGuild(channel.guild_id);
+        const icon = guild?.icon
+            ? IconUtils.getGuildIconURL({ id: guild.id, icon: guild.icon, size: 32 })
+            : undefined;
+        return (
+            <div className={cl("context-header")}>
+                {icon && <img className={cl("context-header-icon")} src={icon} alt="" />}
+                <span className={cl("context-header-name")}>
+                    {guild?.name ?? "Unknown Server"}
+                    {channel.name && (
+                        <>
+                            <span className={cl("context-header-separator")}>{" \u203A "}</span>
+                            <span className={cl("context-header-channel")}>#{channel.name}</span>
+                        </>
+                    )}
+                </span>
+            </div>
+        );
+    }
+
+    return null;
+}
+
+export default ErrorBoundary.wrap(function NotificationComponent(props: NotificationData) {
     const [isHover, setIsHover] = useState(false);
     const [elapsed, setElapsed] = useState(0);
 
-    let renderBody: boolean = true;
-    let footer: boolean = false;
+    const timeout = (PluginSettings.store.timeout ?? 5) * 1000;
+    const opacity = PluginSettings.store.opacity / 100;
+    const startRef = useRef(Date.now());
 
-    if (attachments > 0) footer = true;
-
-    if (body === "") renderBody = false;
-
-    // Precompute appearance settings.
-    const AppearanceSettings = {
-        position: `toastnotifications-position-${PluginSettings.store.position || "bottom-left"}`,
-        timeout: (PluginSettings.store.timeout * 1000) || 5000,
-        opacity: PluginSettings.store.opacity / 100,
-    };
-
-    const start = useMemo(() => Date.now(), [isHover]); // Reset the timer when the user hovers over the notification.
-
-    // Precompute the position style.
-    const positionStyle = useMemo(() => {
-        if (index === undefined) return {};
-        const isTopPosition = AppearanceSettings.position.includes("top");
-        const actualHeight = 115; // Update this with the actual height including margin
-        const effectiveIndex = index % PluginSettings.store.maxNotifications;
-        const offset = 10 + (effectiveIndex * actualHeight); // 10 is the base offset
-
-        return isTopPosition ? { top: `${offset}px` } : { bottom: `${offset}px` };
-    }, [index, AppearanceSettings.position]);
-
-    // Handle notification timeout.
     useEffect(() => {
-        if (isHover || permanent) return void setElapsed(0);
+        if (isHover || props.permanent) {
+            setElapsed(0);
+            return;
+        }
 
+        startRef.current = Date.now();
         const intervalId = setInterval(() => {
-            const elapsed = Date.now() - start;
-            if (elapsed >= AppearanceSettings.timeout)
-                onClose!();
-            else
-                setElapsed(elapsed);
+            const next = Date.now() - startRef.current;
+            if (next >= timeout) props.onClose!();
+            else setElapsed(next);
         }, 10);
 
         return () => clearInterval(intervalId);
-    }, [isHover]);
+    }, [isHover, props.permanent, timeout]);
 
-    const timeoutProgress = elapsed / AppearanceSettings.timeout;
+    const timeoutProgress = elapsed / timeout;
 
-    // Render the notification.
-    return (
+    const handleClick = () => {
+        props.onClick?.();
+        if (props.dismissOnClick !== false) props.onClose!();
+    };
+
+    const handleContextMenu = (e: React.MouseEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        // Also marks the message as read.
+        if (isMessageNotification(props)) {
+            FluxDispatcher.dispatch({
+                type: "BULK_ACK",
+                context: "APP",
+                channels: [{
+                    channelId: props.channel.id,
+                    messageId: props.message.id,
+                    readStateType: 0
+                }]
+            });
+        }
+
+        props.onClose!();
+    };
+
+    const closeButton = useMemo(() => (
         <button
-            style={positionStyle}
-            className={classes("toastnotifications-notification-root", AppearanceSettings.position)}
-            onClick={() => {
-                onClick?.();
-                if (dismissOnClick !== false)
-                    onClose!();
-            }}
-            onContextMenu={e => {
+            className={cl("notification-close-btn")}
+            onClick={e => {
                 e.preventDefault();
                 e.stopPropagation();
-                onClose!();
+                props.onClose!();
             }}
+        >
+            <svg width="24" height="24" viewBox="0 0 24 24" role="img" aria-labelledby="vc-toast-notifications-dismiss-title">
+                <title id="vc-toast-notifications-dismiss-title">Dismiss Notification</title>
+                <path fill="currentColor" d="M18.4 4L12 10.4L5.6 4L4 5.6L10.4 12L4 18.4L5.6 20L12 13.6L18.4 20L20 18.4L13.6 12L20 5.6L18.4 4Z" />
+            </svg>
+        </button>
+    ), [props.onClose]);
+
+    let content: React.ReactNode;
+    if (isMessageNotification(props)) {
+        content = (
+            <div className={cl("notification-content")}>
+                {renderContextHeader(props.channel)}
+                <MessageComponent
+                    id={`toastnotification-mock-${props.message.id}`}
+                    message={props.mockedMessage}
+                    channel={props.channel}
+                    subscribeToComponentDispatch={false}
+                />
+            </div>
+        );
+    } else {
+        const { title, body, icon } = props;
+        content = (
+            <div className={cl("notification-system")}>
+                {icon && <img className={cl("notification-icon")} src={icon} alt="" />}
+                <div className={cl("notification-content")}>
+                    <div className={cl("notification-header")}>
+                        <h2 className={cl("notification-title")}>{title}</h2>
+                    </div>
+                    {body && (
+                        <p className={cl("notification-p")}>
+                            {body.length > 500 ? body.slice(0, 500) + "..." : body}
+                        </p>
+                    )}
+                </div>
+            </div>
+        );
+    }
+
+    return (
+        <button
+            style={{ opacity }}
+            className={cl("notification-root")}
+            onClick={handleClick}
+            onContextMenu={handleContextMenu}
             onMouseEnter={() => setIsHover(true)}
             onMouseLeave={() => setIsHover(false)}
         >
-            <div className="toastnotifications-notification">
-                {icon && <img className="toastnotifications-notification-icon" src={icon} alt="User Avatar" />}
-                <div className="toastnotifications-notification-content">
-                    <div className="toastnotifications-notification-header">
-                        <h2 className="toastnotifications-notification-title">{title}</h2>
-                        <button
-                            className="toastnotifications-notification-close-btn"
-                            onClick={e => {
-                                e.preventDefault();
-                                e.stopPropagation();
-                                onClose!();
-                            }}
-                        >
-                            <svg width="24" height="24" viewBox="0 0 24 24" role="img" aria-labelledby="toastnotifications-notification-dismiss-title">
-                                <title id="toastnotifications-notification-dismiss-title">Dismiss Notification</title>
-                                <path fill="currentColor" d="M18.4 4L12 10.4L5.6 4L4 5.6L10.4 12L4 18.4L5.6 20L12 13.6L18.4 20L20 18.4L13.6 12L20 5.6L18.4 4Z" />
-                            </svg>
-                        </button>
-                    </div>
-                    <div>
-                        {renderBody ? (
-                            richBody ?? (
-                                <p className="toastnotifications-notification-p">
-                                    {body.length > 500 ? body.slice(0, 500) + "..." : body}
-                                </p>
-                            )
-                        ) : null}
-                        {PluginSettings.store.renderImages && image && <img className="toastnotifications-notification-img" src={image} alt="ToastNotification Image" />}
-                        {footer && <p className="toastnotifications-notification-footer">{`${attachments} attachment${attachments > 1 ? "s" : ""} ${attachments > 1 ? "were" : "was"} sent.`}</p>}
-                    </div>
-                </div>
-            </div>
-            {AppearanceSettings.timeout !== 0 && !permanent && (
+            {closeButton}
+            {content}
+            {timeout !== 0 && !props.permanent && (
                 <div
-                    className="toastnotifications-notification-progressbar"
-                    style={{ width: `${(1 - timeoutProgress) * 100}%`, backgroundColor: "var(--toastnotifications-progressbar-color)" }}
+                    className={cl("notification-progressbar")}
+                    style={{ width: `${(1 - timeoutProgress) * 100}%` }}
                 />
             )}
         </button>

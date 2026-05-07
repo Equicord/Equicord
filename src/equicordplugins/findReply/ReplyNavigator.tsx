@@ -7,10 +7,11 @@
 import "./styles.css";
 
 import ErrorBoundary from "@components/ErrorBoundary";
+import { Paginator, requirePaginator } from "@plugins/reviewDB/components/ReviewModal";
 import { ModalCloseButton } from "@utils/modal";
 import { Message } from "@vencord/discord-types";
 import { findCssClassesLazy } from "@webpack";
-import { Paginator, React, useRef, useState } from "@webpack/common";
+import { React, useRef, useState } from "@webpack/common";
 import { MutableRefObject } from "react";
 
 import { jumper } from "./index";
@@ -38,6 +39,7 @@ export default function ReplyNavigator({ replies }: { replies: Message[]; }) {
             document.removeEventListener("mousedown", onMouseDown);
         };
     }, [ref]);
+    requirePaginator();
     return (
         <ErrorBoundary>
             <div ref={ref} className={containerStyles.containerBottom + " vc-findreply-div"} style={{

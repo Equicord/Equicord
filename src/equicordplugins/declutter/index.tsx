@@ -6,13 +6,16 @@
 
 import "./style.css";
 
+import { isPluginEnabled } from "@api/PluginManager";
 import { definePluginSettings, migrateOldSettingToNewPlugin, migratePluginSetting, migratePluginSettings } from "@api/Settings";
 import { Divider } from "@components/Divider";
 import { HeadingSecondary } from "@components/Heading";
 import { Notice } from "@components/Notice";
+import decor from "@plugins/decor";
 import { classNameFactory } from "@utils/css";
 import { Devs, EquicordDevs } from "@utils/index";
 import definePlugin, { OptionType } from "@utils/types";
+import { Alerts } from "@webpack/common";
 
 migratePluginSettings("Declutter", "BetterUserArea", "Anammox");
 migrateOldSettingToNewPlugin("Declutter", "removeClanTag", "GuildTagSettings", "hideTags");
@@ -36,6 +39,13 @@ export const settings = definePluginSettings({
     userProfileHeader: {
         type: OptionType.COMPONENT,
         component: () => SectionSeparator("User Profile"),
+    },
+    removeAvatarDecoration: {
+        type: OptionType.BOOLEAN,
+        description: "Remove avatar decorations.",
+        default: false,
+        disabled: () => isPluginEnabled("Decor"),
+        restartNeeded: true,
     },
     removeNameplate: {
         type: OptionType.BOOLEAN,
@@ -141,15 +151,37 @@ function SectionSeparator(title: string) {
 export default definePlugin({
     name: "Declutter",
     description: "Cleans up Discord by removing non-essential UI elements like profile effects, shop tabs, boosts, and more.",
+    tags: ["Appearance", "Customisation"],
     authors: [EquicordDevs.Leon135, Devs.prism, Devs.Kyuuhachi],
+    start() {
+        if (isPluginEnabled("Decor") && settings.store.removeAvatarDecoration) {
+            settings.store.removeAvatarDecoration = false;
+            Alerts.show({
+                title: "Declutter",
+                body: "Avatar decoration removal has been disabled to prevent conflicts with Decor plugin.",
+                confirmText: "OK",
+                // @ts-expect-error not typed
+                confirmVariant: "critical-primary"
+            });
+        }
+    },
     settings,
     patches: [
         {
-            // Nameplate
-            find: "#{intl::AVATAR_MALLOW}",
+            // Avatar decoration
+            find: "isAvatarDecorationAnimating:",
             replacement: {
-                match: /function \i\(\i\)\{(?=.{0,25}skuId:)/,
-                replace: "$&return null;"
+                match: /(?<=\{avatarDecoration:.{0,40}?)(void 0!==\i\?\i:)\i(?=\)?,canAnimate:)/,
+                replace: "$1null"
+            },
+            predicate: () => settings.store.removeAvatarDecoration && !isPluginEnabled(decor.name),
+        },
+        {
+            // Nameplate
+            find: ".MINI_PREVIEW,[",
+            replacement: {
+                match: /function \i\((\i)\)\{(?=let.{1,5}\{nameplate:\i,)/,
+                replace: '$&if($1.placement!=="preview"&&$1.placement!=="mini_preview")return null;'
             },
             predicate: () => settings.store.removeNameplate,
         },
@@ -157,8 +189,8 @@ export default definePlugin({
             // Profile banner animation effect
             find: "bannerAdjustment,isHovering",
             replacement: {
-                match: /\i=\i=>\{(?=.{0,50}\.useReducedMotion\))/,
-                replace: "$&return null;"
+                match: /\i=(\i)=>\{(?=.{0,50}\.useReducedMotion\))/,
+                replace: "$&if(!$1.shopPreview)return null;"
             },
             predicate: () => settings.store.removeProfileEffect,
         },

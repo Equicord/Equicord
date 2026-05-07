@@ -142,7 +142,8 @@ function activeNowView(cards) {
 export default definePlugin({
     name: "ClientSideBlock",
     description: "Allows you to locally hide almost all content from any user",
-    tags: ["blocked", "block", "hide", "hidden", "noblockedmessages"],
+    tags: ["Utility"],
+    searchTerms: ["blocked", "block", "hide", "hidden", "noblockedmessages"],
     authors: [Devs.Samwich, EquicordDevs.KamiRu],
     settings,
     activeNowView,
@@ -224,8 +225,8 @@ export default definePlugin({
         {
             find: "ACTIVE_NOW_COLUMN)",
             replacement: {
-                match: /(\i\.\i),\{(?=\}\)\])/,
-                replace: '"div",{children:$self.activeNowView($1())'
+                match: /(__invalid_consentCard.{0,40}\()(\i),\{/,
+                replace: '$1"div",{children:$self.activeNowView($2())'
             }
         },
         // mutual friends list in user profile

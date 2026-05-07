@@ -16,6 +16,7 @@ import { UserChatButton, UserDeafenButton, UserMuteButton } from "./utils";
 export default definePlugin({
     name: "VoiceButtons",
     description: "Quickly DM, mute, or deafen any user right from the voice-call panel.",
+    tags: ["Servers", "Utility", "Voice"],
     authors: [EquicordDevs.nicola02nb, EquicordDevs.omaw],
     settings,
     patches: [
@@ -23,7 +24,7 @@ export default definePlugin({
             find: ".VOICE_PANEL}}",
             replacement: [
                 {
-                    match: /\}\),children:\[(?=.{0,200}\.VOICE_CHANNEL_GAME_ACTIVITY_INDICATOR_VIEWED)/,
+                    match: /\}\),children:\[(?=.{0,50}#{intl::PRIORITY_SPEAKER})/,
                     replace: "$&$self.renderButtons(arguments[0]?.user),"
                 }
             ]

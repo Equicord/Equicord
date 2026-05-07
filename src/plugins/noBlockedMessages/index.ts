@@ -90,21 +90,28 @@ export default definePlugin({
     name: "NoBlockedMessages",
     description: "Hide all blocked/ignored messages from chat completely.",
     authors: [Devs.rushii, Devs.Samu, Devs.jamesbt365, Devs.Elvyra, EquicordDevs.Etorix],
+    tags: ["Accessibility", "Chat"],
     isModified: true,
     settings,
     patches: [
-        ...[
-            '"MessageStore"',
-            '"ReadStateStore"'
-        ].map(find => ({
-            find,
+        {
+            find: '"MessageStore"',
             replacement: [
                 {
-                    match: /(?<=function (\i)\((\i)\){)(?=.*MESSAGE_CREATE:\1)/,
-                    replace: (_, _funcName, props) => `if($self.disableNotification(${props}.message)){return;};`
+                    match: /(?<=MESSAGE_CREATE:function\((\i)\){)/,
+                    replace: (_, props) => `if($self.disableNotification(${props}.message))return;`
                 }
             ]
-        })),
+        },
+        {
+            find: '"ReadStateStore"',
+            replacement: [
+                {
+                    match: /(?<=MESSAGE_CREATE:function\((\i)\){)/,
+                    replace: (_, props) => `if($self.disableNotification(${props}.message))return;`
+                }
+            ]
+        },
         {
             find: "`forum-post-action-bar-",
             replacement: [

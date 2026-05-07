@@ -6,8 +6,9 @@
 
 import { DataStore } from "@api/index";
 import { isPluginEnabled, plugins, startPlugin, stopPlugin } from "@api/PluginManager";
-import { SettingsStore } from "@api/Settings";
+import { Settings, SettingsStore } from "@api/Settings";
 import { getUserSettingLazy } from "@api/UserSettings";
+import { HeadphonesIcon } from "@components/Icons";
 import { openPluginModal } from "@components/settings/tabs";
 import { toggleEnabled } from "@equicordplugins/equicordHelper/utils";
 import { copyWithToast } from "@utils/discord";
@@ -15,10 +16,9 @@ import { Logger } from "@utils/Logger";
 import type { Plugin } from "@utils/types";
 import { changes, checkForUpdates } from "@utils/updater";
 import { Guild } from "@vencord/discord-types";
-import { findByPropsLazy, findExportedComponentLazy, findStoreLazy } from "@webpack";
+import { findByPropsLazy, findStoreLazy } from "@webpack";
 import { Alerts, ChannelActionCreators, ChannelRouter, ChannelStore, ComponentDispatch, FluxDispatcher, GuildStore, IconUtils, MediaEngineStore, MessageStore, NavigationRouter, React, ReadStateStore, ReadStateUtils, SelectedChannelStore, SelectedGuildStore, SettingsRouter, StreamerModeStore, Toasts, useEffect, UserStore, VoiceActions } from "@webpack/common";
 import type { FC, ReactElement, ReactNode } from "react";
-import { Settings } from "Vencord";
 
 import commandPalette from ".";
 import {
@@ -801,7 +801,6 @@ const runtimeCleanupCallbacks: Array<() => void> = [];
 const NotificationSettingsActionCreators = findByPropsLazy("updateGuildNotificationSettings", "updateChannelOverrideSettings");
 const GuildSettingsActions = findByPropsLazy("open", "selectRole", "updateGuild");
 const GuildMembershipActions = findByPropsLazy("leaveGuild");
-const HeadphonesIcon = findExportedComponentLazy("HeadphonesIcon");
 const UserGuildSettingsStore = findStoreLazy("UserGuildSettingsStore");
 const NotificationsInboxStore = findStoreLazy("NotificationsInboxStore") as NotificationsInboxStoreLike;
 const RecentMentionsStore = findStoreLazy("RecentMentionsStore") as RecentMentionsStoreLike;
