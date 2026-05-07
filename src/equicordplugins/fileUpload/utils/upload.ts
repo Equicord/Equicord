@@ -6,7 +6,7 @@
 
 import { normalizeCorsProxyUrl, toProxiedUrl } from "@equicordplugins/fileUpload/constants";
 import { settings } from "@equicordplugins/fileUpload/settings";
-import { serviceLabels, ServiceType, ShareXUploaderConfig, UploadResponse } from "@equicordplugins/fileUpload/types";
+import { fallbackServiceOrder, serviceLabels, ServiceType, ShareXUploaderConfig, UploadResponse } from "@equicordplugins/fileUpload/types";
 import { copyToClipboard } from "@utils/clipboard";
 import { insertTextIntoChatInputBox } from "@utils/discord";
 import { Logger } from "@utils/Logger";
@@ -38,6 +38,7 @@ function toProxyUrl(url: string): string {
 let isUploading = false;
 
 type UploadPhase = "idle" | "preparing" | "uploading" | "retrying" | "success" | "failed" | "cancelled";
+type EmbedProxyService = "cors" | "nfp";
 
 export interface UploadProgressState {
     phase: UploadPhase;
@@ -47,6 +48,8 @@ export interface UploadProgressState {
     attempt: number;
     totalAttempts: number;
     percent: number;
+    transferredBytes: number;
+    totalBytes: number;
     status: string;
     canCancel: boolean;
 }
@@ -59,6 +62,8 @@ const defaultUploadState: UploadProgressState = {
     attempt: 0,
     totalAttempts: 0,
     percent: 0,
+    transferredBytes: 0,
+    totalBytes: 0,
     status: "",
     canCancel: false
 };
@@ -66,6 +71,7 @@ const defaultUploadState: UploadProgressState = {
 let uploadState: UploadProgressState = { ...defaultUploadState };
 const uploadStateListeners = new Set<() => void>();
 let activeAbortController: AbortController | null = null;
+let activeXhr: XMLHttpRequest | null = null;
 let cancelRequested = false;
 
 function isUploadCancelledError(error: unknown): boolean {
@@ -74,6 +80,18 @@ function isUploadCancelledError(error: unknown): boolean {
 
     const message = error.message.toLowerCase();
     return message.includes("cancelled") || message.includes("canceled") || message.includes("aborted") || message.includes("aborterror");
+}
+
+function getFallbackServices(): ServiceType[] {
+    const configuredOrder = (settings.store as { fallbackOrder?: string; }).fallbackOrder || fallbackServiceOrder.join(",");
+    const services = configuredOrder
+        .split(/[\n,]/)
+        .map(service => service.trim())
+        .filter((service): service is ServiceType => Object.values(ServiceType).includes(service as ServiceType));
+
+    return services.length === fallbackServiceOrder.length && new Set(services).size === fallbackServiceOrder.length
+        ? services
+        : fallbackServiceOrder;
 }
 
 function emitUploadState() {
@@ -108,6 +126,7 @@ export function cancelCurrentUpload() {
 
     cancelRequested = true;
     activeAbortController?.abort();
+    activeXhr?.abort();
     setUploadState({
         phase: "cancelled",
         status: "Upload cancelled.",
@@ -148,6 +167,103 @@ async function fetchWithTimeout(url: string, options: RequestInit): Promise<Resp
             activeAbortController = null;
         }
     }
+}
+
+function getHeaderEntries(headers?: HeadersInit): [string, string][] {
+    if (!headers) return [];
+    if (headers instanceof Headers) return Array.from(headers.entries());
+    if (Array.isArray(headers)) return headers.map(([key, value]) => [key, value]);
+
+    return Object.entries(headers);
+}
+
+class XhrResponse {
+    ok: boolean;
+    headers: Headers;
+    status: number;
+    statusText: string;
+    url: string;
+
+    constructor(private xhr: XMLHttpRequest) {
+        this.status = xhr.status;
+        this.statusText = xhr.statusText;
+        this.url = xhr.responseURL;
+        this.ok = this.status >= 200 && this.status < 300;
+        this.headers = new Headers();
+
+        const rawHeaders = xhr.getAllResponseHeaders();
+        for (const line of rawHeaders.trim().split(/[\r\n]+/)) {
+            if (!line) continue;
+
+            const separatorIndex = line.indexOf(":");
+            if (separatorIndex < 0) continue;
+
+            this.headers.append(line.slice(0, separatorIndex).trim(), line.slice(separatorIndex + 1).trim());
+        }
+    }
+
+    async text(): Promise<string> {
+        return typeof this.xhr.response === "string"
+            ? this.xhr.response
+            : this.xhr.responseText;
+    }
+
+    async json(): Promise<unknown> {
+        return JSON.parse(await this.text());
+    }
+}
+
+function setXhrUploadProgress(event: ProgressEvent) {
+    if (!event.lengthComputable || event.total <= 0) {
+        setUploadState({
+            status: uploadState.currentServiceLabel
+                ? `Uploading via ${uploadState.currentServiceLabel}...`
+                : "Uploading..."
+        });
+        return;
+    }
+
+    const percent = Math.round(Math.max(0, Math.min(100, event.loaded / event.total * 100)));
+    setUploadState({
+        phase: "uploading",
+        percent,
+        transferredBytes: event.loaded,
+        totalBytes: event.total,
+        status: uploadState.currentServiceLabel
+            ? `Uploading via ${uploadState.currentServiceLabel}...`
+            : "Uploading..."
+    });
+}
+
+async function uploadRequestWithTimeout(url: string, options: RequestInit): Promise<XhrResponse> {
+    const requestUrl = toProxyUrl(url);
+
+    return new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        activeXhr = xhr;
+        const timeout = setTimeout(() => xhr.abort(), getUploadTimeoutMs());
+
+        xhr.open(options.method || "GET", requestUrl);
+
+        for (const [key, value] of getHeaderEntries(options.headers)) {
+            xhr.setRequestHeader(key, value);
+        }
+
+        xhr.upload.onprogress = setXhrUploadProgress;
+        xhr.onload = () => resolve(new XhrResponse(xhr));
+        xhr.onerror = () => reject(new Error("Upload failed"));
+        xhr.onabort = () => reject(new Error(cancelRequested ? "Upload cancelled by user" : "Upload timed out"));
+        xhr.onloadend = () => {
+            clearTimeout(timeout);
+            xhr.upload.onprogress = null;
+            if (activeXhr === xhr) {
+                activeXhr = null;
+            }
+        };
+
+        const { body } = options;
+        xhr.send(body instanceof ReadableStream ? null : body as XMLHttpRequestBodyInit | null);
+    });
 }
 
 function resolveShareXRequestValue(value: string | number | boolean, filename: string): string {
@@ -212,7 +328,7 @@ async function uploadToShareX(fileBlob: Blob, filename: string): Promise<string>
         throw new Error(`Unsupported ShareX Body type: ${config.Body || "unknown"}`);
     }
 
-    const response = await fetchWithTimeout(requestUrl, { method, headers, body });
+    const response = await uploadRequestWithTimeout(requestUrl, { method, headers, body });
 
     const responseText = await response.text();
     let responseJson: unknown = null;
@@ -259,7 +375,7 @@ async function uploadToZipline(fileBlob: Blob, filename: string): Promise<string
         headers["x-zipline-folder"] = folderId;
     }
 
-    const response = await fetchWithTimeout(`${baseUrl}/api/upload`, {
+    const response = await uploadRequestWithTimeout(`${baseUrl}/api/upload`, {
         method: "POST",
         headers,
         body: formData
@@ -276,7 +392,7 @@ async function uploadToZipline(fileBlob: Blob, filename: string): Promise<string
         throw new Error("Server returned invalid response (not JSON)");
     }
 
-    const data: UploadResponse = await response.json();
+    const data = await response.json() as UploadResponse;
 
     if (data.files && data.files.length > 0 && data.files[0].url) {
         return data.files[0].url;
@@ -310,7 +426,7 @@ async function uploadToNest(fileBlob: Blob, filename: string): Promise<string> {
     const formData = new FormData();
     formData.append("file", fileBlob, filename);
 
-    const response = await fetchWithTimeout("https://nest.rip/api/files/upload", {
+    const response = await uploadRequestWithTimeout("https://nest.rip/api/files/upload", {
         method: "POST",
         headers: {
             "Authorization": nestToken
@@ -361,7 +477,10 @@ export function isConfigured(): boolean {
         case ServiceType.BUZZHEAVIER:
         case ServiceType.TEMPSH:
         case ServiceType.FILEBIN:
+        case ServiceType.PIXELDRAIN:
             return true;
+        case ServiceType.PIXELVAULT:
+            return Boolean((settings.store as { pixelVaultKey?: string; }).pixelVaultKey);
         case ServiceType.SHAREX:
             try {
                 parseShareXConfigFromSettings();
@@ -400,7 +519,7 @@ async function uploadToEzHost(fileBlob: Blob, filename: string): Promise<string>
 
     const headers: Record<string, string> = { key: ezHostKey };
 
-    const response = await fetchWithTimeout("https://api.e-z.host/files", {
+    const response = await uploadRequestWithTimeout("https://api.e-z.host/files", {
         method: "POST",
         headers,
         body: formData
@@ -411,12 +530,14 @@ async function uploadToEzHost(fileBlob: Blob, filename: string): Promise<string>
         throw new Error(`Upload failed: ${response.status} ${text}`);
     }
 
-    const data = await response.json();
+    const data = await response.json() as { success?: boolean; error?: string; imageUrl?: string; rawUrl?: string; };
     if (!data || !data.success) {
         throw new Error(data?.error || "Upload failed");
     }
 
-    return data.imageUrl || data.rawUrl;
+    const url = data.imageUrl || data.rawUrl;
+    if (!url) throw new Error("No URL returned from upload");
+    return url;
 }
 
 async function uploadToCatbox(fileBlob: Blob, filename: string): Promise<string> {
@@ -433,7 +554,7 @@ async function uploadToCatbox(fileBlob: Blob, filename: string): Promise<string>
     if (catboxUserhash) formData.append("userhash", catboxUserhash);
     formData.append("fileToUpload", fileBlob, filename);
 
-    const response = await fetchWithTimeout("https://catbox.moe/user/api.php", {
+    const response = await uploadRequestWithTimeout("https://catbox.moe/user/api.php", {
         method: "POST",
         body: formData
     });
@@ -477,7 +598,7 @@ async function uploadToLitterbox(fileBlob: Blob, filename: string): Promise<stri
     formData.append("time", expiry);
     formData.append("fileToUpload", fileBlob, filename);
 
-    const response = await fetchWithTimeout("https://litterbox.catbox.moe/resources/internals/api.php", {
+    const response = await uploadRequestWithTimeout("https://litterbox.catbox.moe/resources/internals/api.php", {
         method: "POST",
         body: formData
     });
@@ -504,7 +625,7 @@ async function uploadToGofile(fileBlob: Blob, filename: string): Promise<string>
     formData.append("file", fileBlob, filename);
 
     const uploadUrl = "https://upload.gofile.io/uploadfile";
-    const response = await fetchWithTimeout(uploadUrl, {
+    const response = await uploadRequestWithTimeout(uploadUrl, {
         method: "POST",
         body: formData
     });
@@ -539,7 +660,7 @@ async function uploadToTmpfiles(fileBlob: Blob, filename: string): Promise<strin
     formData.append("file", fileBlob, filename);
 
     const uploadUrl = "https://tmpfiles.org/api/v1/upload";
-    const response = await fetchWithTimeout(uploadUrl, {
+    const response = await uploadRequestWithTimeout(uploadUrl, {
         method: "POST",
         body: formData
     });
@@ -567,7 +688,7 @@ async function uploadToBuzzheavier(fileBlob: Blob, filename: string): Promise<st
     }
 
     const uploadUrl = `https://w.buzzheavier.com/${encodeURIComponent(filename)}`;
-    const response = await fetchWithTimeout(uploadUrl, {
+    const response = await uploadRequestWithTimeout(uploadUrl, {
         method: "PUT",
         body: fileBlob
     });
@@ -602,7 +723,7 @@ async function uploadToTempSh(fileBlob: Blob, filename: string): Promise<string>
     formData.append("file", fileBlob, filename);
 
     const uploadUrl = "https://temp.sh/upload";
-    const response = await fetchWithTimeout(uploadUrl, {
+    const response = await uploadRequestWithTimeout(uploadUrl, {
         method: "POST",
         body: formData
     });
@@ -634,7 +755,7 @@ async function uploadToFilebin(fileBlob: Blob, filename: string): Promise<string
     const formData = new FormData();
     formData.append("file", fileBlob, filename);
 
-    const response = await fetchWithTimeout(uploadUrl, {
+    const response = await uploadRequestWithTimeout(uploadUrl, {
         method: "POST",
         body: formData
     });
@@ -646,6 +767,98 @@ async function uploadToFilebin(fileBlob: Blob, filename: string): Promise<string
     return `https://filebin.net/${binId}/${encodeURIComponent(filename)}`;
 }
 
+async function uploadToPixelVault(fileBlob: Blob, filename: string): Promise<string> {
+    const { pixelVaultKey } = settings.store as { pixelVaultKey?: string; };
+
+    if (!pixelVaultKey?.trim()) {
+        throw new Error("PixelVault upload key is required");
+    }
+
+    if (Native) {
+        const result = await Native.uploadToPixelVault(await fileBlob.arrayBuffer(), filename, pixelVaultKey.trim());
+
+        if (!result.success) {
+            throw new Error(result.error || "Upload failed");
+        }
+
+        if (!result.url) {
+            throw new Error("No URL returned from upload");
+        }
+
+        return result.url;
+    }
+
+    const formData = new FormData();
+    formData.append("file", fileBlob, filename);
+
+    const response = await uploadRequestWithTimeout("https://pixelvault.co/", {
+        method: "POST",
+        headers: {
+            Authorization: pixelVaultKey.trim()
+        },
+        body: formData
+    });
+
+    const text = await response.text();
+    let data: { resource?: string; url?: string; } | null = null;
+
+    try {
+        data = text ? JSON.parse(text) : null;
+    } catch {
+        data = null;
+    }
+
+    if (!response.ok) {
+        throw new Error(`Upload failed: ${response.status} ${text}`);
+    }
+
+    const url = data?.resource || data?.url || text.trim();
+    if (!url) {
+        throw new Error("No URL returned from upload");
+    }
+
+    return url;
+}
+
+async function uploadToPixelDrain(fileBlob: Blob, filename: string): Promise<string> {
+    const { pixelDrainKey } = settings.store as { pixelDrainKey?: string; };
+
+    if (Native) {
+        const result = await Native.uploadToPixelDrain(await fileBlob.arrayBuffer(), filename, pixelDrainKey?.trim() || undefined);
+        if (!result.success || !result.url) throw new Error(result.error || "No URL returned from upload");
+        return result.url;
+    }
+
+    const headers: Record<string, string> = {};
+    if (pixelDrainKey?.trim()) {
+        headers.Authorization = `Basic ${btoa(`:${pixelDrainKey.trim()}`)}`;
+    }
+
+    const response = await uploadRequestWithTimeout(`https://pixeldrain.com/api/file/${encodeURIComponent(filename)}`, {
+        method: "PUT",
+        headers,
+        body: fileBlob
+    });
+
+    const text = await response.text();
+    let data: { id?: string; success?: boolean; message?: string; } | null = null;
+    try {
+        data = text ? JSON.parse(text) : null;
+    } catch {
+        data = null;
+    }
+
+    if (!response.ok) {
+        throw new Error(data?.message || `Upload failed: ${response.status} ${text}`);
+    }
+
+    if (!data?.id) {
+        throw new Error(data?.message || "No URL returned from upload");
+    }
+
+    return `https://pixeldrain.com/u/${data.id}`;
+}
+
 async function uploadToService(serviceType: ServiceType, fileBlob: Blob, filename: string): Promise<string> {
     switch (serviceType) {
         case ServiceType.ZIPLINE:
@@ -655,7 +868,7 @@ async function uploadToService(serviceType: ServiceType, fileBlob: Blob, filenam
         case ServiceType.EZHOST:
             return uploadToEzHost(fileBlob, filename);
         case ServiceType.S3:
-            return uploadToS3(fileBlob, filename, Native);
+            return uploadToS3(fileBlob, filename, Native, uploadRequestWithTimeout);
         case ServiceType.CATBOX:
             return uploadToCatbox(fileBlob, filename);
         case ServiceType.ZEROX0:
@@ -674,27 +887,55 @@ async function uploadToService(serviceType: ServiceType, fileBlob: Blob, filenam
             return uploadToTempSh(fileBlob, filename);
         case ServiceType.FILEBIN:
             return uploadToFilebin(fileBlob, filename);
+        case ServiceType.PIXELVAULT:
+            return uploadToPixelVault(fileBlob, filename);
+        case ServiceType.PIXELDRAIN:
+            return uploadToPixelDrain(fileBlob, filename);
         default:
             throw new Error("Unknown service type");
     }
 }
-
-const FALLBACK_SERVICES: ServiceType[] = [
-    ServiceType.CATBOX,
-    ServiceType.LITTERBOX,
-    ServiceType.ZEROX0,
-    ServiceType.TMPFILES,
-    ServiceType.GOFILE,
-    ServiceType.BUZZHEAVIER,
-    ServiceType.TEMPSH,
-    ServiceType.FILEBIN
-];
 
 const EXE_BLOCKED_SERVICES = new Set<ServiceType>([
     ServiceType.CATBOX,
     ServiceType.LITTERBOX,
     ServiceType.ZEROX0
 ]);
+
+function getEmbedProxyService(): EmbedProxyService {
+    const service = settings.store.embedProxyService;
+    return service === "nfp" ? service : "cors";
+
+}
+
+function shouldProxyEmbedUrl(url: string): boolean {
+    const ext = getUrlExtension(url)?.toLowerCase();
+    if (!ext) {
+        return false;
+    }
+
+    return getMimeFromExtension(ext).startsWith("video/");
+}
+
+function applyEmbedProxy(url: string): string {
+    if (!settings.store.embedProxyEnabled) {
+        return url;
+    }
+
+    const service = getEmbedProxyService();
+    if (!shouldProxyEmbedUrl(url)) {
+        return url;
+    }
+
+    switch (service) {
+        case "cors":
+            return toProxyUrl(url);
+        case "nfp":
+            return `https://discord.nfp.is/?v=${encodeURIComponent(url)}`;
+        default:
+            return toProxyUrl(url);
+    }
+}
 
 function isExeFileName(fileName: string): boolean {
     return fileName.toLowerCase().endsWith(".exe");
@@ -732,12 +973,12 @@ function buildUploadOrder(primary: ServiceType, fileName: string): ServiceType[]
     const disableFallbacks = Boolean((settings.store as { disableFallbacks?: boolean; }).disableFallbacks);
     const effectivePrimary = normalizePrimaryService(primary, fileName);
 
-    if (disableFallbacks || effectivePrimary === ServiceType.SHAREX || effectivePrimary === ServiceType.S3 || effectivePrimary === ServiceType.ZIPLINE || effectivePrimary === ServiceType.NEST || effectivePrimary === ServiceType.EZHOST) {
-        return [effectivePrimary];
+    const order: ServiceType[] = [effectivePrimary];
+    if (disableFallbacks) {
+        return order;
     }
 
-    const order: ServiceType[] = [effectivePrimary];
-    for (const fallback of FALLBACK_SERVICES) {
+    for (const fallback of getFallbackServices()) {
         if (fallback !== effectivePrimary && canServiceHandleFile(fallback, fileName)) {
             order.push(fallback);
         }
@@ -758,6 +999,14 @@ function finalizeUploadedUrl(url: string): string {
     } catch {
         return url;
     }
+}
+
+function getFilenameExtension(filename: string): string | undefined {
+    const dotIndex = filename.lastIndexOf(".");
+    if (dotIndex < 1 || dotIndex === filename.length - 1) return undefined;
+
+    const ext = filename.slice(dotIndex + 1).toLowerCase();
+    return ext.length <= 10 ? ext : undefined;
 }
 
 async function notifyUploadSuccess(finalUrl: string): Promise<void> {
@@ -796,6 +1045,8 @@ async function uploadWithFallbacks(fileBlob: Blob, filename: string, primary: Se
         totalAttempts: uploadOrder.length,
         attempt: 1,
         percent: 5,
+        transferredBytes: 0,
+        totalBytes: fileBlob.size,
         status: `Starting upload via ${serviceLabels[uploadOrder[0]]}...`,
         currentService: uploadOrder[0],
         currentServiceLabel: serviceLabels[uploadOrder[0]],
@@ -806,12 +1057,15 @@ async function uploadWithFallbacks(fileBlob: Blob, filename: string, primary: Se
         if (cancelRequested) throw new Error("Upload cancelled by user");
 
         const attempt = attempted.length + 1;
+
         setUploadState({
             phase: attempt === 1 ? "uploading" : "retrying",
             attempt,
             currentService: service,
             currentServiceLabel: serviceLabels[service],
-            percent: Math.min(90, 10 + Math.round((attempt / uploadOrder.length) * 70)),
+            transferredBytes: 0,
+            totalBytes: fileBlob.size,
+            percent: 0,
             status: attempt === 1
                 ? `Uploading via ${serviceLabels[service]}...`
                 : `Retrying with ${serviceLabels[service]} (${attempt}/${uploadOrder.length})...`
@@ -866,8 +1120,20 @@ async function uploadWithFallbacks(fileBlob: Blob, filename: string, primary: Se
 }
 
 async function normalizeUploadBlob(blob: Blob, sourceUrl?: string): Promise<{ blob: Blob; filename: string; }> {
+    let sourceFileName = "";
+    if (blob instanceof File && blob.name) {
+        sourceFileName = blob.name;
+    } else if (sourceUrl && URL.canParse(sourceUrl)) {
+        const segment = new URL(sourceUrl).pathname.split("/").pop();
+        if (segment) sourceFileName = decodeURIComponent(segment);
+    }
+
     const extGuessFromSource = sourceUrl ? getUrlExtension(sourceUrl) : undefined;
-    let ext = await getExtensionFromBytes(blob) || getExtensionFromMime(blob.type) || extGuessFromSource || "png";
+    let ext = await getExtensionFromBytes(blob)
+        || getExtensionFromMime(blob.type)
+        || getFilenameExtension(sourceFileName)
+        || extGuessFromSource
+        || "bin";
 
     if (ext === "apng" && settings.store.apngToGif) {
         const gifBlob = await convertApngToGif(blob);
@@ -880,9 +1146,16 @@ async function normalizeUploadBlob(blob: Blob, sourceUrl?: string): Promise<{ bl
     }
 
     const mimeType = getMimeFromExtension(ext);
+    const { preserveOriginalFilename } = settings.store;
+    let filename = `upload.${ext}`;
+    if (preserveOriginalFilename && sourceFileName) {
+        const dotIndex = sourceFileName.lastIndexOf(".");
+        filename = `${sourceFileName.slice(0, dotIndex < 0 ? undefined : dotIndex)}.${ext}`;
+    }
+
     return {
         blob: new Blob([blob], { type: mimeType }),
-        filename: `upload.${ext}`
+        filename
     };
 }
 
@@ -891,7 +1164,7 @@ async function uploadPreparedBlob(blob: Blob, sourceUrl?: string): Promise<void>
     const { blob: normalizedBlob, filename } = await normalizeUploadBlob(blob, sourceUrl);
     setUploadState({ fileName: filename, status: "File ready, starting upload...", percent: 4 });
     const uploadedUrl = await uploadWithFallbacks(normalizedBlob, filename, primary);
-    const finalUrl = finalizeUploadedUrl(uploadedUrl);
+    const finalUrl = applyEmbedProxy(finalizeUploadedUrl(uploadedUrl));
     await notifyUploadSuccess(finalUrl);
 }
 
@@ -971,6 +1244,7 @@ export async function uploadFile(url: string): Promise<void> {
     } finally {
         isUploading = false;
         activeAbortController = null;
+        activeXhr = null;
         setTimeout(() => resetUploadState(), 1800);
     }
 }
@@ -1034,6 +1308,7 @@ export async function uploadProvidedFiles(files: readonly File[]): Promise<void>
     } finally {
         isUploading = false;
         activeAbortController = null;
+        activeXhr = null;
         setTimeout(() => resetUploadState(), 1800);
     }
 }

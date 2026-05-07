@@ -14,6 +14,7 @@ import { makeDevBanner, settings } from "./components";
 export default definePlugin({
     name: "DiscordDevBanner",
     description: "Enables the Discord developer banner, in which displays the build-ID",
+    tags: ["Appearance", "Console", "Developers"],
     authors: [EquicordDevs.KrystalSkull, Devs.thororen],
     settings,
     patches: [
@@ -25,7 +26,11 @@ export default definePlugin({
                     replace: "true"
                 },
                 {
-                    match: /children:\[.*?\{\}\)\]/g,
+                    match: /children:\[.{0,80}#{intl::BUILD_OVERRIDE}.{0,15}\{\}\)\]/,
+                    replace: "children:$self.makeDevBanner()"
+                },
+                {
+                    match: /children:\[.{0,80}#{intl::uyrfYF::raw}.{0,50}\{\}\)\]/,
                     replace: "children:$self.makeDevBanner()"
                 },
             ]

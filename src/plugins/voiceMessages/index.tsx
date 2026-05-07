@@ -26,7 +26,7 @@ import { Microphone } from "@components/Icons";
 import { Link } from "@components/Link";
 import { Paragraph } from "@components/Paragraph";
 import { lastState as silentMessageEnabled } from "@plugins/silentMessageToggle";
-import { Devs, EquicordDevs } from "@utils/constants";
+import { Devs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
 import { Margins } from "@utils/margins";
 import { ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot, openModal } from "@utils/modal";
@@ -35,9 +35,10 @@ import definePlugin, { OptionType } from "@utils/types";
 import { chooseFile } from "@utils/web";
 import { CloudUploadPlatform } from "@vencord/discord-types/enums";
 import { Button, CloudUploader, Constants, FluxDispatcher, Forms, lodash, Menu, MessageActions, PendingReplyStore, PermissionsBits, PermissionStore, RestAPI, SelectedChannelStore, showToast, SnowflakeUtils, Toasts, useEffect, useState } from "@webpack/common";
+import { ComponentType } from "react";
 
 import { VoiceRecorderDesktop } from "./components/DesktopRecorder";
-import { VoicePreview } from "./components/VoicePreview";
+import { VoiceMessageProps, VoicePreview } from "./components/VoicePreview";
 import { VoiceRecorderWeb } from "./components/WebRecorder";
 
 const VOICE_MESSAGE_FLAG = 1 << 13;
@@ -60,6 +61,8 @@ export type VoiceRecorder = React.ComponentType<{
     setAudioBlob(blob: Blob): void;
     onRecordingChange?(recording: boolean): void;
 }>;
+
+export let VoiceMessage: ComponentType<VoiceMessageProps> = () => null;
 
 type AudioMetadata = {
     waveform: string,
@@ -271,10 +274,23 @@ export const settings = definePluginSettings({
 
 export default definePlugin({
     name: "VoiceMessages",
-    description: "Allows you to send voice messages like on mobile. To do so, right click the upload button and click Send Voice Message.",
-    authors: [Devs.Ven, Devs.Vap, Devs.Nickyux, EquicordDevs.Z1xus, Devs.prism],
+    description: "Allows you to send voice messages like on mobile. To do so, right click the upload button and click Send Voice Message",
+    tags: ["Voice"],
+    authors: [Devs.Ven, Devs.Vap, Devs.Nickyux],
     settings,
+    patches: [
+        {
+            find: "#{intl::PAUSE_VOICE_MESSAGE_A11Y_LABEL}",
+            replacement: {
+                match: /(?<=\i=)(?=\i\.memo\(.{0,50}?=1,onVolumeChange:[^}]+?waveform:[^}]+?playbackCacheKey:)/,
+                replace: "$self.VoiceMessage=",
+            }
+        }
+    ],
 
+    set VoiceMessage(value) {
+        VoiceMessage = value;
+    },
     contextMenus: {
         "channel-attach": ctxMenuPatch
     }

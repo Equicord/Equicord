@@ -22,6 +22,7 @@ import { cancelCurrentUpload, getUploadState, isConfigured, subscribeUploadState
 const cl = classNameFactory("vc-file-upload-");
 const { getUserMaxFileSize } = findByPropsLazy("getUserMaxFileSize");
 let uploadAddFilesInterceptor: ((event: unknown) => void) | null = null;
+let pasteEventListener: ((event: ClipboardEvent) => void) | null = null;
 
 type UploadAddFilesEvent = {
     type: string;
@@ -37,7 +38,7 @@ type UploadAddFilesEvent = {
 };
 
 function shouldInterceptUploadFiles(files: readonly File[], payload: UploadAddFilesEvent): boolean {
-    if (!settings.store.interceptDiscordUploadOnlyOverLimit) return true;
+    if (!settings.store.bypassDiscordUploadOnlyOverLimit) return true;
 
     const directLimit = [payload.maxFileSize, payload.fileSizeLimit, payload.limits?.fileSize].find(limit => Number.isFinite(limit)) as number | undefined;
     const fallbackLimit = getUserMaxFileSize(UserStore.getCurrentUser());
@@ -73,7 +74,7 @@ function interceptUploadAddFiles(event: unknown): void {
 
     if (payload.draftType !== DraftType.ChannelMessage) return;
 
-    if (!Boolean((settings.store as { interceptDiscordUpload?: boolean; }).interceptDiscordUpload) || !isConfigured()) return;
+    if (!settings.store.bypassDiscordUpload || !isConfigured()) return;
 
     const files = [
         ...extractFilesFromValue(payload.files),
@@ -91,6 +92,33 @@ function interceptUploadAddFiles(event: unknown): void {
     void uploadProvidedFiles(uniqueFiles);
 }
 
+function handlePaste(event: ClipboardEvent) {
+    const files = Array.from(event.clipboardData?.files || []);
+    if (files.length === 0) return;
+
+    if (!settings.store.autoUploadPastedFiles || !isConfigured()) return;
+
+    event.preventDefault();
+    event.stopPropagation();
+
+    void uploadProvidedFiles(files);
+}
+
+function formatBytes(bytes: number): string {
+    if (!bytes) return "";
+
+    const units = ["B", "KB", "MB", "GB"];
+    let value = bytes;
+    let unitIndex = 0;
+
+    while (value >= 1024 && unitIndex < units.length - 1) {
+        value /= 1024;
+        unitIndex++;
+    }
+
+    return `${value.toFixed(value >= 10 || unitIndex === 0 ? 0 : 1)} ${units[unitIndex]}`;
+}
+
 const ProgressBarInner = () => {
     const [state, setState] = useState(getUploadState);
 
@@ -99,6 +127,9 @@ const ProgressBarInner = () => {
     if (state.phase === "idle") return null;
 
     const percentage = Math.max(0, Math.min(100, state.percent));
+    const progressLabel = state.totalBytes > 0
+        ? `${Math.round(percentage)}% - ${formatBytes(state.transferredBytes)} of ${formatBytes(state.totalBytes)}`
+        : `${Math.round(percentage)}%`;
 
     return (
         <div
@@ -110,6 +141,9 @@ const ProgressBarInner = () => {
                     {state.status || "Uploading..."}
                 </div>
                 <div className={cl("progress-meta")}>
+                    <span className={cl("progress-percent")}>
+                        {progressLabel}
+                    </span>
                     <span className={cl("progress-attempt")}>
                         {state.attempt > 0 && state.totalAttempts > 0 ? `${state.attempt}/${state.totalAttempts}` : ""}
                     </span>
@@ -216,6 +250,7 @@ const channelAttachMenuPatch: NavContextMenuPatchCallback = (children, props) =>
 export default definePlugin({
     name: "FileUpload",
     description: "Upload images and videos to file hosting services like Zipline and Nest",
+    tags: ["Media"],
     authors: [EquicordDevs.creations, EquicordDevs.keircn, Devs.ScattrdBlade],
     settings,
     patches: [
@@ -247,6 +282,9 @@ export default definePlugin({
 
         uploadAddFilesInterceptor = event => interceptUploadAddFiles(event);
         FluxDispatcher.addInterceptor(uploadAddFilesInterceptor);
+
+        pasteEventListener = event => handlePaste(event);
+        document.addEventListener("paste", pasteEventListener, true);
     },
     stop() {
         if (!uploadAddFilesInterceptor) {
@@ -259,9 +297,14 @@ export default definePlugin({
         }
 
         uploadAddFilesInterceptor = null;
+
+        if (pasteEventListener) {
+            document.removeEventListener("paste", pasteEventListener, true);
+            pasteEventListener = null;
+        }
     },
     shouldBypassDiscordUploadSizeCheck(): boolean {
-        return Boolean((settings.store as { interceptDiscordUpload?: boolean; }).interceptDiscordUpload) && isConfigured();
+        return Boolean(settings.store.bypassDiscordUpload) && isConfigured();
     },
     renderUploadProgress() {
         return <ProgressBar />;

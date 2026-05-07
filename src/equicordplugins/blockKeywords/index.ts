@@ -70,6 +70,7 @@ export function containsBlockedKeywords(message: Message) {
 export default definePlugin({
     name: "BlockKeywords",
     description: "Blocks messages containing specific user-defined keywords, as if the user sending them was blocked.",
+    tags: ["Appearance", "Customisation", "Privacy"],
     authors: [EquicordDevs.catcraft],
     patches: [
         {
@@ -80,19 +81,26 @@ export default definePlugin({
                 replace: "$&$1=$self.blockMessagesWithKeywords($1);"
             }
         },
-        ...[
-            '"MessageStore"',
-            '"ReadStateStore"'
-        ].map(find => ({
-            find,
+        {
+            find: '"MessageStore"',
             predicate: () => settings.store.ignoreBlockedMessages && settings.store.blockedWords !== "",
             replacement: [
                 {
-                    match: /(?<=function (\i)\((\i)\){)(?=.*MESSAGE_CREATE:\1)/,
-                    replace: (_, _funcName, props) => `if($self.containsBlockedKeywords(${props}.message))return;`
+                    match: /(?<=MESSAGE_CREATE:function\((\i)\){)/,
+                    replace: (_, props) => `if($self.containsBlockedKeywords(${props}.message))return;`
                 }
             ]
-        })),
+        },
+        {
+            find: '"ReadStateStore"',
+            predicate: () => settings.store.ignoreBlockedMessages && settings.store.blockedWords !== "",
+            replacement: [
+                {
+                    match: /(?<=MESSAGE_CREATE:function\((\i)\){)/,
+                    replace: (_, props) => `if($self.containsBlockedKeywords(${props}.message))return;`
+                }
+            ]
+        },
     ],
 
     settings,

@@ -190,3 +190,22 @@ addContextMenuPatch("textarea-context", (children, args) => {
         </Menu.MenuItem>
     );
 });
+
+// Wrapper stuff is down here to avoid conflicts with above
+export type ChatBarButtonWrapper = (buttons: ReactNode) => ReactNode;
+
+/**
+ * Registry for plugins that need to wrap the entire chat bar button container
+ */
+export const ChatBarButtonWrappers = new Map<string, ChatBarButtonWrapper>();
+
+export const addChatBarButtonWrapper = (id: string, wrapper: ChatBarButtonWrapper) => ChatBarButtonWrappers.set(id, wrapper);
+export const removeChatBarButtonWrapper = (id: string) => ChatBarButtonWrappers.delete(id);
+
+export function _wrapButtons(buttons: ReactNode) {
+    let wrapped = buttons;
+    for (const wrapper of ChatBarButtonWrappers.values()) {
+        wrapped = wrapper(wrapped);
+    }
+    return wrapped;
+}

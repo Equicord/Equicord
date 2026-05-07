@@ -149,13 +149,14 @@ const settings = definePluginSettings({
 export default definePlugin({
     name: "Dragify",
     description: "Drop users, channels, or servers into chat to insert mentions or invites.",
+    tags: ["Chat", "Servers", "Utility", "Voice"],
     authors: [EquicordDevs.justjxke],
     settings,
 
     patches: [
         // Voice user rows (voice channel sidebar list)
         {
-            find: '"system:click_outside","user:escape"',
+            find: ".VOICE_USER],shouldShow:",
             replacement: {
                 match: /(?<=GuildChannelUserContextMenu.{0,150})"data-dnd-name":\i/,
                 replace: "\"data-dragify-user\":!0,\"data-user-id\":arguments[0].user?.id,draggable:!0,onDragStart:e=>$self.onUserDragStart(e,arguments[0].user),$&"
@@ -171,18 +172,10 @@ export default definePlugin({
                 },
                 // Voice channel rows (guild sidebar fallback - li wrapper)
                 {
-                    match: /(?<=getModeClass\(\),.{0,50})"data-dnd-name":.{0,25},children:\[/,
+                    match: /(?<=this\.getModeClass\(\),.{0,50})"data-dnd-name":.{0,40},children:\[/g,
                     replace: "draggable:!0,onDragStart:e=>$self.onChannelDragStart(e,{id:this?.props?.channel?.id,guild_id:this?.props?.channel?.guild_id}),$&"
                 }
             ]
-        },
-        // Voice channel rows (alternate voice list implementation)
-        {
-            find: "handleClickChat",
-            replacement: {
-                match: /(?<=getModeClass\(\),.{0,50})"data-dnd-name":.{0,25},children:\[/,
-                replace: "draggable:!0,onDragStart:e=>$self.onChannelDragStart(e,{id:this?.props?.channel?.id,guild_id:this?.props?.channel?.guild_id}),$&"
-            }
         },
         // Thread rows in channel list (sidebar thread items)
         {
@@ -198,7 +191,7 @@ export default definePlugin({
         {
             find: "shouldShowThreadsPopout",
             replacement: {
-                match: /(?<=getClassName\(\).{0,50})"data-dnd-name":.{0,25},onMouseEnter:/,
+                match: /(?<=getClassName\(\).{0,50})"data-dnd-name":.{0,40},onMouseEnter:/,
                 replace: "draggable:!0,onDragStart:e=>$self.onChannelDragStart(e,{id:this?.props?.channel?.id,guild_id:this?.props?.channel?.guild_id}),$&"
             }
         },

@@ -29,13 +29,14 @@ export const settings = definePluginSettings({
 export default definePlugin({
     name: "ProfileSets",
     description: "Allows you to save and load different profile presets, via the Profile Section in Settings.",
+    tags: ["Appearance", "Customisation", "Utility"],
     authors: [EquicordDevs.omaw, EquicordDevs.justjxke],
     settings,
     patches: [
         {
             find: "DefaultCustomizationSections: user cannot be undefined",
             replacement: {
-                match: /return.{0,50}children:\[(?<=\.getLegacyUsername\(\).*?)/,
+                match: /return.{0,50}children:\[(?=.{0,50},\{placeholder:)/,
                 replace: "$&$self.renderPresetSection(\"main\"),"
             }
         },

@@ -76,6 +76,7 @@ export default definePlugin({
     name: "RoleColorEverywhere",
     authors: [Devs.KingFish, Devs.lewisakura, Devs.AutumnVN, Devs.Kyuuhachi, Devs.jamesbt365],
     description: "Adds the top role color anywhere possible",
+    tags: ["Roles", "Appearance"],
     settings,
 
     patches: [
@@ -107,8 +108,8 @@ export default definePlugin({
             find: 'tutorialId:"whos-online',
             replacement: [
                 {
-                    match: /,"aria-hidden":!0,children:\[.{0,200}— ",\i\]\}\)\]/,
-                    replace: ',"aria-hidden":!0,children:[$self.RoleGroupColor(arguments[0])]'
+                    match: /(#{intl::CHANNEL_MEMBERS_A11Y_LABEL}.+}\):null,).{0,100}?— ",\i\]\}\)\]/,
+                    replace: (_, rest) => `${rest}$self.RoleGroupColor(arguments[0])]`
                 },
             ],
             predicate: () => settings.store.memberList

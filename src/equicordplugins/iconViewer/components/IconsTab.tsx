@@ -8,6 +8,7 @@ import { Button } from "@components/Button";
 import { Heading } from "@components/Heading";
 import { SettingsTab, wrapTab } from "@components/settings";
 import { TooltipContainer } from "@components/TooltipContainer";
+import { iconsModule } from "@equicordplugins/_core/concatenatedModules";
 import { debounce } from "@shared/debounce";
 import { Margins } from "@utils/margins";
 import { classes } from "@utils/misc";
@@ -16,7 +17,6 @@ import { Icon } from "@vencord/discord-types";
 import { Clickable, TextInput, useCallback, useEffect, useMemo, useState } from "@webpack/common";
 
 import { IconsDef } from "../types";
-import { IconsModule } from "../utils";
 import { openIconModal } from "./Modals";
 
 let cachedIcons: IconsDef | null = null;
@@ -25,7 +25,7 @@ function getIcons(): IconsDef {
     if (cachedIcons) return cachedIcons;
 
     cachedIcons = Object.fromEntries(
-        Object.entries(IconsModule).filter(([name, fn]) =>
+        Object.entries(iconsModule).filter(([name, fn]) =>
             typeof fn === "function" && name.endsWith("Icon")
         )
     );

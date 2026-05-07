@@ -8,6 +8,7 @@ export const Native = getNative();
 
 import "./styles.css";
 
+import { LogsIcon } from "@components/Icons";
 import { Devs, EquicordDevs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
 import { Logger } from "@utils/Logger";
@@ -15,11 +16,11 @@ import definePlugin from "@utils/types";
 import { findByPropsLazy } from "@webpack";
 import { FluxDispatcher, MessageStore, SelectedChannelStore, UserStore } from "@webpack/common";
 
-import { LogsIcon, OpenLogsButton } from "./components/LogsButton";
+import { OpenLogsButton } from "./components/LogsButton";
 import { openLogModal } from "./components/LogsModal";
 import * as idb from "./db";
-import { addMessage } from "./LoggedMessageManager";
 import * as LoggedMessageManager from "./LoggedMessageManager";
+import { addMessage } from "./LoggedMessageManager";
 import { settings } from "./settings";
 import { FetchMessagesResponse, LoadMessagePayload, LoggedMessage, LoggedMessageJSON, MessageCreatePayload, MessageDeleteBulkPayload, MessageDeletePayload, MessageUpdatePayload } from "./types";
 import { cleanUpCachedMessage, cleanupUserObject, getNative, isGhostPinged, mapTimestamp, messageJsonToMessageClass, reAddDeletedMessages } from "./utils";
@@ -36,7 +37,14 @@ export const Flogger = new Logger("MessageLoggerEnhanced", "#f26c6c");
 export const cacheSentMessages = new LimitedMap<string, LoggedMessageJSON>();
 export const cl = classNameFactory("vc-msg-logger-enhanced-");
 
+let didClearLogsOnStartup = false;
+
 const cacheThing = findByPropsLazy("commit", "getOrCreate");
+
+export async function clearLogs(showToast = true) {
+    await idb.clearMessagesIDB(showToast);
+    cacheSentMessages.clear();
+}
 
 let oldGetMessage: typeof MessageStore.getMessage;
 
@@ -251,7 +259,8 @@ export default definePlugin({
     name: "MessageLoggerEnhanced",
     authors: [Devs.Aria, EquicordDevs.keircn],
     description: "Improves MessageLogger with edited message history, ghost ping detection and more",
-    dependencies: ["MessageLogger"],
+    tags: ["Chat", "Servers"],
+    dependencies: ["MessageLogger", "HeaderBarAPI"],
 
     patches: [
         {
@@ -395,6 +404,15 @@ export default definePlugin({
         };
 
         Native.init();
+
+        if (settings.store.clearLogsOnRestart && !didClearLogsOnStartup) {
+            try {
+                await clearLogs(false);
+                didClearLogsOnStartup = true;
+            } catch (e) {
+                Flogger.error("Failed to clear logs on restart", e);
+            }
+        }
 
         const { imageCacheDir, logsDir } = await Native.getSettings();
         settings.store.imageCacheDir = imageCacheDir;

@@ -10,6 +10,7 @@ import definePlugin from "@utils/types";
 export default definePlugin({
     name: "BlockKrisp",
     description: "Prevent Krisp from loading",
+    tags: ["Privacy", "Utility", "Voice"],
     authors: [Devs.D3SOX],
     patches: [
         // Block loading modules on Desktop
@@ -24,8 +25,8 @@ export default definePlugin({
         {
             find: "krisp_browser_models",
             replacement: {
-                match: /(\i,\{\i:\(\)=>)\i/,
-                replace: "$1null"
+                match: /if\(this._noiseCancellation\)/,
+                replace: "if(false)"
             }
         },
         // Set Krisp to not supported

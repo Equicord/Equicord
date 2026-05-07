@@ -146,13 +146,14 @@ const WrappedClickableRole = ErrorBoundary.wrap(ClickableRole, { noop: true });
 export default definePlugin({
     name: "ClickableRoles",
     description: "Click on roles in user profiles and the member list to see which members have them.",
+    tags: ["Appearance", "Roles"],
     authors: [Devs.prism],
 
     patches: [
         {
-            find: "#{intl::T+3Adg::raw}",
+            find: "#{intl::zr0Y5R::raw}",
             replacement: {
-                match: /(colors:\i\}\);)return(.*?enableTooltip:!1\}\):null,\i\]\}\))/,
+                match: /(\.colorString\?\?\i;)return(.*?enableTooltip:!1\}\):null,\i\]\}\))/,
                 replace: "$1return $self.wrapRolePill(arguments[0],()=>$2)",
             },
         },

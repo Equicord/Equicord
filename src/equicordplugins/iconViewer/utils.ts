@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { Icon } from "@vencord/discord-types";
 import { findByPropsLazy, waitFor } from "@webpack";
 
 import { CssColorData, IconSize } from "./types";
@@ -12,8 +11,6 @@ import { CssColorData, IconSize } from "./types";
 let colorKeys: string[] = [];
 
 const Colors = findByPropsLazy("colors", "layout");
-export const IconsModule = findByPropsLazy("AngleBracketsIcon", "StaffBadgeIcon") as Record<string, Icon>;
-
 export const iconSizesInPx: Record<string, number> = findByPropsLazy("md", "lg", "xxs");
 export const iconSizes: IconSize[] = ["xxs", "xs", "sm", "md", "lg"];
 

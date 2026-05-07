@@ -8,13 +8,14 @@ import { ApplicationCommandInputType, sendBotMessage } from "@api/Commands";
 import { HeaderBarButton } from "@api/HeaderBar";
 import { addMessagePreSendListener, removeMessagePreSendListener } from "@api/MessageEvents";
 import { isPluginEnabled } from "@api/PluginManager";
-import { definePluginSettings, migratePluginToSettings } from "@api/Settings";
+import { definePluginSettings, migratePluginToSettings, Settings } from "@api/Settings";
+import { ShieldIcon, WarningIcon } from "@components/Icons";
 import customRPC from "@plugins/customRPC";
 import { Devs, EquicordDevs, GUILD_ID, SUPPORT_CHANNEL_ID, SUPPORT_CHANNEL_IDS, VC_SUPPORT_CHANNEL_IDS } from "@utils/constants";
 import { isAnyPluginDev } from "@utils/misc";
 import definePlugin, { OptionType } from "@utils/types";
 import { StandingState } from "@vencord/discord-types/enums";
-import { findByCodeLazy, findExportedComponentLazy, findStoreLazy } from "@webpack";
+import { findByCodeLazy, findStoreLazy } from "@webpack";
 import { Alerts, ApplicationCommandIndexStore, NavigationRouter, React, SettingsRouter, UserStore, useStateFromStores } from "@webpack/common";
 import { ComponentType } from "react";
 
@@ -29,8 +30,6 @@ let clicked = false;
 
 const SafetyHubStore = findStoreLazy("SafetyHubStore");
 const fetchSafetyHub: () => Promise<void> = findByCodeLazy("SAFETY_HUB_FETCH_START");
-const WarningIcon = findExportedComponentLazy("WarningIcon");
-const ShieldIcon = findExportedComponentLazy("ShieldIcon");
 
 const StandingConfig: Record<number, { label: string; hoverColor: string; Icon: ComponentType<any>; }> = {
     [StandingState.ALL_GOOD]: { label: "All good!", hoverColor: "var(--status-positive)", Icon: ShieldIcon },
@@ -125,14 +124,22 @@ const settings = definePluginSettings({
     disableAdoptTagPrompt: {
         type: OptionType.BOOLEAN,
         description: "Disable the prompt to adopt tags",
-        default: true,
-        restartNeeded: true
+        restartNeeded: true,
+        default: false,
     },
+    jsonGateway: {
+        type: OptionType.BOOLEAN,
+        description: "Forces JSON on gateway reconnect",
+        restartNeeded: true,
+        default: false,
+    }
 });
 
 export default definePlugin({
     name: "EquicordHelper",
     description: "Used to provide support, fix discord caused crashes, and other misc features.",
+    tags: ["Appearance", "Commands", "Utility"],
+    dependencies: ["CommandsAPI", "HeaderBarAPI", "MessageAccessoriesAPI"],
     authors: [
         Devs.thororen,
         EquicordDevs.nyx,
@@ -165,6 +172,22 @@ export default definePlugin({
                 }
             ]
         },
+        // Fix a race condition?
+        {
+            find: ".completeOperation(",
+            replacement: {
+                match: /(?<=this\.nextId\(\);)(\i\(\i\)),(.{0,200}reject:\i\}\))/,
+                replace: "$2,$1"
+            }
+        },
+        // catch if it cant open
+        {
+            find: "discarding speculative database",
+            replacement: {
+                match: /await (\i)\((\i)\)(?=;.{0,15}this\.databases)/,
+                replace: "$&.catch(()=>null)"
+            }
+        },
         // When focused on voice channel or group chat voice call
         {
             find: ".STATUS_WARNING_BACKGROUND})})",
@@ -195,10 +218,10 @@ export default definePlugin({
         },
         // Remove Activity Section above Member List
         {
-            find: ".MEMBERLIST_CONTENT_FEED_TOGGLED,",
+            find: ".GLOBAL_FEED});",
             predicate: () => settings.store.removeActivitySection,
             replacement: {
-                match: /null==\i\|\|/,
+                match: /null==\i\|\|0.{0,100}VIEW_CHANNEL\)&&/,
                 replace: "true||$&"
             },
         },
@@ -258,7 +281,7 @@ export default definePlugin({
         },
         // Removes Modal Animation
         {
-            find: "renderLurkerModeUpsellPopout,position:",
+            find: ".SWITCH_THUMB_BACKGROUND_SELECTED_DEFAULT)",
             predicate: () => settings.store.noModalAnimation,
             replacement: {
                 match: /200:300/g,
@@ -268,11 +291,41 @@ export default definePlugin({
         {
             find: "GuildTagAvailableCoachmark",
             replacement: {
-                match: /return.{0,100}shouldShow/g,
+                match: /return.{0,200}GUILD_TAG_COACHMARK_ASSET/g,
                 replace: "return null;$&"
             },
             predicate: () => settings.store.disableAdoptTagPrompt
-        }
+        },
+        {
+            find: "JSONEncoding",
+            replacement: {
+                match: /void 0!==\i\?\i:/,
+                replace: ""
+            },
+            predicate: () => settings.store.jsonGateway
+        },
+        {
+            find: ".USE_OSX_NATIVE_TRAFFIC_LIGHTS",
+            replacement: {
+                match: /case \i\.\i\.WINDOWS:/,
+                replace: 'case "WEB":'
+            },
+            predicate: () => Settings.winNativeTitleBar,
+        },
+        {
+            find: '"refresh-title-bar-small"',
+            replacement: [
+                {
+                    match: /\i===\i\.PlatformTypes\.WINDOWS/g,
+                    replace: "false"
+                },
+                {
+                    match: /\i===\i\.PlatformTypes\.WEB/g,
+                    replace: "true"
+                }
+            ],
+            predicate: () => Settings.winNativeTitleBar,
+        },
     ],
     renderMessageAccessory(props) {
         return (

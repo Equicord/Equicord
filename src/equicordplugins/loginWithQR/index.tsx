@@ -42,6 +42,7 @@ const settings = definePluginSettings({
 export default definePlugin({
     name: "LoginWithQR",
     description: "Allows you to login to another device by scanning a login QR code, just like on mobile!",
+    tags: ["Utility"],
     authors: [EquicordDevs.nexpid],
 
     settings,
@@ -51,7 +52,7 @@ export default definePlugin({
         {
             find: ".clipboardData&&(",
             replacement: {
-                match: /handleGlobalPaste:(\i)/,
+                match: /handleGlobalPaste:(\i)(?=\}\))/,
                 replace: "handleGlobalPaste:(...args)=>!$self.qrModalOpen&&$1(...args)",
             },
         },

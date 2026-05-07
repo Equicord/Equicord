@@ -5,21 +5,21 @@
  */
 
 import { ChatBarButton } from "@api/ChatButtons";
-import { definePluginSettings } from "@api/Settings";
+import { definePluginSettings, migratePluginSetting } from "@api/Settings";
 import { EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType, StartAt } from "@utils/types";
-import { React, useEffect, useState } from "@webpack/common";
+import { useEffect, useState } from "@webpack/common";
 import type { MouseEventHandler, ReactNode } from "react";
 
 let hidechatbuttonsopen: boolean | undefined;
 
 const settings = definePluginSettings({
-    Color: {
+    color: {
         type: OptionType.BOOLEAN,
         description: "Color it red on open", // something extra
         default: false,
     },
-    Open: {
+    open: {
         type: OptionType.BOOLEAN,
         description: "opened by default",
         default: false,
@@ -35,7 +35,7 @@ function HideToggleButton(props: { open: boolean | undefined, onClick: MouseEven
         tooltip={props.open ? "Close" : "Open"}
     >
         <svg
-            fill={settings.store.Color && props.open ? "#c32a32" : "currentColor"}
+            fill={settings.store.color && props.open ? "#c32a32" : "currentColor"}
             fillRule="evenodd"
             width="20"
             height="20"
@@ -50,8 +50,14 @@ function HideToggleButton(props: { open: boolean | undefined, onClick: MouseEven
     </ChatBarButton>);
 }
 
-function ButtonsInnerComponent({ buttons }: { buttons: ReactNode[]; }) {
-    if (!buttons || buttons.every(x => (x as any)?.props?.disabled === true)) return null;
+function ButtonsInnerComponent({ buttons }: { buttons: ReactNode; }) {
+    const buttonItems = Array.isArray(buttons)
+        ? buttons
+        : buttons == null
+            ? []
+            : [buttons];
+
+    if (buttonItems.length === 0 || buttonItems.every(button => (button as any)?.props?.disabled === true)) return null;
 
     const [open, setOpen] = useState(hidechatbuttonsopen);
 
@@ -66,34 +72,29 @@ function ButtonsInnerComponent({ buttons }: { buttons: ReactNode[]; }) {
             overflowX: "auto",
             overflowY: "hidden"
         }}>
-            {open && buttons.map((b, i) => <React.Fragment key={i}>{b}</React.Fragment>)}
+            {open && buttons}
             <HideToggleButton onClick={() => setOpen(!open)} open={open} />
         </div>
     );
 }
 
+migratePluginSetting("HideChatButtons", "open", "Open");
+migratePluginSetting("HideChatButtons", "color", "Color");
 export default definePlugin({
     name: "HideChatButtons",
-    description: "able to hide the chat buttons",
-    settings: settings,
+    description: "Able to hide the chat buttons",
+    tags: ["Chat", "Utility"],
     authors: [EquicordDevs.iamme],
-    patches: [
-        {
-            find: '"sticker")',
-            replacement: {
-                match: /(?<="div",\{.{0,15}children:)(.+?)\}/,
-                replace: "$self.buttonsInner($1)}"
-            }
-        }
-    ],
+    dependencies: ["ChatInputButtonAPI"],
+    settings: settings,
     startAt: StartAt.Init,
-    buttonsInner(buttons: ReactNode[]) {
+    chatBarButtonWrapper: (buttons: ReactNode) => {
         return <ButtonsInnerComponent buttons={buttons} />;
     },
     start() {
-        hidechatbuttonsopen = settings.store.Open;
+        hidechatbuttonsopen = settings.store.open;
     },
     stop() {
         hidechatbuttonsopen = undefined;
-    }
+    },
 });

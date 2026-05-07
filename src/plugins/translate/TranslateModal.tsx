@@ -16,11 +16,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+import { BaseText } from "@components/BaseText";
 import { Divider } from "@components/Divider";
 import { FormSwitch } from "@components/FormSwitch";
-import { HeadingPrimary, HeadingSecondary } from "@components/Heading";
+import { HeadingSecondary } from "@components/Heading";
 import { Margins } from "@utils/margins";
-import { ModalCloseButton, ModalContent, ModalHeader, ModalProps, ModalRoot } from "@utils/modal";
+import { ModalCloseButton, ModalContent, ModalHeader, ModalProps, ModalRoot, openModal } from "@utils/modal";
 import { SearchableSelect, useMemo } from "@webpack/common";
 
 import { settings } from "./settings";
@@ -77,9 +78,9 @@ export function TranslateModal({ rootProps }: { rootProps: ModalProps; }) {
     return (
         <ModalRoot {...rootProps}>
             <ModalHeader className={cl("modal-header")}>
-                <HeadingPrimary className={cl("modal-title")}>
+                <BaseText tag="h2" size="lg" weight="semibold" className={cl("modal-title")}>
                     Translate
-                </HeadingPrimary>
+                </BaseText>
                 <ModalCloseButton onClick={rootProps.onClose} />
             </ModalHeader>
 
@@ -98,4 +99,8 @@ export function TranslateModal({ rootProps }: { rootProps: ModalProps; }) {
             </ModalContent>
         </ModalRoot>
     );
+}
+
+export function openTranslateModal() {
+    openModal(props => <TranslateModal rootProps={props} />);
 }

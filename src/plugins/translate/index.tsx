@@ -62,8 +62,10 @@ let tooltipTimeout: any;
 
 export default definePlugin({
     name: "Translate",
-    description: "Translate messages with Google Translate or DeepL",
-    authors: [Devs.Ven, Devs.AshtonMemer],
+    description: "Translate messages with Google Translate, DeepL or Kagi.",
+    dependencies: ["ChatInputButtonAPI", "MessageAccessoriesAPI", "MessagePopoverAPI"],
+    tags: ["Chat", "Utility"],
+    authors: [Devs.Ven, Devs.AshtonMemer, Devs.koish1],
     settings,
     contextMenus: {
         "message": messageCtxPatch

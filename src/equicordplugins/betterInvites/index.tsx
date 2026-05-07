@@ -34,13 +34,14 @@ function lurk(id: string) {
 export default definePlugin({
     name: "BetterInvites",
     description: "See invites expiration date, view inviter profile and preview servers before joining by clicking the name",
+    tags: ["Appearance", "Customisation", "Chat", "Servers"],
     authors: [EquicordDevs.iamme, Devs.thororen],
     patches: [
         {
             find: "#{intl::xdCLeM::raw}",
             replacement: [
                 {
-                    match: /profile:\i\}\),.{0,15}profile:\i/,
+                    match: /profile:\i\}\),.{0,20}profile:\i(?=.{0,20}profile:\i)/,
                     replace: "$&,invite:arguments[0].invite"
                 }
             ]
@@ -85,8 +86,11 @@ export default definePlugin({
         );
     },
     Header(inviter: User | undefined, guildName: string) {
+        if (!inviter) return null;
+
         const userId = UserStore.getCurrentUser().id;
-        if (!inviter || userId === inviter.id) return null;
+        const isSelf = userId === inviter.id;
+
         return (
             <div className="vc-bi-header-inner">
                 <img
@@ -98,7 +102,9 @@ export default definePlugin({
                         : "/assets/1f0bfc0865d324c2587920a7d80c609b.png?size=128"}
                 />
                 <div className="vc-bi-header-text">
-                    {inviter.global_name || inviter.username} invited you to {guildName}
+                    {isSelf
+                        ? `You sent an invite to join ${guildName}`
+                        : `${inviter.global_name || inviter.username} invited you to ${guildName}`}
                 </div>
             </div>
         );

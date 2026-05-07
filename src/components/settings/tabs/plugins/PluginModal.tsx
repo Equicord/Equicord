@@ -19,6 +19,7 @@
 import "./PluginModal.css";
 
 import { generateId } from "@api/Commands";
+import { hasAnyVisibleSettings, isSettingHidden } from "@api/PluginManager";
 import { useSettings } from "@api/Settings";
 import { BaseText } from "@components/BaseText";
 import { Button } from "@components/Button";
@@ -32,7 +33,7 @@ import { proxyLazy } from "@utils/lazy";
 import { Margins } from "@utils/margins";
 import { classes, isObjectEmpty } from "@utils/misc";
 import { ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot, ModalSize, openModal } from "@utils/modal";
-import { OptionType, Plugin } from "@utils/types";
+import { OptionType, Plugin, PluginTag } from "@utils/types";
 import { User } from "@vencord/discord-types";
 import { findComponentByCodeLazy, findCssClassesLazy } from "@webpack";
 import { Clickable, FluxDispatcher, React, Toasts, Tooltip, useEffect, useMemo, UserStore, UserSummaryItem, UserUtils, useState } from "@webpack/common";
@@ -74,9 +75,19 @@ export function makeDummyUser(user: { username: string; id?: string; avatar?: st
     return newUser;
 }
 
+function PluginTags({ tags }: { tags: PluginTag[]; }) {
+    return (
+        <div className={cl("tags")}>
+            {tags.map(tag => (
+                <div key={tag} className={cl("tag")}>{tag}</div>
+            ))}
+        </div>
+    );
+}
+
 export default function PluginModal({ plugin, onRestartNeeded, onClose, transitionState }: PluginModalProps) {
     const pluginSettings = useSettings([`plugins.${plugin.name}.*`]).plugins[plugin.name];
-    const hasSettings = Boolean(pluginSettings && plugin.options && !isObjectEmpty(plugin.options));
+    const hasSettings = hasAnyVisibleSettings(plugin);
 
     // avoid layout shift by showing dummy users while loading users
     const fallbackAuthors = useMemo(() => [makeDummyUser({ username: "Loading...", id: "-1465912127305809920" })], []);
@@ -104,14 +115,17 @@ export default function PluginModal({ plugin, onRestartNeeded, onClose, transiti
     }
 
     function renderSettings() {
-        if (!hasSettings || !plugin.options)
+        const { settings } = plugin;
+        if (!hasSettings || !settings)
             return <Paragraph>There are no settings for this plugin.</Paragraph>;
 
-        const options = Object.entries(plugin.options).map(([key, setting]) => {
-            if (setting.type === OptionType.CUSTOM || setting.hidden) return null;
+        const options = Object.entries(settings.def).map(([key, setting]) => {
+            if (setting.type === OptionType.CUSTOM) return null;
+
+            if (isSettingHidden(settings, setting)) return null;
 
             function onChange(newValue: any) {
-                const option = plugin.options?.[key];
+                const option = plugin.settings!.def[key];
                 if (!option || option.type === OptionType.CUSTOM) return;
 
                 pluginSettings[key] = newValue;
@@ -124,10 +138,10 @@ export default function PluginModal({ plugin, onRestartNeeded, onClose, transiti
                 <ErrorBoundary noop key={key}>
                     <Component
                         id={key}
-                        option={setting}
+                        setting={setting}
                         onChange={debounce(onChange)}
                         pluginSettings={pluginSettings}
-                        definedSettings={plugin.settings}
+                        definedSettings={settings}
                     />
                 </ErrorBoundary>
             );
@@ -167,6 +181,7 @@ export default function PluginModal({ plugin, onRestartNeeded, onClose, transiti
                 <div className={cl("header-content")}>
                     <BaseText size="lg" weight="semibold" className={cl("title")}>{plugin.name}</BaseText>
                     <BaseText size="sm" className={cl("description")}>{plugin.description}</BaseText>
+                    {!!plugin.tags?.length && <PluginTags tags={plugin.tags} />}
                     {!!plugin.settingsAboutComponent && (
                         <div className={Margins.top8}>
                             <ErrorBoundary message="An error occurred while rendering this plugin's custom Info Component">

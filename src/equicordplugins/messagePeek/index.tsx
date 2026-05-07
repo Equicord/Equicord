@@ -9,6 +9,7 @@ import "./style.css";
 import { DecoratorProps } from "@api/MemberListDecorators";
 import { isPluginEnabled } from "@api/PluginManager";
 import { definePluginSettings } from "@api/Settings";
+import { AttachmentIcon, GifIcon, ImageIcon, Microphone, StickerIcon, VideoIcon } from "@components/Icons";
 import betterActivities from "@equicordplugins/betterActivities";
 import showMeYourName from "@plugins/showMeYourName";
 import { Devs, EquicordDevs } from "@utils/constants";
@@ -17,7 +18,7 @@ import { classes } from "@utils/misc";
 import definePlugin, { OptionType } from "@utils/types";
 import { Activity, ApplicationStream, Channel, Message, OnlineStatus, User } from "@vencord/discord-types";
 import { MessageFlags } from "@vencord/discord-types/enums";
-import { findByCodeLazy, findByPropsLazy, findComponentByCodeLazy, findCssClassesLazy, findExportedComponentLazy } from "@webpack";
+import { findByCodeLazy, findByPropsLazy, findComponentByCodeLazy, findCssClassesLazy } from "@webpack";
 import { ChannelStore, ExperimentStore, MessageStore, Parser, RelationshipStore, SnowflakeUtils, UserGuildSettingsStore, UserStore, useStateFromStores } from "@webpack/common";
 
 const cl = classNameFactory("vc-message-peek-");
@@ -27,7 +28,7 @@ const ActivityClasses = findCssClassesLazy("textWithIconContainer", "icon", "tru
 const MessageActions = findByPropsLazy("fetchMessages", "sendMessage");
 
 const hasRelevantActivity: (props: ActivityCheckProps) => boolean = findByCodeLazy(".OFFLINE||", ".INVISIBLE)return!1");
-const ActivityText: React.ComponentType<ActivityTextProps> = findComponentByCodeLazy("hasQuest:", "hideEmoji:");
+const ActivityText: React.ComponentType<ActivityTextProps> = findComponentByCodeLazy('"ActivityStatus"');
 
 const ONE_HOUR_MS = 60 * 60 * 1000;
 
@@ -43,12 +44,12 @@ type AttachmentType = "image" | "gif" | "video" | "file";
 type IconType = AttachmentType | "voice" | "sticker";
 
 const Icons: Record<IconType, React.ComponentType<{ size: string; className: string; }>> = {
-    image: findExportedComponentLazy("ImageIcon"),
-    file: findExportedComponentLazy("AttachmentIcon"),
-    voice: findExportedComponentLazy("MicrophoneIcon"),
-    sticker: findExportedComponentLazy("StickerIcon"),
-    gif: findExportedComponentLazy("GifIcon"),
-    video: findExportedComponentLazy("VideoIcon"),
+    image: ImageIcon,
+    file: AttachmentIcon,
+    voice: Microphone,
+    sticker: StickerIcon,
+    gif: GifIcon,
+    video: VideoIcon,
 };
 
 const ATTACHMENT_LABELS: Record<AttachmentType, string> = {
@@ -239,6 +240,8 @@ function shouldShowActivity(lastMessage: Message | undefined, hasActivity: boole
 export default definePlugin({
     name: "MessagePeek",
     description: "Shows the last message preview and timestamp in the Direct Messages list.",
+    dependencies: ["MemberListDecoratorsAPI"],
+    tags: ["Appearance", "Chat"],
     authors: [Devs.prism, EquicordDevs.justjxke],
     settings,
     patches: [

@@ -45,12 +45,13 @@ export default definePlugin({
     name: "DragFavoriteEmotes",
     authors: [EquicordDevs.PWall],
     description: "Adds the ability to change the order of your favourite emotes",
+    tags: ["Customisation", "Chat", "Emotes"],
     patches: [
         {
             find: "#{intl::EMOJI_FAVORITE_TOOLTIP}",
             replacement: [
                 {
-                    match: /(ref:\i,children:)(\(0,\i.jsx\)\(\i.\i)/,
+                    match: /(ref:\i,children:)(\(0,\i.jsxs?\)\(\i)/,
                     replace: "$1arguments[0]?.collected?.isDragging?$self.dragItem():$2",
                 },
                 {

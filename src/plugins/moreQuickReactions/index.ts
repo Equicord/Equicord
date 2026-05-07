@@ -52,6 +52,7 @@ migratePluginSettings("MoreQuickReactions", "BetterQuickReact");
 export default definePlugin({
     name: "MoreQuickReactions",
     description: "Improves the quick react buttons in the message context menu.",
+    tags: ["Emotes", "Reactions", "Customisation", "Shortcuts"],
     authors: [Devs.Ven, Devs.Sqaaakoi, Devs.iamme],
     isModified: true,
     settings,
@@ -83,8 +84,12 @@ export default definePlugin({
                 },
                 // Override limit of emojis to display with offset hook.
                 {
-                    match: /(\i)\.length>4&&\((\i)\.length=4\);/,
-                    replace: "let [moreQuickReactionsScrollValue,setMoreQuickReactionsScrollValue]=Vencord.Webpack.Common.React.useState(0);moreQuickReactionsScrollValue;"
+                    match: /"MessageContextMenu"\},\{autoTrackExposure.{0,5}\}\),/,
+                    replace: "$&[moreQuickReactionsScrollValue,setMoreQuickReactionsScrollValue]=Vencord.Webpack.Common.React.useState(0),"
+                },
+                {
+                    match: /\.length>4&&\(\i\.length=4\)/,
+                    replace: ""
                 },
                 // Add a custom class to identify the quick reactions have been modified and a CSS variable for the number of columns to display
                 {
