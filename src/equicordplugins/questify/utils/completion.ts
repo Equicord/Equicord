@@ -10,11 +10,11 @@ import { QuestTaskType } from "@vencord/discord-types/enums";
 import { findByCodeLazy, findLazy } from "@webpack";
 import { FluxDispatcher, QuestStore, RestAPI, showToast, Toasts } from "@webpack/common";
 
+import { getCurrentUserId, getQuestifySettings } from "../settings/access";
 import { autoCompleteQuestTaskTypes, isDesktopCompatible } from "../settings/def";
 import { resetQuestsToResume } from "../settings/fetching";
 import { getIgnoredQuestIDs } from "../settings/ignoredQuests";
 import { rerenderQuests } from "../settings/rerender";
-import { getCurrentUserId, settings } from "../settings/store";
 import { AuthorizedAppsStore } from "./fetching";
 import { normalizeQuestName } from "./filtering";
 import { QL } from "./logging";
@@ -218,7 +218,7 @@ function showBrokenAutoCompleteToast(): void {
 }
 
 export function hasEnabledAutoCompleteQuestTypes(): boolean {
-    return autoCompleteQuestTaskTypes.some(questType => settings.store.autoCompleteQuestTypes[questType]);
+    return autoCompleteQuestTaskTypes.some(questType => getQuestifySettings().autoCompleteQuestTypes[questType]);
 }
 
 function isAutoCompleteRuntimeReady(notify: boolean = false): boolean {
@@ -251,7 +251,7 @@ export function getAutoCompleteQuestTarget(task: QuestTask): AutoCompleteQuestTa
 
     return {
         raw,
-        adjusted: Math.max(0, raw - (isVideoQuestTask(task.type) && settings.store.completeVideoQuestsQuicker ? videoQuestLeeway : 0)),
+        adjusted: Math.max(0, raw - (isVideoQuestTask(task.type) && getQuestifySettings().completeVideoQuestsQuicker ? videoQuestLeeway : 0)),
     };
 }
 
@@ -295,7 +295,7 @@ function getEffectiveAutoCompleteTaskType(task: QuestTask, quest: Quest): QuestT
 function isAutoCompleteQuestTaskEnabled(quest: Quest, task: QuestTask): boolean {
     const taskType = getEffectiveAutoCompleteTaskType(task, quest);
     const compatible = isDesktopCompatible(taskType);
-    const enabled = settings.store.autoCompleteQuestTypes[taskType] === true;
+    const enabled = getQuestifySettings().autoCompleteQuestTypes[taskType] === true;
 
     return compatible && enabled && getQuestAutoCompleteKind(task) != null;
 }
@@ -328,12 +328,12 @@ function updateResumeState(questIDs: string[] = getResumeQuestIds()): void {
         return;
     }
 
-    if (!settings.store.resumeInterruptedQuests || questIDs.length === 0) {
-        delete settings.store.resumeQuestIDs[userId];
+    if (!getQuestifySettings().resumeInterruptedQuests || questIDs.length === 0) {
+        delete getQuestifySettings().resumeQuestIDs[userId];
         return;
     }
 
-    settings.store.resumeQuestIDs[userId] = {
+    getQuestifySettings().resumeQuestIDs[userId] = {
         timestamp: Date.now(),
         questIDs,
     };
@@ -386,12 +386,12 @@ function formatQuestTime(seconds: number, prepositional: boolean = false): strin
 }
 
 function isQuestQueuedForResume(questId: string): boolean {
-    if (!settings.store.resumeInterruptedQuests) {
+    if (!getQuestifySettings().resumeInterruptedQuests) {
         return false;
     }
 
     const userId = getCurrentUserId();
-    const resumeState = userId ? settings.store.resumeQuestIDs[userId] : null;
+    const resumeState = userId ? getQuestifySettings().resumeQuestIDs[userId] : null;
 
     return Boolean(resumeState && !isResumeStateExpired(resumeState.timestamp) && resumeState.questIDs.includes(questId));
 }
@@ -419,7 +419,7 @@ export function getQuestCompletionState(quest: Quest, options: QuestButtonTextOp
     const target = getAutoCompleteQuestTarget(task).adjusted;
     const enrolledAt = quest.userStatus?.enrolledAt ? new Date(quest.userStatus.enrolledAt) : null;
     const storedProgress = activeEntry?.progress ?? getQuestStoredProgress(quest, task) ?? 0;
-    const elapsedProgress = !activeEntry && enrolledAt && isVideoQuestTask(task.type) && settings.store.completeVideoQuestsQuicker
+    const elapsedProgress = !activeEntry && enrolledAt && isVideoQuestTask(task.type) && getQuestifySettings().completeVideoQuestsQuicker
         ? Math.max(0, (Date.now() - enrolledAt.getTime()) / 1000)
         : 0;
     const progress = Math.min(target, Math.max(storedProgress, elapsedProgress));
@@ -757,7 +757,7 @@ async function runVideoQuest(quest: Quest, entry: AutoCompleteEntry, target: Aut
     const completionTarget = target.adjusted;
     const enrolledAt = new Date(quest.userStatus.enrolledAt);
     const initialStoredProgress = getQuestStoredProgress(quest, entry.task) ?? 0;
-    const initialProgress = settings.store.completeVideoQuestsQuicker
+    const initialProgress = getQuestifySettings().completeVideoQuestsQuicker
         ? clampFloat(Math.max(1, (Date.now() - enrolledAt.getTime()) / 1000))
         : Math.max(0, initialStoredProgress);
     let displayedProgress = clampFloat(Math.min(completionTarget, initialProgress));
@@ -989,14 +989,14 @@ async function runEntry(quest: Quest, entry: AutoCompleteEntry): Promise<void> {
         resetQuestsToResume(quest);
         updateResumeState();
 
-        if (!settings.store.autoCompleteQuestsSimultaneously && !suppressQueueDrain) {
+        if (!getQuestifySettings().autoCompleteQuestsSimultaneously && !suppressQueueDrain) {
             runNextQueuedQuest();
         }
     }
 }
 
 function runNextQueuedQuest(): void {
-    if (suppressQueueDrain || settings.store.autoCompleteQuestsSimultaneously || hasRunningQueuedAutoComplete()) {
+    if (suppressQueueDrain || getQuestifySettings().autoCompleteQuestsSimultaneously || hasRunningQueuedAutoComplete()) {
         return;
     }
 
@@ -1054,7 +1054,7 @@ export function processQuestForAutoComplete(quest: Quest, options: AutoCompleteS
 
     activeAutoCompletes.set(quest.id, entry);
 
-    if (settings.store.autoCompleteQuestsSimultaneously) {
+    if (getQuestifySettings().autoCompleteQuestsSimultaneously) {
         void runEntry(quest, entry);
     } else {
         updateResumeState();
@@ -1065,7 +1065,7 @@ export function processQuestForAutoComplete(quest: Quest, options: AutoCompleteS
         questId: quest.id,
         questName,
         source,
-        mode: settings.store.autoCompleteQuestsSimultaneously ? "simultaneous" : "queue",
+        mode: getQuestifySettings().autoCompleteQuestsSimultaneously ? "simultaneous" : "queue",
         taskType: entry.task.type,
     });
 
@@ -1103,7 +1103,7 @@ export function stopQuestAutoComplete(questOrId: Quest | string, options: AutoCo
 
     updateResumeState(resumeQuestIds);
 
-    if (!settings.store.autoCompleteQuestsSimultaneously && !suppressQueueDrain) {
+    if (!getQuestifySettings().autoCompleteQuestsSimultaneously && !suppressQueueDrain) {
         runNextQueuedQuest();
     }
 
@@ -1147,19 +1147,19 @@ export function stopAutoCompletesForRunningGames(gameIds: string[]): boolean {
 }
 
 export function resumeInterruptedAutoCompletes(): void {
-    if (!settings.store.resumeInterruptedQuests) {
+    if (!getQuestifySettings().resumeInterruptedQuests) {
         return;
     }
 
     const userId = getCurrentUserId();
-    const resumeState = userId ? settings.store.resumeQuestIDs[userId] : null;
+    const resumeState = userId ? getQuestifySettings().resumeQuestIDs[userId] : null;
 
     if (!userId || !resumeState?.questIDs.length) {
         return;
     }
 
     if (isResumeStateExpired(resumeState.timestamp)) {
-        delete settings.store.resumeQuestIDs[userId];
+        delete getQuestifySettings().resumeQuestIDs[userId];
         QL.info("AUTO_COMPLETE_RESUME_EXPIRED", { userId, timestamp: resumeState.timestamp, maxAge: resumeExpiryMs });
         return;
     }

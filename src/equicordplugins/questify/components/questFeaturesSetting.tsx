@@ -7,8 +7,8 @@
 import { QuestTaskType } from "@vencord/discord-types/enums";
 import type { JSX } from "react";
 
+import { getQuestifySettings, useQuestifySettings } from "../settings/access";
 import { autoCompleteQuestTaskTypes, defaultAllowChangingDangerousSettings, defaultAutoCompleteQuestsSimultaneously, defaultAutoCompleteQuestTypes, defaultCompleteVideoQuestsQuicker, defaultMakeMobileVideoQuestsDesktopCompatible, defaultResumeInterruptedQuests, isDesktopCompatible } from "../settings/def";
-import { settings } from "../settings/store";
 import { Alerts, q } from "../utils/ui";
 import { ManaButton, type ManaSelectOption, SettingsCard, SettingsDescription, SettingsHeader, SettingsNotice, SettingsParagraph, SettingsSelect, SettingsSubheader, SettingsSubtleSwitch } from "./shared";
 
@@ -119,7 +119,7 @@ function SettingsAllowDangerousButton({
 }
 
 export function QuestFeaturesSetting(): JSX.Element {
-    const questFeatures = settings.use([
+    const questFeatures = useQuestifySettings([
         "disableQuestsEverything",
         "disableSponsoredBanner",
         "disableRelocationNotices",
@@ -148,7 +148,7 @@ export function QuestFeaturesSetting(): JSX.Element {
         const selectedKeys = new Set(Array.isArray(value) ? value : value ? [value] : []);
 
         for (const { key } of disableFeatureOptions) {
-            settings.store[key] = selectedKeys.has(key);
+            getQuestifySettings()[key] = selectedKeys.has(key);
         }
     }
 
@@ -174,12 +174,12 @@ export function QuestFeaturesSetting(): JSX.Element {
             nextAutoCompleteQuestTypes[questType] = nextValue;
         }
 
-        settings.store.autoCompleteQuestTypes = nextAutoCompleteQuestTypes;
+        getQuestifySettings().autoCompleteQuestTypes = nextAutoCompleteQuestTypes;
     }
 
     function updateDisableEverything(checked: boolean) {
         function setDisableEverything() {
-            settings.store.disableQuestsEverything = checked;
+            getQuestifySettings().disableQuestsEverything = checked;
         }
 
         if (checked) {
@@ -196,17 +196,19 @@ export function QuestFeaturesSetting(): JSX.Element {
     }
 
     function resetDangerousSettings() {
-        settings.store.allowChangingDangerousSettings = defaultAllowChangingDangerousSettings;
-        settings.store.autoCompleteQuestsSimultaneously = defaultAutoCompleteQuestsSimultaneously;
-        settings.store.completeVideoQuestsQuicker = defaultCompleteVideoQuestsQuicker;
-        settings.store.makeMobileVideoQuestsDesktopCompatible = defaultMakeMobileVideoQuestsDesktopCompatible;
-        settings.store.resumeInterruptedQuests = defaultResumeInterruptedQuests;
-        settings.store.autoCompleteQuestTypes = { ...defaultAutoCompleteQuestTypes };
+        const settings = getQuestifySettings();
+
+        settings.allowChangingDangerousSettings = defaultAllowChangingDangerousSettings;
+        settings.autoCompleteQuestsSimultaneously = defaultAutoCompleteQuestsSimultaneously;
+        settings.completeVideoQuestsQuicker = defaultCompleteVideoQuestsQuicker;
+        settings.makeMobileVideoQuestsDesktopCompatible = defaultMakeMobileVideoQuestsDesktopCompatible;
+        settings.resumeInterruptedQuests = defaultResumeInterruptedQuests;
+        settings.autoCompleteQuestTypes = { ...defaultAutoCompleteQuestTypes };
     }
 
     function updateDangerousAccess(checked: boolean) {
         function setDangerousAccess() {
-            settings.store.allowChangingDangerousSettings = checked;
+            getQuestifySettings().allowChangingDangerousSettings = checked;
         }
 
         if (checked) {
@@ -221,7 +223,7 @@ export function QuestFeaturesSetting(): JSX.Element {
     }
 
     function updateModifyValue(key: QuestModifySettingKey, checked: boolean) {
-        settings.store[key] = checked;
+        getQuestifySettings()[key] = checked;
     }
 
     return (

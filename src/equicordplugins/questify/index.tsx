@@ -19,11 +19,13 @@ import type { JSX } from "react";
 
 import { disguiseHomeButton, QuestButton, showQuestButton } from "./components/questButton";
 import { QuestTileContextMenu } from "./components/questTileContextMenu";
+import { getQuestifySettings } from "./settings/access";
 import { resetQuestsToResume, startAutoFetchingQuests, stopAutoFetchingQuests } from "./settings/fetching";
 import { validateIgnoredQuests } from "./settings/ignoredQuests";
 import { rerenderQuests, useQuestRerender } from "./settings/rerender";
 import { disposeRestartTracking, initializeRestartTracking, promptToRestartIfDirty } from "./settings/restartTracking";
 import { settings } from "./settings/store";
+import { getSettingsModalOpen, initialQuestDataFetched, setInitialQuestDataFetched, setSettingsModalOpen } from "./state";
 import { canAutoCompleteQuest, getActiveAutoCompletes, getQuestAutoCompleteProgress, getQuestButtonProps, getQuestPanelSubtitleText, hasEnabledAutoCompleteQuestTypes, processQuestForAutoComplete, resumeInterruptedAutoCompletes, setHeartbeatStackTracePatchSucceeded, setVideoProgressStackTracePatchSucceeded, stopAllAutoCompletes, stopAutoCompletesForRunningGames, stopQuestAutoComplete } from "./utils/completion";
 import { canOpenDevToolsWindow, fetchAndDispatchQuests, openDevToolsWindow, snakeToCamel } from "./utils/fetching";
 import { normalizeQuestName } from "./utils/filtering";
@@ -32,23 +34,12 @@ import { getQuestPanelOverride, getQuestPanelPercentComplete, shouldForceQuestPa
 import { getLastFilterChoices, getLastSortChoice, getQuestTileClasses, getQuestTileStyle, setLastFilterChoices, setLastSortChoice, shouldPreloadQuestAssets, sortQuests } from "./utils/questTiles";
 import { formatLowerBadge, QUEST_PAGE } from "./utils/ui";
 
-let settingsModalOpen = false;
-
-export function setSettingsModalOpen(open: boolean): void {
-    settingsModalOpen = open;
-}
-
-function getSettingsModalOpen(): boolean {
-    return settingsModalOpen;
-}
-
-export let initialQuestDataFetched = false;
 let isSwitchingAccount = false;
 let didAttemptAutoCompleteResume = false;
 const notifiedCompletedQuests = new Set<string>();
 
 function setOnQuestsPage(force?: boolean): void {
-    settings.store.isOnQuestsPage = force ?? (window.location.pathname === QUEST_PAGE);
+    getQuestifySettings().isOnQuestsPage = force ?? (window.location.pathname === QUEST_PAGE);
 }
 
 function startPerAccountTasks(source: string): void {
@@ -166,7 +157,7 @@ export default definePlugin({
             // Prevents the DMs Quests tab from counting as part of the
             // DM button highlight logic while the Quest button is visible.
             find: "GLOBAL_DISCOVERY),",
-            predicate: () => !settings.store.disableQuestsEverything && showQuestButton(settings.store.questButtonDisplay, 1, true),
+            predicate: () => !getQuestifySettings().disableQuestsEverything && showQuestButton(getQuestifySettings().questButtonDisplay, 1, true),
             replacement: {
                 match: /(pathname:(\i)}.{0,400}?return )/,
                 replace: "$1$self.disguiseHomeButton($2)?false:"
@@ -175,7 +166,7 @@ export default definePlugin({
         {
             // Hides the Quest icon on members list nameplates.
             find: '("ActivityStatus"),',
-            predicate: () => settings.store.disableQuestsEverything || settings.store.disableMembersListPromo,
+            predicate: () => getQuestifySettings().disableQuestsEverything || getQuestifySettings().disableMembersListPromo,
             replacement: {
                 match: /(,hasQuest:)(?=\i=!1)/,
                 replace: ",questifyInvalid1:"
@@ -184,7 +175,7 @@ export default definePlugin({
         {
             // Hides the Friends List "Active Now" promotion.
             find: "`application-stream-",
-            predicate: () => settings.store.disableQuestsEverything || settings.store.disableFriendsListPromo,
+            predicate: () => getQuestifySettings().disableQuestsEverything || getQuestifySettings().disableFriendsListPromo,
             replacement: [
                 {
                     match: /(?<=let{party:\i,onChannelContextMenu:\i,)quest:(\i)/,
@@ -195,7 +186,7 @@ export default definePlugin({
         {
             // Hides Quests tab in the Discovery page.
             find: "GLOBAL_DISCOVERY_SIDEBAR},",
-            predicate: () => settings.store.disableQuestsEverything || settings.store.disableRelocationNotices,
+            predicate: () => getQuestifySettings().disableQuestsEverything || getQuestifySettings().disableRelocationNotices,
             replacement: [
                 {
                     match: /(GLOBAL_DISCOVERY_TABS).map/,
@@ -206,7 +197,7 @@ export default definePlugin({
         {
             // Hides Quests tab in the DMs tab list.
             find: ".QUEST_HOME):",
-            predicate: () => settings.store.disableQuestsEverything,
+            predicate: () => getQuestifySettings().disableQuestsEverything,
             replacement: [
                 {
                     match: /(?<="family-center"\):null,)/,
@@ -218,7 +209,7 @@ export default definePlugin({
             // Hides the sponsored banner on the Quests page.
             find: "resetSortingFiltering(),requestAnimationFrame",
             group: true,
-            predicate: () => !settings.store.disableQuestsEverything && settings.store.disableSponsoredBanner,
+            predicate: () => !getQuestifySettings().disableQuestsEverything && getQuestifySettings().disableSponsoredBanner,
             replacement: [
                 {
                     match: /(?<=(\i),isLoading:(\i)}=\(0,\i.\i\)\(\);)/,
@@ -230,7 +221,7 @@ export default definePlugin({
             // Hides the Quest & Orbs badges on user profiles.
             find: ".MODAL]:26",
             group: true,
-            predicate: () => !settings.store.disableQuestsEverything && settings.store.disableOrbsAndQuestsBadges,
+            predicate: () => !getQuestifySettings().disableQuestsEverything && getQuestifySettings().disableOrbsAndQuestsBadges,
             replacement: [
                 {
                     match: /(badges:\i)/,
@@ -241,7 +232,7 @@ export default definePlugin({
         {
             // Overrides the account panel Quest popup and progress display.
             find: "QUESTS_BAR,questId",
-            predicate: () => settings.store.disableAccountPanelPromo || !settings.store.disableAccountPanelQuestProgress,
+            predicate: () => getQuestifySettings().disableAccountPanelPromo || !getQuestifySettings().disableAccountPanelQuestProgress,
             replacement: {
                 match: /(?<=function\(\){)(let (\i)=\(0,\i.\i\)\(\);)/,
                 replace: "void $self.useQuestRerender();$1$2=$self.getQuestPanelOverride($2);"
@@ -251,7 +242,7 @@ export default definePlugin({
             // Prevents fetching Quests.
             find: 'type:"QUESTS_FETCH_CURRENT_QUESTS_BEGIN"',
             group: true,
-            predicate: () => settings.store.disableQuestsEverything,
+            predicate: () => getQuestifySettings().disableQuestsEverything,
             replacement: [
                 {
                     // QUESTS_FETCH_CURRENT_QUESTS_BEGIN
@@ -268,7 +259,7 @@ export default definePlugin({
         {
             // Fixes the progress tracking for Quests.
             find: ",{progressTextAnimation:",
-            predicate: () => !settings.store.disableQuestsEverything,
+            predicate: () => !getQuestifySettings().disableQuestsEverything,
             replacement: {
                 match: /(let{percentComplete:.{0,115}?children:\i}=)(\i)/,
                 replace: "const questifyProgress=$self.getQuestPanelPercentComplete({...$2,quest:$2.children?.props?.quest});$1Object.assign({},$2,questifyProgress??{})"
@@ -277,7 +268,7 @@ export default definePlugin({
         {
             // Overrides the title and subtitle to provide more useful information for Quests being completed.
             find: '"progress-title"',
-            predicate: () => !settings.store.disableQuestsEverything,
+            predicate: () => !getQuestifySettings().disableQuestsEverything,
             replacement: {
                 match: /(?<={quest:(\i).{0,250}?return.{0,150}?,percentComplete:\i.{0,280}?"progress-title",children.{0,115}?children:)(\i.{0,50}"progress-subtitle",isTextTransition:!0,children.{0,115}?children:)/,
                 replace: "$self.normalizeQuestName($1)??$2$self.getQuestPanelSubtitleText($1)??"
@@ -286,7 +277,7 @@ export default definePlugin({
         {
             // Formats the Orbs balance on the Quests page with locale string formatting.
             find: '("BalanceCounter")',
-            predicate: () => !settings.store.disableQuestsEverything,
+            predicate: () => !getQuestifySettings().disableQuestsEverything,
             replacement: [
                 {
                     match: /(`\${(\i).toFixed\(0\)}`.length)/,
@@ -302,7 +293,7 @@ export default definePlugin({
             // Removes stack traces from Quest auto-complete network actions and marks both patches as healthy.
             find: "NetworkActionNames.QUEST_VIDEO_PROGRESS,",
             group: true,
-            predicate: () => !settings.store.disableQuestsEverything && hasEnabledAutoCompleteQuestTypes(),
+            predicate: () => !getQuestifySettings().disableQuestsEverything && hasEnabledAutoCompleteQuestTypes(),
             replacement: [
                 {
                     match: /(async function \i\(\i,\i\)\{await \i\.\i\.post\(\{url:\i\.\i\.QUESTS_VIDEO_PROGRESS.{0,200}?stack_trace:)Error\(\)\.stack\?\?""/,
@@ -317,7 +308,7 @@ export default definePlugin({
         {
             find: "resetSortingFiltering(),requestAnimationFrame",
             group: true,
-            predicate: () => !settings.store.disableQuestsEverything,
+            predicate: () => !getQuestifySettings().disableQuestsEverything,
             replacement: [
                 {
                     // Subscribes the Quest page sort/filter state to Questify rerenders.
@@ -349,7 +340,7 @@ export default definePlugin({
         {
             find: "config.taskConfigV2.tasks).length)return",
             group: true,
-            predicate: () => !settings.store.disableQuestsEverything && hasEnabledAutoCompleteQuestTypes(),
+            predicate: () => !getQuestifySettings().disableQuestsEverything && hasEnabledAutoCompleteQuestTypes(),
             replacement: [
                 {
                     // Overwrite button props for UNENROLLED Quests.
@@ -366,7 +357,7 @@ export default definePlugin({
         {
             // Overwrite button props for Quest bar.
             find: "QUESTS_BAR,questId",
-            predicate: () => !settings.store.disableQuestsEverything && hasEnabledAutoCompleteQuestTypes(),
+            predicate: () => !getQuestifySettings().disableQuestsEverything && hasEnabledAutoCompleteQuestTypes(),
             replacement: {
                 match: /(?<=SELECT&&!\i&&!\i,(\i)=null;)(return )(\i\?\i=\(0,\i.\i\)\(\i,{quest:(\i))/,
                 replace: "const questifyButton=$self.enrolledIncompleteButton({quest:$4});$2questifyButton?$1=questifyButton:$3"
@@ -375,7 +366,7 @@ export default definePlugin({
         {
             // Keeps Questify completion progress visible when Discord marks the native Quest bar dismissed.
             find: "prevIsQuestAccepted:",
-            predicate: () => !settings.store.disableQuestsEverything && !settings.store.disableAccountPanelQuestProgress,
+            predicate: () => !getQuestifySettings().disableQuestsEverything && !getQuestifySettings().disableAccountPanelQuestProgress,
             replacement: {
                 match: /(?<=isLoading:\i}=\(0,\i.\i\)\(\),\i=\i\.useContext\(\i\.\i\)\|\|\i&&)(\i)/,
                 replace: "($1||$self.shouldForceQuestPanelVisible(arguments[0].quest))"
@@ -384,7 +375,7 @@ export default definePlugin({
         {
             find: ".rowIndex,trackGuildAndChannelMetadata",
             group: true,
-            predicate: () => !settings.store.disableQuestsEverything,
+            predicate: () => !getQuestifySettings().disableQuestsEverything,
             replacement: [
                 {
                     // Prevent the platform selector if the Quest is auto-completable.
@@ -424,7 +415,7 @@ export default definePlugin({
         {
             find: ".rowIndex,trackGuildAndChannelMetadata",
             group: true,
-            predicate: () => !settings.store.disableQuestsEverything,
+            predicate: () => !getQuestifySettings().disableQuestsEverything,
             replacement: [
                 {
                     // Subscribes each Quest tile to Questify's manual rerender trigger.
@@ -456,7 +447,7 @@ export default definePlugin({
         {
             // Adds the Questify sort option to Discord's Quest sort enum.
             find: "SUGGESTED=\"suggested\",",
-            predicate: () => !settings.store.disableQuestsEverything,
+            predicate: () => !getQuestifySettings().disableQuestsEverything,
             replacement: {
                 match: /(?<=\(\((\i)=\{\}\))(?=\.SUGGESTED="suggested",)/,
                 replace: ".QUESTIFY=\"questify\",$1"
@@ -465,7 +456,7 @@ export default definePlugin({
         {
             // Labels the injected Questify sort option in the dropdown.
             find: "has no rewards configured`",
-            predicate: () => !settings.store.disableQuestsEverything,
+            predicate: () => !getQuestifySettings().disableQuestsEverything,
             replacement: {
                 match: /(?=case (\i\.\i)\.SUGGESTED)/,
                 replace: "case $1.QUESTIFY:return\"Questify\";"
@@ -474,7 +465,7 @@ export default definePlugin({
         {
             find: "CLAIMED=\"claimed\",",
             group: true,
-            predicate: () => !settings.store.disableQuestsEverything,
+            predicate: () => !getQuestifySettings().disableQuestsEverything,
             replacement: [
                 {
                     // Runs Questify sorting in the hook-safe Quest list path and tracks manual rerenders.
@@ -507,7 +498,7 @@ export default definePlugin({
             // Sorts the "Claimed Quests" tabs.
             find: ".ALL)}):(",
             group: true,
-            predicate: () => !settings.store.disableQuestsEverything,
+            predicate: () => !getQuestifySettings().disableQuestsEverything,
             replacement: [
                 {
                     match: /(return \i&&0===\i.length.{0,150}?children:)\[\.\.\.(\i).{0,100}?claimedAt\?\?""\)\)/,
@@ -544,7 +535,7 @@ export default definePlugin({
         CHANNEL_SELECT() { setOnQuestsPage(); },
 
         QUESTS_FETCH_CURRENT_QUESTS_SUCCESS(data: { quests: Quest[]; }): void {
-            initialQuestDataFetched = true;
+            setInitialQuestDataFetched(true);
             QL.log("QUESTS_FETCH_CURRENT_QUESTS_SUCCESS", data);
             validateIgnoredQuests(data.quests);
             resumeAutoCompletesIfReady();
@@ -574,14 +565,14 @@ export default definePlugin({
             if (completedRecently && !claimedAt && !notifiedCompletedQuests.has(userStatus!.questId)) {
                 notifiedCompletedQuests.add(userStatus!.questId);
 
-                if (settings.store.notifyOnQuestComplete) {
+                if (getQuestifySettings().notifyOnQuestComplete) {
                     notifyQuestCompletion(QuestStore.getQuest(userStatus!.questId));
                 }
 
-                if (settings.store.questCompletedAlertSound) {
+                if (getQuestifySettings().questCompletedAlertSound) {
                     playAudio(
-                        settings.store.questCompletedAlertSound,
-                        { volume: Math.max(0, Math.min(100, settings.store.questCompletedAlertVolume)) }
+                        getQuestifySettings().questCompletedAlertSound,
+                        { volume: Math.max(0, Math.min(100, getQuestifySettings().questCompletedAlertVolume)) }
                     );
                 }
             }
@@ -597,13 +588,13 @@ export default definePlugin({
         },
 
         LOGIN_SUCCESS(): void {
-            if (!isSwitchingAccount || settings.store.disableQuestsEverything) {
+            if (!isSwitchingAccount || getQuestifySettings().disableQuestsEverything) {
                 return;
             } else {
                 isSwitchingAccount = false;
             }
 
-            initialQuestDataFetched = false;
+            setInitialQuestDataFetched(false);
             didAttemptAutoCompleteResume = false;
             startPerAccountTasks("LOGIN_SUCCESS");
         },
@@ -615,7 +606,7 @@ export default definePlugin({
                 isSwitchingAccount = true;
             }
 
-            initialQuestDataFetched = false;
+            setInitialQuestDataFetched(false);
             stopPerAccountTasks("LOGOUT");
         },
 
@@ -635,7 +626,7 @@ export default definePlugin({
         addServerListElement(ServerListRenderPosition.Above, this.renderQuestifyButton);
 
         onceReady.then(() => {
-            if (!settings.store.disableQuestsEverything) {
+            if (!getQuestifySettings().disableQuestsEverything) {
                 startPerAccountTasks("PLUGIN_START");
             } else {
                 removeServerListElement(ServerListRenderPosition.Above, this.renderQuestifyButton);

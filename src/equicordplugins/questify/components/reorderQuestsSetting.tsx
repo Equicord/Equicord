@@ -6,9 +6,9 @@
 
 import type { JSX } from "react";
 
+import { getQuestifySettings, useQuestifySettings } from "../settings/access";
 import { defaultQuestOrder, type QuestOrderStatus, type QuestSubsort } from "../settings/def";
 import { rerenderQuests } from "../settings/rerender";
-import { settings } from "../settings/store";
 import { type ManaSelectOption, SettingsCard, SettingsDescription, SettingsHeader, SettingsRow, SettingsRowItem, SettingsSelect, SettingsSubheader, SettingsSubtleSwitch } from "./shared";
 
 const questStatusOptions = [
@@ -83,7 +83,7 @@ function sanitizeQuestOrder(order: unknown): QuestOrderStatus[] {
 }
 
 export function ReorderQuestsSetting(): JSX.Element {
-    const reorderQuests = settings.use([
+    const reorderQuests = useQuestifySettings([
         "disableQuestsEverything",
         "questOrder",
         "unclaimedSubsort",
@@ -110,19 +110,19 @@ export function ReorderQuestsSetting(): JSX.Element {
         }
 
         nextOrder[index] = nextStatus;
-        settings.store.questOrder = nextOrder;
+        getQuestifySettings().questOrder = nextOrder;
         rerenderQuests();
     }
 
     function updateSubsort(key: "unclaimedSubsort" | "claimedSubsort" | "ignoredSubsort" | "expiredSubsort", value: string | string[] | null): void {
         if (typeof value !== "string") return;
 
-        settings.store[key] = value;
+        getQuestifySettings()[key] = value;
         rerenderQuests();
     }
 
     function updateRememberSetting(key: "rememberQuestPageSort" | "rememberQuestPageFilters", checked: boolean): void {
-        settings.store[key] = checked;
+        getQuestifySettings()[key] = checked;
     }
 
     return (

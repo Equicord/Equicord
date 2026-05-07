@@ -9,9 +9,9 @@ import { findComponentByCodeLazy } from "@webpack";
 import { QuestStore, useEffect, useMemo, useRef, useState, useStateFromStores } from "@webpack/common";
 import type { JSX, SyntheticEvent } from "react";
 
+import { getQuestifySettings, useQuestifySettings } from "../settings/access";
 import { defaultQuestTileClaimedColorSetting, defaultQuestTileExpiredColorSetting, defaultQuestTileIgnoredColorSetting, defaultQuestTileUnclaimedColorSetting, type QuestTileColorSetting, type QuestTileGradient } from "../settings/def";
 import { rerenderQuests } from "../settings/rerender";
-import { settings } from "../settings/store";
 import { getQuestTileClasses, getQuestTileStyle } from "../utils/questTiles";
 import { q } from "../utils/ui";
 import { ManaButton, type ManaSelectOption, SettingsCard, SettingsColorPicker, SettingsDescription, SettingsHeader, SettingsRow, SettingsRowItem, SettingsSelect, SettingsSubheader } from "./shared";
@@ -194,7 +194,7 @@ function DummyQuestPreview({
 }
 
 export function QuestTilesSetting(): JSX.Element {
-    const questTiles = settings.use([
+    const questTiles = useQuestifySettings([
         "disableQuestsEverything",
         "questTileUnclaimedColor",
         "questTileClaimedColor",
@@ -211,7 +211,7 @@ export function QuestTilesSetting(): JSX.Element {
 
     function updateColor(key: QuestTileColorKey, nextColor: QuestTileColorSetting): void {
         setPreviewColorKey(key);
-        settings.store[key] = nextColor;
+        getQuestifySettings()[key] = nextColor;
     }
 
     function updateColorValue(key: QuestTileColorKey, setting: QuestTileColorSetting, value: number | null): void {
@@ -233,14 +233,14 @@ export function QuestTilesSetting(): JSX.Element {
     function updateGradient(value: string | string[] | null): void {
         if (typeof value !== "string") return;
 
-        settings.store.questTileGradient = value as QuestTileGradient;
+        getQuestifySettings().questTileGradient = value as QuestTileGradient;
     }
 
     function updatePreload(value: string | string[] | null): void {
         if (typeof value !== "string") return;
 
         const preload = value === "true";
-        settings.store.questTilePreload = preload;
+        getQuestifySettings().questTilePreload = preload;
         rerenderQuests();
     }
 

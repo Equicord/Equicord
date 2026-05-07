@@ -7,10 +7,10 @@
 import { QuestRewardType, QuestTaskType } from "@vencord/discord-types/enums";
 import type { JSX } from "react";
 
+import { getQuestifySettings, useQuestifySettings } from "../settings/access";
 import { type QuestButtonAction, type QuestButtonDisplayMode, type QuestButtonIncludedTypes, type QuestButtonIndicatorMode } from "../settings/def";
 import { startAutoFetchingQuests } from "../settings/fetching";
 import { validateIgnoredQuests } from "../settings/ignoredQuests";
-import { settings } from "../settings/store";
 import { canShowBadge, canShowButton, canShowPill } from "../utils/ui";
 import { DummyQuestButton } from "./questButton";
 import { type ManaSelectOption, SettingsCard, SettingsColorPicker, SettingsDescription, SettingsHeader, SettingsRow, SettingsRowItem, SettingsSelect, SettingsSubheader } from "./shared";
@@ -76,7 +76,7 @@ const questButtonRewardTypeManaOptions = toManaOptions(questButtonRewardTypeOpti
 const questButtonQuestTypeManaOptions = toManaOptions(questButtonQuestTypeOptions);
 
 export function QuestButtonSetting(): JSX.Element {
-    const questButton = settings.use([
+    const questButton = useQuestifySettings([
         "disableQuestsEverything",
         "questButtonDisplay",
         "questButtonIncludedTypes",
@@ -102,36 +102,36 @@ export function QuestButtonSetting(): JSX.Element {
     function updateQuestButtonDisplay(value: string | string[] | null) {
         if (typeof value !== "string") return;
 
-        settings.store.questButtonDisplay = value as QuestButtonDisplayMode;
+        getQuestifySettings().questButtonDisplay = value as QuestButtonDisplayMode;
         startAutoFetchingQuests(true);
     }
 
     function updateQuestButtonIndicator(value: string | string[] | null) {
         if (typeof value !== "string") return;
 
-        settings.store.questButtonIndicator = value as QuestButtonIndicatorMode;
+        getQuestifySettings().questButtonIndicator = value as QuestButtonIndicatorMode;
         startAutoFetchingQuests(true);
     }
 
     function updateQuestButtonAction(key: "questButtonLeftClickAction" | "questButtonMiddleClickAction" | "questButtonRightClickAction", value: string | string[] | null) {
         if (typeof value !== "string") return;
 
-        settings.store[key] = value as QuestButtonAction;
+        getQuestifySettings()[key] = value as QuestButtonAction;
     }
 
     function updateBadgeColor(value: number | null) {
-        settings.store.questButtonBadgeColor = value;
+        getQuestifySettings().questButtonBadgeColor = value;
     }
 
     function updateIncludedTypes(options: readonly QuestButtonIncludedTypeOption[], value: string | string[] | null) {
         const selectedValues = new Set(Array.isArray(value) ? value : value ? [value] : []);
-        const nextIncludedTypes = { ...settings.store.questButtonIncludedTypes };
+        const nextIncludedTypes = { ...getQuestifySettings().questButtonIncludedTypes };
 
         for (const option of options) {
             nextIncludedTypes[option.value] = selectedValues.has(String(option.value));
         }
 
-        settings.store.questButtonIncludedTypes = nextIncludedTypes;
+        getQuestifySettings().questButtonIncludedTypes = nextIncludedTypes;
         validateIgnoredQuests();
     }
 

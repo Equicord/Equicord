@@ -8,8 +8,8 @@ import type { Quest } from "@vencord/discord-types";
 import { QuestTaskType } from "@vencord/discord-types/enums";
 import { QuestStore } from "@webpack/common";
 
+import { getQuestifySettings, useQuestifySettings } from "../settings/access";
 import { ignoredQuestIDsKey } from "../settings/def";
-import { settings } from "../settings/store";
 import { getActiveAutoCompletes, getAutoCompleteQuestTarget, getQuestAutoCompleteEntry } from "./completion";
 import { type QuestIncludedTypes, questMatchesIncludedTypes } from "./filtering";
 
@@ -147,7 +147,7 @@ export function getQuestStoredProgress(quest: Quest, task: QuestTask): number | 
 }
 
 function getCurrentIgnoredQuestIds(): string[] {
-    return Array.from(settings.store.ignoredQuestIDs[ignoredQuestIDsKey] ?? []);
+    return Array.from(getQuestifySettings().ignoredQuestIDs[ignoredQuestIDsKey] ?? []);
 }
 
 function getAutoCompleteShowcaseQuest(): Quest | null {
@@ -208,7 +208,7 @@ function getMostRecentlyCompletedUnclaimedQuest(): Quest | null {
 }
 
 export function getQuestPanelOverride(quest: Quest | null): Quest | null {
-    const panelState = settings.use(["disableQuestsEverything", "disableAccountPanelPromo", "disableAccountPanelQuestProgress"]);
+    const panelState = useQuestifySettings(["disableQuestsEverything", "disableAccountPanelPromo", "disableAccountPanelQuestProgress"]);
 
     if (panelState.disableQuestsEverything) {
         return null;
@@ -228,7 +228,9 @@ export function getQuestPanelOverride(quest: Quest | null): Quest | null {
 }
 
 export function shouldForceQuestPanelVisible(quest: Quest | null): boolean {
-    if (!quest || settings.store.disableQuestsEverything || settings.store.disableAccountPanelQuestProgress) {
+    const settings = getQuestifySettings();
+
+    if (!quest || settings.disableQuestsEverything || settings.disableAccountPanelQuestProgress) {
         return false;
     }
 

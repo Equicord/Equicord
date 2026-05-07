@@ -8,13 +8,14 @@ import type { Quest } from "@vencord/discord-types";
 
 import { fetchAndAlertQuests } from "../utils/fetching";
 import { QL } from "../utils/logging";
-import { getCurrentUserId, settings } from "./store";
+import { getCurrentUserId, getQuestifySettings } from "./access";
 
 let autoFetchInterval: null | ReturnType<typeof setInterval> = null;
 const minimumAutoFetchIntervalValue = 30 * 60; // 30 minutes
 const maximumAutoFetchIntervalValue = 12 * 60 * 60; // 12 hours
 
 export function autoFetchCompatible(): boolean {
+    const settings = getQuestifySettings();
     const {
         newExcludedQuestAlertSound,
         newQuestAlertSound,
@@ -23,8 +24,8 @@ export function autoFetchCompatible(): boolean {
         notifyOnNewQuests,
         questButtonDisplay: displayMode,
         questButtonIndicator: indicatorMode
-    } = settings.store;
-    const fetching = !settings.store.disableQuestsEverything && questFetchInterval > 0;
+    } = settings;
+    const fetching = !settings.disableQuestsEverything && questFetchInterval > 0;
     const notificationsCompatible = notifyOnNewQuests || notifyOnNewExcludedQuests || Boolean(newQuestAlertSound) || Boolean(newExcludedQuestAlertSound);
     let buttonCompatible = false;
 
@@ -54,7 +55,7 @@ export function startAutoFetchingQuests(force: boolean = false): void {
         stopAutoFetchingQuests();
     }
 
-    const { questFetchInterval } = settings.store;
+    const { questFetchInterval } = getQuestifySettings();
     const interval = Math.min(Math.max(questFetchInterval, minimumAutoFetchIntervalValue), maximumAutoFetchIntervalValue);
     autoFetchInterval = setInterval(() => { void fetchAndAlertQuests("AUTO_FETCH"); }, interval * 1000);
     QL.info("START_AUTO_FETCHING_QUESTS", { autoFetchIntervalID: autoFetchInterval, questFetchInterval, questFetchIntervalClamped: interval });
@@ -69,7 +70,7 @@ export function stopAutoFetchingQuests(): void {
 }
 
 export function resetQuestsToResume(quest?: Quest, userId?: string): void {
-    const { resumeQuestIDs } = settings.store;
+    const { resumeQuestIDs } = getQuestifySettings();
     const key = getCurrentUserId(userId);
 
     if (!key) {

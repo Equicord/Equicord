@@ -10,10 +10,10 @@ import { findComponentByCodeLazy } from "@webpack";
 import { ContextMenuApi, Menu, NavigationRouter, useState } from "@webpack/common";
 import type { CSSProperties, JSX, MouseEvent } from "react";
 
-import { initialQuestDataFetched } from "..";
+import { getQuestifySettings, useQuestifySettings } from "../settings/access";
 import type { QuestButtonAction, QuestButtonDisplayMode, QuestButtonIndicatorMode } from "../settings/def";
 import { getIgnoredQuestIDs, ignoreAllQuests, resetIgnoredQuests } from "../settings/ignoredQuests";
-import { settings } from "../settings/store";
+import { initialQuestDataFetched } from "../state";
 import { fetchAndAlertQuests } from "../utils/fetching";
 import { decimalToRGB, formatLowerBadge, isDarkish, leftClick, middleClick, q, QUEST_PAGE, rightClick } from "../utils/ui";
 import { openQuestifySettingsModal } from "./settingsModal";
@@ -139,7 +139,7 @@ export function showQuestButton(displayMode: QuestButtonDisplayMode, badgeCount:
 }
 
 export function disguiseHomeButton(pathname: string): boolean {
-    const buttonSettings = settings.use(["questButtonDisplay", "questButtonBadgeCount", "isOnQuestsPage"]);
+    const buttonSettings = useQuestifySettings(["questButtonDisplay", "questButtonBadgeCount", "isOnQuestsPage"]);
 
     if (!showQuestButton(buttonSettings.questButtonDisplay, buttonSettings.questButtonBadgeCount, buttonSettings.isOnQuestsPage)) {
         return false;
@@ -190,7 +190,7 @@ function getQuestButtonLowerBadgeProps(
 
 export function QuestButtonContextMenu({ dummy = false }: { dummy?: boolean; }): JSX.Element {
     const navId = q(dummy ? "dummy-quest-button-context-menu" : "quest-button-context-menu");
-    const markAllIgnoredDisabled = dummy || settings.store.questButtonBadgeCount <= 0;
+    const markAllIgnoredDisabled = dummy || getQuestifySettings().questButtonBadgeCount <= 0;
     const resetIgnoredDisabled = dummy || getIgnoredQuestIDs().length <= 0;
     const fetchQuestsDisabled = dummy;
 
@@ -232,7 +232,7 @@ export function QuestButton(): JSX.Element {
         questButtonMiddleClickAction,
         questButtonRightClickAction,
         questButtonIndicator,
-    } = settings.use([
+    } = useQuestifySettings([
         "isOnQuestsPage",
         "questButtonBadgeColor",
         "questButtonDisplay",
