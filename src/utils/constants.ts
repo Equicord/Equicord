@@ -1323,7 +1323,7 @@ export const EquicordDevs = Object.freeze({
     },
     NassCT: {
         name: "NassCT",
-        id: 354996937868705793
+        id: 354996937868705793n
     },
 } satisfies Record<string, Dev>);
 
