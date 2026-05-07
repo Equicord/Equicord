@@ -34,7 +34,7 @@ const settings = definePluginSettings({
         description: t("vencord.betterRoleDot.settings.copyRoleColorInProfilePopout"),
         restartNeeded: true,
         default: false
-    },
+    }
 });
 
 export default definePlugin({

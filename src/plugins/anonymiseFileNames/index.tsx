@@ -61,15 +61,20 @@ const settings = definePluginSettings({
     randomisedLength: {
         description: t("vencord.anonymiseFileNames.settings.randomisedLength"),
         type: OptionType.NUMBER,
-        default: 7,
-        disabled: () => settings.store.method !== Methods.Random,
+        default: 7
     },
     consistent: {
         description: t("vencord.anonymiseFileNames.settings.consistent"),
         type: OptionType.STRING,
-        default: "image",
-        disabled: () => settings.store.method !== Methods.Consistent,
+        default: "image"
     },
+}, {
+    randomisedLength: {
+        disabled() { return this.store.method !== Methods.Random; },
+    },
+    consistent: {
+        disabled() { return this.store.method !== Methods.Consistent; },
+    }
 });
 
 export default definePlugin({

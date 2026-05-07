@@ -17,7 +17,9 @@ export enum ServiceType {
     TMPFILES = "tmpfiles",
     BUZZHEAVIER = "buzzheavier",
     TEMPSH = "tempsh",
-    FILEBIN = "filebin"
+    FILEBIN = "filebin",
+    PIXELVAULT = "pixelvault",
+    PIXELDRAIN = "pixeldrain"
 }
 
 export const serviceLabels: Record<ServiceType, string> = {
@@ -33,8 +35,28 @@ export const serviceLabels: Record<ServiceType, string> = {
     [ServiceType.TMPFILES]: "tmpfiles.org",
     [ServiceType.BUZZHEAVIER]: "buzzheavier.com",
     [ServiceType.TEMPSH]: "temp.sh",
-    [ServiceType.FILEBIN]: "filebin.net"
+    [ServiceType.FILEBIN]: "filebin.net",
+    [ServiceType.PIXELVAULT]: "PixelVault",
+    [ServiceType.PIXELDRAIN]: "PixelDrain"
 };
+
+export const fallbackServiceOrder: ServiceType[] = [
+    ServiceType.ZIPLINE,
+    ServiceType.EZHOST,
+    ServiceType.NEST,
+    ServiceType.S3,
+    ServiceType.CATBOX,
+    ServiceType.ZEROX0,
+    ServiceType.LITTERBOX,
+    ServiceType.GOFILE,
+    ServiceType.TMPFILES,
+    ServiceType.BUZZHEAVIER,
+    ServiceType.TEMPSH,
+    ServiceType.FILEBIN,
+    ServiceType.PIXELVAULT,
+    ServiceType.PIXELDRAIN,
+    ServiceType.SHAREX
+];
 
 export interface UploadResponse {
     files: {

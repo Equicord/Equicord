@@ -854,7 +854,7 @@ export default definePlugin({
             }
 
             try {
-                return filterTreeWithTargetNode(child, child => child?.props?.renderTreeNode != null);
+                return filterTreeWithTargetNode(child, c => c?.props?.renderTreeNode != null);
             } catch {
                 return true;
             }

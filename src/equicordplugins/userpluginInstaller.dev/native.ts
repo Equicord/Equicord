@@ -8,7 +8,7 @@ import { NativeSettings } from "@main/settings";
 import { exec, spawn } from "child_process";
 import { BrowserWindow, dialog, shell, WebContentsView } from "electron";
 import { existsSync, readdirSync, readFileSync } from "fs";
-import { readdir, readFile, rm } from "fs/promises";
+import { mkdir, readdir, readFile, rm } from "fs/promises";
 import { basename, join } from "path";
 import yaml from "yaml-js";
 
@@ -19,11 +19,18 @@ import setGitPathContent from "./misc/setGitPath.txt";
 // @ts-ignore fuck off
 import updateValidateContent from "./misc/updateValidate.txt"; // see above
 
-const PLUGIN_META_REGEX = /export default definePlugin\((?:\s|\/(?:\/|\*).*)*{\s*(?:\s|\/(?:\/|\*).*)*name:\s*(?:"|'|`)(.*)(?:"|'|`)(?:\s|\/(?:\/|\*).*)*,(?:\s|\/(?:\/|\*).*)*(?:\s|\/(?:\/|\*).*)*description:\s*(?:"|'|`)(.*)(?:"|'|`)(?:\s|\/(?:\/|\*).*)*/;
+const PLUGIN_META_REGEX = /export default definePlugin\((?:\s|\/(?:\/|\*).*)*{\s*(?:\s|\/(?:\/|\*).*)*name:\s*(?:"|'|`)(.*)(?:"|'|`)(?:\s|\/(?:\/|\*).*)*,(?:\s|\/(?:\/|\*).*)*.+(?:\s|\/(?:\/|\*).*)*description:\s*(?:"|'|`)(.*)(?:"|'|`)(?:\s|\/(?:\/|\*).*)*/;
 // if edited, also edit in misc/constants.ts!!!
 const CLONE_LINK_REGEX = /https:\/\/(?:((?:git(?:hub|lab)\.com|git\.(?:[a-zA-Z0-9]|\.)+|codeberg\.org))\/(?!user-attachments)((?:[a-zA-Z0-9]|-)+)\/((?:[a-zA-Z0-9]|-|\.)+)(?:\.git)?|(plugins\.(nin0)\.dev)\/((?:[a-zA-Z0-9]|-|\.)+))(?:\/)?/;
 
 const vencordPath = ["desktop", "equibop"].includes(basename(__dirname)) ? join(__dirname, "../") : __dirname;
+
+export async function ensurePluginsDirectory(_: any) {
+    if (!IS_DEV) return;
+    try {
+        await mkdir(join(vencordPath, "../src/userplugins"), { recursive: true });
+    } catch(e) { }
+}
 
 export async function rmPlugin(_, name: string): Promise<string> {
     // eslint-disable-next-line

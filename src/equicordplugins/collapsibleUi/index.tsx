@@ -109,7 +109,7 @@ export default definePlugin({
     name: "CollapsibleUI",
     description: "Native collapsible channel, member, chat button, and user area surfaces.",
     tags: ["Appearance", "Customisation", "Chat", "Servers"],
-    dependencies: ["HeaderBarAPI"],
+    dependencies: ["HeaderBarAPI", "ChatInputButtonAPI"],
     authors: [EquicordDevs.benjii],
     searchTerms: ["ui", "sidebar", "layout"],
     managedStyle,
@@ -130,16 +130,8 @@ export default definePlugin({
                 replace: "className:$self.userAreaControlsClass($1),"
             }
         },
-        {
-            find: '"sticker")',
-            replacement: {
-                match: /(?<="div",\{.{0,15}children:)(.+?)\}/,
-                replace: "$self.wrapChatButtons($1)}"
-            }
-        }
     ],
-
-    wrapChatButtons(buttons: ReactNode[]) {
+    chatBarButtonWrapper: (buttons: ReactNode) => {
         if (!Array.isArray(buttons) || buttons.length === 0) return buttons;
         return <ChatButtonsRow buttons={buttons} />;
     },

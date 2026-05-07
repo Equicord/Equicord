@@ -38,6 +38,12 @@ const settings = definePluginSettings({
         default: true,
         restartNeeded: true
     },
+    enableSpeakingIndicators: {
+        type: OptionType.BOOLEAN,
+        description: "Enable speaking indicators",
+        default: true,
+        restartNeeded: true
+    },
     enableAdvancedSignals: {
         type: OptionType.BOOLEAN,
         description: t("equicord.clipsEnhancements.settings.enableAdvancedSignals"),
@@ -102,8 +108,8 @@ export default definePlugin({
         {
             find: "2026-03-clips-experiment",
             replacement: {
-                match: /defaultConfig:\{enableClips:!\d,ignorePlatformRestriction:!\d,showClipsHeaderEntrypoint:!\d,enableScreenshotKeybind:!\d,enableVoiceOnlyClips:!\d,enableAdvancedSignals:!\d\}/,
-                replace: "defaultConfig:{enableClips:!0,ignorePlatformRestriction:$self.settings.store.ignorePlatformRestriction,showClipsHeaderEntrypoint:!0,enableScreenshotKeybind:$self.settings.store.enableScreenshotKeybind,enableVoiceOnlyClips:$self.settings.store.enableVoiceOnlyClips,enableAdvancedSignals:$self.settings.store.enableAdvancedSignals}"
+                match: /defaultConfig:\{enableClips:!\d,ignorePlatformRestriction:!\d,enableScreenshotKeybind:!\d,enableVoiceOnlyClips:!\d,enableSpeakingIndicators:!\d,enableAdvancedSignals:!\d\}/,
+                replace: "defaultConfig:{enableClips:!0,ignorePlatformRestriction:$self.settings.store.ignorePlatformRestriction,enableScreenshotKeybind:$self.settings.store.enableScreenshotKeybind,enableVoiceOnlyClips:$self.settings.store.enableVoiceOnlyClips,enableSpeakingIndicators:$self.settings.store.enableSpeakingIndicators,enableAdvancedSignals:$self.settings.store.enableAdvancedSignals}"
             }
         }
     ],

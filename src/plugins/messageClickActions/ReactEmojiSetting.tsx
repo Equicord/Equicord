@@ -9,7 +9,7 @@ import "./styles.css";
 import { Heading } from "@components/Heading";
 import { classNameFactory } from "@utils/css";
 import { t } from "@utils/translation";
-import type { IPluginOptionComponentProps } from "@utils/types";
+import type { PluginSettingComponentProps } from "@utils/types";
 import type { Channel } from "@vencord/discord-types";
 import { findComponentByCodeLazy } from "@webpack";
 import { ChannelStore, IconUtils, Popout, SelectedChannelStore, TextInput, useRef, useState, useStateFromStores } from "@webpack/common";
@@ -183,7 +183,7 @@ function EmojiPreview({ value }: { value: string; }) {
     return <span className={cl("unicode-preview")}>{renderedEmoji.name}</span>;
 }
 
-export function ReactEmojiSetting({ setValue }: IPluginOptionComponentProps) {
+export function ReactEmojiSetting({ setValue }: PluginSettingComponentProps) {
     const [emoji, setEmoji] = useState(settings.store.reactEmoji ?? "💀");
 
     return (
@@ -203,7 +203,7 @@ export function ReactEmojiSetting({ setValue }: IPluginOptionComponentProps) {
     );
 }
 
-export function AdditionalReactEmojisSetting({ setValue }: IPluginOptionComponentProps) {
+export function AdditionalReactEmojisSetting({ setValue }: PluginSettingComponentProps) {
     const { addAdditionalReacts } = settings.use(["addAdditionalReacts"]);
     const [emojiList, setEmojiList] = useState(settings.store.additionalReactEmojis ?? "");
 

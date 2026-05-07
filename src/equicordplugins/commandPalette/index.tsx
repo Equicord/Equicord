@@ -204,17 +204,8 @@ export default definePlugin({
     description: t("equicord.commandPalette.description"),
     authors: [EquicordDevs.justjxke, EquicordDevs.Ethan],
     tags: ["Appearance", "Customisation", "Commands", "Shortcuts"],
+    dependencies: ["ChatInputButtonAPI"],
     settings,
-    patches: [
-        {
-            find: '"sticker")',
-            replacement: {
-                match: /("div",\{.{0,15}children:)(.+?)\}/,
-                replace: "$1$self.wrapChatBarChildren($2)}"
-            }
-        }
-    ],
-
     start() {
         registerBuiltInCommands();
         window.addEventListener("keydown", this.handleKeydown);
@@ -239,5 +230,5 @@ export default definePlugin({
         });
     },
 
-    wrapChatBarChildren,
+    chatBarButtonWrapper: wrapChatBarChildren,
 });

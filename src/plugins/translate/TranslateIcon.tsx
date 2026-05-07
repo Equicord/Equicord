@@ -18,14 +18,14 @@
 
 import { ChatBarButton, ChatBarButtonFactory } from "@api/ChatButtons";
 import { Paragraph } from "@components/Paragraph";
+import { TooltipContainer } from "@components/TooltipContainer";
 import { classes } from "@utils/misc";
-import { openModal } from "@utils/modal";
 import { t, Translate } from "@utils/translation";
 import { IconComponent } from "@utils/types";
-import { Alerts, Tooltip, useEffect, useState } from "@webpack/common";
+import { Alerts, useEffect, useState } from "@webpack/common";
 
 import { settings } from "./settings";
-import { TranslateModal } from "./TranslateModal";
+import { openTranslateModal } from "./TranslateModal";
 import { cl } from "./utils";
 
 export const TranslateIcon: IconComponent = ({ height = 20, width = 20, className }) => {
@@ -82,10 +82,7 @@ export const TranslateChatBarIcon: ChatBarButtonFactory = ({ isMainChat }) => {
             tooltip={t("vencord.translate.openTranslateModal")}
             onClick={e => {
                 if (e.shiftKey) return toggle();
-
-                openModal(props => (
-                    <TranslateModal rootProps={props} />
-                ));
+                else openTranslateModal();
             }}
             onContextMenu={toggle}
             buttonProps={{
@@ -98,9 +95,9 @@ export const TranslateChatBarIcon: ChatBarButtonFactory = ({ isMainChat }) => {
 
     if (shouldShowTranslateEnabledTooltip && settings.store.showAutoTranslateTooltip)
         return (
-            <Tooltip text={t("vencord.translate.autoTranslateEnabled")} forceOpen>
-                {() => button}
-            </Tooltip>
+            <TooltipContainer text={t("vencord.translate.autoTranslateEnabled")} forceOpen>
+                {button}
+            </TooltipContainer>
         );
 
     return button;

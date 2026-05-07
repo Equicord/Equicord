@@ -49,7 +49,7 @@ export default definePlugin({
     name: "ChannelTabs",
     description: t("equicord.channelTabs.description"),
     tags: ["Appearance", "Customisation", "Organisation", "Servers"],
-    authors: [Devs.TheSun, Devs.TheKodeToad, EquicordDevs.keifufu, Devs.Nickyux, EquicordDevs.DiabeloDEV, EquicordDevs.justjxke],
+    authors: [Devs.TheSun, Devs.TheKodeToad, EquicordDevs.keifufu, Devs.Nickyux, EquicordDevs.DiabeloDEV, EquicordDevs.justjxke, EquicordDevs.keircn],
     dependencies: ["ContextMenuAPI"],
     contextMenus: {
         "channel-mention-context": contextMenuPatch,

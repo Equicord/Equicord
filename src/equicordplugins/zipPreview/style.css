@@ -170,14 +170,15 @@
     align-items: center;
     gap: 4px;
     margin-bottom: 4px;
-    color: var(--text-normal);
+    color: var(--text-muted);
 }
 
-.vc-zip-preview-breadcrumb-icon {
+.vc-zip-preview-breadcrumb > .vc-zip-preview-breadcrumb-icon {
     flex-shrink: 0;
     width: 16px;
     height: 16px;
-    color: var(--text-normal);
+    color: var(--text-muted);
+    fill: currentcolor;
 }
 
 .vc-zip-preview-breadcrumb-segment {
@@ -201,8 +202,8 @@
     color: var(--text-link-low-saturation);
 }
 
-.vc-zip-preview-breadcrumb-current {
-    color: var(--text-normal);
+.vc-zip-preview-breadcrumb .vc-zip-preview-breadcrumb-current {
+    color: var(--text-muted);
 }
 
 .vc-zip-preview-size {

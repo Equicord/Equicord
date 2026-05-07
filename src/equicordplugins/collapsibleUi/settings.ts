@@ -41,6 +41,12 @@ export const panelRegistry = {
         label: "Title Bar",
         collapsedKey: "titleBarCollapsed",
     },
+    headerBar: {
+        id: "headerBar",
+        classId: "header-bar",
+        label: "Header Bar",
+        collapsedKey: "headerBarCollapsed",
+    },
     userArea: {
         id: "userArea",
         classId: "user-area",
@@ -51,7 +57,7 @@ export const panelRegistry = {
 
 export type PanelId = keyof typeof panelRegistry;
 
-export const toolbarPanelOrder = ["guildBar", "channelList", "membersList", "chatButtons", "titleBar", "userArea"] as const satisfies readonly PanelId[];
+export const toolbarPanelOrder = ["guildBar", "channelList", "membersList", "chatButtons", "titleBar", "headerBar", "userArea"] as const satisfies readonly PanelId[];
 
 export const settings = definePluginSettings({
     collapsedSize: {
@@ -89,6 +95,11 @@ export const settings = definePluginSettings({
     titleBarCollapsed: {
         type: OptionType.BOOLEAN,
         description: "Persist the title bar as collapsed.",
+        default: false,
+    },
+    headerBarCollapsed: {
+        type: OptionType.BOOLEAN,
+        description: "Persist the header bar as collapsed.",
         default: false,
     },
     userAreaCollapsed: {

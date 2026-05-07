@@ -21,6 +21,14 @@ type S3Store = {
     corsProxyUrl?: string;
 };
 
+type UploadRequestResponse = {
+    ok: boolean;
+    status: number;
+    text(): Promise<string>;
+};
+
+type UploadRequest = (url: string, options: RequestInit) => Promise<UploadRequestResponse>;
+
 const textEncoder = new TextEncoder();
 
 function toArrayBuffer(data: ArrayBuffer | Uint8Array | string): ArrayBuffer {
@@ -90,7 +98,8 @@ export function isS3Configured(): boolean {
 export async function uploadToS3(
     fileBlob: Blob,
     filename: string,
-    native: PluginNative<typeof import("../native")> | null
+    native: PluginNative<typeof import("../native")> | null,
+    uploadRequest: UploadRequest
 ): Promise<string> {
     const {
         s3Endpoint,
@@ -189,7 +198,7 @@ export async function uploadToS3(
             throw new Error(result.error || "Upload failed");
         }
     } else {
-        const response = await fetch(toProxiedUrl(uploadUrl.toString(), settings.store.corsProxyUrl), {
+        const response = await uploadRequest(toProxiedUrl(uploadUrl.toString(), settings.store.corsProxyUrl), {
             method: "PUT",
             headers: requestHeaders,
             body: fileBlob

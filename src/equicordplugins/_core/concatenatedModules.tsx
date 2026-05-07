@@ -26,7 +26,7 @@ export default definePlugin({
             }
         }
     ],
-    set iconsModule(value: any) {
+    iconsModule(value: IconsDef) {
         iconsModule = value;
     },
 });

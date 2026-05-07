@@ -11,6 +11,7 @@ import { definePluginSettings, migrateOldSettingToNewPlugin, migratePluginSettin
 import { Divider } from "@components/Divider";
 import { HeadingSecondary } from "@components/Heading";
 import { Notice } from "@components/Notice";
+import decor from "@plugins/decor";
 import { classNameFactory } from "@utils/css";
 import { Devs, EquicordDevs } from "@utils/index";
 import { t, Translate } from "@utils/translation";
@@ -171,12 +172,12 @@ export default definePlugin({
     patches: [
         {
             // Avatar decoration
-            find: "getAvatarDecorationURL:",
+            find: "isAvatarDecorationAnimating:",
             replacement: {
-                match: /(?<=function \i\(\i\){)(?=.{0,150}let{avatarDecoration)/,
-                replace: "$&return null;"
+                match: /(?<=\{avatarDecoration:.{0,40}?)(void 0!==\i\?\i:)\i(?=\)?,canAnimate:)/,
+                replace: "$1null"
             },
-            predicate: () => settings.store.removeAvatarDecoration && !isPluginEnabled("Decor"),
+            predicate: () => settings.store.removeAvatarDecoration && !isPluginEnabled(decor.name),
         },
         {
             // Nameplate

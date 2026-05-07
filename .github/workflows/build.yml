@@ -68,11 +68,12 @@ jobs:
                   rm release/*.map
 
             - name: Upload Equicord Stable
+              if: ${{ !vars.ACT }}
               run: |
                   gh release upload latest --clobber dist/release/*
 
             - name: Upload Plugin JSONs to Equibored repo
-              if: github.repository == 'Equicord/Equicord'
+              if: github.repository == 'Equicord/Equicord' && !vars.ACT
               run: |
                   git config --global user.name "GitHub-Actions"
                   git config --global user.email actions@github.com

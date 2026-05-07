@@ -16,13 +16,11 @@ import { Margins } from "@utils/margins";
 import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { findByPropsLazy } from "@webpack";
-import { React } from "@webpack/common";
+import { ExperimentStore, React } from "@webpack/common";
 
 import hideBugReport from "./hideBugReport.css?managed";
 
 const KbdStyles = findByPropsLazy("key", "combo");
-let BugReporterExperiment: any;
-
 const modKey = IS_MAC ? "cmd" : "ctrl";
 const altKey = IS_MAC ? "opt" : "alt";
 
@@ -148,19 +146,7 @@ export default definePlugin({
                 }
             ]
         },
-        {
-            find: "2026-01-bug-reporter",
-            replacement: {
-                match: /(?<==)(?=\(0,\i\(.+?\)\.\i\)\({name:"2026-01-bug-reporter")/,
-                replace: "$self.BugReporterExperiment="
-            }
-        }
     ],
-
-    set BugReporterExperiment(value: any) {
-        BugReporterExperiment = value;
-    },
-
     matchExperiment(url: string, label: string): boolean {
         const items = url.split("/");
         const labelCleaned = label.replace(/[^a-zA-Z0-9]+/g, "").toLowerCase();
@@ -168,7 +154,7 @@ export default definePlugin({
         return !!labelCleaned && urlEndCleaned !== undefined && labelCleaned === urlEndCleaned;
     },
 
-    start: () => !BugReporterExperiment.getConfig().hasBugReporterAccess && enableStyle(hideBugReport),
+    start: () => ExperimentStore.getUserExperimentBucket("2026-01-bug-reporter") > 0 && enableStyle(hideBugReport),
     stop: () => disableStyle(hideBugReport),
 
     settingsAboutComponent: () => {

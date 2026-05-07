@@ -12,6 +12,7 @@
     padding: 10px 0;
     cursor: pointer;
     top: -8px;
+    z-index: 10;
     border: solid grey 1px;
     border-radius: 5px;
 }

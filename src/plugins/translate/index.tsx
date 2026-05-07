@@ -66,7 +66,7 @@ export default definePlugin({
     description: t("vencord.translate.description"),
     dependencies: ["ChatInputButtonAPI", "MessageAccessoriesAPI", "MessagePopoverAPI"],
     tags: ["Chat", "Utility"],
-    authors: [Devs.Ven, Devs.AshtonMemer],
+    authors: [Devs.Ven, Devs.AshtonMemer, Devs.koish1],
     settings,
     contextMenus: {
         "message": messageCtxPatch

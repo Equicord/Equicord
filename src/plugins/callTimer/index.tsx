@@ -140,7 +140,7 @@ export default definePlugin({
             find: "renderConnectionStatus(){",
             replacement: {
                 match: /(renderConnectionStatus\(\).{0,1000}?lineClamp:1,children:)(\i)(?=,|}\))/,
-                replace: "$1[$2,$self.renderConnectionTimer(this.props?.channel?.id)]"
+                replace: "$1[$2,$self.renderConnectionTimer({ channelId: this?.props?.channel?.id })]"
             }
         }
     ],
@@ -271,11 +271,15 @@ export default definePlugin({
         </ErrorBoundary>;
     },
 
-    ConnectionTimer({ channelId }: { channelId: string; }) {
+    ConnectionTimer: ErrorBoundary.wrap(({ channelId }: { channelId: string; }) => {
         const time = useTimer({
             deps: [channelId]
         });
 
-        return <p style={{ margin: 0, fontFamily: "var(--font-code)" }}>{formatDurationMs(time, settings.store.format === "human")}</p>;
-    }
+        return (
+            <p style={{ margin: 0, fontFamily: "var(--font-code)" }}>
+                {formatDurationMs(time, settings.store.format === "human")}
+            </p>
+        );
+    }, { noop: true }),
 });

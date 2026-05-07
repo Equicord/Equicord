@@ -1,6 +1,9 @@
 dist
 node_modules
 .VSCodeCounter
+.vars
+.secrets
+.input
 
 *.exe
 vencord_installer

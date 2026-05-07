@@ -17,6 +17,7 @@
 */
 
 import ErrorBoundary from "@components/ErrorBoundary";
+import { Logger } from "@utils/Logger";
 import { t } from "@utils/translation";
 import { JSX, ReactNode } from "react";
 
@@ -47,23 +48,28 @@ export function _modifyAccessories(
     elements: JSX.Element[],
     props: Record<string, any>
 ) {
-    for (const [key, accessory] of accessories.entries()) {
-        const res = (
-            <ErrorBoundary noop message={t("api.messageAccessories.fallback", { key: key })} key={key}>
-                <accessory.render {...props} />
-            </ErrorBoundary>
-        );
+    try {
+        for (const [key, accessory] of accessories.entries()) {
+            const res = (
+                <ErrorBoundary noop message={t("api.messageAccessories.fallback", { key: key })} key={key}>
+                    <accessory.render {...props} />
+                </ErrorBoundary>
+            );
 
-        elements.splice(
-            accessory.position != null
-                ? accessory.position < 0
-                    ? elements.length + accessory.position
-                    : accessory.position
-                : elements.length,
-            0,
-            res
-        );
+            elements.splice(
+                accessory.position != null
+                    ? accessory.position < 0
+                        ? elements.length + accessory.position
+                        : accessory.position
+                    : elements.length,
+                0,
+                res
+            );
+        }
+
+        return elements;
+    } catch (e) {
+        new Logger("MessageAccessories").error("Failed to modify message accessories", e);
+        return elements;
     }
-
-    return elements;
 }

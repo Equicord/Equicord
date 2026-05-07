@@ -29,7 +29,7 @@ const ActivityClasses = findCssClassesLazy("textWithIconContainer", "icon", "tru
 const MessageActions = findByPropsLazy("fetchMessages", "sendMessage");
 
 const hasRelevantActivity: (props: ActivityCheckProps) => boolean = findByCodeLazy(".OFFLINE||", ".INVISIBLE)return!1");
-const ActivityText: React.ComponentType<ActivityTextProps> = findComponentByCodeLazy("hasQuest:", "hideEmoji:");
+const ActivityText: React.ComponentType<ActivityTextProps> = findComponentByCodeLazy('"ActivityStatus"');
 
 const ONE_HOUR_MS = 60 * 60 * 1000;
 

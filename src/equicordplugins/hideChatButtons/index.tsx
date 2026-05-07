@@ -5,7 +5,7 @@
  */
 
 import { ChatBarButton } from "@api/ChatButtons";
-import { definePluginSettings } from "@api/Settings";
+import { definePluginSettings, migratePluginSetting } from "@api/Settings";
 import { EquicordDevs } from "@utils/constants";
 import { t } from "@utils/translation";
 import definePlugin, { OptionType, StartAt } from "@utils/types";
@@ -15,12 +15,12 @@ import type { MouseEventHandler, ReactNode } from "react";
 let hidechatbuttonsopen: boolean | undefined;
 
 const settings = definePluginSettings({
-    Color: {
+    color: {
         type: OptionType.BOOLEAN,
         description: t("equicord.hideChatButtons.settings.color"),
         default: false,
     },
-    Open: {
+    open: {
         type: OptionType.BOOLEAN,
         description: t("equicord.hideChatButtons.settings.open"),
         default: false,
@@ -36,7 +36,7 @@ function HideToggleButton(props: { open: boolean | undefined, onClick: MouseEven
         tooltip={props.open ? t("equicord.hideChatButtons.ui.close") : t("equicord.hideChatButtons.ui.open")}
     >
         <svg
-            fill={settings.store.Color && props.open ? "#c32a32" : "currentColor"}
+            fill={settings.store.color && props.open ? "#c32a32" : "currentColor"}
             fillRule="evenodd"
             width="20"
             height="20"
@@ -79,29 +79,23 @@ function ButtonsInnerComponent({ buttons }: { buttons: ReactNode; }) {
     );
 }
 
+migratePluginSetting("HideChatButtons", "open", "Open");
+migratePluginSetting("HideChatButtons", "color", "Color");
 export default definePlugin({
     name: "HideChatButtons",
     description: t("equicord.hideChatButtons.description"),
     tags: ["Chat", "Utility"],
-    settings: settings,
     authors: [EquicordDevs.iamme],
-    patches: [
-        {
-            find: '"sticker")',
-            replacement: {
-                match: /(?<="div",\{.{0,15}children:)(.+?)\}/,
-                replace: "$self.buttonsInner($1)}"
-            }
-        }
-    ],
+    dependencies: ["ChatInputButtonAPI"],
+    settings: settings,
     startAt: StartAt.Init,
-    buttonsInner(buttons: ReactNode) {
+    chatBarButtonWrapper: (buttons: ReactNode) => {
         return <ButtonsInnerComponent buttons={buttons} />;
     },
     start() {
-        hidechatbuttonsopen = settings.store.Open;
+        hidechatbuttonsopen = settings.store.open;
     },
     stop() {
         hidechatbuttonsopen = undefined;
-    }
+    },
 });

@@ -34,7 +34,7 @@ export default definePlugin({
             find: ".handleImageLoad)",
             replacement: {
                 match: /getSrc\(\i\)\{/,
-                replace: "$&var _vcSrc=$self.getSrc(this.props,arguments[1]);if(_vcSrc)return _vcSrc;"
+                replace: "$&var _vcSrc=$self.getSrc(this?.props,arguments[1]);if(_vcSrc)return _vcSrc;"
             }
         }
     ],

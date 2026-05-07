@@ -55,7 +55,7 @@ export default definePlugin({
             replacement: [
                 {
                     match: /(\.renderReactions\(\i\).+?className:)/,
-                    replace: '$&(this.props?.channel?.nsfw || $self.settings.store.blurAllChannels ? "vc-nsfw-img ": "")+'
+                    replace: '$&(this?.props?.channel?.nsfw || $self.settings.store.blurAllChannels ? "vc-nsfw-img ": "")+'
                 }
             ]
         }

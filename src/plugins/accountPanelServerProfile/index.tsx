@@ -9,7 +9,7 @@ import { definePluginSettings } from "@api/Settings";
 import ErrorBoundary from "@components/ErrorBoundary";
 import alwaysExpandProfiles from "@equicordplugins/alwaysExpandProfiles";
 import { Devs } from "@utils/constants";
-import { fetchUserProfile, getCurrentChannel } from "@utils/discord";
+import { fetchUserProfile, getCurrentChannel, openUserProfile } from "@utils/discord";
 import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { User } from "@vencord/discord-types";
@@ -42,9 +42,9 @@ const AccountPanelContextMenu = ErrorBoundary.wrap(() => {
                 action={async e => {
                     if (isPluginEnabled(alwaysExpandProfiles.name)) {
                         const user = await fetchUserProfile(UserStore.getCurrentUser().id, {
-                            guild_id: getCurrentChannel()?.getGuildId()
+                            guild_id: prioritizeServerProfile ? undefined : getCurrentChannel()?.getGuildId()
                         }, false);
-                        return alwaysExpandProfiles.openUserModal(user!.userId);
+                        return openUserProfile(user!.userId);
                     }
                     openAlternatePopout = true;
                     accountPanelRef.current?.click();
@@ -147,7 +147,7 @@ function ServerProfileLauncher({ popoutProps, userId, guildId }: { popoutProps: 
         popoutProps.closePopout?.();
         popoutProps.onRequestClose?.();
         fetchUserProfile(userId, { guild_id: guildId }, false).then(user => {
-            if (user) alwaysExpandProfiles.openUserModal(user.userId);
+            if (user) openUserProfile(user.userId);
         });
     }, []);
     return null;
