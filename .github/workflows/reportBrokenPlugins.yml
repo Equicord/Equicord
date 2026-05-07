@@ -12,7 +12,9 @@ on:
                 default: both
             webhook_url:
                 type: string
-                description: "Webhook URL that the report will be posted to. This will be visible for everyone, so DO NOT pass sensitive webhooks like discord webhook. This is meant to be used by Venbot."
+                description: "Webhook URL that the report will be posted to. This will be
+                    visible for everyone, so DO NOT pass sensitive webhooks like
+                    discord webhook. This is meant to be used by Equibot."
                 required: false
     schedule:
         #   # Every day at midnight
@@ -27,14 +29,14 @@ jobs:
         runs-on: ubuntu-latest
 
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v6
               with:
                   ref: ${{ github.event_name == 'schedule' && 'dev' || github.ref }}
 
-            - uses: pnpm/action-setup@v3 # Install pnpm using packageManager key in package.json
+            - uses: pnpm/action-setup@v6 # Install pnpm using packageManager key in package.json
 
             - name: Use Node.js 24
-              uses: actions/setup-node@v4
+              uses: actions/setup-node@v6
               with:
                   node-version: 24
                   cache: "pnpm"
