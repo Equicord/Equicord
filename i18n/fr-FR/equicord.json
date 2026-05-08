@@ -81,7 +81,7 @@
             }
         },
         "ui": {
-            "copiedToast": "Contenu décodé copié dans le presse-papiers !",
+            "copiedToast": "Contenu décodé copié dans le presse-papiers !",
             "copyDecoded": "Copier le contenu décodé",
             "decodedContent": "Contenu décodé",
             "modalTitle": "Contenu Base64 décodé",
