@@ -180,7 +180,7 @@ export default definePlugin({
             // Avatar decoration on dms list
             find: "showCommunicationDisabledStyles",
             replacement: {
-                match: /null==\i\|\|\i\?null:\(0,\i\.jsx\)\("img",\{className:\i\.\i,src:\i,alt:" ","aria-hidden":!0\}\)/,
+                match: /null==\i\|\|\i\?null:\(0,\i\.jsxs?\)\("img",\{className:\i\.\i,src:\i,alt:" ","aria-hidden":!0\}\)/,
                 replace: "null"
             },
             predicate: () => settings.store.removeAvatarDecoration && !isPluginEnabled(decor.name),
