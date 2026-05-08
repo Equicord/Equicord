@@ -207,15 +207,13 @@ export default definePlugin({
         },
         {
             // Hides the sponsored banner on the Quests page.
-            find: "resetSortingFiltering(),requestAnimationFrame",
-            group: true,
+            find: "QUEST_HOME)},[]),",
             predicate: () => !getQuestifySettings().disableQuestsEverything && getQuestifySettings().disableSponsoredBanner,
-            replacement: [
-                {
-                    match: /(?<=(\i),isLoading:(\i)}=\(0,\i.\i\)\(\);)/,
-                    replace: "if(true){$1=null;$2=false;};"
-                }
-            ]
+            replacement: {
+                match: /(?<=(\i),isLoading:(\i)}=\(0,\i.\i\)\(\i\);)/,
+                replace: "if(true){$1=null;$2=false;};"
+            }
+
         },
         {
             // Hides the Quest & Orbs badges on user profiles.
@@ -306,7 +304,7 @@ export default definePlugin({
             ]
         },
         {
-            find: "resetSortingFiltering(),requestAnimationFrame",
+            find: "QUEST_HOME)},[]),",
             group: true,
             predicate: () => !getQuestifySettings().disableQuestsEverything,
             replacement: [
@@ -329,11 +327,6 @@ export default definePlugin({
                     // Update the last used sort and filter choices when the toggle setting for either is changed.
                     match: /(?<=ALL,\i.useMemo\(\(\)=>\()({sortMethod:(\i),filters:(\i))/,
                     replace: "$self.setLastSortChoice($2),$self.setLastFilterChoices($3),$1"
-                },
-                {
-                    // Makes the reset action return to the Questify sort option.
-                    match: /(?<=resetSortingFiltering:\(\)=>{\i\(\),\i\()\i.\i.SUGGESTED/,
-                    replace: '"questify"'
                 }
             ]
         },
@@ -419,7 +412,7 @@ export default definePlugin({
             replacement: [
                 {
                     // Subscribes each Quest tile to Questify's manual rerender trigger.
-                    match: /(?=return\(0,\i\.\i\)\("div",\{id:`quest-tile-\$\{\i\.id\}`)/,
+                    match: /(?=return\(0,\i\.\i\)\("div",\{id:)/,
                     replace: "void $self.useQuestRerender();"
                 },
                 {
