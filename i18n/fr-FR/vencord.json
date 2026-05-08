@@ -34,9 +34,9 @@
             "noDeleteSafety": "Retire la saisie du nom du serveur lors de la suppression de celui-ci"
         },
         "ui": {
-            "deleteServerBody": "C'est permanent, si ce n'était pas évident.",
+            "deleteServerBody": "C'est permanent, si ce n'était pas déjà évident.",
             "deleteServerConfirm": "Supprimer",
-            "deleteServerTitle": "Supprimer le serveur ?"
+            "deleteServerTitle": "Supprimer le serveur ?"
         }
     },
     "anonymiseFileNames": {
