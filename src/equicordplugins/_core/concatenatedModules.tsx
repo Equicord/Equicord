@@ -19,11 +19,15 @@ export default definePlugin({
             find: "AngleBracketsIcon",
             replacement: {
                 match: /\i\.\i\((\i)\),\i\.\i\(\i,\{AIcon/,
-                replace: "$self.iconsModule($1),$&"
+                replace: "$self.setIconsModule($1),$&"
             }
         }
     ],
-    iconsModule(value: IconsDef) {
+    setIconsModule(value: IconsDef) {
         iconsModule = value;
+
+        // incase you dont want to use iconviewer you can do
+        // Vencord.Plugins.plugins.ConcatenatedModules.iconsModule instead for icons and viewing paths
+        this.iconsModule = value;
     },
 });
