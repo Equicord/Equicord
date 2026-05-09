@@ -381,27 +381,28 @@ export default definePlugin({
                     replace: "!$self.canAutoCompleteQuest(arguments[0].quest)&&"
                 },
                 // If this group becomes unruly due to Discord refactoring and is unfixable,
-                // the 2nd, 3rd, and 4th can be commented out in favor of just the 1st at the
-                // expense of not seeing CTA buttons on completed but unclaimed Quests.
+                // the 2nd, 3rd, and 4th can be commented out in favor of just the 1st at the expense
+                // of not seeing CTA buttons on completed but unclaimed Quests. Also, questifyCanAutoComplete
+                // would need to be replaced as the 2nd patch defines it.
                 {
                     // Always expose the CTA button when available instead of only for videos and activities.
-                    match: /(?<=wrap:!1,children:\[)\i&&[^?]+/,
-                    replace: "!!arguments[0].quest.config.ctaConfig"
+                    match: /(?<=wrap:!1,children:\[)(\i&&[^?]+)/,
+                    replace: "((!!arguments[0].quest.config.ctaConfig&&questifyCanAutoComplete)||($1))"
                 },
                 {
                     // Let completed/claimed expired Quests with CTAs use the CTA-aware completed branch.
-                    match: /(?<=return\()(?=\i.enabled&&\i===\i\.\i\.EXPIRED_CLAIMABLE&&\i\.\i\.has\(\i\))/,
-                    replace: "!arguments[0].quest.config.ctaConfig&&"
+                    match: /(return\()(?=\i.enabled&&\i===\i\.\i\.EXPIRED_CLAIMABLE&&\i\.\i\.has\(\i\))/,
+                    replace: "const questifyCanAutoComplete=$self.canAutoCompleteQuest(arguments[0].quest);$1!arguments[0].quest.config.ctaConfig&&questifyCanAutoComplete&&"
                 },
                 {
                     // Let completed/claimed expired Quests with CTAs use the CTA-aware completed branch.
-                    match: /(?<=\):\i\?\i=)(\i)(?=\?\(0,\i\.jsx\)\(\i,\{quest:\i,sourceQuestContent:\i,onClick:\i,text:\i\}\):\(0,\i\.\i\)\(\i\)\?)/,
-                    replace: "arguments[0].quest.config.ctaConfig||$1"
+                    match: /(?<=\):\i\?\i=)(\i)(?=\?\(0,\i\.jsx\)\(\i,\{quest:\i,sourceQuestContent:\i,onClick:\i,text:\i\}\):)/,
+                    replace: "((arguments[0].quest.config.ctaConfig&&questifyCanAutoComplete)||($1))"
                 },
                 {
                     // Force the CTA-aware complete branch.
-                    match: /(?<=analyticsCtxQuestContentRowIndex:\i}\)}\):\i&&\i)(.{0,200}?fullWidth:!0}\)}\):)(\i.enabled)(.{0,50}?CLAIMED\))&&\i.\i.has\(\i\)(\?\i=)\i/,
-                    replace: "&&false$1arguments[0].quest.config.ctaConfig&&arguments[0].quest.userStatus?.completedAt&&($2||true)$3$4true"
+                    match: /(?<=analyticsCtxQuestContentRowIndex:\i}\)}\):\i&&\i)(.{0,200}?fullWidth:!0}\)}\):)(\i.enabled.{0,50}?CLAIMED\)&&\i.\i.has\(\i\))(\?\i=)(\i)/,
+                    replace: "&&!questifyCanAutoComplete$1((questifyCanAutoComplete&&arguments[0].quest.config.ctaConfig&&arguments[0].quest.userStatus?.completedAt)||($2))$3(questifyCanAutoComplete||$4)"
                 }
             ]
         },
