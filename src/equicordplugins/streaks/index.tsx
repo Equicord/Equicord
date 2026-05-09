@@ -12,7 +12,7 @@ import { iconsModule } from "@equicordplugins/_core/concatenatedModules";
 import { EquicordDevs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
 import definePlugin from "@utils/types";
-import { ChannelStore, Tooltip, UserStore } from "@webpack/common";
+import { ChannelStore, Tooltip, UserStore, moment } from "@webpack/common";
 
 const cl = classNameFactory("vc-streaks-");
 
@@ -42,7 +42,7 @@ function yesterdayKey() {
     return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 }
 
-function updateok(userId: string, outgoing: boolean) {
+const updateStreak = (userId: string, outgoing: boolean) => {
     const today = todayKey();
     const entry = cache[userId] ??= { count: 0, lastDay: "", todayFlags: 0, todayDate: "" };
 
@@ -61,7 +61,7 @@ function updateok(userId: string, outgoing: boolean) {
     }
 
     set(dataKey, cache);
-}
+};
 
 function streakOf(userId: string) {
     const entry = cache[userId];
@@ -82,9 +82,9 @@ function colorFor(streak: number) {
     return "#f59e0b";
 }
 
-function StreakBadge({ userId }: { userId: string; }) {
+const StreakBadge = ({ userId }: { userId: string; }) => {
     const streak = streakOf(userId);
-    if (streak < minStreak) return null;
+    if (streak < 1) return null;
 
     const FireIcon = iconsModule?.FireIcon;
     const color = activeToday(userId) ? colorFor(streak) : "#9ca3af";
@@ -99,7 +99,7 @@ function StreakBadge({ userId }: { userId: string; }) {
             )}
         </Tooltip>
     );
-}
+};
 
 export default definePlugin({
     name: "Streaks",
@@ -132,8 +132,8 @@ export default definePlugin({
         },
     },
 
-    renderMessageDecoration(props) {
-        const userId = props.message?.author?.id;
+    renderMessageDecoration({ message }) {
+        const userId = message?.author?.id;
         if (!userId || userId === UserStore.getCurrentUser()?.id) return null;
         return <StreakBadge userId={userId} />;
     },
