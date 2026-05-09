@@ -21,7 +21,7 @@ export default definePlugin({
     description: "Adds a new tab to settings to preview all icons.",
     tags: ["Developers"],
     authors: [EquicordDevs.iamme],
-    dependencies: ["Settings"],
+    dependencies: ["Settings", "ConcatenatedModules"],
     startAt: StartAt.WebpackReady,
     toolboxActions: {
         "Open Icons Tab"() {

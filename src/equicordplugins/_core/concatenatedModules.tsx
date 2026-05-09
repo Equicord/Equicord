@@ -14,9 +14,6 @@ export default definePlugin({
     name: "ConcatenatedModules",
     description: "Extract modules that have been concatenated by the bundler",
     authors: [Devs.thororen],
-
-    required: true,
-
     patches: [
         {
             find: "AngleBracketsIcon",

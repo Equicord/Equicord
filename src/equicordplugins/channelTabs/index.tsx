@@ -49,7 +49,7 @@ export default definePlugin({
     description: "Group your commonly visited channels in tabs, like a browser",
     tags: ["Appearance", "Customisation", "Organisation", "Servers"],
     authors: [Devs.TheSun, Devs.TheKodeToad, EquicordDevs.keifufu, Devs.Nickyux, EquicordDevs.DiabeloDEV, EquicordDevs.justjxke, EquicordDevs.keircn],
-    dependencies: ["ContextMenuAPI"],
+    dependencies: ["ContextMenuAPI", "ConcatenatedModules"],
     contextMenus: {
         "channel-mention-context": contextMenuPatch,
         "channel-context": contextMenuPatch,
