@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Vencord, a modification for Discord's desktop app
  * Copyright (c) 2022 Vendicated and contributors
  *
@@ -793,7 +793,7 @@ export const EquicordDevs = Object.freeze({
         id: 703634705152606318n
     },
     Tolgchu: {
-        name: "✨Tolgchu✨",
+        name: "âœ¨Tolgchuâœ¨",
         id: 329671025312923648n
     },
     DaBluLite: {
@@ -1078,7 +1078,7 @@ export const EquicordDevs = Object.freeze({
         id: 707309693449535599n
     },
     seth: {
-        name: "S€th",
+        name: "Sâ‚¬th",
         id: 1273447359417942128n
     },
     SteelTech: {
@@ -1325,6 +1325,10 @@ export const EquicordDevs = Object.freeze({
         name: "NassCT",
         id: 354996937868705793n
     },
+    rolololodev007: {
+        name: "rolololodev007",
+        id: 0n
+    },
 } satisfies Record<string, Dev>);
 
 // iife so #__PURE__ works correctly
@@ -1343,3 +1347,4 @@ export const EquicordDevsById = /* #__PURE__*/ (() =>
             .map(([_, v]) => [v.id, v] as const)
     ))
 )() as Record<string, Dev>;
+
