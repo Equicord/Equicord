@@ -1,0 +1,127 @@
+.vc-detect-block-indicator {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2px;
+    color: var(--status-danger);
+}
+
+.vc-detect-block-indicator-profile {
+    margin: 0 1px;
+    padding: 0 1px;
+}
+
+.vc-detect-block-indicator-message {
+    position: relative;
+    vertical-align: top;
+    top: -1px;
+}
+
+.vc-detect-block-icon {
+    flex: 0 0 auto;
+}
+
+.vc-detect-block-modal {
+    width: 480px;
+    max-width: 480px;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.vc-detect-block-header {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    padding: 72px 32px 28px;
+    text-align: center;
+    background:
+        linear-gradient(180deg, rgb(73 49 116 / 44%), rgb(73 49 116 / 0%) 78%),
+        var(--modal-background);
+}
+
+.vc-detect-block-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+}
+
+.vc-detect-block-graphic {
+    display: block;
+    width: 376px;
+    max-width: 100%;
+    margin-bottom: 2px;
+}
+
+.vc-detect-block-title,
+.vc-detect-block-subtitle {
+    margin: 0;
+}
+
+.vc-detect-block-subtitle {
+    max-width: 360px;
+    line-height: 1.28;
+}
+
+.vc-detect-block-content {
+    padding: 0 32px;
+}
+
+.vc-detect-block-info-group {
+    overflow: hidden;
+    border-radius: 8px;
+    background: var(--background-secondary);
+}
+
+.vc-detect-block-info-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 56px;
+    padding: 10px 16px;
+}
+
+.vc-detect-block-info-icon {
+    display: inline-flex;
+    width: 32px;
+    height: 32px;
+    flex: 0 0 32px;
+    align-items: center;
+    justify-content: center;
+    color: var(--interactive-icon-default);
+}
+
+.vc-detect-block-info-text {
+    line-height: 1.25;
+}
+
+.vc-detect-block-subject {
+    min-width: 0;
+}
+
+.vc-detect-block-username {
+    white-space: nowrap;
+}
+
+.vc-detect-block-divider {
+    height: 1px;
+    margin-left: 60px;
+    background: var(--border-subtle);
+}
+
+.vc-detect-block-footer-shell {
+    padding: 16px 32px;
+}
+
+.vc-detect-block-footer {
+    width: 100%;
+    display: flex;
+    gap: 8px;
+    flex-direction: row;
+}
+
+.vc-detect-block-button {
+    flex: 1 1 0;
+    min-width: 0;
+}
