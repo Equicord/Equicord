@@ -117,7 +117,7 @@ export default definePlugin({
     flux: {
         async MESSAGE_CREATE({ optimistic, type, message, channelId }: { optimistic: boolean; type: string; message: Message; channelId: string; }) {
             if (optimistic || type !== "MESSAGE_CREATE" || message.state === "SENDING") return;
-            if (message.author?.bot || channelId !== SelectedChannelStore.getChannelId()) return;
+            if (message.author?.bot) return;
 
             const channel = ChannelStore.getChannel(channelId);
             if (!channel.isDM()) return;
