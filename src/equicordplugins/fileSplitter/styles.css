@@ -92,11 +92,11 @@
     line-height: 1.2;
 }
 
-.vc-file-splitter-action:hover:not(:disabled) {
-    background: var(--button-secondary-background-hover);
-}
-
 .vc-file-splitter-action:disabled {
     cursor: default;
     opacity: 0.6;
+}
+
+.vc-file-splitter-action:hover:not(:disabled) {
+    background: var(--button-secondary-background-hover);
 }

@@ -6,17 +6,18 @@
 
 import "./styles.css";
 
-import { ChatBarButton, addChatBarButton, removeChatBarButton } from "@api/ChatButtons";
+import { ChatBarButton, ChatBarButtonFactory } from "@api/ChatButtons";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { EquicordDevs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
 import definePlugin, { PluginNative } from "@utils/types";
 import { chooseFile, saveFile } from "@utils/web";
+import type { Message, MessageAttachment } from "@vencord/discord-types";
 import { findLazy } from "@webpack";
 import { Constants, MessageStore, React, RestAPI, SelectedChannelStore, SnowflakeUtils, Toasts } from "@webpack/common";
 
 const cl = classNameFactory("vc-file-splitter-");
-const CloudUpload = findLazy(m => m.prototype?.trackUploadFinished);
+const CloudUpload = findLazy(m => m.prototype?.trackUploadFinished) as CloudUploadConstructor;
 
 const Native = IS_DISCORD_DESKTOP
     ? VencordNative.pluginHelpers.FileSplitter as PluginNative<typeof import("./native")>
@@ -37,6 +38,10 @@ interface ChunkData {
     messageId?: string;
 }
 
+type FileSplitterMetadata = Omit<ChunkData, "url" | "channelId" | "messageId"> & {
+    type: "FileSplitterChunk";
+};
+
 interface ChunkStorageEntry {
     ch: ChunkData[];
     lu: number;
@@ -55,20 +60,47 @@ interface MergedResult {
 }
 
 type ChunkMessage = {
-    id?: string;
     channel_id?: string;
     channelId?: string;
-    content?: string;
-    attachments?: any[];
+} & Partial<Pick<Message, "id" | "content" | "attachments">> & {
+    attachments?: MessageAttachment[];
 };
+
+type AttachmentWithUrls = MessageAttachment & {
+    download_url?: string;
+    proxyUrl?: string;
+};
+
+type StoredMessageCollection = ChunkMessage[] | {
+    toArray?: () => ChunkMessage[];
+    values?: () => Iterable<ChunkMessage>;
+    _array?: ChunkMessage[];
+    array?: ChunkMessage[];
+    _map?: {
+        values?: () => Iterable<ChunkMessage>;
+    };
+    [key: string]: unknown;
+};
+
+interface CloudUploadInstance {
+    filename: string;
+    uploadedFilename: string;
+    on(event: "complete", callback: () => void): void;
+    on(event: "error", callback: (error: unknown) => void): void;
+    upload(): void;
+}
+
+type CloudUploadConstructor = new (
+    data: { file: File; platform: number; },
+    channelId: string
+) => CloudUploadInstance;
 
 const cs: Record<string, ChunkStorageEntry> = {};
 const mergedResults = new Map<string, MergedResult>();
 const storeListeners = new Set<() => void>();
 let storeVersion = 0;
 let delayedChannelScan: ReturnType<typeof setTimeout> | undefined;
-let hideObserver: MutationObserver | undefined;
-let pendingHideSweep: number | undefined;
+let cleanupInterval: ReturnType<typeof setInterval> | undefined;
 
 const IMAGE_MIME_BY_EXTENSION: Record<string, string> = {
     avif: "image/avif",
@@ -103,12 +135,10 @@ async function downloadBlob(blob: Blob, filename: string) {
             const buffer = await blob.arrayBuffer();
             await DiscordNative.fileManager.saveWithDialog(new Uint8Array(buffer), filename);
             return;
-        } catch (e) {
-            console.warn("[FileSplitter] saveWithDialog failed, using browser fallback:", e);
-        }
+        } catch { }
     }
 
-    saveFile(new File([blob], filename, { type: blob.type || "application/octet-stream" }));
+    saveFile(new File([blob], filename, { type: blob.type ?? "application/octet-stream" }));
 }
 
 function getChunkKey(c: Pick<ChunkData, "originalName" | "timestamp"> & Partial<Pick<ChunkData, "originalSize">>) {
@@ -129,7 +159,7 @@ function normalizeAttachmentUrl(url: string | null | undefined) {
     }
 }
 
-function getAttachmentUrl(attachment: any) {
+function getAttachmentUrl(attachment: AttachmentWithUrls) {
     return attachment?.url
         ?? attachment?.proxy_url
         ?? attachment?.download_url
@@ -145,24 +175,57 @@ function getMessageChannelId(message: ChunkMessage) {
     return message.channel_id ?? message.channelId ?? "";
 }
 
+function getErrorMessage(error: unknown): string {
+    if (error instanceof Error) return error.message;
+    if (typeof error === "string") return error;
+
+    try {
+        return JSON.stringify(error) ?? String(error);
+    } catch {
+        return String(error);
+    }
+}
+
+function isChunkMessageLike(message: unknown): message is ChunkMessage {
+    return typeof message === "object"
+        && message !== null
+        && typeof (message as { content?: unknown; }).content === "string";
+}
+
 function parseChunkMeta(content: string | undefined): Omit<ChunkData, "url" | "channelId" | "messageId"> | null {
     if (!content) return null;
 
     try {
-        const c = JSON.parse(content);
+        const c = JSON.parse(content) as Partial<FileSplitterMetadata> & { type?: unknown; };
+        const {
+            index,
+            total,
+            originalName,
+            originalSize,
+            timestamp
+        } = c;
+
         if (
             typeof c === "object"
             && c?.type === "FileSplitterChunk"
-            && Number.isInteger(c.index)
-            && c.index >= 0
-            && Number.isInteger(c.total)
-            && c.total > 0
-            && c.index < c.total
-            && typeof c.originalName === "string"
-            && typeof c.originalSize === "number"
-            && typeof c.timestamp === "number"
+            && Number.isInteger(index)
+            && typeof index === "number"
+            && index >= 0
+            && Number.isInteger(total)
+            && typeof total === "number"
+            && total > 0
+            && index < total
+            && typeof originalName === "string"
+            && typeof originalSize === "number"
+            && typeof timestamp === "number"
         ) {
-            return c;
+            return {
+                index,
+                total,
+                originalName,
+                originalSize,
+                timestamp
+            };
         }
     } catch { }
 
@@ -170,19 +233,19 @@ function parseChunkMeta(content: string | undefined): Omit<ChunkData, "url" | "c
 }
 
 function getStoredMessages(channelId: string): ChunkMessage[] {
-    const messages = MessageStore.getMessages(channelId);
+    const messages = MessageStore.getMessages(channelId) as StoredMessageCollection | null | undefined;
     if (!messages) return [];
 
     if (Array.isArray(messages)) return messages;
     if (typeof messages.toArray === "function") return messages.toArray();
     if (typeof messages.values === "function") return Array.from(messages.values());
-    if (Array.isArray((messages as any)._array)) return (messages as any)._array;
-    if (Array.isArray((messages as any).array)) return (messages as any).array;
-    if ((messages as any)._map && typeof (messages as any)._map.values === "function") {
-        return Array.from((messages as any)._map.values());
+    if (Array.isArray(messages._array)) return messages._array;
+    if (Array.isArray(messages.array)) return messages.array;
+    if (messages._map && typeof messages._map.values === "function") {
+        return Array.from(messages._map.values());
     }
 
-    return Object.values(messages).filter((message: any) => typeof message?.content === "string") as ChunkMessage[];
+    return Object.values(messages).filter(isChunkMessageLike);
 }
 
 function inferMimeType(filename: string) {
@@ -203,7 +266,8 @@ function getFileBadge(filename: string) {
     if (["mp3", "wav", "flac", "ogg", "m4a"].includes(extension)) return { kind: "audio", label: extension.toUpperCase() };
     if (["mp4", "mkv", "avi", "mov", "webm"].includes(extension)) return { kind: "video", label: extension.toUpperCase() };
     if (["exe", "msi", "apk"].includes(extension)) return { kind: "app", label: extension.toUpperCase() };
-    return { kind: "file", label: (extension || "FILE").slice(0, 4).toUpperCase() };
+    const label = extension.toUpperCase();
+    return { kind: "file", label: label ? label.slice(0, 4) : "FILE" };
 }
 
 function getChunkFromMessage(message: ChunkMessage): (ChunkData & { attachmentUrl: string; }) | null {
@@ -228,145 +292,7 @@ function getAnchorChunk(key: string) {
     const entry = cs[key];
     if (!entry?.ch.length) return null;
 
-    return entry.ch.find(chunk => chunk.channelId && chunk.messageId && getMessageElement(chunk.channelId, chunk.messageId, chunk.url))
-        ?? [...entry.ch].sort((a, b) => a.index - b.index)[0]
-        ?? null;
-}
-
-function getMessageElement(channelId: string, messageId: string, attachmentUrl?: string) {
-    const directId = document.getElementById(`chat-messages-${channelId}-${messageId}`);
-    if (directId instanceof HTMLElement) return directId;
-
-    const fallbackSelectors = [
-        `[data-list-item-id="chat-messages___${channelId}-${messageId}"]`,
-        `[data-message-id="${messageId}"]`,
-        `[id$="-${messageId}"]`
-    ];
-
-    for (const selector of fallbackSelectors) {
-        const element = document.querySelector(selector);
-        if (element instanceof HTMLElement) return element;
-    }
-
-    if (!attachmentUrl) return null;
-
-    let normalizedAttachmentUrl = normalizeAttachmentUrl(attachmentUrl)?.split("?")[0] ?? null;
-    if (!normalizedAttachmentUrl) return null;
-
-    for (const link of Array.from(document.querySelectorAll("a[href]"))) {
-        if (!(link instanceof HTMLAnchorElement)) continue;
-
-        const href = normalizeAttachmentUrl(link.href)?.split("?")[0] ?? null;
-        if (href !== normalizedAttachmentUrl) continue;
-
-        const container = link.closest("[id^='chat-messages-'], [data-list-item-id^='chat-messages___'], li, article, [class*='message']");
-        if (container instanceof HTMLElement) return container;
-    }
-
-    return null;
-}
-
-function isFileSplitterNode(element: HTMLElement) {
-    return Boolean(element.closest(".vc-file-splitter-card") || element.querySelector(".vc-file-splitter-card"));
-}
-
-function markHidden(element: HTMLElement) {
-    if (element.dataset.filesplitterHidden === "true") return;
-
-    element.dataset.filesplitterHidden = "true";
-    element.dataset.filesplitterPrevDisplay = element.style.display || "";
-    element.style.display = "none";
-}
-
-function restoreHiddenChunkMessages() {
-    for (const node of Array.from(document.querySelectorAll("[data-filesplitter-hidden='true']"))) {
-        if (!(node instanceof HTMLElement)) continue;
-
-        node.style.display = node.dataset.filesplitterPrevDisplay ?? "";
-        delete node.dataset.filesplitterHidden;
-        delete node.dataset.filesplitterPrevDisplay;
-    }
-}
-
-function hideAnchorChunkPayload(messageEl: HTMLElement, chunk: ChunkData) {
-    const contentCandidates = messageEl.querySelectorAll("[id^='message-content-'], [class*='messageContent'], [class*='markup']");
-    for (const candidate of Array.from(contentCandidates)) {
-        if (!(candidate instanceof HTMLElement) || isFileSplitterNode(candidate)) continue;
-        if ((candidate.textContent ?? "").includes("FileSplitterChunk")) markHidden(candidate);
-    }
-
-    const attachmentBlocks = messageEl.querySelectorAll([
-        "[class*='attachment']",
-        "[class*='mediaMosaic']",
-        "[class*='visualMediaItemContainer']",
-        "[class*='fileWrapper']",
-        "[class*='file']"
-    ].join(", "));
-
-    for (const block of Array.from(attachmentBlocks)) {
-        if (!(block instanceof HTMLElement) || isFileSplitterNode(block)) continue;
-        markHidden(block);
-    }
-
-    const attachmentHref = normalizeAttachmentUrl(chunk.url)?.split("?")[0] ?? null;
-    if (attachmentHref) {
-        for (const link of Array.from(messageEl.querySelectorAll("a[href]"))) {
-            if (!(link instanceof HTMLAnchorElement) || isFileSplitterNode(link)) continue;
-
-            const href = normalizeAttachmentUrl(link.href)?.split("?")[0] ?? null;
-            if (href !== attachmentHref) continue;
-
-            const target = link.closest("[class*='attachment'], [class*='fileWrapper'], [class*='file'], [class*='embed'], [class*='container'], a[href]");
-            if (target instanceof HTMLElement && target !== messageEl && !isFileSplitterNode(target)) markHidden(target);
-        }
-    }
-
-    for (const node of Array.from(messageEl.querySelectorAll("a, button, div, span"))) {
-        if (!(node instanceof HTMLElement) || isFileSplitterNode(node)) continue;
-
-        const text = node.textContent ?? "";
-        if (!/FileSplitterChunk|\.part\d{3}/i.test(text)) continue;
-
-        const target = node.closest("[id^='message-content-'], [class*='messageContent'], [class*='markup'], [class*='attachment'], [class*='fileWrapper'], [class*='file'], [class*='embed'], [class*='container'], a[href]");
-        if (target instanceof HTMLElement && target !== messageEl && !isFileSplitterNode(target)) {
-            markHidden(target);
-        } else {
-            markHidden(node);
-        }
-    }
-}
-
-function hideChunkMessages(key: string) {
-    const entry = cs[key];
-    const anchorChunk = getAnchorChunk(key);
-    if (!entry?.ch.length || !anchorChunk?.messageId) return;
-
-    for (const chunk of entry.ch) {
-        if (!chunk.channelId || !chunk.messageId) continue;
-
-        const messageEl = getMessageElement(chunk.channelId, chunk.messageId, chunk.url);
-        if (!messageEl) continue;
-
-        if (chunk.messageId !== anchorChunk.messageId) {
-            markHidden(messageEl);
-            continue;
-        }
-
-        hideAnchorChunkPayload(messageEl, chunk);
-    }
-}
-
-function hideKnownChunkMessages() {
-    for (const key of Object.keys(cs)) hideChunkMessages(key);
-}
-
-function scheduleHideSweep() {
-    if (pendingHideSweep !== undefined) return;
-
-    pendingHideSweep = requestAnimationFrame(() => {
-        pendingHideSweep = undefined;
-        hideKnownChunkMessages();
-    });
+    return [...entry.ch].sort((a, b) => a.index - b.index)[0] ?? null;
 }
 
 function getCompleteChunkCount(entry: ChunkStorageEntry) {
@@ -416,13 +342,10 @@ async function fetchBlob(url: string, filename?: string): Promise<Blob> {
             const res = await Native.fetchChunk(normalizedUrl);
             if (res.success && res.data) {
                 return new Blob([res.data], {
-                    type: res.contentType || (filename ? inferMimeType(filename) : null) || "application/octet-stream"
+                    type: res.contentType ?? (filename ? inferMimeType(filename) : null) ?? "application/octet-stream"
                 });
             }
-            console.warn("[FileSplitter] Native fetch failed:", res.error);
-        } catch (e) {
-            console.warn("[FileSplitter] Native fetch errored:", e);
-        }
+        } catch { }
     }
 
     const r = await fetch(normalizedUrl);
@@ -451,7 +374,7 @@ async function ensureMergedResult(key: string, eagerImagePreview = false) {
     const entry = cs[key];
     if (!entry?.ch.length) return;
 
-    const originalName = entry.ch[0].originalName;
+    const [{ originalName }] = entry.ch;
     const isImage = isInlinePreviewableImage(originalName);
     let result = mergedResults.get(key);
     let changed = false;
@@ -484,10 +407,9 @@ async function ensureMergedResult(key: string, eagerImagePreview = false) {
         result.objectUrl = URL.createObjectURL(blob);
         result.status = "ready";
         result.error = undefined;
-    } catch (e: any) {
+    } catch (e: unknown) {
         result.status = "error";
-        result.error = e?.message ?? String(e);
-        console.error("[FileSplitter] Preview preparation failed:", e);
+        result.error = getErrorMessage(e);
     }
 
     emitStoreChange();
@@ -510,13 +432,12 @@ async function handleDownload(key: string) {
         }
 
         await downloadBlob(result.blob, result.originalName);
-    } catch (e: any) {
+    } catch (e: unknown) {
         result.status = "error";
-        result.error = e?.message ?? String(e);
+        result.error = getErrorMessage(e);
         emitStoreChange();
-        console.error("[FileSplitter] Download failed:", e);
         Toasts.show({
-            message: `Download failed: ${e?.message ?? e}`,
+            message: `Download failed: ${getErrorMessage(e)}`,
             id: Toasts.genId(),
             type: Toasts.Type.FAILURE
         });
@@ -547,7 +468,6 @@ function processMessage(message: ChunkMessage) {
 
     const { key } = storeChunk(chunk);
     tryMergeChunks(key);
-    scheduleHideSweep();
     return true;
 }
 
@@ -557,24 +477,16 @@ function scanExistingMessages(channelId: string) {
         for (const msg of messages) {
             processMessage(msg);
         }
-    } catch (e) {
-        console.error("[FileSplitter] Scan error:", e);
-    }
+    } catch { }
 }
 
 function clearAllState() {
-    if (pendingHideSweep !== undefined) {
-        cancelAnimationFrame(pendingHideSweep);
-        pendingHideSweep = undefined;
-    }
-
     for (const result of mergedResults.values()) {
         if (result.objectUrl) URL.revokeObjectURL(result.objectUrl);
     }
 
     for (const key of Object.keys(cs)) delete cs[key];
     mergedResults.clear();
-    restoreHiddenChunkMessages();
     emitStoreChange();
 }
 
@@ -592,10 +504,10 @@ function pruneOldChunks() {
     if (changed) emitStoreChange();
 }
 
-function uploadChunk(channelId: string, chunkFile: File, metadata: any): Promise<void> {
+function uploadChunk(channelId: string, chunkFile: File, metadata: FileSplitterMetadata): Promise<void> {
     return new Promise((resolve, reject) => {
         try {
-            const uploader = new (CloudUpload as any)({ file: chunkFile, platform: 1 }, channelId);
+            const uploader = new CloudUpload({ file: chunkFile, platform: 1 }, channelId);
 
             uploader.on("complete", () => {
                 RestAPI.post({
@@ -613,13 +525,13 @@ function uploadChunk(channelId: string, chunkFile: File, metadata: any): Promise
                             uploaded_filename: uploader.uploadedFilename
                         }]
                     }
-                }).then(() => resolve()).catch((e: any) => reject(new Error(`Send failed: ${JSON.stringify(e)}`)));
+                }).then(() => resolve()).catch((e: unknown) => reject(new Error(`Send failed: ${getErrorMessage(e)}`)));
             });
 
-            uploader.on("error", (e: any) => reject(new Error(`Upload failed: ${JSON.stringify(e)}`)));
+            uploader.on("error", (e: unknown) => reject(new Error(`Upload failed: ${getErrorMessage(e)}`)));
             uploader.upload();
-        } catch (e: any) {
-            reject(new Error(e?.message ?? JSON.stringify(e)));
+        } catch (e: unknown) {
+            reject(new Error(getErrorMessage(e)));
         }
     });
 }
@@ -653,7 +565,7 @@ const FileTypeIcon = ({ kind, label }: { kind: string; label: string; }) => {
     );
 };
 
-const ActionButton = ({ children, disabled, onClick }: { children: any; disabled?: boolean; onClick: () => void; }) => (
+const ActionButton = ({ children, disabled, onClick }: { children: React.ReactNode; disabled?: boolean; onClick: () => void; }) => (
     <button
         className={cl("action")}
         type="button"
@@ -749,10 +661,6 @@ function FileSplitterAccessory({ message }: { message: ChunkMessage; }) {
         void ensureMergedResult(key, isInlinePreviewableImage(entry.ch[0].originalName));
     }, [key, count, total, complete]);
 
-    React.useEffect(() => {
-        if (key) scheduleHideSweep();
-    }, [key, count, total, complete, result?.status]);
-
     if (!chunk || !key || !entry || !isAnchor) return null;
     if (!complete) return <ProgressCard entry={entry} />;
     if (!result) return null;
@@ -762,7 +670,24 @@ function FileSplitterAccessory({ message }: { message: ChunkMessage; }) {
 
 const SafeFileSplitterAccessory = ErrorBoundary.wrap(FileSplitterAccessory, { noop: true });
 
-const SplitButton = () => {
+function isFileSplitterChunkMessage(message?: ChunkMessage | null) {
+    return Boolean(message && getChunkFromMessage(message));
+}
+
+function shouldHideFileSplitterChunkMessage(message?: ChunkMessage | null) {
+    if (!message) return false;
+
+    const chunk = getChunkFromMessage(message);
+    if (!chunk) return false;
+
+    const { key } = storeChunk(chunk);
+    tryMergeChunks(key);
+
+    const anchorChunk = getAnchorChunk(key);
+    return Boolean(anchorChunk?.messageId && anchorChunk.messageId !== getMessageId(message));
+}
+
+const SplitButton: ChatBarButtonFactory = ({ isMainChat }) => {
     const [status, setStatus] = React.useState<string | null>(null);
 
     async function doUpload() {
@@ -796,7 +721,7 @@ const SplitButton = () => {
                 const end = Math.min(start + CHUNK_SIZE, file.size);
                 const chunkBlob = file.slice(start, end);
 
-                const metadata = {
+                const metadata: FileSplitterMetadata = {
                     type: "FileSplitterChunk",
                     index: i,
                     total: totalChunks,
@@ -816,12 +741,14 @@ const SplitButton = () => {
             }
 
             Toasts.show({ message: `Uploaded ${totalChunks} parts for ${file.name}`, id: Toasts.genId(), type: Toasts.Type.SUCCESS });
-        } catch (e: any) {
-            Toasts.show({ message: `Error: ${e?.message ?? JSON.stringify(e)}`, id: Toasts.genId(), type: Toasts.Type.FAILURE });
+        } catch (e: unknown) {
+            Toasts.show({ message: `Error: ${getErrorMessage(e)}`, id: Toasts.genId(), type: Toasts.Type.FAILURE });
         } finally {
             setStatus(null);
         }
     }
+
+    if (!isMainChat) return null;
 
     const label = status ? `Uploading ${status}` : "Split & Upload";
 
@@ -838,10 +765,45 @@ export default definePlugin({
     tags: ["Chat", "Utility"],
     authors: [EquicordDevs.sioaeko],
     dependencies: ["ChatInputButtonAPI", "MessageAccessoriesAPI"],
-    _cleanupInterval: undefined as any,
 
-    renderMessageAccessory(props: { message: ChunkMessage; }) {
-        return <SafeFileSplitterAccessory message={props.message} />;
+    chatBarButton: {
+        icon: SplitIcon,
+        render: SplitButton
+    },
+
+    patches: [
+        {
+            find: ".NITRO_NOTIFICATION,[",
+            replacement: [
+                {
+                    match: /renderContentOnly:\i}=\i;/,
+                    replace: "$&if($self.shouldHideChunkMessage(arguments[0].message)) return null;"
+                },
+                {
+                    match: /childrenMessageContent:(\i),/g,
+                    replace: "childrenMessageContent:$self.isChunkMessage(arguments[0].message)?null:$1,"
+                },
+            ]
+        },
+        {
+            find: "this.renderAttachments(",
+            replacement: {
+                match: /(?<=\i=)this\.render(?:Attachments|Embeds|StickersAccessories|ComponentAccessories)\((\i)\)/g,
+                replace: "$self.isChunkMessage($1)?null:$&"
+            }
+        }
+    ],
+
+    renderMessageAccessory({ message }) {
+        return <SafeFileSplitterAccessory message={message as ChunkMessage} />;
+    },
+
+    isChunkMessage(message?: ChunkMessage | null) {
+        return isFileSplitterChunkMessage(message);
+    },
+
+    shouldHideChunkMessage(message?: ChunkMessage | null) {
+        return shouldHideFileSplitterChunkMessage(message);
     },
 
     flux: {
@@ -867,12 +829,6 @@ export default definePlugin({
 
     start() {
         clearAllState();
-        addChatBarButton("FileSplitter", SplitButton, SplitIcon);
-
-        if (typeof MutationObserver !== "undefined" && document.body) {
-            hideObserver = new MutationObserver(() => scheduleHideSweep());
-            hideObserver.observe(document.body, { childList: true, subtree: true });
-        }
 
         const currentChannel = SelectedChannelStore.getChannelId();
         if (currentChannel) {
@@ -880,16 +836,14 @@ export default definePlugin({
             delayedChannelScan = setTimeout(() => scanExistingMessages(currentChannel), 1500);
         }
 
-        scheduleHideSweep();
-        this._cleanupInterval = setInterval(pruneOldChunks, 60000);
+        cleanupInterval = setInterval(pruneOldChunks, 60000);
     },
 
     stop() {
-        removeChatBarButton("FileSplitter");
         if (delayedChannelScan) clearTimeout(delayedChannelScan);
-        if (this._cleanupInterval) clearInterval(this._cleanupInterval);
-        if (hideObserver) hideObserver.disconnect();
-        hideObserver = undefined;
+        if (cleanupInterval) clearInterval(cleanupInterval);
+        delayedChannelScan = undefined;
+        cleanupInterval = undefined;
         clearAllState();
     }
 });
