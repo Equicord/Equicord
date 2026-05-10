@@ -76,5 +76,8 @@ export default definePlugin({
     tags: ["Friends"],
     authors: [Devs.Elvyra, Devs.Antti],
     dependencies: ["ProfileSectionsAPI"],
-    renderProfileSection: FriendsSinceSection,
+    renderProfileSection: {
+        render: FriendsSinceSection,
+        priority: 0,
+    },
 });

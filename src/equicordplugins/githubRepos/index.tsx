@@ -64,13 +64,16 @@ export default definePlugin({
     shouldShowGitHub(userId: string) {
         return UserProfileStore.getUserProfile(userId)?.connectedAccounts?.some((c: any) => c.type === "github") ?? false;
     },
-    renderProfileCollection: (props: { user: User; displayProfile?: any; }) => {
-        return (
-            <ProfilePopoutComponent
-                {...props}
-                id={props.user.id}
-            />
-        );
+    renderProfileCollection: {
+        render: (props: { user: User; displayProfile?: any; }) => {
+            return (
+                <ProfilePopoutComponent
+                    {...props}
+                    id={props.user.id}
+                />
+            );
+        },
+        priority: 0,
     },
     renderProfileRepositoriesTab: ErrorBoundary.wrap((props: { user: User; displayProfile?: any; }) => {
         return (

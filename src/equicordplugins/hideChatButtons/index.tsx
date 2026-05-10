@@ -88,8 +88,11 @@ export default definePlugin({
     dependencies: ["ChatInputButtonAPI"],
     settings: settings,
     startAt: StartAt.Init,
-    chatBarButtonWrapper: (buttons: ReactNode) => {
-        return <ButtonsInnerComponent buttons={buttons} />;
+    chatBarButtonWrapper: {
+        wrapper: (buttons: ReactNode) => {
+            return <ButtonsInnerComponent buttons={buttons} />;
+        },
+        priority: 0,
     },
     start() {
         hidechatbuttonsopen = settings.store.open;

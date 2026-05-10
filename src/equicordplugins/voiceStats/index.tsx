@@ -140,7 +140,10 @@ export default definePlugin({
     tags: ["Voice", "Friends"],
     authors: [EquicordDevs.Moowi],
     dependencies: ["ProfileSectionsAPI"],
-    renderProfileSection: VoiceStatsSection,
+    renderProfileSection: {
+        render: VoiceStatsSection,
+        priority: 0,
+    },
     flux: {
         VOICE_STATE_UPDATES({ voiceStates }: { voiceStates: VoiceState[]; }) {
             const myId = UserStore.getCurrentUser()?.id;

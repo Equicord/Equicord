@@ -131,9 +131,12 @@ export default definePlugin({
             }
         },
     ],
-    chatBarButtonWrapper: (buttons: ReactNode) => {
-        if (!Array.isArray(buttons) || buttons.length === 0) return buttons;
-        return <ChatButtonsRow buttons={buttons} />;
+    chatBarButtonWrapper: {
+        wrapper: (buttons: ReactNode) => {
+            if (!Array.isArray(buttons) || buttons.length === 0) return buttons;
+            return <ChatButtonsRow buttons={buttons} />;
+        },
+        priority: 0,
     },
 
     userAreaControlsClass(className: string) {

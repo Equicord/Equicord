@@ -383,7 +383,7 @@ export const initPluginManager = onlyOnce(function init() {
         "onBeforeMessageEdit", "onBeforeMessageSend", "onMessageClick",
         "renderMemberListDecorator", "renderMessageAccessory", "renderMessageDecoration",
         // Custom
-        "renderNicknameIcon", "renderProfileCollection", "renderProfileSection"
+        "renderNicknameIcon"
     ];
 
     const neededApiPlugins = new Set<string>();
@@ -430,7 +430,7 @@ export const initPluginManager = onlyOnce(function init() {
         if (p.renderProfileSection) neededApiPlugins.add("ProfileSectionsAPI");
 
         for (const key of pluginKeysToBind) {
-            p[key] &&= p[key].bind(p) as any;
+            p[key] &&= (p[key] as Function).bind(p) as any;
         }
     }
 
