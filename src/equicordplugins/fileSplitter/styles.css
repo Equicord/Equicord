@@ -9,10 +9,6 @@
     box-shadow: 0 6px 18px rgb(0 0 0 / 24%);
 }
 
-[data-filesplitter-hidden="true"] {
-    display: none !important;
-}
-
 .vc-file-splitter-card[data-status="error"] {
     border-color: var(--status-danger);
 }

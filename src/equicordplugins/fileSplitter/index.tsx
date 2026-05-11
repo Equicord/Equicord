@@ -13,6 +13,7 @@ import { classNameFactory } from "@utils/css";
 import definePlugin, { PluginNative } from "@utils/types";
 import { chooseFile, saveFile } from "@utils/web";
 import type { Message, MessageAttachment } from "@vencord/discord-types";
+import { CloudUploadPlatform } from "@vencord/discord-types/enums";
 import { findLazy } from "@webpack";
 import { Constants, MessageStore, React, RestAPI, SelectedChannelStore, SnowflakeUtils, Toasts } from "@webpack/common";
 
@@ -507,7 +508,7 @@ function pruneOldChunks() {
 function uploadChunk(channelId: string, chunkFile: File, metadata: FileSplitterMetadata): Promise<void> {
     return new Promise((resolve, reject) => {
         try {
-            const uploader = new CloudUpload({ file: chunkFile, platform: 1 }, channelId);
+            const uploader = new CloudUpload({ file: chunkFile, platform: CloudUploadPlatform.WEB }, channelId);
 
             uploader.on("complete", () => {
                 RestAPI.post({
@@ -680,10 +681,10 @@ function shouldHideFileSplitterChunkMessage(message?: ChunkMessage | null) {
     const chunk = getChunkFromMessage(message);
     if (!chunk) return false;
 
-    const { key } = storeChunk(chunk);
-    tryMergeChunks(key);
+    const key = getChunkKey(chunk);
+    const knownChunks = cs[key]?.ch ?? [];
+    const anchorChunk = [...knownChunks, chunk].sort((a, b) => a.index - b.index)[0];
 
-    const anchorChunk = getAnchorChunk(key);
     return Boolean(anchorChunk?.messageId && anchorChunk.messageId !== getMessageId(message));
 }
 
