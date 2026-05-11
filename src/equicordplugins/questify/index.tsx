@@ -372,6 +372,11 @@ export default definePlugin({
             predicate: () => !getQuestifySettings().disableQuestsEverything,
             replacement: [
                 {
+                    // Alias the selected platform dropdown state before exposing CTA buttons.
+                    match: /(?<=var \i;)(?=let \i,\i,{quest:\i,questContent:)/,
+                    replace: "let questifySelectedPlatformDropdownVisible;"
+                },
+                {
                     // Prevent the platform selector if the Quest is auto-completable.
                     match: /(?<=ACCEPTED,\i=)(?=\i&&)/,
                     replace: "!$self.canAutoCompleteQuest(arguments[0].quest)&&"
@@ -379,31 +384,28 @@ export default definePlugin({
                 {
                     // Prevent the platform selector if the Quest is auto-completable.
                     match: /(?<=SELECT,\i=)(?=\i&&)/,
-                    replace: "!$self.canAutoCompleteQuest(arguments[0].quest)&&"
+                    replace: "questifySelectedPlatformDropdownVisible=!$self.canAutoCompleteQuest(arguments[0].quest)&&"
                 },
-                // If this group becomes unruly due to Discord refactoring and is unfixable,
-                // the 2nd, 3rd, and 4th can be commented out in favor of just the 1st at the expense
-                // of not seeing CTA buttons on completed but unclaimed Quests. Also, questifyCanAutoComplete
-                // would need to be replaced as the 2nd patch defines it.
                 {
-                    // Always expose the CTA button when available instead of only for videos and activities.
+                    // Always expose the CTA button when available instead of only for videos and activities,
+                    // unless the selected platform dropdown is already taking the secondary slot.
                     match: /(?<=wrap:!1,children:\[)(\i&&[^?]+)/,
-                    replace: "((!!arguments[0].quest.config.ctaConfig&&questifyCanAutoComplete)||($1))"
+                    replace: "((!!arguments[0].quest.config.ctaConfig&&!questifySelectedPlatformDropdownVisible)||($1))"
                 },
                 {
                     // Let completed/claimed expired Quests with CTAs use the CTA-aware completed branch.
                     match: /(return\()(?=\i.enabled&&\i===\i\.\i\.EXPIRED_CLAIMABLE&&\i\.\i\.has\(\i\))/,
-                    replace: "const questifyCanAutoComplete=$self.canAutoCompleteQuest(arguments[0].quest);$1(questifyCanAutoComplete?!arguments[0].quest.config.ctaConfig:true)&&"
+                    replace: "$1!arguments[0].quest.config.ctaConfig&&"
                 },
                 {
                     // Let completed/claimed expired Quests with CTAs use the CTA-aware completed branch.
                     match: /(?<=\):\i\?\i=)(\i)(?=\?\(0,\i\.jsx\)\(\i,\{quest:\i,sourceQuestContent:\i,onClick:\i,text:\i\}\):)/,
-                    replace: "((arguments[0].quest.config.ctaConfig&&questifyCanAutoComplete)||($1))"
+                    replace: "(arguments[0].quest.config.ctaConfig||$1)"
                 },
                 {
                     // Force the CTA-aware complete branch.
                     match: /(?<=analyticsCtxQuestContentRowIndex:\i}\)}\):\i&&\i)(.{0,200}?fullWidth:!0}\)}\):)(\i.enabled.{0,50}?CLAIMED\)&&\i.\i.has\(\i\))(\?\i=)(\i)/,
-                    replace: "&&!questifyCanAutoComplete$1((questifyCanAutoComplete&&arguments[0].quest.config.ctaConfig&&arguments[0].quest.userStatus?.completedAt)||($2))$3(questifyCanAutoComplete||$4)"
+                    replace: "&&false$1((arguments[0].quest.config.ctaConfig&&arguments[0].quest.userStatus?.completedAt)||($2))$3(true||$4)"
                 }
             ]
         },
