@@ -28,7 +28,7 @@ const logger = new Logger("FileUpload", "#7cb7ff");
 function toProxyUrl(url: string): string {
     const corsProxyUrl = normalizeCorsProxyUrl((settings.store as { corsProxyUrl?: string; }).corsProxyUrl);
 
-    if (Native || url.startsWith(`${corsProxyUrl}?url=`)) {
+    if (url.startsWith(`${corsProxyUrl}?url=`)) {
         return url;
     }
 
