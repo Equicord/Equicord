@@ -573,7 +573,7 @@ export default definePlugin({
             scanChannel(ch);
             delayedScan = setTimeout(() => scanChannel(ch), 1500);
         }
-        cleanupInterval = setInterval(pruneOldChunks, 60_000);
+        cleanupInterval = setInterval(pruneOldChunks, 60000);
     },
 
     stop() {
