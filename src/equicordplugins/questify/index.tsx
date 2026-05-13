@@ -245,12 +245,12 @@ export default definePlugin({
             replacement: [
                 {
                     // QUESTS_FETCH_CURRENT_QUESTS_BEGIN
-                    match: /(?=if\(!\i.\i.isFetchingCurrentQuests\))/,
-                    replace: "return;"
+                    match: /(?<=if\(\i.\i.isFetchingCurrentQuests)/,
+                    replace: "||true"
                 },
                 {
                     // QUESTS_FETCH_QUEST_TO_DELIVER_BEGIN
-                    match: /(?=let.{0,150}QUESTS_FETCH_QUEST_TO_DELIVER_BEGIN)/,
+                    match: /(?=let \i=Date.now\(\);\i.recordQuestRequestAttempt.{0,50}QUESTS_FETCH_QUEST_TO_DELIVER_BEGIN)/,
                     replace: "return;"
                 }
             ]
