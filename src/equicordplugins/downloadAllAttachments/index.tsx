@@ -7,6 +7,7 @@
 import { CloudDownloadIcon } from "@components/Icons";
 import { EquicordDevs } from "@utils/constants";
 import { Logger } from "@utils/Logger";
+import { pluralise } from "@utils/misc";
 import definePlugin from "@utils/types";
 import { Message, MessageAttachment } from "@vencord/discord-types";
 import { ChannelStore, showToast, Toasts } from "@webpack/common";
@@ -18,30 +19,64 @@ async function downloadAll(attachments: MessageAttachment[]) {
     try {
         dir = await window.showDirectoryPicker({ mode: "readwrite" });
     } catch (e) {
-        if (e instanceof DOMException && e.name === "AbortError") return; // user cancelled
+        if (e instanceof DOMException && e.name === "AbortError") return;
         logger.error("Failed to open directory picker:", e);
         return;
     }
 
-    let failed = 0;
-    await Promise.all(attachments.map(async a => {
+    const usedNames = new Map<string, number>();
+
+    function uniqueName(original: string): string {
+        const count = usedNames.get(original) ?? 0;
+        usedNames.set(original, count + 1);
+        if (count === 0) return original;
+        const dot = original.lastIndexOf(".");
+        return dot === -1
+            ? `${original}_${count}`
+            : `${original.slice(0, dot)}_${count}${original.slice(dot)}`;
+    }
+
+    const tasks = attachments.map(a => ({ attachment: a, filename: uniqueName(a.filename) }));
+
+    const results = await Promise.allSettled(tasks.map(async ({ attachment, filename }) => {
+        if (!attachment.proxy_url) throw new Error("Missing Proxy URL");
+
+        const res = await fetch(attachment.proxy_url);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        if (!res.body) throw new Error("Response body is empty");
+
+        let fileHandle: FileSystemFileHandle | undefined;
         try {
-            const res = await fetch(a.proxy_url);
-            if (!res.ok) throw new Error(`HTTP ${res.status}`);
-            if (!res.body) throw new Error("Response body is empty");
-            const file = await dir.getFileHandle(a.filename, { create: true });
-            const writable = await file.createWritable();
-            await res.body.pipeTo(writable);
+            fileHandle = await dir.getFileHandle(filename, { create: true });
+            const writable = await fileHandle.createWritable();
+            try {
+                await res.body.pipeTo(writable);
+            } catch (e) {
+                await writable.abort();
+                throw e;
+            }
         } catch (e) {
-            logger.warn(`Failed to download ${a.filename}:`, e);
-            failed++;
+            if (fileHandle) {
+                try { await dir.removeEntry(filename); } catch { }
+            }
+            throw e;
         }
     }));
 
+    const failed = results.filter(r => {
+        if (r.status === "rejected") {
+            logger.warn("Failed to download attachment:", r.reason);
+            return true;
+        }
+        return false;
+    }).length;
+
+    const succeeded = attachments.length - failed;
+
     if (failed === 0)
-        showToast(`Downloaded ${attachments.length} attachment${attachments.length === 1 ? "" : "s"}.`, Toasts.Type.SUCCESS);
+        showToast(`Downloaded ${pluralise(succeeded, "attachment")}.`, Toasts.Type.SUCCESS);
     else
-        showToast(`Downloaded ${attachments.length - failed} of ${attachments.length} attachments. ${failed} failed.`, Toasts.Type.FAILURE);
+        showToast(`Downloaded ${succeeded} of ${attachments.length} attachments. ${failed} failed.`, Toasts.Type.FAILURE);
 }
 
 export default definePlugin({
