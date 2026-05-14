@@ -27,6 +27,9 @@ const Native = IS_DISCORD_DESKTOP
 const CHUNK_SIZE = 10 * 1024 * 1024;
 const MAX_FILE_SIZE = 500 * 1024 * 1024;
 const CHUNK_TIMEOUT = 30 * 60 * 1000;
+const SCAN_DELAY = 1500;
+const PRUNE_INTERVAL = 60 * 1000;
+const MAX_PARALLEL_DOWNLOADS = 4;
 
 const IMAGE_MIME: Record<string, string> = {
     avif: "image/avif", bmp: "image/bmp", gif: "image/gif",
@@ -128,13 +131,25 @@ async function fetchBlob(url: string, filename?: string): Promise<Blob> {
             if (res.success && res.data)
                 return new Blob([res.data], { type: res.contentType ?? (filename ? mimeType(filename) : null) ?? "application/octet-stream" });
         } catch {
-            // Fall through to browser fetch when the native bridge is unavailable.
+            return fetchBrowserBlob(normalized);
         }
     }
 
-    const r = await fetch(normalized);
+    return fetchBrowserBlob(normalized);
+}
+
+async function fetchBrowserBlob(url: string): Promise<Blob> {
+    const r = await fetch(url);
     if (!r.ok) throw new Error(`HTTP ${r.status}`);
     return r.blob();
+}
+
+async function fetchChunkParts(chunks: ChunkData[], filename: string): Promise<Blob[]> {
+    const parts: Blob[] = [];
+    for (let i = 0; i < chunks.length; i += MAX_PARALLEL_DOWNLOADS) {
+        parts.push(...await Promise.all(chunks.slice(i, i + MAX_PARALLEL_DOWNLOADS).map(chunk => fetchBlob(chunk.url, filename))));
+    }
+    return parts;
 }
 
 async function assembleBlob(key: string): Promise<{ blob: Blob; mimeType: string; }> {
@@ -142,8 +157,7 @@ async function assembleBlob(key: string): Promise<{ blob: Blob; mimeType: string
     if (!entry?.chunks.length) throw new Error("No chunks available");
 
     const name = entry.chunks[0].originalName;
-    const parts: Blob[] = [];
-    for (const chunk of entry.chunks) parts.push(await fetchBlob(chunk.url, name));
+    const parts = await fetchChunkParts(entry.chunks, name);
     const mime = mimeType(name) ?? "application/octet-stream";
     return { blob: new Blob(parts, { type: mime }), mimeType: mime };
 }
@@ -563,7 +577,7 @@ export default definePlugin({
             if (!channelId) return;
             scanChannel(channelId);
             clearTimeout(delayedScan);
-            delayedScan = setTimeout(() => scanChannel(channelId), 1500);
+            delayedScan = setTimeout(() => scanChannel(channelId), SCAN_DELAY);
         }
     },
 
@@ -572,9 +586,9 @@ export default definePlugin({
         const ch = SelectedChannelStore.getChannelId();
         if (ch) {
             scanChannel(ch);
-            delayedScan = setTimeout(() => scanChannel(ch), 1500);
+            delayedScan = setTimeout(() => scanChannel(ch), SCAN_DELAY);
         }
-        cleanupInterval = setInterval(pruneOldChunks, 60000);
+        cleanupInterval = setInterval(pruneOldChunks, PRUNE_INTERVAL);
     },
 
     stop() {
