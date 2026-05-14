@@ -14,13 +14,11 @@ import definePlugin, { PluginNative } from "@utils/types";
 import { chooseFile, saveFile } from "@utils/web";
 import { Message } from "@vencord/discord-types";
 import { CloudUploadPlatform } from "@vencord/discord-types/enums";
-import { findLazy } from "@webpack";
-import { Constants, MessageStore, React, RestAPI, SelectedChannelStore, SnowflakeUtils, Toasts } from "@webpack/common";
+import { CloudUploader, Constants, MessageStore, React, RestAPI, SelectedChannelStore, SnowflakeUtils, Toasts } from "@webpack/common";
 
 import { ChunkData, ChunkEntry, ChunkMeta, MergedResult } from "./types";
 
 const cl = classNameFactory("vc-file-splitter-");
-const CloudUpload = findLazy(m => m.prototype?.trackUploadFinished);
 
 const Native = IS_DISCORD_DESKTOP
     ? VencordNative.pluginHelpers.FileSplitter as PluginNative<typeof import("./native")>
@@ -102,7 +100,9 @@ function parseChunkMeta(content: string | undefined): Omit<ChunkMeta, "type"> | 
             && typeof originalSize === "number"
             && typeof timestamp === "number"
         ) return { index, total, originalName, originalSize, timestamp };
-    } catch { }
+    } catch {
+        return null;
+    }
     return null;
 }
 
@@ -127,7 +127,9 @@ async function fetchBlob(url: string, filename?: string): Promise<Blob> {
             const res = await Native.fetchChunk(normalized);
             if (res.success && res.data)
                 return new Blob([res.data], { type: res.contentType ?? (filename ? mimeType(filename) : null) ?? "application/octet-stream" });
-        } catch { }
+        } catch {
+            // Fall through to browser fetch when the native bridge is unavailable.
+        }
     }
 
     const r = await fetch(normalized);
@@ -140,18 +142,13 @@ async function assembleBlob(key: string): Promise<{ blob: Blob; mimeType: string
     if (!entry?.chunks.length) throw new Error("No chunks available");
 
     const name = entry.chunks[0].originalName;
-    const parts = await Promise.all(entry.chunks.map(c => fetchBlob(c.url, name)));
+    const parts: Blob[] = [];
+    for (const chunk of entry.chunks) parts.push(await fetchBlob(chunk.url, name));
     const mime = mimeType(name) ?? "application/octet-stream";
     return { blob: new Blob(parts, { type: mime }), mimeType: mime };
 }
 
-async function downloadBlob(blob: Blob, filename: string) {
-    if (IS_DISCORD_DESKTOP) {
-        try {
-            await DiscordNative.fileManager.saveWithDialog(new Uint8Array(await blob.arrayBuffer()), filename);
-            return;
-        } catch { }
-    }
+function downloadBlob(blob: Blob, filename: string) {
     saveFile(new File([blob], filename, { type: blob.type ?? "application/octet-stream" }));
 }
 
@@ -169,7 +166,7 @@ async function handleDownload(key: string) {
             result.mimeType = assembled.mimeType;
             result.status = "ready";
         }
-        await downloadBlob(result.blob, result.originalName);
+        downloadBlob(result.blob, result.originalName);
     } catch (e) {
         result.status = "error";
         result.error = e instanceof Error ? e.message : String(e);
@@ -267,10 +264,13 @@ function pruneOldChunks() {
     const now = Date.now();
     let changed = false;
     for (const key of Object.keys(chunkStore)) {
-        if (!mergedResults.has(key) && now - chunkStore[key].lastUpdated > CHUNK_TIMEOUT) {
-            delete chunkStore[key];
-            changed = true;
-        }
+        if (now - chunkStore[key].lastUpdated <= CHUNK_TIMEOUT) continue;
+
+        const result = mergedResults.get(key);
+        if (result?.objectUrl) URL.revokeObjectURL(result.objectUrl);
+        mergedResults.delete(key);
+        delete chunkStore[key];
+        changed = true;
     }
     if (changed) emitChange();
 }
@@ -278,7 +278,7 @@ function pruneOldChunks() {
 function uploadChunk(channelId: string, file: File, meta: ChunkMeta): Promise<void> {
     return new Promise((resolve, reject) => {
         try {
-            const uploader = new CloudUpload({ file, platform: CloudUploadPlatform.WEB }, channelId);
+            const uploader = new CloudUploader({ file, platform: CloudUploadPlatform.WEB }, channelId);
             uploader.on("complete", () => {
                 RestAPI.post({
                     url: Constants.Endpoints.MESSAGES(channelId),
@@ -431,7 +431,7 @@ function FileSplitterAccessory({ message }) {
 
 const SafeFileSplitterAccessory = ErrorBoundary.wrap(FileSplitterAccessory, { noop: true });
 
-const SplitButton: ChatBarButtonFactory = ({ isMainChat }) => {
+const SplitButton: ChatBarButtonFactory = ({ isMainChat, channel }) => {
     const [status, setStatus] = React.useState<string | null>(null);
 
     async function doUpload() {
@@ -447,7 +447,7 @@ const SplitButton: ChatBarButtonFactory = ({ isMainChat }) => {
             return;
         }
 
-        const channelId = SelectedChannelStore.getChannelId();
+        const channelId = channel.id;
         if (!channelId) {
             Toasts.show({ message: "No channel selected.", id: Toasts.genId(), type: Toasts.Type.FAILURE });
             return;
@@ -484,8 +484,12 @@ const SplitButton: ChatBarButtonFactory = ({ isMainChat }) => {
 
     if (!isMainChat) return null;
 
+    const handleClick = () => {
+        if (!status) void doUpload();
+    };
+
     return (
-        <ChatBarButton tooltip={status ? `Uploading ${status}` : "Split & Upload"} onClick={status ? () => { } : () => void doUpload()}>
+        <ChatBarButton tooltip={status ? `Uploading ${status}` : "Split & Upload"} onClick={handleClick}>
             <SplitIcon />
         </ChatBarButton>
     );
@@ -578,5 +582,6 @@ export default definePlugin({
         clearInterval(cleanupInterval);
         delayedScan = cleanupInterval = undefined;
         clearAll();
+        storeListeners.clear();
     }
 });
