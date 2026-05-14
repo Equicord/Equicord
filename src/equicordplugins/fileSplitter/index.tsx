@@ -333,7 +333,8 @@ const FILE_BADGE_KINDS: Array<[string[], string]> = [
 function getFileBadge(filename: string) {
     const ext = filename.split(".").pop()?.toLowerCase() ?? "";
     const kind = FILE_BADGE_KINDS.find(([exts]) => exts.includes(ext))?.[1] ?? "file";
-    return { kind, label: ext.toUpperCase().slice(0, 4) || "FILE" };
+    const label = ext.toUpperCase().slice(0, 4);
+    return { kind, label: label.length ? label : "FILE" };
 }
 
 const FILE_ICON_PATHS: Record<string, string[]> = {
@@ -424,7 +425,7 @@ function MergedResultCard({ result }: { result: MergedResult; }) {
     );
 }
 
-function FileSplitterAccessory({ message }) {
+function FileSplitterAccessory({ message }: { message: Message; }) {
     useStore();
 
     React.useEffect(() => {
