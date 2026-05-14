@@ -53,6 +53,21 @@
     color: var(--text-muted);
 }
 
+.vc-narrator-custom-sound {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.vc-narrator-custom-sound-text {
+    margin: 0;
+    opacity: 0.85;
+}
+
+.vc-narrator-file-input {
+    display: none;
+}
+
 /* Voice select modal */
 .vc-narrator-modal-title {
     flex-grow: 1;
