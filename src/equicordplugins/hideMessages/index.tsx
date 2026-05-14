@@ -136,7 +136,7 @@ export default definePlugin({
     },
     renderHiddenMessagesToggle: ErrorBoundary.wrap(() => {
         const hasHiddenDms = hiddenDmIds.size > 0;
-        const label = hasHiddenDms ? showHiddenDms ? "Hide Hidden DMs" : "Show Hidden DMs" : "No Hidden DMs";
+        const label = !hasHiddenDms ? "No Hidden DMs" : showHiddenDms ? "Hide Hidden DMs" : "Show Hidden DMs";
 
         return (
             <Tooltip text={label}>
