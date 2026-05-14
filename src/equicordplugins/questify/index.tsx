@@ -353,8 +353,8 @@ export default definePlugin({
             find: "QUESTS_BAR,questId",
             predicate: () => !getQuestifySettings().disableQuestsEverything && hasEnabledAutoCompleteQuestTypes(),
             replacement: {
-                match: /(?<=SELECT&&!\i&&!\i,(\i)=null;)(return )(\i\?\i=\(0,\i.\i\)\(\i,{quest:(\i))/,
-                replace: "const questifyButton=$self.enrolledIncompleteButton({quest:$4});$2questifyButton?$1=questifyButton:$3"
+                match: /(?<=SELECT&&!\i&&!\i,(\i)=\i\.\i\.useConfig\({location:\i\.\i\.QUESTS_BAR}\),(\i)=\(0,\i\.\i\)\((\i)\);)/,
+                replace: 'const questifyButton=$self.enrolledIncompleteButton({quest:$3,size:"sm"});if(questifyButton)return questifyButton;'
             }
         },
         {
