@@ -14,7 +14,7 @@ import { Channel } from "@vencord/discord-types";
 import { React } from "@webpack/common";
 
 import { Packs, PickerContent, PickerHeader, PickerSidebar, Wrapper } from "./components";
-import { getStickerPack, getStickerPackMetas } from "./stickers";
+import { fetchAndRefreshAllDynamicPackSets, getStickerPack, getStickerPackMetas } from "./stickers";
 import { StickerPack, StickerPackMeta } from "./types";
 import { cl, FFmpegStateContext, loadFFmpeg } from "./utils";
 
@@ -37,6 +37,10 @@ export default definePlugin({
     tags: ["Chat", "Emotes", "Media"],
     authors: [EquicordDevs.Leko, Devs.Arjix],
     settings,
+
+    start() {
+        fetchAndRefreshAllDynamicPackSets().catch(console.error);
+    },
 
     patches: [
         {
@@ -182,7 +186,8 @@ export default definePlugin({
                         stickerPackMetas.map(meta => ({
                             id: meta.id,
                             name: meta.title,
-                            iconUrl: meta.logo.image
+                            iconUrl: meta.logo.image,
+                            stickerPackId: meta.id
                         }))
                     }
                     onPackSelect={pack => {

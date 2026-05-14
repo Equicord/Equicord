@@ -11,8 +11,8 @@ import { CloudUploadPlatform } from "@vencord/discord-types/enums";
 import { ChannelStore, CloudUploader, Constants, DraftStore, FluxDispatcher, MessageActions, PendingReplyStore, RestAPI, showToast, SnowflakeUtils, Toasts, UploadHandler } from "@webpack/common";
 
 import { settings } from ".";
+import { fetchStickerAsset } from "./assetCache";
 import { FFmpegState, Sticker } from "./types";
-import { corsFetch } from "./utils";
 
 type SendStickerOptions = {
     channelId: string;
@@ -73,9 +73,9 @@ async function resizeImage(url: string) {
     return blob;
 }
 
-async function toGIF(url: string, ffmpeg: FFmpeg): Promise<File> {
-    const filename = (new URL(url)).pathname.split("/").pop() ?? "image.png";
-    const res = await corsFetch(url);
+async function toGIF(sticker: Sticker, ffmpeg: FFmpeg): Promise<File> {
+    const filename = (new URL(sticker.image)).pathname.split("/").pop() ?? "image.png";
+    const res = await fetchStickerAsset(sticker);
     if (!res.ok) throw new Error("Failed to fetch image for GIF conversion");
     const arr = new Uint8Array(await res.arrayBuffer());
     await ffmpeg.writeFile(filename, arr);
@@ -128,9 +128,9 @@ export async function sendSticker({ channelId, sticker, ctrlKey, shiftKey, ffmpe
 
     if (sticker?.isAnimated) {
         if (!ffmpegState?.ffmpeg || !ffmpegState.isLoaded) throw new Error("FFmpeg not ready");
-        file = await toGIF(sticker.image, ffmpegState.ffmpeg);
+        file = await toGIF(sticker, ffmpegState.ffmpeg);
     } else {
-        const res = await corsFetch(sticker.image);
+        const res = await fetchStickerAsset(sticker);
         if (!res.ok) throw new Error("Failed to fetch sticker image");
         const blobUrl = URL.createObjectURL(await res.blob());
         const processed = await resizeImage(blobUrl);

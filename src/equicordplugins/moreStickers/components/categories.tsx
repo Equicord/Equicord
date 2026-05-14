@@ -4,12 +4,13 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { StickerAssetImage } from "@equicordplugins/moreStickers/assetCache";
 import { CategoryImageProps, StickerCategoryProps } from "@equicordplugins/moreStickers/types";
 import { cl } from "@equicordplugins/moreStickers/utils";
 import { React } from "@webpack/common";
 import { JSX } from "react";
 
-export function CategoryImage({ src, alt, isActive }: CategoryImageProps) {
+export function CategoryImage({ src, alt, isActive, stickerPackId }: CategoryImageProps) {
     return (
         <div>
             <svg width={32} height={32} style={{
@@ -32,8 +33,9 @@ export function CategoryImage({ src, alt, isActive }: CategoryImageProps) {
                     height={32}
                     overflow="visible"
                 >
-                    <img
+                    <StickerAssetImage
                         src={src}
+                        stickerPackId={stickerPackId}
                         alt={alt}
                         width={32}
                         height={32}
