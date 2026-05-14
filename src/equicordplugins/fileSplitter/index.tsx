@@ -116,9 +116,7 @@ function getChunkFromMessage(message: Message): ChunkData | null {
 }
 
 function anchorMessageId(key: string): string | null {
-    const entry = chunkStore[key];
-    if (!entry?.chunks.length) return null;
-    return [...entry.chunks].sort((a, b) => a.index - b.index)[0].messageId;
+    return chunkStore[key]?.chunks[0]?.messageId ?? null;
 }
 
 async function fetchBlob(url: string, filename?: string): Promise<Blob> {
@@ -154,7 +152,7 @@ async function downloadBlob(blob: Blob, filename: string) {
             return;
         } catch { }
     }
-    saveFile(new File([blob], filename, { type: blob.type || "application/octet-stream" }));
+    saveFile(new File([blob], filename, { type: blob.type ?? "application/octet-stream" }));
 }
 
 async function handleDownload(key: string) {
@@ -253,10 +251,9 @@ function processMessage(message: Message) {
 }
 
 function scanChannel(channelId: string) {
-    try {
-        const messages = MessageStore.getMessages(channelId).toArray();
-        for (const msg of messages) processMessage(msg);
-    } catch { }
+    const messages = MessageStore.getMessages(channelId);
+    if (!messages) return;
+    for (const msg of messages.toArray()) processMessage(msg);
 }
 
 function clearAll() {

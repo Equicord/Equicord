@@ -27,7 +27,7 @@ export async function fetchChunk(
         return {
             success: true,
             data: await response.arrayBuffer(),
-            contentType: response.headers.get("content-type") || ""
+            contentType: response.headers.get("content-type") ?? ""
         };
     } catch (e) {
         return { success: false, error: e instanceof Error ? e.message : "Unknown error" };
