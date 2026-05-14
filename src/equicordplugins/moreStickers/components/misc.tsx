@@ -142,8 +142,7 @@ export const Packs = () => {
                     <Paragraph>
                         <p>
                             Currently LINE stickers/emojis supported only. <br />
-
-                            Get Telegram stickers with <a href="#" onClick={() => VencordNative.native.openExternal("https://github.com/lekoOwO/MoreStickersConverter")}> MoreStickersConverter</a>.
+                            For Telegram and managed sticker subscriptions, use <a href="#" onClick={() => VencordNative.native.openExternal("https://github.com/lekoOwO/MoreStickersManager-rs")}>MoreStickersManager-rs (MSM)</a>, a self-hosted sticker manager. MSM is recommended over the older MoreStickersConverter workflow.
                         </p>
                     </Paragraph>
                     <Flex flexDirection="row" style={{
