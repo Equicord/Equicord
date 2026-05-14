@@ -5,6 +5,7 @@
  */
 
 import { HeadingPrimary } from "@components/Heading";
+import { StickerAssetImage } from "@equicordplugins/moreStickers/assetCache";
 import { PickerContent, PickerContentHeader, PickerContentRow, PickerContentRowGrid, PickerHeaderProps, SidebarProps, Sticker, StickerCategoryType, StickerPack } from "@equicordplugins/moreStickers/types";
 import { sendSticker } from "@equicordplugins/moreStickers/upload";
 import { clPicker, FFmpegStateContext } from "@equicordplugins/moreStickers/utils";
@@ -58,7 +59,7 @@ export const PickerSidebar = ({ packMetas, onPackSelect }: SidebarProps) => {
                                 }}
                                 isActive={activePack?.id === pack.id}
                             >
-                                <CategoryImage src={pack.iconUrl!} alt={pack.name} isActive={activePack?.id === pack.id} />
+                                <CategoryImage src={pack.iconUrl!} alt={pack.name} isActive={activePack?.id === pack.id} stickerPackId={pack.stickerPackId ?? pack.id} />
                             </StickerCategory>
                         );
                     })
@@ -139,9 +140,10 @@ function PickerContentRowGrid({
                             height: "96px",
                             width: "96px"
                         }}>
-                            <img
+                            <StickerAssetImage
                                 alt={sticker.title}
                                 src={sticker.image}
+                                stickerPackId={sticker.stickerPackId}
                                 draggable="false"
                                 data-id={sticker.id}
                                 className={clPicker("content-row-grid-img")}
@@ -185,6 +187,7 @@ function HeaderCollapseIcon({ isExpanded }: { isExpanded: boolean; }) {
 export function PickerContentHeader({
     image,
     title,
+    stickerPackId,
     children,
     isSelected = false,
     afterScroll = () => { },
@@ -228,12 +231,13 @@ export function PickerContentHeader({
                                     x={0} y={0} width={16} height={16}
                                     overflow="visible" mask="url(#svg-mask-squircle)"
                                 >
-                                    <img
+                                    <StickerAssetImage
                                         alt={title}
                                         src={image}
+                                        stickerPackId={stickerPackId}
                                         className={clPicker("content-header-guild-icon")}
                                         loading="lazy"
-                                    ></img>
+                                    />
                                 </foreignObject>
                             </svg>
                                 : image}
@@ -364,6 +368,7 @@ export function PickerContent({ stickerPacks, selectedStickerPackId, setSelected
                                             key={sp.id}
                                             image={sp.logo.image}
                                             title={sp.title}
+                                            stickerPackId={sp.id}
                                             isSelected={sp.id === selectedStickerPackId}
                                             beforeScroll={() => {
                                                 scrollerRef.current?.scrollTo({
@@ -398,9 +403,10 @@ export function PickerContent({ stickerPacks, selectedStickerPackId, setSelected
                                 height: "28px",
                                 width: "28px"
                             }}>
-                                <img
+                                <StickerAssetImage
                                     alt={currentSticker?.title ?? ""}
                                     src={currentSticker?.image}
+                                    stickerPackId={currentSticker?.stickerPackId}
                                     draggable="false"
                                     data-id={currentSticker?.id ?? ""}
                                     className={clPicker("content-inspector-img")}
@@ -419,10 +425,11 @@ export function PickerContent({ stickerPacks, selectedStickerPackId, setSelected
                         <div>
                             <svg width={32} height={32} viewBox="0 0 32 32">
                                 <foreignObject x={0} y={0} width={32} height={32} overflow="visible" mask="url(#svg-mask-squircle)">
-                                    <img
+                                    <StickerAssetImage
                                         alt={currentStickerPack?.title ?? ""}
                                         src={currentStickerPack?.logo?.image}
-                                    ></img>
+                                        stickerPackId={currentStickerPack?.id}
+                                    />
                                 </foreignObject>
                             </svg>
                         </div>

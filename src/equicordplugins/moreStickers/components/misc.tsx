@@ -11,13 +11,15 @@ import { Divider } from "@components/Divider";
 import { Flex } from "@components/Flex";
 import { Heading } from "@components/Heading";
 import { Paragraph } from "@components/Paragraph";
+import { StickerAssetImage } from "@equicordplugins/moreStickers/assetCache";
 import { convert as convertLineEP, getIdFromUrl as getLineEmojiPackIdFromUrl, getStickerPackById as getLineEmojiPackById, isLineEmojiPackHtml, parseHtml as getLineEPFromHtml } from "@equicordplugins/moreStickers/lineEmojis";
 import { convert as convertLineSP, getIdFromUrl as getLineStickerPackIdFromUrl, getStickerPackById as getLineStickerPackById, isLineStickerPackHtml, parseHtml as getLineSPFromHtml } from "@equicordplugins/moreStickers/lineStickers";
 import { isV1, migrate } from "@equicordplugins/moreStickers/migrate-v1";
-import { deleteStickerPack, getStickerPack, getStickerPackMetas, saveStickerPack } from "@equicordplugins/moreStickers/stickers";
+import { addMsmSubscription, isMsmSubscriptionUrl, type MsmDynamicPackSetMeta, syncMsmSubscription } from "@equicordplugins/moreStickers/msm";
+import { deleteDynamicPackSetMeta, deleteStickerPack, getDynamicPackSetMetas, getStickerPack, getStickerPackMetas, saveStickerPack } from "@equicordplugins/moreStickers/stickers";
 import { SettingsTabsKey, Sticker, StickerPack, StickerPackMeta } from "@equicordplugins/moreStickers/types";
 import { cl, clPicker, Mutex } from "@equicordplugins/moreStickers/utils";
-import { Button, React, TabBar, TextArea, Toasts } from "@webpack/common";
+import { Button, React, TabBar, TextArea, TextInput, Toasts } from "@webpack/common";
 import { JSX } from "react";
 
 const mutex = new Mutex();
@@ -52,7 +54,7 @@ const StickerPackMetadata = ({ meta, hoveredStickerPackId, setHoveredStickerPack
                 height: "96px",
                 width: "96px",
             }}></div>
-            {meta.logo?.image ? <img src={meta.logo.image} width="96" {...noDrag} /> : null}
+            {meta.logo?.image ? <StickerAssetImage src={meta.logo.image} stickerPackId={meta.id} width="96" {...noDrag} /> : null}
             <button
                 className={hoveredStickerPackId === meta.id ? "show" : ""}
                 onClick={async () => {
@@ -92,7 +94,11 @@ const StickerPackMetadata = ({ meta, hoveredStickerPackId, setHoveredStickerPack
 
 export const Packs = () => {
     const [stickerPackMetas, setstickerPackMetas] = React.useState<StickerPackMeta[]>([]);
+    const [dynamicPackSetMetas, setDynamicPackSetMetas] = React.useState<MsmDynamicPackSetMeta[]>([]);
     const [addStickerUrl, setAddStickerUrl] = React.useState<string>("");
+    const [addMsmUrl, setAddMsmUrl] = React.useState<string>("");
+    const [addMsmToken, setAddMsmToken] = React.useState<string>("");
+    const [addMsmLabel, setAddMsmLabel] = React.useState<string>("");
     const [addStickerHtml, setAddStickerHtml] = React.useState<string>("");
     const [tab, setTab] = React.useState<SettingsTabsKey>(SettingsTabsKey.ADD_STICKER_PACK_URL);
     const [hoveredStickerPackId, setHoveredStickerPackId] = React.useState<string | null>(null);
@@ -101,8 +107,12 @@ export const Packs = () => {
     async function refreshStickerPackMetas() {
         setstickerPackMetas(await getStickerPackMetas());
     }
+    async function refreshDynamicPackSetMetas() {
+        setDynamicPackSetMetas(((await getDynamicPackSetMetas()) ?? []) as MsmDynamicPackSetMeta[]);
+    }
     React.useEffect(() => {
         refreshStickerPackMetas();
+        refreshDynamicPackSetMetas();
     }, []);
     React.useEffect(() => {
         isV1().then(setV1);
@@ -132,8 +142,7 @@ export const Packs = () => {
                     <Paragraph>
                         <p>
                             Currently LINE stickers/emojis supported only. <br />
-
-                            Get Telegram stickers with <a href="#" onClick={() => VencordNative.native.openExternal("https://github.com/lekoOwO/MoreStickersConverter")}> MoreStickersConverter</a>.
+                            For Telegram and managed sticker subscriptions, use <a href="#" onClick={() => VencordNative.native.openExternal("https://github.com/lekoOwO/MoreStickersManager-rs")}>MoreStickersManager-rs (MSM)</a>, a self-hosted sticker manager. MSM is recommended over the older MoreStickersConverter workflow.
                         </p>
                     </Paragraph>
                     <Flex flexDirection="row" style={{
@@ -231,6 +240,111 @@ export const Packs = () => {
 
                             }}
                         >Insert</Button>
+                    </Flex>
+                </div>
+            }
+            {tab === SettingsTabsKey.ADD_MSM_SUBSCRIPTION &&
+                <div className="section">
+                    <Heading>Add MSM Subscription</Heading>
+                    <Paragraph>
+                        <p>
+                            Add an MSM pack subscription or subscription-group URL. Protected MSM
+                            subscriptions should use a subscription token or PAT; the token is sent
+                            only to the MSM origin and is reused for protected assets.
+                        </p>
+                    </Paragraph>
+                    <Flex flexDirection="column" style={{ gap: "8px" }}>
+                        <CheckedTextInput
+                            initialValue={addMsmUrl}
+                            onChange={setAddMsmUrl}
+                            validate={(v: string) => isMsmSubscriptionUrl(v) || "Invalid MSM subscription URL"}
+                            placeholder="https://msm.example.com/api/public/subscriptions/..."
+                        />
+                        <TextInput
+                            value={addMsmToken}
+                            onChange={setAddMsmToken}
+                            placeholder="Optional subscription token or PAT"
+                        />
+                        <TextInput
+                            value={addMsmLabel}
+                            onChange={setAddMsmLabel}
+                            placeholder="Optional display label"
+                        />
+                        <Button
+                            size={Button.Sizes.SMALL}
+                            onClick={async e => {
+                                e.preventDefault();
+                                try {
+                                    await addMsmSubscription(addMsmUrl, addMsmToken, addMsmLabel);
+                                    setAddMsmUrl("");
+                                    setAddMsmToken("");
+                                    setAddMsmLabel("");
+                                    await Promise.all([refreshStickerPackMetas(), refreshDynamicPackSetMetas()]);
+                                    Toasts.show({
+                                        message: "MSM subscription added",
+                                        type: Toasts.Type.SUCCESS,
+                                        id: Toasts.genId(),
+                                        options: { duration: 1000 }
+                                    });
+                                } catch (e: any) {
+                                    Toasts.show({
+                                        message: e.message,
+                                        type: Toasts.Type.FAILURE,
+                                        id: Toasts.genId(),
+                                        options: { duration: 1000 }
+                                    });
+                                }
+                            }}
+                        >Add MSM Subscription</Button>
+                    </Flex>
+                    <Divider style={{ marginTop: "12px", marginBottom: "12px" }} />
+                    <Heading>MSM Subscriptions</Heading>
+                    <Flex flexDirection="column" style={{ gap: "8px" }}>
+                        {
+                            dynamicPackSetMetas.length === 0 ? <BaseText tag="span">No MSM subscriptions added.</BaseText> :
+                                dynamicPackSetMetas.map(meta => (
+                                    <div key={meta.id} className={cl("msm-subscription-row")}>
+                                        <div>
+                                            <BaseText tag="span">{meta.msm?.label ?? meta.title ?? meta.id}</BaseText>
+                                            <BaseText tag="div">{meta.packs.length} packs</BaseText>
+                                            <BaseText tag="div">Last sync: {meta.msm?.lastSyncedAt ?? "never"}</BaseText>
+                                            {meta.msm?.lastError ? <BaseText tag="div">Last error: {meta.msm.lastError}</BaseText> : null}
+                                        </div>
+                                        <Flex flexDirection="row" style={{ gap: "8px" }}>
+                                            <Button
+                                                size={Button.Sizes.SMALL}
+                                                onClick={async () => {
+                                                    try {
+                                                        await syncMsmSubscription(meta, true);
+                                                        await Promise.all([refreshStickerPackMetas(), refreshDynamicPackSetMetas()]);
+                                                        Toasts.show({
+                                                            message: "MSM subscription synced",
+                                                            type: Toasts.Type.SUCCESS,
+                                                            id: Toasts.genId(),
+                                                            options: { duration: 1000 }
+                                                        });
+                                                    } catch (e: any) {
+                                                        await refreshDynamicPackSetMetas();
+                                                        Toasts.show({
+                                                            message: e.message,
+                                                            type: Toasts.Type.FAILURE,
+                                                            id: Toasts.genId(),
+                                                            options: { duration: 1000 }
+                                                        });
+                                                    }
+                                                }}
+                                            >Sync now</Button>
+                                            <Button
+                                                size={Button.Sizes.SMALL}
+                                                onClick={async () => {
+                                                    await deleteDynamicPackSetMeta(meta.id);
+                                                    await Promise.all([refreshStickerPackMetas(), refreshDynamicPackSetMetas()]);
+                                                }}
+                                            >Remove</Button>
+                                        </Flex>
+                                    </div>
+                                ))
+                        }
                     </Flex>
                 </div>
             }

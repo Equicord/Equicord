@@ -490,6 +490,15 @@
     padding-bottom: 4px;
 }
 
+.vc-more-stickers-msm-subscription-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px;
+    border-radius: 8px;
+    background-color: var(--background-secondary-alt);
+}
+
 .vc-more-stickers-pack-title {
     font-family: var(--font-primary);
     font-size: 8pt;

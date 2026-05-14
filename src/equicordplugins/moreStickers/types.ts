@@ -10,6 +10,7 @@ export interface CategoryImageProps {
     src: string;
     alt?: string;
     isActive?: boolean;
+    stickerPackId?: string;
 }
 
 export interface LineSticker {
@@ -72,6 +73,7 @@ export interface PickerContent {
 export interface PickerContentHeader {
     image: string | React.ReactNode;
     title: string;
+    stickerPackId?: string;
     children?: React.ReactNode;
     isSelected?: boolean;
     afterScroll?: () => void;
@@ -98,6 +100,7 @@ export interface PickerContentRowGrid {
 
 export enum SettingsTabsKey {
     ADD_STICKER_PACK_URL = "Add from URL",
+    ADD_MSM_SUBSCRIPTION = "Add MSM Subscription",
     ADD_STICKER_PACK_HTML = "Add from HTML",
     ADD_STICKER_PACK_FILE = "Add from File",
     MISC = "Misc",
@@ -121,6 +124,7 @@ export interface StickerCategoryType {
     id: string;
     name: string;
     iconUrl?: string;
+    stickerPackId?: string;
 }
 
 export interface StickerCategoryProps {
