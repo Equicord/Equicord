@@ -6,17 +6,20 @@
 
 import { definePluginSettings } from "@api/Settings";
 import { UserAreaButton, UserAreaRenderProps } from "@api/UserArea";
+import { Button } from "@components/Button";
+import { Switch } from "@components/Switch";
 import { debounce } from "@shared/debounce";
 import { Devs, EquicordDevs } from "@utils/constants";
 import definePlugin, { makeRange, OptionType } from "@utils/types";
 import type { Channel, VoiceState } from "@vencord/discord-types";
 import { findByCodeLazy, findByPropsLazy } from "@webpack";
-import { ChannelActions, ChannelRouter, ChannelStore, ContextMenuApi, FluxDispatcher, GuildStore, MediaEngineStore, Menu, PermissionsBits, PermissionStore, React, RelationshipStore, SelectedChannelStore, Toasts, UserStore, VoiceActions, VoiceStateStore } from "@webpack/common";
+import { ChannelActions, ChannelRouter, ChannelStore, ContextMenuApi, FluxDispatcher, GuildStore, MediaEngineStore, Menu, PermissionsBits, PermissionStore, React, RelationshipStore, SelectedChannelStore, Toasts, UserStore, VoiceActions, VoiceStateStore, useEffect, useState } from "@webpack/common";
 
 const startStream = findByCodeLazy('type:"STREAM_START"');
 const getDesktopSources = findByCodeLazy("desktop sources");
 const { isVideoEnabled } = findByPropsLazy("isVideoEnabled");
 const NO_SERVERS = "__NONE__";
+const DEFAULT_KEYBIND = ["Control", "Shift", "R"];
 
 type RandomVoiceOperation = "<" | ">" | "==";
 type StateFilterKey = "mute" | "deafen" | "video" | "stream";
@@ -68,7 +71,107 @@ interface RandomVoiceStateLike {
     selfVideo?: boolean | null;
 }
 
+function RandomVoiceKeybindSettings() {
+    const [isListening, setIsListening] = useState(false);
+    const { keybind, keybindEnabled } = settings.use(["keybind", "keybindEnabled"]);
+
+    useEffect(() => {
+        if (!isListening) return;
+
+        const handleKeyDown = (event: KeyboardEvent) => {
+            event.preventDefault();
+            event.stopPropagation();
+
+            settings.store.keybind = eventToKeybind(event);
+            setIsListening(false);
+        };
+
+        const handleBlur = () => setIsListening(false);
+
+        document.addEventListener("keydown", handleKeyDown, true);
+        window.addEventListener("blur", handleBlur);
+
+        return () => {
+            document.removeEventListener("keydown", handleKeyDown, true);
+            window.removeEventListener("blur", handleBlur);
+        };
+    }, [isListening]);
+
+    return (
+        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            <div style={{ color: "var(--text-muted)" }}>Keybind</div>
+            <Switch checked={keybindEnabled} onChange={value => { settings.store.keybindEnabled = value; }} />
+            {keybindEnabled && (
+                <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+                    <Button type="button" variant="secondary" onClick={() => setIsListening(true)} disabled={isListening}>
+                        {isListening ? "Recording..." : formatKeybind(keybind)}
+                    </Button>
+                    <Button type="button" variant="secondary" onClick={() => { settings.store.keybind = DEFAULT_KEYBIND; }} disabled={isListening}>
+                        Reset
+                    </Button>
+                </div>
+            )}
+        </div>
+    );
+}
+
+function formatKeybind(keybind: string | string[]) {
+    const keybindString = Array.isArray(keybind) ? keybind.join("+") : keybind;
+    return navigator.platform.toUpperCase().includes("MAC")
+        ? keybindString.replace(/Control/gi, "⌘").replace(/Meta/gi, "⌘").replace(/Alt/gi, "⌥").replace(/Shift/gi, "⇧")
+        : keybindString;
+}
+
+function eventToKeybind(event: KeyboardEvent) {
+    const keys = [];
+    if (event.ctrlKey) keys.push("Control");
+    if (event.shiftKey) keys.push("Shift");
+    if (event.altKey) keys.push("Alt");
+    if (event.metaKey) keys.push("Meta");
+    const mainKey = event.key === " " ? "Space" : event.key;
+    return [...keys, mainKey];
+}
+
+function getConfiguredKeybind() {
+    const raw = settings.store.keybind;
+    return Array.isArray(raw) && raw.length ? raw : DEFAULT_KEYBIND;
+}
+
+function matchesKeybind(event: KeyboardEvent) {
+    const keybind = getConfiguredKeybind().map(key => key.toLowerCase());
+    const pressed = event.key === " " ? "space" : event.key.toLowerCase();
+    const modifiers = ["control", "ctrl", "shift", "alt", "meta", "cmd", "command", "option"];
+    let nonModifierMatched = false;
+
+    for (const key of keybind) {
+        if (key === "control" || key === "ctrl") { if (!event.ctrlKey) return false; continue; }
+        if (key === "shift") { if (!event.shiftKey) return false; continue; }
+        if (key === "alt" || key === "option") { if (!event.altKey) return false; continue; }
+        if (key === "meta" || key === "cmd" || key === "command") { if (!event.metaKey) return false; continue; }
+        if (pressed !== key) return false;
+        nonModifierMatched = true;
+    }
+
+    return nonModifierMatched || keybind.every(key => modifiers.includes(key));
+}
+
+function shouldIgnoreKeybindTarget(target: EventTarget | null) {
+    return target instanceof HTMLElement && (target.isContentEditable || ["INPUT", "TEXTAREA", "SELECT"].includes(target.tagName));
+}
+
 const settings = definePluginSettings({
+    keybind: {
+        description: "Keybind to hop to a random voice channel",
+        type: OptionType.COMPONENT,
+        default: DEFAULT_KEYBIND,
+        component: RandomVoiceKeybindSettings,
+    },
+    keybindEnabled: {
+        description: "Show the random voice keybind controls",
+        type: OptionType.BOOLEAN,
+        default: false,
+        hidden: true,
+    },
     UserAmountOperation: {
         description: "Select an operation for the amounts of users",
         type: OptionType.SELECT,
@@ -679,6 +782,24 @@ export default definePlugin({
     userAreaButton: {
         icon: RandomVoiceIcon,
         render: RandomVoiceButton,
+    },
+
+    start() {
+        document.addEventListener("keydown", this.onKeyDown);
+    },
+
+    stop() {
+        document.removeEventListener("keydown", this.onKeyDown);
+    },
+
+    onKeyDown(event: KeyboardEvent) {
+        if (!settings.store.keybindEnabled) return;
+        if (shouldIgnoreKeybindTarget(event.target)) return;
+        if (!matchesKeybind(event)) return;
+
+        event.preventDefault();
+        event.stopPropagation();
+        void joinRandomVoice();
     },
 
     flux: {
