@@ -181,7 +181,7 @@ function TroubleshootingSettings() {
 function CustomSoundSettings({ soundKey, nameKey }: { soundKey: string; nameKey: string; }) {
     const fileInputRef = React.useRef<HTMLInputElement>(null);
     const [busy, setBusy] = React.useState(false);
-    const [, forceUpdate] = React.useReducer((count: number) => count + 1, 0);
+    const forceUpdate = useForceUpdater();
     const customSound = settings.store[soundKey];
     const customSoundName = settings.store[nameKey] ?? "";
     const hasCustomSound = typeof customSound === "string" && customSound.startsWith("data:audio/");
