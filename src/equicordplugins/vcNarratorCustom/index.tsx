@@ -70,7 +70,7 @@ import {
 const cl = classNameFactory("vc-narrator-");
 
 const API_BASE = "https://tiktok-tts-aio.exampleuser.workers.dev";
-const AUDIO_EXTENSIONS = ["mp3", "wav", "ogg", "m4a", "aac", "flac", "webm", "wma", "mp4"];
+const AUDIO_EXTENSIONS = ["mp3", "wav", "ogg", "m4a", "aac", "flac", "wma"];
 const SOUND_PLACEHOLDER = "{{SOUND}}";
 
 type LastApiCallStatus = {
