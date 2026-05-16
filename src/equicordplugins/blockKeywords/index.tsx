@@ -183,7 +183,7 @@ export default definePlugin({
         }
     },
 
-    blockMessagesWithKeywords(messageList: any) {
+    blockMessagesWithKeywords(messageList: { reset(v: unknown): unknown; map(fn: (m: unknown) => unknown): unknown; }) {
         return messageList.reset(messageList.map(
             message => message.set("blocked", message.blocked || this.containsBlockedKeywords(message))
         ));
