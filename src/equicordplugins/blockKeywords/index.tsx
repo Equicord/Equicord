@@ -93,7 +93,7 @@ const settings = definePluginSettings({
     regexHelper: {
         type: OptionType.COMPONENT,
         description: "Test your regular expressions against a sample input",
-        component: () => <RegexHelper />,
+        component: () => <ErrorBoundary noop><RegexHelper /></ErrorBoundary>,
     },
     caseSensitive: {
         type: OptionType.BOOLEAN,
