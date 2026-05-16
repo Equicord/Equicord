@@ -9,17 +9,20 @@ import { UserAreaButton, UserAreaRenderProps } from "@api/UserArea";
 import { Button } from "@components/Button";
 import { Switch } from "@components/Switch";
 import { debounce } from "@shared/debounce";
-import { Devs, EquicordDevs } from "@utils/constants";
+import { Devs, EquicordDevs, IS_MAC } from "@utils/constants";
 import definePlugin, { makeRange, OptionType } from "@utils/types";
 import type { Channel, VoiceState } from "@vencord/discord-types";
 import { findByCodeLazy, findByPropsLazy } from "@webpack";
-import { ChannelActions, ChannelRouter, ChannelStore, ContextMenuApi, FluxDispatcher, GuildStore, MediaEngineStore, Menu, PermissionsBits, PermissionStore, React, RelationshipStore, SelectedChannelStore, Toasts, UserStore, VoiceActions, VoiceStateStore, useEffect, useState } from "@webpack/common";
+import { ChannelActions, ChannelRouter, ChannelStore, ContextMenuApi, FluxDispatcher, GuildStore, MediaEngineStore, Menu, PermissionsBits, PermissionStore, React, RelationshipStore, SelectedChannelStore, Toasts, useEffect, UserStore, useState, VoiceActions, VoiceStateStore } from "@webpack/common";
 
 const startStream = findByCodeLazy('type:"STREAM_START"');
 const getDesktopSources = findByCodeLazy("desktop sources");
 const { isVideoEnabled } = findByPropsLazy("isVideoEnabled");
 const NO_SERVERS = "__NONE__";
-const DEFAULT_KEYBIND = ["Control", "Shift", "R"];
+const DEFAULT_KEYBIND = IS_MAC ? ["Meta", "Shift", "R"] : ["Control", "Shift", "R"];
+const MODIFIER_KEYS = new Set(["control", "ctrl", "shift", "alt", "option", "meta", "cmd", "command", "mod"]);
+
+let isRecordingKeybind = false;
 
 type RandomVoiceOperation = "<" | ">" | "==";
 type StateFilterKey = "mute" | "deafen" | "video" | "stream";
@@ -73,14 +76,17 @@ interface RandomVoiceStateLike {
 
 function RandomVoiceKeybindSettings() {
     const [isListening, setIsListening] = useState(false);
-    const { keybind, keybindEnabled } = settings.use(["keybind", "keybindEnabled"]);
+    const { keybind, keybindEnabled } = settings.use();
 
     useEffect(() => {
+        isRecordingKeybind = isListening;
         if (!isListening) return;
 
         const handleKeyDown = (event: KeyboardEvent) => {
             event.preventDefault();
             event.stopPropagation();
+
+            if (isModifierKey(event.key)) return;
 
             settings.store.keybind = eventToKeybind(event);
             setIsListening(false);
@@ -92,6 +98,7 @@ function RandomVoiceKeybindSettings() {
         window.addEventListener("blur", handleBlur);
 
         return () => {
+            isRecordingKeybind = false;
             document.removeEventListener("keydown", handleKeyDown, true);
             window.removeEventListener("blur", handleBlur);
         };
@@ -117,42 +124,91 @@ function RandomVoiceKeybindSettings() {
 
 function formatKeybind(keybind: string | string[]) {
     const keybindString = Array.isArray(keybind) ? keybind.join("+") : keybind;
-    return navigator.platform.toUpperCase().includes("MAC")
-        ? keybindString.replace(/Control/gi, "⌘").replace(/Meta/gi, "⌘").replace(/Alt/gi, "⌥").replace(/Shift/gi, "⇧")
+    return IS_MAC
+        ? keybindString.replace(/Control/gi, "^").replace(/Meta|Command|Cmd/gi, "⌘").replace(/Alt|Option/gi, "⌥").replace(/Shift/gi, "⇧")
         : keybindString;
 }
 
 function eventToKeybind(event: KeyboardEvent) {
-    const keys = [];
-    if (event.ctrlKey) keys.push("Control");
-    if (event.shiftKey) keys.push("Shift");
-    if (event.altKey) keys.push("Alt");
-    if (event.metaKey) keys.push("Meta");
-    const mainKey = event.key === " " ? "Space" : event.key;
-    return [...keys, mainKey];
+    const keys: string[] = [];
+    addPressedModifiers(event, keys);
+    keys.push(normalizeKey(event.key));
+    return keys;
 }
 
 function getConfiguredKeybind() {
     const raw = settings.store.keybind;
-    return Array.isArray(raw) && raw.length ? raw : DEFAULT_KEYBIND;
+    if (Array.isArray(raw) && raw.some(key => !isModifierKey(key))) return raw;
+    return DEFAULT_KEYBIND;
 }
 
 function matchesKeybind(event: KeyboardEvent) {
     const keybind = getConfiguredKeybind().map(key => key.toLowerCase());
-    const pressed = event.key === " " ? "space" : event.key.toLowerCase();
-    const modifiers = ["control", "ctrl", "shift", "alt", "meta", "cmd", "command", "option"];
+    const pressed = normalizeKey(event.key).toLowerCase();
+    const code = normalizeCode(event.code);
     let nonModifierMatched = false;
 
     for (const key of keybind) {
-        if (key === "control" || key === "ctrl") { if (!event.ctrlKey) return false; continue; }
-        if (key === "shift") { if (!event.shiftKey) return false; continue; }
-        if (key === "alt" || key === "option") { if (!event.altKey) return false; continue; }
-        if (key === "meta" || key === "cmd" || key === "command") { if (!event.metaKey) return false; continue; }
-        if (pressed !== key) return false;
+        if (isModifierKey(key)) {
+            if (!isModifierPressed(event, key)) return false;
+            continue;
+        }
+
+        if (pressed !== key && code !== key) return false;
         nonModifierMatched = true;
     }
 
-    return nonModifierMatched || keybind.every(key => modifiers.includes(key));
+    return nonModifierMatched;
+}
+
+function isModifierKey(key: string) {
+    return MODIFIER_KEYS.has(key.toLowerCase());
+}
+
+function isModifierPressed(event: KeyboardEvent, key: string) {
+    switch (key) {
+        case "mod":
+            return IS_MAC ? event.metaKey : event.ctrlKey;
+        case "control":
+        case "ctrl":
+            return event.ctrlKey;
+        case "shift":
+            return event.shiftKey;
+        case "alt":
+        case "option":
+            return event.altKey;
+        case "meta":
+        case "cmd":
+        case "command":
+            return event.metaKey;
+        default:
+            return false;
+    }
+}
+
+function addPressedModifiers(event: KeyboardEvent, keys: string[]) {
+    if (event.metaKey) keys.push("Meta");
+    if (event.ctrlKey) keys.push("Control");
+    if (event.shiftKey) keys.push("Shift");
+    if (event.altKey) keys.push("Alt");
+}
+
+function keybindUsesModifier() {
+    return getConfiguredKeybind().some(isModifierKey);
+}
+
+function normalizeKey(key: string) {
+    if (key === " ") return "Space";
+    if (key === "Esc") return "Escape";
+    return key.length === 1 ? key.toUpperCase() : key;
+}
+
+function normalizeCode(code: string) {
+    return code
+        .toLowerCase()
+        .replace(/^key/, "")
+        .replace(/^digit/, "")
+        .replace(/^numpad/, "");
 }
 
 function shouldIgnoreKeybindTarget(target: EventTarget | null) {
@@ -785,16 +841,17 @@ export default definePlugin({
     },
 
     start() {
-        document.addEventListener("keydown", this.onKeyDown);
+        window.addEventListener("keydown", this.onKeyDown, true);
     },
 
     stop() {
-        document.removeEventListener("keydown", this.onKeyDown);
+        window.removeEventListener("keydown", this.onKeyDown, true);
     },
 
     onKeyDown(event: KeyboardEvent) {
+        if (isRecordingKeybind) return;
         if (!settings.store.keybindEnabled) return;
-        if (shouldIgnoreKeybindTarget(event.target)) return;
+        if (shouldIgnoreKeybindTarget(event.target) && !keybindUsesModifier()) return;
         if (!matchesKeybind(event)) return;
 
         event.preventDefault();
