@@ -18,7 +18,8 @@ const cardStyle = { padding: "0.4em 0.75em", display: "flex", alignItems: "cente
 
 function splitPatterns(input: string): string[] {
     return input
-        .replace(/\{(\d+,?\d*|,\d+)\}/g, m => m.replace(",", "\x00"))
+        .replace(/\[([^\]]*)\]/g, m => m.replace(/,/g, "\x00")) // protect commas in [...]
+        .replace(/\{(\d+,?\d*|,\d+)\}/g, m => m.replace(",", "\x00")) // protect commas in {n,m}
         .split(",")
         .map(s => s.replace(/\x00/g, ",").trim())
         .filter(Boolean);
@@ -32,12 +33,15 @@ function RegexHelper() {
         return splitPatterns(settings.store.blockedWords)
             .map(pattern => {
                 try {
-                    return { pattern, matches: new RegExp(pattern, caseSensitiveFlag).test(testInput) };
+                    const regex = settings.store.useRegex
+                        ? new RegExp(pattern, caseSensitiveFlag)
+                        : new RegExp(`\\b${pattern.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`, caseSensitiveFlag);
+                    return { pattern, matches: regex.test(testInput) };
                 } catch (e: any) {
                     return { pattern, matches: false, error: e.message as string };
                 }
             });
-    }, [testInput, settings.store.blockedWords, settings.store.caseSensitive]);
+    }, [testInput, settings.store.blockedWords, settings.store.caseSensitive, settings.store.useRegex]);
 
     return (
         <Card style={{ padding: "0.75em" }}>
@@ -112,30 +116,12 @@ const settings = definePluginSettings({
 export function containsBlockedKeywords(message: Message) {
     if (!blockedKeywords) return false;
 
-    // can't use forEach because we need to return from inside the loop
-    // message content loop
-    for (let wordIndex = 0; wordIndex < blockedKeywords.length; wordIndex++) {
-        if (blockedKeywords[wordIndex].test(message.content)) {
-            return true;
-        }
-    }
+    // test a nullable string against all keywords
+    const testField = (text: string | null | undefined) => text != null && blockedKeywords.some(regex => regex.test(text));
 
-    // embed content loop (e.g. twitter embeds)
-    for (let embedIndex = 0; embedIndex < message.embeds.length; embedIndex++) {
-        const embed = message.embeds[embedIndex];
-        for (let wordIndex = 0; wordIndex < blockedKeywords.length; wordIndex++) {
-            // doing this because undefined strings get converted to the string "undefined" in regex tests
-            // @ts-ignore
-            const descriptionHasKeywords = embed.rawDescription != null && blockedKeywords[wordIndex].test(embed.rawDescription);
-            // @ts-ignore
-            const titleHasKeywords = embed.rawTitle != null && blockedKeywords[wordIndex].test(embed.rawTitle);
-            if (descriptionHasKeywords || titleHasKeywords) {
-                return true;
-            }
-        }
-    }
-
-    return false;
+    return blockedKeywords.some(regex =>
+        regex.test(message.content)) || message.embeds.some(embed =>
+        testField(embed.rawDescription) || testField(embed.rawTitle));
 }
 
 export default definePlugin({
