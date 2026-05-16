@@ -37,8 +37,8 @@ function RegexHelper() {
                         ? new RegExp(pattern, caseSensitiveFlag)
                         : new RegExp(`\\b${pattern.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`, caseSensitiveFlag);
                     return { pattern, matches: regex.test(testInput) };
-                } catch (e: any) {
-                    return { pattern, matches: false, error: e.message as string };
+                } catch (e: unknown) {
+                    return { pattern, matches: false, error: e instanceof Error ? e.message : String(e) };
                 }
             });
     }, [testInput, settings.store.blockedWords, settings.store.caseSensitive, settings.store.useRegex]);
