@@ -7,6 +7,7 @@
 import { definePluginSettings } from "@api/Settings";
 import { UserAreaButton, UserAreaRenderProps } from "@api/UserArea";
 import { Button } from "@components/Button";
+import ErrorBoundary from "@components/ErrorBoundary";
 import { Switch } from "@components/Switch";
 import { debounce } from "@shared/debounce";
 import { Devs, EquicordDevs, IS_MAC } from "@utils/constants";
@@ -148,11 +149,10 @@ function matchesKeybind(event: KeyboardEvent) {
     const code = normalizeCode(event.code);
     let nonModifierMatched = false;
 
+    if (!matchesModifiers(event, keybind)) return false;
+
     for (const key of keybind) {
-        if (isModifierKey(key)) {
-            if (!isModifierPressed(event, key)) return false;
-            continue;
-        }
+        if (isModifierKey(key)) continue;
 
         if (pressed !== key && code !== key) return false;
         nonModifierMatched = true;
@@ -165,24 +165,36 @@ function isModifierKey(key: string) {
     return MODIFIER_KEYS.has(key.toLowerCase());
 }
 
-function isModifierPressed(event: KeyboardEvent, key: string) {
+function matchesModifiers(event: KeyboardEvent, keybind: string[]) {
+    const expected = new Set(keybind.map(getModifierKey).filter(Boolean));
+    const pressed = new Set<string>();
+
+    if (event.ctrlKey) pressed.add("control");
+    if (event.shiftKey) pressed.add("shift");
+    if (event.altKey) pressed.add("alt");
+    if (event.metaKey) pressed.add("meta");
+
+    return expected.size === pressed.size && [...expected].every(key => pressed.has(key));
+}
+
+function getModifierKey(key: string) {
     switch (key) {
         case "mod":
-            return IS_MAC ? event.metaKey : event.ctrlKey;
+            return IS_MAC ? "meta" : "control";
         case "control":
         case "ctrl":
-            return event.ctrlKey;
+            return "control";
         case "shift":
-            return event.shiftKey;
+            return "shift";
         case "alt":
         case "option":
-            return event.altKey;
+            return "alt";
         case "meta":
         case "cmd":
         case "command":
-            return event.metaKey;
+            return "meta";
         default:
-            return false;
+            return null;
     }
 }
 
@@ -220,7 +232,7 @@ const settings = definePluginSettings({
         description: "Keybind to hop to a random voice channel",
         type: OptionType.COMPONENT,
         default: DEFAULT_KEYBIND,
-        component: RandomVoiceKeybindSettings,
+        component: ErrorBoundary.wrap(RandomVoiceKeybindSettings),
     },
     keybindEnabled: {
         description: "Show the random voice keybind controls",
