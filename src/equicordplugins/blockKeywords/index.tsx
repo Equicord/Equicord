@@ -5,11 +5,68 @@
  */
 
 import { definePluginSettings } from "@api/Settings";
+import { Card } from "@components/Card";
+import { HeadingTertiary } from "@components/Heading";
+import { Margins } from "@components/margins";
 import { EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 import { Message } from "@vencord/discord-types";
+import { React, TextInput } from "@webpack/common";
 
 let blockedKeywords: Array<RegExp>;
+const cardStyle = { padding: "0.4em 0.75em", display: "flex", alignItems: "center", justifyContent: "space-between" };
+
+function RegexHelper() {
+    const [testInput, setTestInput] = React.useState("");
+
+    const results = React.useMemo(() => {
+        const caseSensitiveFlag = settings.store.caseSensitive ? "" : "i";
+        return settings.store.blockedWords
+            .split(",")
+            .map(w => w.trim())
+            .filter(Boolean)
+            .map(pattern => {
+                try {
+                    return { pattern, matches: new RegExp(pattern, caseSensitiveFlag).test(testInput) };
+                } catch (e: any) {
+                    return { pattern, matches: false, error: e.message as string };
+                }
+            });
+    }, [testInput, settings.store.blockedWords, settings.store.caseSensitive]);
+
+    return (
+        <Card style={{ padding: "0.75em" }}>
+            <HeadingTertiary className={Margins.bottom8}>Regex Helper</HeadingTertiary>
+            <TextInput
+                type="text"
+                placeholder="Input to test..."
+                value={testInput}
+                onChange={setTestInput}
+                maxLength={null}
+            />
+            {results.length === 0 ?
+                <Card
+                    key="vc-no-patterns-rgex"
+                    variant="warning"
+                    className={Margins.top8}
+                    style={cardStyle}
+                >
+                    <code>No patterns configured</code>
+                </Card> : (
+                    results.map(({ pattern, matches, error }, i) => (
+                        <Card
+                            key={`vc-pattern-card-${i}`}
+                            variant={error ? "danger" : matches ? "success" : "primary"}
+                            className={Margins.top8}
+                            style={cardStyle}
+                        >
+                            <code>{pattern}</code>
+                            {error && <span style={{ fontSize: "12px", marginLeft: "1em", flexShrink: 0 }}>{error}</span>}
+                        </Card>
+                    )))}
+        </Card>
+    );
+}
 
 const settings = definePluginSettings({
     blockedWords: {
@@ -24,6 +81,11 @@ const settings = definePluginSettings({
         default: false,
         restartNeeded: true
     },
+    regexHelper: {
+        type: OptionType.COMPONENT,
+        description: "Test your regular expressions against a sample input",
+        component: () => <RegexHelper />,
+    },
     caseSensitive: {
         type: OptionType.BOOLEAN,
         description: "Whether to use a case sensitive search or not",
@@ -36,6 +98,10 @@ const settings = definePluginSettings({
         default: true,
         restartNeeded: true,
     },
+}, {
+    regexHelper: {
+        hidden() { return !this.store.useRegex; }
+    }
 });
 
 export function containsBlockedKeywords(message: Message) {
@@ -71,7 +137,7 @@ export default definePlugin({
     name: "BlockKeywords",
     description: "Blocks messages containing specific user-defined keywords, as if the user sending them was blocked.",
     tags: ["Appearance", "Customisation", "Privacy"],
-    authors: [EquicordDevs.catcraft],
+    authors: [EquicordDevs.catcraft, EquicordDevs.secp192k1],
     patches: [
         {
             find: "_channelMessages={}",
