@@ -27,6 +27,7 @@ function splitPatterns(input: string): string[] {
 
 function RegexHelper() {
     const [testInput, setTestInput] = React.useState("");
+    const { blockedWords, caseSensitive, useRegex } = settings.use(["blockedWords", "caseSensitive", "useRegex"]);
 
     const results = React.useMemo(() => {
         const caseSensitiveFlag = settings.store.caseSensitive ? "" : "i";
