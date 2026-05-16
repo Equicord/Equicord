@@ -51,7 +51,7 @@ function RegexHelper() {
             />
             {results.length === 0 ?
                 <Card
-                    key="vc-no-patterns-rgex"
+                    key="vc-no-patterns-regex"
                     variant="warning"
                     className={Margins.top8}
                     style={cardStyle}
@@ -76,7 +76,7 @@ function RegexHelper() {
 const settings = definePluginSettings({
     blockedWords: {
         type: OptionType.STRING,
-        description: "Comma-seperated list of words to block",
+        description: "Comma-separated list of words to block",
         default: "",
         restartNeeded: true
     },
@@ -181,7 +181,7 @@ export default definePlugin({
         const blockedWordsList = splitPatterns(settings.store.blockedWords);
         const caseSensitiveFlag = settings.store.caseSensitive ? "" : "i";
 
-        if (!blockedWordsList) return;
+        if (blockedWordsList.length === 0) return;
 
         if (settings.store.useRegex) {
             blockedKeywords = blockedWordsList.map(word => {
