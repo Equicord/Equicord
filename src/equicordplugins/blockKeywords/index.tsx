@@ -7,6 +7,7 @@
 import { definePluginSettings } from "@api/Settings";
 import { Card } from "@components/Card";
 import { HeadingTertiary } from "@components/Heading";
+import { ErrorBoundary } from "@components/index";
 import { Margins } from "@components/margins";
 import { EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
