@@ -16,15 +16,20 @@ import { React, TextInput } from "@webpack/common";
 let blockedKeywords: Array<RegExp>;
 const cardStyle = { padding: "0.4em 0.75em", display: "flex", alignItems: "center", justifyContent: "space-between" };
 
+function splitPatterns(input: string): string[] {
+    return input
+        .replace(/\{(\d+,?\d*|,\d+)\}/g, m => m.replace(",", "\x00"))
+        .split(",")
+        .map(s => s.replace(/\x00/g, ",").trim())
+        .filter(Boolean);
+}
+
 function RegexHelper() {
     const [testInput, setTestInput] = React.useState("");
 
     const results = React.useMemo(() => {
         const caseSensitiveFlag = settings.store.caseSensitive ? "" : "i";
-        return settings.store.blockedWords
-            .split(",")
-            .map(w => w.trim())
-            .filter(Boolean)
+        return splitPatterns(settings.store.blockedWords)
             .map(pattern => {
                 try {
                     return { pattern, matches: new RegExp(pattern, caseSensitiveFlag).test(testInput) };
@@ -173,7 +178,7 @@ export default definePlugin({
     containsBlockedKeywords,
 
     start() {
-        const blockedWordsList: Array<string> = settings.store.blockedWords.split(",");
+        const blockedWordsList = splitPatterns(settings.store.blockedWords);
         const caseSensitiveFlag = settings.store.caseSensitive ? "" : "i";
 
         if (!blockedWordsList) return;
