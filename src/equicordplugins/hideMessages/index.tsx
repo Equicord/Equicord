@@ -70,9 +70,8 @@ const userCtxPatch: NavContextMenuPatchCallback = (children, { channel }: UserCo
     if (!group) return;
 
     const hidden = hiddenDmIds.has(channel.id);
-    const closeDmIndex = group.findIndex(c => c?.props?.id === "close-dm");
 
-    group.splice(closeDmIndex, 0, (
+    group.splice(group.findIndex(c => c?.props?.id === "close-dm"), 0, (
         <Menu.MenuItem
             id="vc-hidemessages-dm"
             label={hidden ? "Unhide DM" : "Hide DM"}
