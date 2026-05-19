@@ -114,13 +114,9 @@ async function fetchState(userId: string): Promise<BlockDetectionState> {
 
         return body.user_profile == null ? "blockedYou" : "clear";
     } catch (error) {
-        const status = typeof error === "object" && error != null && "status" in error
+        const status = isObject(error) && "status" in error
             ? Reflect.get(error, "status")
             : void 0;
-
-        if (status === 404) {
-            return "unknown";
-        }
 
         return "unknown";
     }

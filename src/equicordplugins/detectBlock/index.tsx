@@ -1,6 +1,6 @@
 /*
  * Vencord, a Discord client mod
- * Copyright (c) 2025 Vendicated and contributors
+ * Copyright (c) 2026 Vendicated and contributors
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
@@ -42,7 +42,7 @@ let latestVoiceJoinAttempt = 0;
 
 function getDisplayName(user: User | undefined) {
     if (!user) return "Unknown user";
-    return user.globalName || user.username;
+    return user.globalName ?? user.username;
 }
 
 function getBlockedVoiceUserIds(channelId: string) {
@@ -214,7 +214,10 @@ async function maybeWarnForGroupChannel(channelId: string) {
             blockedNames: blockedUsers.map(user => user.name),
             blockedUserIds: blockedUsers.map(user => user.userId),
             variant: "group",
-            onConfirm: () => void 0
+            onConfirm: () => {
+                if (generation !== activeGeneration) return;
+                void VoiceChannelActions.selectVoiceChannel(null);
+            }
         });
     })().finally(() => {
         if (pendingGroupWarnings.get(channelId) === pendingPromise) {

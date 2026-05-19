@@ -71,7 +71,7 @@ function getAvatar(user: User | undefined, fallbackId: string) {
     const fallbackUser = UserStore.getUser(fallbackId);
     return (
         <Avatar
-            src={user?.getAvatarURL(undefined, 24, true) ?? fallbackUser?.getAvatarURL(undefined, 24, true) ?? fallbackUser?.getAvatarURL(undefined, 24, false) ?? undefined}
+            src={IconUtils.getUserAvatarURL(user ?? fallbackUser, { size: 32 })}
             size="SIZE_32"
         />
     );
@@ -79,7 +79,7 @@ function getAvatar(user: User | undefined, fallbackId: string) {
 
 function getUserDisplayName(user: User | undefined, fallbackId: string) {
     const fallbackUser = UserStore.getUser(fallbackId);
-    return user?.globalName || user?.username || fallbackUser?.globalName || fallbackUser?.username || "Unknown user";
+    return user?.globalName ?? user?.username ?? fallbackUser?.globalName ?? fallbackUser?.username ?? "Unknown user";
 }
 
 function getBlockedSubjectText(names: string[], userIds: string[]) {
