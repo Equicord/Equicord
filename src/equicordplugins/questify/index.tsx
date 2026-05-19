@@ -354,7 +354,7 @@ export default definePlugin({
             predicate: () => !getQuestifySettings().disableQuestsEverything && hasEnabledAutoCompleteQuestTypes(),
             replacement: {
                 match: /(?<=SELECT&&!\i&&!\i,(\i)=null;)(return )(\i\?\i=\(0,\i.\i\)\(\i,{quest:(\i))/,
-                replace: "const questifyButton=$self.enrolledIncompleteButton({quest:$4});$2questifyButton?$1=questifyButton:$3"
+                replace: "const questifyButton=$self.enrolledIncompleteButton({quest:$4,size:\"sm\"});$2questifyButton?$1=questifyButton:$3"
             }
         },
         {
