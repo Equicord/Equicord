@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import "./styles.css";
+
 import { definePluginSettings } from "@api/Settings";
 import { UserAreaButton, UserAreaRenderProps } from "@api/UserArea";
 import { Button } from "@components/Button";
@@ -11,6 +13,7 @@ import ErrorBoundary from "@components/ErrorBoundary";
 import { Switch } from "@components/Switch";
 import { debounce } from "@shared/debounce";
 import { Devs, EquicordDevs, IS_MAC } from "@utils/constants";
+import { classNameFactory } from "@utils/css";
 import definePlugin, { makeRange, OptionType } from "@utils/types";
 import type { Channel, VoiceState } from "@vencord/discord-types";
 import { findByCodeLazy, findByPropsLazy } from "@webpack";
@@ -24,8 +27,9 @@ const DEFAULT_KEYBIND = IS_MAC ? ["Meta", "Shift", "R"] : ["Control", "Shift", "
 const MODIFIER_KEYS = new Set(["control", "ctrl", "shift", "alt", "option", "meta", "cmd", "command", "mod"]);
 
 let isRecordingKeybind = false;
+const cl = classNameFactory("vc-random-voice-");
 
-type RandomVoiceOperation = "<" | ">" | "==";
+type RandomVoiceOperation = "<" | ">" | "==" | string;
 type StateFilterKey = "mute" | "deafen" | "video" | "stream";
 type SelfSettingKey = "selfMute" | "selfDeafen" | "autoCamera" | "autoStream" | "leaveEmpty" | "autoNavigate" | "avoidStages" | "avoidAfk" | "prioritizeFriends";
 type PostJoinAction = () => void | Promise<void>;
@@ -106,11 +110,11 @@ function RandomVoiceKeybindSettings() {
     }, [isListening]);
 
     return (
-        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            <div style={{ color: "var(--text-muted)" }}>Keybind</div>
+        <div className={cl("record")}>
+            <div className={cl("keybind")}>Keybind</div>
             <Switch checked={keybindEnabled} onChange={value => { settings.store.keybindEnabled = value; }} />
             {keybindEnabled && (
-                <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+                <div className={cl("recording")}>
                     <Button type="button" variant="secondary" onClick={() => setIsListening(true)} disabled={isListening}>
                         {isListening ? "Recording..." : formatKeybind(keybind)}
                     </Button>
@@ -166,7 +170,7 @@ function isModifierKey(key: string) {
 }
 
 function matchesModifiers(event: KeyboardEvent, keybind: string[]) {
-    const expected = new Set(keybind.map(getModifierKey).filter(Boolean));
+    const expected = new Set(keybind.map(getModifierKey).filter(key => key !== null));
     const pressed = new Set<string>();
 
     if (event.ctrlKey) pressed.add("control");
@@ -229,7 +233,6 @@ function shouldIgnoreKeybindTarget(target: EventTarget | null) {
 
 const settings = definePluginSettings({
     keybind: {
-        description: "Keybind to hop to a random voice channel",
         type: OptionType.COMPONENT,
         default: DEFAULT_KEYBIND,
         component: ErrorBoundary.wrap(RandomVoiceKeybindSettings),
@@ -243,8 +246,11 @@ const settings = definePluginSettings({
     UserAmountOperation: {
         description: "Select an operation for the amounts of users",
         type: OptionType.SELECT,
-        options: [...operationOptions],
-        default: "<",
+        options: [
+            { label: "More than", value: "<", default: true },
+            { label: "Less than", value: ">", default: false },
+            { label: "Equal to", value: "==", default: false },
+        ],
     },
     UserAmount: {
         description: "Select amount of users",
@@ -256,8 +262,11 @@ const settings = definePluginSettings({
     spacesLeftOperation: {
         description: "Select an operation for the maximum amounts of users",
         type: OptionType.SELECT,
-        options: [...operationOptions],
-        default: "<",
+        options: [
+            { label: "More than", value: "<", default: true },
+            { label: "Less than", value: ">", default: false },
+            { label: "Equal to", value: "==", default: false },
+        ],
     },
     spacesLeft: {
         description: "Select amount of max users",
@@ -269,8 +278,11 @@ const settings = definePluginSettings({
     vcLimitOperation: {
         description: "Select an operation for the voice-channel.",
         type: OptionType.SELECT,
-        options: [...operationOptions],
-        default: "<",
+        options: [
+            { label: "More than", value: "<", default: true },
+            { label: "Less than", value: ">", default: false },
+            { label: "Equal to", value: "==", default: false },
+        ],
     },
     vcLimit: {
         description: "Select a voice-channel limit",
