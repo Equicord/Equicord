@@ -137,7 +137,7 @@ export function openBlockedWarningModal({
                 }
             }))}
         >
-            <div style={{ display: "flex", justifyContent: "center", marginBottom: "16px" }}>
+            <div className={cl("graphic-wrapper")}>
                 <img alt="" aria-hidden="true" draggable={false} className={cl("graphic")} src={WARNING_GRAPHIC_SRC} />
             </div>
             <div className={cl("info-group")}>

@@ -6,6 +6,7 @@
 
 import "./styles.css";
 
+import ErrorBoundary from "@components/ErrorBoundary";
 import { EquicordDevs } from "@utils/constants";
 import definePlugin from "@utils/types";
 import { Channel, User } from "@vencord/discord-types";
@@ -236,8 +237,9 @@ export default definePlugin({
     name: "DetectBlock",
     description: "Detects users who have blocked you and warns when they appear in voice channels or group DMs.",
     authors: [EquicordDevs.justjxke],
+    dependencies: ["MemberListDecoratorsAPI", "MessageDecorationsAPI", "NicknameIconsAPI"],
     flux: {
-        USER_PROFILE_FETCH_SUCCESS({ userProfile }: { userProfile: { user: User; user_profile: any | null; }; }) {
+        USER_PROFILE_FETCH_SUCCESS({ userProfile }: { userProfile: { user: User; user_profile: Record<string, unknown> | null; }; }) {
             const userId = userProfile.user.id;
             if (userProfile.user_profile != null && UserProfileStore.getUserProfile(userId) != null) {
                 primeClear(userId);
@@ -294,12 +296,12 @@ export default definePlugin({
         clearDetectionState();
     },
     renderNicknameIcon({ userId }) {
-        return <DetectBlockBadge user={UserStore.getUser(userId)} isProfile />;
+        return <ErrorBoundary noop><DetectBlockBadge user={UserStore.getUser(userId)} isProfile /></ErrorBoundary>;
     },
     renderMemberListDecorator({ user }) {
-        return <DetectBlockBadge user={user} isMemberList />;
+        return <ErrorBoundary noop><DetectBlockBadge user={user} isMemberList /></ErrorBoundary>;
     },
     renderMessageDecoration({ message }) {
-        return <DetectBlockBadge user={message?.author} isMessage />;
+        return <ErrorBoundary noop><DetectBlockBadge user={message?.author} isMessage /></ErrorBoundary>;
     }
 });

@@ -47,6 +47,12 @@
     right: 16px;
 }
 
+.vc-detect-block-graphic-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 16px;
+}
+
 .vc-detect-block-graphic {
     display: block;
     width: 376px;

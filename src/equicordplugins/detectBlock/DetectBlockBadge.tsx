@@ -56,9 +56,8 @@ export interface DetectBlockBadgeProps {
 }
 
 export function DetectBlockBadge({ user, isMemberList, isMessage, isProfile }: DetectBlockBadgeProps) {
+    const state = useBlockState(user?.id ?? "");
     if (!user) return null;
-
-    const state = useBlockState(user.id);
     if (state !== "blockedYou") return null;
 
     return (
