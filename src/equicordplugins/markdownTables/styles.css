@@ -86,24 +86,20 @@
 
 .vc-markdownTables-scrollFrame::before {
     left: 0;
-    background: linear-gradient(
-        to right,
-        var(--vc-markdown-tables-fade-color) 0,
-        var(--vc-markdown-tables-fade-mid) 42%,
-        var(--vc-markdown-tables-fade-soft) 70%,
-        transparent 100%
-    );
+    background: linear-gradient(to right,
+            var(--vc-markdown-tables-fade-color) 0,
+            var(--vc-markdown-tables-fade-mid) 42%,
+            var(--vc-markdown-tables-fade-soft) 70%,
+            transparent 100%);
 }
 
 .vc-markdownTables-scrollFrame::after {
     right: 0;
-    background: linear-gradient(
-        to left,
-        var(--vc-markdown-tables-fade-color) 0,
-        var(--vc-markdown-tables-fade-mid) 42%,
-        var(--vc-markdown-tables-fade-soft) 70%,
-        transparent 100%
-    );
+    background: linear-gradient(to left,
+            var(--vc-markdown-tables-fade-color) 0,
+            var(--vc-markdown-tables-fade-mid) 42%,
+            var(--vc-markdown-tables-fade-soft) 70%,
+            transparent 100%);
 }
 
 .vc-markdownTables-mask-left::before,
@@ -127,31 +123,25 @@
 }
 
 .vc-markdownTables-mask-left .vc-markdownTables-scroll {
-    mask-image: linear-gradient(
-        to right,
-        transparent 0,
-        black var(--vc-markdown-tables-mask-size),
-        black 100%
-    );
+    mask-image: linear-gradient(to right,
+            transparent 0,
+            black var(--vc-markdown-tables-mask-size),
+            black 100%);
 }
 
 .vc-markdownTables-mask-right .vc-markdownTables-scroll {
-    mask-image: linear-gradient(
-        to right,
-        black 0,
-        black calc(100% - var(--vc-markdown-tables-mask-size)),
-        transparent 100%
-    );
+    mask-image: linear-gradient(to right,
+            black 0,
+            black calc(100% - var(--vc-markdown-tables-mask-size)),
+            transparent 100%);
 }
 
 .vc-markdownTables-mask-left.vc-markdownTables-mask-right .vc-markdownTables-scroll {
-    mask-image: linear-gradient(
-        to right,
-        transparent 0,
-        black var(--vc-markdown-tables-mask-size),
-        black calc(100% - var(--vc-markdown-tables-mask-size)),
-        transparent 100%
-    );
+    mask-image: linear-gradient(to right,
+            transparent 0,
+            black var(--vc-markdown-tables-mask-size),
+            black calc(100% - var(--vc-markdown-tables-mask-size)),
+            transparent 100%);
 }
 
 .vc-markdownTables-table {

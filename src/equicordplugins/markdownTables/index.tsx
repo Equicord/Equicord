@@ -7,7 +7,7 @@
 import ErrorBoundary from "@components/ErrorBoundary";
 import { EquicordDevs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
-import definePlugin, { StartAt } from "@utils/types";
+import definePlugin from "@utils/types";
 import { waitFor } from "@webpack";
 import { Parser, useLayoutEffect, useRef, useState } from "@webpack/common";
 import type { ReactNode } from "react";
@@ -147,14 +147,12 @@ function TableScrollFrame({
     });
 
     useLayoutEffect(() => {
-        const currentScrollElement = scrollRef.current;
-        if (!currentScrollElement) return;
-
-        const scrollElement = currentScrollElement;
+        const scrollElement = scrollRef.current;
+        if (!scrollElement) return;
 
         function updateMask(trackDirection = false) {
-            const maxScrollLeft = Math.max(0, scrollElement.scrollWidth - scrollElement.clientWidth);
-            const scrollLeft = Math.min(Math.max(scrollElement.scrollLeft, 0), maxScrollLeft);
+            const maxScrollLeft = Math.max(0, scrollElement!.scrollWidth - scrollElement!.clientWidth);
+            const scrollLeft = Math.min(Math.max(scrollElement!.scrollLeft, 0), maxScrollLeft);
             let nextDirection: ScrollDirection = null;
 
             if (trackDirection && scrollLeft > lastScrollLeftRef.current) {
@@ -316,17 +314,6 @@ function createTableRule(order: number): MarkdownRule {
         },
     };
 }
-
-function installTableRule() {
-    shouldInstallTableRule = true;
-
-    if (Parser?.defaultRules) {
-        scheduleTableRuleInstall(Parser);
-    }
-
-    waitFor("parseTopic", scheduleTableRuleInstall);
-}
-
 function scheduleTableRuleInstall(parser: { defaultRules?: MarkdownRules; }) {
     window.setTimeout(() => installTableRuleForParser(parser), 0);
 }
@@ -342,12 +329,6 @@ function installTableRuleForParser(parser: { defaultRules?: MarkdownRules; }) {
     rules[TABLE_RULE] = createTableRule(paragraphOrder - 0.5);
 }
 
-function uninstallTableRule() {
-    shouldInstallTableRule = false;
-    if (installedRules) delete installedRules[TABLE_RULE];
-    installedRules = null;
-}
-
 export default definePlugin({
     name: "MarkdownTables",
     description: "Render GitHub-style markdown tables in Discord messages.",
@@ -356,7 +337,7 @@ export default definePlugin({
     managedStyle,
     patches: [
         {
-            find: "paragraph:{order:",
+            find: "simple-markdown: Invalid order for rule",
             replacement: {
                 match: /paragraph:\{order:/,
                 replace: "markdownTable:$self.getTableRule(),$&",
@@ -370,10 +351,23 @@ export default definePlugin({
             },
         },
     ],
-    startAt: StartAt.Init,
 
-    start: installTableRule,
-    stop: uninstallTableRule,
+    start() {
+        shouldInstallTableRule = true;
+
+        if (Parser?.defaultRules) {
+            scheduleTableRuleInstall(Parser);
+        }
+
+        waitFor("parseTopic", scheduleTableRuleInstall);
+    },
+
+    stop() {
+        shouldInstallTableRule = false;
+        if (installedRules) delete installedRules[TABLE_RULE];
+        installedRules = null;
+    },
+
     getTableRule(paragraphOrder = 1) {
         return createTableRule(paragraphOrder - 0.5);
     },
