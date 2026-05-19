@@ -1,0 +1,21 @@
+/*
+ * Toggled at runtime via enableStyle/disableStyle when there are unread entries.
+ * Adds a small red dot to Discord's inbox button(s).
+ */
+
+[aria-label*="Inbox" i] {
+    position: relative;
+}
+
+[aria-label*="Inbox" i]::after {
+    content: "";
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    width: 8px;
+    height: 8px;
+    background: #f23f43;
+    border-radius: 50%;
+    border: 2px solid var(--background-secondary, #2b2d31);
+    pointer-events: none;
+}
