@@ -189,7 +189,7 @@ function TextReplace({ title, description, rulesArray, isRegex = false }: TextRe
         rulesArray[index][key] = e;
 
         // If a rule is empty after editing and is not the last rule, remove it
-        if (rulesArray[index].find === "" && rulesArray[index].replace === "" && rulesArray[index].onlyIfIncludes === "" && index !== rulesArray.length - 1) {
+        if (rulesArray[index].name === "" && rulesArray[index].find === "" && rulesArray[index].replace === "" && rulesArray[index].onlyIfIncludes === "" && index !== rulesArray.length - 1) {
             rulesArray.splice(index, 1);
         }
     }
@@ -231,7 +231,7 @@ function TextReplace({ title, description, rulesArray, isRegex = false }: TextRe
                                 <div className={cl("input-grid")}>
                                     <TextRow
                                         label="Name"
-                                        description="A name to help you identify this rule. This is optional"
+                                        description="An optional name to help you identify this rule."
                                         value={rule.name ?? ""}
                                         onChange={e => onChange(e, index, "name")}
                                     />
@@ -249,7 +249,7 @@ function TextReplace({ title, description, rulesArray, isRegex = false }: TextRe
                                     />
                                     <TextRow
                                         label="Only if includes"
-                                        description="This rule will only be applied if the message includes this text. This is optional"
+                                        description="Optionally, only apply this rule if the message includes this text."
                                         value={rule.onlyIfIncludes}
                                         onChange={e => onChange(e, index, "onlyIfIncludes")}
                                     />
