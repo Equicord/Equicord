@@ -123,7 +123,7 @@ export function containsBlockedKeywords(message: Message) {
 
     return blockedKeywords.some(regex =>
         regex.test(message.content)) || message.embeds.some(embed =>
-        testField(embed.rawDescription) || testField(embed.rawTitle));
+            testField(embed.rawDescription) || testField(embed.rawTitle));
 }
 
 export default definePlugin({
@@ -183,7 +183,7 @@ export default definePlugin({
         }
     },
 
-    blockMessagesWithKeywords(messageList: { reset(v: unknown): unknown; map(fn: (m: unknown) => unknown): unknown; }) {
+    blockMessagesWithKeywords(messageList) {
         return messageList.reset(messageList.map(
             message => message.set("blocked", message.blocked || this.containsBlockedKeywords(message))
         ));
