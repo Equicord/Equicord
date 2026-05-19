@@ -5,13 +5,11 @@
  */
 
 import { set } from "@api/DataStore";
-import { Button } from "@components/Button";
-import { Flex } from "@components/Flex";
 import { Heading } from "@components/Heading";
 import { Margins } from "@components/margins";
 import { classNameFactory } from "@utils/css";
-import { ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot } from "@utils/modal";
-import { IconUtils, React, TextInput, Toasts, UserStore, useState } from "@webpack/common";
+import { RenderModalProps } from "@vencord/discord-types";
+import { IconUtils, Modal, React, TextInput, Toasts, UserStore, useState } from "@webpack/common";
 
 import { data, KEY_DATASTORE } from ".";
 
@@ -26,7 +24,7 @@ function fileToDataUrl(file: File): Promise<string> {
     });
 }
 
-export function SetAvatarModal({ userId, modalProps }: { userId: string; modalProps: ModalProps; }) {
+export function SetAvatarModal({ userId, modalProps }: { userId: string; modalProps: RenderModalProps; }) {
     const { avatars } = data;
     const user = UserStore.getUser(userId);
     const originalAvatar = IconUtils.getUserAvatarURL(user, true, 128) || "";
@@ -36,7 +34,7 @@ export function SetAvatarModal({ userId, modalProps }: { userId: string; modalPr
     const [isDragging, setIsDragging] = useState(false);
     const fileInputRef = React.useRef<HTMLInputElement>(null);
 
-    function handleKey(e: KeyboardEvent) {
+    function handleKey(e: React.KeyboardEvent) {
         if (e.key === "Enter") saveUserAvatar();
     }
 
@@ -78,15 +76,30 @@ export function SetAvatarModal({ userId, modalProps }: { userId: string; modalPr
         modalProps.onClose();
     }
 
+    const actions = [
+        {
+            text: "Save",
+            variant: "primary",
+            onClick: saveUserAvatar
+        }
+    ];
+
+    if (avatars[userId]) {
+        actions.unshift({
+            text: "Delete",
+            variant: "dangerPrimary",
+            onClick: deleteUserAvatar
+        });
+    }
+
     return (
-        <ModalRoot {...modalProps}>
-            <ModalHeader className={cl("modal-header")}>
-                <Heading tag="h3">Custom Avatar</Heading>
-                <ModalCloseButton onClick={modalProps.onClose} />
-            </ModalHeader>
-
-            <ModalContent className={cl("modal-content")} onKeyDown={handleKey}>
-
+        <Modal
+            {...modalProps}
+            size="sm"
+            title="Custom Avatar"
+            actions={actions}
+        >
+            <div onKeyDown={handleKey}>
                 {/* Preview */}
                 <div className={cl("preview-row")}>
                     <div className={cl("preview-box")}>
@@ -141,17 +154,7 @@ export function SetAvatarModal({ userId, modalProps }: { userId: string; modalPr
                         }}
                     />
                 </div>
-
-            </ModalContent>
-
-            <ModalFooter className={cl("modal-footer")}>
-                <Flex gap="8px">
-                    {avatars[userId] && (
-                        <Button variant="dangerPrimary" onClick={deleteUserAvatar}>Delete</Button>
-                    )}
-                    <Button onClick={saveUserAvatar}>Save</Button>
-                </Flex>
-            </ModalFooter>
-        </ModalRoot>
+            </div>
+        </Modal>
     );
 }

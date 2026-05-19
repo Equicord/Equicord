@@ -7,9 +7,8 @@
 import "./VoiceChannelLogEntryComponent.css";
 
 import { openUserProfile } from "@utils/discord";
-import { closeAllModals } from "@utils/modal";
 import { Channel } from "@vencord/discord-types";
-import { ApplicationStore, Clickable, IconUtils, NavigationRouter, Timestamp, Tooltip, UserStore } from "@webpack/common";
+import { ApplicationStore, Clickable, closeAllModals,IconUtils, NavigationRouter, Timestamp, Tooltip, UserStore } from "@webpack/common";
 
 import { getCallStartTime } from "../logs";
 import { VoiceChannelLogEntry } from "../types";

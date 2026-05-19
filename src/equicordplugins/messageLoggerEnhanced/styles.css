@@ -54,7 +54,9 @@
 
 .vc-msg-logger-enhanced-modal-tab-bar {
     margin-top: 20px;
-    width: 100%;
+    margin-bottom: -24px;
+    margin-left: -24px;
+    width: 114.5%;
     justify-content: space-around;
 }
 
@@ -100,4 +102,8 @@
 
 .vc-updater-modal-content {
     padding: 1rem 2rem;
+}
+
+header:has(.vc-msg-logger-enhanced-modal-tab-bar) [class*="headerTrailing_"] {
+    margin-top: 0;
 }

@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { definePluginSettings, SettingsStore } from "@api/Settings";
+import { definePluginSettings } from "@api/Settings";
 import { EquicordDevs } from "@utils/index";
 import definePlugin, { OptionType } from "@utils/types";
 
@@ -75,33 +75,13 @@ const settings = definePluginSettings({
     }
 });
 
-function migrate() {
-    const { plugins } = SettingsStore.plain;
-    const oldPlugin = plugins?.LimitMiddleClickPaste;
-
-    if (!oldPlugin) return;
-
-    const newPlugin = plugins.MiddleClickTweaks ??= { enabled: false };
-    const { scope, threshold, preventLinkOpen } = oldPlugin;
-
-    if (scope) newPlugin.pasteScope = scope;
-    if (threshold) newPlugin.pasteThreshold = threshold;
-    if (preventLinkOpen) newPlugin.openScope = "both";
-    if (oldPlugin.enabled) newPlugin.enabled = true;
-
-    delete plugins.LimitMiddleClickPaste;
-    SettingsStore.markAsChanged();
-}
-
-migrate();
-
 export default definePlugin({
     name: "MiddleClickTweaks",
     description: "Various middle click tweaks, such as with pasting and link opening.",
-    tags: ["Utility"],
     authors: [EquicordDevs.Etorix, EquicordDevs.korzi],
     settings,
 
+    tags: ["Utility"],
     searchTerms: ["LimitMiddleClickPaste"],
 
     isPastingDisabled(isInput: boolean) {
@@ -115,11 +95,7 @@ export default definePlugin({
         return false;
     },
 
-    start() {
-        migrate();
-        updateListeners();
-    },
-
+    start() { updateListeners(); },
     stop() { updateListeners(false); },
 
     patches: [
@@ -132,10 +108,10 @@ export default definePlugin({
             }
         },
         {
-            // Detects paste events triggered inside of Discord's text input.
+            // Detects paste events triggered inside of Discord's text inputs.
             find: ",origin:\"clipboard\"});",
             replacement: {
-                match: /(?<=handlePaste=(\i)=>{)(?=let)/,
+                match: /(?<=handlePaste=(\i)=>{)(?=let)/g,
                 replace: "if($self.isPastingDisabled(true)){$1.preventDefault?.();$1.stopPropagation?.();return;}"
             }
         },

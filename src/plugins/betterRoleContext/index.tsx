@@ -26,7 +26,6 @@ const DeveloperMode = getUserSettingLazy("appearance", "developerMode")!;
 
 async function openRoleIconModal(roleId: string, roleIcon: string, roleName: string) {
     const format = settings.store.roleIconFileFormat;
-    const contentType = format === "jpg" ? "image/jpeg" : `image/${format}`;
     const original = `${location.protocol}//${window.GLOBAL_ENV.CDN_HOST}/role-icons/${roleId}/${roleIcon}.${format}`;
     const url = original.replace(`//${window.GLOBAL_ENV.CDN_HOST}/`, "//media.discordapp.net/");
 
@@ -34,18 +33,7 @@ async function openRoleIconModal(roleId: string, roleIcon: string, roleName: str
         url,
         original,
         height: 128,
-        width: 128,
-        contentType,
-        originalContentType: contentType,
-        sourceMetadata: {
-            identifier: {
-                type: "attachment",
-                attachmentId: roleId,
-                filename: `role-icon-${roleId}.${format}`,
-                title: roleName,
-                size: 1,
-            }
-        }
+        width: 128
     });
 }
 

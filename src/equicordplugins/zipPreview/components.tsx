@@ -4,16 +4,12 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { Button } from "@components/Button";
 import { CodeBlock } from "@components/CodeBlock";
 import ErrorBoundary from "@components/ErrorBoundary";
-import { Flex } from "@components/Flex";
-import { Heading } from "@components/Heading";
 import { ChevronSmallDownIcon, ChevronSmallUpIcon, FolderIcon } from "@components/Icons";
 import { classNameFactory } from "@utils/css";
 import { copyWithToast } from "@utils/discord";
-import { closeModal, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalRoot, ModalSize, openModal } from "@utils/modal";
-import { useEffect, useMemo, useRef, useState } from "@webpack/common";
+import { Modal,openModal, useEffect, useMemo, useRef, useState } from "@webpack/common";
 
 import {
     createImageObjectUrl,
@@ -312,52 +308,50 @@ function openZipEntryModal(entry: ZipEntry) {
 
 function openTextEntryModal(entry: ZipEntry) {
     const content = readTextEntry(entry);
-    const key = openModal(modalProps => (
+    openModal(modalProps => (
         <ErrorBoundary>
-            <ModalRoot {...modalProps} size={ModalSize.LARGE}>
-                <ModalHeader>
-                    <Heading tag="h2" className={cl("modal-title")}>{entry.name}</Heading>
-                    <ModalCloseButton onClick={() => closeModal(key)} />
-                </ModalHeader>
-                <ModalContent className={cl("modal-content")}>
-                    <div className={cl("code-wrap")}>
-                        <CodeBlock content={content} lang={getCodeLanguage(entry)} />
-                    </div>
-                </ModalContent>
-                <ModalFooter>
-                    <Flex gap={8} justifyContent="flex-end">
-                        <Button variant="secondary" onClick={() => copyWithToast(content, "File contents copied to clipboard!")}>
-                            Copy
-                        </Button>
-                        <Button onClick={() => makeDownload(entry)}>
-                            Download
-                        </Button>
-                    </Flex>
-                </ModalFooter>
-            </ModalRoot>
+            <Modal
+                {...modalProps}
+                size="lg"
+                title={entry.name}
+                actions={[
+                    {
+                        text: "Copy",
+                        variant: "secondary",
+                        onClick: () => copyWithToast(content, "File contents copied to clipboard!")
+                    },
+                    {
+                        text: "Download",
+                        variant: "primary",
+                        onClick: () => makeDownload(entry)
+                    }
+                ]}
+            >
+                <div className={cl("code-wrap")}>
+                    <CodeBlock content={content} lang={getCodeLanguage(entry)} />
+                </div>
+            </Modal>
         </ErrorBoundary>
     ));
 }
 
 function openImageEntryModal(entry: ZipEntry) {
-    const key = openModal(modalProps => (
+    openModal(modalProps => (
         <ErrorBoundary>
-            <ModalRoot {...modalProps} size={ModalSize.LARGE}>
-                <ModalHeader>
-                    <Heading tag="h2" className={cl("modal-title")}>{entry.name}</Heading>
-                    <ModalCloseButton onClick={() => closeModal(key)} />
-                </ModalHeader>
-                <ModalContent className={cl("modal-content")}>
-                    <ZipImagePreview entry={entry} />
-                </ModalContent>
-                <ModalFooter>
-                    <Flex gap={8} justifyContent="flex-end">
-                        <Button onClick={() => makeDownload(entry)}>
-                            Download
-                        </Button>
-                    </Flex>
-                </ModalFooter>
-            </ModalRoot>
+            <Modal
+                {...modalProps}
+                size="lg"
+                title={entry.name}
+                actions={[
+                    {
+                        text: "Download",
+                        variant: "primary",
+                        onClick: () => makeDownload(entry)
+                    }
+                ]}
+            >
+                <ZipImagePreview entry={entry} />
+            </Modal>
         </ErrorBoundary>
     ));
 }

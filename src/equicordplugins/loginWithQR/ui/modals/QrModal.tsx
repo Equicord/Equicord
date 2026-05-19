@@ -9,9 +9,6 @@ import { QrCodeIcon } from "@components/Icons";
 import { wrapTab } from "@components/settings";
 import loginWithQR from "@equicordplugins/loginWithQR";
 import { images } from "@equicordplugins/loginWithQR/images";
-import {
-    ModalProps,
-} from "@utils/modal";
 import { findByPropsLazy } from "@webpack";
 import {
     RestAPI,
@@ -135,7 +132,7 @@ const handleProcessImage = (file: File, modalPropsRef: QrModalPropsRef) => {
     reader.readAsDataURL(file);
 };
 
-function QrModal(props: ModalProps) {
+function QrModal() {
     const [state, setState] = useState(LoginStateType.Idle);
     const [preview, setPreview] = useState<Preview | null>(null);
     const error = useRef<string | null>(null);

@@ -51,22 +51,26 @@ function getEmojiValue(emoji: EmojiSelectPayload | null | undefined) {
     return emoji.name?.trim() ?? "";
 }
 
-function toRenderedEmoji(value: string) {
+type RenderedEmoji =
+    | { kind: "custom"; id: string; name: string; animated: boolean; }
+    | { kind: "unicode"; name: string; animated: boolean; };
+
+function toRenderedEmoji(value: string): RenderedEmoji | null {
     const trimmed = value.trim();
     if (!trimmed) return null;
 
     const customEmoji = parseCustomEmoji(trimmed);
     if (customEmoji) {
         return {
-            kind: "custom" as const,
-            id: customEmoji[3],
-            name: customEmoji[2],
+            kind: "custom",
+            id: customEmoji[3]!,
+            name: customEmoji[2]!,
             animated: customEmoji[1] === "a"
         };
     }
 
     return {
-        kind: "unicode" as const,
+        kind: "unicode",
         name: trimmed,
         animated: false
     };

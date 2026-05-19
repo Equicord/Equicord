@@ -8,10 +8,10 @@ import "./styles.css";
 
 import { BaseText } from "@components/BaseText";
 import { Flex } from "@components/Flex";
-import { HeadingTertiary } from "@components/Heading";
+import { Heading, HeadingTertiary } from "@components/Heading";
 import { copyToClipboard } from "@utils/clipboard";
 import { findByPropsLazy, findCssClassesLazy } from "@webpack";
-import { Button, Forms, Parser, useEffect, useState } from "@webpack/common";
+import { Button, Parser, useEffect, useState } from "@webpack/common";
 
 import { FriendInvite } from "./types";
 
@@ -77,12 +77,12 @@ export default function FriendCodesPanel() {
     return (
         <>
             <header className={FormStyles.header}>
-                <Forms.FormTitle
+                <Heading
                     tag="h2"
                     className={FormStyles.title}
                 >
                     Your Friend Codes
-                </Forms.FormTitle>
+                </Heading>
 
                 <Flex
                     style={{ marginBottom: "16px" }}

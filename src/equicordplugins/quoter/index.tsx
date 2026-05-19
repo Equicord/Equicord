@@ -5,14 +5,12 @@
  */
 
 import { definePluginSettings } from "@api/Settings";
-import { BaseText } from "@components/BaseText";
 import { FormSwitch } from "@components/FormSwitch";
 import { Devs, EquicordDevs } from "@utils/constants";
 import { getCurrentChannel } from "@utils/discord";
-import { ModalCloseButton, ModalContent, ModalHeader, ModalProps, ModalRoot, ModalSize, openModal } from "@utils/modal";
 import definePlugin, { OptionType } from "@utils/types";
-import { Message } from "@vencord/discord-types";
-import { Button, IconUtils, Menu, TextInput, UploadHandler, useEffect, useState } from "@webpack/common";
+import { Message, RenderModalProps } from "@vencord/discord-types";
+import { IconUtils, Menu, Modal, openModal, TextInput, UploadHandler, useEffect, useState } from "@webpack/common";
 
 import { QuoteIcon } from "./components/QuoteIcon";
 import { QuoteFont } from "./types";
@@ -89,7 +87,7 @@ export default definePlugin({
     }
 });
 
-function QuoteModal({ message, ...props }: ModalProps & { message: Message; }) {
+function QuoteModal({ message, ...props }: RenderModalProps & { message: Message; }) {
     const [gray, setGray] = useState(settings.store.grayscale);
     const [showWatermark, setShowWatermark] = useState(settings.store.showWatermark);
     const [saveAsGif, setSaveAsGif] = useState(settings.store.saveAsGif);
@@ -166,49 +164,48 @@ function QuoteModal({ message, ...props }: ModalProps & { message: Message; }) {
     };
 
     return (
-        <ModalRoot {...props} size={ModalSize.MEDIUM}>
-            <ModalHeader separator={false}>
-                <BaseText color="text-strong" size="lg" weight="semibold" tag="h1" style={{ flexGrow: 1 }}>
-                    Catch Them In 4K.
-                </BaseText>
-                <ModalCloseButton onClick={props.onClose} />
-            </ModalHeader>
-            <ModalContent scrollbarType="none">
-                <img alt="Quote preview" src="" id="quoterPreview" style={{ borderRadius: "20px", width: "100%", marginBottom: "20px" }} />
+        <Modal
+            {...props}
+            size="md"
+            title="Catch Them In 4K."
+            actions={[
+                {
+                    text: "Export",
+                    variant: "primary",
+                    onClick: handleExport
+                },
+                {
+                    text: "Send",
+                    variant: "primary",
+                    onClick: handleSendInChat
+                }
+            ]}
+        >
+            <img alt="Quote preview" src="" id="quoterPreview" style={{ borderRadius: "20px", width: "100%", marginBottom: "20px" }} />
 
-                <FormSwitch title="Grayscale" value={gray} onChange={setGray} />
-                <FormSwitch
-                    title="Save as GIF"
-                    value={saveAsGif}
-                    onChange={setSaveAsGif}
-                    description="Saves/Sends the image as a GIF instead of a PNG"
-                />
-                <FormSwitch
-                    title="Show Watermark"
-                    value={showWatermark}
-                    onChange={setShowWatermark}
-                    hideBorder={showWatermark}
-                />
-                {showWatermark && (
-                    <div style={{ marginTop: "8px", marginBottom: "20px" }}>
-                        <TextInput
-                            value={watermarkText}
-                            onChange={setWatermarkText}
-                            placeholder="Watermark text (max 32 characters)"
-                            maxLength={32}
-                        />
-                    </div>
-                )}
-
-                <div style={{ display: "flex", gap: "8px", marginTop: "16px", marginBottom: "16px" }}>
-                    <Button color={Button.Colors.BRAND} size={Button.Sizes.MEDIUM} onClick={handleExport}>
-                        Export
-                    </Button>
-                    <Button color={Button.Colors.BRAND} size={Button.Sizes.MEDIUM} onClick={handleSendInChat}>
-                        Send
-                    </Button>
+            <FormSwitch title="Grayscale" value={gray} onChange={setGray} />
+            <FormSwitch
+                title="Save as GIF"
+                value={saveAsGif}
+                onChange={setSaveAsGif}
+                description="Saves/Sends the image as a GIF instead of a PNG"
+            />
+            <FormSwitch
+                title="Show Watermark"
+                value={showWatermark}
+                onChange={setShowWatermark}
+                hideBorder={showWatermark}
+            />
+            {showWatermark && (
+                <div style={{ marginTop: "8px", marginBottom: "20px" }}>
+                    <TextInput
+                        value={watermarkText}
+                        onChange={setWatermarkText}
+                        placeholder="Watermark text (max 32 characters)"
+                        maxLength={32}
+                    />
                 </div>
-            </ModalContent>
-        </ModalRoot>
+            )}
+        </Modal>
     );
 }

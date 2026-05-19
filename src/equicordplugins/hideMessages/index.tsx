@@ -6,11 +6,28 @@
 
 import { findGroupChildrenByChildId, NavContextMenuPatchCallback } from "@api/ContextMenu";
 import { definePluginSettings } from "@api/Settings";
+import ErrorBoundary from "@components/ErrorBoundary";
 import { EyeIcon } from "@components/Icons";
 import { EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
-import { Message } from "@vencord/discord-types";
-import { ChannelStore, FluxDispatcher, Menu } from "@webpack/common";
+import { Channel, Message } from "@vencord/discord-types";
+import { ChannelStore, Clickable, FluxDispatcher, Menu, Tooltip } from "@webpack/common";
+
+interface UserContextProps {
+    channel?: Channel;
+}
+
+interface PrivateChannelsListInstance {
+    forceUpdate(callback?: () => void): void;
+}
+
+const hiddenDmIds = new Set<string>();
+let privateChannelsListInstance: PrivateChannelsListInstance | null = null;
+let showHiddenDms = false;
+
+function notifyHiddenDmsUpdate() {
+    privateChannelsListInstance?.forceUpdate();
+}
 
 const hideMessage = (messageId: string, channelId: string) => {
     FluxDispatcher.dispatch({
@@ -20,6 +37,17 @@ const hideMessage = (messageId: string, channelId: string) => {
         mlDeleted: true,
     });
 };
+
+function toggleDm(channelId: string) {
+    if (hiddenDmIds.has(channelId)) {
+        hiddenDmIds.delete(channelId);
+        if (!hiddenDmIds.size) showHiddenDms = false;
+    } else {
+        hiddenDmIds.add(channelId);
+    }
+
+    notifyHiddenDmsUpdate();
+}
 
 const messageCtxPatch: NavContextMenuPatchCallback = (children, { message }: { message: Message; }) => {
     const group = findGroupChildrenByChildId("copy-text", children);
@@ -35,6 +63,24 @@ const messageCtxPatch: NavContextMenuPatchCallback = (children, { message }: { m
     ));
 };
 
+const userCtxPatch: NavContextMenuPatchCallback = (children, { channel }: UserContextProps) => {
+    if (!channel?.isDM()) return;
+
+    const group = findGroupChildrenByChildId("close-dm", children);
+    if (!group) return;
+
+    const hidden = hiddenDmIds.has(channel.id);
+
+    group.splice(group.findIndex(c => c?.props?.id === "close-dm"), 0, (
+        <Menu.MenuItem
+            id="vc-hidemessages-dm"
+            label={hidden ? "Unhide DM" : "Hide DM"}
+            icon={EyeIcon}
+            action={() => toggleDm(channel.id)}
+        />
+    ));
+};
+
 const settings = definePluginSettings({
     hidePopoverButton: {
         type: OptionType.BOOLEAN,
@@ -45,14 +91,75 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "HideMessages",
-    description: "A plugin to temporarily hide messages until you restart.",
+    description: "Temporarily hide messages and DMs until you restart.",
     dependencies: ["MessagePopoverAPI"],
     tags: ["Chat", "Utility"],
     authors: [EquicordDevs.yash],
+    patches: [
+        {
+            find: '"dm-quick-launcher"===',
+            replacement: [
+                {
+                    match: /render\(\)\{/,
+                    replace: "$&this.props.privateChannelIds=$self.filterPrivateChannelIds(this.props.privateChannelIds,this);"
+                },
+                {
+                    match: /renderRow=\i=>\{/,
+                    replace: "$&this.props.privateChannelIds=$self.filterPrivateChannelIds(this.props.privateChannelIds,this);"
+                },
+                {
+                    match: /renderDM=\(\i,\i\)=>\{/,
+                    replace: "$&this.props.privateChannelIds=$self.filterPrivateChannelIds(this.props.privateChannelIds,this);"
+                },
+                {
+                    match: /#{intl::DIRECT_MESSAGES}\)\}\),/,
+                    replace: "$&$self.renderHiddenMessagesToggle(),"
+                }
+            ]
+        }
+    ],
     contextMenus: {
-        "message": messageCtxPatch
+        "message": messageCtxPatch,
+        "user-context": userCtxPatch
     },
     settings,
+    stop() {
+        hiddenDmIds.clear();
+        showHiddenDms = false;
+        notifyHiddenDmsUpdate();
+        privateChannelsListInstance = null;
+    },
+    filterPrivateChannelIds(privateChannelIds: string[], instance?: PrivateChannelsListInstance) {
+        privateChannelsListInstance = instance ?? privateChannelsListInstance;
+        return showHiddenDms ? privateChannelIds : privateChannelIds.filter(id => !hiddenDmIds.has(id));
+    },
+    renderHiddenMessagesToggle: ErrorBoundary.wrap(() => {
+        const hasHiddenDms = hiddenDmIds.size > 0;
+        const label = !hasHiddenDms ? "No Hidden DMs" : showHiddenDms ? "Hide Hidden DMs" : "Show Hidden DMs";
+
+        return (
+            <Tooltip text={label}>
+                {tooltipProps => (
+                    <Clickable
+                        {...tooltipProps}
+                        role="button"
+                        tabIndex={0}
+                        aria-label={label}
+                        aria-disabled={!hasHiddenDms}
+                        onClick={event => {
+                            event.preventDefault();
+                            event.stopPropagation();
+                            if (!hasHiddenDms) return;
+                            showHiddenDms = !showHiddenDms;
+                            notifyHiddenDmsUpdate();
+                        }}
+                    >
+                        <EyeIcon width={18} height={18} />
+                    </Clickable>
+                )}
+            </Tooltip>
+        );
+    }, { noop: true }),
     messagePopoverButton: {
         icon: EyeIcon,
         render(message: Message) {

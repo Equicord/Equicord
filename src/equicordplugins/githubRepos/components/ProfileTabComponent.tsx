@@ -7,8 +7,7 @@
 import { BaseText } from "@components/BaseText";
 import { fetchReposByUserId, fetchReposByUsername, fetchUserInfo, GitHubUserInfo } from "@equicordplugins/githubRepos/githubApi";
 import { GitHubRepo } from "@equicordplugins/githubRepos/types";
-import { openModal } from "@utils/modal";
-import { React, useEffect, UserProfileStore, useState } from "@webpack/common";
+import { openModal,React, useEffect, UserProfileStore, useState } from "@webpack/common";
 
 import { cl, settings } from "..";
 import { RepoCard } from "./RepoCard";

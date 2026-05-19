@@ -33,8 +33,11 @@
         "repair": "node scripts/runInstaller.mjs -- --repair",
         "lint": "eslint",
         "lint-styles": "stylelint \"src/**/*.css\" --ignore-pattern src/userplugins",
+        "lint-styles:fix": "pnpm lint-styles --fix",
         "lint:fix": "pnpm lint --fix",
-        "test": "pnpm buildStandalone && pnpm testTsc && pnpm lint:fix && pnpm lint-styles && pnpm generatePluginJson",
+        "lint:intl": "node scripts/lintIntl.mjs",
+        "lint:patches": "node scripts/lintPatches.mjs",
+        "test": "pnpm buildStandalone && pnpm testTsc && pnpm lint:fix && pnpm lint-styles && pnpm lint:intl && pnpm lint:patches && pnpm generatePluginJson",
         "testWeb": "pnpm lint:fix && pnpm buildWeb && pnpm testTsc",
         "testTsc": "tsc --noEmit",
         "depCheck": "node scripts/depCheck.mjs"

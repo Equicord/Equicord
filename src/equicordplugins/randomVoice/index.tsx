@@ -4,21 +4,32 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import "./styles.css";
+
 import { definePluginSettings } from "@api/Settings";
 import { UserAreaButton, UserAreaRenderProps } from "@api/UserArea";
+import { Button } from "@components/Button";
+import ErrorBoundary from "@components/ErrorBoundary";
+import { Switch } from "@components/Switch";
 import { debounce } from "@shared/debounce";
-import { Devs, EquicordDevs } from "@utils/constants";
+import { Devs, EquicordDevs, IS_MAC } from "@utils/constants";
+import { classNameFactory } from "@utils/css";
 import definePlugin, { makeRange, OptionType } from "@utils/types";
 import type { Channel, VoiceState } from "@vencord/discord-types";
 import { findByCodeLazy, findByPropsLazy } from "@webpack";
-import { ChannelActions, ChannelRouter, ChannelStore, ContextMenuApi, FluxDispatcher, GuildStore, MediaEngineStore, Menu, PermissionsBits, PermissionStore, React, RelationshipStore, SelectedChannelStore, Toasts, UserStore, VoiceActions, VoiceStateStore } from "@webpack/common";
+import { ChannelActions, ChannelRouter, ChannelStore, ContextMenuApi, FluxDispatcher, GuildStore, MediaEngineStore, Menu, PermissionsBits, PermissionStore, React, RelationshipStore, SelectedChannelStore, Toasts, useEffect, UserStore, useState, VoiceActions, VoiceStateStore } from "@webpack/common";
 
 const startStream = findByCodeLazy('type:"STREAM_START"');
 const getDesktopSources = findByCodeLazy("desktop sources");
 const { isVideoEnabled } = findByPropsLazy("isVideoEnabled");
 const NO_SERVERS = "__NONE__";
+const DEFAULT_KEYBIND = IS_MAC ? ["Meta", "Shift", "R"] : ["Control", "Shift", "R"];
+const MODIFIER_KEYS = new Set(["control", "ctrl", "shift", "alt", "option", "meta", "cmd", "command", "mod"]);
 
-type RandomVoiceOperation = "<" | ">" | "==";
+let isRecordingKeybind = false;
+const cl = classNameFactory("vc-random-voice-");
+
+type RandomVoiceOperation = "<" | ">" | "==" | string;
 type StateFilterKey = "mute" | "deafen" | "video" | "stream";
 type SelfSettingKey = "selfMute" | "selfDeafen" | "autoCamera" | "autoStream" | "leaveEmpty" | "autoNavigate" | "avoidStages" | "avoidAfk" | "prioritizeFriends";
 type PostJoinAction = () => void | Promise<void>;
@@ -68,12 +79,178 @@ interface RandomVoiceStateLike {
     selfVideo?: boolean | null;
 }
 
+function RandomVoiceKeybindSettings() {
+    const [isListening, setIsListening] = useState(false);
+    const { keybind, keybindEnabled } = settings.use();
+
+    useEffect(() => {
+        isRecordingKeybind = isListening;
+        if (!isListening) return;
+
+        const handleKeyDown = (event: KeyboardEvent) => {
+            event.preventDefault();
+            event.stopPropagation();
+
+            if (isModifierKey(event.key)) return;
+
+            settings.store.keybind = eventToKeybind(event);
+            setIsListening(false);
+        };
+
+        const handleBlur = () => setIsListening(false);
+
+        document.addEventListener("keydown", handleKeyDown, true);
+        window.addEventListener("blur", handleBlur);
+
+        return () => {
+            isRecordingKeybind = false;
+            document.removeEventListener("keydown", handleKeyDown, true);
+            window.removeEventListener("blur", handleBlur);
+        };
+    }, [isListening]);
+
+    return (
+        <div className={cl("record")}>
+            <div className={cl("keybind")}>Keybind</div>
+            <Switch checked={keybindEnabled} onChange={value => { settings.store.keybindEnabled = value; }} />
+            {keybindEnabled && (
+                <div className={cl("recording")}>
+                    <Button type="button" variant="secondary" onClick={() => setIsListening(true)} disabled={isListening}>
+                        {isListening ? "Recording..." : formatKeybind(keybind)}
+                    </Button>
+                    <Button type="button" variant="secondary" onClick={() => { settings.store.keybind = DEFAULT_KEYBIND; }} disabled={isListening}>
+                        Reset
+                    </Button>
+                </div>
+            )}
+        </div>
+    );
+}
+
+function formatKeybind(keybind: string | string[]) {
+    const keybindString = Array.isArray(keybind) ? keybind.join("+") : keybind;
+    return IS_MAC
+        ? keybindString.replace(/Control/gi, "^").replace(/Meta|Command|Cmd/gi, "⌘").replace(/Alt|Option/gi, "⌥").replace(/Shift/gi, "⇧")
+        : keybindString;
+}
+
+function eventToKeybind(event: KeyboardEvent) {
+    const keys: string[] = [];
+    addPressedModifiers(event, keys);
+    keys.push(normalizeKey(event.key));
+    return keys;
+}
+
+function getConfiguredKeybind() {
+    const raw = settings.store.keybind;
+    if (Array.isArray(raw) && raw.some(key => !isModifierKey(key))) return raw;
+    return DEFAULT_KEYBIND;
+}
+
+function matchesKeybind(event: KeyboardEvent) {
+    const keybind = getConfiguredKeybind().map(key => key.toLowerCase());
+    const pressed = normalizeKey(event.key).toLowerCase();
+    const code = normalizeCode(event.code);
+    let nonModifierMatched = false;
+
+    if (!matchesModifiers(event, keybind)) return false;
+
+    for (const key of keybind) {
+        if (isModifierKey(key)) continue;
+
+        if (pressed !== key && code !== key) return false;
+        nonModifierMatched = true;
+    }
+
+    return nonModifierMatched;
+}
+
+function isModifierKey(key: string) {
+    return MODIFIER_KEYS.has(key.toLowerCase());
+}
+
+function matchesModifiers(event: KeyboardEvent, keybind: string[]) {
+    const expected = new Set(keybind.map(getModifierKey).filter(key => key !== null));
+    const pressed = new Set<string>();
+
+    if (event.ctrlKey) pressed.add("control");
+    if (event.shiftKey) pressed.add("shift");
+    if (event.altKey) pressed.add("alt");
+    if (event.metaKey) pressed.add("meta");
+
+    return expected.size === pressed.size && [...expected].every(key => pressed.has(key));
+}
+
+function getModifierKey(key: string) {
+    switch (key) {
+        case "mod":
+            return IS_MAC ? "meta" : "control";
+        case "control":
+        case "ctrl":
+            return "control";
+        case "shift":
+            return "shift";
+        case "alt":
+        case "option":
+            return "alt";
+        case "meta":
+        case "cmd":
+        case "command":
+            return "meta";
+        default:
+            return null;
+    }
+}
+
+function addPressedModifiers(event: KeyboardEvent, keys: string[]) {
+    if (event.metaKey) keys.push("Meta");
+    if (event.ctrlKey) keys.push("Control");
+    if (event.shiftKey) keys.push("Shift");
+    if (event.altKey) keys.push("Alt");
+}
+
+function keybindUsesModifier() {
+    return getConfiguredKeybind().some(isModifierKey);
+}
+
+function normalizeKey(key: string) {
+    if (key === " ") return "Space";
+    if (key === "Esc") return "Escape";
+    return key.length === 1 ? key.toUpperCase() : key;
+}
+
+function normalizeCode(code: string) {
+    return code
+        .toLowerCase()
+        .replace(/^key/, "")
+        .replace(/^digit/, "")
+        .replace(/^numpad/, "");
+}
+
+function shouldIgnoreKeybindTarget(target: EventTarget | null) {
+    return target instanceof HTMLElement && (target.isContentEditable || ["INPUT", "TEXTAREA", "SELECT"].includes(target.tagName));
+}
+
 const settings = definePluginSettings({
+    keybind: {
+        type: OptionType.COMPONENT,
+        default: DEFAULT_KEYBIND,
+        component: ErrorBoundary.wrap(RandomVoiceKeybindSettings),
+    },
+    keybindEnabled: {
+        description: "Show the random voice keybind controls",
+        type: OptionType.BOOLEAN,
+        default: false,
+        hidden: true,
+    },
     UserAmountOperation: {
         description: "Select an operation for the amounts of users",
         type: OptionType.SELECT,
-        options: [...operationOptions],
-        default: "<",
+        options: [
+            { label: "More than", value: "<", default: true },
+            { label: "Less than", value: ">", default: false },
+            { label: "Equal to", value: "==", default: false },
+        ],
     },
     UserAmount: {
         description: "Select amount of users",
@@ -85,8 +262,11 @@ const settings = definePluginSettings({
     spacesLeftOperation: {
         description: "Select an operation for the maximum amounts of users",
         type: OptionType.SELECT,
-        options: [...operationOptions],
-        default: "<",
+        options: [
+            { label: "More than", value: "<", default: true },
+            { label: "Less than", value: ">", default: false },
+            { label: "Equal to", value: "==", default: false },
+        ],
     },
     spacesLeft: {
         description: "Select amount of max users",
@@ -98,8 +278,11 @@ const settings = definePluginSettings({
     vcLimitOperation: {
         description: "Select an operation for the voice-channel.",
         type: OptionType.SELECT,
-        options: [...operationOptions],
-        default: "<",
+        options: [
+            { label: "More than", value: "<", default: true },
+            { label: "Less than", value: ">", default: false },
+            { label: "Equal to", value: "==", default: false },
+        ],
     },
     vcLimit: {
         description: "Select a voice-channel limit",
@@ -679,6 +862,25 @@ export default definePlugin({
     userAreaButton: {
         icon: RandomVoiceIcon,
         render: RandomVoiceButton,
+    },
+
+    start() {
+        window.addEventListener("keydown", this.onKeyDown, true);
+    },
+
+    stop() {
+        window.removeEventListener("keydown", this.onKeyDown, true);
+    },
+
+    onKeyDown(event: KeyboardEvent) {
+        if (isRecordingKeybind) return;
+        if (!settings.store.keybindEnabled) return;
+        if (shouldIgnoreKeybindTarget(event.target) && !keybindUsesModifier()) return;
+        if (!matchesKeybind(event)) return;
+
+        event.preventDefault();
+        event.stopPropagation();
+        void joinRandomVoice();
     },
 
     flux: {

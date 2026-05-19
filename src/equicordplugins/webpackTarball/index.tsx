@@ -8,13 +8,13 @@ import { definePluginSettings } from "@api/Settings";
 import { BaseText } from "@components/BaseText";
 import { Flex } from "@components/Flex";
 import { FormSwitch } from "@components/FormSwitch";
-import { Heading, HeadingPrimary } from "@components/Heading";
+import { Heading } from "@components/Heading";
 import { Devs } from "@utils/constants";
 import { makeLazy } from "@utils/lazy";
-import { closeModal, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot, openModal } from "@utils/modal";
 import definePlugin, { OptionType } from "@utils/types";
+import { RenderModalProps } from "@vencord/discord-types";
 import { findByProps, wreq } from "@webpack";
-import { Button, Timestamp, useState } from "@webpack/common";
+import { Button, Modal,openModal, Timestamp, useState } from "@webpack/common";
 
 import TarFile from "./tar";
 import * as Webpack from "./webpack";
@@ -37,10 +37,9 @@ export default definePlugin({
 
     toolboxActions: {
         "Webpack Tarball"() {
-            const key = openModal(props => (
+            openModal(props => (
                 <TarModal
                     modalProps={props}
-                    close={() => closeModal(key)}
                 />
             ));
         }
@@ -83,7 +82,7 @@ async function saveTar(patched: boolean) {
     tar.save(`${root}.tar`);
 }
 
-function TarModal({ modalProps, close }: { modalProps: ModalProps; close(): void; }) {
+function TarModal({ modalProps }: { modalProps: RenderModalProps; }) {
     const webpackRequire = wreq as any;
     const { buildNumber, builtAt } = getBuildNumber();
     const [, rerender] = useState({});
@@ -99,66 +98,63 @@ function TarModal({ modalProps, close }: { modalProps: ModalProps; close(): void
     const { patched } = settings.use(["patched"]);
     const WEBPACK_CHUNK = "webpackChunkdiscord_app";
     return (
-        <ModalRoot {...modalProps}>
-            <ModalHeader>
-                <HeadingPrimary>
-                    Webpack Tarball
-                </HeadingPrimary>
+        <Modal
+            {...modalProps}
+            size="md"
+            title="Webpack Tarball"
+            actions={[
+                {
+                    text: "Create",
+                    variant: "primary",
+                    onClick: () => {
+                        saveTar(patched);
+                        modalProps.onClose();
+                    }
+                }
+            ]}
+        >
+            <div style={{ marginBottom: "16px" }}>
                 <BaseText size="md">
                     <Timestamp timestamp={new Date(builtAt)} isInline={false}>
                         {"Build number "}
                         {buildNumber}
                     </Timestamp>
                 </BaseText>
-                <ModalCloseButton onClick={close} />
-            </ModalHeader>
+            </div>
 
-            <ModalContent>
-                <div style={{ marginTop: "8px", marginBottom: "24px" }}>
-                    <Heading>
-                        Lazy chunks
-                    </Heading>
-                    <Flex alignItems="center">
-                        <BaseText
-                            size="md"
-                            style={{ flexGrow: 1 }}
-                        >
-                            {loaded}/{all}
-                            {errored ? ` (${errored} errors)` : null}
-                        </BaseText>
-                        <Button
-                            disabled={loading === all || isLoading}
-                            onClick={async () => {
-                                setLoading(true);
-                                // @ts-ignore
-                                await Webpack.protectWebpack(window[WEBPACK_CHUNK], async () => {
-                                    await Webpack.forceLoadAll(webpackRequire, rerender);
-                                });
-                            }}
-                        >
-                            {loaded === all ? "Loaded" : loading === all ? "Loading" : "Load all"}
-                        </Button>
-                    </Flex>
-                </div>
+            <div style={{ marginTop: "8px", marginBottom: "24px" }}>
+                <Heading>
+                    Lazy chunks
+                </Heading>
+                <Flex alignItems="center">
+                    <BaseText
+                        size="md"
+                        style={{ flexGrow: 1 }}
+                    >
+                        {loaded}/{all}
+                        {errored ? ` (${errored} errors)` : null}
+                    </BaseText>
+                    <Button
+                        disabled={loading === all || isLoading}
+                        onClick={async () => {
+                            setLoading(true);
+                            // @ts-ignore
+                            await Webpack.protectWebpack(window[WEBPACK_CHUNK], async () => {
+                                await Webpack.forceLoadAll(webpackRequire, rerender);
+                            });
+                        }}
+                    >
+                        {loaded === all ? "Loaded" : loading === all ? "Loading" : "Load all"}
+                    </Button>
+                </Flex>
+            </div>
 
-                <FormSwitch
-                    value={patched}
-                    onChange={v => settings.store.patched = v}
-                    title={settings.def.patched.description}
-                    hideBorder
-                />
-            </ModalContent>
-
-            <ModalFooter>
-                <Button
-                    onClick={() => {
-                        saveTar(patched);
-                        close();
-                    }}
-                >
-                    Create
-                </Button>
-            </ModalFooter>
-        </ModalRoot>
+            <FormSwitch
+                value={patched}
+                onChange={v => settings.store.patched = v}
+                title={settings.def.patched.description}
+                hideBorder
+            />
+        </Modal>
     );
 }

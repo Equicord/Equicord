@@ -5,11 +5,8 @@
  */
 
 import { BaseText } from "@components/BaseText";
-import { Button } from "@components/Button";
-import { Heading } from "@components/Heading";
 import { Paragraph } from "@components/Paragraph";
-import { ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalRoot, ModalSize } from "@utils/modal";
-import { TextInput, useState } from "@webpack/common";
+import { Modal, TextInput, useState } from "@webpack/common";
 
 import { SetAliasModalProps } from "./types";
 
@@ -30,45 +27,40 @@ export function SetAliasModal({
     const canSave = !validationError && !duplicateAlias;
 
     return (
-        <ModalRoot {...modalProps} size={ModalSize.SMALL}>
-            <ModalHeader>
-                <Heading style={{ flexGrow: 1 }}>Set alias</Heading>
-                <ModalCloseButton onClick={modalProps.onClose} />
-            </ModalHeader>
-
-            <ModalContent style={{ overflowY: "hidden" }}>
-                <Paragraph style={{ margin: 0, marginBottom: 8 }}>Set an alias for {emojiDisplayName}</Paragraph>
-                <TextInput
-                    value={input}
-                    onChange={value => {
-                        setInput(value);
-                        setError(null);
-                    }}
-                    placeholder='Alias, e.g. "sob"'
-                />
-                {finalError && (
-                    <BaseText style={{ color: "var(--text-feedback-critical)", marginTop: 8 }}>
-                        {finalError}
-                    </BaseText>
-                )}
-            </ModalContent>
-
-            <ModalFooter>
-                <Button
-                    variant="primary"
-                    disabled={!canSave}
-                    onClick={async () => {
+        <Modal
+            {...modalProps}
+            size="sm"
+            title="Set alias"
+            actions={[
+                {
+                    text: "Save",
+                    variant: "primary",
+                    disabled: !canSave,
+                    onClick: async () => {
                         const result = await onSave(input);
                         if (!result.ok) {
                             setError(result.error);
                             return;
                         }
                         modalProps.onClose();
-                    }}
-                >
-                    Save
-                </Button>
-            </ModalFooter>
-        </ModalRoot>
+                    }
+                }
+            ]}
+        >
+            <Paragraph style={{ margin: 0, marginBottom: 8 }}>Set an alias for {emojiDisplayName}</Paragraph>
+            <TextInput
+                value={input}
+                onChange={value => {
+                    setInput(value);
+                    setError(null);
+                }}
+                placeholder='Alias, e.g. "sob"'
+            />
+            {finalError && (
+                <BaseText style={{ color: "var(--text-feedback-critical)", marginTop: 8 }}>
+                    {finalError}
+                </BaseText>
+            )}
+        </Modal>
     );
 }

@@ -4,12 +4,10 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { BaseText } from "@components/BaseText";
 import { classes } from "@utils/misc";
-import { ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot, ModalSize, openModal } from "@utils/modal";
-import { Channel } from "@vencord/discord-types";
+import { Channel, RenderModalProps } from "@vencord/discord-types";
 import { findStoreLazy } from "@webpack";
-import { Button, React, ScrollerThin } from "@webpack/common";
+import { Modal, openModal, React, ScrollerThin } from "@webpack/common";
 
 import { clearLogs, getVcLogs, vcLogSubscribe } from "../logs";
 import { cl } from "../utils";
@@ -23,47 +21,43 @@ export function openVoiceChannelLog(channel: Channel) {
     ));
 }
 
-export function VoiceChannelLogModal({ channel, props }: { channel: Channel; props: ModalProps; }) {
+export function VoiceChannelLogModal({ channel, props }: { channel: Channel; props: RenderModalProps; }) {
     const logs = React.useSyncExternalStore(vcLogSubscribe, () => getVcLogs(channel.id));
 
     return (
-        <ModalRoot {...props} size={ModalSize.LARGE}>
-            <ModalHeader>
-                <BaseText size="lg" weight="semibold" className={cl("header")} style={{ flexGrow: 1 }}>
-                    {channel.name} logs
-                </BaseText>
-                <ModalCloseButton onClick={props.onClose} />
-            </ModalHeader>
+        <Modal
+            {...props}
+            size="lg"
+            title={`${channel.name} logs`}
+            actions={[
+                {
+                    text: "Clear logs",
+                    variant: "dangerPrimary",
+                    onClick: () => clearLogs(channel.id)
+                }
+            ]}
+        >
+            <ScrollerThin fade className={classes(cl("scroller"), `group-spacing-${AccessibilityStore.messageGroupSpacing}`)}>
+                {logs.length > 0 ? logs.map((entry, i) => {
+                    const elements: React.ReactNode[] = [];
 
-            <ModalContent>
-                <ScrollerThin fade className={classes(cl("scroller"), `group-spacing-${AccessibilityStore.messageGroupSpacing}`)}>
-                    {logs.length > 0 ? logs.map((entry, i) => {
-                        const elements: React.ReactNode[] = [];
-
-                        if (i === 0 || entry.timestamp.toDateString() !== logs[i - 1].timestamp.toDateString()) {
-                            elements.push(
-                                <div key={`sep-${i}`} className={cl("date-separator")} role="separator" aria-label={entry.timestamp.toDateString()}>
-                                    <span>{entry.timestamp.toDateString()}</span>
-                                </div>
-                            );
-                        }
-
+                    if (i === 0 || entry.timestamp.toDateString() !== logs[i - 1].timestamp.toDateString()) {
                         elements.push(
-                            <VoiceChannelLogEntryComponent key={`entry-${i}`} logEntry={entry} channel={channel} />
+                            <div key={`sep-${i}`} className={cl("date-separator")} role="separator" aria-label={entry.timestamp.toDateString()}>
+                                <span>{entry.timestamp.toDateString()}</span>
+                            </div>
                         );
+                    }
 
-                        return elements;
-                    }) : (
-                        <div className={cl("empty")}>No logs to display.</div>
-                    )}
-                </ScrollerThin>
-            </ModalContent>
+                    elements.push(
+                        <VoiceChannelLogEntryComponent key={`entry-${i}`} logEntry={entry} channel={channel} />
+                    );
 
-            <ModalFooter>
-                <Button color={Button.Colors.RED} onClick={() => clearLogs(channel.id)}>
-                    Clear logs
-                </Button>
-            </ModalFooter>
-        </ModalRoot>
+                    return elements;
+                }) : (
+                    <div className={cl("empty")}>No logs to display.</div>
+                )}
+            </ScrollerThin>
+        </Modal>
     );
 }

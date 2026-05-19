@@ -11,35 +11,28 @@ import { definePluginSettings } from "@api/Settings";
 import { Button } from "@components/Button";
 import { Divider } from "@components/Divider";
 import ErrorBoundary from "@components/ErrorBoundary";
-import { HeadingPrimary, HeadingSecondary } from "@components/Heading";
+import { HeadingSecondary } from "@components/Heading";
 import { Devs, EquicordDevs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
 import { Margins } from "@utils/margins";
-import {
-    ModalCloseButton,
-    ModalContent,
-    ModalFooter,
-    ModalHeader,
-    ModalProps,
-    ModalRoot,
-    ModalSize,
-    openModal,
-} from "@utils/modal";
+import { useForceUpdater } from "@utils/react";
 import { wordsToTitle } from "@utils/text";
 import definePlugin, { OptionType } from "@utils/types";
-import type { User } from "@vencord/discord-types";
+import { RenderModalProps, type User } from "@vencord/discord-types";
 import { ChannelType } from "@vencord/discord-types/enums";
 import {
-    Button as DiscordButton,
     ChannelStore,
     Forms,
     GuildMemberStore,
     IconUtils,
     Menu,
+    Modal,
+    openModal,
     React,
     SearchableSelect,
     SelectedChannelStore,
     SelectedGuildStore,
+    showToast,
     useMemo,
     UserStore,
     VoiceStateStore,
@@ -69,6 +62,8 @@ import {
 const cl = classNameFactory("vc-narrator-");
 
 const API_BASE = "https://tiktok-tts-aio.exampleuser.workers.dev";
+const AUDIO_EXTENSIONS = ["mp3", "wav", "ogg", "m4a", "aac", "flac", "wma"];
+const SOUND_PLACEHOLDER = "{{SOUND}}";
 
 type LastApiCallStatus = {
     at: number;
@@ -175,6 +170,98 @@ function TroubleshootingSettings() {
     );
 }
 
+function CustomSoundSettings({ soundKey, nameKey }: { soundKey: string; nameKey: string; }) {
+    const fileInputRef = React.useRef<HTMLInputElement>(null);
+    const [busy, setBusy] = React.useState(false);
+    const forceUpdate = useForceUpdater();
+    const customSound = settings.store[soundKey];
+    const customSoundName = settings.store[nameKey] ?? "";
+    const hasCustomSound = typeof customSound === "string" && customSound.startsWith("data:audio/");
+
+    const uploadSound = async (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.currentTarget.files?.[0];
+        if (!file) return;
+
+        const extension = file.name.split(".").pop()?.toLowerCase();
+        if (!extension || !AUDIO_EXTENSIONS.includes(extension)) {
+            showToast("Please choose an audio file.");
+            event.currentTarget.value = "";
+            return;
+        }
+
+        setBusy(true);
+        try {
+            const dataUri = await new Promise<string>((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onloadend = () => resolve(String(reader.result ?? ""));
+                reader.onerror = reject;
+                reader.readAsDataURL(file);
+            });
+
+            if (!dataUri.startsWith("data:audio/")) {
+                showToast("Please choose an audio file.");
+                return;
+            }
+
+            settings.store[soundKey] = dataUri;
+            settings.store[nameKey] = file.name;
+            forceUpdate();
+            showToast("Custom sound saved.");
+        } catch {
+            showToast("Could not load that audio file.");
+        } finally {
+            event.currentTarget.value = "";
+            setBusy(false);
+        }
+    };
+
+    const previewSound = () => {
+        if (!hasCustomSound) return;
+
+        setBusy(true);
+        const audio = new Audio(customSound);
+        audio.volume = settings.store.volume;
+        audio.onended = () => setBusy(false);
+        audio.onerror = () => setBusy(false);
+        audio.play().catch(() => setBusy(false));
+    };
+
+    return (
+        <div className={cl("custom-sound")}>
+            <Forms.FormText className={cl("custom-sound-text")}>
+                {hasCustomSound ? `Selected: ${customSoundName || "Custom audio"}` : "No custom sound selected."}
+            </Forms.FormText>
+            <input
+                ref={fileInputRef}
+                type="file"
+                accept=".mp3,.wav,.ogg,.m4a,.aac,.flac,.webm,.wma,.mp4"
+                className={cl("file-input")}
+                onChange={uploadSound}
+            />
+            <div className={cl("buttons")}>
+                <Button variant="secondary" size="small" disabled={busy} onClick={() => fileInputRef.current?.click()}>
+                    Choose file
+                </Button>
+                <Button variant="secondary" size="small" disabled={busy || !hasCustomSound} onClick={previewSound}>
+                    Preview
+                </Button>
+                <Button
+                    variant="dangerPrimary"
+                    size="small"
+                    disabled={busy || !hasCustomSound}
+                    onClick={() => {
+                        settings.store[soundKey] = "";
+                        settings.store[nameKey] = "";
+                        forceUpdate();
+                    }}
+                >
+                    Clear
+                </Button>
+            </div>
+        </div>
+    );
+}
+
 interface VoiceState {
     userId: string;
     channelId?: string;
@@ -192,6 +279,7 @@ interface QueueItem {
     userId?: string;
     interruptKey?: string;
     useDefaultVoice?: boolean;
+    sound?: string;
 }
 const mainQueue: QueueItem[] = [];
 const stateQueue: QueueItem[] = [];
@@ -274,6 +362,7 @@ async function processQueue() {
             userId: intro.userId,
             interruptKey: action.interruptKey,
             useDefaultVoice: false,
+            sound: intro.sound ?? action.sound,
         };
         mainQueue.push(combined);
     }
@@ -284,7 +373,7 @@ async function processQueue() {
     onQueueChange?.();
 
     try {
-        await speak(item.text, item.userId, item.interruptKey, item.useDefaultVoice);
+        await speak(item.text, item.userId, item.interruptKey, item.useDefaultVoice, item.sound);
     } catch (e) {
         console.error("TTS Error:", e);
     }
@@ -297,7 +386,7 @@ async function processQueue() {
     }, delay);
 }
 
-function queueSpeak(text: string, userId?: string, interruptKey?: string, queue: "main" | "state" = "main", useDefaultVoice?: boolean) {
+function queueSpeak(text: string, userId?: string, interruptKey?: string, queue: "main" | "state" = "main", useDefaultVoice?: boolean, sound?: string) {
     if (text.trim().length === 0) return;
 
     const targetQueue = queue === "state" ? stateQueue : mainQueue;
@@ -314,48 +403,45 @@ function queueSpeak(text: string, userId?: string, interruptKey?: string, queue:
         interruptPlayback(interruptKey);
     }
 
-    targetQueue.push({ text, userId, interruptKey, useDefaultVoice });
+    targetQueue.push({ text, userId, interruptKey, useDefaultVoice, sound });
     onQueueChange?.();
     processQueue();
 }
 
-async function speak(text: string, userId?: string, interruptKey?: string, useDefaultVoice?: boolean): Promise<void> {
+async function speak(text: string, userId?: string, interruptKey?: string, useDefaultVoice?: boolean, sound?: string): Promise<void> {
     return new Promise(resolve => {
-        const onEnd = () => {
-            if (currentStop === onEnd) {
-                currentAudio = null;
-                currentInterruptKey = undefined;
-                currentStop = null;
-            }
-            resolve();
-        };
-
-        const playAudio = (url: string) => {
+        const playAudio = (url: string, playbackRate: number) => new Promise<boolean>(resolveAudio => {
             const audio = new Audio(url);
+            let settled = false;
+
+            const finish = (completed: boolean) => {
+                if (settled) return;
+                settled = true;
+                if (currentStop === stop) {
+                    currentAudio = null;
+                    currentInterruptKey = undefined;
+                    currentStop = null;
+                }
+                resolveAudio(completed);
+            };
+
+            const stop = () => finish(false);
+
             audio.volume = settings.store.volume;
-            audio.playbackRate = settings.store.rate;
-            audio.onended = onEnd;
-            audio.onerror = onEnd;
+            audio.playbackRate = playbackRate;
+            audio.onended = () => finish(true);
+            audio.onerror = stop;
             currentAudio = audio;
             currentInterruptKey = interruptKey;
-            currentStop = onEnd;
-            audio.play().catch(onEnd);
-        };
+            currentStop = stop;
+            audio.play().catch(stop);
+        });
 
-        void (async () => {
-            const voice = useDefaultVoice
-                ? DEFAULT_VOICE
-                : getVoiceForUser(userId, {
-                    userVoiceMap: settings.store.userVoiceMap,
-                    customVoice: settings.store.customVoice,
-                    defaultVoice: DEFAULT_VOICE,
-                });
-
-            const cacheKey = `${voice}_${text}`;
+        const getTtsUrl = async (speechText: string, voice: string) => {
+            const cacheKey = `${voice}_${speechText}`;
 
             if (ttsCache.has(cacheKey)) {
-                playAudio(ttsCache.get(cacheKey)!);
-                return;
+                return ttsCache.get(cacheKey)!;
             }
 
             try {
@@ -363,8 +449,7 @@ async function speak(text: string, userId?: string, interruptKey?: string, useDe
                 if (cachedBlob) {
                     const url = URL.createObjectURL(cachedBlob);
                     ttsCache.set(cacheKey, url);
-                    playAudio(url);
-                    return;
+                    return url;
                 }
             } catch (err) {
                 console.error("Error accessing IndexedDB:", err);
@@ -378,7 +463,7 @@ async function speak(text: string, userId?: string, interruptKey?: string, useDe
                     headers: { "Content-Type": "application/json" },
                     referrerPolicy: "no-referrer",
                     body: JSON.stringify({
-                        text: text,
+                        text: speechText,
                         voice: voice,
                         base64: true,
                     }),
@@ -387,8 +472,7 @@ async function speak(text: string, userId?: string, interruptKey?: string, useDe
 
                 if (!response.ok) {
                     console.error(`TTS failed: ${response.status}`);
-                    resolve();
-                    return;
+                    return null;
                 }
 
                 const audioData = atob((await response.text()).trim());
@@ -403,13 +487,50 @@ async function speak(text: string, userId?: string, interruptKey?: string, useDe
                 ttsCache.set(cacheKey, url);
                 setCachedVoiceInDB(cacheKey, blob).catch(console.error);
 
-                playAudio(url);
+                return url;
             } catch (e) {
                 recordApiError(e);
                 console.error("TTS Network Error:", e);
-                resolve();
+                return null;
             }
-        })().catch(onEnd);
+        };
+
+        const playSpeech = async (speechText: string, voice: string) => {
+            const trimmedText = speechText.trim();
+            if (!trimmedText) return true;
+
+            const url = await getTtsUrl(trimmedText, voice);
+            return !url || await playAudio(url, settings.store.rate);
+        };
+
+        void (async () => {
+            const voice = useDefaultVoice
+                ? DEFAULT_VOICE
+                : getVoiceForUser(userId, {
+                    userVoiceMap: settings.store.userVoiceMap,
+                    customVoice: settings.store.customVoice,
+                    defaultVoice: DEFAULT_VOICE,
+                });
+
+            const soundUrl = typeof sound === "string" && sound.startsWith("data:audio/") ? sound : "";
+            const soundIndex = text.indexOf(SOUND_PLACEHOLDER);
+
+            if (!soundUrl || soundIndex === -1) {
+                await playSpeech(text.replaceAll(SOUND_PLACEHOLDER, ""), voice);
+                resolve();
+                return;
+            }
+
+            const beforeSound = text.slice(0, soundIndex);
+            const afterSound = text.slice(soundIndex + SOUND_PLACEHOLDER.length).replaceAll(SOUND_PLACEHOLDER, "");
+
+            if (await playSpeech(beforeSound, voice)) {
+                const soundCompleted = await playAudio(soundUrl, 1);
+                if (soundCompleted) await playSpeech(afterSound, voice);
+            }
+
+            resolve();
+        })().catch(() => resolve());
     });
 }
 
@@ -561,7 +682,12 @@ function playSample(tempSettings: any, type: string) {
             currentUser.globalName ?? currentUser.username,
             (myGuildId ? GuildMemberStore.getNick(myGuildId, currentUser.id) : null) ?? currentUser.username,
             settingsobj.latinOnly
-        )
+        ),
+        undefined,
+        undefined,
+        "main",
+        undefined,
+        settingsobj[type + "Sound"]
     );
 }
 
@@ -604,18 +730,51 @@ const settings = definePluginSettings({
     },
     joinMessage: {
         type: OptionType.STRING,
-        description: "Placeholders: {{USER}}, {{DISPLAY_NAME}}, {{NICKNAME}}, {{CHANNEL}}",
+        description: "Placeholders: {{USER}}, {{DISPLAY_NAME}}, {{NICKNAME}}, {{CHANNEL}}, {{SOUND}}.",
         default: "{{DISPLAY_NAME}} joined",
+    },
+    joinSound: {
+        type: OptionType.COMPONENT,
+        component: () => <CustomSoundSettings soundKey="joinSound" nameKey="joinSoundName" />,
+        default: "",
+    },
+    joinSoundName: {
+        type: OptionType.STRING,
+        description: "Join sound file name.",
+        default: "",
+        hidden: true,
     },
     leaveMessage: {
         type: OptionType.STRING,
-        description: "Leave Message",
+        description: "Placeholders: {{USER}}, {{DISPLAY_NAME}}, {{NICKNAME}}, {{CHANNEL}}, {{SOUND}}.",
         default: "{{DISPLAY_NAME}} left",
+    },
+    leaveSound: {
+        type: OptionType.COMPONENT,
+        component: () => <CustomSoundSettings soundKey="leaveSound" nameKey="leaveSoundName" />,
+        default: "",
+    },
+    leaveSoundName: {
+        type: OptionType.STRING,
+        description: "Leave sound file name.",
+        default: "",
+        hidden: true,
     },
     moveMessage: {
         type: OptionType.STRING,
-        description: "Move Message",
+        description: "Placeholders: {{USER}}, {{DISPLAY_NAME}}, {{NICKNAME}}, {{CHANNEL}}, {{SOUND}}.",
         default: "{{DISPLAY_NAME}} moved to {{CHANNEL}}",
+    },
+    moveSound: {
+        type: OptionType.COMPONENT,
+        component: () => <CustomSoundSettings soundKey="moveSound" nameKey="moveSoundName" />,
+        default: "",
+    },
+    moveSoundName: {
+        type: OptionType.STRING,
+        description: "Move sound file name.",
+        default: "",
+        hidden: true,
     },
     announceOthersMute: {
         description: "Announce when other users mute/unmute in your current VC",
@@ -686,7 +845,7 @@ interface UserContextProps {
     user: User;
 }
 
-function VoiceSelectModal({ modalProps, user }: { modalProps: ModalProps; user: User; }) {
+function VoiceSelectModal({ modalProps, user }: { modalProps: RenderModalProps; user: User; }) {
     const DEFAULT_VALUE = "__default__";
 
     const options = useMemo(() => {
@@ -741,80 +900,72 @@ function VoiceSelectModal({ modalProps, user }: { modalProps: ModalProps; user: 
     };
 
     return (
-        <ModalRoot {...modalProps} size={ModalSize.MEDIUM}>
-            <ModalHeader>
-                <HeadingPrimary className={cl("modal-title")}>VC Narrator Voice</HeadingPrimary>
-                <ModalCloseButton onClick={modalProps.onClose} />
-            </ModalHeader>
+        <Modal
+            {...modalProps}
+            size="md"
+            title="VC Narrator Voice"
+            actions={[
+                {
+                    text: "Cancel",
+                    variant: "secondary",
+                    onClick: modalProps.onClose
+                },
+                {
+                    text: "Save",
+                    variant: "primary",
+                    onClick: () => {
+                        if (currentValue === DEFAULT_VALUE) {
+                            settings.store.userVoiceMap = removeUserVoiceFromMap(settings.store.userVoiceMap, user.id);
+                        } else {
+                            settings.store.userVoiceMap = upsertUserVoiceMap(settings.store.userVoiceMap, user.id, currentValue);
+                        }
+                        modalProps.onClose();
+                    }
+                }
+            ]}
+        >
+            <section className={Margins.bottom16}>
+                <HeadingSecondary>Select voice for {user.username}</HeadingSecondary>
+                <SearchableSelect
+                    options={options}
+                    value={options.find(o => o.value === currentValue)?.value}
+                    placeholder="Select a voice"
+                    maxVisibleItems={6}
+                    closeOnSelect={true}
+                    onChange={v => setCurrentValue(v as any)}
+                />
 
-            <ModalContent>
-                <section className={Margins.bottom16}>
-                    <HeadingSecondary>Select voice for {user.username}</HeadingSecondary>
-                    <SearchableSelect
-                        options={options}
-                        value={options.find(o => o.value === currentValue)?.value}
-                        placeholder="Select a voice"
-                        maxVisibleItems={6}
-                        closeOnSelect={true}
-                        onChange={v => setCurrentValue(v as any)}
-                    />
-
-                    <Forms.FormText className={cl("preview-hint")}>
-                        Preview how this voice sounds with their name:
-                    </Forms.FormText>
-                    <div className={cl("preview-buttons")}>
-                        <Button
-                            variant="secondary"
-                            size="small"
-                            disabled={busy}
-                            onClick={() => previewVoice(clean(displayName, settings.store.latinOnly) || "Someone")}
-                        >
-                            {busy ? "Playing..." : `"${clean(displayName, settings.store.latinOnly) || "Someone"}"`}
-                        </Button>
-                        <Button
-                            variant="secondary"
-                            size="small"
-                            disabled={busy}
-                            onClick={() => previewVoice(`${clean(displayName, settings.store.latinOnly) || "Someone"} joined`)}
-                        >
-                            Joined
-                        </Button>
-                        <Button
-                            variant="secondary"
-                            size="small"
-                            disabled={busy}
-                            onClick={() => previewVoice(`${clean(displayName, settings.store.latinOnly) || "Someone"} left`)}
-                        >
-                            Left
-                        </Button>
-                    </div>
-                </section>
-            </ModalContent>
-
-            <ModalFooter>
-                <div className={cl("modal-footer")}>
-                    <DiscordButton
-                        color={DiscordButton.Colors.PRIMARY}
-                        onClick={modalProps.onClose}
+                <Forms.FormText className={cl("preview-hint")}>
+                    Preview how this voice sounds with their name:
+                </Forms.FormText>
+                <div className={cl("preview-buttons")}>
+                    <Button
+                        variant="secondary"
+                        size="small"
+                        disabled={busy}
+                        onClick={() => previewVoice(clean(displayName, settings.store.latinOnly) || "Someone")}
                     >
-                        Cancel
-                    </DiscordButton>
-                    <DiscordButton
-                        color={DiscordButton.Colors.BRAND}
-                        onClick={() => {
-                            if (currentValue === DEFAULT_VALUE) {
-                                settings.store.userVoiceMap = removeUserVoiceFromMap(settings.store.userVoiceMap, user.id);
-                            } else {
-                                settings.store.userVoiceMap = upsertUserVoiceMap(settings.store.userVoiceMap, user.id, currentValue);
-                            }
-                            modalProps.onClose();
-                        }}
+                        {busy ? "Playing..." : `"${clean(displayName, settings.store.latinOnly) || "Someone"}"`}
+                    </Button>
+                    <Button
+                        variant="secondary"
+                        size="small"
+                        disabled={busy}
+                        onClick={() => previewVoice(`${clean(displayName, settings.store.latinOnly) || "Someone"} joined`)}
                     >
-                        Save
-                    </DiscordButton>
+                        Joined
+                    </Button>
+                    <Button
+                        variant="secondary"
+                        size="small"
+                        disabled={busy}
+                        onClick={() => previewVoice(`${clean(displayName, settings.store.latinOnly) || "Someone"} left`)}
+                    >
+                        Left
+                    </Button>
                 </div>
-            </ModalFooter>
-        </ModalRoot>
+            </section>
+        </Modal>
     );
 }
 
@@ -896,7 +1047,7 @@ export default definePlugin({
     name: "VcNarratorCustom",
     description: "Announces when users join, leave, or move voice channels via narrator using TikTok TTS. Revamped and back from the dead.",
     tags: ["Accessibility", "Voice"],
-    authors: [Devs.Ven, Devs.Nyako, EquicordDevs.Loukios, EquicordDevs.examplegit],
+    authors: [Devs.Ven, Devs.Nyako, EquicordDevs.Loukios, EquicordDevs.examplegit, EquicordDevs.qdnx],
     settings,
     contextMenus: {
         "user-context": UserContextMenuPatch,
@@ -996,7 +1147,14 @@ export default definePlugin({
                             const nickname = u && ((myGuildId ? GuildMemberStore.getNick(myGuildId, userId) : null) ?? displayName);
                             const channel = ChannelStore.getChannel(id)?.name ?? "channel";
 
-                            queueSpeak(formatText(template, u, channel, displayName, nickname, settings.store.latinOnly), userId);
+                            queueSpeak(
+                                formatText(template, u, channel, displayName, nickname, settings.store.latinOnly),
+                                userId,
+                                undefined,
+                                "main",
+                                undefined,
+                                settings.store[type + "Sound"]
+                            );
                         }
                     }
 

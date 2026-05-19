@@ -8,10 +8,11 @@ import "./styles.css";
 
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Paginator, requirePaginator } from "@plugins/reviewDB/components/ReviewModal";
-import { ModalCloseButton } from "@utils/modal";
 import { Message } from "@vencord/discord-types";
-import { findCssClassesLazy } from "@webpack";
+import { findComponentByCodeLazy, findCssClassesLazy } from "@webpack";
 import { React, useRef, useState } from "@webpack/common";
+
+const CloseButton = findComponentByCodeLazy("CLOSE_BUTTON_LABEL");
 import { MutableRefObject } from "react";
 
 import { jumper } from "./index";
@@ -53,7 +54,7 @@ export default function ReplyNavigator({ replies }: { replies: Message[]; }) {
                     totalCount={replies.length}
                     onPageChange={processPageChange}
                 />
-                <ModalCloseButton className={"vc-findreply-close"} onClick={() => setVisible(false)} />
+                <CloseButton className={"vc-findreply-close"} onClick={() => setVisible(false)} />
             </div>
         </ErrorBoundary>
     );

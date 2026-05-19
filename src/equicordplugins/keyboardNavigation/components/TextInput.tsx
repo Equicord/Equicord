@@ -6,11 +6,11 @@
 
 import "./style.css";
 
-import { closeAllModals, ModalProps, ModalRoot, ModalSize, openModal } from "@utils/modal";
-import { React, TextInput, useEffect, useState } from "@webpack/common";
+import { RenderModalProps } from "@vencord/discord-types";
+import { closeAllModals, Modal,openModal, React, TextInput, useEffect, useState } from "@webpack/common";
 
 interface SimpleTextInputProps {
-    modalProps: ModalProps;
+    modalProps: RenderModalProps;
     onSelect: (inputValue: string) => void;
     placeholder?: string;
     info?: string;
@@ -35,16 +35,17 @@ export function SimpleTextInput({ modalProps, onSelect, placeholder, info }: Sim
     }, []);
 
     return (
-        // @ts-ignore
-        <ModalRoot className="vc-command-palette-simple-text" {...modalProps} size={ModalSize.DYNAMIC} onKeyDown={handleKeyDown}>
-            <TextInput
-                value={inputValue}
-                onChange={e => setInputValue(e as unknown as string)}
-                style={{ width: "30vw", borderRadius: "5px" }}
-                placeholder={placeholder ?? "Type and press Enter"}
-            />
-            {info && <div className="vc-command-palette-textinfo">{info}</div>}
-        </ModalRoot>
+        <Modal {...modalProps} size="sm" title="Text Input">
+            <div className="vc-command-palette-simple-text" onKeyDown={handleKeyDown}>
+                <TextInput
+                    value={inputValue}
+                    onChange={e => setInputValue(e as unknown as string)}
+                    style={{ width: "30vw", borderRadius: "5px" }}
+                    placeholder={placeholder ?? "Type and press Enter"}
+                />
+                {info && <div className="vc-command-palette-textinfo">{info}</div>}
+            </div>
+        </Modal>
     );
 }
 

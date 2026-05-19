@@ -155,7 +155,7 @@ export default definePlugin({
             find: "}setDesktopEncodingOptions(",
             replacement: [
                 {
-                    match: /setDesktopEncodingOptions\((\i),(\i),(\i),\i\)\{/,
+                    match: /setDesktopEncodingOptions\((\i),(\i),(\i)\)\{/,
                     replace: "$&$1=$self.getWidth();$2=$self.getHeight();$3=$self.getFps();",
                     predicate: () => settings.store.forceEncoderSettings,
                 },

@@ -5,7 +5,6 @@
  */
 
 import { NavContextMenuPatchCallback } from "@api/ContextMenu";
-import { BaseText } from "@components/BaseText";
 import { CodeBlock } from "@components/CodeBlock";
 import { Divider } from "@components/Divider";
 import ErrorBoundary from "@components/ErrorBoundary";
@@ -13,18 +12,9 @@ import { Heading } from "@components/Heading";
 import { Devs } from "@utils/constants";
 import { getIntlMessage } from "@utils/discord";
 import { Margins } from "@utils/margins";
-import {
-    closeModal,
-    ModalCloseButton,
-    ModalContent,
-    ModalHeader,
-    ModalRoot,
-    ModalSize,
-    openModal,
-} from "@utils/modal";
 import definePlugin from "@utils/types";
 import { Message } from "@vencord/discord-types";
-import { Menu } from "@webpack/common";
+import { Menu, Modal,openModal } from "@webpack/common";
 
 type CustomMessage = Message & {
     editHistory?: any;
@@ -60,38 +50,34 @@ function cleanMessage(msg: CustomMessage) {
 }
 
 function openViewRawModal(obj: any, type: string, isMessage?: boolean) {
-    const key = openModal(props => (
+    openModal(props => (
         <ErrorBoundary>
-            <ModalRoot {...props} size={ModalSize.LARGE}>
-                <ModalHeader>
-                    <BaseText size="lg" weight="semibold" style={{ flexGrow: 1 }}>
-                        View Raw {type}
-                    </BaseText>
-                    <ModalCloseButton onClick={() => closeModal(key)} />
-                </ModalHeader>
-                <ModalContent>
-                    <div style={{ padding: "16px 0" }}>
-                        {isMessage && (
-                            <>
-                                <Heading>
-                                    Content
-                                </Heading>
-                                <CodeBlock
-                                    content={obj.content}
-                                    lang="markdown"
-                                />
-                                <Divider className={Margins.bottom20} />
-                            </>
-                        )}
+            <Modal
+                {...props}
+                size="lg"
+                title={`View Raw ${type}`}
+            >
+                <div style={{ padding: "16px 0" }}>
+                    {isMessage && (
+                        <>
+                            <Heading>
+                                Content
+                            </Heading>
+                            <CodeBlock
+                                content={obj.content}
+                                lang="markdown"
+                            />
+                            <Divider className={Margins.bottom20} />
+                        </>
+                    )}
 
-                        <Heading>{type} Data</Heading>
-                        <CodeBlock
-                            content={JSON.stringify(obj, null, 4)}
-                            lang="json"
-                        />
-                    </div>
-                </ModalContent>
-            </ModalRoot>
+                    <Heading>{type} Data</Heading>
+                    <CodeBlock
+                        content={JSON.stringify(obj, null, 4)}
+                        lang="json"
+                    />
+                </div>
+            </Modal>
         </ErrorBoundary>
     ));
 }

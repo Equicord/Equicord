@@ -26,6 +26,7 @@ import { app, BrowserWindow, dialog, ipcMain, nativeTheme, shell, systemPreferen
 import monacoHtml from "file://monacoWin.html?minify&base64";
 import { FSWatcher, mkdirSync, readFileSync, watch, writeFileSync } from "fs";
 import { open, readdir, readFile, unlink } from "fs/promises";
+import { release } from "os";
 import { join, normalize } from "path";
 
 import { registerCspIpcHandlers } from "./csp/manager";
@@ -192,3 +193,7 @@ if (IS_DISCORD_DESKTOP) {
         e.returnValue = readFileSync(join(__dirname, "renderer.js"), "utf-8");
     });
 }
+
+ipcMain.on(IpcEvents.SUPPORTS_WINDOWS_MATERIAL, e => {
+    e.returnValue = process.platform === "win32" && Number(release().split(".")[2]) >= 22621;
+});

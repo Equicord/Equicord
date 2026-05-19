@@ -10,9 +10,8 @@ import * as DataStore from "@api/DataStore";
 import { definePluginSettings } from "@api/Settings";
 import { EquicordDevs, IS_MAC } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
-import { closeModal, openModal } from "@utils/modal";
 import definePlugin, { makeRange, OptionType } from "@utils/types";
-import { Button, ChannelRouter, ChannelStore, IconUtils, React, RelationshipStore, SelectedChannelStore, Toasts, UserStore } from "@webpack/common";
+import { Button, ChannelRouter, ChannelStore, closeModal, IconUtils, openModal,React, RelationshipStore, SelectedChannelStore, Toasts, UserStore } from "@webpack/common";
 
 const STORAGE_KEY = "RDMSwitch_history";
 

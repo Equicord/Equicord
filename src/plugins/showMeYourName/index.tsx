@@ -10,17 +10,17 @@ import { findGroupChildrenByChildId, NavContextMenuPatchCallback } from "@api/Co
 import { DataStore } from "@api/index";
 import { isPluginEnabled } from "@api/PluginManager";
 import { definePluginSettings } from "@api/Settings";
-import { Button, TextButton } from "@components/Button";
+import { TextButton } from "@components/Button";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Heading } from "@components/Heading";
 import ircColors from "@plugins/ircColors";
 import mentionAvatars from "@plugins/mentionAvatars";
 import { Devs, EquicordDevs } from "@utils/constants";
-import { classNameFactory, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot, openModal } from "@utils/index";
+import { classNameFactory } from "@utils/index";
 import definePlugin, { OptionType } from "@utils/types";
-import { GuildMember, Message, User } from "@vencord/discord-types";
+import { GuildMember, Message, RenderModalProps, User } from "@vencord/discord-types";
 import { findByCodeLazy, findStoreLazy } from "@webpack";
-import { ChannelStore, GuildMemberStore, GuildStore, Menu, MessageStore, RelationshipStore, StreamerModeStore, TextInput, useEffect, useState } from "@webpack/common";
+import { ChannelStore, GuildMemberStore, GuildStore, Menu, MessageStore, Modal, openModal, RelationshipStore, StreamerModeStore, TextInput, useEffect, useState } from "@webpack/common";
 import { JSX } from "react";
 
 const SMYNC = classNameFactory();
@@ -842,49 +842,19 @@ function removeHoveringReactionPopout(id: string) {
     settings.store.triggerNameRerender = !settings.store.triggerNameRerender;
 }
 
-function CustomNicknameModal({ modalProps, user }: { modalProps: ModalProps; user: User; }) {
+function CustomNicknameModal({ modalProps, user }: { modalProps: RenderModalProps; user: User; }) {
     const [value, setValue] = useState(customNicknames[user.id] ?? "");
 
     return (
-        <ModalRoot {...modalProps}>
-            <ModalHeader>
-                <Heading tag="h1" style={{ flexGrow: 1, margin: 0 }}>
-                    {customNicknames[user.id] ? "Change SMYN Nickname" : "Add SMYN Nickname"}
-                </Heading>
-                <ModalCloseButton onClick={modalProps.onClose} />
-            </ModalHeader>
-            <ModalContent>
-                <Heading tag="h3" style={{ marginBottom: 8, fontSize: "16px", fontWeight: "400", lineHeight: "1.25", color: "var(--text-subtle)" }}>
-                    {"Set a custom SMYN nickname for this user. Make use of it by specifying {custom} in the SMYN template settings."}
-                </Heading>
-                <div style={{ paddingTop: "10px", flexGrow: 0 }}></div>
-                <Heading tag="h3" style={{ marginBottom: 8, fontSize: "14px", fontWeight: 600 }}>
-                    SMYN Nickname
-                </Heading>
-                <TextInput
-                    value={value}
-                    maxLength={32}
-                    onChange={setValue}
-                    placeholder={user.globalName ?? user.username}
-                    style={{ width: "100%" }}
-                />
-                <TextButton
-                    className="smyn-reset-button"
-                    onClick={async () => {
-                        setValue("");
-                        delete customNicknames[user.id];
-                        await DataStore.set("SMYNCustomNicknames", customNicknames);
-                        settings.store.triggerNameRerender = !settings.store.triggerNameRerender;
-                    }}
-                >
-                    Reset SMYN Nickname
-                </TextButton>
-                <div style={{ paddingTop: "10px", flexGrow: 0 }}></div>
-            </ModalContent>
-            <ModalFooter className="smyn-modal-footer-container">
-                <Button
-                    variant="primary"
-                    onClick={async () => {
+        <Modal
+            {...modalProps}
+            size="sm"
+            title={customNicknames[user.id] ? "Change SMYN Nickname" : "Add SMYN Nickname"}
+            actions={[
+                {
+                    text: "Save",
+                    variant: "primary",
+                    onClick: async () => {
                         const trimmed = value.trim().slice(0, 32).trim();
 
                         if (trimmed) {
@@ -896,19 +866,42 @@ function CustomNicknameModal({ modalProps, user }: { modalProps: ModalProps; use
                         await DataStore.set("SMYNCustomNicknames", customNicknames);
                         settings.store.triggerNameRerender = !settings.store.triggerNameRerender;
                         modalProps.onClose();
-                    }}
-                >
-                    Save
-                </Button>
-                <Button
-                    variant="secondary"
-                    style={{ marginRight: "8px" }}
-                    onClick={modalProps.onClose}
-                >
-                    Cancel
-                </Button>
-            </ModalFooter>
-        </ModalRoot>
+                    }
+                },
+                {
+                    text: "Cancel",
+                    variant: "secondary",
+                    onClick: modalProps.onClose
+                }
+            ]}
+        >
+            <Heading tag="h3" style={{ marginBottom: 8, fontSize: "16px", fontWeight: "400", lineHeight: "1.25", color: "var(--text-subtle)" }}>
+                {"Set a custom SMYN nickname for this user. Make use of it by specifying {custom} in the SMYN template settings."}
+            </Heading>
+            <div style={{ paddingTop: "10px", flexGrow: 0 }}></div>
+            <Heading tag="h3" style={{ marginBottom: 8, fontSize: "14px", fontWeight: 600 }}>
+                SMYN Nickname
+            </Heading>
+            <TextInput
+                value={value}
+                maxLength={32}
+                onChange={setValue}
+                placeholder={user.globalName ?? user.username}
+                style={{ width: "100%" }}
+            />
+            <TextButton
+                className="smyn-reset-button"
+                onClick={async () => {
+                    setValue("");
+                    delete customNicknames[user.id];
+                    await DataStore.set("SMYNCustomNicknames", customNicknames);
+                    settings.store.triggerNameRerender = !settings.store.triggerNameRerender;
+                }}
+            >
+                Reset SMYN Nickname
+            </TextButton>
+            <div style={{ paddingTop: "10px", flexGrow: 0 }}></div>
+        </Modal>
     );
 }
 

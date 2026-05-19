@@ -7,8 +7,8 @@
 import { CogWheel } from "@components/Icons";
 import { classNameFactory } from "@utils/css";
 import { classes } from "@utils/misc";
-import { type ModalProps,ModalRoot, ModalSize, openModal } from "@utils/modal";
-import { TextInput, useCallback, useEffect, useMemo, useRef, useState } from "@webpack/common";
+import { RenderModalProps } from "@vencord/discord-types";
+import { Modal,openModal, TextInput, useCallback, useEffect, useMemo, useRef, useState } from "@webpack/common";
 
 import {
     type CommandEntry, getCategoryGroupLabel, getCategoryWeight, getCommandSearchText, getRecentRank, getRegistryVersion, listCommands, subscribeRegistry
@@ -56,7 +56,7 @@ export function openCommandPicker(props: CommandPickerProps) {
     ));
 }
 
-function CommandPickerModal({ modalProps, commands: providedCommands, allowMultiple = false, initialQuery = "", initialSelectedIds = [], includeHiddenInSearch = false, emptyStateText = "No commands found", filter: filterPredicate, onSelect, onComplete, onClose }: CommandPickerProps & { modalProps: ModalProps; }) {
+function CommandPickerModal({ modalProps, commands: providedCommands, allowMultiple = false, initialQuery = "", initialSelectedIds = [], includeHiddenInSearch = false, emptyStateText = "No commands found", filter: filterPredicate, onSelect, onComplete, onClose }: CommandPickerProps & { modalProps: RenderModalProps; }) {
     const [query, setQuery] = useState(initialQuery);
     const [registryVersion, setRegistryVersion] = useState(() => getRegistryVersion());
     const [selectedIndex, setSelectedIndex] = useState(-1);
@@ -321,8 +321,8 @@ function CommandPickerModal({ modalProps, commands: providedCommands, allowMulti
     };
 
     return (
-        <ModalRoot {...modalProps} size={ModalSize.SMALL} className={classes(cn("vc-command-palette"), cl("picker"))}>
-            <div className={classes(cl("shell"), cl("picker-shell"))} onKeyDown={handleKeyDown}>
+        <Modal {...modalProps} size="sm" title="Command Picker">
+            <div className={classes(cl("shell"), cl("picker-shell"), cn("vc-command-palette"), cl("picker"))} onKeyDown={handleKeyDown}>
                 <div className={cl("input")}>
                     <TextInput
                         autoFocus
@@ -373,6 +373,6 @@ function CommandPickerModal({ modalProps, commands: providedCommands, allowMulti
                     })}
                 </div>
             </div>
-        </ModalRoot>
+        </Modal>
     );
 }

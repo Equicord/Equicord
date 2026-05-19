@@ -7,17 +7,15 @@
 import "./ContributorModal.css";
 
 import { useSettings } from "@api/Settings";
-import ErrorBoundary from "@components/ErrorBoundary";
-import { HeadingPrimary } from "@components/Heading";
+import { Heading } from "@components/Heading";
 import { Link } from "@components/Link";
 import { Paragraph } from "@components/Paragraph";
 import { EquicordDevsById, VencordDevsById } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
 import { fetchUserProfile } from "@utils/discord";
 import { pluralise } from "@utils/misc";
-import { ModalContent, ModalFooter, ModalRoot, openModal } from "@utils/modal";
-import { User } from "@vencord/discord-types";
-import { showToast, useEffect, useMemo, UserProfileStore, useStateFromStores } from "@webpack/common";
+import { RenderModalProps, User } from "@vencord/discord-types";
+import { Modal, openModal, showToast, useEffect, useMemo, UserProfileStore, useStateFromStores } from "@webpack/common";
 
 import Plugins, { PluginMeta } from "~plugins";
 
@@ -27,16 +25,10 @@ import { PluginCard } from "./PluginCard";
 const cl = classNameFactory("vc-author-modal-");
 
 export function openContributorModal(user: User) {
-    openModal(modalProps =>
-        <ModalRoot {...modalProps}>
-            <ErrorBoundary>
-                <ContributorModal user={user} />
-            </ErrorBoundary>
-        </ModalRoot>
-    );
+    openModal(modalProps => <ContributorModal user={user} modalProps={modalProps} />);
 }
 
-function ContributorModal({ user }: { user: User; }) {
+function ContributorModal({ user, modalProps }: { user: User; modalProps: RenderModalProps; }) {
     useSettings();
 
     const profile = useStateFromStores([UserProfileStore], () => UserProfileStore.getUserProfile(user.id));
@@ -68,44 +60,37 @@ function ContributorModal({ user }: { user: User; }) {
     const hasLinks = website || githubName;
 
     return (
-        <>
-            <ModalContent className={cl("root")}>
+        <Modal
+            {...modalProps}
+            title={
                 <div className={cl("header")}>
                     <img
                         className={cl("avatar")}
                         src={user.getAvatarURL(void 0, 512, true)}
                         alt=""
                     />
-                    <HeadingPrimary className={cl("name")}>{user.username}</HeadingPrimary>
+                    <Heading tag="h2" className={cl("name")}>{user.username}</Heading>
                 </div>
-
-                {plugins.length ? (
-                    <Paragraph>
-                        {user.username} has {ContributedHyperLink} to {pluralise(plugins.length, "plugin")}!
-                    </Paragraph>
-                ) : (
-                    <Paragraph>
-                        {user.username} has not made any plugins. They likely {ContributedHyperLink} in other ways!
-                    </Paragraph>
-                )}
-
-                {!!plugins.length && (
-                    <div className={cl("plugins")}>
-                        {plugins.map(p =>
-                            <PluginCard
-                                key={p.name}
-                                plugin={p}
-                                disabled={p.required ?? false}
-                                onRestartNeeded={() => showToast("Restart to apply changes!")}
-                            />
-                        )}
-                    </div>
-                )}
-            </ModalContent>
-
-            {hasLinks && (
-                <ModalFooter>
-                    <div className={cl("links")}>
+            }
+            subtitle={
+                plugins.length
+                    ? (
+                        <Paragraph>
+                            {user.username} has {ContributedHyperLink} to {pluralise(plugins.length, "plugin")}!
+                        </Paragraph>
+                    )
+                    : (
+                        <Paragraph>
+                            {user.username} has not made any plugins. They likely {ContributedHyperLink} in other ways!
+                        </Paragraph>
+                    )
+            }
+            actionBarInput={
+                hasLinks && (
+                    <div
+                        className={cl("links")}
+                        style={{ width: "100%", justifyContent: "flex-end" }}
+                    >
                         {website && (
                             <WebsiteButton
                                 text={website}
@@ -119,8 +104,23 @@ function ContributorModal({ user }: { user: User; }) {
                             />
                         )}
                     </div>
-                </ModalFooter>
-            )}
-        </>
+                )
+            }
+        >
+            <div className={cl("root")}>
+                {!!plugins.length && (
+                    <div className={cl("plugins")}>
+                        {plugins.map(p =>
+                            <PluginCard
+                                key={p.name}
+                                plugin={p}
+                                disabled={p.required ?? false}
+                                onRestartNeeded={() => showToast("Restart to apply changes!")}
+                            />
+                        )}
+                    </div>
+                )}
+            </div>
+        </Modal>
     );
 }
