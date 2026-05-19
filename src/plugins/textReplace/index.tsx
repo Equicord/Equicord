@@ -284,7 +284,10 @@ function TextReplace({ title, description, rulesArray, isRegex = false }: TextRe
                     </ExpandableSection>
                 )}
                 <Button
-                    onClick={() => rulesArray.push(makeEmptyRule())}
+                    onClick={() => {
+                        setSearchQuery("");
+                        rulesArray.push(makeEmptyRule());
+                    }}
                     disabled={rulesArray.length > 0 && isEmptyRule(rulesArray[rulesArray.length - 1])}
                 >
                     Add Rule
