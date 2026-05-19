@@ -4,18 +4,22 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import "./styles.css";
+
 import { definePluginSettings } from "@api/Settings";
 import { Card } from "@components/Card";
 import { HeadingTertiary } from "@components/Heading";
 import { ErrorBoundary } from "@components/index";
 import { Margins } from "@components/margins";
 import { EquicordDevs } from "@utils/constants";
+import { classNameFactory } from "@utils/css";
+import { classes } from "@utils/misc";
 import definePlugin, { OptionType } from "@utils/types";
 import { Message } from "@vencord/discord-types";
 import { React, TextInput } from "@webpack/common";
 
 let blockedKeywords: Array<RegExp>;
-const cardStyle = { padding: "0.4em 0.75em", display: "flex", alignItems: "center", justifyContent: "space-between" };
+const cl = classNameFactory("vc-block-keywords-");
 
 function splitPatterns(input: string): string[] {
     return input
@@ -46,7 +50,7 @@ function RegexHelper() {
     }, [testInput, blockedWords, caseSensitive, useRegex]);
 
     return (
-        <Card style={{ padding: "0.75em" }}>
+        <Card className={cl("regex")}>
             <HeadingTertiary className={Margins.bottom8}>Regex Helper</HeadingTertiary>
             <TextInput
                 type="text"
@@ -59,8 +63,7 @@ function RegexHelper() {
                 <Card
                     key="vc-no-patterns-regex"
                     variant="warning"
-                    className={Margins.top8}
-                    style={cardStyle}
+                    className={classes(cl("card"), Margins.top8)}
                 >
                     <code>No patterns configured</code>
                 </Card> : (
@@ -68,11 +71,10 @@ function RegexHelper() {
                         <Card
                             key={`vc-pattern-card-${i}`}
                             variant={error ? "danger" : matches ? "success" : "primary"}
-                            className={Margins.top8}
-                            style={cardStyle}
+                            className={classes(cl("card"), Margins.top8)}
                         >
                             <code>{pattern}</code>
-                            {error && <span style={{ fontSize: "12px", marginLeft: "1em", flexShrink: 0 }}>{error}</span>}
+                            {error && <span className={cl("error")}>{error}</span>}
                         </Card>
                     )))}
         </Card>
