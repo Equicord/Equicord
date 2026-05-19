@@ -97,22 +97,22 @@ export default definePlugin({
     authors: [EquicordDevs.yash],
     patches: [
         {
-            find: "\"dm-quick-launcher\"===",
+            find: '"dm-quick-launcher"===',
             replacement: [
                 {
-                    match: /(render\(\)\{let\{privateChannelIds:(\i),padding:\i\}=this\.props,\{preRenderedChildren:\i\}=this\.state;)/,
-                    replace: "$1$2=$self.filterPrivateChannelIds($2,this);"
+                    match: /render\(\)\{/,
+                    replace: "$&this.props.privateChannelIds=$self.filterPrivateChannelIds(this.props.privateChannelIds,this);"
                 },
                 {
-                    match: /(renderRow=\i=>\{let\{section:\i,row:\i\}=\i,\{privateChannelIds:(\i)\}=this\.props;)/,
-                    replace: "$1$2=$self.filterPrivateChannelIds($2,this);"
+                    match: /renderRow=\i=>\{/,
+                    replace: "$&this.props.privateChannelIds=$self.filterPrivateChannelIds(this.props.privateChannelIds,this);"
                 },
                 {
-                    match: /(renderDM=\(\i,\i\)=>\{let\{privateChannelIds:(\i),channels:\i,selectedChannelId:\i\}=this\.props,\{totalRowCount:\i,preRenderedChildren:\i\}=this\.state),(\i)=/,
-                    replace: "$1;$2=$self.filterPrivateChannelIds($2,this);let $3="
+                    match: /renderDM=\(\i,\i\)=>\{/,
+                    replace: "$&this.props.privateChannelIds=$self.filterPrivateChannelIds(this.props.privateChannelIds,this);"
                 },
                 {
-                    match: /children:\[\(0,\i\.jsx\)\(.{0,20}\{className:\i\.TK,children:\i\.intl\.string\(\i\.t#{intl::DIRECT_MESSAGES}\)\}\),/,
+                    match: /#{intl::DIRECT_MESSAGES}\)\}\),/,
                     replace: "$&$self.renderHiddenMessagesToggle(),"
                 }
             ]
