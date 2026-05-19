@@ -44,6 +44,11 @@ interface TextReplaceProps {
     isRegex?: boolean;
 }
 
+interface RuleWithIndex {
+    rule: Rule;
+    index: number;
+}
+
 const makeEmptyRule: () => Rule = () => ({
     find: "",
     replace: "",
@@ -151,7 +156,17 @@ function TextRow({ label, description, value, onChange }: { label: string; descr
 
 const isEmptyRule = (rule: Rule) => !rule.find;
 
+function matchesRuleSearch(rule: Rule, query: string) {
+    if (!query) return true;
+
+    const normalizedQuery = query.toLowerCase();
+    return [rule.find, rule.replace, rule.onlyIfIncludes]
+        .some(value => value.toLowerCase().includes(normalizedQuery));
+}
+
 function TextReplace({ title, description, rulesArray, isRegex = false }: TextReplaceProps) {
+    const [searchQuery, setSearchQuery] = useState("");
+
     function onClickRemove(index: number) {
         rulesArray.splice(index, 1);
     }
@@ -171,14 +186,30 @@ function TextReplace({ title, description, rulesArray, isRegex = false }: TextRe
         { label: "Apply to all messages", value: "allMessages" }
     ];
 
+    const filteredRules = rulesArray.reduce((acc: RuleWithIndex[], rule, index) => {
+        if (matchesRuleSearch(rule, searchQuery)) {
+            acc.push({ rule, index });
+        }
+
+        return acc;
+    }, []);
+
     return (
         <>
             <div>
                 <HeadingSecondary>{title}</HeadingSecondary>
                 <Paragraph>{description}</Paragraph>
+                <TextInput
+                    placeholder="Search for a rule..."
+                    value={searchQuery}
+                    onChange={setSearchQuery}
+                />
             </div>
             <Flex flexDirection="column" style={{ gap: "0.5em", paddingBottom: "1.25em" }}>
-                {rulesArray.map((rule, index) =>
+                {!filteredRules.length && searchQuery && (
+                    <Paragraph>No rules match your search criteria.</Paragraph>
+                )}
+                {filteredRules.map(({ rule, index }) =>
                     <ExpandableSection
                         key={rule.id}
                         renderContent={() => (
@@ -306,7 +337,7 @@ export default definePlugin({
     description: "Replace text in your messages. You can find pre-made rules in the #textreplace-rules channel in Vencord's Server",
     dependencies: ["MessagePopoverAPI"],
     tags: ["Chat", "Customisation", "Utility"],
-    authors: [Devs.AutumnVN, Devs.TheKodeToad, EquicordDevs.Etorix],
+    authors: [Devs.AutumnVN, Devs.TheKodeToad, EquicordDevs.Etorix, EquicordDevs.Ape],
     isModified: true,
     settings,
     modifyIncomingMessage,
