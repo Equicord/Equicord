@@ -193,6 +193,7 @@ async function maybeWarnForGroupChannel(channelId: string) {
     const pendingWarning = pendingGroupWarnings.get(channelId);
     if (pendingWarning) return pendingWarning;
 
+    const generation = activeGeneration;
     const currentRecipientKey = [...channel.recipients].sort().join(",");
     if (warnedGroupChannels.get(channelId) === currentRecipientKey) return;
 
@@ -236,7 +237,7 @@ export default definePlugin({
     description: "Detects users who have blocked you and warns when they appear in voice channels or group DMs.",
     authors: [EquicordDevs.justjxke],
     flux: {
-        USER_PROFILE_FETCH_SUCCESS({ userProfile }: { userProfile: { user: User; user_profile: unknown | null; }; }) {
+        USER_PROFILE_FETCH_SUCCESS({ userProfile }: { userProfile: { user: User; user_profile: any | null; }; }) {
             const userId = userProfile.user.id;
             if (userProfile.user_profile != null && UserProfileStore.getUserProfile(userId) != null) {
                 primeClear(userId);

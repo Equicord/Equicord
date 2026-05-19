@@ -4,7 +4,8 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { Constants, RestAPI, UserProfileStore } from "@webpack/common";
+import { fetchUserProfile } from "@utils/discord";
+import { UserProfileStore } from "@webpack/common";
 
 export type BlockDetectionState = "unknown" | "blockedYou" | "clear";
 
@@ -103,21 +104,9 @@ async function fetchState(userId: string): Promise<BlockDetectionState> {
     }
 
     try {
-        const { body } = await RestAPI.get({
-            url: Constants.Endpoints.USER_PROFILE(userId),
-            query: {
-                with_mutual_guilds: false,
-                with_mutual_friends_count: false
-            },
-            oldFormErrors: true
-        });
-
-        return body.user_profile == null ? "blockedYou" : "clear";
+        const profile = await fetchUserProfile(userId);
+        return profile == null ? "blockedYou" : "clear";
     } catch (error) {
-        const status = isObject(error) && "status" in error
-            ? Reflect.get(error, "status")
-            : void 0;
-
         return "unknown";
     }
 }

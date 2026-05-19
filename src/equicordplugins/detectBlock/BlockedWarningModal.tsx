@@ -5,13 +5,10 @@
  */
 
 import { BaseText } from "@components/BaseText";
-import { Button } from "@components/Button";
-import { Flex } from "@components/Flex";
 import { classNameFactory } from "@utils/css";
-import { ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalRoot, ModalSize, openModal } from "@utils/modal";
 import { humanFriendlyJoin } from "@utils/text";
 import type { User } from "@vencord/discord-types";
-import { Avatar, UserStore } from "@webpack/common";
+import { Avatar, IconUtils, Modal, openModal, UserStore } from "@webpack/common";
 
 type WarningVariant = "voiceJoin" | "voiceLeave" | "group";
 
@@ -29,7 +26,7 @@ type WarningRecipe = {
 };
 
 const cl = classNameFactory("vc-detect-block-");
-const WARNING_GRAPHIC_SRC = "https://cdn.discordapp.com/assets/content/f64aeb4eb878e4f0749f45b759fc3ee6f3a943329962bc573fcbe0ea7678870d.svg";
+const WARNING_GRAPHIC_SRC = "https://equicord.org/assets/plugins/detectBlock/warning.svg";
 
 const WARNING_RECIPES: Record<WarningVariant, WarningRecipe> = {
     voiceJoin: {
@@ -71,7 +68,7 @@ function getAvatar(user: User | undefined, fallbackId: string) {
     const fallbackUser = UserStore.getUser(fallbackId);
     return (
         <Avatar
-            src={IconUtils.getUserAvatarURL(user ?? fallbackUser, { size: 32 })}
+            src={IconUtils.getUserAvatarURL(user ?? fallbackUser, true, 32)}
             size="SIZE_32"
         />
     );
@@ -126,52 +123,37 @@ export function openBlockedWarningModal({
     const subjectText = getBlockedSubjectText(blockedNames, blockedUserIds);
 
     return openModal(modalProps => (
-        <ModalRoot {...modalProps} size={ModalSize.MEDIUM} className={cl("modal")}>
-            <ModalHeader separator={false} className={cl("header")}>
-                <ModalCloseButton onClick={modalProps.onClose} className={cl("close")} />
+        <Modal
+            {...modalProps}
+            size="md"
+            title={recipe.title}
+            subtitle={recipe.subtitle}
+            actions={recipe.actions.map(action => ({
+                text: action.text,
+                variant: action.variant,
+                onClick: () => {
+                    if (action.confirms) void onConfirm();
+                    modalProps.onClose();
+                }
+            }))}
+        >
+            <div style={{ display: "flex", justifyContent: "center", marginBottom: "16px" }}>
                 <img alt="" aria-hidden="true" draggable={false} className={cl("graphic")} src={WARNING_GRAPHIC_SRC} />
-                <BaseText tag="h1" size="xl" weight="semibold" color="text-strong" className={cl("title")}>
-                    {recipe.title}
-                </BaseText>
-                <BaseText size="md" weight="normal" color="text-muted" className={cl("subtitle")}>
-                    {recipe.subtitle}
-                </BaseText>
-            </ModalHeader>
-
-            <ModalContent className={cl("content")}>
-                <div className={cl("info-group")}>
-                    <InfoRow icon={getAvatar(avatarUser, blockedUserIds[0] ?? "")}>
-                        <span className={cl("subject")}>
-                            <BaseText tag="span" size="md" weight="semibold" color="text-default" className={cl("username")}>
-                                {subjectText.subject}
-                            </BaseText>
-                            {subjectText.suffix}
-                        </span>
-                    </InfoRow>
-                    <div className={cl("divider")} />
-                    <InfoRow icon={<WarningIcon />}>
-                        {recipe.hearingText}
-                    </InfoRow>
-                </div>
-            </ModalContent>
-
-            <ModalFooter className={cl("footer-shell")}>
-                <Flex className={cl("footer")}>
-                    {recipe.actions.map(action => (
-                        <Button
-                            key={action.text}
-                            variant={action.variant}
-                            className={cl("button")}
-                            onClick={() => {
-                                if (action.confirms) void onConfirm();
-                                modalProps.onClose();
-                            }}
-                        >
-                            {action.text}
-                        </Button>
-                    ))}
-                </Flex>
-            </ModalFooter>
-        </ModalRoot>
+            </div>
+            <div className={cl("info-group")}>
+                <InfoRow icon={getAvatar(avatarUser, blockedUserIds[0] ?? "")}>
+                    <span className={cl("subject")}>
+                        <BaseText tag="span" size="md" weight="semibold" color="text-default" className={cl("username")}>
+                            {subjectText.subject}
+                        </BaseText>
+                        {subjectText.suffix}
+                    </span>
+                </InfoRow>
+                <div className={cl("divider")} />
+                <InfoRow icon={<WarningIcon />}>
+                    {recipe.hearingText}
+                </InfoRow>
+            </div>
+        </Modal>
     ));
 }
