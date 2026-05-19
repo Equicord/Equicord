@@ -35,7 +35,14 @@ import { React, Select, TextInput, UserStore, useState } from "@webpack/common";
 
 const cl = classNameFactory("vc-textReplace-");
 
-type Rule = Record<"find" | "replace" | "onlyIfIncludes" | "scope" | "id", string>;
+interface Rule {
+    name?: string;
+    find: string;
+    replace: string;
+    onlyIfIncludes: string;
+    scope: string;
+    id: string;
+}
 
 interface TextReplaceProps {
     title: string;
@@ -50,6 +57,7 @@ interface RuleWithIndex {
 }
 
 const makeEmptyRule: () => Rule = () => ({
+    name: "",
     find: "",
     replace: "",
     onlyIfIncludes: "",
@@ -159,9 +167,15 @@ const isEmptyRule = (rule: Rule) => !rule.find;
 function matchesRuleSearch(rule: Rule, query: string) {
     if (!query) return true;
 
-    const normalizedQuery = query.toLowerCase();
-    return [rule.find, rule.replace, rule.onlyIfIncludes]
+    const normalizedQuery = query.trim().toLowerCase();
+    return [rule.name ?? "", rule.find, rule.replace, rule.onlyIfIncludes]
         .some(value => value.toLowerCase().includes(normalizedQuery));
+}
+
+function normalizeRule(rule: Rule) {
+    rule.name ??= "";
+    rule.scope ??= "myMessages";
+    rule.id ??= crypto.randomUUID();
 }
 
 function TextReplace({ title, description, rulesArray, isRegex = false }: TextReplaceProps) {
@@ -216,6 +230,12 @@ function TextReplace({ title, description, rulesArray, isRegex = false }: TextRe
                             <>
                                 <div className={cl("input-grid")}>
                                     <TextRow
+                                        label="Name"
+                                        description="A name to help you identify this rule. This is optional"
+                                        value={rule.name ?? ""}
+                                        onChange={e => onChange(e, index, "name")}
+                                    />
+                                    <TextRow
                                         label="Find"
                                         description={isRegex ? "The regex pattern" : "The text to replace"}
                                         value={rule.find}
@@ -254,9 +274,11 @@ function TextReplace({ title, description, rulesArray, isRegex = false }: TextRe
                         )}
                     >
                         <Paragraph weight="medium" size="md">
-                            {isEmptyRule(rule)
-                                ? `Empty Rule ${index + 1}`
-                                : `Rule ${index + 1} - ${rule.find}`
+                            {rule.name
+                                ? rule.name
+                                : isEmptyRule(rule)
+                                    ? `Empty Rule ${index + 1}`
+                                    : `Rule ${index + 1} - ${rule.find}`
                             }
                         </Paragraph>
                     </ExpandableSection>
@@ -355,15 +377,8 @@ export default definePlugin({
     start() {
         const { stringRules, regexRules } = settings.store;
 
-        stringRules.forEach(rule => {
-            rule.scope ??= "myMessages";
-            rule.id ??= crypto.randomUUID();
-        });
-
-        regexRules.forEach(rule => {
-            rule.scope ??= "myMessages";
-            rule.id ??= crypto.randomUUID();
-        });
+        stringRules.forEach(normalizeRule);
+        regexRules.forEach(normalizeRule);
     },
 
     onBeforeMessageSend(channelId, msg) {
