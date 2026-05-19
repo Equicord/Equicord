@@ -31,11 +31,11 @@ function RegexHelper() {
     const { blockedWords, caseSensitive, useRegex } = settings.use(["blockedWords", "caseSensitive", "useRegex"]);
 
     const results = React.useMemo(() => {
-        const caseSensitiveFlag = settings.store.caseSensitive ? "" : "i";
-        return splitPatterns(settings.store.blockedWords)
+        const caseSensitiveFlag = caseSensitive ? "" : "i";
+        return splitPatterns(blockedWords)
             .map(pattern => {
                 try {
-                    const regex = settings.store.useRegex
+                    const regex = useRegex
                         ? new RegExp(pattern, caseSensitiveFlag)
                         : new RegExp(`\\b${pattern.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`, caseSensitiveFlag);
                     return { pattern, matches: regex.test(testInput) };
@@ -43,7 +43,7 @@ function RegexHelper() {
                     return { pattern, matches: false, error: e instanceof Error ? e.message : String(e) };
                 }
             });
-    }, [testInput, settings.store.blockedWords, settings.store.caseSensitive, settings.store.useRegex]);
+    }, [testInput, blockedWords, caseSensitive, useRegex]);
 
     return (
         <Card style={{ padding: "0.75em" }}>
