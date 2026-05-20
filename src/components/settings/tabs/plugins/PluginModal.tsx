@@ -351,7 +351,7 @@ export function openWarningModal(plugin?: Plugin | null, onRestartNeeded?: (plug
             <Paragraph>
                 {isPlugin
                     ? <>{t("equicord.ui.pluginModal.resetConfirm", "Are you sure you want to reset all settings for")} <strong>{plugin?.name}</strong> {t("equicord.ui.pluginModal.resetConfirmDetail", "to their default values?")}</>
-                    : `${t("equicord.ui.pluginModal.disableConfirm", "Are you sure you want to disable")} ${enabledPlugins} ${t("equicord.ui.pluginModal.cannotUndo", "plugins?")}`
+                    : `${t("equicord.ui.pluginModal.disableConfirm", "Are you sure you want to disable {count} plugins?").replace("{count}", String(enabledPlugins))}`
                 }
             </Paragraph>
             <div className={classes(Margins.top16, cl("warning"))}>

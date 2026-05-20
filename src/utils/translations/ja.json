@@ -708,5 +708,7 @@
   "equicord.plugins.xsOverlay.name": "XSOverlay",
   "equicord.plugins.xsOverlay.description": "XSOverlayの機能を提供します。Websocket port",
   "equicord.plugins.youtubeAdblock_desktop.name": "YouTube広告ブロック",
-  "equicord.plugins.youtubeAdblock_desktop.description": "YouTube広告ブロックの機能を提供します。Block ads in YouTube embeds and the WatchTogether activity v"
+  "equicord.plugins.youtubeAdblock_desktop.description": "YouTube広告ブロックの機能を提供します。Block ads in YouTube embeds and the WatchTogether activity v",
+  "equicord.ui.pluginModal.cannotUndo": "この操作は元に戻せません。",
+  "equicord.ui.pluginModal.disableConfirm": "{count}個のプラグインを無効化してもよろしいですか？"
 }

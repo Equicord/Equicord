@@ -5,7 +5,8 @@
  */
 
 import { findByPropsLazy } from "@webpack";
-import { LocaleStore, React, useEffect, useState } from "@webpack/common";
+import { LocaleStore, React, useEffect } from "@webpack/common";
+import { useForceUpdater } from "@utils/react";
 
 import jaMessages from "../utils/translations/ja.json";
 
@@ -15,15 +16,10 @@ const dictionaries: Record<string, Messages> = {};
 let currentLocale = "en";
 let subscribed = false;
 
-/* Callbacks that fire when the locale changes */
 const localeChangeListeners = new Set<() => void>();
 
-/* Load the bundled Japanese translation */
 addMessages("ja", jaMessages as Messages);
 
-/**
- * Register a set of translation messages for a locale.
- */
 export function addMessages(locale: string, messages: Messages): void {
     dictionaries[locale] = { ...dictionaries[locale], ...messages };
 }
@@ -38,7 +34,7 @@ function ensureSubscribed(): void {
     if (subscribed) return;
     subscribed = true;
 
-    currentLocale = detectLocale();
+    currentLocale = readLocaleFromStore();
 
     if (typeof LocaleStore !== "undefined" && LocaleStore) {
         try {
@@ -64,10 +60,6 @@ function readLocaleFromStore(): string {
     return detectLocale();
 }
 
-/**
- * Detects the user's locale from Discord's LocaleStore.
- * Falls back to navigator.language then "en".
- */
 function detectLocale(): string {
     try {
         if (typeof LocaleStore !== "undefined" && LocaleStore?.locale) {
@@ -93,50 +85,31 @@ function detectLocale(): string {
     return "en";
 }
 
-/**
- * Override the detected locale at runtime.
- */
 export function setLocale(locale: string): void {
     currentLocale = locale;
     localeChangeListeners.forEach(cb => { try { cb(); } catch { } });
 }
 
-/**
- * Return the current active locale string.
- */
 export function getLocale(): string {
     return currentLocale;
 }
 
-/**
- * Translate a key to the current locale.
- * @param key The dot-separated translation key.
- * @param fallback Fallback string if no translation is found.
- * @returns The translated string, the fallback, or the key itself.
- */
 export function t(key: string, fallback?: string): string {
     const messages = dictionaries[currentLocale];
     if (messages && key in messages) return messages[key];
     return fallback ?? key;
 }
 
-/**
- * React hook that returns the translation function and current locale.
- * Re-renders automatically when Discord's locale changes.
- */
 export function useTranslation(): { t: typeof t; locale: string; } {
-    const [, forceUpdate] = useState(0);
+    const forceUpdate = useForceUpdater();
 
     useEffect(() => {
-        const unsub = subscribe(() => {
-            forceUpdate(n => n + 1);
-        });
+        const unsub = subscribe(() => forceUpdate());
 
-        /* Re-detect on mount to ensure we're in sync */
         const onMountLocale = readLocaleFromStore();
         if (onMountLocale !== currentLocale) {
             currentLocale = onMountLocale;
-            forceUpdate(n => n + 1);
+            forceUpdate();
         }
 
         return unsub;
@@ -145,10 +118,6 @@ export function useTranslation(): { t: typeof t; locale: string; } {
     return { t, locale: currentLocale };
 }
 
-/**
- * React component that renders the translation for a key.
- * Re-renders when locale changes.
- */
 export function Translate({ k, fallback }: { k: string; fallback?: string; }) {
     const { t } = useTranslation();
     return <>{t(k, fallback)}</>;
