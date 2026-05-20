@@ -7,8 +7,10 @@
 import { CogWheel } from "@components/Icons";
 import { classNameFactory } from "@utils/css";
 import { classes } from "@utils/misc";
-import { type ModalProps,ModalRoot, ModalSize, openModal } from "@utils/modal";
+import { ModalRoot, ModalSize, openModal } from "@utils/modal";
+import { RenderModalProps } from "@vencord/discord-types";
 import { TextInput, useCallback, useEffect, useMemo, useRef, useState } from "@webpack/common";
+import type { ComponentType, ReactNode } from "react";
 
 import {
     type CommandEntry, getCategoryGroupLabel, getCategoryWeight, getCommandSearchText, getRecentRank, getRegistryVersion, listCommands, subscribeRegistry
@@ -36,6 +38,7 @@ const getNextSelectableIndex = (start: number, direction: 1 | -1, items: PickerI
 
 const cl = classNameFactory("vc-command-palette-");
 const cn = classNameFactory();
+const LegacyModalRoot = ModalRoot as ComponentType<RenderModalProps & { children?: ReactNode; className?: string; size?: ModalSize; }>;
 
 interface CommandPickerProps {
     commands?: CommandEntry[];
@@ -56,7 +59,7 @@ export function openCommandPicker(props: CommandPickerProps) {
     ));
 }
 
-function CommandPickerModal({ modalProps, commands: providedCommands, allowMultiple = false, initialQuery = "", initialSelectedIds = [], includeHiddenInSearch = false, emptyStateText = "No commands found", filter: filterPredicate, onSelect, onComplete, onClose }: CommandPickerProps & { modalProps: ModalProps; }) {
+function CommandPickerModal({ modalProps, commands: providedCommands, allowMultiple = false, initialQuery = "", initialSelectedIds = [], includeHiddenInSearch = false, emptyStateText = "No commands found", filter: filterPredicate, onSelect, onComplete, onClose }: CommandPickerProps & { modalProps: RenderModalProps; }) {
     const [query, setQuery] = useState(initialQuery);
     const [registryVersion, setRegistryVersion] = useState(() => getRegistryVersion());
     const [selectedIndex, setSelectedIndex] = useState(-1);
@@ -321,7 +324,7 @@ function CommandPickerModal({ modalProps, commands: providedCommands, allowMulti
     };
 
     return (
-        <ModalRoot {...modalProps} size={ModalSize.SMALL} className={classes(cn("vc-command-palette"), cl("picker"))}>
+        <LegacyModalRoot {...modalProps} size={ModalSize.SMALL} className={classes(cn("vc-command-palette"), cl("picker"))}>
             <div className={classes(cl("shell"), cl("picker-shell"))} onKeyDown={handleKeyDown}>
                 <div className={cl("input")}>
                     <TextInput
@@ -373,6 +376,6 @@ function CommandPickerModal({ modalProps, commands: providedCommands, allowMulti
                     })}
                 </div>
             </div>
-        </ModalRoot>
+        </LegacyModalRoot>
     );
 }

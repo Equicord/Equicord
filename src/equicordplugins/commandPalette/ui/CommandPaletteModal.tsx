@@ -11,9 +11,10 @@ import { classNameFactory, classNameToSelector } from "@utils/css";
 import { copyWithToast } from "@utils/discord";
 import { Logger } from "@utils/Logger";
 import { classes } from "@utils/misc";
-import { type ModalProps, ModalRoot, ModalSize } from "@utils/modal";
+import { ModalRoot, ModalSize } from "@utils/modal";
+import { RenderModalProps } from "@vencord/discord-types";
 import { TextInput, Toasts, useEffect, useMemo, useRef, useState } from "@webpack/common";
-import type { KeyboardEvent as ReactKeyboardEvent } from "react";
+import type { ComponentType, KeyboardEvent as ReactKeyboardEvent, ReactNode } from "react";
 
 import { buildQueryResolution } from "../actions/executors";
 import { resolveCalculatorQuery } from "../calculator";
@@ -82,6 +83,8 @@ const SINGLE_SELECT_PROMPT_COMMAND_IDS = new Set([
 const logger = new Logger("CommandPaletteModal");
 const cl = classNameFactory("vc-command-palette-");
 const cn = classNameFactory();
+// TODO: Fully migrate this modal to the new Discord modal API and update the palette CSS around the new structure.
+const LegacyModalRoot = ModalRoot as ComponentType<RenderModalProps & { children?: ReactNode; className?: string; size?: ModalSize; }>;
 const promptActiveSelector = classNameToSelector(cl("prompt-active-input"));
 const mainInputSelectorClass = classNameToSelector(cl("main-input"));
 const pageSelector = classNameToSelector(cl("page"));
@@ -282,7 +285,7 @@ function createInitialPageState(ref: PalettePageRef): PalettePageValuesState {
     };
 }
 
-export function CommandPaletteModal({ modalProps, instanceKey }: { modalProps: ModalProps; instanceKey: number; }) {
+export function CommandPaletteModal({ modalProps, instanceKey }: { modalProps: RenderModalProps; instanceKey: number; }) {
     const {
         compactStartEnabled = true,
         closeAfterExecute = true
@@ -1469,7 +1472,7 @@ export function CommandPaletteModal({ modalProps, instanceKey }: { modalProps: M
     }, [activePage, activePageFieldKey, activePageSpec, activePageState, activePageSuggestions]);
 
     return (
-        <ModalRoot
+        <LegacyModalRoot
             {...modalProps}
             className={cn("vc-command-palette", compact && cl("compact"))}
             size={compact ? ModalSize.SMALL : ModalSize.LARGE}
@@ -1656,6 +1659,6 @@ export function CommandPaletteModal({ modalProps, instanceKey }: { modalProps: M
                     />
                 )}
             </div>
-        </ModalRoot>
+        </LegacyModalRoot>
     );
 }
