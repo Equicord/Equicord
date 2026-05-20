@@ -42,14 +42,17 @@ function isEscapedAt(value: string, index: number) {
     return slashCount % 2 === 1;
 }
 
-function countEscapedPipes(line: string) {
+function hasEscapedTableDelimiters(line: string) {
     let count = 0;
 
     for (let i = 0; i < line.length; i++) {
-        if (line[i] === "|" && isEscapedAt(line, i)) count++;
+        if (line[i] !== "|" || !isEscapedAt(line, i)) continue;
+
+        count++;
+        if (count >= 2) return true;
     }
 
-    return count;
+    return false;
 }
 
 function hasUnescapedTableDelimiter(line: string) {
@@ -58,10 +61,6 @@ function hasUnescapedTableDelimiter(line: string) {
     }
 
     return false;
-}
-
-function hasEscapedTableDelimiters(line: string) {
-    return countEscapedPipes(line) >= 2;
 }
 
 function hasTableDelimiter(line: string) {
@@ -177,6 +176,17 @@ function canStartTableAt(lines: string[], lineIndex: number, fenced?: boolean[])
     return canBeTableLine(lines[lineIndex]) && parseSeparator(lines[lineIndex + 1]) !== null;
 }
 
+function canContinueTableAt(lines: string[], lineIndex: number, fenced?: boolean[]) {
+    if (lineIndex < 0 || fenced?.[lineIndex]) return false;
+
+    const line = lines[lineIndex];
+    if (!canBeTableLine(line) || parseSeparator(line)) return false;
+
+    return lineIndex >= lines.length - 1
+        || fenced?.[lineIndex + 1]
+        || !parseSeparator(lines[lineIndex + 1]);
+}
+
 function getFenceMask(lines: string[]) {
     const mask = new Array<boolean>(lines.length).fill(false);
     let fenceChar: "`" | "~" | null = null;
@@ -238,23 +248,27 @@ function parseTableAtLine(lines: string[], lineIndex: number, fenced?: boolean[]
             continue;
         }
 
-        if (rows.length > 0 && isBlankLine(line)) {
-            const nextLineIndex = nextContentLine(lines, cursor + 1, fenced);
-            const nextLine = nextLineIndex >= 0 ? lines[nextLineIndex] : "";
+        if (rows.length > 0) {
+            if (isBlankLine(line)) {
+                const nextLineIndex = nextContentLine(lines, cursor + 1, fenced);
 
-            if (nextLineIndex >= 0 && canBeTableLine(nextLine) && !canStartTableAt(lines, nextLineIndex, fenced) && !parseSeparator(nextLine)) {
-                cursor = nextLineIndex;
-                continue;
+                if (canContinueTableAt(lines, nextLineIndex, fenced)) {
+                    cursor = nextLineIndex;
+                    continue;
+                }
+            } else {
+                const nextLineIndex = nextContentLine(lines, cursor + 1, fenced);
+
+                if (canContinueTableAt(lines, nextLineIndex, fenced)) {
+                    const lastRow = rows[rows.length - 1];
+                    const lastCellIndex = width - 1;
+
+                    // Treat prose between table-looking rows as wrapped cell text.
+                    lastRow[lastCellIndex] = `${lastRow[lastCellIndex]}\n${line.trim()}`.trim();
+                    cursor++;
+                    continue;
+                }
             }
-        }
-
-        const nextLineIndex = nextContentLine(lines, cursor + 1, fenced);
-        const nextLine = nextLineIndex >= 0 ? lines[nextLineIndex] : "";
-
-        if (rows.length > 0 && !isBlankLine(line) && nextLineIndex >= 0 && canBeTableLine(nextLine) && !canStartTableAt(lines, nextLineIndex, fenced) && !parseSeparator(nextLine)) {
-            rows[rows.length - 1][width - 1] = `${rows[rows.length - 1][width - 1]}\n${line.trim()}`.trim();
-            cursor++;
-            continue;
         }
 
         break;
@@ -313,13 +327,10 @@ function parseLooseRowsAtLine(lines: string[], lineIndex: number, fenced?: boole
 }
 
 function stripLineEnding(line: string) {
-    return line.endsWith("\r\n")
-        ? line.slice(0, -2)
-        : line.endsWith("\n")
-            ? line.slice(0, -1)
-            : line.endsWith("\r")
-                ? line.slice(0, -1)
-                : line;
+    if (line.endsWith("\r\n")) return line.slice(0, -2);
+    if (line.endsWith("\n") || line.endsWith("\r")) return line.slice(0, -1);
+
+    return line;
 }
 
 function sourceLines(markdown: string) {
