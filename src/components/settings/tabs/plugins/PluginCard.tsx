@@ -17,7 +17,7 @@ import { React, showToast, Toasts } from "@webpack/common";
 import { PluginMeta } from "~plugins";
 
 import { openPluginModal } from "./PluginModal";
-import { t } from "@api/I18n";
+import { t, pluginI18nKey } from "@api/I18n";
 
 const logger = new Logger("PluginCard");
 const cl = classNameFactory("vc-plugins-");
@@ -138,10 +138,10 @@ export function PluginCard({ plugin, disabled, onRestartNeeded, onMouseEnter, on
 
     return (
         <AddonCard
-            name={plugin.nameI18n ? t(plugin.nameI18n, plugin.name) : plugin.name}
+            name={t(pluginI18nKey(pluginMeta.folderName) + ".name", plugin.name)}
             sourceBadge={sourceBadge}
             tooltip={tooltip}
-            description={plugin.descriptionI18n ? t(plugin.descriptionI18n, plugin.description) : plugin.description}
+            description={t(pluginI18nKey(pluginMeta.folderName) + ".description", plugin.description)}
             isNew={isNew}
             enabled={isEnabled()}
             setEnabled={toggleEnabled}

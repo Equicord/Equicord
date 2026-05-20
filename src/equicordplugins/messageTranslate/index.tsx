@@ -50,9 +50,7 @@ function triggerReRender(message: MessageWithContent) {
 
 export default definePlugin({
     name: "MessageTranslate",
-    nameI18n: "equicord.plugins.messageTranslate.name",
     description: "Auto translate messages to your language with caching, per-channel toggles, and more options.",
-    descriptionI18n: "equicord.plugins.messageTranslate.description",
     tags: ["Chat", "Utility"],
     authors: [EquicordDevs.creations],
     settings,

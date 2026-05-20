@@ -75,9 +75,7 @@ export function removeIndicator() {
 
 export default definePlugin({
     name: "HideServers",
-    nameI18n: "equicord.plugins.hideServers.name",
     description: "Allows you to hide servers from the guild list and quick switcher by right clicking them",
-    descriptionI18n: "equicord.plugins.hideServers.description",
     tags: ["Servers", "Utility"],
     authors: [EquicordDevs.bep],
     searchTerms: ["guild", "server", "hide", "folder"],

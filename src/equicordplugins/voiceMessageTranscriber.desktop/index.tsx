@@ -322,10 +322,8 @@ function TranscriptionModal(props: { modalProps: RenderModalProps, src: string, 
 
 export default definePlugin({
     name: "VoiceMessageTranscriber",
-    nameI18n: "equicord.plugins.voiceMessageTranscriber_desktop.name",
     authors: [Devs.TheSun],
     description: "On-device transcriptions for voice messages powered by Whisper v3",
-    descriptionI18n: "equicord.plugins.voiceMessageTranscriber_desktop.description",
     tags: ["Chat", "Media", "Utility", "Voice"],
     patches: [
         {

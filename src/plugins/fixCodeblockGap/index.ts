@@ -9,9 +9,7 @@ import definePlugin from "@utils/types";
 
 export default definePlugin({
     name: "FixCodeblockGap",
-    nameI18n: "equicord.plugins.fixCodeblockGap.name",
     description: "Removes the gap between codeblocks and text below it",
-    descriptionI18n: "equicord.plugins.fixCodeblockGap.description",
     tags: ["Appearance"],
     authors: [Devs.Grzesiek11],
     patches: [

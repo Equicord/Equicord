@@ -61,9 +61,7 @@ async function autoStartStream(instant = true) {
 
 export default definePlugin({
     name: "InstantScreenshare",
-    nameI18n: "equicord.plugins.instantScreenshare.name",
     description: "Instantly screenshare when joining a voice channel with support for desktop sources, windows, and video input devices (cameras, capture cards)",
-    descriptionI18n: "equicord.plugins.instantScreenshare.description",
     tags: ["Media", "Voice"],
     authors: [Devs.HAHALOSAH, Devs.thororen, EquicordDevs.mart],
     dependencies: ["EquicordToolbox"],

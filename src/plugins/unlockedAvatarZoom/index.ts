@@ -19,9 +19,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "UnlockedAvatarZoom",
-    nameI18n: "equicord.plugins.unlockedAvatarZoom.name",
     description: "Allows you to zoom in further in the image crop tool when changing your avatar",
-    descriptionI18n: "equicord.plugins.unlockedAvatarZoom.description",
     tags: ["Media", "Utility"],
     authors: [Devs.nakoyasha],
     settings,

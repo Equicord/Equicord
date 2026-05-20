@@ -54,9 +54,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "BetterSessions",
-    nameI18n: "equicord.plugins.betterSessions.name",
     description: "Enhances the sessions (devices) menu. Allows you to view exact timestamps, give each session a custom name, and receive notifications about new sessions.",
-    descriptionI18n: "equicord.plugins.betterSessions.description",
     authors: [Devs.amia],
     tags: ["Notifications", "Customisation", "Utility"],
     settings: settings,

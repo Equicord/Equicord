@@ -82,9 +82,7 @@ migratePluginSetting("HideChatButtons", "open", "Open");
 migratePluginSetting("HideChatButtons", "color", "Color");
 export default definePlugin({
     name: "HideChatButtons",
-    nameI18n: "equicord.plugins.hideChatButtons.name",
     description: "Able to hide the chat buttons",
-    descriptionI18n: "equicord.plugins.hideChatButtons.description",
     tags: ["Chat", "Utility"],
     authors: [EquicordDevs.iamme],
     dependencies: ["ChatInputButtonAPI"],

@@ -19,9 +19,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "BetterGifPicker",
-    nameI18n: "equicord.plugins.betterGifPicker.name",
     description: "Makes the gif picker open the favourite category by default",
-    descriptionI18n: "equicord.plugins.betterGifPicker.description",
     tags: ["Emotes", "Customisation"],
     authors: [Devs.Samwich, EquicordDevs.justjxke],
     isModified: true,

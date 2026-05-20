@@ -41,9 +41,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "LoginWithQR",
-    nameI18n: "equicord.plugins.loginWithQR.name",
     description: "Allows you to login to another device by scanning a login QR code, just like on mobile!",
-    descriptionI18n: "equicord.plugins.loginWithQR.description",
     tags: ["Utility"],
     authors: [EquicordDevs.nexpid],
 

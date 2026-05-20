@@ -61,9 +61,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "MessageLinkTooltip",
-    nameI18n: "equicord.plugins.messageLinkTooltip.name",
     description: "Adds a tooltip with a message preview when hovering over message links, replies, and forwarded messages.",
-    descriptionI18n: "equicord.plugins.messageLinkTooltip.description",
     tags: ["Appearance", "Chat"],
     authors: [Devs.Kyuuhachi],
 

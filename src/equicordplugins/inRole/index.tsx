@@ -33,9 +33,7 @@ function getMembersInRole(roleId: string, guildId: string) {
 
 export default definePlugin({
     name: "InRole",
-    nameI18n: "equicord.plugins.inRole.name",
     description: "Know who is in a role with the role context menu or /inrole command (read plugin info!)",
-    descriptionI18n: "equicord.plugins.inRole.description",
     tags: ["Commands", "Roles"],
     authors: [Devs.nin0dev],
     dependencies: ["UserSettingsAPI", "CommandsAPI"],

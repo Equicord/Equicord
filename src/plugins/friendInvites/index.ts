@@ -25,9 +25,7 @@ const FriendInvites = findByPropsLazy("createFriendInvite");
 
 export default definePlugin({
     name: "FriendInvites",
-    nameI18n: "equicord.plugins.friendInvites.name",
     description: "Create and manage friend invite links via slash commands (/create friend invite, /view friend invites, /revoke friend invites).",
-    descriptionI18n: "equicord.plugins.friendInvites.description",
     dependencies: ["CommandsAPI"],
     tags: ["Friends", "Commands"],
     authors: [Devs.afn, Devs.Dziurwa],

@@ -150,9 +150,7 @@ function applyDefaultSettings(guildId: string | null) {
 
 export default definePlugin({
     name: "NewGuildSettings",
-    nameI18n: "equicord.plugins.newGuildSettings.name",
     description: "Automatically mute new servers and change various other settings upon joining",
-    descriptionI18n: "equicord.plugins.newGuildSettings.description",
     tags: ["Servers", "Customisation"],
     searchTerms: ["MuteNewGuild", "mute", "server"],
     authors: [Devs.Glitch, Devs.Nuckyz, Devs.carince, Devs.Mopi, Devs.GabiRP],

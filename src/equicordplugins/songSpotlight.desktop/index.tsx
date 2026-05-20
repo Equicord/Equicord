@@ -19,9 +19,7 @@ import WidgetSongs from "./ui/songs/WidgetSongs";
 
 export default definePlugin({
     name: "SongSpotlight",
-    nameI18n: "equicord.plugins.songSpotlight_desktop.name",
     description: "Show off songs on your profile",
-    descriptionI18n: "equicord.plugins.songSpotlight_desktop.description",
     dependencies: ["ProfileCollectionsAPI"],
     tags: ["Appearance", "Media"],
     authors: [EquicordDevs.nexpid],

@@ -142,9 +142,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "WhoReacted",
-    nameI18n: "equicord.plugins.whoReacted.name",
     description: "Renders the avatars of users who reacted to a message",
-    descriptionI18n: "equicord.plugins.whoReacted.description",
     tags: ["Reactions", "Chat", "Appearance"],
     authors: [Devs.Ven, Devs.KannaDev, Devs.newwares],
     isModified: true,

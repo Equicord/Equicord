@@ -173,9 +173,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "VoiceChatUtilities",
-    nameI18n: "equicord.plugins.voiceChatUtils.name",
     description: "This plugin allows you to perform multiple actions on an entire channel (move, mute, disconnect, etc.) (originally by dutake)",
-    descriptionI18n: "equicord.plugins.voiceChatUtils.description",
     tags: ["Chat", "Servers", "Voice"],
     authors: [Devs.D3SOX, EquicordDevs.nickwoah],
 

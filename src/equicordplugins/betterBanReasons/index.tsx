@@ -107,9 +107,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "BetterBanReasons",
-    nameI18n: "equicord.plugins.betterBanReasons.name",
     description: "Create custom reasons to use in the Discord ban modal, and/or show a text input by default instead of the options.",
-    descriptionI18n: "equicord.plugins.betterBanReasons.description",
     tags: ["Appearance", "Customisation"],
     authors: [Devs.Inbestigator, EquicordDevs.yonn2222],
 

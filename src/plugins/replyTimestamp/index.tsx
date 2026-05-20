@@ -57,9 +57,7 @@ function ReplyTimestamp({
 
 export default definePlugin({
     name: "ReplyTimestamp",
-    nameI18n: "equicord.plugins.replyTimestamp.name",
     description: "Shows a timestamp on replied-message previews",
-    descriptionI18n: "equicord.plugins.replyTimestamp.description",
     tags: ["Chat", "Appearance"],
     authors: [Devs.Kyuuhachi],
 

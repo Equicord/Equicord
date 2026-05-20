@@ -33,9 +33,7 @@ export const settings = definePluginSettings({
 
 export default definePlugin({
     name: "MoreStickers",
-    nameI18n: "equicord.plugins.moreStickers.name",
     description: "Adds sticker packs from other social media platforms. (e.g. LINE)",
-    descriptionI18n: "equicord.plugins.moreStickers.description",
     tags: ["Chat", "Emotes", "Media"],
     authors: [EquicordDevs.Leko, Devs.Arjix],
     settings,

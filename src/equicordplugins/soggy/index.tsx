@@ -135,9 +135,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "Soggy",
-    nameI18n: "equicord.plugins.soggy.name",
     description: "Adds a soggy button to the toolbox",
-    descriptionI18n: "equicord.plugins.soggy.description",
     tags: ["Fun"],
     authors: [EquicordDevs.sliwka],
     settings,

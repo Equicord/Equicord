@@ -125,9 +125,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "KeyboardSounds",
-    nameI18n: "equicord.plugins.keyboardSounds.name",
     description: "Adds OperaGX or osu! sound effects when typing on your keyboard.",
-    descriptionI18n: "equicord.plugins.keyboardSounds.description",
     tags: ["Fun"],
     authors: [Devs.HypedDomi, EquicordDevs.Etorix],
     dependencies: ["AudioPlayerAPI"],

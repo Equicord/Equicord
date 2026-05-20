@@ -120,9 +120,7 @@ export const settings = definePluginSettings({
 
 export default definePlugin({
     name: "ToastNotifications",
-    nameI18n: "equicord.plugins.toastNotifications.name",
     description: "Show a pop-up toast notification, configurable for DMs, group, friends, or guild channels.",
-    descriptionI18n: "equicord.plugins.toastNotifications.description",
     tags: ["Appearance", "Customisation", "Notifications"],
     authors: [EquicordDevs.Skully, EquicordDevs.Ethan, EquicordDevs.Buzzy],
     settings,

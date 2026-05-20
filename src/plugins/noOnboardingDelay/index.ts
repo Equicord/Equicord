@@ -21,9 +21,7 @@ import definePlugin from "@utils/types";
 
 export default definePlugin({
     name: "NoOnboardingDelay",
-    nameI18n: "equicord.plugins.noOnboardingDelay.name",
     description: "Skips the slow and annoying onboarding delay",
-    descriptionI18n: "equicord.plugins.noOnboardingDelay.description",
     tags: ["Utility", "Servers"],
     authors: [Devs.nekohaxx],
     patches: [

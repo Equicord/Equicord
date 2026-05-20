@@ -140,10 +140,8 @@ function ChatBadges({ author }: { author: User; }) {
 
 export default definePlugin({
     name: "ShowBadgesInChat",
-    nameI18n: "equicord.plugins.showBadgesInChat.name",
     authors: [Devs.Inbestigator, EquicordDevs.KrystalSkull],
     description: "Shows the message author's badges beside their name in chat.",
-    descriptionI18n: "equicord.plugins.showBadgesInChat.description",
     dependencies: ["MessageDecorationsAPI"],
     tags: ["Appearance", "Chat"],
     settings,

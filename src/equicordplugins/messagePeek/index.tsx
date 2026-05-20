@@ -239,9 +239,7 @@ function shouldShowActivity(lastMessage: Message | undefined, hasActivity: boole
 
 export default definePlugin({
     name: "MessagePeek",
-    nameI18n: "equicord.plugins.messagePeek.name",
     description: "Shows the last message preview and timestamp in the Direct Messages list.",
-    descriptionI18n: "equicord.plugins.messagePeek.description",
     dependencies: ["MemberListDecoratorsAPI"],
     tags: ["Appearance", "Chat"],
     authors: [Devs.prism, EquicordDevs.justjxke],

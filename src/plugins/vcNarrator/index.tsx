@@ -141,9 +141,7 @@ function playSample(type: string) {
 
 export default definePlugin({
     name: "VcNarrator",
-    nameI18n: "equicord.plugins.vcNarrator.name",
     description: "Announces when users join, leave, or move voice channels via narrator",
-    descriptionI18n: "equicord.plugins.vcNarrator.description",
     tags: ["Voice", "Accessibility"],
     authors: [Devs.Ven],
     reporterTestable: ReporterTestable.None,

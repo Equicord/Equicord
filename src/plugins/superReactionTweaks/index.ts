@@ -36,9 +36,7 @@ export const settings = definePluginSettings({
 
 export default definePlugin({
     name: "SuperReactionTweaks",
-    nameI18n: "equicord.plugins.superReactionTweaks.name",
     description: "Customize the limit of Super Reactions playing at once, and super react by default",
-    descriptionI18n: "equicord.plugins.superReactionTweaks.description",
     tags: ["Reactions", "Emotes"],
     authors: [Devs.FieryFlames, Devs.ant0n],
     patches: [

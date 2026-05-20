@@ -36,9 +36,7 @@ function generateSearchResults(query) {
 
 export default definePlugin({
     name: "FrequentQuickSwitcher",
-    nameI18n: "equicord.plugins.frequentQuickSwitcher.name",
     description: "Rewrites and filters the quick switcher results to be your most frequent channels",
-    descriptionI18n: "equicord.plugins.frequentQuickSwitcher.description",
     tags: ["Shortcuts", "Servers"],
     authors: [Devs.Samwich],
     generateSearchResults: generateSearchResults,

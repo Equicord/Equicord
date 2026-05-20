@@ -22,9 +22,7 @@ import { UserStore } from "@webpack/common";
 
 export default definePlugin({
     name: "NoProfileThemes",
-    nameI18n: "equicord.plugins.noProfileThemes.name",
     description: "Completely removes Nitro profile themes from everyone but yourself",
-    descriptionI18n: "equicord.plugins.noProfileThemes.description",
     tags: ["Appearance"],
     authors: [Devs.TheKodeToad],
     patches: [

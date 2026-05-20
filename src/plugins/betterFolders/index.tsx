@@ -314,9 +314,7 @@ const GRID_STYLE_NAME = "vc-betterFolders-sidebar-grid";
 
 export default definePlugin({
     name: "BetterFolders",
-    nameI18n: "equicord.plugins.betterFolders.name",
     description: "Shows server folders on dedicated sidebar and adds folder related improvements",
-    descriptionI18n: "equicord.plugins.betterFolders.description",
     tags: ["Organisation", "Servers", "Appearance"],
     authors: [Devs.juby, Devs.AutumnVN, Devs.Nuckyz, EquicordDevs.justjxke],
     isModified: true,

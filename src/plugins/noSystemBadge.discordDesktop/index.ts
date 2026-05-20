@@ -21,9 +21,7 @@ import definePlugin from "@utils/types";
 
 export default definePlugin({
     name: "NoSystemBadge",
-    nameI18n: "equicord.plugins.noSystemBadge_discordDesktop.name",
     description: "Disables the taskbar and system tray unread count badge.",
-    descriptionI18n: "equicord.plugins.noSystemBadge_discordDesktop.description",
     tags: ["Notifications", "Appearance"],
     authors: [Devs.rushii],
     patches: [

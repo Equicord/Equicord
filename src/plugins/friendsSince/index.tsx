@@ -72,9 +72,7 @@ const FriendsSinceSection = ErrorBoundary.wrap(({ userId, isSideBar }: { userId:
 
 export default definePlugin({
     name: "FriendsSince",
-    nameI18n: "equicord.plugins.friendsSince.name",
     description: "Shows when you became friends with someone in the user popout",
-    descriptionI18n: "equicord.plugins.friendsSince.description",
     tags: ["Friends"],
     authors: [Devs.Elvyra, Devs.Antti],
     dependencies: ["ProfileSectionsAPI"],

@@ -142,9 +142,7 @@ function getBadgesToApply() {
 
 export default definePlugin({
     name: "FriendshipRanks",
-    nameI18n: "equicord.plugins.friendshipRanks.name",
     description: "Adds badges showcasing how long you have been friends with a user for",
-    descriptionI18n: "equicord.plugins.friendshipRanks.description",
     tags: ["Friends"],
     authors: [Devs.Samwich],
     start() {

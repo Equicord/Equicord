@@ -36,9 +36,7 @@ migratePluginToSettings(true, "MoreUserTags", "NoAppsAllowed", "noAppsAllowed");
 
 export default definePlugin({
     name: "MoreUserTags",
-    nameI18n: "equicord.plugins.moreUserTags.name",
     description: "Adds tags for webhooks and moderative roles (owner, admin, etc.)",
-    descriptionI18n: "equicord.plugins.moreUserTags.description",
     dependencies: ["MemberListDecoratorsAPI", "MessageDecorationsAPI", "NicknameIconsAPI"],
     tags: ["Appearance", "Chat"],
     authors: [Devs.Cyn, Devs.TheSun, Devs.RyanCaoDev, Devs.LordElias, Devs.AutumnVN, EquicordDevs.Hen, EquicordDevs.meowabyte],

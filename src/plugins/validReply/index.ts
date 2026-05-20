@@ -32,7 +32,6 @@ const createMessageRecord = findByCodeLazy(".createFromServer(", ".isBlockedForM
 
 export default definePlugin({
     name: "ValidReply",
-    nameI18n: "equicord.plugins.validReply.name",
     description: 'Fixes "Message could not be loaded" upon hovering over the reply',
     tags: ["Chat", "Utility"],
     authors: [Devs.newwares],

@@ -56,9 +56,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "LoadingQuotes",
-    nameI18n: "equicord.plugins.loadingQuotes.name",
     description: "Replace Discords loading quotes",
-    descriptionI18n: "equicord.plugins.loadingQuotes.description",
     tags: ["Appearance", "Fun", "Customisation"],
     authors: [Devs.Ven, Devs.KraXen72, Devs.UlyssesZhan],
 

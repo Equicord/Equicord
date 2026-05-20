@@ -30,9 +30,7 @@ export const settings = definePluginSettings({
 
 export default definePlugin({
     name: "WebpackTarball",
-    nameI18n: "equicord.plugins.webpackTarball.name",
     description: "Converts Discord's webpack sources into a tarball.",
-    descriptionI18n: "equicord.plugins.webpackTarball.description",
     tags: ["Developers", "Utility"],
     authors: [Devs.Kyuuhachi],
     settings,

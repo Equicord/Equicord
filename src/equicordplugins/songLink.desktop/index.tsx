@@ -123,9 +123,7 @@ function SongLinkerList({ urls }: { urls: string[]; }) {
 
 export default definePlugin({
     name: "SongLink",
-    nameI18n: "equicord.plugins.songLink_desktop.name",
     description: "Adds streaming service buttons below song links",
-    descriptionI18n: "equicord.plugins.songLink_desktop.description",
     dependencies: ["MessageAccessoriesAPI"],
     tags: ["Media", "Utility"],
     authors: [Devs.nin0dev, EquicordDevs.NassCT],

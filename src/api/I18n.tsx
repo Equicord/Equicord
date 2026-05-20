@@ -122,3 +122,12 @@ export function Translate({ k, fallback }: { k: string; fallback?: string; }) {
     const { t } = useTranslation();
     return <>{t(k, fallback)}</>;
 }
+
+/**
+ * Derive the i18n translation key prefix for a plugin from its folder path.
+ * e.g. "src/equicordplugins/messageTranslate" → "equicord.plugins.messageTranslate"
+ */
+export function pluginI18nKey(folderName: string): string {
+    const folder = folderName.replace(/^src\/(?:equicord)?plugins\//, "").replace(/\.\w+$/, "");
+    return `equicord.plugins.${folder}`;
+}

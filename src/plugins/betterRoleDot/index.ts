@@ -38,10 +38,8 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "BetterRoleDot",
-    nameI18n: "equicord.plugins.betterRoleDot.name",
     authors: [Devs.Ven, Devs.AutumnVN],
     description: "Copy role colour on RoleDot (accessibility setting) click. Also allows using both RoleDot and coloured names simultaneously",
-    descriptionI18n: "equicord.plugins.betterRoleDot.description",
     tags: ["Roles", "Appearance"],
     settings,
 

@@ -24,9 +24,7 @@ import { findComponentByCodeLazy } from "@webpack";
 const PinIcon = findComponentByCodeLazy("1-.06-.63L6.16");
 export default definePlugin({
     name: "PinIcon",
-    nameI18n: "equicord.plugins.pinIcon.name",
     description: "Adds a pin icon to pinned messages",
-    descriptionI18n: "equicord.plugins.pinIcon.description",
     tags: ["Appearance", "Chat"],
     authors: [EquicordDevs.iamme],
     patches: [

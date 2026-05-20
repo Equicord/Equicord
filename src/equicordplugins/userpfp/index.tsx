@@ -63,9 +63,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "UserPFP",
-    nameI18n: "equicord.plugins.userpfp.name",
     description: "Allows you to use an animated avatar without Nitro",
-    descriptionI18n: "equicord.plugins.userpfp.description",
     tags: ["Appearance", "Customisation", "Servers"],
     authors: [EquicordDevs.nexpid, Devs.thororen, EquicordDevs.soapphia, EquicordDevs.sketchmyname],
     settings,

@@ -22,9 +22,7 @@ const getMetadataFromApi: (activity: any, userId: string) => Promise<any> = find
 
 export default definePlugin({
     name: "CopyStatusUrls",
-    nameI18n: "equicord.plugins.copyStatusUrls.name",
     description: "Copy the users status url when you right-click it",
-    descriptionI18n: "equicord.plugins.copyStatusUrls.description",
     tags: ["Activity", "Utility"],
     authors: [Devs.sadan],
 

@@ -32,9 +32,7 @@ const settings = definePluginSettings({
 migratePluginSettings("AlwaysExpandRoles", "ShowAllRoles");
 export default definePlugin({
     name: "AlwaysExpandRoles",
-    nameI18n: "equicord.plugins.alwaysExpandRoles.name",
     description: "Always expands the role list in profile popouts",
-    descriptionI18n: "equicord.plugins.alwaysExpandRoles.description",
     tags: ["Appearance", "Roles"],
     authors: [Devs.surgedevs],
     isModified: true,

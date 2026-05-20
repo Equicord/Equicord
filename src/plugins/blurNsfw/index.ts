@@ -42,9 +42,7 @@ function setCss() {
 
 export default definePlugin({
     name: "BlurNSFW",
-    nameI18n: "equicord.plugins.blurNsfw.name",
     description: "Blur attachments in NSFW channels until hovered",
-    descriptionI18n: "equicord.plugins.blurNsfw.description",
     tags: ["Privacy", "Appearance"],
     authors: [Devs.Ven],
     isModified: true,

@@ -26,9 +26,7 @@ import StartupTimingPage from "./StartupTimingPage";
 
 export default definePlugin({
     name: "StartupTimings",
-    nameI18n: "equicord.plugins.startupTimings.name",
     description: "Adds Startup Timings to the Settings menu",
-    descriptionI18n: "equicord.plugins.startupTimings.description",
     tags: ["Developers"],
     authors: [Devs.Megu],
     start() {

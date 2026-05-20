@@ -196,9 +196,7 @@ function hotkeyUsesModifiers() {
 
 export default definePlugin({
     name: "CommandPalette",
-    nameI18n: "equicord.plugins.commandPalette.name",
     description: "Quickly run actions through a searchable command palette",
-    descriptionI18n: "equicord.plugins.commandPalette.description",
     tags: ["Appearance", "Customisation", "Commands", "Shortcuts"],
     authors: [EquicordDevs.justjxke],
     dependencies: ["ChatInputButtonAPI"],

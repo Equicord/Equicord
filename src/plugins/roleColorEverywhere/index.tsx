@@ -74,10 +74,8 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "RoleColorEverywhere",
-    nameI18n: "equicord.plugins.roleColorEverywhere.name",
     authors: [Devs.KingFish, Devs.lewisakura, Devs.AutumnVN, Devs.Kyuuhachi, Devs.jamesbt365],
     description: "Adds the top role color anywhere possible",
-    descriptionI18n: "equicord.plugins.roleColorEverywhere.description",
     tags: ["Roles", "Appearance"],
     settings,
 

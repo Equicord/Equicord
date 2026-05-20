@@ -68,9 +68,7 @@ const userContextPatch: NavContextMenuPatchCallback = (children, { user }: { use
 
 export default definePlugin({
     name: "ReviewDB",
-    nameI18n: "equicord.plugins.reviewDB.name",
     description: "Review other users (Adds a new settings to profiles)",
-    descriptionI18n: "equicord.plugins.reviewDB.description",
     dependencies: ["ProfileCollectionsAPI"],
     tags: ["Friends", "Servers"],
     authors: [Devs.mantikafasi, Devs.Ven],

@@ -208,9 +208,7 @@ const userPatch: NavContextMenuPatchCallback = (children, { user }) => {
 
 export default definePlugin({
     name: "FriendTags",
-    nameI18n: "equicord.plugins.friendTags.name",
     description: "Allows you to filter by custom tags in the quick switcher by starting a search with &",
-    descriptionI18n: "equicord.plugins.friendTags.description",
     tags: ["Shortcuts"],
     authors: [Devs.Samwich],
     settings,

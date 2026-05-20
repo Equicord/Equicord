@@ -23,9 +23,7 @@ import { GuildStore } from "@webpack/common";
 
 export default definePlugin({
     name: "ForceOwnerCrown",
-    nameI18n: "equicord.plugins.forceOwnerCrown.name",
     description: "Force the owner crown next to usernames even if the server is large.",
-    descriptionI18n: "equicord.plugins.forceOwnerCrown.description",
     authors: [Devs.D3SOX, Devs.Nickyux],
     tags: ["Roles", "Appearance", "Servers"],
     patches: [

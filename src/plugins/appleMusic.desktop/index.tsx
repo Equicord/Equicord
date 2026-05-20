@@ -156,9 +156,7 @@ function getImageAsset(type: AssetImageType, data: TrackData) {
 
 export default definePlugin({
     name: "AppleMusicRichPresence",
-    nameI18n: "equicord.plugins.appleMusic_desktop.name",
     description: "Discord rich presence for your Apple Music!",
-    descriptionI18n: "equicord.plugins.appleMusic_desktop.description",
     tags: ["Activity", "Media"],
     authors: [Devs.RyanCaoDev],
     hidden: !IS_MAC,

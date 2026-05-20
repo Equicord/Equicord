@@ -85,9 +85,7 @@ function handleReactionEvent(event: FluxReactionEvent): void {
 
 export default definePlugin({
     name: "ScheduledMessages",
-    nameI18n: "equicord.plugins.scheduledMessages.name",
     description: "Schedule messages to be sent at a specific time or after a delay.",
-    descriptionI18n: "equicord.plugins.scheduledMessages.description",
     tags: ["Chat", "Utility"],
     dependencies: ["ChatInputButtonAPI", "MessageAccessoriesAPI", "MessageEventsAPI"],
     authors: [EquicordDevs.mmeta, Devs.prism],

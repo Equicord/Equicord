@@ -74,9 +74,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "GoogleThat",
-    nameI18n: "equicord.plugins.googleThat.name",
     description: "Adds a command to send a internet search link",
-    descriptionI18n: "equicord.plugins.googleThat.description",
     dependencies: ["CommandsAPI"],
     tags: ["Commands", "Utility"],
     authors: [Devs.Samwich, EquicordDevs.KrystalSkull],

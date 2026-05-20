@@ -22,9 +22,7 @@ import definePlugin from "@utils/types";
 
 export default definePlugin({
     name: "NeverPausePreviews",
-    nameI18n: "equicord.plugins.neverPausePreviews.name",
     description: "Prevents in-call/PiP previews (screenshare, streams, etc) from pausing even if the client loses focus",
-    descriptionI18n: "equicord.plugins.neverPausePreviews.description",
     tags: ["Media"],
     authors: [EquicordDevs.vappstar],
     settingsAboutComponent: () => (

@@ -25,9 +25,7 @@ import { ExpressionPickerStore } from "@webpack/common";
 
 export default definePlugin({
     name: "GifPaste",
-    nameI18n: "equicord.plugins.gifPaste.name",
     description: "Makes picking a gif in the gif picker insert a link into the chatbox instead of instantly sending it",
-    descriptionI18n: "equicord.plugins.gifPaste.description",
     tags: ["Media", "Chat"],
     authors: [Devs.Ven],
 

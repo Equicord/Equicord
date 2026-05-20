@@ -23,9 +23,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "PictureInPicture",
-    nameI18n: "equicord.plugins.pictureInPicture.name",
     description: "Adds picture in picture to videos (next to the Download button)",
-    descriptionI18n: "equicord.plugins.pictureInPicture.description",
     tags: ["Media", "Utility"],
     authors: [Devs.Lumap],
     settings,

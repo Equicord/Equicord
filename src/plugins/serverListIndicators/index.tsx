@@ -140,9 +140,7 @@ export const settings = definePluginSettings({
 
 export default definePlugin({
     name: "ServerListIndicators",
-    nameI18n: "equicord.plugins.serverListIndicators.name",
     description: "Add online friend count or server count in the server list",
-    descriptionI18n: "equicord.plugins.serverListIndicators.description",
     tags: ["Servers", "Appearance"],
     authors: [Devs.dzshn, EquicordDevs.Panniku],
     dependencies: ["ServerListAPI"],

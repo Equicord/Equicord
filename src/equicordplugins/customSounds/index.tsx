@@ -392,9 +392,7 @@ export function findOverride(id: string): SoundOverride | null {
 
 export default definePlugin({
     name: "CustomSounds",
-    nameI18n: "equicord.plugins.customSounds.name",
     description: "Customize Discord's sounds.",
-    descriptionI18n: "equicord.plugins.customSounds.description",
     dependencies: ["AudioPlayerAPI"],
     tags: ["Customisation", "Notifications", "Voice"],
     authors: [Devs.ScattrdBlade, Devs.TheKodeToad],

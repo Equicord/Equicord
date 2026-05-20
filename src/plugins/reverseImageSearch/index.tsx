@@ -101,9 +101,7 @@ const imageContextMenuPatch: NavContextMenuPatchCallback = (children, props) => 
 
 export default definePlugin({
     name: "ReverseImageSearch",
-    nameI18n: "equicord.plugins.reverseImageSearch.name",
     description: "Adds ImageSearch to image context menus",
-    descriptionI18n: "equicord.plugins.reverseImageSearch.description",
     tags: ["Media", "Utility"],
     authors: [Devs.Ven, Devs.Nuckyz],
     searchTerms: ["ImageUtilities"],

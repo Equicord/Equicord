@@ -43,7 +43,7 @@ import { PluginMeta } from "~plugins";
 import { OptionComponentMap } from "./components";
 import { openContributorModal } from "./ContributorModal";
 import { GithubButton, WebsiteButton } from "./LinkIconButton";
-import { t } from "@api/I18n";
+import { t, pluginI18nKey } from "@api/I18n";
 
 const cl = classNameFactory("vc-plugin-modal-");
 
@@ -183,13 +183,13 @@ export default function PluginModal({ plugin, onRestartNeeded, onClose, transiti
             size="lg"
             title={
                 <div className={cl("header")}>
-                    <BaseText tag="h1" weight="semibold" size="lg">{plugin.nameI18n ? t(plugin.nameI18n, plugin.name) : plugin.name}</BaseText>
+                    <BaseText tag="h1" weight="semibold" size="lg">{t(pluginI18nKey(pluginMeta.folderName) + ".name", plugin.name)}</BaseText>
                 </div>
             }
             subtitle={
                 <div className={cl("info")}>
                     <div>
-                        <Paragraph size="md">{plugin.descriptionI18n ? t(plugin.descriptionI18n, plugin.description) : plugin.description}</Paragraph>
+                        <Paragraph size="md">{t(pluginI18nKey(pluginMeta.folderName) + ".description", plugin.description)}</Paragraph>
                         {!!plugin.tags?.length && <PluginTags tags={plugin.tags} />}
                     </div>
                 </div>

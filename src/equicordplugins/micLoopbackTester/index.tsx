@@ -114,9 +114,7 @@ const MicLoopbackUserAreaButton: UserAreaButtonFactory = props => <MicLoopbackBu
 
 export default definePlugin({
     name: "MicLoopbackTester",
-    nameI18n: "equicord.plugins.micLoopbackTester.name",
     description: "Adds mic loopback test icon to the user panel",
-    descriptionI18n: "equicord.plugins.micLoopbackTester.description",
     tags: ["Utility", "Voice"],
     authors: [EquicordDevs.benjii],
     dependencies: ["UserSettingsAPI", "UserAreaAPI"],

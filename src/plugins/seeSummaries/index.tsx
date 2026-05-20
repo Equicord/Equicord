@@ -65,9 +65,7 @@ function createChannelSummaryFromServer(s: Summary, channelId: string): ChannelS
 
 export default definePlugin({
     name: "Summaries",
-    nameI18n: "equicord.plugins.seeSummaries.name",
     description: "Enables Discord's experimental Summaries feature on every server, displaying AI generated summaries of conversations",
-    descriptionI18n: "equicord.plugins.seeSummaries.description",
     tags: ["Chat", "Fun"],
     authors: [Devs.mantikafasi],
     settings,

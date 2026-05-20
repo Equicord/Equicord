@@ -32,9 +32,7 @@ function fetchIndex(target: object) {
 
 export default definePlugin({
     name: "BetterCommands",
-    nameI18n: "equicord.plugins.betterCommands.name",
     description: "Enhances the command system with miscellaneous improvements.",
-    descriptionI18n: "equicord.plugins.betterCommands.description",
     dependencies: ["CommandsAPI"],
     tags: ["Appearance", "Commands", "Shortcuts"],
     authors: [Devs.thororen],

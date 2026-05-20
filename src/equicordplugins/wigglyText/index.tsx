@@ -111,9 +111,7 @@ const updateStyles = () => {
 
 export default definePlugin({
     name: "WigglyText",
-    nameI18n: "equicord.plugins.wigglyText.name",
     description: "Adds a new markdown formatting that makes text wiggly.",
-    descriptionI18n: "equicord.plugins.wigglyText.description",
     tags: ["Appearance", "Customisation", "Fun"],
     authors: [EquicordDevs.nexpid],
     settings,

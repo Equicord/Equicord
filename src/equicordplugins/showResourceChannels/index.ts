@@ -9,9 +9,7 @@ import definePlugin from "@utils/types";
 
 export default definePlugin({
     name: "ShowResourceChannels",
-    nameI18n: "equicord.plugins.showResourceChannels.name",
     description: "shows the channels hidden behind the server resources in the channel list",
-    descriptionI18n: "equicord.plugins.showResourceChannels.description",
     tags: ["Servers"],
     authors: [EquicordDevs.VillainsRule],
     patches: [

@@ -9,9 +9,7 @@ import definePlugin from "@utils/types";
 
 export default definePlugin({
     name: "StickerPaste",
-    nameI18n: "equicord.plugins.stickerPaste.name",
     description: "Makes picking a sticker in the sticker picker insert it into the chatbox instead of instantly sending",
-    descriptionI18n: "equicord.plugins.stickerPaste.description",
     tags: ["Emotes", "Chat"],
     authors: [Devs.ImBanana],
 

@@ -185,9 +185,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "LastFMRichPresence",
-    nameI18n: "equicord.plugins.lastfmRichPresence.name",
     description: "Little plugin for Last.fm rich presence",
-    descriptionI18n: "equicord.plugins.lastfmRichPresence.description",
     tags: ["Activity", "Media"],
     authors: [Devs.dzshn, Devs.RuiNtD, Devs.blahajZip, Devs.archeruwu],
 

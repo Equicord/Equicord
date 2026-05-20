@@ -132,18 +132,6 @@ export type IconProps = { height?: number | string; width?: number | string; cla
 export interface PluginDef {
     name: string;
     description: string;
-    /**
-     * Optional i18n translation key for the plugin name.
-     * If set, the plugin list and modals will display the translated name
-     * instead of the raw English name when a translation is available.
-     */
-    nameI18n?: string;
-    /**
-     * Optional i18n translation key for the plugin description.
-     * If set, the plugin list and modals will display the translated description
-     * instead of the raw English description when a translation is available.
-     */
-    descriptionI18n?: string;
     /** Additional search terms that will bring up your plugin */
     searchTerms?: string[];
     tags?: PluginTag[];

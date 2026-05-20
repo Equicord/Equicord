@@ -49,9 +49,7 @@ interface RuleSet {
 
 export default definePlugin({
     name: "ClearURLs",
-    nameI18n: "equicord.plugins.clearURLs.name",
     description: "Automatically removes tracking elements from URLs you send",
-    descriptionI18n: "equicord.plugins.clearURLs.description",
     dependencies: ["MessageEventsAPI"],
     tags: ["Privacy", "Utility"],
     authors: [Devs.adryd, Devs.thororen],

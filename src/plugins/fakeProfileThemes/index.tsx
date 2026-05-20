@@ -199,9 +199,7 @@ function SettingsAboutComponent() {
 
 export default definePlugin({
     name: "FakeProfileThemes",
-    nameI18n: "equicord.plugins.fakeProfileThemes.name",
     description: "Allows profile theming by hiding the colors in your bio thanks to invisible 3y3 encoding",
-    descriptionI18n: "equicord.plugins.fakeProfileThemes.description",
     tags: ["Appearance", "Customisation"],
     authors: [Devs.Alyxia, Devs.Remty],
     patches: [

@@ -31,9 +31,7 @@ import { TidalPlayer } from "./tidal/TidalPlayer";
 
 export default definePlugin({
     name: "MusicControls",
-    nameI18n: "equicord.plugins.musicControls.name",
     description: "Music Controls and Lyrics for multiple services ",
-    descriptionI18n: "equicord.plugins.musicControls.description",
     authors: [Devs.Ven, Devs.afn, Devs.KraXen72, Devs.Av32000, Devs.nin0dev, Devs.thororen, EquicordDevs.vmohammad, Devs.Joona],
     settings,
     tags: ["Media", "Activity"],

@@ -145,9 +145,7 @@ function disabledIcon() {
 
 export default definePlugin({
     name: "Ingtoninator",
-    nameI18n: "equicord.plugins.ingtoninator.name",
     description: "Suffixes 'ington' to a random word in your message",
-    descriptionI18n: "equicord.plugins.ingtoninator.description",
     dependencies: ["ChatInputButtonAPI"],
     tags: ["Fun"],
     authors: [EquicordDevs.zyqunix, EquicordDevs.BioTomateDE],

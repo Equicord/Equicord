@@ -31,9 +31,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "UnlimitedAccounts",
-    nameI18n: "equicord.plugins.unlimitedAccounts.name",
     description: "Increases the amount of accounts you can add.",
-    descriptionI18n: "equicord.plugins.unlimitedAccounts.description",
     tags: ["Utility"],
     authors: [Devs.thororen],
     settings,

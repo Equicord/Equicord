@@ -19,9 +19,7 @@ const MessageTypes = findByPropsLazy("REPLY", "STAGE_RAISE_HAND", "CHANNEL_NAME_
 
 export default definePlugin({
     name: "NotificationTitle",
-    nameI18n: "equicord.plugins.notificationTitle_discordDesktop.name",
     description: "Makes desktop notifications more informative",
-    descriptionI18n: "equicord.plugins.notificationTitle_discordDesktop.description",
     tags: ["Appearance", "Notifications"],
     authors: [Devs.Kyuuhachi],
 

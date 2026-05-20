@@ -108,9 +108,7 @@ let runOneTime = true;
 
 export default definePlugin({
     name: "CallTimer",
-    nameI18n: "equicord.plugins.callTimer.name",
     description: "Add call timers for all users in voice channels and in the connection status.",
-    descriptionI18n: "equicord.plugins.callTimer.description",
     tags: ["Voice", "Utility"],
     authors: [Devs.Ven, EquicordDevs.MaxHerbold, Devs.D3SOX],
     managedStyle: alignedChatInputFix,

@@ -24,7 +24,6 @@ let ERROR_CODES: Record<string, string> | undefined;
 
 export default definePlugin({
     name: "ReactErrorDecoder",
-    nameI18n: "equicord.plugins.reactErrorDecoder.name",
     description: 'Replaces "Minified React Error" with the actual error.',
     tags: ["Developers"],
     authors: [Devs.Cyn, Devs.maisymoe],

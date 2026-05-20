@@ -47,9 +47,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "OnePingPerDM",
-    nameI18n: "equicord.plugins.onePingPerDM.name",
     description: "If unread messages are sent by a user in DMs multiple times, you'll only receive one audio ping. Read the messages to reset the limit",
-    descriptionI18n: "equicord.plugins.onePingPerDM.description",
     tags: ["Notifications", "Customisation"],
     authors: [Devs.ProffDea],
     isModified: true,

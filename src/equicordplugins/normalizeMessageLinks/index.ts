@@ -9,9 +9,7 @@ import definePlugin from "@utils/types";
 
 export default definePlugin({
     name: "NormalizeMessageLinks",
-    nameI18n: "equicord.plugins.normalizeMessageLinks.name",
     description: "Strip canary/ptb from message links",
-    descriptionI18n: "equicord.plugins.normalizeMessageLinks.description",
     tags: ["Chat"],
     authors: [Devs.bb010g],
     patches: [

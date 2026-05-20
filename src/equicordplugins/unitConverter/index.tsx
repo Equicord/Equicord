@@ -47,9 +47,7 @@ export const settings = definePluginSettings({
 
 export default definePlugin({
     name: "UnitConverter",
-    nameI18n: "equicord.plugins.unitConverter.name",
     description: "Converts metric units to Imperal units and vice versa",
-    descriptionI18n: "equicord.plugins.unitConverter.description",
     dependencies: ["MessagePopoverAPI"],
     tags: ["Utility"],
     authors: [Devs.sadan],

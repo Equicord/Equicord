@@ -88,9 +88,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "FindReply",
-    nameI18n: "equicord.plugins.findReply.name",
     description: "Jumps to the earliest reply to a message in a channel (lets you follow past conversations more easily).",
-    descriptionI18n: "equicord.plugins.findReply.description",
     dependencies: ["MessagePopoverAPI"],
     tags: ["Chat", "Shortcuts"],
     authors: [Devs.newwares],

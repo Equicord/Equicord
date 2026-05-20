@@ -86,9 +86,7 @@ const IS_PATCHED = Symbol("MutualGroupDMs.Patched");
 
 export default definePlugin({
     name: "MutualGroupDMs",
-    nameI18n: "equicord.plugins.mutualGroupDMs.name",
     description: "Shows mutual group dms in profiles",
-    descriptionI18n: "equicord.plugins.mutualGroupDMs.description",
     tags: ["Friends", "Appearance"],
     authors: [Devs.amia],
 

@@ -77,9 +77,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "MiddleClickTweaks",
-    nameI18n: "equicord.plugins.middleClickTweaks.name",
     description: "Various middle click tweaks, such as with pasting and link opening.",
-    descriptionI18n: "equicord.plugins.middleClickTweaks.description",
     authors: [EquicordDevs.Etorix, EquicordDevs.korzi],
     settings,
 

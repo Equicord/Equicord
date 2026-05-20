@@ -47,9 +47,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "UserVoiceShow",
-    nameI18n: "equicord.plugins.userVoiceShow.name",
     description: "Shows an indicator when a user is in a Voice Channel",
-    descriptionI18n: "equicord.plugins.userVoiceShow.description",
     tags: ["Voice", "Appearance", "Friends"],
     dependencies: ["MemberListDecoratorsAPI", "MessageDecorationsAPI", "NicknameIconsAPI"],
     authors: [Devs.Nuckyz, Devs.LordElias, EquicordDevs.omaw],

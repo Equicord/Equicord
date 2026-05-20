@@ -87,9 +87,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "SpotifyActivityToggle",
-    nameI18n: "equicord.plugins.spotifyActivityToggle.name",
     description: "Adds a toggle button for Spotify activity visibility.",
-    descriptionI18n: "equicord.plugins.spotifyActivityToggle.description",
     dependencies: ["UserAreaAPI"],
     tags: ["Activity", "Utility"],
     authors: [Devs.thororen],

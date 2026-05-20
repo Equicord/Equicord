@@ -131,9 +131,7 @@ const keydownListener = (event: KeyboardEvent) => {
 migratePluginSettings("RepeatMessages", "RepeatMessage");
 export default definePlugin({
     name: "RepeatMessages",
-    nameI18n: "equicord.plugins.repeatMessages.name",
     description: "Allows you to repeat messages quickly. If you hold shift while clicking the Repeat option, it will reply to the message.",
-    descriptionI18n: "equicord.plugins.repeatMessages.description",
     dependencies: ["MessagePopoverAPI"],
     tags: ["Chat"],
     authors: [EquicordDevs.Tolgchu, Devs.thororen],

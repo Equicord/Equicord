@@ -22,9 +22,7 @@ interface UserMentionComponentProps {
 
 export default definePlugin({
     name: "FullUserInChatbox",
-    nameI18n: "equicord.plugins.fullUserInChatbox.name",
     description: "Makes the user mention in the chatbox have more functionalities, like left/right clicking",
-    descriptionI18n: "equicord.plugins.fullUserInChatbox.description",
     tags: ["Shortcuts", "Utility"],
     authors: [Devs.sadan],
 

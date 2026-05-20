@@ -27,10 +27,8 @@ export const settings = definePluginSettings({
 
 export default definePlugin({
     name: "ClientTheme",
-    nameI18n: "equicord.plugins.clientTheme.name",
     authors: [Devs.Nuckyz],
     description: "Recreation of the old client theme experiment. Add a color to your Discord client theme",
-    descriptionI18n: "equicord.plugins.clientTheme.description",
     tags: ["Appearance", "Customisation"],
     settings,
 

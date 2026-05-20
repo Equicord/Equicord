@@ -21,9 +21,7 @@ import definePlugin from "@utils/types";
 
 export default definePlugin({
     name: "DisableCallIdle",
-    nameI18n: "equicord.plugins.disableCallIdle.name",
     description: "Disables automatically getting kicked from a DM voice call after 3 minutes and being moved to an AFK voice channel.",
-    descriptionI18n: "equicord.plugins.disableCallIdle.description",
     tags: ["Voice", "Utility"],
     authors: [Devs.Nuckyz],
     patches: [

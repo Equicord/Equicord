@@ -78,10 +78,8 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "AnonymiseFileNames",
-    nameI18n: "equicord.plugins.anonymiseFileNames.name",
     authors: [Devs.fawn],
     description: "Anonymise uploaded file names",
-    descriptionI18n: "equicord.plugins.anonymiseFileNames.description",
     dependencies: ["CommandsAPI"],
     tags: ["Privacy", "Utility"],
     isModified: true,

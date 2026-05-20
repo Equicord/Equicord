@@ -31,9 +31,7 @@ function renderBadge(id: number, title: string) {
 
 export default definePlugin({
     name: "ChannelBadges",
-    nameI18n: "equicord.plugins.channelBadges.name",
     description: "Adds badges to channels based on their type",
-    descriptionI18n: "equicord.plugins.channelBadges.description",
     tags: ["Appearance", "Customisation", "Servers"],
     authors: [EquicordDevs.creations, Devs.thororen],
     settings,

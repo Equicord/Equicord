@@ -134,9 +134,7 @@ export function LastActiveIcon() {
 
 export default definePlugin({
     name: "LastActive",
-    nameI18n: "equicord.plugins.lastActive.name",
     description: "A plugin to jump to last active message from yourself or another user in a channel/server.",
-    descriptionI18n: "equicord.plugins.lastActive.description",
     tags: ["Chat", "Utility"],
     authors: [EquicordDevs.Crxa],
     contextMenus: {

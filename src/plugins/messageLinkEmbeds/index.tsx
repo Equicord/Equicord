@@ -363,9 +363,7 @@ function AutomodEmbedAccessory(props: MessageEmbedProps): JSX.Element | null {
 
 export default definePlugin({
     name: "MessageLinkEmbeds",
-    nameI18n: "equicord.plugins.messageLinkEmbeds.name",
     description: "Adds a preview to messages that link another message",
-    descriptionI18n: "equicord.plugins.messageLinkEmbeds.description",
     tags: ["Chat", "Appearance"],
     authors: [Devs.TheSun, Devs.Ven, Devs.RyanCaoDev],
     dependencies: ["MessageAccessoriesAPI", "MessageUpdaterAPI", "UserSettingsAPI"],

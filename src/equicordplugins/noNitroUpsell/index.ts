@@ -10,9 +10,7 @@ import { OverridePremiumTypeStore } from "@webpack/common";
 
 export default definePlugin({
     name: "NoNitroUpsell",
-    nameI18n: "equicord.plugins.noNitroUpsell.name",
     description: "Removes all of Discord's nitro upsells by tricking the client into thinking you have nitro.",
-    descriptionI18n: "equicord.plugins.noNitroUpsell.description",
     tags: ["Utility"],
     authors: [Devs.thororen],
     flux: {

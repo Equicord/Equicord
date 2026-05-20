@@ -331,9 +331,7 @@ function installTableRuleForParser(parser: { defaultRules?: MarkdownRules; }) {
 
 export default definePlugin({
     name: "MarkdownTables",
-    nameI18n: "equicord.plugins.markdownTables.name",
     description: "Render GitHub-style markdown tables in Discord messages.",
-    descriptionI18n: "equicord.plugins.markdownTables.description",
     tags: ["Chat", "Appearance"],
     authors: [EquicordDevs.yafyx],
     managedStyle,

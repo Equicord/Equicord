@@ -144,9 +144,7 @@ function makeContextItem(props) {
 
 export default definePlugin({
     name: "Ghosted",
-    nameI18n: "equicord.plugins.ghosted.name",
     description: "A cute ghost will appear if you don't answer their DMs",
-    descriptionI18n: "equicord.plugins.ghosted.description",
     tags: ["Chat", "Utility"],
     authors: [EquicordDevs.vei, Devs.sadan, EquicordDevs.justjxke, EquicordDevs.iamme],
     settings,

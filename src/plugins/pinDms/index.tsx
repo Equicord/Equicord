@@ -66,9 +66,7 @@ export const settings = definePluginSettings({
 
 export default definePlugin({
     name: "PinDMs",
-    nameI18n: "equicord.plugins.pinDms.name",
     description: "Allows you to pin private channels to the top of your DM list. To pin/unpin or re-order pins, right click DMs",
-    descriptionI18n: "equicord.plugins.pinDms.description",
     tags: ["Friends", "Organisation"],
     authors: [Devs.Ven, Devs.Aria],
     settings,

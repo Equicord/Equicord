@@ -23,9 +23,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "FixImagesQuality",
-    nameI18n: "equicord.plugins.fixImagesQuality.name",
     description: "Improves quality of images by loading them at their original resolution",
-    descriptionI18n: "equicord.plugins.fixImagesQuality.description",
     tags: ["Media", "Appearance"],
     authors: [Devs.Nuckyz, Devs.Ven],
     settings,

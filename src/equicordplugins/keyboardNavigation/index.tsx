@@ -85,9 +85,7 @@ export const settings = definePluginSettings({
 
 export default definePlugin({
     name: "KeyboardNavigation",
-    nameI18n: "equicord.plugins.keyboardNavigation.name",
     description: "Allows you to navigate the UI with a keyboard.",
-    descriptionI18n: "equicord.plugins.keyboardNavigation.description",
     tags: ["Accessibility", "Shortcuts"],
     authors: [Devs.Ethan],
     settings,

@@ -36,9 +36,7 @@ function toggleStreamerMode({ streamKey }: StreamEvent, value: boolean) {
 
 export default definePlugin({
     name: "StreamerModeOn",
-    nameI18n: "equicord.plugins.streamerModeOnStream.name",
     description: "Automatically enables streamer mode when you start streaming in Discord",
-    descriptionI18n: "equicord.plugins.streamerModeOnStream.description",
     tags: ["Privacy", "Utility"],
     authors: [Devs.IcedMarina],
     flux: {

@@ -81,9 +81,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "WhosWatching",
-    nameI18n: "equicord.plugins.whosWatching.name",
     description: "Hover over the screenshare icon to view what users are watching your stream",
-    descriptionI18n: "equicord.plugins.whosWatching.description",
     tags: ["Activity"],
     authors: [EquicordDevs.Fres, Devs.thororen],
     settings,

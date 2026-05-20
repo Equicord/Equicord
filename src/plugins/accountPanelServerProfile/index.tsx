@@ -69,9 +69,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "AccountPanelServerProfile",
-    nameI18n: "equicord.plugins.accountPanelServerProfile.name",
     description: "Right click your account panel in the bottom left to view your profile in the current server",
-    descriptionI18n: "equicord.plugins.accountPanelServerProfile.description",
     tags: ["Appearance", "Servers"],
     authors: [Devs.Nuckyz, Devs.relitrix],
     settings,

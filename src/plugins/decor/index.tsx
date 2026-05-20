@@ -26,9 +26,7 @@ export interface AvatarDecoration {
 
 export default definePlugin({
     name: "Decor",
-    nameI18n: "equicord.plugins.decor.name",
     description: "Create and use your own custom avatar decorations, or pick your favorite from the presets.",
-    descriptionI18n: "equicord.plugins.decor.description",
     tags: ["Appearance", "Customisation"],
     authors: [Devs.FieryFlames],
     patches: [

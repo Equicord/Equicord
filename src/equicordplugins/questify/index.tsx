@@ -98,9 +98,7 @@ function enrolledIncompleteButton(args: { quest: Quest, size: string; }): JSX.El
 
 export default definePlugin({
     name: "Questify",
-    nameI18n: "equicord.plugins.questify.name",
     description: "Enhance specific Quest features, disable annoyances, or completely remove Quests.",
-    descriptionI18n: "equicord.plugins.questify.description",
     tags: ["Appearance", "Customisation", "Privacy", "Utility"],
     authors: [EquicordDevs.Etorix],
     dependencies: ["AudioPlayerAPI", "ServerListAPI"],

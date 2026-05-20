@@ -148,9 +148,7 @@ export async function buildEmbed(message: any, revealed: string): Promise<void> 
 
 export default definePlugin({
     name: "InvisibleChat",
-    nameI18n: "equicord.plugins.invisibleChat_desktop.name",
     description: "Encrypt your Messages in a non-suspicious way!",
-    descriptionI18n: "equicord.plugins.invisibleChat_desktop.description",
     tags: ["Chat"],
     authors: [Devs.SammCheese],
     dependencies: ["MessageUpdaterAPI", "ChatInputButtonAPI", "MessagePopoverAPI"],

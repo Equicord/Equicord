@@ -156,9 +156,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "BypassStatus",
-    nameI18n: "equicord.plugins.bypassStatus.name",
     description: "Still get notifications from specific sources when in do not disturb mode. Right-click on users/channels/guilds to set them to bypass do not disturb mode.",
-    descriptionI18n: "equicord.plugins.bypassStatus.description",
     tags: ["Activity", "Customisation", "Notifications", "Servers"],
     authors: [Devs.Inbestigator],
     dependencies: ["AudioPlayerAPI"],

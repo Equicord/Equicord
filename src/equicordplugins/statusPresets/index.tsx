@@ -121,9 +121,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "StatusPresets",
-    nameI18n: "equicord.plugins.statusPresets.name",
     description: "Allows you to remember your statuses and set them later",
-    descriptionI18n: "equicord.plugins.statusPresets.description",
     tags: ["Activity", "Utility"],
     authors: [EquicordDevs.iamme],
     settings,

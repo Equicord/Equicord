@@ -172,9 +172,7 @@ const devContextCallback: NavContextMenuPatchCallback = (children, { id }: { id:
 
 export default definePlugin({
     name: "ViewRaw",
-    nameI18n: "equicord.plugins.viewRaw.name",
     description: "Copy and view the raw content/data of any message, channel or guild",
-    descriptionI18n: "equicord.plugins.viewRaw.description",
     dependencies: ["MessagePopoverAPI"],
     tags: ["Chat", "Developers"],
     authors: [Devs.KingFish, Devs.Ven, Devs.rad, Devs.ImLvna],

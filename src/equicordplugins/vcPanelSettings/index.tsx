@@ -237,9 +237,7 @@ function VoiceSettings() {
 
 export default definePlugin({
     name: "VCPanelSettings",
-    nameI18n: "equicord.plugins.vcPanelSettings.name",
     description: "Control voice settings right from the voice panel",
-    descriptionI18n: "equicord.plugins.vcPanelSettings.description",
     tags: ["Utility", "Voice"],
     authors: [Devs.nin0dev],
     settings,

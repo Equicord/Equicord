@@ -16,9 +16,7 @@ let updateFunc = (v: any) => { };
 
 export default definePlugin({
     name: "BetterBlockedUsers",
-    nameI18n: "equicord.plugins.betterBlockedUsers.name",
     description: "Allows you to search in blocked users list and makes names selectable in settings.",
-    descriptionI18n: "equicord.plugins.betterBlockedUsers.description",
     tags: ["Appearance", "Shortcuts"],
     authors: [EquicordDevs.TheArmagan],
     patches: [

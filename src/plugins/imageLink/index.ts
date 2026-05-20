@@ -9,9 +9,7 @@ import definePlugin from "@utils/types";
 
 export default definePlugin({
     name: "ImageLink",
-    nameI18n: "equicord.plugins.imageLink.name",
     description: "Never hide image links in messages, even if it's the only content",
-    descriptionI18n: "equicord.plugins.imageLink.description",
     tags: ["Media", "Appearance"],
     authors: [Devs.Kyuuhachi, Devs.Sqaaakoi],
 

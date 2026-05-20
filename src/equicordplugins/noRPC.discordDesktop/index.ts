@@ -9,9 +9,7 @@ import definePlugin from "@utils/types";
 
 export default definePlugin({
     name: "NoRPC",
-    nameI18n: "equicord.plugins.noRPC_discordDesktop.name",
     description: "Disables Discord's RPC server.",
-    descriptionI18n: "equicord.plugins.noRPC_discordDesktop.description",
     tags: ["Privacy", "Servers"],
     authors: [Devs.Cyn],
     patches: [

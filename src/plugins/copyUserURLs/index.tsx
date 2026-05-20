@@ -45,10 +45,8 @@ const UserContextMenuPatch: NavContextMenuPatchCallback = (children, { user }: U
 
 export default definePlugin({
     name: "CopyUserURLs",
-    nameI18n: "equicord.plugins.copyUserURLs.name",
     authors: [Devs.castdrian],
     description: "Adds a 'Copy User URL' option to the user context menu.",
-    descriptionI18n: "equicord.plugins.copyUserURLs.description",
     tags: ["Utility", "Friends"],
     contextMenus: {
         "user-context": UserContextMenuPatch

@@ -37,9 +37,7 @@ export const settings = definePluginSettings({
 
 export default definePlugin({
     name: "GitHubRepos",
-    nameI18n: "equicord.plugins.githubRepos.name",
     description: "Displays a user's public GitHub repositories in their profile",
-    descriptionI18n: "equicord.plugins.githubRepos.description",
     dependencies: ["ProfileCollectionsAPI"],
     tags: ["Appearance"],
     authors: [EquicordDevs.talhakf, EquicordDevs.Panniku, EquicordDevs.benjii],

@@ -10,9 +10,7 @@ import definePlugin from "@utils/types";
 // The entire code of this plugin can be found in native.ts
 export default definePlugin({
     name: "YoutubeAdblock",
-    nameI18n: "equicord.plugins.youtubeAdblock_desktop.name",
     description: "Block ads in YouTube embeds and the WatchTogether activity via AdGuard",
-    descriptionI18n: "equicord.plugins.youtubeAdblock_desktop.description",
     tags: ["Media", "Utility"],
     authors: [Devs.ImLvna, Devs.Ven],
 });

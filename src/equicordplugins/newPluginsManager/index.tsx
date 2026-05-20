@@ -13,9 +13,7 @@ import { openNewPluginsModal } from "./NewPluginsModal";
 
 export default definePlugin({
     name: "NewPluginsManager",
-    nameI18n: "equicord.plugins.newPluginsManager.name",
     description: "Utility that notifies you when new plugins are added to Equicord",
-    descriptionI18n: "equicord.plugins.newPluginsManager.description",
     tags: ["Utility"],
     authors: [Devs.Sqaaakoi],
     enabledByDefault: true,

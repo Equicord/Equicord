@@ -59,9 +59,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "AlwaysTrust",
-    nameI18n: "equicord.plugins.alwaysTrust.name",
     description: "Removes the annoying untrusted domain and suspicious file popup",
-    descriptionI18n: "equicord.plugins.alwaysTrust.description",
     tags: ["Utility"],
     authors: [Devs.zt, Devs.Trwy],
     isModified: true,

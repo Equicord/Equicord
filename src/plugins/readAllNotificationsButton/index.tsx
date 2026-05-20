@@ -65,9 +65,7 @@ const ReadAllButton = () => (
 
 export default definePlugin({
     name: "ReadAllNotificationsButton",
-    nameI18n: "equicord.plugins.readAllNotificationsButton.name",
     description: "Read all server notifications with a single button click!",
-    descriptionI18n: "equicord.plugins.readAllNotificationsButton.description",
     tags: ["Notifications", "Shortcuts"],
     authors: [Devs.kemo, EquicordDevs.KrystalSkull],
     dependencies: ["ServerListAPI"],

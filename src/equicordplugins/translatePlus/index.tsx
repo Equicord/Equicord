@@ -45,9 +45,7 @@ const messageCtxPatch: NavContextMenuPatchCallback = (children, { message }) => 
 
 export default definePlugin({
     name: "Translate+",
-    nameI18n: "equicord.plugins.translatePlus.name",
     description: "Vencord's translate plugin but with support for artistic languages!",
-    descriptionI18n: "equicord.plugins.translatePlus.description",
     dependencies: ["MessageAccessoriesAPI", "MessagePopoverAPI"],
     tags: ["Chat", "Utility"],
     authors: [Devs.Ven, EquicordDevs.Prince527],

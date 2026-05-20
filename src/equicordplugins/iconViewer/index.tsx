@@ -18,9 +18,7 @@ import { SettingsAbout } from "./components/Modals";
 
 export default definePlugin({
     name: "IconViewer",
-    nameI18n: "equicord.plugins.iconViewer.name",
     description: "Adds a new tab to settings to preview all icons.",
-    descriptionI18n: "equicord.plugins.iconViewer.description",
     tags: ["Developers"],
     authors: [EquicordDevs.iamme],
     dependencies: ["Settings", "ConcatenatedModules"],

@@ -43,10 +43,8 @@ function disableInvites(guildId: string) {
 
 export default definePlugin({
     name: "PauseInvitesForever",
-    nameI18n: "equicord.plugins.pauseInvitesForever.name",
     searchTerms: ["DisableInvitesForever"],
     description: "Brings back the option to pause invites indefinitely that stupit Discord removed.",
-    descriptionI18n: "equicord.plugins.pauseInvitesForever.description",
     tags: ["Servers"],
     authors: [Devs.Dolfies, Devs.amia],
 

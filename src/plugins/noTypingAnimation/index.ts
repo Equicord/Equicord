@@ -9,10 +9,8 @@ import definePlugin from "@utils/types";
 
 export default definePlugin({
     name: "NoTypingAnimation",
-    nameI18n: "equicord.plugins.noTypingAnimation.name",
     authors: [Devs.AutumnVN],
     description: "Disables the CPU-intensive typing dots animation",
-    descriptionI18n: "equicord.plugins.noTypingAnimation.description",
     tags: ["Appearance"],
     patches: [
         {

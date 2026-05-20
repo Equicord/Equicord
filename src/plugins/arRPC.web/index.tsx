@@ -41,9 +41,7 @@ let ws: WebSocket;
 migratePluginSettings("WebRichPresence", "WebRichPresence (arRPC)");
 export default definePlugin({
     name: "WebRichPresence",
-    nameI18n: "equicord.plugins.arRPC_web.name",
     description: "Client plugin for arRPC to enable RPC on Discord Web (experimental)",
-    descriptionI18n: "equicord.plugins.arRPC_web.description",
     tags: ["Activity", "Utility"],
     authors: [Devs.Ducko],
     reporterTestable: ReporterTestable.None,

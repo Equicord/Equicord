@@ -120,9 +120,7 @@ const MessageMenuPatch: NavContextMenuPatchCallback = (children, { message }: { 
 
 export default definePlugin({
     name: "JumpTo",
-    nameI18n: "equicord.plugins.jumpTo.name",
     description: "Adds context menu options to jump to the start or bottom of a channel/DM.",
-    descriptionI18n: "equicord.plugins.jumpTo.description",
     tags: ["Chat", "Utility"],
     authors: [Devs.Samwich, Devs.thororen],
     contextMenus: {

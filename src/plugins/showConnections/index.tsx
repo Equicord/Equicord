@@ -160,9 +160,7 @@ function CompactConnectionComponent({ connection, theme }: { connection: Connect
 
 export default definePlugin({
     name: "ShowConnections",
-    nameI18n: "equicord.plugins.showConnections.name",
     description: "Show connected accounts in user popouts",
-    descriptionI18n: "equicord.plugins.showConnections.description",
     tags: ["Friends", "Appearance"],
     authors: [Devs.TheKodeToad],
     settings,

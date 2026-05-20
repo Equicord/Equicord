@@ -47,9 +47,7 @@ function DefaultRoleIcon() {
 
 export default definePlugin({
     name: "MentionAvatars",
-    nameI18n: "equicord.plugins.mentionAvatars.name",
     description: "Shows user avatars and role icons inside mentions",
-    descriptionI18n: "equicord.plugins.mentionAvatars.description",
     tags: ["Appearance", "Customisation"],
     authors: [Devs.Ven, Devs.SerStars],
     patches: [{

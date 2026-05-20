@@ -148,9 +148,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "Dragify",
-    nameI18n: "equicord.plugins.dragify.name",
     description: "Drop users, channels, or servers into chat to insert mentions or invites.",
-    descriptionI18n: "equicord.plugins.dragify.description",
     tags: ["Chat", "Servers", "Utility", "Voice"],
     authors: [EquicordDevs.justjxke],
     settings,

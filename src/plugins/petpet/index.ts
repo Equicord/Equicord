@@ -109,9 +109,7 @@ function applyPaletteTransparent(data: Uint8Array | Uint8ClampedArray, palette: 
 migratePluginSettings("PetPet", "petpet");
 export default definePlugin({
     name: "PetPet",
-    nameI18n: "equicord.plugins.petpet.name",
     description: "Adds a /petpet slash command to create headpet gifs from any image",
-    descriptionI18n: "equicord.plugins.petpet.description",
     dependencies: ["CommandsAPI"],
     tags: ["Fun", "Commands"],
     authors: [Devs.Ven, Devs.u32],

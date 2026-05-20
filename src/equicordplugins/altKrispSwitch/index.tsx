@@ -9,9 +9,7 @@ import definePlugin from "@utils/types";
 
 export default definePlugin({
     name: "AltKrispSwitch",
-    nameI18n: "equicord.plugins.altKrispSwitch.name",
     description: "Makes the Noise Suppression Popout switch between None and Krisp instead of Krisp and Standard",
-    descriptionI18n: "equicord.plugins.altKrispSwitch.description",
     tags: ["Customisation", "Voice"],
     authors: [Devs.newwares],
     patches: [

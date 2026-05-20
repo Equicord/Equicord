@@ -124,9 +124,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "CustomTimestamps",
-    nameI18n: "equicord.plugins.customTimestamps.name",
     description: "Custom timestamps on messages and tooltips",
-    descriptionI18n: "equicord.plugins.customTimestamps.description",
     tags: ["Appearance", "Customisation"],
     authors: [Devs.Rini, EquicordDevs.nvhhr, EquicordDevs.Suffocate, Devs.Obsidian],
     settings,

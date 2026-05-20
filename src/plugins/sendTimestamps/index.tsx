@@ -154,9 +154,7 @@ const SendTimestampButton: ChatBarButtonFactory = ({ isAnyChat }) => {
 
 export default definePlugin({
     name: "SendTimestamps",
-    nameI18n: "equicord.plugins.sendTimestamps.name",
     description: "Send timestamps easily via chat box button & text shortcuts. Read the extended description!",
-    descriptionI18n: "equicord.plugins.sendTimestamps.description",
     dependencies: ["ChatInputButtonAPI", "MessagePopoverAPI"],
     tags: ["Chat", "Commands"],
     authors: [Devs.Ven, Devs.Tyler, Devs.Grzesiek11],

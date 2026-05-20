@@ -27,9 +27,7 @@ const timers = {} as Record<string, {
 
 export default definePlugin({
     name: "VoiceChatDoubleClick",
-    nameI18n: "equicord.plugins.vcDoubleClick.name",
     description: "Join voice chats via double click instead of single click",
-    descriptionI18n: "equicord.plugins.vcDoubleClick.description",
     tags: ["Voice"],
     authors: [Devs.Ven, Devs.D3SOX, Devs.sadan],
     patches: [

@@ -23,9 +23,7 @@ import definePlugin from "@utils/types";
 
 export default definePlugin({
     name: "PlainFolderIcon",
-    nameI18n: "equicord.plugins.plainFolderIcon.name",
     description: "Dont show the small guild icons in folders",
-    descriptionI18n: "equicord.plugins.plainFolderIcon.description",
     tags: ["Appearance", "Customisation"],
     authors: [Devs.botato],
 

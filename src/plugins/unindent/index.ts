@@ -22,9 +22,7 @@ import definePlugin from "@utils/types";
 
 export default definePlugin({
     name: "Unindent",
-    nameI18n: "equicord.plugins.unindent.name",
     description: "Trims leading indentation from codeblocks",
-    descriptionI18n: "equicord.plugins.unindent.description",
     dependencies: ["MessageEventsAPI"],
     tags: ["Chat", "Utility"],
     authors: [Devs.Ven],

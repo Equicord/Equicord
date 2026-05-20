@@ -192,9 +192,7 @@ async function playSound(buffer: AudioBuffer, volume: number) {
 
 export default definePlugin({
     name: "Animalese",
-    nameI18n: "equicord.plugins.animalese.name",
     description: "Plays animal crossing animalese for every message sent (they yap a lot)",
-    descriptionI18n: "equicord.plugins.animalese.description",
     tags: ["Customisation", "Fun"],
     authors: [EquicordDevs.ryanamay, EquicordDevs.Mocha],
     settings,

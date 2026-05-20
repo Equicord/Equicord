@@ -9,9 +9,7 @@ import definePlugin from "@utils/types";
 
 export default definePlugin({
     name: "TidalEmbeds",
-    nameI18n: "equicord.plugins.tidalEmbeds.name",
     description: "Embeds TIDAL songs to make them playable in Discord.",
-    descriptionI18n: "equicord.plugins.tidalEmbeds.description",
     tags: ["Appearance", "Chat", "Media"],
     authors: [EquicordDevs.vmohammad],
     dependencies: ["MessageUpdaterAPI", "MessageAccessoriesAPI"],

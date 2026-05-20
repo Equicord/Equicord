@@ -853,9 +853,7 @@ function renderOperationGroup({
 
 export default definePlugin({
     name: "RandomVoice",
-    nameI18n: "equicord.plugins.randomVoice.name",
     description: "Adds a button near mute to join a random voice channel.",
-    descriptionI18n: "equicord.plugins.randomVoice.description",
     dependencies: ["UserAreaAPI"],
     tags: ["Fun", "Voice"],
     authors: [EquicordDevs.xijexo, EquicordDevs.omaw, Devs.thororen],

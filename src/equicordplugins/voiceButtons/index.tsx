@@ -15,9 +15,7 @@ import { UserChatButton, UserDeafenButton, UserMuteButton } from "./utils";
 
 export default definePlugin({
     name: "VoiceButtons",
-    nameI18n: "equicord.plugins.voiceButtons.name",
     description: "Quickly DM, mute, or deafen any user right from the voice-call panel.",
-    descriptionI18n: "equicord.plugins.voiceButtons.description",
     tags: ["Servers", "Utility", "Voice"],
     authors: [EquicordDevs.nicola02nb, EquicordDevs.omaw],
     settings,

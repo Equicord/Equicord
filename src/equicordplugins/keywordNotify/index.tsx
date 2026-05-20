@@ -316,10 +316,8 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "KeywordNotify",
-    nameI18n: "equicord.plugins.keywordNotify.name",
     authors: [EquicordDevs.camila314, EquicordDevs.x3rt],
     description: "Sends a notification if a given message matches certain keywords or regexes",
-    descriptionI18n: "equicord.plugins.keywordNotify.description",
     tags: ["Chat", "Notifications"],
     settings,
     patches: [

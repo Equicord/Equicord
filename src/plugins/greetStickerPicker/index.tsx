@@ -150,9 +150,7 @@ function GreetMenu({ channel, message }: { message: Message, channel: Channel; }
 
 export default definePlugin({
     name: "GreetStickerPicker",
-    nameI18n: "equicord.plugins.greetStickerPicker.name",
     description: "Allows you to use any greet sticker instead of only the random one by right-clicking the 'Wave to say hi!' button",
-    descriptionI18n: "equicord.plugins.greetStickerPicker.description",
     tags: ["Emotes", "Customisation"],
     authors: [Devs.Ven],
 

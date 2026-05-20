@@ -46,9 +46,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "NoPendingCount",
-    nameI18n: "equicord.plugins.noPendingCount.name",
     description: "Removes the ping count of incoming friend requests, message requests, and nitro offers.",
-    descriptionI18n: "equicord.plugins.noPendingCount.description",
     tags: ["Notifications", "Appearance"],
     authors: [Devs.amia],
 

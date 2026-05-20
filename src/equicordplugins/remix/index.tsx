@@ -69,9 +69,7 @@ export function sendRemix(blob: Blob) {
 
 export default definePlugin({
     name: "RemixRevived",
-    nameI18n: "equicord.plugins.remix.name",
     description: "Revives Remix and breings it to Desktop",
-    descriptionI18n: "equicord.plugins.remix.description",
     tags: ["Customisation", "Fun"],
     authors: [EquicordDevs.MrDiamond, EquicordDevs.meowabyte],
     contextMenus: {

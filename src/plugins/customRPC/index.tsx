@@ -253,9 +253,7 @@ function stopTimestampLoop() {
 
 export default definePlugin({
     name: "CustomRPC",
-    nameI18n: "equicord.plugins.customRPC.name",
     description: "Add a fully customisable Rich Presence (Game status) to your Discord profile",
-    descriptionI18n: "equicord.plugins.customRPC.description",
     tags: ["Activity", "Customisation"],
     authors: [Devs.captain, Devs.AutumnVN, Devs.nin0dev],
     dependencies: ["UserSettingsAPI"],

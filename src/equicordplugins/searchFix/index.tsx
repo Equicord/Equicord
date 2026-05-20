@@ -38,7 +38,6 @@ function settingsComponent() {
 
 export default definePlugin({
     name: "SearchFix",
-    nameI18n: "equicord.plugins.searchFix.name",
     description: 'Fixes the annoying "We dropped the magnifying glass!" error.',
     tags: ["Utility"],
     settingsAboutComponent: () => settingsComponent(),

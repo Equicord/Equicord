@@ -81,9 +81,7 @@ function isUncategorized(objChannel: { channel: Channel; comparator: number; }) 
 
 export default definePlugin({
     name: "ShowHiddenChannels",
-    nameI18n: "equicord.plugins.showHiddenChannels.name",
     description: "Show channels that you do not have access to view.",
-    descriptionI18n: "equicord.plugins.showHiddenChannels.description",
     tags: ["Servers", "Utility"],
     authors: [Devs.BigDuck, Devs.AverageReactEnjoyer, Devs.D3SOX, Devs.Ven, Devs.Nuckyz, Devs.Nickyux, Devs.dzshn, EquicordDevs.Oggetto],
     isModified: true,

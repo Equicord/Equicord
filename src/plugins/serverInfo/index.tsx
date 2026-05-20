@@ -49,9 +49,7 @@ export const settings = definePluginSettings({
 
 export default definePlugin({
     name: "ServerInfo",
-    nameI18n: "equicord.plugins.serverInfo.name",
     description: "Allows you to view info about a server",
-    descriptionI18n: "equicord.plugins.serverInfo.description",
     tags: ["Servers", "Utility"],
     authors: [Devs.Ven, Devs.Nuckyz, EquicordDevs.Z1xus],
     dependencies: ["DynamicImageModalAPI"],

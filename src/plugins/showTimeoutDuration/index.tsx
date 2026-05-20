@@ -67,9 +67,7 @@ function renderTimeout(message: Message, inline: boolean) {
 
 export default definePlugin({
     name: "ShowTimeoutDuration",
-    nameI18n: "equicord.plugins.showTimeoutDuration.name",
     description: "Shows how much longer a user's timeout will last, either in the timeout icon tooltip or next to it",
-    descriptionI18n: "equicord.plugins.showTimeoutDuration.description",
     tags: ["Servers", "Utility"],
     authors: [Devs.Ven, Devs.Sqaaakoi],
 

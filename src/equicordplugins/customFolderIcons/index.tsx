@@ -13,9 +13,7 @@ import { folderProp, int2rgba } from "./util";
 
 export default definePlugin({
     name: "CustomFolderIcons",
-    nameI18n: "equicord.plugins.customFolderIcons.name",
     description: "Customize folder icons with any png",
-    descriptionI18n: "equicord.plugins.customFolderIcons.description",
     tags: ["Appearance", "Customisation", "Organisation"],
     authors: [EquicordDevs.sadan],
     settings,

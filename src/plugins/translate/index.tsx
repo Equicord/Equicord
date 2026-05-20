@@ -62,9 +62,7 @@ let tooltipTimeout: any;
 
 export default definePlugin({
     name: "Translate",
-    nameI18n: "equicord.plugins.translate.name",
     description: "Translate messages with Google Translate, DeepL or Kagi.",
-    descriptionI18n: "equicord.plugins.translate.description",
     dependencies: ["ChatInputButtonAPI", "MessageAccessoriesAPI", "MessagePopoverAPI"],
     tags: ["Chat", "Utility"],
     authors: [Devs.Ven, Devs.AshtonMemer, Devs.koish1],

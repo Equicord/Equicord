@@ -49,10 +49,8 @@ interface StreamData {
 
 export default definePlugin({
     name: "VolumeBooster",
-    nameI18n: "equicord.plugins.volumeBooster.name",
     authors: [Devs.Nuckyz, Devs.sadan],
     description: "Allows you to set the user and stream volume above the default maximum",
-    descriptionI18n: "equicord.plugins.volumeBooster.description",
     tags: ["Voice", "Utility"],
     settings,
 

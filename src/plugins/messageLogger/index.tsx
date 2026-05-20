@@ -416,9 +416,7 @@ export const settings = definePluginSettings({
 
 export default definePlugin({
     name: "MessageLogger",
-    nameI18n: "equicord.plugins.messageLogger.name",
     description: "Temporarily logs deleted and edited messages.",
-    descriptionI18n: "equicord.plugins.messageLogger.description",
     tags: ["Chat", "Utility"],
     authors: [Devs.rushii, Devs.Ven, Devs.AutumnVN, Devs.Nickyux, Devs.Kyuuhachi, EquicordDevs.justjxke],
     dependencies: ["MessageUpdaterAPI"],
