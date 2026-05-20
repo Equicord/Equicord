@@ -1,0 +1,55 @@
+{
+  "equicord.plugins.messageTranslate.name": "MessageTranslate",
+  "equicord.plugins.messageTranslate.description": "Auto translate messages to your language with caching, per-channel toggles, and more options.",
+
+  "equicord.plugins.translatePlus.name": "Translate+",
+  "equicord.plugins.translatePlus.description": "Vencord's translate plugin but with support for artistic languages!",
+
+  "equicord.plugins.messageLoggerEnhanced.name": "MessageLoggerEnhanced",
+  "equicord.plugins.messageLoggerEnhanced.description": "Log deleted and edited messages, with advanced filtering.",
+
+  "equicord.plugins.unlimitedAccounts.name": "UnlimitedAccounts",
+  "equicord.plugins.unlimitedAccounts.description": "Add unlimited alt accounts to Discord.",
+
+  "equicord.plugins.voiceChatUtils.name": "VoiceChatUtils",
+  "equicord.plugins.voiceChatUtils.description": "Useful utilities for voice chats: pin users, hide empty VCs, and more.",
+
+  "equicord.plugins.platformSpoofer.name": "PlatformSpoofer",
+  "equicord.plugins.platformSpoofer.description": "Spoof your Discord client platform (Windows, Linux, macOS).",
+
+  "equicord.plugins.messagePeek.name": "MessagePeek",
+  "equicord.plugins.messagePeek.description": "Preview message content without marking channels as read.",
+
+  "equicord.plugins.ghosted.name": "Ghosted",
+  "equicord.plugins.ghosted.description": "See when users delete messages, with a clean notification.",
+
+  "equicord.plugins.betterActivities.name": "BetterActivities",
+  "equicord.plugins.betterActivities.description": "Enhanced activity panel with more details and customization.",
+
+  "equicord.plugins.channelTabs.name": "ChannelTabs",
+  "equicord.plugins.channelTabs.description": "Browse multiple channels in tabs, like a browser.",
+
+  "equicord.plugins.friendCodes.name": "FriendCodes",
+  "equicord.plugins.friendCodes.description": "Generate shareable codes to add friends easily.",
+
+  "equicord.plugins.globalBadges.name": "GlobalBadges",
+  "equicord.plugins.globalBadges.description": "Show badge information across all servers.",
+
+  "equicord.plugins.betterInvites.name": "BetterInvites",
+  "equicord.plugins.betterInvites.description": "Enhanced invite management with more details and controls.",
+
+  "equicord.plugins.betterBlockedUsers.name": "BetterBlockedUsers",
+  "equicord.plugins.betterBlockedUsers.description": "Better UI for managing your blocked users list.",
+
+  "equicord.plugins.showBadgesInChat.name": "ShowBadgesInChat",
+  "equicord.plugins.showBadgesInChat.description": "Display user badges directly in the chat area.",
+
+  "equicord.plugins.ignoreCalls.name": "IgnoreCalls",
+  "equicord.plugins.ignoreCalls.description": "Automatically ignore or decline incoming calls from specified users.",
+
+  "equicord.plugins.favEmojiFirst.name": "FavEmojiFirst",
+  "equicord.plugins.favEmojiFirst.description": "Put your favorite emojis at the top of the picker.",
+
+  "equicord.plugins.spotifyActivityToggle.name": "SpotifyActivityToggle",
+  "equicord.plugins.spotifyActivityToggle.description": "Toggle Spotify activity display on and off quickly."
+}

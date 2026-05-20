@@ -43,6 +43,7 @@ import { PluginMeta } from "~plugins";
 import { OptionComponentMap } from "./components";
 import { openContributorModal } from "./ContributorModal";
 import { GithubButton, WebsiteButton } from "./LinkIconButton";
+import { t } from "@api/I18n";
 
 const cl = classNameFactory("vc-plugin-modal-");
 
@@ -116,7 +117,7 @@ export default function PluginModal({ plugin, onRestartNeeded, onClose, transiti
     function renderSettings() {
         const { settings } = plugin;
         if (!hasSettings || !settings)
-            return <Paragraph>There are no settings for this plugin.</Paragraph>;
+            return <Paragraph>{t("equicord.ui.pluginModal.noSettings", "There are no settings for this plugin.")}</Paragraph>;
 
         const options = Object.entries(settings.def).map(([key, setting]) => {
             if (setting.type === OptionType.CUSTOM) return null;
@@ -182,13 +183,13 @@ export default function PluginModal({ plugin, onRestartNeeded, onClose, transiti
             size="lg"
             title={
                 <div className={cl("header")}>
-                    <BaseText tag="h1" weight="semibold" size="lg">{plugin.name}</BaseText>
+                    <BaseText tag="h1" weight="semibold" size="lg">{plugin.nameI18n ? t(plugin.nameI18n, plugin.name) : plugin.name}</BaseText>
                 </div>
             }
             subtitle={
                 <div className={cl("info")}>
                     <div>
-                        <Paragraph size="md">{plugin.description}</Paragraph>
+                        <Paragraph size="md">{plugin.descriptionI18n ? t(plugin.descriptionI18n, plugin.description) : plugin.description}</Paragraph>
                         {!!plugin.tags?.length && <PluginTags tags={plugin.tags} />}
                     </div>
                 </div>
@@ -205,7 +206,7 @@ export default function PluginModal({ plugin, onRestartNeeded, onClose, transiti
             )}
             <div className={"vc-settings-modal-content"}>
                 <section>
-                    <Text variant="heading-lg/semibold" className={classes(Margins.top8, Margins.bottom8)}>Authors</Text>
+                    <Text variant="heading-lg/semibold" className={classes(Margins.top8, Margins.bottom8)}>{t("equicord.ui.pluginModal.authors", "Authors")}</Text>
                     <div style={{ width: "fit-content" }}>
                         <ErrorBoundary noop>
                             <UserSummaryItem
@@ -233,7 +234,7 @@ export default function PluginModal({ plugin, onRestartNeeded, onClose, transiti
                 </section>
 
                 <section>
-                    <BaseText size="lg" weight="semibold" color="text-strong" className={classes(Margins.top16, Margins.bottom8)}>Settings</BaseText>
+                    <BaseText size="lg" weight="semibold" color="text-strong" className={classes(Margins.top16, Margins.bottom8)}>{t("equicord.ui.pluginModal.settings", "Settings")}</BaseText>
                     {renderSettings()}
                 </section>
             </div>
@@ -241,7 +242,7 @@ export default function PluginModal({ plugin, onRestartNeeded, onClose, transiti
                 <Flex flexDirection="column" style={{ width: "100%" }}>
                     <Flex style={{ justifyContent: "space-between", alignItems: "center" }}>
                         {hasSettings ? (
-                            <Tooltip text="Reset to default settings" shouldShow={!isObjectEmpty(pluginSettings)}>
+                            <Tooltip text={t("equicord.ui.pluginModal.resetTooltip", "Reset to default settings")} shouldShow={!isObjectEmpty(pluginSettings)}>
                                 {({ onMouseEnter, onMouseLeave }) => (
                                     <Button
                                         className={cl("disable-warning")}
@@ -251,7 +252,7 @@ export default function PluginModal({ plugin, onRestartNeeded, onClose, transiti
                                         onMouseEnter={onMouseEnter}
                                         onMouseLeave={onMouseLeave}
                                     >
-                                        Reset
+                                        {t("equicord.ui.pluginModal.reset", "Reset")}
                                     </Button>
                                 )}
                             </Tooltip>
@@ -259,11 +260,11 @@ export default function PluginModal({ plugin, onRestartNeeded, onClose, transiti
                         {!pluginMeta.userPlugin && (
                             <div className={cl("links")}>
                                 <WebsiteButton
-                                    text="Website"
+                                    text={t("equicord.ui.pluginModal.website", "Website")}
                                     href={isEquicordPlugin ? `https://equicord.org/plugins/${plugin.name}` : `https://vencord.dev/plugins/${plugin.name}`}
                                 />
                                 <GithubButton
-                                    text="Source Code"
+                                    text={t("equicord.ui.pluginModal.sourceCode", "Source Code")}
                                     href={`https://github.com/${gitRemote}/tree/main/${pluginMeta.folderName}`}
                                 />
                             </div>
@@ -335,9 +336,9 @@ export function openWarningModal(plugin?: Plugin | null, onRestartNeeded?: (plug
         <ConfirmModal
             {...props}
             className={cl("confirm")}
-            header={isPlugin ? "Reset Settings" : "Disable Plugins"}
-            confirmText={isPlugin ? "Reset" : "Disable All"}
-            cancelText="Cancel"
+            header={isPlugin ? t("equicord.ui.pluginModal.resetSettings", "Reset Settings") : t("equicord.ui.pluginModal.disablePlugins", "Disable Plugins")}
+            confirmText={isPlugin ? t("equicord.ui.pluginModal.reset", "Reset") : t("equicord.ui.pluginModal.disableAll", "Disable All")}
+            cancelText={t("equicord.ui.pluginModal.cancel", "Cancel")}
             onConfirm={() => {
                 if (isPlugin && plugin) {
                     resetSettings(plugin, onRestartNeeded);
@@ -349,13 +350,13 @@ export function openWarningModal(plugin?: Plugin | null, onRestartNeeded?: (plug
         >
             <Paragraph>
                 {isPlugin
-                    ? <>Are you sure you want to reset all settings for <strong>{plugin?.name}</strong> to their default values?</>
-                    : `Are you sure you want to disable ${enabledPlugins} plugins?`
+                    ? <>{t("equicord.ui.pluginModal.resetConfirm", "Are you sure you want to reset all settings for")} <strong>{plugin?.name}</strong> {t("equicord.ui.pluginModal.resetConfirmDetail", "to their default values?")}</>
+                    : `${t("equicord.ui.pluginModal.disableConfirm", "Are you sure you want to disable")} ${enabledPlugins} ${t("equicord.ui.pluginModal.cannotUndo", "plugins?")}`
                 }
             </Paragraph>
             <div className={classes(Margins.top16, cl("warning"))}>
                 <WarningIcon color="var(--text-feedback-critical)" />
-                <span>This action cannot be undone.</span>
+                <span>{t("equicord.ui.pluginModal.cannotUndo", "This action cannot be undone.")}</span>
             </div>
         </ConfirmModal>
     ));

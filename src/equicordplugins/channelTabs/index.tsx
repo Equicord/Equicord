@@ -46,7 +46,9 @@ const contextMenuPatch: NavContextMenuPatchCallback = (children, props: { channe
 
 export default definePlugin({
     name: "ChannelTabs",
+    nameI18n: "equicord.plugins.channelTabs.name",
     description: "Group your commonly visited channels in tabs, like a browser",
+    descriptionI18n: "equicord.plugins.channelTabs.description",
     tags: ["Appearance", "Customisation", "Organisation", "Servers"],
     authors: [Devs.TheSun, Devs.TheKodeToad, EquicordDevs.keifufu, Devs.Nickyux, EquicordDevs.DiabeloDEV, EquicordDevs.justjxke, EquicordDevs.keircn],
     dependencies: ["ContextMenuAPI", "ConcatenatedModules"],

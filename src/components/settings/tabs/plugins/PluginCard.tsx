@@ -17,6 +17,7 @@ import { React, showToast, Toasts } from "@webpack/common";
 import { PluginMeta } from "~plugins";
 
 import { openPluginModal } from "./PluginModal";
+import { t } from "@api/I18n";
 
 const logger = new Logger("PluginCard");
 const cl = classNameFactory("vc-plugins-");
@@ -126,14 +127,21 @@ export function PluginCard({ plugin, disabled, onRestartNeeded, onMouseEnter, on
         />
     ) : null;
 
-    const tooltip = pluginDetails?.title || "Unknown Plugin";
+    const tooltip = t(
+        pluginMeta?.folderName?.startsWith("src/equicordplugins/") ? "equicord.ui.pluginCard.equicordPlugin"
+            : pluginMeta?.folderName?.startsWith("src/plugins/") ? "equicord.ui.pluginCard.vencordPlugin"
+            : pluginMeta?.userPlugin ? "equicord.ui.pluginCard.userPlugin"
+            : plugin.isModified ? "equicord.ui.pluginCard.modifiedPlugin"
+            : "equicord.ui.pluginCard.unknownPlugin",
+        pluginDetails?.title || "Unknown Plugin"
+    );
 
     return (
         <AddonCard
-            name={plugin.name}
+            name={plugin.nameI18n ? t(plugin.nameI18n, plugin.name) : plugin.name}
             sourceBadge={sourceBadge}
             tooltip={tooltip}
-            description={plugin.description}
+            description={plugin.descriptionI18n ? t(plugin.descriptionI18n, plugin.description) : plugin.description}
             isNew={isNew}
             enabled={isEnabled()}
             setEnabled={toggleEnabled}

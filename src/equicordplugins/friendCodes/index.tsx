@@ -11,7 +11,9 @@ import FriendCodesPanel from "./FriendCodesPanel";
 
 export default definePlugin({
     name: "FriendCodes",
+    nameI18n: "equicord.plugins.friendCodes.name",
     description: "Generate FriendCodes to easily add friends",
+    descriptionI18n: "equicord.plugins.friendCodes.description",
     tags: ["Friends", "Utility"],
     authors: [Devs.HypedDomi],
     patches: [

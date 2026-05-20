@@ -1,0 +1,77 @@
+{
+  "equicord.plugins.messageTranslate.name": "メッセージ翻訳",
+  "equicord.plugins.messageTranslate.description": "メッセージをあなたの言語に自動翻訳（キャッシュ、チャンネルごとの切替対応）",
+
+  "equicord.plugins.translatePlus.name": "翻訳+",
+  "equicord.plugins.translatePlus.description": "Vencord翻訳プラグインの拡張版（人工言語などに対応）",
+
+  "equicord.plugins.messageLoggerEnhanced.name": "拡張メッセージロガー",
+  "equicord.plugins.messageLoggerEnhanced.description": "削除・編集されたメッセージをログに記録（高度なフィルタリング）",
+
+  "equicord.plugins.unlimitedAccounts.name": "無制限アカウント",
+  "equicord.plugins.unlimitedAccounts.description": "Discordに無制限のサブアカウントを追加",
+
+  "equicord.plugins.voiceChatUtils.name": "ボイスチャットユーティリティ",
+  "equicord.plugins.voiceChatUtils.description": "ボイスチャット便利機能：ユーザー固定、空VC非表示など",
+
+  "equicord.plugins.platformSpoofer.name": "プラットフォーム偽装",
+  "equicord.plugins.platformSpoofer.description": "Discordクライアントのプラットフォームを偽装（Windows/Linux/macOS）",
+
+  "equicord.plugins.messagePeek.name": "メッセージプレビュー",
+  "equicord.plugins.messagePeek.description": "既読にせずメッセージ内容をプレビュー",
+
+  "equicord.plugins.ghosted.name": "ゴースト対策",
+  "equicord.plugins.ghosted.description": "メッセージ削除を検出してクリーンな通知",
+
+  "equicord.plugins.betterActivities.name": "アクティビティ強化",
+  "equicord.plugins.betterActivities.description": "アクティビティパネルの拡張（詳細表示・カスタマイズ）",
+
+  "equicord.plugins.channelTabs.name": "チャンネルタブ",
+  "equicord.plugins.channelTabs.description": "複数チャンネルをブラウザのようにタブで切り替え",
+
+  "equicord.plugins.friendCodes.name": "フレンドコード",
+  "equicord.plugins.friendCodes.description": "共有可能なコードを生成して簡単にフレンド追加",
+
+  "equicord.plugins.globalBadges.name": "グローバルバッジ",
+  "equicord.plugins.globalBadges.description": "全サーバーでバッジ情報を表示",
+
+  "equicord.plugins.betterInvites.name": "招待管理強化",
+  "equicord.plugins.betterInvites.description": "招待管理の拡張（詳細表示・コントロール）",
+
+  "equicord.plugins.betterBlockedUsers.name": "ブロック管理強化",
+  "equicord.plugins.betterBlockedUsers.description": "ブロックユーザー一覧の管理UI改善",
+
+  "equicord.plugins.showBadgesInChat.name": "チャット内バッジ表示",
+  "equicord.plugins.showBadgesInChat.description": "チャットエリアにユーザーバッジを表示",
+
+  "equicord.plugins.ignoreCalls.name": "着信無視",
+  "equicord.plugins.ignoreCalls.description": "指定ユーザーからの着信を自動的に無視・拒否",
+
+  "equicord.plugins.favEmojiFirst.name": "お気に入り絵文字優先",
+  "equicord.plugins.favEmojiFirst.description": "お気に入りの絵文字をピッカーの先頭に表示",
+
+  "equicord.plugins.spotifyActivityToggle.name": "Spotify表示切替",
+  "equicord.plugins.spotifyActivityToggle.description": "Spotifyのアクティビティ表示をワンタップで切替",
+
+  "equicord.ui.pluginModal.noSettings": "このプラグインには設定項目がありません。",
+  "equicord.ui.pluginModal.authors": "作者",
+  "equicord.ui.pluginModal.settings": "設定",
+  "equicord.ui.pluginModal.reset": "リセット",
+  "equicord.ui.pluginModal.resetSettings": "設定をリセット",
+  "equicord.ui.pluginModal.resetConfirm": "設定をリセットしてもよろしいですか？",
+  "equicord.ui.pluginModal.resetConfirmDetail": "の設定をデフォルト値にリセットします。",
+  "equicord.ui.pluginModal.cannotUndo": "この操作は元に戻せません。",
+  "equicord.ui.pluginModal.website": "Webサイト",
+  "equicord.ui.pluginModal.sourceCode": "ソースコード",
+  "equicord.ui.pluginModal.cancel": "キャンセル",
+  "equicord.ui.pluginModal.disablePlugins": "プラグインを無効化",
+  "equicord.ui.pluginModal.disableAll": "すべて無効化",
+  "equicord.ui.pluginModal.disableConfirm": "次の数のプラグインを無効化してもよろしいですか？",
+  "equicord.ui.pluginModal.resetTooltip": "設定をデフォルトにリセット",
+
+  "equicord.ui.pluginCard.equicordPlugin": "Equicordプラグイン",
+  "equicord.ui.pluginCard.vencordPlugin": "Vencordプラグイン",
+  "equicord.ui.pluginCard.modifiedPlugin": "修正版Vencordプラグイン",
+  "equicord.ui.pluginCard.userPlugin": "ユーザープラグイン",
+  "equicord.ui.pluginCard.unknownPlugin": "不明なプラグイン"
+}
