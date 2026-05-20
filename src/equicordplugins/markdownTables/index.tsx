@@ -367,7 +367,7 @@ export default definePlugin({
     settings,
     patches: [
         {
-            find: "paragraph:{order:",
+            find: "simple-markdown: Invalid order for rule",
             replacement: {
                 match: /paragraph:\{order:/,
                 replace: "markdownTable:$self.getTableRule(),$&",
