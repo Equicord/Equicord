@@ -68,16 +68,16 @@
     },
     "appleMusicRichPresence": {
         "activityTypes": {
-            "listening": "Hören",
-            "playing": "Spielen"
+            "listening": "Hört Musik",
+            "playing": "Wird abgespielt"
         },
         "assetImageTypes": {
             "album": "Albumcover",
-            "artist": "Künstlerische Kunstwerke",
+            "artist": "Künstlerbild",
             "disabled": "Deaktiviert"
         },
         "buttons": {
-            "listenOnAppleMusic": "Hören Sie auf Apple Music",
+            "listenOnAppleMusic": "Auf Apple Music hören",
             "viewOnSongLink": "Auf SongLink ansehen"
         },
         "defaultDetails": "{name}",
@@ -116,6 +116,7 @@
     "arRPC": {
         "connected": "Verbunden mit arRPC",
         "connectionFailed": "Verbindung zu arRPC konnte nicht hergestellt werden. Läuft es?",
+        "description": "Client-Plugin für arRPC zur Aktivierung von RPC auf Discord Web (experimentell)",
         "retry": "Erneut versuchen",
         "settingsAbout": {
             "description": "Befolgen Sie die Anweisungen im GitHub-Repository, um den Server zum Laufen zu bringen, und aktivieren Sie dann das Plugin.",
@@ -129,7 +130,7 @@
             "statusToSet": "Status, der beim Spielen eines Spiels festgelegt werden soll"
         },
         "statusOptions": {
-            "dnd": "Bitte nicht stören",
+            "dnd": "Nicht stören",
             "idle": "Abwesend",
             "invisible": "Unsichtbar",
             "online": "Online"
@@ -139,6 +140,7 @@
         "description": "API zum Hinzufügen von Badges zu Benutzern"
     },
     "betterFolders": {
+        "description": "Zeigt Serverordner in einer speziellen Seitenleiste an und fügt ordnerbezogene Verbesserungen hinzu.",
         "settings": {
             "closeAllFolders": "Schließen Sie alle Ordner, wenn Sie einen Server auswählen, der sich nicht in einem Ordner befindet",
             "closeAllHomeButton": "Schließen Sie alle Ordner, wenn Sie auf die Home-Schaltfläche klicken",
@@ -149,8 +151,8 @@
             "folderIconNever": "Nie",
             "forceOpen": "Erzwingen Sie das Öffnen eines Ordners, wenn Sie zu einem Server dieses Ordners wechseln",
             "keepIcons": "Gildensymbole werden weiterhin im primären Gildenleistenordner angezeigt, wenn dieser in der BetterFolders-Seitenleiste geöffnet ist",
-            "showFolderIcon": "Zeigen Sie das Ordnersymbol über den Ordnergilden in der BetterFolders-Seitenleiste an",
-            "sidebar": "Zeigen Sie Server aus dem Ordner in der speziellen Seitenleiste an",
+            "showFolderIcon": "Zeigen Sie das Ordner Symbol über den Ordnergilden in der BetterFolders-Seitenleiste an",
+            "sidebar": "Server aus dem Ordner in einer separaten Seitenleiste anzeigen",
             "sidebarAnim": "Animiert das Öffnen der Ordneransicht."
         }
     },
@@ -158,7 +160,7 @@
         "description": "Ändern Sie den GIF-Alt-Text von einfach „GIF“ so, dass er die GIF-Tags/den Dateinamen enthält"
     },
     "betterGifPicker": {
-        "description": "Lässt die GIF-Auswahl standardmäßig die Lieblingskategorie öffnen",
+        "description": "Die GIF-Auswahl sollte standardmäßig die Favoriten Kategorie öffnen.",
         "settings": {
             "keepOpen": "Hält die GIF-Auswahl geöffnet, nachdem ein GIF ausgewählt wurde"
         }
@@ -172,11 +174,11 @@
     },
     "betterRoleContext": {
         "copyRoleColor": "Rollenfarbe kopieren",
-        "description": "Fügt Optionen zum Kopieren der Rollenfarbe, Bearbeiten der Rolle und Anzeigen des Rollensymbols hinzu, wenn Sie mit der rechten Maustaste auf Rollen im Benutzerprofil klicken",
+        "description": "Fügt Optionen zum Kopieren der Rolle Farbe, Bearbeiten der Rolle und Anzeigen des Rollensymbols hinzu, wenn Sie mit der rechten Maustaste auf Rollen im Benutzerprofil klicken",
         "editRole": "Rolle bearbeiten",
         "name": "BetterRoleContext",
         "settings": {
-            "roleIconFileFormat": "Beim Anzeigen von Rollensymbolen zu verwendendes Dateiformat"
+            "roleIconFileFormat": "Dateiformat zum Anzeigen von Rollensymbolen"
         },
         "viewRoleIcon": "Rollensymbol anzeigen"
     },
@@ -184,16 +186,17 @@
         "description": "Rollenfarbe auf RoleDot kopieren (Einstellung für Barrierefreiheit) klicken. Ermöglicht außerdem die gleichzeitige Verwendung von RoleDot- und farbigen Namen",
         "settings": {
             "bothStyles": "Zeigen Sie sowohl gepunktete als auch farbige Rollennamen an",
-            "copyRoleColorInProfilePopout": "Klicken Sie im Profil-Popout auf den Rollenpunkt, um die Rollenfarbe zu kopieren"
+            "copyRoleColorInProfilePopout": "Erlauben Sie das Klicken Sie im Profil-Popout auf den Rollenpunkt, um die Rollenfarbe zu kopieren"
         }
     },
     "betterSessions": {
+        "description": "Verbessert das Sitzungsmenü (Gerätemenu). Ermöglicht die Anzeige genauer Zeitstempel, die Vergabe benutzerdefinierter Namen für jede Sitzung und den Erhalt von Benachrichtigungen über neue Sitzungen.",
         "newBadge": "NEU",
         "newSession": "Neue Sitzung:",
         "rename": "Umbenennen",
         "renameModal": {
             "newDeviceName": "Neuer Gerätename",
-            "resetName": "Namen zurücksetzen",
+            "resetName": "Name zurücksetzen",
             "save": "Speichern",
             "title": "Umbenennen"
         },
@@ -203,6 +206,7 @@
         }
     },
     "betterSettings": {
+        "description": "Verbessert das Erlebnis beim Öffnen des Einstellungsmenüs.",
         "settings": {
             "disableFade": "Deaktivieren Sie die Crossfade-Animation",
             "eagerLoad": "Entfernt die Ladeverzögerung beim ersten Öffnen des Menüs",
@@ -218,7 +222,7 @@
         "viewStreamPreview": "Stream-Vorschau anzeigen"
     },
     "blurNsfw": {
-        "description": "Verwischen Sie Anhänge in NSFW-Kanälen, bis Sie mit der Maus darüber fahren",
+        "description": "Anhänge in NSFW-Kanälen werden erst sichtbar, wenn man mit dem Mauszeiger darüberfährt.",
         "settings": {
             "blurAllChannels": "Unscharfe Anhänge in allen Kanälen (nicht nur NSFW)",
             "blurAmount": "Unschärfebetrag (in Pixel)"
@@ -232,7 +236,7 @@
             "showRoleColor": "Zeigt die Rollenfarbe des Benutzers an (wenn dieses Plugin aktiviert ist)",
             "showSeconds": "Sekunden im Timer anzeigen",
             "showWithoutHover": "Zeigt den Timer immer an, ohne mit der Maus darüber sein zu müssen.",
-            "trackSelf": "Verfolgen Sie auch sich selbst",
+            "trackSelf": "Verfolgen dich auch selbst",
             "watchLargeGuilds": "Verfolgen Sie Benutzer in großen Gilden. Dies kann zu Verzögerungen führen, wenn Sie vielen großen Gilden mit aktiven Sprachbenutzern angehören. Getestet mit bis zu 2.000 aktiven Sprachbenutzern ohne Probleme."
         }
     },
@@ -244,10 +248,10 @@
         "description": "Entfernt automatisch Tracking-Elemente aus den von Ihnen gesendeten URLs"
     },
     "clientTheme": {
-        "contrastWarning": "Die ausgewählte Farbe bildet keinen guten Kontrast zum Text",
+        "contrastWarning": "Die ausgewählte Farbe bildet keinen guten Kontrast zu Text",
         "disableNitroTheme": "Deaktivieren Sie das Nitro-Design",
         "nitroNotSupported": "Nitro-Themes werden nicht unterstützt",
-        "resetThemeColor": "Designfarbe zurücksetzen",
+        "resetThemeColor": "Themenfarbe zurücksetzen",
         "switchToMode": "Wechseln Sie in den Modus {mode}.",
         "themeColor": "Themenfarbe",
         "themeColorDescription": "Fügen Sie Ihrem Discord-Kundendesign eine Farbe hinzu",
@@ -272,13 +276,15 @@
             "failedToDelete": "Einstellungen konnten nicht gelöscht werden ({e}).",
             "failedToSync": "Einstellungen zur Cloud konnten nicht synchronisiert werden ({e}).",
             "header": "Cloud Einstellungen",
+            "manifest": "Konnte Manifest zum Löschen nicht abrufen (API: {e}).",
             "newerThanCloud": "Ihre lokalen Einstellungen sind neuer, als die in der Cloud.",
             "noSettings": "Es gibt keine Einstellungen in der Cloud.",
             "success": "Einstellungen mit der Cloud synchronisiert!",
             "syncFromCloud": "Einstellungen aus der Cloud konnten nicht synchronisiert werden ({e}).",
+            "syncedCloud": "Clouddaten synchronisiert.",
             "upToDate": "Ihre Einstellungen sind aktuell.",
             "updated": "Deine Einstellungen wurden aktualisiert! Klicke hier, um neu zu Starten und die Änderungen vollständig zu bestätigen!",
-            "updatedRemote": "Deine Einstellungen wurden aktualisiert! Klicke hier, um neu zu Starten und die Änderungen vollständig zu bestätigen!"
+            "updatedRemote": "Einstellungen in die Cloud synchronisiert!"
         }
     },
     "colorSighted": {
@@ -288,7 +294,7 @@
         "description": "API die für alles benötigt wird, was Befehle verwendet."
     },
     "consoleJanitor": {
-        "alwaysAllowLoggers": "Erlauben Sie immer Logger dieser Art",
+        "alwaysAllowLoggers": "Protokollierung dieser Art sollte immer zugelassen werden",
         "description": "Deaktiviert lästige Konsolenmeldungen/Fehler",
         "filterList": "Filterliste",
         "name": "ConsoleJanitor",
@@ -324,7 +330,7 @@
     },
     "copyStickerLinks": {
         "copyLink": "Link kopieren",
-        "description": "Integriert die Möglichkeit, Sticker-Links zu kopieren und zu öffnen",
+        "description": "Fügt die Möglichkeit, Sticker-Links zu kopieren und zu öffnen",
         "linkCopied": "Link kopiert!",
         "openLink": "Link öffnen"
     },
@@ -338,7 +344,7 @@
             "crashedBody": "Awn :( Discord ist zweimal schnell abgestürzt und hat keinen Wiederherstellungsversuch unternommen. Klicken Sie hier, um unserem Support-Server beizutreten!",
             "crashedTitle": "Discord ist abgestürzt!",
             "invalidInvite": "Ungültige oder abgelaufene Einladung",
-            "recoveringBody": "Wiederherstellungsversuch... Klicken Sie hier, um unserem Support-Server beizutreten!"
+            "recoveringBody": "Wiederherstellungsversuch... Klicken Sie hier, um unseren Support-Server beitreten!"
         },
         "settings": {
             "attemptToNavigateToHome": "Ob versucht werden soll, zur Startseite zu navigieren, um Discord-Abstürze zu verhindern.",
@@ -359,7 +365,7 @@
         }
     },
     "customIdle": {
-        "description": "Ermöglicht Ihnen, die Zeit festzulegen, bevor Discord in den Ruhezustand wechselt (oder die automatische Ruhephase zu deaktivieren).",
+        "description": "Ermöglicht Ihnen, die Zeit festzulegen, nach der Discord in den Leerlauf wechselt (oder den automatischen Leerlauf zu deaktivieren).",
         "settings": {
             "idleTimeout": "Minuten bevor Discord in den Leerlauf geht (0, um den automatischen Leerlauf zu deaktivieren)",
             "remainInIdle": "Wenn Sie zu Discord zurückkehren, bleiben Sie inaktiv, bis Sie bestätigen, dass Sie online gehen möchten"
@@ -384,6 +390,7 @@
         "button1Url": "Button1 URL",
         "button2Text": "Button2 Text",
         "button2Url": "Button2 URL",
+        "description": "Füge deinem Discord-Profil eine vollständig anpassbare Rich Presence (Spielstatus) hinzu.",
         "detailLine1": "Detail (Zeile 1)",
         "detailUrl": "Detail URL",
         "endTimestamp": "Endzeitstempel (in Millisekunden)",
@@ -449,6 +456,8 @@
     },
     "decor": {
         "accessFromProfiles": "Sie können auch über die Seite {link} auf Dekordekorationen zugreifen.",
+        "agreedToGuidelines": "Den Richtlinien zugestimmt",
+        "baseUrl": "URL für die Decor-API",
         "changeDecoration": "Dekoration ändern",
         "description": "Erstellen und verwenden Sie Ihre eigenen benutzerdefinierten Avatar-Dekorationen oder wählen Sie Ihren Favoriten aus den Voreinstellungen aus.",
         "enableAndRestart": "Aktivieren Sie Dekor und starten Sie Ihren Client neu, um die Dekoration Ihres Avatars zu ändern.",
@@ -505,6 +514,7 @@
         "cloneTo": "Klonen nach {guild}",
         "clonedSuccess": "{name} erfolgreich nach {guild} geklont!",
         "customName": "Benutzerdefinierter Name",
+        "description": "Ermöglicht das Klonen von Emotes & Stickern auf deinen eigenen Server (Rechtsklick darauf).",
         "failedToClone": "Klonen fehlgeschlagen: {error}",
         "nameValidation": "Der Name muss zwischen 2 und 32 Zeichen lang sein",
         "somethingWentWrong": "Etwas ist schief gelaufen (Konsole überprüfen!)"
@@ -699,6 +709,7 @@
         "description": "Verstecken Sie keine Nachrichten vor „wahrscheinlichen Spammern“"
     },
     "ignoreActivities": {
+        "description": "Ignoriere Aktivitäten NUR in deinem Status. Du kannst in den Tabs „Registrierte Spiele“ und „Aktivitäten“ konfigurieren, welche spezifisch ignoriert werden sollen, oder die allgemeinen Einstellungen unten verwenden.",
         "disableActivity": "Aktivität deaktivieren",
         "enableActivity": "Aktivität aktivieren",
         "filterList": {
@@ -732,6 +743,7 @@
         "description": "Verstecken Sie niemals Bildlinks in Nachrichten, auch wenn dies der einzige Inhalt ist"
     },
     "imageZoom": {
+        "description": "Ermöglicht das Zoomen in Bildern und GIFs. Benutze das Scrollrad zum Herunzoomen und Umschalt (Shift) + Scrollrad, um den Linsenradius / die Größe zu erhöhen.",
         "lensSize": "Linsengröße",
         "nearestNeighbour": "Nächster Nachbar",
         "settings": {
@@ -840,6 +852,7 @@
         "showLogs": "Protokolle anzeigen"
     },
     "memberCount": {
+        "description": "Zeigt die Anzahl der Online-Mitglieder, die Gesamtzahl der Mitglieder und die Benutzer in Sprachkanälen auf dem Server an – in der Mitgliederliste und im Tooltip.",
         "settings": {
             "memberList": "Mitgliederzahl in der Mitgliederliste anzeigen",
             "toolTip": "Mitgliederzahl im Server-Tooltip anzeigen",
@@ -930,6 +943,7 @@
     "messageLatency": {
         "clockAhead": "Die Uhr dieses Benutzers ist {delta} voraus.",
         "delayedMessage": "Verzögerte Nachricht",
+        "description": "Zeigt einen Indikator für Nachrichten an, deren Senden ≥n Sekunden gedauert hat",
         "messageDelayed": "Diese Nachricht wurde mit einer Verzögerung von {delta} gesendet.",
         "oldAndroidClient": "Alter Discord Android-Client",
         "oldDiscordAndroid": "Es wird vermutet, dass der Benutzer einen alten Android-Client Discord verwendet",
@@ -989,6 +1003,7 @@
         "deletedMessages_one": "{count} Nachricht gelöscht",
         "deletedMessages_other": "{count} gelöschte Nachrichten",
         "deletedMessages_zero": "Keine gelöschten Nachrichten",
+        "description": "Protokolliert vorübergehend gelöschte und bearbeitete Nachrichten.",
         "disableDiffView": "Deaktivieren Sie die Diff-Ansicht",
         "editHistory": "Verlauf der Nachrichtenbearbeitung",
         "enableDiffView": "Aktivieren Sie die Diff-Ansicht",
@@ -1157,6 +1172,12 @@
     "noSystemBadge": {
         "description": "Deaktiviert das Symbol für die Ungelesen-Zählung in der Taskleiste und der Taskleiste."
     },
+    "noTrack": {
+        "description": "Deaktiviere Discords Tracking (Analytics/„Science“), Metriken und Sentry-Absturzberichte",
+        "settings": {
+            "disableAnalytics": "Deaktiviere Discords Tracking (Analytics/„Science“)"
+        }
+    },
     "noTypingAnimation": {
         "description": "Deaktiviert die CPU-intensive Tipppunktanimation"
     },
@@ -1230,6 +1251,7 @@
         }
     },
     "permissionsViewer": {
+        "description": "Zeige die Berechtigungen eines Benutzers oder Kanals sowie die Rollen eines Servers an.",
         "noPermissions": "Keine Berechtigung zum Anzeigen!",
         "owner": "Eigentümer",
         "permissions": "Berechtigungen",
@@ -1280,6 +1302,7 @@
         "color": "Farbe",
         "create": "Erstellen",
         "deleteCategory": "Kategorie löschen",
+        "description": "Ermöglicht es dir, private Kanäle oben in deiner DM-Liste anzupinnen. Zum Anpinnen/Lösen oder Ändern der Reihenfolge rechtsklicke auf die DMs.",
         "editCategory": "Kategorie bearbeiten",
         "editCategoryTitle": "Kategorie bearbeiten",
         "moveDown": "Nach unten bewegen",
@@ -1414,6 +1437,7 @@
         "confirmDelete": "Möchten Sie diese Bewertung wirklich löschen?",
         "confirmReport": "Möchten Sie diese Bewertung wirklich melden?",
         "delete": "Löschen",
+        "description": "Bewerte andere Benutzer (Fügt den Profilen eine neue Einstellung hinzu)",
         "failedToFetchBlocks": "Blockierungen konnten nicht abgerufen werden: {error}",
         "mustBeLoggedInBlock": "Sie müssen angemeldet sein, um Benutzer zu blockieren.",
         "mustBeLoggedInDelete": "Sie müssen angemeldet sein, um Bewertungen zu löschen.",
@@ -1446,6 +1470,7 @@
         },
         "system": "System",
         "unblockUser": "Benutzer entsperren",
+        "userReviews": "Nutzerbewertungen",
         "viewReviews": "Bewertungen anzeigen"
     },
     "roleColorEverywhere": {
@@ -1604,7 +1629,7 @@
         },
         "frameless": {
             "description": "Entfernen Sie den nativen Fensterrahmen, um ein saubereres Aussehen zu erzielen. Sie können das Fenster weiterhin verschieben, indem Sie den Titelleistenbereich ziehen.",
-            "title": "Fensterrahmen deaktivieren"
+            "title": "Alle Fensterrahmen deaktivieren"
         },
         "hint": "Hinweis: Sie können die Position dieses Einstellungsbereichs in den <0>Einstellungen des Einstellungen Plugin</0> ändern!",
         "macosVibrancyStyle": {
@@ -1653,6 +1678,16 @@
             "description": "Ersetzen Sie Discords benutzerdefinierte Titelleiste mit der Standard-Windows-Titelleiste. Dies kann die Kompatibilität mit einigen Fensterverwaltungswerkzeugen verbessern.",
             "title": "Benutze die native Titelleiste von Windows anstelle der benutzerdefinierten Titelleiste von Discord."
         }
+    },
+    "settingsPlugin": {
+        "aboveActivity": "Über den Aktivitätseinstellungen",
+        "aboveNitro": "Über dem Nitro Bereich",
+        "belowActivity": "Unter den Aktivitätseinstellungen",
+        "belowNitro": "Unter dem Nitro Bereich",
+        "bottom": "Ganz unten",
+        "description": "Fügt Einstellungs Menü und Debug Infos hinzu",
+        "settingsLocation": "Wo der Equicord Einstellungsbereich platziert werden soll",
+        "top": "Ganz oben"
     },
     "settingsSync": {
         "failedToImport": "Fehler beim Importieren der Einstellungen: {e}",
@@ -1853,6 +1888,7 @@
             "membersListIndicators": "Mitgliederlistenindikatoren",
             "silentTyping": "Leises Tippen"
         },
+        "description": "Verstecke deine Tippanzeige im Chat.",
         "noChanges": "Es wurden keine Änderungen an den Einstellungen für die stille Eingabe vorgenommen.",
         "settings": {
             "chatContextMenu": "Zeigen Sie im Chat-Kontextmenü ein Dropdown-Menü an, um die Plugin-Einstellungen unterwegs zu ändern.",
@@ -1914,21 +1950,34 @@
             "unlimitedSuperReactionPlaying": "Entferne das Limit für die gleichzeitige Wiedergabe von Superreaktionen"
         }
     },
+    "supportHelper": {
+        "debug": "Sende Equicord Debug Infos",
+        "description": "Hilft uns dabei dich zu unterstützen",
+        "plugins": "Sende Equicord Plugin Liste"
+    },
     "tabs": {
         "settings": "Equicord Einstellungen"
     },
     "textReplace": {
+        "description": "Ersetze Text in deinen oder den Nachrichten anderer. Vorgefertigte Regeln findest du im Kanal #textreplace-rules auf dem Vencord-Server.",
         "find": "Suchen",
+        "findDesc": "Text zum Ersetzen",
+        "findDescRegex": "Das Regex-Muster",
         "messageWithRules": "Nachricht mit angewendeten Regeln",
         "onlyIfIncludes": "Nur wenn enthalten",
+        "onlyIfIncludesDesc": "Diese Regel wird nur angewendet, wenn die Nachricht diesen Text enthält. Optional.",
+        "regexRules": "Erweiterte Ersetzungen mit Regex. Für Fortgeschrittene. Wenn du es nicht verstehst, ignorieren.",
         "replace": "Ersetzen",
+        "replaceDesc": "Ersatztext",
         "scope.allMessages": "Apply to all messages",
         "scope.myMessages": "Apply to your messages (visible to everyone)",
         "scope.othersMessages": "Apply to others' messages (only visible to you)",
+        "stringRules": "Einfache Suchen-und-Ersetzen-Regeln. Z. B. „brb“ durch „be right back“ ersetzen.",
+        "testMessage": "Nachricht zum Testen der Regeln eingeben",
         "testRules": "Testregeln",
         "typeMessage": "Geben Sie eine Nachricht ein",
-        "usingRegex": "Verwenden von Regex",
-        "usingString": "String verwenden"
+        "usingRegex": "Regex ersetzen",
+        "usingString": "Einfache Ersetzungen"
     },
     "themeAttributes": {
         "description": "Fügt zu Themenzwecken Datenattribute zu verschiedenen Elementen hinzu"
@@ -1940,6 +1989,7 @@
             "title": "Equicord Automatische Übersetzung aktiviert"
         },
         "autoTranslateEnabledLabel": "Automatische Übersetzung aktiviert",
+        "description": "Übersetze Nachrichten mit Google Translate oder DeepL",
         "disableAutoTranslate": "Deaktivieren Sie die automatische Übersetzung",
         "dontShowAgain": "Nicht mehr anzeigen",
         "gotIt": "Habe es",
@@ -1947,6 +1997,16 @@
         "openTranslateModal": "Öffnen Sie „Translate Modal“.",
         "selectLanguage": "Wählen Sie eine Sprache aus",
         "translate": "Übersetzen"
+    },
+    "translation": {
+        "description": "Hilft bei der Übersetzung von Equicord",
+        "settings": {
+            "forceLocale": {
+                "description": "Erzwinge eine andere Gebietsschema Einstellen für Equicord",
+                "followDiscord": "Standard (wie Discord)"
+            },
+            "showMissingKeys": "Wenn für die aktuelle Sprache Übersetzungen fehlen, werden die Schlüssel statt Englisch angezeigt."
+        }
     },
     "typingIndicator": {
         "description": "Fügt einen Indikator hinzu, wenn jemand auf einem Kanal tippt.",
@@ -2061,6 +2121,11 @@
         },
         "speechSynthesisNotSupported": "SpeechSynthesis wird nicht unterstützt oder es wurden keine Erzählerstimmen gefunden. Daher funktioniert dieses Plugin nicht. Weitere Informationen finden Sie in meinen Einstellungen"
     },
+    "vencordDonor": {
+        "description": "Dieses Abzeichen ist ein besonderer Vorteil für Vencord-Spender",
+        "description2": "Bitte unterstütze die Entwicklung von Vencord, indem du Spender wirst. Es würde uns sehr viel bedeuten!!",
+        "title": "Vencord Spender"
+    },
     "viewIcons": {
         "description": "Macht Avatare und Banner in Benutzerprofilen anklickbar und fügt View Icon/Banner-Einträge im Benutzer-, Server- und Gruppenkanal-Kontextmenü hinzu.",
         "settings": {
@@ -2094,6 +2159,7 @@
         "downloadVoiceMessage": "Sprachnachricht herunterladen"
     },
     "voiceMessages": {
+        "description": "Ermöglicht es dir, Sprachnachrichten wie auf dem Handy zu versenden. Klicke dazu mit der rechten Maustaste auf die Schaltfläche zum Hochladen und wähle Sprachnachricht senden.",
         "echoCancellation": "Echo unterdrücken",
         "failedToParse": "Ausgewählte Audiodatei konnte nicht analysiert werden: {error}",
         "failedToUpload": "Die Sprachnachricht konnte nicht hochgeladen werden",
@@ -2126,6 +2192,7 @@
         "description": "Entfernt die Bitratenbeschränkung von 2500 Kbit/s auf Chromium- und Vesktop-Clients."
     },
     "whoReacted": {
+        "description": "Zeigt die Avatare der Benutzer an, die auf eine Nachricht reagiert haben",
         "settings": {
             "avatarClick": "Klicken Sie auf Avatare in Reaktionen"
         }

@@ -3,16 +3,16 @@
         "errorExecuting": "Une erreur s'est produite lors de l'exécution de la commande \"{name}\""
     },
     "memberListDecorators": {
-        "fallback": "Échec du rendu du décorateur de liste de membres {key}"
+        "fallback": "Échec de l'affichage du décorateur de liste de membres {key}"
     },
     "messageAccessories": {
-        "fallback": "Échec du rendu de l'accessoire de message {key}"
+        "fallback": "Échec lors de l'affichage de l'accessoire de message {key}"
     },
     "messageDecorations": {
-        "fallback": "Échec du rendu de la décoration du message {key}"
+        "fallback": "Échec de l'affichage de la décoration du message {key}"
     },
     "notices": {
-        "fallback": "Erreur d'affichage de la notification"
+        "fallback": "Erreur d'affichage de la bannière"
     },
     "notifications": {
         "dismissNotification": "Ignorer la notification",
@@ -20,10 +20,10 @@
             "body_one": "Cela supprimera définitivement {count} notifications. Cette action ne peut pas être annulée.",
             "body_other": "Cela supprimera définitivement {count} notifications. Cette action ne peut pas être annulée.",
             "body_zero": "Aucune notification sélectionnée.",
-            "cancel": "Tout compte fait, non.",
-            "clearNotificationLog": "Nettoyer le journal de notifications",
-            "confirm": "Fait le!",
-            "title": "Êtes-vous sûr ?"
+            "cancel": "Annuler",
+            "clearNotificationLog": "Vider l'historique des notifications",
+            "confirm": "OK",
+            "title": "Êtes-vous certain?"
         },
         "missedNotifications": {
             "body_one": "{count} notifications reçues",
@@ -31,7 +31,7 @@
             "title": "Pendant ton absence"
         },
         "noNotifications": "Aucune notification pour l'instant",
-        "notificationLog": "Journal des notifications",
-        "notificationSettings": "Paramètres de notification"
+        "notificationLog": "Historique des notifications",
+        "notificationSettings": "Paramètres des notifications"
     }
 }

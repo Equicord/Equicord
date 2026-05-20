@@ -55,6 +55,9 @@
         },
         "description": "Mencione alguém aleatoriamente"
     },
+    "audioPlayerAPI": {
+        "description": "API para reproduzir arquivos de áudio internos do Discord ou links de áudio externos."
+    },
     "autoZipper": {
         "description": "Compacta automaticamente pastas e tipos de arquivos especificados antes de fazer o upload para o Discord",
         "settings": {
@@ -111,7 +114,7 @@
             "oscilloscopeColor": "Cor para osciloscópio",
             "oscilloscopeSolidColor": "Usar cor sólida para o osciloscópio",
             "spectrograph": "Ativar visualizador espectrográfico",
-            "spectrographColor": "Cor para espectrográfico",
+            "spectrographColor": "Cor para espectrográfico (R, G, B ou #hex)",
             "spectrographSolidColor": "Usar cores sólidas para o espectrógrafo"
         },
         "toasts": {
@@ -146,7 +149,7 @@
                 "userOption": "usuário específico para tentar atualizar"
             }
         },
-        "description": "Melhora o sistema de comandos com diversas melhorias.",
+        "description": "Atualiza localmente os comandos dos aplicativos especificados.",
         "settings": {
             "allowNewlinesInCommands": "Permitir novas linhas em entradas de comando (CTRL + Shift + Enter)",
             "autoFillArguments": "Preencher automaticamente o comando com todos os argumentos em vez de apenas os necessários"
@@ -291,7 +294,7 @@
     },
     "clickableRoles": {
         "andNumMore": "e {count} mais",
-        "description": "Clique nas funções nos perfis dos usuários e na lista de membros para ver quais membros as possuem.",
+        "description": "Clique nos cargos em perfis de usuário e na lista de membros para ver quais membros os possuem.",
         "loadingMembers": "Carregando membros...",
         "noMembers": "Nenhum membro encontrado."
     },
@@ -334,6 +337,8 @@
     "commandPalette": {
         "description": "Executa ações rapidamente através de uma paleta de comandos pesquisável",
         "settings": {
+            "closeAfterExecute": "Fechar a paleta após executar um comando.",
+            "compactStartEnabled": "Primeiro, abra a paleta no modo compacto.",
             "customCommands": "Gerenciar entradas personalizadas da paleta de comandos",
             "enableTagFilter": "Mostrar a barra de filtro de tags",
             "hotkey": "Atalho usado para abrir a paleta de comandos",
@@ -552,6 +557,11 @@
             "reset": "Redefinir"
         }
     },
+    "equicordDonor": {
+        "description": "Esta insígnia é uma vantagem especial para doadores do Equicord (Não Vencord)",
+        "description2": "Considere apoiar o desenvolvimento do Equicord tornando-se um doador. Isso significaria muito!!",
+        "title": "Doador do Equicord"
+    },
     "equicordHelper": {
         "alerts": {
             "equicordSupport": "Suporte Equicord",
@@ -597,8 +607,12 @@
             "plugins": "Plugins",
             "restartToApply": "Reinicie para aplicar a alteração.",
             "themes": "Temas",
-            "tooltip": "Caixa de ferramentas Equicord"
+            "tooltip": "Equicord Toolbox"
         }
+    },
+    "equicordTranslator": {
+        "description": "Concedido a colaboradores que expandem o suporte a idiomas do Equicord, traduzindo conteúdo para a comunidade.",
+        "title": "Tradutor do Equicord"
     },
     "equissant": {
         "description": "Crossant a cada quantidade especificada de cliques:trolley:",
@@ -801,16 +815,16 @@
     "ghosted": {
         "description": "Um fantasma fofo aparecerá se você não responder às DMs dele",
         "settings": {
-            "exemptedChannels": "Lista de IDs de canal separada por vírgulas para isentar do Ghosted (clique com o botão direito em um DM para copiar o ID)",
+            "exemptedChannels": "Lista de IDs de canais, separados por vírgula, para isentar de ghosting (clique com o botão direito em um canal de DM para copiar o seu ID)",
             "ignoreBots": "Ignorar DMs de bots",
-            "ignoreGroupDms": "Excluir todos os DMs do grupo do fantasma",
+            "ignoreGroupDms": "Excluir todas as DMs de grupo do ghosting",
             "showDmIcons": "Mostrar ícones fantasma ao lado de DMs individuais",
             "showIndicator": "Mostrar o contador de fantasmas no topo da lista de servidores"
         },
         "ui": {
-            "ghostedUsers": "Usuários fantasmas {count}",
-            "noGhostedUsers": "Nenhum usuário fantasma",
-            "unghost": "exorcizar"
+            "ghostedUsers": "{count} usuários no vácuo",
+            "noGhostedUsers": "Nenhum usuário no vácuo",
+            "unghost": "unghost (tirar do vácuo)"
         }
     },
     "gifCollections": {
@@ -866,7 +880,7 @@
             "refreshUrl": "Atualizar URL",
             "refreshing": "Atualizando URL...",
             "remove": "Remover",
-            "removeAction": "remova este item",
+            "removeAction": "remover este item",
             "rename": "Renomear",
             "reset": "Redefinir",
             "resetCollections": "Redefinir Coleções",
@@ -890,6 +904,7 @@
     },
     "githubRepos": {
         "description": "Exibe os repositórios GitHub públicos de um usuário em seu perfil",
+        "githubRepos": "Repositórios do GitHub",
         "settings": {
             "showInMiniProfile": "Mostrar interface do usuário completa no miniperfil em vez de apenas um botão",
             "showLanguage": "Mostrar idioma do repositório",
@@ -916,8 +931,8 @@
         "settings": {
             "customEngineURL": "A URL do mecanismo que você deseja usar",
             "defaultEngine": "O mecanismo de pesquisa a ser usado",
-            "embed": "Se o link enviado renderizar um embed",
-            "hyperlink": "Se o link enviado tiver um hiperlink com a consulta como rótulo"
+            "embed": "Se o link enviado deve renderizar um embed",
+            "hyperlink": "Se o link enviado deve ser um hiperlink com a consulta como rótulo"
         }
     },
     "guildPickerDumper": {
@@ -935,10 +950,13 @@
             "hideTags": "Esconder Tags"
         }
     },
+    "headerBarAPI": {
+        "description": "API para adicionar botões à barra de cabeçalho e à barra de ferramentas do canal."
+    },
     "hideChatButtons": {
         "description": "Capaz de ocultar os botões de chat",
         "settings": {
-            "color": "Pinte-o de vermelho ao abrir",
+            "color": "Colore em vermelho ao abrir",
             "open": "Aberto por padrão"
         },
         "ui": {
@@ -967,17 +985,17 @@
     "holyNotes": {
         "description": "Salve mensagens como notas para revisitar mais tarde",
         "ui": {
-            "holyNotes": "holynotes",
+            "holyNotes": "Holy Notes",
             "noteMessage": "Mensagem de nota",
             "openNotes": "Notas abertas",
             "saveNote": "Salvar nota"
         }
     },
     "homeTyping": {
-        "description": "Muda o botão home para um indicador de digitação se alguém em seu dms estiver digitando"
+        "description": "Muda o botão home para um indicador de digitação se alguém em sua dm estiver digitando"
     },
     "hopOn": {
-        "description": "Entre no Fortnite ou entre no Bloons:3",
+        "description": "Bora lá! Abre uma URL configurável quando uma mensagem corresponde a um regex personalizado no canal atual.",
         "settings": {
             "regex": "Regex para acionar",
             "url": "URL para abrir"
@@ -987,11 +1005,11 @@
         "description": "Adiciona o botão Husk (verifique as configurações para alterar o emoji usado)",
         "settings": {
             "emojiID": "ID Emoji (padrão (do servidor Vencord): 1026532993923293184)",
-            "emojiName": "Nome do emoji (padrão (do servidor Vencord): casca)",
+            "emojiName": "Nome do emoji (padrão (do servidor Vencord): husk)",
             "findInServer": "Tente encontrar emoji de mesmo nome no servidor antes de usar o ID nas configurações (útil se não houver nitro)"
         },
         "ui": {
-            "husk": "Casca"
+            "husk": "Husk"
         }
     },
     "iRememberYou": {
@@ -1010,12 +1028,12 @@
     "idleAutoRestart": {
         "description": "Reinicia automaticamente o cliente após ficar ausente por um período de tempo configurável, mas evita reiniciar enquanto você estiver em um canal de voz.",
         "settings": {
-            "idleMinutes": "Minutos de inatividade antes de reiniciar (quando não estiver no VC)",
+            "idleMinutes": "Minutos de inatividade antes de reiniciar (quando não estiver no chat de voz)",
             "isEnabled": "Habilitar reinicialização automática após inatividade"
         },
         "ui": {
-            "disableAutoIdle": "Desativar reinicialização automática ociosa",
-            "enableAutoIdle": "Ativar reinicialização automática ociosa"
+            "disableAutoIdle": "Desativar reinicialização automática por inatividade",
+            "enableAutoIdle": "Ativar reinicialização automática por inatividade"
         }
     },
     "ignoreCalls": {
@@ -1053,9 +1071,9 @@
         },
         "limitations": {
             "description": "Se você não tiver permissões de mod no servidor e esse servidor for grande (mais de 100 membros), o plugin pode ser limitado das seguintes maneiras:",
-            "friendsAlwaysShown": "No entanto, os amigos sempre serão mostrados, independentemente do seu status.",
-            "offlineNotListed": "Membros off-line não serão listados",
-            "title": ": aviso: Limitações",
+            "friendsAlwaysShown": "No entanto, os amigos sempre serão exibidos, independentemente de seus status.",
+            "offlineNotListed": "Membros offline não serão listados",
+            "title": ":warning: Limitações",
             "upTo100": "Até 100 membros serão listados por padrão. Para obter mais, role para baixo na lista de membros para carregar mais membros."
         },
         "ui": {
@@ -1066,7 +1084,7 @@
         "description": "Sufixa 'ington' em uma palavra aleatória em sua mensagem",
         "settings": {
             "isEnabled": "Habilite ou desabilite o Ingtoninator",
-            "showIcon": "Mostrar um botão para alternar o plugin Ingtoninator"
+            "showIcon": "Mostrar um botão para ativar/desativar o plugin Ingtoninator"
         },
         "ui": {
             "disabled": "Ingtoninator Desativado",
@@ -1077,8 +1095,8 @@
         "description": "Compartilha tela instantaneamente ao entrar em um canal de voz com suporte para fontes de desktop, janelas e dispositivos de entrada de vídeo (câmeras, placas de captura)",
         "info": {
             "linux": "Para Linux",
-            "soundPreview": "Em relação às configurações de som e visualização",
-            "soundPreviewInfo": "Usamos as configurações definidas e usadas pelo discord para decidir se a visualização e o som do stream devem ser ativados ou não",
+            "soundPreview": "Em relação às configurações de som e pré-visualização",
+            "soundPreviewInfo": "Usamos as configurações definidas e utilizadas pelo Discord para decidir se a pré-visualização e o som da transmissão devem ser ativados ou não",
             "videoDevices": "Dispositivos de vídeo",
             "videoDevicesInfo": "Suporta câmeras e placas de captura (como Elgato HD60X) quando habilitado nas configurações",
             "wayland": "Para Wayland, apenas aparece a seleção de compartilhamento de tela",
@@ -1093,7 +1111,7 @@
     "invisibleChat": {
         "description": "Criptografe suas mensagens de maneira não suspeita!",
         "settings": {
-            "savedPasswords": "Senhas salvas (separadas por, )"
+            "savedPasswords": "Senhas salvas (separadas por , )"
         },
         "ui": {
             "decryptMessage": "Descriptografar mensagem",
@@ -1110,7 +1128,7 @@
         "settings": {
             "inviteDuration": "Duração do convite",
             "maxUses": "Contagem de Usos do Convite",
-            "temporaryMembership": "Associação Temporária"
+            "temporaryMembership": "Assinatura de Servidor Temporária"
         }
     },
     "jellyfinRichPresence": {
@@ -1118,10 +1136,10 @@
             "episodeCover": "Capa do episódio",
             "seriesCover": "Capa da série"
         },
-        "description": "Presença rica para servidor de mídia Jellyfin",
+        "description": "Rich presence para servidor de mídia Jellyfin",
         "episodeFormatOptions": {
             "fulltext": "Temporada 1, episódio 1",
-            "s01e01": "S01E01",
+            "s01e01": "T01E01",
             "short": "1x01"
         },
         "howToGetApiKey": {
@@ -1157,11 +1175,11 @@
         "settings": {
             "apiKey": "Chave de API do Jellyfin obtida no seu painel de administração do Jellyfin",
             "coverType": "Escolha qual capa exibir ao assistir a um programa de TV",
-            "customName": "Nome de presença avançada personalizada (usado somente se 'Personalizado' estiver selecionado). Opções: {name}, {series}, {season}, {episode}, {artist}, {album}, {year}",
+            "customName": "Nome de Rich Presence personalizado (usado apenas se 'Personalizado' estiver selecionado). Opções: {name}, {series}, {season}, {episode}, {artist}, {album}, {year}",
             "episodeFormat": "Formato do número do episódio",
-            "nameDisplay": "Escolha como o nome do aplicativo deve aparecer no Rich Presence",
-            "overrideRichPresenceType": "Substituir o tipo de presença avançada",
-            "privacyMode": "Modo de privacidade (ocultar detalhes da mídia, como nome do episódio/música)",
+            "nameDisplay": "Escolha como o nome do aplicativo deve aparecer na Rich Presence",
+            "overrideRichPresenceType": "Substituir o tipo de rich presence",
+            "privacyMode": "Modo de privacidade (oculta detalhes da mídia, como nome do episódio/música)",
             "serverUrl": "URL do servidor Jellyfin (ex: https://jellyfin.examplo.com)",
             "showEpisodeName": "Mostrar o nome do episódio após as informações da temporada/episódio",
             "showPausedState": "Mostrar atividade quando a mídia estiver pausada",
@@ -1278,10 +1296,10 @@
         "defaults": {
             "statusName": "alguma música"
         },
-        "description": "Pequeno plugin para rica presença do ListenBrainz",
+        "description": "Pequeno plugin para atividade do ListenBrainz",
         "missingArtOptions": {
             "listenbrainzLogo": "Usar logo grande do ListenBrainz",
-            "placeholder": "Use espaço reservado genérico"
+            "placeholder": "Usar marcador genérico"
         },
         "nameFormatOptions": {
             "albumName": "Use o nome do álbum (volta para o texto de status personalizado se a música não tiver álbum)",
@@ -1300,7 +1318,7 @@
             "shareSong": "Mostrar link para música no ListenBrainz (pode ser visível apenas para outros usuários)",
             "shareUsername": "Mostrar link para o perfil ListenBrainz (pode ser visível apenas para outros usuários)",
             "statusName": "Texto de status personalizado",
-            "useListeningStatus": "Mostrar o status \"Ouvindo\" em vez de \"Reproduzindo\"",
+            "useListeningStatus": "Mostrar o status \"Ouvindo\" em vez de \"Jogando\"",
             "useLogo": "Mostrar logo do ListenBrainz na arte do álbum",
             "useTimeBar": "Use a duração da faixa para exibir uma barra de tempo (deve estar usando o status de escuta)",
             "username": "Nome de usuário ListenBrainz"
@@ -1315,6 +1333,10 @@
             "enableAndRestart": "Ative o plugin e reinicie seu cliente para escanear um código QR de login",
             "scanQrCode": "Escanear um QR code"
         }
+    },
+    "mainWindowFrameless": {
+        "description": "Remove a moldura nativa da janela para um visual mais limpo. Você ainda pode mover a janela arrastando a área da barra de título.",
+        "title": "Desativar a moldura(frame) da janela principal"
     },
     "mediaPlaybackSpeed": {
         "description": "Controle a velocidade de reprodução de mídia para mensagens de voz, vídeos e anexos de áudio",
@@ -1497,7 +1519,7 @@
         }
     },
     "moyai": {
-        "description": "Reproduz o efeito sonoro moyai quando o emoji 🗿 for usado",
+        "description": "Reproduz um efeito de 🗿 sempre que um emoji moyai é enviado, reagido ou usado como efeito de voz no seu canal atual.",
         "settings": {
             "ignoreBlocked": "Ignorar mensagens de usuários bloqueados",
             "ignoreBots": "Ignorar mensagens de bots",
@@ -1599,10 +1621,10 @@
     "pingNotifications": {
         "description": "Configurações de notificação personalizadas para pings, DMs e mensagens de amigos",
         "settings": {
-            "dms": "Notificar sobre mensagens DM e mensagens DM em grupo",
+            "dms": "Notificar para mensagens de DM e Grupo de DM",
             "friends": "Notificar quando amigos enviarem mensagens em servidores",
             "ignoreMuted": "Ignorar canais silenciados, servidores e usuários bloqueados",
-            "mentions": "Notificar quando mencionado (@username)",
+            "mentions": "Notificar quando mencionado (@nomedeusuário)",
             "showInActive": "Mostrar notificações mesmo quando o canal estiver ativo"
         }
     },
@@ -1624,7 +1646,7 @@
     "polishWording": {
         "description": "Melhore automaticamente o texto da mensagem com melhor gramática, letras maiúsculas e pontuação",
         "settings": {
-            "blockedWords": "Lista de palavras separadas por vírgula a serem excluídas das correções de capitalização",
+            "blockedWords": "Lista de palavras, separadas por vírgula, para excluir das correções de capitalização",
             "expandContractions": "Expandir contrações (ex: 'don't' → 'do not')",
             "fixApostrophes": "Corrigir apóstrofos ausentes em contrações (ex: 'dont' → 'don't')",
             "fixCapitalization": "Corrigir capitalização de frases",
@@ -1634,7 +1656,7 @@
         }
     },
     "profileSets": {
-        "description": "Salvar e gerenciar predefinições de personalização de perfil",
+        "description": "Salve e gerencie predefinições de personalização de perfil",
         "settings": {
             "avatarSize": "Tamanho do avatar no gerenciador de predefinições"
         }
@@ -1642,10 +1664,10 @@
     "questify": {
         "buttonActions": {
             "contextMenu": "Mostrar menu de contexto",
-            "openQuests": "Abra a página de missões",
+            "openQuests": "Abrir página de missões",
             "pluginSettings": "Abrir configurações do plugin"
         },
-        "description": "Gerenciamento aprimorado de missões com conclusão automática, notificações e estilização personalizada",
+        "description": "Gerenciamento aprimorado de missões com conclusão automática, notificações e estilização personalizada.",
         "gradientOptions": {
             "black": "Preto",
             "default": "Padrão",
@@ -1713,7 +1735,7 @@
         "operations": {
             "equalTo": "Igual a",
             "lessThan": "Menor que",
-            "moreThan": "Mais do que"
+            "moreThan": "Maior que"
         },
         "settings": {
             "Servers": "IDs de servidor a serem incluídos (separados por vírgula)",
@@ -1728,15 +1750,15 @@
             "deafen": "Procure usuários ensurdecidos",
             "includeStates": "Incluir usuários que correspondam aos filtros de estado",
             "leaveEmpty": "Sair quando o canal ficar vazio",
-            "mute": "Procure usuários silenciados",
+            "mute": "Procurar usuários silenciados",
             "selfDeafen": "Ensurdecer automaticamente ao entrar",
             "selfMute": "Silenciar automaticamente ao entrar",
             "spacesLeft": "Espaços mínimos restantes no canal",
             "spacesLeftOperation": "Operador de comparação de espaços à esquerda",
-            "stream": "Procure canais com streams",
+            "stream": "Procurar canais com streams",
             "vcLimit": "Limite de usuários do canal de voz",
             "vcLimitOperation": "Operador de comparação de limite de canal",
-            "video": "Procure canais com vídeo ativado"
+            "video": "Procurar canais com vídeo ativado"
         }
     },
     "recentDMSwitcher": {
@@ -1757,11 +1779,11 @@
         "visualStyles": {
             "off": "Nenhum indicador visual",
             "overlay": "Sobreposição (estilo Alt+Tab)",
-            "toast": "Notificação de brinde"
+            "toast": "Notificação de Toast"
         }
     },
     "remix": {
-        "description": "Remixar imagens diretamente no Discord com um editor integrado"
+        "description": "Remixe imagens diretamente no Discord com um editor integrado"
     },
     "repeatMessages": {
         "description": "Repetir mensagens com resposta opcional (Shift+Clique para responder)"
@@ -1770,11 +1792,11 @@
         "description": "Controle se você receberá um ping quando alguém responder às suas mensagens",
         "settings": {
             "alwaysPingOnReply": "Sempre receba um ping quando alguém responder às suas mensagens",
-            "replyPingWhitelist": "Lista separada por vírgulas de IDs de usuário para sempre receber pings de resposta"
+            "replyPingWhitelist": "Lista de IDs de usuário, separados por vírgula, para sempre receber menções de resposta de"
         }
     },
     "richMagnetLinks": {
-        "description": "Exibir visualizações avançadas de links magnéticos com extração de nome de arquivo"
+        "description": "Exibe visualizações avançadas para links magnéticos com extração de nome de arquivo"
     },
     "rpcEditor": {
         "description": "Edite e customize seu Rich Precense (RPC) para qualquer aplicação",
@@ -1788,7 +1810,7 @@
             "state": "Texto do estado atual"
         },
         "settings": {
-            "replacedAppIds": "Gerenciar substituições RPC específicas do aplicativo"
+            "replacedAppIds": "Gerencie substituições de RPC específicas da aplicação"
         }
     },
     "rpcStats": {
@@ -1803,15 +1825,15 @@
             "statDisplay": "Estatísticas a serem exibidas"
         },
         "statOptions": {
-            "messagesAllTime": "Total de mensagens enviadas",
+            "messagesAllTime": "Mensagens enviadas todo o período",
             "messagesToday": "Mensagens enviadas hoje",
             "mostListenedAlbum": "Álbum mais escutado esta semana (Last.fm)"
         }
     },
     "saveFavoriteGIFs": {
-        "description": "Salve todos os URLs GIF favoritos em um arquivo de texto",
+        "description": "Salve todos as URLs de GIF favoritos em um arquivo de texto",
         "settings": {
-            "showToolboxButton": "Mostrar o botão 'Salvar GIFs favoritos' na caixa de ferramentas Equicord (requer recarga)"
+            "showToolboxButton": "Mostrar o botão 'Salvar GIFs favoritos' em Equicord Toolbox (requer reiniciar)"
         }
     },
     "scheduledMessages": {
@@ -1839,24 +1861,24 @@
         "description": "Encaminhar mensagens para você mesmo"
     },
     "serverSearch": {
-        "description": "Pesquisa aprimorada de servidor com integração rápida de switcher"
+        "description": "Pesquisa aprimorada de servidor com integração QuickSwitcher"
     },
     "showBadgesInChat": {
         "description": "Mostrar insígnias de usuário em mensagens de chat",
         "settings": {
             "DiscordNitroPosition": "A posição da insígnia Discord Nitro",
             "DiscordProfilePosition": "A posição das insígnias do perfil Discord",
-            "EquicordContributorPosition": "A posição da insígnia de Colaborador Equicord",
+            "EquicordContributorPosition": "A posição da insígnia de Contribuidor Equicord",
             "EquicordDonorPosition": "A posição das insígnias de doador Equicord",
-            "VencordContributorPosition": "A posição da insígnia de Colaborador Vencord",
-            "VencordDonorPosition": "A posição das insígnias de doador Vencord",
+            "VencordContributorPosition": "A posição da insígnia de Contribuidor Vencord",
+            "VencordDonorPosition": "A posição das insígnias de Doador Vencord",
             "badgeSettings": "Configurar layout e visibilidade das insígnias",
             "showDiscordNitro": "Habilite para mostrar insígnias Discord Nitro no chat",
             "showDiscordProfile": "Ative para mostrar insígnias de perfil Discord no chat",
-            "showEquicordContributor": "Habilite a exibição de insígnias de Colaborador Equicord no chat",
-            "showEquicordDonor": "Habilite a exibição de insígnias de doador Equicord no chat",
-            "showVencordContributor": "Habilite a exibição de insígnias de colaborador Vencord no chat",
-            "showVencordDonor": "Habilite a exibição de insígnias de doador Vencord no chat"
+            "showEquicordContributor": "Habilite a exibição de insígnias de Contribuidor Equicord no chat",
+            "showEquicordDonor": "Habilitar a exibição de insígnias de doador Equicord no chat",
+            "showVencordContributor": "Habilite a exibição de insígnias de Contribuidor Vencord no chat",
+            "showVencordDonor": "Habilitar a exibição de insígnias de Doador Vencord no chat"
         }
     },
     "showMessageEmbeds": {
@@ -1871,7 +1893,7 @@
     "sidebarChat": {
         "description": "Interface de chat na barra lateral para visualização de vários canais",
         "settings": {
-            "patchCommunity": "Aplica correções em itens como o Navegador de Canais ou a aba de Membros que servidores comunitários possuem",
+            "patchCommunity": "Corrigi itens como o Navegador de Canais ou a aba de Membros que servidores de comunidade possuem",
             "persistSidebar": "Mantenha o chat da barra lateral aberto durante as reinicializações do Discord"
         }
     },
@@ -1882,7 +1904,7 @@
             "isEnabled": "Alternar funcionalidade",
             "name": "A assinatura que será adicionada ao final de suas mensagens",
             "showIcon": "Mostrar um ícone para alternar o plugin na barra de chat",
-            "textHeader": "Com qual cabeçalho prefaciar o texto"
+            "textHeader": "Qual cabeçalho prefacia o texto com"
         }
     },
     "snowfall": {
@@ -1932,7 +1954,7 @@
         }
     },
     "spotifyActivityToggle": {
-        "description": "Ativar e desativar o compartilhamento de atividades do Spotify",
+        "description": "Ativar/desativar o compartilhamento de atividades do Spotify",
         "settings": {
             "location": "Onde mostrar o botão de alternância Spotify"
         }
@@ -1949,7 +1971,7 @@
             "shareUsername": "Mostrar link para o perfil stats.fm",
             "showStatsFmLogo": "Mostrar o Stats.fm ao lado da capa do álbum",
             "statusName": "Texto de status personalizado",
-            "useListeningStatus": "Mostrar o status 'Ouvindo' em vez de 'Reproduzindo'",
+            "useListeningStatus": "Mostrar o status 'Ouvindo' em vez de 'Jogando'",
             "username": "Nome de usuário Stats.fm"
         }
     },
@@ -1965,11 +1987,11 @@
     "steamStatusSync": {
         "description": "Sincronize o status do Steam com o status Discord",
         "settings": {
-            "dndStatus": "Status do Steam quando ativado Não perturbe",
+            "dndStatus": "Status da Steam quando ativado Não perturbe",
             "goInvisibleIfActivityIsHidden": "Sempre fique invisível ao ocultar a atividade de jogo no Discord",
-            "idleStatus": "Status do Steam quando inativo",
-            "invisibleStatus": "Status do Steam quando está invisível",
-            "onlineStatus": "Status do Steam quando estiver online"
+            "idleStatus": "Status da Steam quando inativo",
+            "invisibleStatus": "Status da Steam quando está invisível",
+            "onlineStatus": "Status da Steam quando estiver online"
         }
     },
     "stickerBlocker": {
@@ -1982,13 +2004,13 @@
         }
     },
     "streamingCodecDisabler": {
-        "description": "Desativar codec de streaming para streaming Discord",
+        "description": "Desabilite codec de transmissão para transmissões do Discord",
         "settings": {
-            "disableAv1Codec": "Faça com que Discord não considere usar AV1 para streaming",
-            "disableH264Codec": "Faça com que Discord não considere usar H264 para streaming",
-            "disableH265Codec": "Faça com que Discord não considere usar H265 para streaming",
-            "disableVP8Codec": "Faça com que Discord não considere usar VP8 para streaming",
-            "disableVP9Codec": "Faça com que Discord não considere usar VP9 para streaming"
+            "disableAv1Codec": "Fazer com que o Discord não considere usar AV1 para transmissão",
+            "disableH264Codec": "Fazer com que o Discord não considere usar H264 para transmissão",
+            "disableH265Codec": "Fazer com que o Discord não considere usar H265 para transmissão",
+            "disableVP8Codec": "Fazer com que o Discord não considere usar VP8 para transmissão",
+            "disableVP9Codec": "Fazer com que o Discord não considere usar VP9 para transmissão"
         }
     },
     "talkInReverse": {
@@ -2005,7 +2027,7 @@
     },
     "tiktokTTS": {
         "contextMenu": {
-            "playTikTokTTS": "Jogar TikTok TTS"
+            "playTikTokTTS": "Tocar TikTok TTS"
         },
         "description": "Reproduza a conversão de texto em voz do TikTok para mensagens",
         "settings": {
@@ -2016,7 +2038,7 @@
         "contextMenu": {
             "setLocalTimezone": "Definir fuso horário local"
         },
-        "description": "Exibir fusos horários dos usuários em perfis e cabeçalhos de mensagens",
+        "description": "Exibe fusos horários dos usuários em perfis e cabeçalhos de mensagens",
         "settings": {
             "24hTime": "Mostrar horário no formato 24h",
             "databaseUrl": "URL do banco de dados para armazenamento de fusos horários",
@@ -2030,7 +2052,7 @@
             "useDatabase": "Ativar banco de dados para obter fuso horário dos usuários"
         },
         "toasts": {
-            "failed": "Fusos horários Falha ao atualizar!",
+            "failed": "Fusos horários falhou ao atualizar!",
             "refreshed": "Fusos horários atualizados com sucesso!"
         },
         "toolbox": {
@@ -2045,7 +2067,7 @@
         }
     },
     "toastNotifications": {
-        "description": "Mostrar notificações do sistema para mensagens e eventos",
+        "description": "Mostre notificações do sistema para mensagens e eventos",
         "positionOptions": {
             "bottomLeft": "Canto Inferior esquerdo",
             "bottomRight": "Canto Inferior Direito",
@@ -2058,16 +2080,16 @@
             "disableInStreamerMode": "Desative notificações no modo streamer",
             "exampleButton": "Mostrar um exemplo de notificação do sistema",
             "friendActivity": "Mostrar notificações para adicionar alguém ou receber uma solicitação de amizade",
-            "friendServerNotifications": "Mostre notificações quando amigos enviarem mensagens em servidores que compartilham com você",
+            "friendServerNotifications": "Mostrar notificações quando amigos enviarem mensagens em servidores que compartilham com você",
             "groupMessages": "Mostrar notificações para mensagens em grupo",
             "ignoreUsers": "Crie uma lista de IDs de usuários para ignorar todas as notificações vindas deles (separado com vírgula)",
             "maxNotifications": "Número máximo de notificações exibidas de uma só vez",
             "notifyFor": "Crie uma lista de IDs de canais para receber notificações (separe com vírgulas)",
-            "opacity": "Opacidade das notificações",
+            "opacity": "Opacidade da notificação",
             "position": "A posição da notificação do sistema",
             "renderImages": "Renderizar imagens em notificações",
             "streamingTreatment": "Como tratar notificações ao compartilhar sua tela",
-            "timeout": "As notificações de tempo em segundos serão mostradas para"
+            "timeout": "Tempo em segundos em que as notificações serão exibidas"
         },
         "streamingOptions": {
             "ignore": "Ignorar - Não mostrar a notificação de jeito nenhum",
@@ -2079,9 +2101,9 @@
         "description": "Adiciona um atalho de teclado para alternar seu vídeo/webcam no chat por voz",
         "settings": {
             "keyBind": "A tecla para alternar a webcam quando pressionada",
-            "reqAlt": "Exigir que alt seja mantido",
-            "reqCtrl": "Exigir que o controle seja mantido",
-            "reqShift": "Exigir que o turno seja realizado"
+            "reqAlt": "Exigir que alt seja segurado",
+            "reqCtrl": "Exigir que Control seja segurado",
+            "reqShift": "Exigir que Shift seja segurado"
         }
     },
     "toneIndicators": {
@@ -2093,7 +2115,7 @@
         }
     },
     "tosuRPC": {
-        "description": "Rica integração de presença para osu! via tosu"
+        "description": "Integração de Rich Presence para osu! via tosu"
     },
     "translatePlus": {
         "contextMenu": {
@@ -2125,7 +2147,7 @@
             "convertUnits": "Converter unidades"
         },
         "settings": {
-            "myUnits": "As unidades que você usa e para as quais deseja que as coisas sejam convertidas"
+            "myUnits": "As unidades que você usa e deseja que as coisas sejam convertidas para"
         },
         "unitOptions": {
             "imperial": "imperial",
@@ -2147,16 +2169,16 @@
         }
     },
     "unreadBadgeCount": {
-        "description": "Mostrar insígnias de contagem de mensagens não lidas nos canais",
+        "description": "Mostrar emblema de contagem de mensagens não lidas nos canais",
         "settings": {
-            "notificationCountLimit": "Limitar a contagem de notificações para mais de 99",
+            "notificationCountLimit": "Limitar a contagem de notificações para 99+",
             "showOnMutedChannels": "Mostrar contagem não lida em canais silenciados"
         }
     },
     "urlHighlighter": {
-        "description": "Destaque URLs específicos em mensagens com cores personalizadas",
+        "description": "Destaque URLs específicas em mensagens com cores personalizadas",
         "settings": {
-            "boldUrls": "Deixe os URLs destacados em negrito",
+            "boldUrls": "Tornar URLs destacadas em negrito",
             "highlightEmbeds": "Destaque também URLs no conteúdo do embed",
             "patterns": "Padrões de URL para destacar usando padrões glob"
         },
@@ -2166,20 +2188,23 @@
             "urlPatterns": "Padrões de URL"
         }
     },
+    "userAreaAPI": {
+        "description": "API para adicionar botões ao painel da área do usuário."
+    },
     "userpfp": {
         "avatarOptions": {
             "nitro": "Nitro",
             "userpfp": "UserPFP"
         },
         "buttons": {
-            "joinServer": "Junte-se ao servidor UserPFP",
+            "joinServer": "Entre no servidor UserPFP",
             "support": "Apoie UserPFP aqui"
         },
         "contextMenu": {
             "setAvatar": "Definir Avatar"
         },
         "description": "Use imagens de perfil personalizadas do banco de dados UserPFP ou defina as suas próprias",
-        "notice": "Usar o recurso de definir avatar é apenas local, ou seja, somente você vê a alteração.",
+        "notice": "O uso do recurso de definir avatar é apenas local, o que significa que apenas você vê a alteração.",
         "settings": {
             "databaseSource": "URL para carregar o banco de dados",
             "overrideServerAvatars": "Substituir os avatares de servidor por avatares personalizados ou pelo avatar padrão do usuário se nenhum avatar personalizado estiver definido",
@@ -2189,26 +2214,26 @@
     "vcNarratorCustom": {
         "contextMenu": {
             "stateFilter": "Filtro de mudança de estado",
-            "vcNarrator": "Narrador VC",
+            "vcNarrator": "Narrador de VC (chat de voz)",
             "voice": "Voz"
         },
         "description": "Narrador de canal de voz personalizado com TTS para entradas/saídas de usuários e mudanças de estado",
         "filterOptions": {
             "blacklist": "Lista negra (anunciar todos, exceto os listados)",
             "off": "Desligado",
-            "whitelist": "Lista de permissões (anuncia apenas usuários listados)"
+            "whitelist": "Lista Branca (anuncia apenas usuários listados)"
         },
         "modal": {
             "cancel": "Cancelar",
-            "previewHint": "Visualize como essa voz soa com seu nome:",
+            "previewHint": "Pré-visualizar como esta voz soa com o nome deles:",
             "save": "Salvar",
             "selectVoice": "Selecione uma voz",
-            "title": "Voz do Narrador VC"
+            "title": "Voz do Narrador de VC (chat de voz)"
         },
         "preview": {
-            "playing": "jogando...",
+            "playing": "tocando...",
             "subtitle": "Usa a voz do narrador selecionada",
-            "title": "Visualizar sons"
+            "title": "Pré-visualizar sons"
         },
         "settings": {
             "announceOthersDeafen": "Anuncie quando outros usuários ensurdecerem ou deixarem de estar ensurdecidos no seu VC atual",
@@ -2218,15 +2243,15 @@
             "customVoice": "Voz do narrador",
             "ignoreSelf": "Ignore você mesmo em todos os eventos",
             "joinMessage": "Marcadores: {{USER}}, {{DISPLAY_NAME}}, {{NICKNAME}}, {{CHANNEL}}",
-            "latinOnly": "Remova caracteres não latinos dos nomes antes da narração",
+            "latinOnly": "Remover caracteres não latinos dos nomes antes de falá-los",
             "leaveMessage": "Mensagem de saída",
             "moveMessage": "Mensagem de mudança de canal",
             "rate": "Velocidade do narrador",
             "sayOwnName": "Diga o próprio nome",
             "stateChangeCooldownMs": "Tempo de espera do anúncio de mudança de estado (ms)",
-            "stateChangeFilterList": "IDs de usuário separados por vírgula para lista branca/lista negra. Clique com o botão direito nos usuários para adicionar/remover.",
+            "stateChangeFilterList": "Lista de IDs de usuário, separados por vírgula, para a lista branca/lista negra. Clique com o botão direito nos usuários para adicionar/remover.",
             "stateChangeFilterMode": "Filtre quais usuários acionam anúncios de mudança de estado",
-            "userVoiceMap": "Substituições de voz por usuário (formato: userId:voiceId,userId2:voiceId2). Clique com o botão direito nos usuários para definir.",
+            "userVoiceMap": "Substituições de voz por usuário (formato: idDoUsuário:idDaVoz,idDoUsuário2:idDaVoz2). Clique com o botão direito nos usuários para definir.",
             "volume": "Volume do Narrador"
         },
         "troubleshooting": {
@@ -2264,13 +2289,13 @@
     },
     "viewRawVariant": {
         "contextMenu": {
-            "viewRaw": "Ver raw"
+            "viewRaw": "Ver Raw"
         },
         "description": "Visualize dados JSON brutos para mensagens, usuários, canais e servidores",
         "modal": {
             "content": "Conteúdo",
             "data": "Dados",
-            "title": "Ver {type} bruto"
+            "title": "Ver Raw {type}"
         }
     },
     "voiceButtons": {
@@ -2336,7 +2361,7 @@
     "voiceJoinMessages": {
         "description": "Receba notificações quando amigos entrarem em canais de voz",
         "settings": {
-            "allowedFriends": "Lista separada por vírgulas ou espaços de IDs de usuários dos amigos dos quais você deseja receber mensagens",
+            "allowedFriends": "Lista de IDs de usuário de amigos, separados por vírgula ou espaço, dos quais você deseja receber mensagens de entrada",
             "friendDirectMessages": "Receba notificações no DMs dos seus amigos quando eles entrarem em um canal de voz",
             "friendDirectMessagesSelf": "Receber notificações nas DMs dos seus amigos mesmo se você estiver no mesmo canal de voz que eles",
             "friendDirectMessagesShowMemberCount": "Exibe a contagem de outros membros no canal de voz ao receber uma notificação de DM",
@@ -2354,13 +2379,13 @@
             "copied": "Copiado!",
             "copyToClipboard": "Copiar para a área de transferência",
             "downloadingAudio": "Baixando áudio...",
-            "error": "Erro",
+            "error": "Error",
             "inProgress": "Transcrição em andamento...",
             "initializing": "Inicializando...",
             "loadingModel": "Carregando modelo...",
             "processingAudio": "Processando Áudio...",
             "retry": "Tentar novamente",
-            "showTimestamps": "Mostrar data/hora",
+            "showTimestamps": "Mostrar Timestamps",
             "start": "Começar",
             "transcribe": "Transcrever",
             "transcribing": "Transcrevendo...",
@@ -2400,7 +2425,7 @@
             "joinQueue": "Entrar na fila",
             "leaveQueue": "Sair da fila"
         },
-        "description": "Faça fila para canais de voz completos e seja notificado quando uma vaga for aberta",
+        "description": "Fila para canais de voz completos e seja notificado quando uma vaga for aberta",
         "notices": {
             "channelFull": "O canal de voz {channel} está cheio. Esperar por uma vaga?",
             "join": "Entrar",
@@ -2428,7 +2453,7 @@
         "modal": {
             "create": "Criar",
             "errors": "erros",
-            "lazyChunks": "Pedaços preguiçosos",
+            "lazyChunks": "Chunks preguiçosos",
             "loadAll": "Carregar tudo",
             "loaded": "Carregado",
             "loadedStatus": "Carregado",
@@ -2444,21 +2469,21 @@
     },
     "whitelistedEmojis": {
         "alerts": {
-            "importConfirmBody": "Isso substituirá sua lista de permissões atual.",
+            "importConfirmBody": "Isso substituirá sua lista branca atual.",
             "importConfirmTitle": "Tem certeza?",
-            "resetConfirmBody": "Isso removerá todos os emojis da sua lista de permissões.",
+            "resetConfirmBody": "Isso removerá todos os emojis da sua lista branca.",
             "resetConfirmTitle": "Tem certeza?"
         },
         "contextMenu": {
             "addAllGuildEmojis": "Adicionar Todos os Emojis do Servidor",
             "addToWhitelist": "Adicionar à Lista Branca",
             "removeAllGuildEmojis": "Remover todos os emojis do Servidor",
-            "removeFromWhitelist": "Remover da lista de permissões"
+            "removeFromWhitelist": "Remover da lista branca"
         },
-        "description": "Coloque emojis específicos na lista de permissões e oculte todos os outros do seletor de emojis",
+        "description": "Coloque emojis específicos na lista branca e oculte todos os outros do seletor de emojis",
         "settings": {
             "defaultEmojis": "Ocultar emojis padrão",
-            "disableToasts": "Desativar brindes",
+            "disableToasts": "Desativar toasts",
             "exportEmojis": "Exportar emojis",
             "importEmojis": "Importar Emojis",
             "resetEmojis": "Redefinir Emojis",
@@ -2479,8 +2504,8 @@
         },
         "ui": {
             "defaultEmojis": "Emoji padrão",
-            "guildEmojis": "Emojis {guild}",
-            "noEmojis": "Nenhum emoji na lista de permissões.",
+            "guildEmojis": "{guild} Emojis",
+            "noEmojis": "Nenhum emoji na lista branca.",
             "removeAll": "Remover tudo"
         }
     },
@@ -2497,7 +2522,7 @@
     "wigglyText": {
         "about": {
             "circle": "em um círculo ao digitar )~texto~^",
-            "description": "Você pode fazer o texto oscilar com o seguinte:",
+            "description": "Você pode fazer o texto balançar com o seguinte:",
             "leftRight": "para a esquerda e para a direita digitando <~text~>",
             "upDown": "para cima e para baixo digitando ^~text~^"
         },
