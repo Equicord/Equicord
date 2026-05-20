@@ -11,8 +11,8 @@ import { classNameFactory, classNameToSelector } from "@utils/css";
 import { copyWithToast } from "@utils/discord";
 import { Logger } from "@utils/Logger";
 import { classes } from "@utils/misc";
-import { RenderModalProps } from "@vencord/discord-types";
-import { Modal,TextInput, Toasts, useEffect, useMemo, useRef, useState } from "@webpack/common";
+import { type ModalProps, ModalRoot, ModalSize } from "@utils/modal";
+import { TextInput, Toasts, useEffect, useMemo, useRef, useState } from "@webpack/common";
 import type { KeyboardEvent as ReactKeyboardEvent } from "react";
 
 import { buildQueryResolution } from "../actions/executors";
@@ -282,7 +282,7 @@ function createInitialPageState(ref: PalettePageRef): PalettePageValuesState {
     };
 }
 
-export function CommandPaletteModal({ modalProps, instanceKey }: { modalProps: RenderModalProps; instanceKey: number; }) {
+export function CommandPaletteModal({ modalProps, instanceKey }: { modalProps: ModalProps; instanceKey: number; }) {
     const {
         compactStartEnabled = true,
         closeAfterExecute = true
@@ -1469,12 +1469,12 @@ export function CommandPaletteModal({ modalProps, instanceKey }: { modalProps: R
     }, [activePage, activePageFieldKey, activePageSpec, activePageState, activePageSuggestions]);
 
     return (
-        <Modal
+        <ModalRoot
             {...modalProps}
-            size={compact ? "sm" : "lg"}
-            title="Command Palette"
+            className={cn("vc-command-palette", compact && cl("compact"))}
+            size={compact ? ModalSize.SMALL : ModalSize.LARGE}
         >
-            <div className={cn("vc-command-palette", cl("shell"), compact && cl("compact"))} onKeyDown={onKeyDown}>
+            <div className={cl("shell")} onKeyDown={onKeyDown}>
                 {!isPageOpen && (
                     <CommandPaletteInput
                         inputRef={mainInputRef}
@@ -1656,6 +1656,6 @@ export function CommandPaletteModal({ modalProps, instanceKey }: { modalProps: R
                     />
                 )}
             </div>
-        </Modal>
+        </ModalRoot>
     );
 }

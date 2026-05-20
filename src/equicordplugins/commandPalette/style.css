@@ -62,11 +62,14 @@
 }
 
 .vc-command-palette-main-input input {
+    width: 100% !important;
+    box-sizing: border-box !important;
     background: transparent !important;
     border: none !important;
     color: var(--cp-text-primary) !important;
     font-size: 20px !important;
     font-weight: 400 !important;
+    line-height: 48px !important;
     padding: 0 0 2px !important;
     min-height: 48px !important;
     height: 48px !important;
