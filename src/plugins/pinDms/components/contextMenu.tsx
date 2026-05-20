@@ -15,6 +15,8 @@ import { openCategoryModal } from "./CreateCategoryModal";
 function createPinMenuItem(channelId: string) {
     const pinned = isPinned(channelId);
 
+    const showSeparator = pinned || currentUserCategories.length > 0;
+
     return (
         <Menu.MenuItem
             id="pin-dm"
@@ -29,7 +31,7 @@ function createPinMenuItem(channelId: string) {
                         color="brand"
                         action={() => openCategoryModal(null, channelId)}
                     />
-                    <Menu.MenuSeparator />
+                    {showSeparator && <Menu.MenuSeparator />}
 
                     {
                         currentUserCategories.map(category => (

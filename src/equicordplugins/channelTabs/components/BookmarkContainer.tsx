@@ -10,9 +10,8 @@ import { CircleQuestionIcon, DiscoveryIcon, EnvelopeIcon, FriendsIcon, NitroIcon
 import { classNameFactory } from "@utils/css";
 import { getGuildAcronym, getIntlMessage } from "@utils/discord";
 import { classes } from "@utils/misc";
-import { closeModal, openModal } from "@utils/modal";
 import { findComponentByCodeLazy } from "@webpack";
-import { Avatar, ChannelStore, ContextMenuApi, FluxDispatcher, GuildStore, Menu, React, ReadStateStore, ReadStateUtils, SelectedChannelStore, SelectedGuildStore, TextInput, Tooltip, useDrag, useDrop, useEffect, useRef, UserStore, useState } from "@webpack/common";
+import { Avatar, ChannelStore, closeModal, ContextMenuApi, FluxDispatcher, GuildStore, Menu, openModal,React, ReadStateStore, ReadStateUtils, SelectedChannelStore, SelectedGuildStore, TextInput, Tooltip, useDrag, useDrop, useEffect, useRef, UserStore, useState } from "@webpack/common";
 
 import { NotificationDot } from "./ChannelTab";
 import { BookmarkContextMenu, EditModal } from "./ContextMenus";

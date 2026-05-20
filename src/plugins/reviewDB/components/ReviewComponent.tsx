@@ -13,7 +13,7 @@ import { openUserProfile } from "@utils/discord";
 import { classes } from "@utils/misc";
 import { t } from "@utils/translation";
 import { findCssClassesLazy } from "@webpack";
-import { Alerts, IconUtils, Parser, Timestamp, useState } from "@webpack/common";
+import { ConfirmModal,IconUtils, openModal as openVencordModal, Parser, Timestamp, useState } from "@webpack/common";
 
 import { openBlockModal } from "./BlockedUserModal";
 import { BlockButton, DeleteButton, ReportButton } from "./MessageButton";
@@ -35,40 +35,45 @@ export default function ReviewComponent({ review, refetch, profileId }: { review
     }
 
     function delReview() {
-        Alerts.show({
-            title: t("vencord.reviewDB.confirm.title"),
-            body: t("vencord.reviewDB.confirm.deleteBody"),
-            confirmText: t("vencord.reviewDB.delete"),
-            cancelText: t("vencord.reviewDB.cancel"),
-            onConfirm: async () => {
-                if (!(await getToken())) {
-                    return showToast(t("vencord.reviewDB.mustLogin"));
-                } else {
-                    deleteReview(review.id).then(res => {
-                        if (res) {
-                            refetch();
-                        }
-                    });
-                }
-            }
-        });
+        openVencordModal(props => (
+            <ConfirmModal
+                {...props}
+                title={t("vencord.reviewDB.areYouSure")}
+                subtitle={t("vencord.reviewDB.confirmDelete")}
+                confirmText={t("vencord.reviewDB.delete")}
+                cancelText={t("vencord.reviewDB.nevermind")}
+                onConfirm={async () => {
+                    if (!(await getToken())) {
+                        return showToast(t("vencord.reviewDB.mustBeLoggedInDelete"));
+                    } else {
+                        deleteReview(review.id).then(res => {
+                            if (res) {
+                                refetch();
+                            }
+                        });
+                    }
+                }}
+            />
+        ));
     }
 
     function reportRev() {
-        Alerts.show({
-            title: t("vencord.reviewDB.confirm.title"),
-            body: t("vencord.reviewDB.confirm.reportBody"),
-            confirmText: t("vencord.reviewDB.report"),
-            cancelText: t("vencord.reviewDB.cancel"),
-            // confirmColor: "red", this just adds a class name and breaks the submit button guh
-            onConfirm: async () => {
-                if (!(await getToken())) {
-                    return showToast(t("vencord.reviewDB.mustLogin"));
-                } else {
-                    reportReview(review.id);
-                }
-            }
-        });
+        openVencordModal(props => (
+            <ConfirmModal
+                {...props}
+                title={t("vencord.reviewDB.areYouSure")}
+                subtitle={t("vencord.reviewDB.confirmReport")}
+                confirmText={t("vencord.reviewDB.report")}
+                cancelText={t("vencord.reviewDB.nevermind")}
+                onConfirm={async () => {
+                    if (!(await getToken())) {
+                        return showToast(t("vencord.reviewDB.mustBeLoggedInReport"));
+                    } else {
+                        reportReview(review.id);
+                    }
+                }}
+            />
+        ));
     }
 
     const isAuthorBlocked = Auth?.user?.blockedUsers?.includes(review.sender.discordID) ?? false;
@@ -77,20 +82,22 @@ export default function ReviewComponent({ review, refetch, profileId }: { review
         if (isAuthorBlocked)
             return unblockUser(review.sender.discordID);
 
-        Alerts.show({
-            title: t("vencord.reviewDB.confirm.title"),
-            body: t("vencord.reviewDB.confirm.blockBody"),
-            confirmText: t("vencord.reviewDB.block"),
-            cancelText: t("vencord.reviewDB.cancel"),
-            // confirmColor: "red", this just adds a class name and breaks the submit button guh
-            onConfirm: async () => {
-                if (!(await getToken())) {
-                    return showToast(t("vencord.reviewDB.mustLogin"));
-                } else {
-                    blockUser(review.sender.discordID);
-                }
-            }
-        });
+        openVencordModal(props => (
+            <ConfirmModal
+                {...props}
+                title={t("vencord.reviewDB.areYouSure")}
+                subtitle={t("vencord.reviewDB.confirmBlock")}
+                confirmText={t("vencord.reviewDB.block")}
+                cancelText={t("vencord.reviewDB.nevermind")}
+                onConfirm={async () => {
+                    if (!(await getToken())) {
+                        return showToast(t("vencord.reviewDB.mustBeLoggedInBlock"));
+                    } else {
+                        blockUser(review.sender.discordID);
+                    }
+                }}
+            />
+        ));
     }
 
     return (

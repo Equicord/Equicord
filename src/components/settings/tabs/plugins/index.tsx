@@ -35,10 +35,10 @@ import { isTruthy } from "@utils/guards";
 import { Logger } from "@utils/Logger";
 import { Margins } from "@utils/margins";
 import { classes } from "@utils/misc";
-import { useAwaiter, useIntersection } from "@utils/react";
+import { useAwaiter, useCleanupEffect, useIntersection } from "@utils/react";
 import { t } from "@utils/translation";
 import { PluginTag, PluginTags } from "@utils/types";
-import { Alerts, lodash, Parser, React, SearchableSelect, Select, TextInput, Toasts, Tooltip, useCallback, useMemo, useRef, useState } from "@webpack/common";
+import { Alerts, ConfirmModal, lodash, openModal, Parser, React, SearchableSelect, Select, TextInput, Toasts, Tooltip, useCallback, useMemo, useRef, useState } from "@webpack/common";
 import { JSX } from "react";
 
 import Plugins, { ExcludedPlugins, PluginMeta } from "~plugins";
@@ -148,7 +148,7 @@ export default function PluginSettings() {
     const changeRef = useRef<ChangeList<string>>(null);
     const changes = changeRef.current ??= new ChangeList<string>();
 
-    React.useEffect(() => {
+    useCleanupEffect(() => {
         return () => {
             if (!changes.hasChanges) return;
 
@@ -158,23 +158,29 @@ export default function PluginSettings() {
             const displayed = pluginNames.slice(0, maxDisplay);
             const remainingCount = pluginNames.length - displayed.length;
 
-            Alerts.show({
-                title: t("vencord.settings.restartRequired.title"),
-                body: (
-                    <div>
-                        {displayed.map((s, i) => (
-                            <span key={i}>
-                                {i > 0 && ", "}
-                                {Parser.parse("`" + s + "`")}
-                            </span>
-                        ))}
-                        {remainingCount > 0 && <span> and {remainingCount} more</span>}
-                    </div>
-                ),
-                confirmText: t("vencord.settings.restartRequired.confirm"),
-                cancelText: t("vencord.settings.restartRequired.cancel"),
-                onConfirm: () => location.reload()
-            });
+            openModal(props => (
+                <ConfirmModal
+                    {...props}
+                    title={t("vencord.settings.restartRequired.title")}
+                    confirmText={t("vencord.settings.restartRequired.confirm")}
+                    cancelText={t("vencord.settings.restartRequired.cancel")}
+                    variant="primary"
+                    onConfirm={() => location.reload()}
+                >
+                    <>
+                        <p>{t("vencord.settings.restartRequired.plugins")}</p>
+                        <div>
+                            {displayed.map((s, i) => (
+                                <span key={i}>
+                                    {i > 0 && ", "}
+                                    {Parser.parse("`" + s + "`")}
+                                </span>
+                            ))}
+                            {remainingCount > 0 && <span> and {remainingCount} more</span>}
+                        </div>
+                    </>
+                </ConfirmModal>
+            ));
         };
     }, []);
 

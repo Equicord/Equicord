@@ -7,16 +7,14 @@
 import "./styles.css";
 
 import { Heading } from "@components/Heading";
-import { Paragraph } from "@components/Paragraph";
 import { classNameFactory } from "@utils/css";
 import { getGuildAcronym, openImageModal, openUserProfile } from "@utils/discord";
 import { classes } from "@utils/misc";
-import { ModalRoot, ModalSize, openModal } from "@utils/modal";
 import { useAwaiter } from "@utils/react";
 import { t } from "@utils/translation";
-import { Guild, User } from "@vencord/discord-types";
+import { Guild, RenderModalProps, User } from "@vencord/discord-types";
 import { findComponentByCodeLazy, findCssClassesLazy } from "@webpack";
-import { FluxDispatcher, GuildChannelStore, GuildMemberStore, GuildRoleStore, GuildStore, IconUtils, Parser, PresenceStore, RelationshipStore, ScrollerThin, SnowflakeUtils, TabBar, Timestamp, useEffect, UserStore, UserUtils, useState, useStateFromStores } from "@webpack/common";
+import { FluxDispatcher, Forms, GuildChannelStore, GuildMemberStore, GuildRoleStore, GuildStore, IconUtils, Modal, openModal, Parser, PresenceStore, RelationshipStore, ScrollerThin, SnowflakeUtils, TabBar, Timestamp, useEffect, UserStore, UserUtils, useState, useStateFromStores } from "@webpack/common";
 
 import { settings } from ".";
 
@@ -26,11 +24,7 @@ const FriendRow = findComponentByCodeLazy("discriminatorClass:", ".isMobileOnlin
 const cl = classNameFactory("vc-gp-");
 
 export function openGuildInfoModal(guild: Guild) {
-    openModal(props =>
-        <ModalRoot {...props} size={ModalSize.MEDIUM}>
-            <GuildInfoModal guild={guild} />
-        </ModalRoot>
-    );
+    openModal(props => <GuildInfoModal guild={guild} modalProps={props} />);
 }
 
 const enum Tabs {
@@ -61,7 +55,7 @@ function renderTimestamp(timestamp: number) {
     );
 }
 
-function GuildInfoModal({ guild }: GuildProps) {
+function GuildInfoModal({ guild, modalProps }: GuildProps & { modalProps: RenderModalProps; }) {
     const [friendCount, setFriendCount] = useState<number>();
     const [blockedCount, setBlockedCount] = useState<number>();
     const [ignoredCount, setIgnoredCount] = useState<number>();
@@ -85,7 +79,32 @@ function GuildInfoModal({ guild }: GuildProps) {
     });
 
     return (
-        <div className={cl("root")}>
+        <Modal
+            {...modalProps}
+            size="lg"
+            title={
+                <div className={cl("header")}>
+                    {iconUrl
+                        ? <img
+                            className={cl("icon")}
+                            src={iconUrl}
+                            alt=""
+                            onClick={() => openImageModal({
+                                url: iconUrl,
+                                height: 512,
+                                width: 512,
+                            })}
+                        />
+                        : <div aria-hidden className={classes(IconClasses.childWrapper, IconClasses.acronym)}>{getGuildAcronym(guild)}</div>
+                    }
+
+                    <div className={cl("name-and-description")}>
+                        <Forms.FormTitle tag="h5" className={cl("name")}>{guild.name}</Forms.FormTitle>
+                        {guild.description && <Forms.FormText>{guild.description}</Forms.FormText>}
+                    </div>
+                </div>
+            }
+        >
             {bannerUrl && currentTab === Tabs.ServerInfo && (
                 <img
                     className={cl("banner")}
@@ -97,27 +116,6 @@ function GuildInfoModal({ guild }: GuildProps) {
                     })}
                 />
             )}
-
-            <div className={cl("header")}>
-                {iconUrl
-                    ? <img
-                        className={cl("icon")}
-                        src={iconUrl}
-                        alt=""
-                        onClick={() => openImageModal({
-                            url: iconUrl,
-                            height: 512,
-                            width: 512,
-                        })}
-                    />
-                    : <div aria-hidden className={classes(IconClasses.childWrapper, IconClasses.acronym)}>{getGuildAcronym(guild)}</div>
-                }
-
-                <div className={cl("name-and-description")}>
-                    <Heading className={cl("name")}>{guild.name}</Heading>
-                    {guild.description && <Paragraph>{guild.description}</Paragraph>}
-                </div>
-            </div>
 
             <TabBar
                 type="top"
@@ -132,7 +130,7 @@ function GuildInfoModal({ guild }: GuildProps) {
                 >
                     <div style={{ textAlign: "center" }}>
                         <div>
-                            Server Info
+                            {t("vencord.serverInfo.ui.serverInfo")}
                         </div>
                     </div>
                 </TabBar.Item>
@@ -142,7 +140,7 @@ function GuildInfoModal({ guild }: GuildProps) {
                 >
                     <div style={{ textAlign: "center" }}>
                         <div>
-                            Friends
+                            {t("vencord.serverInfo.ui.friends")}
                         </div>
                         {friendCount !== undefined ? ` (${friendCount})` : ""}
                     </div>
@@ -153,7 +151,7 @@ function GuildInfoModal({ guild }: GuildProps) {
                 >
                     <div style={{ textAlign: "center" }}>
                         <div>
-                            Mutual Users
+                            {t("vencord.serverInfo.ui.mutualUsers")}
                         </div>{mutualMembersCount !== undefined ? ` (${mutualMembersCount})` : ""}
                     </div>
                 </TabBar.Item>
@@ -163,7 +161,7 @@ function GuildInfoModal({ guild }: GuildProps) {
                 >
                     <div style={{ textAlign: "center" }}>
                         <div>
-                            Blocked Users
+                            {t("vencord.serverInfo.ui.blockedUsers")}
                         </div>
                         {blockedCount !== undefined ? ` (${blockedCount})` : ""}
                     </div>
@@ -174,7 +172,7 @@ function GuildInfoModal({ guild }: GuildProps) {
                 >
                     <div style={{ textAlign: "center" }}>
                         <div>
-                            Ignored Users
+                            {t("vencord.serverInfo.ui.ignoredUsers")}
                         </div>
                         {ignoredCount !== undefined ? `(${ignoredCount})` : ""}
 
@@ -189,7 +187,7 @@ function GuildInfoModal({ guild }: GuildProps) {
                 {currentTab === Tabs.BlockedUsers && <BlockedUsersTab guild={guild} setCount={setBlockedCount} />}
                 {currentTab === Tabs.IgnoredUsers && <IgnoredUserTab guild={guild} setCount={setIgnoredCount} />}
             </div>
-        </div>
+        </Modal>
     );
 }
 
@@ -229,15 +227,15 @@ function ServerInfoTab({ guild }: GuildProps) {
     });
 
     const Fields = {
-        "Server Owner": owner ? Owner(guild.id, owner) : t("vencord.loading"),
-        "Created At": renderTimestamp(SnowflakeUtils.extractTimestamp(guild.id)),
-        "Joined At": guild.joinedAt ? renderTimestamp(guild.joinedAt.getTime()) : "-", // Not available in lurked guild
-        "Vanity Link": guild.vanityURLCode ? (<a>{`discord.gg/${guild.vanityURLCode}`}</a>) : "-", // Making the anchor href valid would cause Discord to reload
-        "Preferred Locale": guild.preferredLocale || "-",
-        "Verification Level": ["None", "Low", "Medium", "High", "Highest"][guild.verificationLevel] || "?",
-        "Server Boosts": `${guild.premiumSubscriberCount ?? 0} (Level ${guild.premiumTier ?? 0})`,
-        "Channels": GuildChannelStore.getChannels(guild.id)?.count - 1 || "?", // - null category
-        "Roles": GuildRoleStore.getSortedRoles(guild.id).length - 1, // - @everyone
+        [t("vencord.serverInfo.ui.serverOwner")]: owner ? Owner(guild.id, owner) : t("vencord.loading"),
+        [t("vencord.serverInfo.ui.createdAt")]: renderTimestamp(SnowflakeUtils.extractTimestamp(guild.id)),
+        [t("vencord.serverInfo.ui.joinedAt")]: guild.joinedAt ? renderTimestamp(guild.joinedAt.getTime()) : "-", // Not available in lurked guild
+        [t("vencord.serverInfo.ui.vanityLink")]: guild.vanityURLCode ? (<a>{`discord.gg/${guild.vanityURLCode}`}</a>) : "-", // Making the anchor href valid would cause Discord to reload
+        [t("vencord.serverInfo.ui.preferredLocale")]: guild.preferredLocale || "-",
+        [t("vencord.serverInfo.ui.verificationLevel")]: ["None", "Low", "Medium", "High", "Highest"][guild.verificationLevel] || "?",
+        [t("vencord.serverInfo.ui.serverBoosts")]: `${guild.premiumSubscriberCount ?? 0} (Level ${guild.premiumTier ?? 0})`,
+        [t("vencord.serverInfo.ui.channels")]: GuildChannelStore.getChannels(guild.id)?.count - 1 || "?", // - null category
+        [t("vencord.serverInfo.ui.roles")]: GuildRoleStore.getSortedRoles(guild.id).length - 1, // - @everyone
     };
 
     return (

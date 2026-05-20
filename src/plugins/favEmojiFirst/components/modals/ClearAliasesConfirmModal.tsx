@@ -4,36 +4,30 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { Button } from "@components/Button";
-import { Heading } from "@components/Heading";
 import { Paragraph } from "@components/Paragraph";
-import { ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalRoot, ModalSize } from "@utils/modal";
 import { t } from "@utils/translation";
+import { Modal } from "@webpack/common";
 
 import { ClearAliasesConfirmModalProps } from "./types";
 
 export function ClearAliasesConfirmModal({ modalProps, onConfirm }: ClearAliasesConfirmModalProps) {
     return (
-        <ModalRoot {...modalProps} size={ModalSize.SMALL}>
-            <ModalHeader>
-                <Heading style={{ flexGrow: 1 }}>{t("vencord.favEmojiFirst.ui.confirmModal.title")}</Heading>
-                <ModalCloseButton onClick={modalProps.onClose} />
-            </ModalHeader>
-            <ModalContent>
-                <Paragraph>{t("vencord.favEmojiFirst.ui.confirmModal.description")}</Paragraph>
-            </ModalContent>
-            <ModalFooter>
-                <Button
-                    variant="dangerPrimary"
-                    style={{ marginLeft: "auto" }}
-                    onClick={async () => {
+        <Modal
+            {...modalProps}
+            size="sm"
+            title={t("vencord.favEmojiFirst.ui.confirmModal.title")}
+            actions={[
+                {
+                    text: t("vencord.favEmojiFirst.ui.confirmModal.confirmButton"),
+                    variant: "danger-primary",
+                    onClick: async () => {
                         await onConfirm();
                         modalProps.onClose();
-                    }}
-                >
-                    {t("vencord.favEmojiFirst.ui.confirmModal.confirmButton")}
-                </Button>
-            </ModalFooter>
-        </ModalRoot>
+                    }
+                }
+            ]}
+        >
+            <Paragraph>{t("vencord.favEmojiFirst.ui.confirmModal.description")}</Paragraph>
+        </Modal>
     );
 }

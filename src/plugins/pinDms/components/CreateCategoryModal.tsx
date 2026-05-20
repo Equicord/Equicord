@@ -4,18 +4,17 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { BaseText } from "@components/BaseText";
-import { Divider } from "@components/Divider";
 import { Heading } from "@components/Heading";
 import { DEFAULT_COLOR, SWATCHES } from "@plugins/pinDms/constants";
 import { categoryLen, createCategory, getCategory } from "@plugins/pinDms/data";
 import { classNameFactory } from "@utils/css";
-import { ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot, openModalLazy } from "@utils/modal";
 import { t } from "@utils/translation";
+import { RenderModalProps } from "@vencord/discord-types";
 import { extractAndLoadChunksLazy, findComponentByCodeLazy } from "@webpack";
-import { Button, ColorPicker, TextInput, Toasts, useMemo, useState } from "@webpack/common";
+import { ColorPicker, Modal, openModalLazy, TextInput, Toasts, useMemo, useState } from "@webpack/common";
 
 interface ColorPickerWithSwatchesProps {
+    className?: string;
     defaultColor: number;
     colors: number[];
     value: number;
@@ -34,7 +33,7 @@ const cl = classNameFactory("vc-pindms-modal-");
 interface Props {
     categoryId: string | null;
     initialChannelId: string | null;
-    modalProps: ModalProps;
+    modalProps: RenderModalProps;
 }
 
 function useCategory(categoryId: string | null, initalChannelId: string | null) {
@@ -44,7 +43,7 @@ function useCategory(categoryId: string | null, initalChannelId: string | null) 
         } else if (initalChannelId) {
             return {
                 id: Toasts.genId(),
-                name: t("pinDms.pinCategory", { index: categoryLen() + 1 }),
+                name: t("vencord.pinDms.pinCategory", { index: categoryLen() + 1 }),
                 color: DEFAULT_COLOR,
                 collapsed: false,
                 channels: [initalChannelId]
@@ -62,9 +61,7 @@ export function NewCategoryModal({ categoryId, modalProps, initialChannelId }: P
     const [name, setName] = useState(category.name);
     const [color, setColor] = useState(category.color);
 
-    const onSave = (e: React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-        e.preventDefault();
-
+    const onSave = () => {
         category.name = name;
         category.color = color;
 
@@ -76,47 +73,52 @@ export function NewCategoryModal({ categoryId, modalProps, initialChannelId }: P
     };
 
     return (
-        <ModalRoot {...modalProps}>
-            <ModalHeader>
-                <BaseText size="lg" weight="semibold" style={{ flexGrow: 1 }}>{categoryId ? t("vencord.pinDms.editCategoryTitle") : t("vencord.pinDms.newCategory")}</BaseText>
-            </ModalHeader>
-
-            {/* form is here so when you press enter while in the text input it submits */}
-            <form onSubmit={onSave}>
-                <ModalContent className={cl("content")}>
-                    <section>
-                        <Heading>{t("vencord.pinDms.name")}</Heading>
-                        <TextInput
-                            value={name}
-                            onChange={e => setName(e)}
-                        />
-                    </section>
-                    <Divider />
-                    <section>
-                        <Heading>{t("vencord.pinDms.color")}</Heading>
-                        <ColorPickerWithSwatches
-                            key={category.id}
-                            defaultColor={DEFAULT_COLOR}
-                            colors={SWATCHES}
-                            onChange={c => setColor(c!)}
-                            value={color}
-                            renderDefaultButton={() => null}
-                            renderCustomButton={() => (
-                                <ColorPicker
-                                    color={color}
-                                    onChange={c => setColor(c!)}
-                                    key={category.id}
-                                    showEyeDropper={false}
-                                />
-                            )}
-                        />
-                    </section>
-                </ModalContent>
-                <ModalFooter>
-                    <Button type="submit" onClick={onSave} disabled={!name}>{categoryId ? t("vencord.pinDms.save") : t("vencord.pinDms.create")}</Button>
-                </ModalFooter>
+        <Modal
+            {...modalProps}
+            title={categoryId ? t("vencord.pinDms.editCategoryTitle") : t("vencord.pinDms.newCategory")}
+            actions={[{
+                text: categoryId ? t("vencord.pinDms.save") : t("vencord.pinDms.create"),
+                variant: "primary",
+                onClick: onSave,
+                disabled: !name
+            }]}
+        >
+            <form
+                className={cl("content")}
+                onSubmit={e => {
+                    e.preventDefault();
+                    onSave();
+                }}
+            >
+                <section>
+                    <Heading tag="h5">{t("vencord.pinDms.name")}</Heading>
+                    <TextInput
+                        value={name}
+                        onChange={e => setName(e)}
+                    />
+                </section>
+                <section>
+                    <Heading tag="h5">{t("vencord.pinDms.color")}</Heading>
+                    <ColorPickerWithSwatches
+                        className={cl("color-picker")}
+                        key={category.id}
+                        defaultColor={DEFAULT_COLOR}
+                        colors={SWATCHES}
+                        onChange={c => setColor(c!)}
+                        value={color}
+                        renderDefaultButton={() => null}
+                        renderCustomButton={() => (
+                            <ColorPicker
+                                color={color}
+                                onChange={c => setColor(c!)}
+                                key={category.id}
+                                showEyeDropper={false}
+                            />
+                        )}
+                    />
+                </section>
             </form>
-        </ModalRoot>
+        </Modal>
     );
 }
 

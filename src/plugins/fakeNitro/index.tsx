@@ -25,10 +25,10 @@ import { getCurrentGuild } from "@utils/discord";
 import { Logger } from "@utils/Logger";
 import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
-import type { Emoji, Message, Sticker } from "@vencord/discord-types";
+import type { Emoji, Message, RenderModalProps, Sticker } from "@vencord/discord-types";
 import { StickerFormatType } from "@vencord/discord-types/enums";
 import { findByCodeLazy, findByPropsLazy, proxyLazyWebpack } from "@webpack";
-import { Alerts, ChannelStore, DraftType, EmojiStore, FluxDispatcher, GuildMemberStore, IconUtils, lodash, OverridePremiumTypeStore, Parser, PermissionsBits, PermissionStore, StickersStore, UploadHandler, UserSettingsActionCreators, UserSettingsProtoStore } from "@webpack/common";
+import { ChannelStore, ConfirmModal, DraftType, EmojiStore, FluxDispatcher, GuildMemberStore, IconUtils, lodash, openModal, OverridePremiumTypeStore, Parser, PermissionsBits, PermissionStore, StickersStore, UploadHandler, UserSettingsActionCreators, UserSettingsProtoStore } from "@webpack/common";
 import { applyPalette, GIFEncoder, quantize } from "gifenc";
 import type { ReactElement, ReactNode } from "react";
 
@@ -157,6 +157,46 @@ const hasExternalEmojiPerms = (channelId: string) => hasPermission(channelId, Pe
 const hasExternalStickerPerms = (channelId: string) => hasPermission(channelId, PermissionsBits.USE_EXTERNAL_STICKERS);
 const hasEmbedPerms = (channelId: string) => hasPermission(channelId, PermissionsBits.EMBED_LINKS);
 const hasAttachmentPerms = (channelId: string) => hasPermission(channelId, PermissionsBits.ATTACH_FILES);
+
+function getWordBoundary(origStr: string, offset: number) {
+    return (!origStr[offset] || /\s/.test(origStr[offset])) ? "" : " ";
+}
+
+function CannotEmbedNoticeModal({ modalProps, resolve }: { modalProps: RenderModalProps; resolve: (value: boolean) => void; }) {
+    const s = settings.use(["disableEmbedPermissionCheck"]);
+    return (
+        <ConfirmModal
+            {...modalProps}
+            title={t("vencord.fakeNitro.holdOn")}
+            subtitle={
+                <div>
+                    <Paragraph>
+                        {t("vencord.fakeNitro.noEmbedPerms.body1")}
+                        <br />
+                        {t("vencord.fakeNitro.noEmbedPerms.body2")}
+                        <br />
+                        {t("vencord.fakeNitro.noEmbedPerms.body3")}
+                    </Paragraph>
+                </div>
+            }
+            confirmText={t("vencord.fakeNitro.sendAnyway")}
+            cancelText={t("vencord.cancel")}
+            onConfirm={() => resolve(true)}
+            onCloseCallback={() => setImmediate(() => resolve(false))}
+            checkboxProps={{
+                label: t("vencord.fakeNitro.doNotShowAgain"),
+                checked: s.disableEmbedPermissionCheck === true,
+                onChange: checked => s.disableEmbedPermissionCheck = checked
+            }}
+        />
+    );
+}
+
+function showCannotEmbedNotice() {
+    return new Promise<boolean>(resolve => {
+        openModal(props => <CannotEmbedNoticeModal modalProps={props} resolve={resolve} />);
+    });
+}
 
 export default definePlugin({
     name: "FakeNitro",
@@ -801,39 +841,6 @@ export default definePlugin({
             return;
         }
 
-        function getWordBoundary(origStr: string, offset: number) {
-            return (!origStr[offset] || /\s/.test(origStr[offset])) ? "" : " ";
-        }
-
-        function cannotEmbedNotice() {
-            return new Promise<boolean>(resolve => {
-                Alerts.show({
-                    title: t("vencord.fakeNitro.holdOn"),
-                    body: <div>
-                        <Paragraph>
-                            {t("vencord.fakeNitro.noEmbedPerms.body1")}
-                            <br />
-                            {t("vencord.fakeNitro.noEmbedPerms.body2")}
-                            <br />
-                            {t("vencord.fakeNitro.noEmbedPerms.body3")}
-                        </Paragraph>
-                        <Paragraph>
-                            {t("vencord.fakeNitro.noEmbedPerms.disableNotice")}
-                        </Paragraph>
-                    </div>,
-                    confirmText: t("vencord.fakeNitro.sendAnyway"),
-                    cancelText: t("vencord.cancel"),
-                    secondaryConfirmText: t("vencord.fakeNitro.doNotShowAgain"),
-                    onConfirm: () => resolve(true),
-                    onCloseCallback: () => setImmediate(() => resolve(false)),
-                    onConfirmSecondary() {
-                        settings.store.disableEmbedPermissionCheck = true;
-                        resolve(true);
-                    }
-                });
-            });
-        }
-
         this.preSend = addMessagePreSendListener(async (channelId, messageObj, extra) => {
             const { guildId } = this;
 
@@ -859,14 +866,20 @@ export default definePlugin({
 
                 if (sticker.format_type === StickerFormatType.APNG) {
                     if (!hasAttachmentPerms(channelId)) {
-                        Alerts.show({
-                            title: t("vencord.fakeNitro.holdOn"),
-                            body: <div>
-                                <Paragraph>
-                                    {t("vencord.fakeNitro.noAttachmentPerms.body")}
-                                </Paragraph>
-                            </div>
-                        });
+                        openModal(props => (
+                            <ConfirmModal
+                                {...props}
+                                title={t("vencord.fakeNitro.holdOn")}
+                                confirmText={t("vencord.fakeNitro.ok")}
+                                variant="primary"
+                            >
+                                <div>
+                                    <Paragraph>
+                                        {t("vencord.fakeNitro.noAttachmentPerms.body")}
+                                    </Paragraph>
+                                </div>
+                            </ConfirmModal>
+                        ));
                     } else {
                         this.sendAnimatedSticker(link, sticker.id, channelId);
                     }
@@ -910,7 +923,7 @@ export default definePlugin({
             }
 
             if (hasBypass && !s.disableEmbedPermissionCheck && !hasEmbedPerms(channelId)) {
-                if (!await cannotEmbedNotice()) {
+                if (!await showCannotEmbedNotice()) {
                     return { cancel: true };
                 }
             }
@@ -941,7 +954,7 @@ export default definePlugin({
             });
 
             if (hasBypass && !s.disableEmbedPermissionCheck && !hasEmbedPerms(channelId)) {
-                if (!await cannotEmbedNotice()) {
+                if (!await showCannotEmbedNotice()) {
                     return { cancel: true };
                 }
             }

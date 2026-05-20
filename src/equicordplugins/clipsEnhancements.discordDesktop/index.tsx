@@ -40,7 +40,7 @@ const settings = definePluginSettings({
     },
     enableSpeakingIndicators: {
         type: OptionType.BOOLEAN,
-        description: "Enable speaking indicators",
+        description: t("equicord.clipsEnhancements.settings.enableSpeakingIndicators"),
         default: true,
         restartNeeded: true
     },
@@ -104,14 +104,6 @@ export default definePlugin({
                 replace: "$self.patchTimeslots($&)"
             }
         },
-        // enables clips
-        {
-            find: "2026-03-clips-experiment",
-            replacement: {
-                match: /defaultConfig:\{enableClips:!\d,ignorePlatformRestriction:!\d,enableScreenshotKeybind:!\d,enableVoiceOnlyClips:!\d,enableSpeakingIndicators:!\d,enableAdvancedSignals:!\d\}/,
-                replace: "defaultConfig:{enableClips:!0,ignorePlatformRestriction:$self.settings.store.ignorePlatformRestriction,enableScreenshotKeybind:$self.settings.store.enableScreenshotKeybind,enableVoiceOnlyClips:$self.settings.store.enableVoiceOnlyClips,enableSpeakingIndicators:$self.settings.store.enableSpeakingIndicators,enableAdvancedSignals:$self.settings.store.enableAdvancedSignals}"
-            }
-        }
     ],
 
     patchTimeslots(timeslots: { id: string; value: number; label: string; }[]) {

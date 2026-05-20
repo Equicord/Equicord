@@ -17,17 +17,14 @@
 */
 
 import { definePluginSettings } from "@api/Settings";
-import { BaseText } from "@components/BaseText";
 import { CodeBlock } from "@components/CodeBlock";
 import ErrorBoundary from "@components/ErrorBoundary";
-import { Flex } from "@components/Flex";
 import { Heading } from "@components/Heading";
 import { EquicordDevs } from "@utils/constants";
 import { copyWithToast } from "@utils/discord";
-import { closeModal, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalRoot, ModalSize, openModal } from "@utils/modal";
 import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
-import { Button, ChannelStore } from "@webpack/common";
+import { ChannelStore, Modal, openModal } from "@webpack/common";
 
 function DecodeIcon() {
     return (
@@ -65,32 +62,26 @@ function decodeBase64Strings(base64Strings) {
 }
 
 function openDecodedBase64Modal(decodedContent) {
-    const key = openModal(props => (
+    openModal(props => (
         <ErrorBoundary>
-            <ModalRoot {...props} size={ModalSize.LARGE}>
-                <ModalHeader>
-                    <BaseText size="lg" weight="semibold" style={{ flexGrow: 1 }}>{t("equicord.baseDecoder.ui.modalTitle")}</BaseText>
-                    <ModalCloseButton onClick={() => closeModal(key)} />
-                </ModalHeader>
-                <ModalContent>
-                    <div style={{ padding: "16px 0" }}>
-                        <Heading>{t("equicord.baseDecoder.ui.decodedContent")}</Heading>
-                        {decodedContent.map((content, index) => (
-                            <CodeBlock key={index} content={content} lang="" />
-                        ))}
-                    </div>
-                </ModalContent >
-                <ModalFooter>
-                    <Flex gap={10}>
-                        {decodedContent.map((content, index) => (
-                            <Button key={index} onClick={() => copyWithToast(content, t("equicord.baseDecoder.ui.copiedToast"))}>
-                                {t("equicord.baseDecoder.ui.copyDecoded")} {index + 1}
-                            </Button>
-                        ))}
-                    </Flex>
-                </ModalFooter>
-            </ModalRoot >
-        </ErrorBoundary >
+            <Modal
+                {...props}
+                size="lg"
+                title={t("equicord.baseDecoder.ui.modalTitle")}
+                actions={decodedContent.map((content, index) => ({
+                    text: `${t("equicord.baseDecoder.ui.copyDecoded")} ${index + 1}`,
+                    variant: "primary",
+                    onClick: () => copyWithToast(content, t("equicord.baseDecoder.ui.copiedToast"))
+                }))}
+            >
+                <div style={{ padding: "16px 0" }}>
+                    <Heading>{t("equicord.baseDecoder.ui.decodedContent")}</Heading>
+                    {decodedContent.map((content, index) => (
+                        <CodeBlock key={index} content={content} lang="" />
+                    ))}
+                </div>
+            </Modal>
+        </ErrorBoundary>
     ));
 }
 

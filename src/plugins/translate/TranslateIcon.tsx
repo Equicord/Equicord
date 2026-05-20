@@ -17,12 +17,12 @@
 */
 
 import { ChatBarButton, ChatBarButtonFactory } from "@api/ChatButtons";
-import { Paragraph } from "@components/Paragraph";
 import { TooltipContainer } from "@components/TooltipContainer";
 import { classes } from "@utils/misc";
 import { t, Translate } from "@utils/translation";
 import { IconComponent } from "@utils/types";
-import { Alerts, useEffect, useState } from "@webpack/common";
+import { RenderModalProps } from "@vencord/discord-types";
+import { ConfirmModal, openModal, useEffect, useState } from "@webpack/common";
 
 import { settings } from "./settings";
 import { openTranslateModal } from "./TranslateModal";
@@ -43,6 +43,31 @@ export const TranslateIcon: IconComponent = ({ height = 20, width = 20, classNam
 
 export let setShouldShowTranslateEnabledTooltip: undefined | ((show: boolean) => void);
 
+function AutoTranslateConfirmModal(props: RenderModalProps) {
+    const s = settings.use(["dismissedAutoTranslateAlert"]);
+
+    return (
+        <ConfirmModal
+            {...props}
+            title={t("vencord.translate.autoTranslateEnabled.title")}
+            subtitle={
+                <Translate i18nKey="vencord.translate.autoTranslateEnabled.body">
+                    You just enabled Auto Translate! Any message <b>will automatically be translated</b> before being sent.
+                </Translate>
+            }
+            confirmText={t("vencord.translate.disableAutoTranslate")}
+            onConfirm={() => settings.store.autoTranslate = false}
+            cancelText={t("vencord.translate.gotIt")}
+            variant="primary"
+            checkboxProps={{
+                label: t("vencord.translate.dontShowAgain"),
+                checked: s.dismissedAutoTranslateAlert === true,
+                onChange: checked => s.dismissedAutoTranslateAlert = checked,
+            }}
+        />
+    );
+}
+
 export const TranslateChatBarIcon: ChatBarButtonFactory = ({ isMainChat }) => {
     const { autoTranslate } = settings.use(["autoTranslate"]);
 
@@ -57,24 +82,8 @@ export const TranslateChatBarIcon: ChatBarButtonFactory = ({ isMainChat }) => {
     const toggle = () => {
         const newState = !autoTranslate;
         settings.store.autoTranslate = newState;
-        if (newState && settings.store.showAutoTranslateAlert !== false)
-            Alerts.show({
-                title: t("vencord.translate.autoTranslateEnabled.title"),
-                body: <>
-                    <Paragraph>
-                        <Translate i18nKey="vencord.translate.autoTranslateEnabled.body">
-                            You just enabled Auto Translate! Any message <b>will automatically be translated</b> before being sent.
-                        </Translate>
-                    </Paragraph>
-                </>,
-                confirmText: t("vencord.translate.disableAutoTranslate"),
-                cancelText: t("vencord.translate.gotIt"),
-                secondaryConfirmText: t("vencord.translate.dontShowAgain"),
-                onConfirmSecondary: () => settings.store.showAutoTranslateAlert = false,
-                onConfirm: () => settings.store.autoTranslate = false,
-                // troll
-                confirmColor: "vc-notification-log-danger-btn",
-            });
+        if (newState && !settings.store.dismissedAutoTranslateAlert)
+            openModal(props => <AutoTranslateConfirmModal {...props} />);
     };
 
     const button = (

@@ -13,10 +13,10 @@ import { Flex } from "@components/Flex";
 import { Paragraph } from "@components/Paragraph";
 import { Devs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
-import { ModalContent, ModalHeader, ModalRoot, ModalSize, openModal } from "@utils/modal";
 import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
-import { Forms, RelationshipStore } from "@webpack/common";
+import { RenderModalProps } from "@vencord/discord-types";
+import { Forms, Modal,openModal, RelationshipStore } from "@webpack/common";
 
 interface rankInfo {
     title: string;
@@ -85,10 +85,12 @@ const ranks: rankInfo[] =
     ];
 
 function openRankModal(rank: rankInfo) {
-    openModal(props => (
+    openModal((props: RenderModalProps) => (
         <ErrorBoundary>
-            <ModalRoot {...props} size={ModalSize.DYNAMIC}>
-                <ModalHeader>
+            <Modal
+                {...props}
+                size="sm"
+                title={
                     <Flex className={cl("flex")}>
                         <Forms.FormTitle
                             className={cl("img")}
@@ -98,15 +100,14 @@ function openRankModal(rank: rankInfo) {
                             {rank.title}
                         </Forms.FormTitle>
                     </Flex>
-                </ModalHeader>
-                <ModalContent>
-                    <div className={cl("text")}>
-                        <Paragraph>
-                            {rank.description}
-                        </Paragraph>
-                    </div>
-                </ModalContent>
-            </ModalRoot>
+                }
+            >
+                <div className={cl("text")}>
+                    <Paragraph>
+                        {rank.description}
+                    </Paragraph>
+                </div>
+            </Modal>
         </ErrorBoundary >
     ));
 }

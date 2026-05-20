@@ -4,12 +4,10 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { Button } from "@components/Button";
-import { HeadingPrimary } from "@components/Heading";
 import { getLanguageColor } from "@equicordplugins/githubRepos/colors";
 import { GitHubRepo } from "@equicordplugins/githubRepos/types";
-import { ModalContent, ModalFooter, ModalHeader, ModalRoot } from "@utils/modal";
-import { React } from "@webpack/common";
+import { RenderModalProps } from "@vencord/discord-types";
+import { Modal, React } from "@webpack/common";
 
 import { cl } from "..";
 import { Star } from "./Star";
@@ -20,7 +18,7 @@ interface ReposModalProps {
     rootProps: any;
 }
 
-export function ReposModal({ repos, username, rootProps }: ReposModalProps) {
+export function ReposModal({ repos, username, rootProps }: ReposModalProps & { rootProps: RenderModalProps; }) {
     const renderTableHeader = () => (
         <thead>
             <tr>
@@ -63,44 +61,38 @@ export function ReposModal({ repos, username, rootProps }: ReposModalProps) {
     );
 
     return (
-        <ModalRoot className={cl("modal")} size="large" {...rootProps}>
-            <ModalHeader>
-                <HeadingPrimary className={cl("modal-title")}>
-                    {username}'s GitHub Repositories
-                </HeadingPrimary>
-            </ModalHeader>
-            <ModalContent className={cl("modal-content")}>
-                <div className={cl("table-container")}>
-                    <table className={cl("table")}>
-                        <colgroup>
-                            <col className={cl("header-repo")} />
-                            <col className={cl("header-description")} />
-                            <col className={cl("header-language")} />
-                            <col className={cl("header-stars")} />
-                        </colgroup>
-                        {renderTableHeader()}
-                        <tbody>
-                            {repos.map(renderTableRow)}
-                        </tbody>
-                    </table>
-                </div>
-            </ModalContent>
-            <ModalFooter className={cl("modal-footer")}>
-                <Button
-                    className={cl("modal-footer-github")}
-                    variant="link"
-                    onClick={() => window.open(`https://github.com/${username}?tab=repositories`, "_blank")}
-                >
-                    View on GitHub
-                </Button>
-                <Button
-                    className={cl("modal-footer-close")}
-                    variant="secondary"
-                    onClick={rootProps.onClose}
-                >
-                    Close
-                </Button>
-            </ModalFooter>
-        </ModalRoot>
+        <Modal
+            {...rootProps}
+            className={cl("modal")}
+            size="lg"
+            title={`${username}'s GitHub Repositories`}
+            actions={[
+                {
+                    text: "View on GitHub",
+                    variant: "link",
+                    onClick: () => window.open(`https://github.com/${username}?tab=repositories`, "_blank")
+                },
+                {
+                    text: "Close",
+                    variant: "secondary",
+                    onClick: rootProps.onClose
+                }
+            ]}
+        >
+            <div className={cl("table-container")}>
+                <table className={cl("table")}>
+                    <colgroup>
+                        <col className={cl("header-repo")} />
+                        <col className={cl("header-description")} />
+                        <col className={cl("header-language")} />
+                        <col className={cl("header-stars")} />
+                    </colgroup>
+                    {renderTableHeader()}
+                    <tbody>
+                        {repos.map(renderTableRow)}
+                    </tbody>
+                </table>
+            </div>
+        </Modal>
     );
 }

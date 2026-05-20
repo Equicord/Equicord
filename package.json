@@ -1,7 +1,7 @@
 {
     "name": "equicord",
     "private": "true",
-    "version": "1.14.12.0",
+    "version": "1.14.13.0",
     "description": "The other cutest Discord client mod",
     "homepage": "https://github.com/Equicord/Equicord#readme",
     "bugs": {
@@ -33,8 +33,11 @@
         "repair": "node scripts/runInstaller.mjs -- --repair",
         "lint": "eslint",
         "lint-styles": "stylelint \"src/**/*.css\" --ignore-pattern src/userplugins",
+        "lint-styles:fix": "pnpm lint-styles --fix",
         "lint:fix": "pnpm lint --fix",
-        "test": "pnpm buildStandalone && pnpm testTsc && pnpm lint:fix && pnpm lint-styles && pnpm generatePluginJson",
+        "lint:intl": "node scripts/lintIntl.mjs",
+        "lint:patches": "node scripts/lintPatches.mjs",
+        "test": "pnpm buildStandalone && pnpm testTsc && pnpm lint:fix && pnpm lint-styles && pnpm lint:intl && pnpm lint:patches && pnpm generatePluginJson",
         "testWeb": "pnpm lint:fix && pnpm buildWeb && pnpm testTsc",
         "testTsc": "tsc --noEmit",
         "depCheck": "node scripts/depCheck.mjs"
@@ -98,31 +101,7 @@
         "typescript-transform-paths": "^3.5.6",
         "zip-local": "^0.3.5"
     },
-    "packageManager": "pnpm@10.33.0",
-    "pnpm": {
-        "patchedDependencies": {
-            "@types/less@3.0.8": "patches/@types__less@3.0.8.patch"
-        },
-        "peerDependencyRules": {
-            "ignoreMissing": [
-                "eslint-plugin-import",
-                "eslint"
-            ]
-        },
-        "allowedDeprecatedVersions": {
-            "source-map-resolve": "*",
-            "resolve-url": "*",
-            "source-map-url": "*",
-            "urix": "*",
-            "q": "*"
-        },
-        "onlyBuiltDependencies": [
-            "esbuild"
-        ],
-        "overrides": {
-            "@eslint/plugin-kit@<0.3.4": ">=0.3.4"
-        }
-    },
+    "packageManager": "pnpm@11.0.9",
     "engines": {
         "node": ">=18"
     }

@@ -18,15 +18,13 @@
 
 import * as DataStore from "@api/DataStore";
 import { Settings } from "@api/Settings";
-import { BaseText } from "@components/BaseText";
-import { Flex } from "@components/Flex";
 import { Paragraph } from "@components/Paragraph";
 import { openNotificationSettingsModal } from "@components/settings/tabs/vencord/NotificationSettings";
 import { classNameFactory } from "@utils/css";
-import { closeModal, ModalCloseButton, ModalFooter, ModalHeader, ModalProps, ModalRoot, ModalSize, openModal } from "@utils/modal";
 import { useAwaiter } from "@utils/react";
 import { t } from "@utils/translation";
-import { Alerts, Button, ListScrollerThin, React, Timestamp, useEffect, useReducer, useState } from "@webpack/common";
+import { RenderModalProps } from "@vencord/discord-types";
+import { ConfirmModal, ListScrollerThin, Modal, openModal, React, Timestamp, useEffect, useReducer, useState } from "@webpack/common";
 import { nanoid } from "nanoid";
 import type { DispatchWithoutAction } from "react";
 
@@ -133,7 +131,7 @@ function NotificationEntry({ data }: { data: PersistentNotificationData; }) {
 export function NotificationLog({ log, pending }: { log: PersistentNotificationData[], pending: boolean; }) {
     if (!log.length && !pending)
         return (
-            <div className={cl("container")}>
+            <div>
                 <div className={cl("empty")} />
                 <Paragraph style={{ textAlign: "center" }}>
                     {t("api.notifications.noNotifications")}
@@ -153,56 +151,47 @@ export function NotificationLog({ log, pending }: { log: PersistentNotificationD
     );
 }
 
-function LogModal({ modalProps, close }: { modalProps: ModalProps; close(): void; }) {
+function LogModal(props: RenderModalProps) {
     const [log, pending] = useLogs();
 
     return (
-        <ModalRoot {...modalProps} size={ModalSize.LARGE} className={cl("modal")}>
-            <ModalHeader>
-                <BaseText size="lg" weight="semibold" style={{ flexGrow: 1 }}>{t("api.notifications.notificationLog")}</BaseText>
-                <ModalCloseButton onClick={close} />
-            </ModalHeader>
-
-            <div style={{ width: "100%" }}>
-                <NotificationLog log={log} pending={pending} />
-            </div>
-
-            <ModalFooter>
-                <Flex>
-                    <Button onClick={openNotificationSettingsModal}>
-                        {t("api.notifications.notificationSettings")}
-                    </Button>
-
-                    <Button
-                        disabled={log.length === 0}
-                        color={Button.Colors.RED}
-                        onClick={() => {
-                            Alerts.show({
-                                title: t("api.notifications.logs.title"),
-                                body: t("api.notifications.logs.body", { count: log.length }),
-                                async onConfirm() {
+        <Modal
+            {...props}
+            size="xl"
+            title={t("api.notifications.notificationLog")}
+            actions={[
+                {
+                    text: t("api.notifications.notificationSettings"),
+                    variant: "primary",
+                    onClick: openNotificationSettingsModal
+                },
+                {
+                    text: t("api.notifications.logs.clearNotificationLog"),
+                    variant: "critical-primary",
+                    disabled: !log.length,
+                    onClick() {
+                        openModal(props =>
+                            <ConfirmModal
+                                {...props}
+                                title={t("api.notifications.logs.title")}
+                                subtitle={t("api.notifications.logs.body", { count: log.length })}
+                                confirmText={t("api.notifications.logs.confirm")}
+                                cancelText={t("api.notifications.logs.cancel")}
+                                onConfirm={async () => {
                                     await DataStore.set(KEY, []);
                                     signals.forEach(x => x());
-                                },
-                                confirmText: t("api.notifications.logs.confirm"),
-                                confirmColor: "vc-notification-log-danger-btn",
-                                cancelText: t("api.notifications.cancel")
-                            });
-                        }}
-                    >
-                        {t("api.notifications.clearNotificationLog")}
-                    </Button>
-                </Flex>
-            </ModalFooter>
-        </ModalRoot>
+                                }}
+                            />
+                        );
+                    }
+                }
+            ]}
+        >
+            <NotificationLog log={log} pending={pending} />
+        </Modal>
     );
 }
 
 export function openNotificationLogModal() {
-    const key = openModal(modalProps => (
-        <LogModal
-            modalProps={modalProps}
-            close={() => closeModal(key)}
-        />
-    ));
+    openModal(props => <LogModal {...props} />);
 }

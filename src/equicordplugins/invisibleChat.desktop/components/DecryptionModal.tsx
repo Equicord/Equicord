@@ -16,60 +16,50 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-import { Heading, HeadingTertiary } from "@components/Heading";
-import {
-    ModalContent,
-    ModalFooter,
-    ModalHeader,
-    ModalRoot,
-    openModal,
-} from "@utils/modal";
+import { Heading } from "@components/Heading";
 import { t } from "@utils/translation";
-import { Button, React, TextInput } from "@webpack/common";
+import { RenderModalProps } from "@vencord/discord-types";
+import { Modal, openModal, React, TextInput } from "@webpack/common";
 
 import { buildEmbed, decrypt } from "../index";
 
-export function DecModal(props: any) {
+export function DecModal(props: RenderModalProps & { message: any; }) {
     const encryptedMessage: string = props?.message?.content;
     const [password, setPassword] = React.useState("password");
 
+    const onDecrypt = () => {
+        const toSend = decrypt(encryptedMessage, password, true);
+        if (!toSend || !props?.message) return;
+        buildEmbed(props?.message, toSend);
+        props.onClose();
+    };
+
     return (
-        <ModalRoot {...props}>
-            <ModalHeader>
-                <HeadingTertiary>Decrypt Message</HeadingTertiary>
-            </ModalHeader>
-
-            <ModalContent>
-                <Heading style={{ marginTop: "10px" }}>Message with Encryption</Heading>
-                <TextInput defaultValue={encryptedMessage} disabled={true}></TextInput>
-                <Heading style={{ marginTop: "10px" }}>Password</Heading>
-                <TextInput
-                    style={{ marginBottom: "20px" }}
-                    onChange={setPassword}
-                />
-            </ModalContent>
-
-            <ModalFooter>
-                <Button
-                    color={Button.Colors.GREEN}
-                    onClick={() => {
-                        const toSend = decrypt(encryptedMessage, password, true);
-                        if (!toSend || !props?.message) return;
-                        buildEmbed(props?.message, toSend);
-                        props.onClose();
-                    }}>
-                    Decrypt
-                </Button>
-                <Button
-                    color={Button.Colors.TRANSPARENT}
-                    look={Button.Looks.LINK}
-                    style={{ left: 15, position: "absolute" }}
-                    onClick={props.onClose}
-                >
-                    {t("vencord.cancel")}
-                </Button>
-            </ModalFooter>
-        </ModalRoot>
+        <Modal
+            {...props}
+            size="sm"
+            title="Decrypt Message"
+            actions={[
+                {
+                    text: "Decrypt",
+                    variant: "primary",
+                    onClick: onDecrypt
+                },
+                {
+                    text: t("vencord.cancel"),
+                    variant: "secondary",
+                    onClick: props.onClose
+                }
+            ]}
+        >
+            <Heading style={{ marginTop: "10px" }}>Message with Encryption</Heading>
+            <TextInput defaultValue={encryptedMessage} disabled={true}></TextInput>
+            <Heading style={{ marginTop: "10px" }}>Password</Heading>
+            <TextInput
+                style={{ marginBottom: "20px" }}
+                onChange={setPassword}
+            />
+        </Modal>
     );
 }
 

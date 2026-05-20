@@ -5,11 +5,11 @@
  */
 
 import * as DataStore from "@api/DataStore";
-import { HeadingPrimary, HeadingSecondary } from "@components/Heading";
+import { HeadingSecondary } from "@components/Heading";
 import { classNameFactory } from "@utils/css";
 import { Margins } from "@utils/margins";
-import { ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot } from "@utils/modal";
-import { Button, SearchableSelect, useEffect, useMemo, useState } from "@webpack/common";
+import { RenderModalProps } from "@vencord/discord-types";
+import { Modal, SearchableSelect, useEffect, useMemo, useState } from "@webpack/common";
 
 import { DATASTORE_KEY, getSystemTimezone, resolveUserTimezone, settings, timezones } from ".";
 import { setTimezone, setUserDatabaseTimezone } from "./database";
@@ -21,7 +21,7 @@ export async function setUserTimezone(userId: string, timezone: string | null) {
 
 const cl = classNameFactory("vc-timezone-");
 
-export function SetTimezoneModal({ userId, modalProps, database }: { userId: string, modalProps: ModalProps; database?: boolean; }) {
+export function SetTimezoneModal({ userId, modalProps, database }: { userId: string, modalProps: RenderModalProps; database?: boolean; }) {
     const [currentValue, setCurrentValue] = useState<string | null>(null);
 
     useEffect(() => {
@@ -39,63 +39,59 @@ export function SetTimezoneModal({ userId, modalProps, database }: { userId: str
         });
     }, []);
 
+    const actions = [
+        {
+            text: "Save",
+            variant: "primary",
+            disabled: currentValue === null,
+            onClick: async () => {
+                if (database) {
+                    const success = await setTimezone(currentValue!);
+                    if (success) {
+                        await setUserDatabaseTimezone(userId, currentValue);
+                    }
+                } else {
+                    await setUserTimezone(userId, currentValue);
+                }
+
+                modalProps.onClose();
+            }
+        }
+    ];
+
+    if (!database) {
+        actions.unshift({
+            text: "Delete Timezone",
+            variant: "dangerPrimary",
+            disabled: false,
+            onClick: async () => {
+                await setUserTimezone(userId, null);
+                modalProps.onClose();
+            }
+        });
+    }
+
     return (
-        <ModalRoot {...modalProps}>
-            <ModalHeader className={cl("modal-header")}>
-                <HeadingPrimary>
-                    Timezones
-                </HeadingPrimary>
-                <ModalCloseButton onClick={modalProps.onClose} />
-            </ModalHeader>
+        <Modal
+            {...modalProps}
+            size="sm"
+            title="Timezones"
+            actions={actions}
+        >
+            <section className={Margins.bottom16}>
+                <HeadingSecondary>
+                    Select Timezone
+                </HeadingSecondary>
 
-            <ModalContent className={cl("modal-content")}>
-                <section className={Margins.bottom16}>
-                    <HeadingSecondary>
-                        Select Timezone
-                    </HeadingSecondary>
-
-                    <SearchableSelect
-                        options={options}
-                        value={options.find(o => o.value === currentValue)?.value}
-                        placeholder={"Select a Timezone"}
-                        maxVisibleItems={5}
-                        closeOnSelect={true}
-                        onChange={v => setCurrentValue(v)}
-                    />
-                </section>
-            </ModalContent>
-
-            <ModalFooter className={cl("modal-footer")}>
-                {!database && (
-                    <Button
-                        color={Button.Colors.RED}
-                        onClick={async () => {
-                            await setUserTimezone(userId, null);
-                            modalProps.onClose();
-                        }}
-                    >
-                        Delete Timezone
-                    </Button>
-                )}
-                <Button
-                    color={Button.Colors.BRAND}
-                    disabled={currentValue === null}
-                    onClick={async () => {
-                        if (database) {
-                            const success = await setTimezone(currentValue!);
-                            if (success) {
-                                await setUserDatabaseTimezone(userId, currentValue);
-                            }
-                        } else {
-                            await setUserTimezone(userId, currentValue);
-                        }
-
-                        modalProps.onClose();
-                    }}
-                >
-                    Save
-                </Button>
-            </ModalFooter>
-        </ModalRoot>
+                <SearchableSelect
+                    options={options}
+                    value={options.find(o => o.value === currentValue)?.value}
+                    placeholder={"Select a Timezone"}
+                    maxVisibleItems={5}
+                    closeOnSelect={true}
+                    onChange={v => setCurrentValue(v)}
+                />
+            </section>
+        </Modal>
     );
 }

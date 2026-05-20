@@ -19,9 +19,8 @@ import {
     wrapTab,
 } from "@components/settings/tabs/BaseTab";
 import { classes, isObjectEmpty } from "@utils/misc";
-import { closeAllModals } from "@utils/modal";
 import { relaunch } from "@utils/native";
-import { Alerts, NavigationRouter, Toasts, useEffect, useState } from "@webpack/common";
+import { Alerts, closeAllModals,NavigationRouter, Toasts, useEffect, useState } from "@webpack/common";
 
 import userpluginInstaller, { Native } from "..";
 import {

@@ -72,7 +72,7 @@ async function searchGoogleFonts(query: string) {
 }
 
 const preloadFont = (family: string) =>
-    loadFontStyle(createGoogleFontUrl(family, "&text=The quick brown fox jumps over the lazy dog"));
+    loadFontStyle(createGoogleFontUrl(family, ":wght@400;700"));
 
 let styleElement: HTMLStyleElement | null = null;
 
@@ -136,14 +136,13 @@ function GoogleFontSearch({ onSelect }: { onSelect: (font: GoogleFontMetadata) =
     return (
         <section>
             <HeadingSecondary>{t("equicord.fontLoader.ui.searchGoogleFonts")}</HeadingSecondary>
-            <Paragraph>{t("equicord.fontLoader.ui.clickToApply")}</Paragraph>
+            <Paragraph className={Margins.bottom8}>{t("equicord.fontLoader.ui.clickToApply")}</Paragraph>
 
             <TextInput
                 value={query}
                 onChange={e => handleSearch(e)}
                 placeholder={t("equicord.fontLoader.ui.searchFonts")}
                 disabled={loading}
-                className={Margins.bottom16}
             />
 
             {results.length > 0 && (

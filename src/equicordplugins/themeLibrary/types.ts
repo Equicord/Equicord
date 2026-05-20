@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { ModalProps } from "@utils/modal";
-import { User } from "@vencord/discord-types";
+import { RenderModalProps, User } from "@vencord/discord-types";
 
 type Author = {
     github_name?: string;
@@ -35,7 +34,7 @@ export interface Theme {
     requiresThemeAttributes?: boolean;
 }
 
-export interface ThemeInfoModalProps extends ModalProps {
+export interface ThemeInfoModalProps extends RenderModalProps {
     author: User | User[];
     theme: Theme;
 }

@@ -13,12 +13,12 @@ const logger = new Logger("ProfileSectionsAPI");
 
 export type ProfileSectionFactory = (props: { userId: string; isSideBar: boolean; }) => ReactNode | Promise<ReactNode> | null;
 
-interface SectionEntry {
+export interface ProfileSectionData {
     render: ProfileSectionFactory;
     priority: number;
 }
 
-const profileSections = new Map<string, SectionEntry>();
+const profileSections = new Map<string, ProfileSectionData>();
 const profileSectionListeners = new Set<() => void>();
 
 /**

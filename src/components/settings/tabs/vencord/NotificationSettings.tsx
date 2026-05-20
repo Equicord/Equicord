@@ -6,7 +6,6 @@
 
 import { openNotificationLogModal } from "@api/Notifications/notificationLog";
 import { useSettings } from "@api/Settings";
-import { BaseText } from "@components/BaseText";
 import { Button } from "@components/Button";
 import { ErrorCard } from "@components/ErrorCard";
 import { Flex } from "@components/Flex";
@@ -15,9 +14,8 @@ import { Heading } from "@components/Heading";
 import { Paragraph } from "@components/Paragraph";
 import { Margins } from "@utils/margins";
 import { identity } from "@utils/misc";
-import { ModalCloseButton, ModalContent, ModalHeader, ModalRoot, ModalSize, openModal } from "@utils/modal";
 import { t } from "@utils/translation";
-import { Select, Slider } from "@webpack/common";
+import { Modal, openModal, Select, Slider } from "@webpack/common";
 
 export function NotificationSection() {
     return (
@@ -41,16 +39,13 @@ export function NotificationSection() {
 
 export function openNotificationSettingsModal() {
     openModal(props => (
-        <ModalRoot {...props} size={ModalSize.MEDIUM}>
-            <ModalHeader>
-                <BaseText size="lg" weight="semibold" style={{ flexGrow: 1 }}>Notification Settings</BaseText>
-                <ModalCloseButton onClick={props.onClose} />
-            </ModalHeader>
-
-            <ModalContent>
-                <NotificationSettings />
-            </ModalContent>
-        </ModalRoot>
+        <Modal
+            {...props}
+            size="lg"
+            title={t("api.notifications.notificationSettings")}
+        >
+            <NotificationSettings />
+        </Modal>
     ));
 }
 
@@ -58,8 +53,8 @@ function NotificationSettings() {
     const settings = useSettings(["notifications.*"]).notifications;
 
     return (
-        <div style={{ padding: "1em 0" }}>
-            <Heading>Notification Style</Heading>
+        <>
+            <Heading tag="h5">Notification Style</Heading>
             {settings.useNative !== "never" && Notification?.permission === "denied" && (
                 <ErrorCard style={{ padding: "1em" }} className={Margins.bottom8}>
                     <Heading>Desktop Notification Permission denied</Heading>
@@ -135,6 +130,6 @@ function NotificationSettings() {
                 onValueRender={v => v === 200 ? "∞" : v}
                 onMarkerRender={v => v === 200 ? "∞" : v}
             />
-        </div>
+        </>
     );
 }

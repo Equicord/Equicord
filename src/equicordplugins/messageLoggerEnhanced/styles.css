@@ -1,8 +1,6 @@
 .vc-msg-logger-enhanced-modal-root {
-    max-height: 80vh;
-    min-height: 80vh;
-    min-width: 85vw;
-    max-width: 85vw;
+    max-height: 100%;
+    max-width: 100%;
 }
 
 .vc-msg-logger-enhanced-modal-empty-logs {
@@ -19,16 +17,11 @@
     cursor: pointer;
 }
 
-.vc-msg-logger-enhanced-modal-header {
-    flex-direction: column;
-
-    /* width: 100%; */
-}
-
 .vc-msg-logger-enhanced-modal-content-container {
     /* max-height: 80vh; */
     overflow: hidden;
     height: 100%;
+    width: 100%;
     transition: opacity 100ms ease-in;
 }
 
@@ -43,18 +36,15 @@
     height: 100%;
 }
 
-.vc-msg-logger-enhanced-modal-header > div:has(input) {
-    width: 100%;
-}
-
 .vc-msg-logger-enhanced-modal-tab-bar-item {
     padding-bottom: 16px;
     margin-bottom: -2px;
 }
 
 .vc-msg-logger-enhanced-modal-tab-bar {
-    margin-top: 20px;
-    width: 100%;
+    margin-bottom: 12px;
+    margin-left: -24px;
+    width: 114.5%;
     justify-content: space-around;
 }
 
@@ -100,4 +90,16 @@
 
 .vc-updater-modal-content {
     padding: 1rem 2rem;
+}
+
+.vc-msg-logger-enhanced-modal {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    padding-right: 20px;
+}
+
+.vc-msg-logger-enhanced-modal-filter {
+    width: 106%;
 }

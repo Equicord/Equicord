@@ -15,10 +15,10 @@ import { cl, DecorationModalClasses, requireAvatarDecorationModal, requireCreate
 import { AvatarDecorationModalPreview } from "@plugins/decor/ui/components";
 import { openInviteModal } from "@utils/discord";
 import { Margins } from "@utils/margins";
-import { closeAllModals, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot, ModalSize, openModal } from "@utils/modal";
 import { t } from "@utils/translation";
+import { RenderModalProps } from "@vencord/discord-types";
 import { filters, findComponentByCodeLazy, mapMangledModuleLazy } from "@webpack";
-import { Button, FluxDispatcher, GuildStore, NavigationRouter, TextInput, useEffect, useMemo, UserStore, useState } from "@webpack/common";
+import { closeAllModals, FluxDispatcher, GuildStore, Modal, NavigationRouter, openModal, TextInput, useEffect, useMemo, UserStore, useState } from "@webpack/common";
 
 const FileUpload = findComponentByCodeLazy(".currentTarget.files", "lineClamp:1");
 
@@ -45,7 +45,7 @@ function useObjectURL(object: Blob | MediaSource | null) {
     return url;
 }
 
-function CreateDecorationModal(props: ModalProps) {
+function CreateDecorationModal(props: RenderModalProps) {
     const [name, setName] = useState("");
     const [file, setFile] = useState<File | null>(null);
     const [submitting, setSubmitting] = useState(false);
@@ -61,60 +61,64 @@ function CreateDecorationModal(props: ModalProps) {
 
     const decoration = useMemo(() => fileUrl ? { asset: fileUrl, skuId: RAW_SKU_ID } : null, [fileUrl]);
 
-    return <ModalRoot
+    return <Modal
         {...props}
-        size={ModalSize.MEDIUM}
-        className={DecorationModalClasses.modal}
+        size="lg"
+        title={t("vencord.decor.createDecoration")}
+        actions={[
+            {
+                text: t("vencord.cancel"),
+                variant: "secondary",
+                onClick: props.onClose
+            },
+            {
+                text: t("vencord.decor.submitForReview"),
+                variant: "primary",
+                onClick: () => {
+                    setSubmitting(true);
+                    createDecoration({ alt: name, file: file! })
+                        .then(props.onClose).catch(e => { setSubmitting(false); setError(e); });
+                },
+                disabled: !file || !name || submitting
+            }
+        ]}
     >
-        <ModalHeader separator={false} className={cl("modal-header")}>
-            <BaseText
-                size="lg"
-                weight="semibold"
-                color="text-strong"
-                tag="h1"
-                style={{ flexGrow: 1 }}
-            >
-                Create Decoration
-            </BaseText>
-            <ModalCloseButton onClick={props.onClose} />
-        </ModalHeader >
-        <ModalContent
-            className={cl("create-decoration-modal-content")}
-            scrollbarType="none"
-        >
+        <div className={cl("create-decoration-modal-content", DecorationModalClasses.modal)}>
             <ErrorBoundary>
                 <HelpMessage messageType={HelpMessageTypes.WARNING}>
-                    Make sure your decoration does not violate <Link
-                        href="https://github.com/decor-discord/.github/blob/main/GUIDELINES.md"
-                    >
-                        the guidelines
-                    </Link> before submitting it.
+                    {t("vencord.decor.guidelinesNotice", {
+                        guidelines: <Link
+                            href="https://github.com/decor-discord/.github/blob/main/GUIDELINES.md"
+                        >
+                            {t("vencord.decor.theGuidelines")}
+                        </Link>
+                    })}
                 </HelpMessage>
                 <div className={cl("create-decoration-modal-form-preview-container")}>
                     <div className={cl("create-decoration-modal-form")}>
                         {error !== null && <BaseText size="xs" color="text-danger">{error.message}</BaseText>}
                         <section>
-                            <Heading>File</Heading>
+                            <Heading>{t("vencord.decor.file")}</Heading>
                             <FileUpload
                                 filename={file?.name}
-                                placeholder="Choose a file"
-                                buttonText="Browse"
+                                placeholder={t("vencord.decor.chooseAFile")}
+                                buttonText={t("vencord.decor.browse")}
                                 filters={[{ name: "Decoration file", extensions: ["png", "apng"] }]}
                                 onFileSelect={setFile}
                             />
                             <Paragraph className={Margins.top8}>
-                                File should be APNG or PNG.
+                                {t("vencord.decor.fileNotice")}
                             </Paragraph>
                         </section>
                         <section>
-                            <Heading>Name</Heading>
+                            <Heading>{t("vencord.decor.name")}</Heading>
                             <TextInput
                                 placeholder="Companion Cube"
                                 value={name}
                                 onChange={setName}
                             />
                             <Paragraph className={Margins.top8}>
-                                This name will be used when referring to this decoration.
+                                {t("vencord.decor.nameNotice")}
                             </Paragraph>
                         </section>
                     </div>
@@ -126,49 +130,31 @@ function CreateDecorationModal(props: ModalProps) {
                     </div>
                 </div>
                 <HelpMessage messageType={HelpMessageTypes.INFO} className={Margins.bottom8}>
-                    To receive updates on your decoration's review, join <Link
-                        href={`https://discord.gg/${INVITE_KEY}`}
-                        onClick={async e => {
-                            e.preventDefault();
-                            if (!GuildStore.getGuild(GUILD_ID)) {
-                                const inviteAccepted = await openInviteModal(INVITE_KEY);
-                                if (inviteAccepted) {
+                    {t("vencord.decor.discordServerNotice", {
+                        link: <Link
+                            href={`https://discord.gg/${INVITE_KEY}`}
+                            onClick={async e => {
+                                e.preventDefault();
+                                if (!GuildStore.getGuild(GUILD_ID)) {
+                                    const inviteAccepted = await openInviteModal(INVITE_KEY);
+                                    if (inviteAccepted) {
+                                        closeAllModals();
+                                        FluxDispatcher.dispatch({ type: "LAYER_POP_ALL" });
+                                    }
+                                } else {
                                     closeAllModals();
                                     FluxDispatcher.dispatch({ type: "LAYER_POP_ALL" });
+                                    NavigationRouter.transitionToGuild(GUILD_ID);
                                 }
-                            } else {
-                                closeAllModals();
-                                FluxDispatcher.dispatch({ type: "LAYER_POP_ALL" });
-                                NavigationRouter.transitionToGuild(GUILD_ID);
-                            }
-                        }}
-                    >
-                        Decor's Discord server
-                    </Link> and allow direct messages.
+                            }}
+                        >
+                            {t("vencord.decor.decorDiscordServer")}
+                        </Link>
+                    })}
                 </HelpMessage>
             </ErrorBoundary>
-        </ModalContent>
-        <ModalFooter className={cl("modal-footer")}>
-            <div className={cl("modal-footer-btn-container")}>
-                <Button
-                    onClick={props.onClose}
-                    color={Button.Colors.PRIMARY}
-                >
-                    {t("vencord.cancel")}
-                </Button>
-                <Button
-                    onClick={() => {
-                        setSubmitting(true);
-                        createDecoration({ alt: name, file: file! })
-                            .then(props.onClose).catch(e => { setSubmitting(false); setError(e); });
-                    }}
-                    disabled={!file || !name || submitting}
-                >
-                    Submit for Review
-                </Button>
-            </div>
-        </ModalFooter>
-    </ModalRoot >;
+        </div>
+    </Modal>;
 }
 
 export const openCreateDecorationModal = () =>

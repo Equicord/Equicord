@@ -10,18 +10,18 @@ import { findGroupChildrenByChildId, NavContextMenuPatchCallback } from "@api/Co
 import { DataStore } from "@api/index";
 import { isPluginEnabled } from "@api/PluginManager";
 import { definePluginSettings } from "@api/Settings";
-import { Button, TextButton } from "@components/Button";
+import { TextButton } from "@components/Button";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Heading } from "@components/Heading";
 import ircColors from "@plugins/ircColors";
 import mentionAvatars from "@plugins/mentionAvatars";
 import { Devs, EquicordDevs } from "@utils/constants";
-import { classNameFactory, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot, openModal } from "@utils/index";
+import { classNameFactory } from "@utils/index";
 import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
-import { GuildMember, Message, User } from "@vencord/discord-types";
+import { GuildMember, Message, RenderModalProps, User } from "@vencord/discord-types";
 import { findByCodeLazy, findStoreLazy } from "@webpack";
-import { ChannelStore, GuildMemberStore, GuildStore, Menu, MessageStore, RelationshipStore, StreamerModeStore, TextInput, useEffect, useState } from "@webpack/common";
+import { ChannelStore, GuildMemberStore, GuildStore, Menu, MessageStore, Modal, openModal, RelationshipStore, StreamerModeStore, TextInput, useEffect, useState } from "@webpack/common";
 import { JSX } from "react";
 
 const SMYNC = classNameFactory();
@@ -843,49 +843,19 @@ function removeHoveringReactionPopout(id: string) {
     settings.store.triggerNameRerender = !settings.store.triggerNameRerender;
 }
 
-function CustomNicknameModal({ modalProps, user }: { modalProps: ModalProps; user: User; }) {
+function CustomNicknameModal({ modalProps, user }: { modalProps: RenderModalProps; user: User; }) {
     const [value, setValue] = useState(customNicknames[user.id] ?? "");
 
     return (
-        <ModalRoot {...modalProps}>
-            <ModalHeader>
-                <Heading tag="h1" style={{ flexGrow: 1, margin: 0 }}>
-                    {customNicknames[user.id] ? t("vencord.showMeYourName.changeNickname") : t("vencord.showMeYourName.addNickname")}
-                </Heading>
-                <ModalCloseButton onClick={modalProps.onClose} />
-            </ModalHeader>
-            <ModalContent>
-                <Heading tag="h3" style={{ marginBottom: 8, fontSize: "16px", fontWeight: "400", lineHeight: "1.25", color: "var(--text-subtle)" }}>
-                    {t("vencord.showMeYourName.modalDescription")}
-                </Heading>
-                <div style={{ paddingTop: "10px", flexGrow: 0 }}></div>
-                <Heading tag="h3" style={{ marginBottom: 8, fontSize: "14px", fontWeight: 600 }}>
-                    {t("vencord.showMeYourName.nicknameLabel")}
-                </Heading>
-                <TextInput
-                    value={value}
-                    maxLength={32}
-                    onChange={setValue}
-                    placeholder={user.globalName ?? user.username}
-                    style={{ width: "100%" }}
-                />
-                <TextButton
-                    className="smyn-reset-button"
-                    onClick={async () => {
-                        setValue("");
-                        delete customNicknames[user.id];
-                        await DataStore.set("SMYNCustomNicknames", customNicknames);
-                        settings.store.triggerNameRerender = !settings.store.triggerNameRerender;
-                    }}
-                >
-                    {t("vencord.showMeYourName.resetNickname")}
-                </TextButton>
-                <div style={{ paddingTop: "10px", flexGrow: 0 }}></div>
-            </ModalContent>
-            <ModalFooter className="smyn-modal-footer-container">
-                <Button
-                    variant="primary"
-                    onClick={async () => {
+        <Modal
+            {...modalProps}
+            size="sm"
+            title={customNicknames[user.id] ? t("vencord.showMeYourName.changeNickname") : t("vencord.showMeYourName.addNickname")}
+            actions={[
+                {
+                    text: t("vencord.showMeYourName.save"),
+                    variant: "primary",
+                    onClick: async () => {
                         const trimmed = value.trim().slice(0, 32).trim();
 
                         if (trimmed) {
@@ -897,19 +867,42 @@ function CustomNicknameModal({ modalProps, user }: { modalProps: ModalProps; use
                         await DataStore.set("SMYNCustomNicknames", customNicknames);
                         settings.store.triggerNameRerender = !settings.store.triggerNameRerender;
                         modalProps.onClose();
-                    }}
-                >
-                    {t("vencord.showMeYourName.save")}
-                </Button>
-                <Button
-                    variant="secondary"
-                    style={{ marginRight: "8px" }}
-                    onClick={modalProps.onClose}
-                >
-                    {t("vencord.showMeYourName.cancel")}
-                </Button>
-            </ModalFooter>
-        </ModalRoot>
+                    }
+                },
+                {
+                    text: t("vencord.showMeYourName.cancel"),
+                    variant: "secondary",
+                    onClick: modalProps.onClose
+                }
+            ]}
+        >
+            <Heading tag="h3" style={{ marginBottom: 8, fontSize: "16px", fontWeight: "400", lineHeight: "1.25", color: "var(--text-subtle)" }}>
+                {t("vencord.showMeYourName.modalDescription")}
+            </Heading>
+            <div style={{ paddingTop: "10px", flexGrow: 0 }}></div>
+            <Heading tag="h3" style={{ marginBottom: 8, fontSize: "14px", fontWeight: 600 }}>
+                {t("vencord.showMeYourName.nicknameLabel")}
+            </Heading>
+            <TextInput
+                value={value}
+                maxLength={32}
+                onChange={setValue}
+                placeholder={user.globalName ?? user.username}
+                style={{ width: "100%" }}
+            />
+            <TextButton
+                className="smyn-reset-button"
+                onClick={async () => {
+                    setValue("");
+                    delete customNicknames[user.id];
+                    await DataStore.set("SMYNCustomNicknames", customNicknames);
+                    settings.store.triggerNameRerender = !settings.store.triggerNameRerender;
+                }}
+            >
+                {t("vencord.showMeYourName.resetNickname")}
+            </TextButton>
+            <div style={{ paddingTop: "10px", flexGrow: 0 }}></div>
+        </Modal>
     );
 }
 
@@ -1140,8 +1133,8 @@ export default definePlugin({
             // Replace name in solo DM title bar and tooltip.
             find: "channel.isSystemDM(),",
             replacement: {
-                match: /(?<=}\);)(return.{0,500}?{text:)(\i,position:"bottom",children:.{0,40}?children:)(\i\?\?\i.\i.getName\(\i\))/,
-                replace: "const smynName=arguments[0].channel.recipients.length===1?$self.getTypingMemberListProfilesReactionsVoiceNameText({user:$self.UserStore.getUser(arguments[0].channel.recipients[0]),type:\"profilesPopout\"})??null:null;$1smynName??$2smynName??$3"
+                match: /(?<=length>0,)(\i=)(.{0,280}?"aria-label":)(\i.\i.getName\(\i\).{0,400}?text:)/,
+                replace: "smynName=arguments[0].channel.recipients.length===1?$self.getTypingMemberListProfilesReactionsVoiceNameText({user:$self.UserStore.getUser(arguments[0].channel.recipients[0]),type:\"profilesPopout\"})??null:null,$1smynName??$2smynName??$3smynName??"
             },
         },
         {

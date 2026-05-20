@@ -236,7 +236,7 @@ export default definePlugin({
                 Component: BackupAndRestoreTab,
                 Icon: BackupRestoreIcon
             }),
-            IS_DEV && PatchHelperTab && buildEntry({
+            !IS_STANDALONE && PatchHelperTab && buildEntry({
                 key: "equicord_patch_helper",
                 title: "Patch Helper",
                 Component: PatchHelperTab,

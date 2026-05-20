@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { closeModal, openModal } from "@utils/modal";
+import { closeModal, openModal } from "@webpack/common";
 
 import { CommandPaletteModal } from "./ui/CommandPaletteModal";
 

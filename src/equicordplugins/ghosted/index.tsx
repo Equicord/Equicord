@@ -12,11 +12,10 @@ import { definePluginSettings } from "@api/Settings";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Devs, EquicordDevs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
-import { closeModal, openModal } from "@utils/modal";
 import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { Channel } from "@vencord/discord-types";
-import { Menu, Tooltip, useEffect, useState } from "@webpack/common";
+import { Menu, openModal,Tooltip, useEffect, useState } from "@webpack/common";
 
 import { Boo, clearChannelFromGhost, getBooCount, getGhostedChannels, onBooCountChange } from "./Boo";
 import { getChannelDisplayName, GhostedUsersModal } from "./GhostedUsersModal";
@@ -86,12 +85,11 @@ function BooIndicator() {
 
     const handleClick = () => {
         const ghostedChannels = getGhostedChannels();
-        const modalKey = openModal(modalProps => (
+        openModal(modalProps => (
             <ErrorBoundary>
                 <GhostedUsersModal
                     modalProps={modalProps}
                     ghostedChannels={ghostedChannels}
-                    onClose={() => closeModal(modalKey)}
                     onClearGhost={clearChannelFromGhost}
                 />
             </ErrorBoundary>

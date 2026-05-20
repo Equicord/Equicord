@@ -34,7 +34,6 @@ import {
     generatePoissonDiskPosition,
     getCuteAnimeBoys,
     getCuteNeko,
-    getCutePats,
     getMessage,
     isMorse,
     loadFriendImage,
@@ -349,13 +348,6 @@ export default definePlugin({
                     });
                 }
             },
-        },
-        {
-            name: "pat",
-            description: "Sends a headpat gif",
-            execute: async () => ({
-                content: await getCutePats()
-            })
         },
         {
             name: "nekos",

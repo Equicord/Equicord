@@ -140,7 +140,10 @@ export default definePlugin({
     tags: ["Voice", "Friends"],
     authors: [EquicordDevs.Moowi],
     dependencies: ["ProfileSectionsAPI"],
-    renderProfileSection: VoiceStatsSection,
+    renderProfileSection: {
+        render: VoiceStatsSection,
+        priority: 0,
+    },
     flux: {
         VOICE_STATE_UPDATES({ voiceStates }: { voiceStates: VoiceState[]; }) {
             const myId = UserStore.getCurrentUser()?.id;
@@ -159,8 +162,8 @@ export default definePlugin({
                     continue;
                 }
 
-                const joinedMyChannel = channelId === trackedChannelId && oldChannelId !== trackedChannelId;
-                const leftMyChannel = oldChannelId === trackedChannelId && channelId !== trackedChannelId;
+                const joinedMyChannel = trackedChannelId !== null && channelId === trackedChannelId && oldChannelId !== trackedChannelId;
+                const leftMyChannel = trackedChannelId !== null && oldChannelId === trackedChannelId && channelId !== trackedChannelId;
 
                 if (joinedMyChannel) {
                     sessionStarts.set(userId, Date.now());

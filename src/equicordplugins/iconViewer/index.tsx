@@ -22,7 +22,7 @@ export default definePlugin({
     description: t("equicord.iconViewer.description"),
     tags: ["Developers"],
     authors: [EquicordDevs.iamme],
-    dependencies: ["Settings"],
+    dependencies: ["Settings", "ConcatenatedModules"],
     startAt: StartAt.WebpackReady,
     toolboxActions: {
         [t("equicord.iconViewer.ui.openIconsTab")]() {

@@ -1,7 +1,6 @@
 .vc-plugin-modal-header {
     align-items: flex-start;
     position: relative;
-    padding: 16px 16px 0 24px;
 }
 
 .vc-plugin-modal-header-content {
@@ -70,7 +69,7 @@
     display: flex;
     flex-wrap: wrap;
     gap: 4px;
-    margin-block: 8px 16px;
+    margin-top: 8px;
 }
 
 .vc-plugin-modal-tag {
@@ -81,4 +80,10 @@
     justify-content: center;
     padding: 6px 12px;
     color: var(--text-default);
+}
+
+.vc-plugin-modal-about-box {
+    padding: 16px;
+    border-radius: 8px;
+    border: 1px solid var(--border-normal, var(--background-modifier-accent));
 }

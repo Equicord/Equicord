@@ -8,14 +8,12 @@ import { BaseText } from "@components/BaseText";
 import { Button } from "@components/Button";
 import { Flex } from "@components/Flex";
 import { InfoIcon } from "@components/Icons";
-import { Link } from "@components/Link";
 import { copyWithToast, openUserProfile } from "@utils/discord";
-import { closeAllModals, ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot, ModalSize, openModal } from "@utils/modal";
 import { LazyComponent } from "@utils/react";
 import { t } from "@utils/translation";
-import { type User } from "@vencord/discord-types";
+import { RenderModalProps, type User } from "@vencord/discord-types";
 import { find, findByCode, findByCodeLazy } from "@webpack";
-import { Alerts, ChannelStore, ContextMenuApi, FluxDispatcher, GuildStore, Menu, NavigationRouter, React, TabBar, TextInput, Tooltip, useMemo, useRef, useState } from "@webpack/common";
+import { Alerts, ChannelStore, closeAllModals, ContextMenuApi, FluxDispatcher, GuildStore, Menu, Modal, NavigationRouter, openModal, React, TabBar, TextInput, Tooltip, useMemo, useRef, useState } from "@webpack/common";
 
 import { DBMessageRecord, deleteMessageIDB, deleteMessagesBulkIDB } from "../db";
 import { cl, clearLogs, settings } from "../index";
@@ -63,7 +61,7 @@ export enum LogTabs {
 }
 
 interface Props {
-    modalProps: ModalProps;
+    modalProps: RenderModalProps;
     initalQuery?: string;
 }
 
@@ -77,46 +75,98 @@ export function LogsModal({ modalProps, initalQuery }: Props) {
     const { messages, total, statusTotal, pending, reset } = useMessages(queryEh, currentTab, sortNewest, numDisplayedMessages);
 
     return (
-        <ModalRoot className={cl("modal-root")} {...modalProps} size={ModalSize.LARGE}>
-            <ModalHeader className={cl("modal-header")}>
-                <TextInput value={queryEh} onChange={e => setQuery(e)} style={{ width: "100%" }} placeholder="Filter Messages" />
-                <TabBar
-                    type="top"
-                    look="brand"
-                    className={cl("modal-tab-bar")}
-                    selectedItem={currentTab}
-                    onItemSelect={e => {
-                        setCurrentTab(e);
-                        setNumDisplayedMessages(settings.store.messagesToDisplayAtOnceInLogs);
+        <Modal
+            {...modalProps}
+            size="lg"
+            title={
+                <div className={cl("modal")}>
+                    <TabBar
+                        type="top"
+                        look="brand"
+                        className={cl("modal-tab-bar")}
+                        selectedItem={currentTab}
+                        onItemSelect={e => {
+                            setCurrentTab(e);
+                            setNumDisplayedMessages(settings.store.messagesToDisplayAtOnceInLogs);
+                            contentRef.current?.firstElementChild?.scrollTo(0, 0);
+                        }}
+                    >
+                        <TabBar.Item
+                            className={cl("modal-tab-bar-item")}
+                            id={LogTabs.DELETED}
+                        >
+                            Deleted
+                        </TabBar.Item>
+                        <TabBar.Item
+                            className={cl("modal-tab-bar-item")}
+                            id={LogTabs.EDITED}
+                        >
+                            Edited
+                        </TabBar.Item>
+                        <TabBar.Item
+                            className={cl("modal-tab-bar-item")}
+                            id={LogTabs.GHOST_PING}
+                        >
+                            Ghost Pinged
+                        </TabBar.Item>
+                    </TabBar>
+                    <div className={cl("modal-filter")}>
+                        <TextInput value={queryEh} onChange={e => setQuery(e)} placeholder="Filter Messages" />
+                    </div>
+                </div>
+            }
+            actions={[
+                {
+                    text: `Sort ${sortNewest ? "Oldest First" : "Newest First"}`,
+                    variant: "secondary",
+                    onClick: () => {
+                        setSortNewest(e => {
+                            const val = !e;
+                            settings.store.sortNewest = val;
+                            return val;
+                        });
                         contentRef.current?.firstElementChild?.scrollTo(0, 0);
-                    }}
-                >
-                    <TabBar.Item
-                        className={cl("modal-tab-bar-item")}
-                        id={LogTabs.DELETED}
-                    >
-                        Deleted
-                    </TabBar.Item>
-                    <TabBar.Item
-                        className={cl("modal-tab-bar-item")}
-                        id={LogTabs.EDITED}
-                    >
-                        Edited
-                    </TabBar.Item>
-                    <TabBar.Item
-                        className={cl("modal-tab-bar-item")}
-                        id={LogTabs.GHOST_PING}
-                    >
-                        Ghost Pinged
-                    </TabBar.Item>
-                </TabBar>
-            </ModalHeader>
-            <div style={{ opacity: modalProps.transitionState === 1 ? "1" : "0" }} className={cl("modal-content-container")} ref={contentRef}>
+                    }
+                },
+                {
+                    text: t("vencord.logs.clearLogs"),
+                    variant: "critical-secondary",
+                    disabled: messages?.length === 0,
+                    onClick: () => Alerts.show({
+                        title: t("vencord.logs.clearLogs"),
+                        body: t("vencord.logs.clearLogsConfirmationNum", { count: messages.length }),
+                        confirmText: "Clear",
+                        // @ts-expect-error not typed
+                        confirmVariant: "critical-primary",
+                        cancelText: t("vencord.cancel"),
+                        onConfirm: async () => {
+                            await deleteMessagesBulkIDB(messages.map(e => e.message_id));
+                            reset();
+                        }
+                    })
+                },
+                {
+                    text: t("vencord.logs.clearAllLogs"),
+                    variant: "critical-primary",
+                    onClick: () => Alerts.show({
+                        title: t("vencord.logs.clearAllLogs"),
+                        body: t("vencord.logs.clearAllLogsConfirmation"),
+                        confirmText: "Clear",
+                        // @ts-expect-error not typed
+                        confirmVariant: "critical-primary",
+                        cancelText: t("vencord.cancel"),
+                        onConfirm: async () => {
+                            await clearLogs();
+                            reset();
+                        }
+                    })
+                }
+            ]}
+        >
+            <div style={{ opacity: modalProps.transitionState === 1 ? "1" : "0" }} className={`${cl("modal-content-container")} ${cl("modal-root")}`} ref={contentRef}>
                 {
                     modalProps.transitionState === 1 &&
-                    <ModalContent
-                        className={cl("modal-content")}
-                    >
+                    <div>
                         {messages != null && total === 0 && (
                             <EmptyLogs
                                 hasQuery={queryEh.length !== 0}
@@ -134,62 +184,10 @@ export function LogsModal({ modalProps, initalQuery }: Props) {
                                 handleLoadMore={() => setNumDisplayedMessages(e => e + settings.store.messagesToDisplayAtOnceInLogs)}
                             />
                         )}
-                    </ModalContent>
+                    </div>
                 }
             </div>
-            <ModalFooter className={cl("footer")}>
-                <Button
-                    variant="dangerPrimary"
-                    onClick={() => Alerts.show({
-                        title: t("vencord.logs.clearAllLogs"),
-                        body: t("vencord.logs.clearAllLogsConfirmation"),
-                        confirmText: "Clear",
-                        // @ts-expect-error not typed
-                        confirmVariant: "critical-primary",
-                        cancelText: t("vencord.cancel"),
-                        onConfirm: async () => {
-                            await clearLogs();
-                            reset();
-                        }
-
-                    })}
-                >
-                    Clear All Logs
-                </Button>
-                <Button
-                    style={{ marginRight: "16px" }}
-                    variant="dangerSecondary"
-                    disabled={messages?.length === 0}
-                    onClick={() => Alerts.show({
-                        title: t("vencord.logs.clearLogs"),
-                        body: t("vencord.logs.clearLogsConfirmationNum", { count: messages.length }),
-                        confirmText: "Clear",
-                        // @ts-expect-error not typed
-                        confirmVariant: "critical-primary",
-                        cancelText: t("vencord.cancel"),
-                        onConfirm: async () => {
-                            await deleteMessagesBulkIDB(messages.map(e => e.message_id));
-                            reset();
-                        }
-                    })}
-                >
-                    Clear Visible Logs
-                </Button>
-                <Link
-                    style={{ marginRight: "1rem" }}
-                    onClick={() => {
-                        setSortNewest(e => {
-                            const val = !e;
-                            settings.store.sortNewest = val;
-                            return val;
-                        });
-                        contentRef.current?.firstElementChild?.scrollTo(0, 0);
-                    }}
-                >
-                    Sort {sortNewest ? "Oldest First" : "Newest First"}
-                </Link>
-            </ModalFooter>
-        </ModalRoot>
+        </Modal>
     );
 }
 

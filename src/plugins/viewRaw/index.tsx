@@ -18,20 +18,17 @@
 
 import { findGroupChildrenByChildId, NavContextMenuPatchCallback } from "@api/ContextMenu";
 import { definePluginSettings } from "@api/Settings";
-import { BaseText } from "@components/BaseText";
 import { CodeBlock } from "@components/CodeBlock";
 import { Divider } from "@components/Divider";
 import ErrorBoundary from "@components/ErrorBoundary";
-import { Flex } from "@components/Flex";
-import { Heading } from "@components/Heading";
 import { Devs } from "@utils/constants";
 import { copyWithToast, getCurrentGuild, getIntlMessage } from "@utils/discord";
+import { isTruthy } from "@utils/guards";
 import { Margins } from "@utils/margins";
-import { closeModal, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalRoot, ModalSize, openModal } from "@utils/modal";
 import { t } from "@utils/translation";
 import definePlugin, { IconComponent, OptionType } from "@utils/types";
 import { Message } from "@vencord/discord-types";
-import { Button, ChannelStore, GuildRoleStore, Menu } from "@webpack/common";
+import { ChannelStore, Forms, GuildRoleStore, Menu, Modal, openModal } from "@webpack/common";
 
 const CopyIcon: IconComponent = ({ height = 20, width = 20, className }) => {
     return (
@@ -73,40 +70,36 @@ function cleanMessage(msg: Message) {
 }
 
 function openViewRawModal(json: string, type: string, msgContent?: string) {
-    const key = openModal(props => (
+    openModal(props => (
         <ErrorBoundary>
-            <ModalRoot {...props} size={ModalSize.LARGE}>
-                <ModalHeader>
-                    <BaseText size="lg" weight="semibold" style={{ flexGrow: 1 }}>{t("vencord.viewRaw.viewRaw")}</BaseText>
-                    <ModalCloseButton onClick={() => closeModal(key)} />
-                </ModalHeader>
-                <ModalContent>
-                    <div style={{ padding: "16px 0" }}>
-                        {!!msgContent && (
-                            <>
-                                <Heading>{t("vencord.viewRaw.content")}</Heading>
-                                <CodeBlock content={msgContent} lang="" />
-                                <Divider className={Margins.bottom20} />
-                            </>
-                        )}
+            <Modal
+                {...props}
+                title={t("vencord.viewRaw.viewRaw")}
+                size="xl"
+                actions={[
+                    {
+                        text: t("vencord.viewRaw.copyJson", { type }),
+                        variant: "primary",
+                        onClick: () => copyWithToast(json, t("vencord.viewRaw.dataCopied", { type }))
+                    },
+                    msgContent && {
+                        text: t("vencord.viewRaw.copyRawContent"),
+                        variant: "secondary",
+                        onClick: () => copyWithToast(msgContent, t("vencord.viewRaw.contentCopied"))
+                    }
+                ].filter(isTruthy)}
+            >
+                {!!msgContent && (
+                    <>
+                        <Forms.FormTitle tag="h5">{t("vencord.viewRaw.content")}</Forms.FormTitle>
+                        <CodeBlock content={msgContent} lang="" />
+                        <Divider className={Margins.bottom20} />
+                    </>
+                )}
 
-                        <Heading>{t("viewRaw.data", { type })}</Heading>
-                        <CodeBlock content={json} lang="json" />
-                    </div>
-                </ModalContent >
-                <ModalFooter>
-                    <Flex>
-                        <Button onClick={() => copyWithToast(json, t("viewRaw.dataCopied", { type }))}>
-                            {t("viewRaw.copyJson", { type })}
-                        </Button>
-                        {!!msgContent && (
-                            <Button onClick={() => copyWithToast(msgContent, t("vencord.viewRaw.contentCopied"))}>
-                                {t("vencord.viewRaw.copyRawContent")}
-                            </Button>
-                        )}
-                    </Flex>
-                </ModalFooter>
-            </ModalRoot >
+                <Forms.FormTitle tag="h5">{t("vencord.viewRaw.data", { type })}</Forms.FormTitle>
+                <CodeBlock content={json} lang="json" />
+            </Modal>
         </ErrorBoundary >
     ));
 }
@@ -128,7 +121,7 @@ const settings = definePluginSettings({
         ]
     },
     messageContextMenu: {
-        description: "Show in message context menu",
+        description: t("vencord.viewRaw.settings.messageContextMenu"),
         type: OptionType.BOOLEAN,
         default: false
     }

@@ -5,12 +5,9 @@
  */
 
 import { BaseText } from "@components/BaseText";
-import { Button } from "@components/Button";
-import { Heading } from "@components/Heading";
 import { Paragraph } from "@components/Paragraph";
-import { ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalRoot, ModalSize } from "@utils/modal";
 import { t } from "@utils/translation";
-import { TextInput, useState } from "@webpack/common";
+import { Modal, TextInput, useState } from "@webpack/common";
 
 import { SetAliasModalProps } from "./types";
 
@@ -31,45 +28,40 @@ export function SetAliasModal({
     const canSave = !validationError && !duplicateAlias;
 
     return (
-        <ModalRoot {...modalProps} size={ModalSize.SMALL}>
-            <ModalHeader>
-                <Heading style={{ flexGrow: 1 }}>{t("vencord.favEmojiFirst.ui.modal.setTitle")}</Heading>
-                <ModalCloseButton onClick={modalProps.onClose} />
-            </ModalHeader>
-
-            <ModalContent style={{ overflowY: "hidden" }}>
-                <Paragraph style={{ margin: 0, marginBottom: 8 }}>{t("favEmojiFirst.ui.modal.setDescription", { emoji: emojiDisplayName })}</Paragraph>
-                <TextInput
-                    value={input}
-                    onChange={value => {
-                        setInput(value);
-                        setError(null);
-                    }}
-                    placeholder={t("vencord.favEmojiFirst.ui.modal.placeholder")}
-                />
-                {finalError && (
-                    <BaseText style={{ color: "var(--text-feedback-critical)", marginTop: 8 }}>
-                        {finalError}
-                    </BaseText>
-                )}
-            </ModalContent>
-
-            <ModalFooter>
-                <Button
-                    variant="primary"
-                    disabled={!canSave}
-                    onClick={async () => {
+        <Modal
+            {...modalProps}
+            size="sm"
+            title={t("vencord.favEmojiFirst.ui.modal.setTitle")}
+            actions={[
+                {
+                    text: t("vencord.favEmojiFirst.ui.modal.save"),
+                    variant: "primary",
+                    disabled: !canSave,
+                    onClick: async () => {
                         const result = await onSave(input);
                         if (!result.ok) {
                             setError(result.error);
                             return;
                         }
                         modalProps.onClose();
-                    }}
-                >
-                    {t("vencord.favEmojiFirst.ui.modal.save")}
-                </Button>
-            </ModalFooter>
-        </ModalRoot>
+                    }
+                }
+            ]}
+        >
+            <Paragraph style={{ margin: 0, marginBottom: 8 }}>{t("vencord.favEmojiFirst.ui.modal.setDescription", { emoji: emojiDisplayName })}</Paragraph>
+            <TextInput
+                value={input}
+                onChange={value => {
+                    setInput(value);
+                    setError(null);
+                }}
+                placeholder={t("vencord.favEmojiFirst.ui.modal.placeholder")}
+            />
+            {finalError && (
+                <BaseText style={{ color: "var(--text-feedback-critical)", marginTop: 8 }}>
+                    {finalError}
+                </BaseText>
+            )}
+        </Modal>
     );
 }

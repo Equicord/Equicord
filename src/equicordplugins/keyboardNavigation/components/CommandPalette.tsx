@@ -9,14 +9,14 @@ import "./style.css";
 import { actions } from "@equicordplugins/keyboardNavigation/commands";
 import { classNameFactory } from "@utils/css";
 import { Logger } from "@utils/Logger";
-import { closeAllModals, ModalRoot, ModalSize, openModal } from "@utils/modal";
-import { React, TextInput, useEffect, useState } from "@webpack/common";
+import { RenderModalProps } from "@vencord/discord-types";
+import { closeAllModals, Modal,openModal, React, TextInput, useEffect, useState } from "@webpack/common";
 
 import { settings } from "..";
 
 const logger = new Logger("CommandPalette", "#e5c890");
 
-export function CommandPalette({ modalProps }) {
+export function CommandPalette({ modalProps }: { modalProps: RenderModalProps; }) {
     const cl = classNameFactory("vc-command-palette-");
     const [focusedIndex, setFocusedIndex] = useState<number | null>(null);
     const [startIndex, setStartIndex] = useState(0);
@@ -100,8 +100,8 @@ export function CommandPalette({ modalProps }) {
     }, [queryEh]);
 
     return (
-        <ModalRoot className={cl("root")} {...modalProps} size={ModalSize.MEDIUM} onKeyDown={handleKeyDown} onWheel={handleWheel}>
-            <div>
+        <Modal {...modalProps} size="md" title="Command Palette">
+            <div className={cl("root")} onKeyDown={handleKeyDown} onWheel={handleWheel}>
                 <TextInput
                     value={queryEh}
                     onChange={e => setQuery(e)}
@@ -123,7 +123,7 @@ export function CommandPalette({ modalProps }) {
                     ))}
                 </div>
             </div>
-        </ModalRoot>
+        </Modal>
     );
 }
 

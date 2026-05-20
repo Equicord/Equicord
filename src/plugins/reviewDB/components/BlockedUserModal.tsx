@@ -10,10 +10,9 @@ import { ReviewDBUser } from "@plugins/reviewDB/entities";
 import { fetchBlocks, unblockUser } from "@plugins/reviewDB/reviewDbApi";
 import { cl } from "@plugins/reviewDB/utils";
 import { Logger } from "@utils/Logger";
-import { ModalCloseButton, ModalContent, ModalHeader, ModalRoot, openModal } from "@utils/modal";
 import { useAwaiter } from "@utils/react";
 import { t } from "@utils/translation";
-import { Forms, Tooltip, useState } from "@webpack/common";
+import { Modal, openModal, Tooltip, useState } from "@webpack/common";
 
 function UnblockButton(props: { onClick?(): void; }) {
     return (
@@ -57,7 +56,7 @@ function BlockedUser({ user, isBusy, setIsBusy }: { user: ReviewDBUser; isBusy: 
     );
 }
 
-function Modal() {
+function BlockedUsersList() {
     const [isBusy, setIsBusy] = useState(false);
     const [blocks, error, pending] = useAwaiter(fetchBlocks, {
         onError: e => new Logger("ReviewDB").error("Failed to fetch blocks", e),
@@ -67,7 +66,7 @@ function Modal() {
     if (pending)
         return null;
     if (error)
-        return <Paragraph>{t("reviewDB.failedToFetchBlocks", { error: String(error) })}</Paragraph>;
+        return <Paragraph>{t("vencord.reviewDB.failedToFetchBlocks", { error: String(error) })}</Paragraph>;
     if (!blocks.length)
         return <Paragraph>{t("vencord.reviewDB.noBlockedUsers")}</Paragraph>;
 
@@ -87,14 +86,13 @@ function Modal() {
 
 export function openBlockModal() {
     openModal(modalProps => (
-        <ModalRoot {...modalProps}>
-            <ModalHeader className={cl("block-modal-header")}>
-                <Forms.FormTitle style={{ margin: 0 }}>{t("vencord.reviewDB.blockedUsers")}</Forms.FormTitle>
-                <ModalCloseButton onClick={modalProps.onClose} />
-            </ModalHeader>
-            <ModalContent className={cl("block-modal")}>
-                {Auth.token ? <Modal /> : <Paragraph>{t("vencord.reviewDB.notLoggedIn")}</Paragraph>}
-            </ModalContent>
-        </ModalRoot>
+        <Modal
+            {...modalProps}
+            title={t("vencord.reviewDB.blockedUsers")}
+        >
+            <div className={cl("block-modal")}>
+                {Auth.token ? <BlockedUsersList /> : <Paragraph>{t("vencord.reviewDB.notLoggedIn")}</Paragraph>}
+            </div>
+        </Modal>
     ));
 }

@@ -10,6 +10,7 @@ import { Devs, EquicordDevs } from "@utils/constants";
 import { sendMessage } from "@utils/discord";
 import { t } from "@utils/translation";
 import definePlugin, { OptionType, PluginNative } from "@utils/types";
+import { useEffect, useState } from "@webpack/common";
 
 import { Providers } from "./Providers";
 import { Settings } from "./Settings";
@@ -84,6 +85,43 @@ function formatMessage(data: SongLinkResult): string | null {
     return parts.join("\n");
 }
 
+function SongLinkerList({ urls }: { urls: string[]; }) {
+    const [resolvedKeys, setResolvedKeys] = useState<Record<string, string | null>>(
+        () => Object.fromEntries(urls.map(u => [u, null]))
+    );
+
+    useEffect(() => {
+        setResolvedKeys(Object.fromEntries(urls.map(u => [u, null])));
+    }, [urls.join("\n")]);
+
+    function onResolved(url: string, result: SongLinkResult) {
+        const key = result.info
+            ? `${result.info.title}\0${result.info.artist}`
+            : url;
+        setResolvedKeys(prev => prev[url] === key ? prev : { ...prev, [url]: key });
+    }
+
+    const seenKeys = new Set<string>();
+    const dedupedUrls = urls.filter(url => {
+        const key = resolvedKeys[url];
+        if (key === null) return true;
+        if (seenKeys.has(key)) return false;
+        seenKeys.add(key);
+        return true;
+    });
+
+    return <div style={{
+        display: "flex",
+        flexDirection: "column",
+        gap: "10px",
+        marginTop: "7px"
+    }}>
+        {dedupedUrls.map(url => (
+            <SongLinker key={url} url={url} onResolved={onResolved} />
+        ))}
+    </div>;
+}
+
 export default definePlugin({
     name: "SongLink",
     description: t("equicord.songLink.description"),
@@ -108,19 +146,12 @@ export default definePlugin({
             /https:\/\/music\.youtube\.com\/watch\?v=[0-9A-Za-z_-]+/, // yt music
             /https:\/\/tidal\.com\/track\/[0-9]+\/u/ // tidal
         ];
-        const musicLinks = content.match(new RegExp(regexes.map(r => r.source).join("|"), "g"));
-        if (!musicLinks?.length) return;
+        const allMatches = content.match(new RegExp(regexes.map(r => r.source).join("|"), "g"));
+        if (!allMatches?.length) return;
 
-        return <div style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "10px",
-            marginTop: "7px"
-        }}>
-            {
-                musicLinks.map(item => <SongLinker key={item} url={item} />)
-            }
-        </div>;
+        const musicLinks = [...new Set(allMatches)];
+
+        return <SongLinkerList urls={musicLinks} />;
     },
     commands: [
         {

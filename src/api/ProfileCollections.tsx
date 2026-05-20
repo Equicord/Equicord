@@ -14,11 +14,12 @@ const logger = new Logger("ProfileCollectionAPI");
 
 export type ProfileCollectionFactory = (props: { user: User; isSideBar: boolean; }) => ReactNode | Promise<ReactNode> | null;
 
-interface CollectionEntry {
+export interface ProfileCollectionData {
     render: ProfileCollectionFactory;
+    priority: number;
 }
 
-const profileCollections = new Map<string, CollectionEntry>();
+const profileCollections = new Map<string, ProfileCollectionData>();
 const profileCollectionListeners = new Set<() => void>();
 
 /**
@@ -34,7 +35,7 @@ const profileCollectionListeners = new Set<() => void>();
  * ));
  */
 export function addProfileCollection(id: string, render: ProfileCollectionFactory, priority = 0) {
-    profileCollections.set(id, { render });
+    profileCollections.set(id, { render, priority });
     profileCollectionListeners.forEach(listener => listener());
 }
 
@@ -58,6 +59,7 @@ function ProfileCollections({ props }: { props: any; }) {
     }, []);
 
     return Array.from(profileCollections)
+        .sort(([, a], [, b]) => b.priority - a.priority)
         .map(([id, { render: Collection }]) => (
             <ErrorBoundary noop key={id} onError={e => logger.error(`Failed to render profile collection: ${id}`, e.error)}>
                 <Collection {...props} user={props.user ?? props.currentUser} />

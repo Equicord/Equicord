@@ -8,9 +8,9 @@ import { Button } from "@components/Button";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Heading } from "@components/Heading";
 import { classNameFactory } from "@utils/css";
-import { closeModal, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot, openModal } from "@utils/modal";
+import { RenderModalProps } from "@vencord/discord-types";
 import { findByPropsLazy } from "@webpack";
-import { ChannelStore, DraftType, showToast, TextInput, Toasts, UploadManager, useState } from "@webpack/common";
+import { ChannelStore, closeModal, DraftType, Modal, openModal, showToast, TextInput, Toasts, UploadManager, useState } from "@webpack/common";
 
 import { ScheduledAttachment } from "../types";
 import { addScheduledMessage, getChannelDisplayInfo } from "../utils";
@@ -23,7 +23,7 @@ function ScheduleTimeModalInner({ channelId, content, attachments, rootProps, cl
     channelId: string;
     content: string;
     attachments?: ScheduledAttachment[];
-    rootProps: ModalProps;
+    rootProps: RenderModalProps;
     close: () => void;
 }) {
     const [scheduleType, setScheduleType] = useState<"delay" | "time">("delay");
@@ -69,74 +69,78 @@ function ScheduleTimeModalInner({ channelId, content, attachments, rootProps, cl
     };
 
     return (
-        <ModalRoot {...rootProps}>
-            <ModalHeader className={cl("modal-header")}>
-                <Heading tag="h2" className={cl("modal-title")}>Schedule Message</Heading>
-                <ModalCloseButton onClick={close} />
-            </ModalHeader>
+        <Modal
+            {...rootProps}
+            size="sm"
+            title="Schedule Message"
+            actions={[
+                {
+                    text: "Schedule",
+                    variant: "primary",
+                    onClick: handleSchedule
+                },
+                {
+                    text: "Cancel",
+                    variant: "secondary",
+                    onClick: close
+                }
+            ]}
+        >
+            <div className={cl("channel-info")}>
+                {avatar && <img src={avatar} className={cl("channel-avatar")} alt="" />}
+                <span className={cl("channel-text")}>
+                    Scheduling for: <strong>{isDM ? name : `#${name}`}</strong>
+                </span>
+            </div>
 
-            <ModalContent className={cl("modal-content")}>
-                <div className={cl("channel-info")}>
-                    {avatar && <img src={avatar} className={cl("channel-avatar")} alt="" />}
-                    <span className={cl("channel-text")}>
-                        Scheduling for: <strong>{isDM ? name : `#${name}`}</strong>
-                    </span>
+            <Heading tag="h5" className={cl("field-label")}>Schedule Type</Heading>
+            <div className={cl("schedule-type-buttons")}>
+                <Button
+                    size="small"
+                    variant={scheduleType === "delay" ? "primary" : "secondary"}
+                    onClick={() => setScheduleType("delay")}
+                >
+                    Delay
+                </Button>
+                <Button
+                    size="small"
+                    variant={scheduleType === "time" ? "primary" : "secondary"}
+                    onClick={() => setScheduleType("time")}
+                >
+                    Specific Time
+                </Button>
+            </div>
+
+            {scheduleType === "delay" ? (
+                <>
+                    <Heading tag="h5" className={cl("field-label")}>Delay (minutes)</Heading>
+                    <TextInput
+                        value={delayMinutes}
+                        onChange={setDelayMinutes}
+                        placeholder="5"
+                        type="number"
+                    />
+                </>
+            ) : (
+                <>
+                    <Heading tag="h5" className={cl("field-label")}>Date & Time</Heading>
+                    <input
+                        type="datetime-local"
+                        className={cl("datetime-input")}
+                        value={scheduledDateTime}
+                        onChange={e => setScheduledDateTime(e.target.value)}
+                        min={new Date().toISOString().slice(0, 16)}
+                    />
+                </>
+            )}
+
+            {error && (
+                <div className={cl("error")}>
+                    <ErrorIcon />
+                    <span>{error}</span>
                 </div>
-
-                <Heading tag="h5" className={cl("field-label")}>Schedule Type</Heading>
-                <div className={cl("schedule-type-buttons")}>
-                    <Button
-                        size="small"
-                        variant={scheduleType === "delay" ? "primary" : "secondary"}
-                        onClick={() => setScheduleType("delay")}
-                    >
-                        Delay
-                    </Button>
-                    <Button
-                        size="small"
-                        variant={scheduleType === "time" ? "primary" : "secondary"}
-                        onClick={() => setScheduleType("time")}
-                    >
-                        Specific Time
-                    </Button>
-                </div>
-
-                {scheduleType === "delay" ? (
-                    <>
-                        <Heading tag="h5" className={cl("field-label")}>Delay (minutes)</Heading>
-                        <TextInput
-                            value={delayMinutes}
-                            onChange={setDelayMinutes}
-                            placeholder="5"
-                            type="number"
-                        />
-                    </>
-                ) : (
-                    <>
-                        <Heading tag="h5" className={cl("field-label")}>Date & Time</Heading>
-                        <input
-                            type="datetime-local"
-                            className={cl("datetime-input")}
-                            value={scheduledDateTime}
-                            onChange={e => setScheduledDateTime(e.target.value)}
-                            min={new Date().toISOString().slice(0, 16)}
-                        />
-                    </>
-                )}
-
-                {error && (
-                    <div className={cl("error")}>
-                        <ErrorIcon />
-                        <span>{error}</span>
-                    </div>
-                )}
-            </ModalContent>
-
-            <ModalFooter className={cl("modal-footer")}>
-                <Button onClick={handleSchedule} variant="positive">Schedule</Button>
-                <Button variant="secondary" onClick={close}>Cancel</Button>
-            </ModalFooter>
-        </ModalRoot>
+            )}
+        </Modal>
     );
 }
 

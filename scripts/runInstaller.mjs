@@ -38,7 +38,14 @@ function getFilename() {
         case "win32":
             return "EquilotlCli.exe";
         case "darwin":
-            return "Equilotl.MacOS.zip";
+            switch (process.arch) {
+                case "x64":
+                    return "Equilotl-darwin-x64.zip";
+                case "arm64":
+                    return "Equilotl-darwin-arm64.zip";
+                default:
+                    throw new Error("Unsupported macOS architecture: " + process.arch);
+            }
         case "linux":
             return "EquilotlCli-linux";
         default:

@@ -20,7 +20,11 @@ export interface RegistryStore {
     getTreeCommandCache(): Map<string, CommandEntry[]>;
 }
 
+let instance: RegistryStore | null = null;
+
 export function createRegistryStore(): RegistryStore {
+    if (instance) return instance;
+
     let registryVersion = 0;
     let cachedSortedCommands: CommandEntry[] | null = null;
     const categoryCommandCache = new Map<string, CommandEntry[]>();
@@ -38,7 +42,7 @@ export function createRegistryStore(): RegistryStore {
         for (const listener of registryListeners) listener(registryVersion);
     };
 
-    return {
+    instance = {
         getRegistryVersion: () => registryVersion,
         bumpRegistryVersion: () => {
             registryVersion += 1;
@@ -77,4 +81,6 @@ export function createRegistryStore(): RegistryStore {
         getCategoryCommandCache: () => categoryCommandCache,
         getTreeCommandCache: () => treeCommandCache
     };
+
+    return instance;
 }

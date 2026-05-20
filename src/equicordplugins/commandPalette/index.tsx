@@ -230,5 +230,8 @@ export default definePlugin({
         });
     },
 
-    chatBarButtonWrapper: wrapChatBarChildren,
+    chatBarButtonWrapper: {
+        wrapper: wrapChatBarChildren,
+        priority: 0,
+    },
 });

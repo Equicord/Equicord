@@ -16,15 +16,16 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-import { Heading, HeadingTertiary } from "@components/Heading";
+import { TextButton } from "@components/Button";
+import { Heading } from "@components/Heading";
 import { SessionInfo } from "@plugins/betterSessions/types";
 import { getDefaultName, savedSessionsCache, saveSessionsToDataStore } from "@plugins/betterSessions/utils";
-import { ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot } from "@utils/modal";
 import { t } from "@utils/translation";
-import { Button, React, TextInput } from "@webpack/common";
+import { RenderModalProps } from "@vencord/discord-types";
+import { Modal, React, TextInput } from "@webpack/common";
 import { KeyboardEvent } from "react";
 
-export function RenameModal({ props, session, state }: { props: ModalProps, session: SessionInfo["session"], state: [string, React.Dispatch<React.SetStateAction<string>>]; }) {
+export function RenameModal({ props, session, state }: { props: RenderModalProps, session: SessionInfo["session"], state: [string, React.Dispatch<React.SetStateAction<string>>]; }) {
     const [title, setTitle] = state;
     const [value, setValue] = React.useState(savedSessionsCache.get(session.id_hash)?.name ?? "");
 
@@ -41,13 +42,24 @@ export function RenameModal({ props, session, state }: { props: ModalProps, sess
     }
 
     return (
-        <ModalRoot {...props}>
-            <ModalHeader>
-                <HeadingTertiary>{t("vencord.betterSessions.renameModal.title")}</HeadingTertiary>
-            </ModalHeader>
-
-            <ModalContent>
-                <Heading style={{ marginTop: "10px" }}>{t("vencord.betterSessions.renameModal.newDeviceName")}</Heading>
+        <Modal
+            {...props}
+            title={t("vencord.betterSessions.renameModal.title")}
+            actions={[
+                {
+                    text: t("vencord.cancel"),
+                    variant: "secondary",
+                    onClick: () => props.onClose()
+                },
+                {
+                    text: t("vencord.betterSessions.renameModal.save"),
+                    variant: "primary",
+                    onClick: onSaveClick
+                }
+            ]}
+        >
+            <div>
+                <Heading tag="h5">{t("vencord.betterSessions.renameModal.newDeviceName")}</Heading>
                 <TextInput
                     style={{ marginBottom: "10px" }}
                     placeholder={getDefaultName(session.client_info)}
@@ -59,38 +71,16 @@ export function RenameModal({ props, session, state }: { props: ModalProps, sess
                         }
                     }}
                 />
-                <Button
+                <TextButton
                     style={{
-                        marginBottom: "20px",
                         paddingLeft: "1px",
-                        paddingRight: "1px",
                         opacity: 0.6
                     }}
-                    look={Button.Looks.LINK}
-                    color={Button.Colors.LINK}
-                    size={Button.Sizes.NONE}
                     onClick={() => setValue("")}
                 >
                     {t("vencord.betterSessions.renameModal.resetName")}
-                </Button>
-            </ModalContent>
-
-            <ModalFooter>
-                <div className="vc-betterSessions-footer-buttons">
-                    <Button
-                        color={Button.Colors.PRIMARY}
-                        onClick={() => props.onClose()}
-                    >
-                        {t("vencord.cancel")}
-                    </Button>
-                    <Button
-                        color={Button.Colors.BRAND}
-                        onClick={onSaveClick}
-                    >
-                        {t("vencord.betterSessions.renameModal.save")}
-                    </Button>
-                </div>
-            </ModalFooter>
-        </ModalRoot >
+                </TextButton>
+            </div>
+        </Modal>
     );
 }

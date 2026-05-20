@@ -48,6 +48,10 @@ export function isRestartDirty(): boolean {
     return restartDirty;
 }
 
+export function setRestartDirty(dirty: boolean): void {
+    restartDirty = dirty;
+}
+
 export function promptToRestartIfDirty(): boolean {
     if (!restartDirty) {
         return false;

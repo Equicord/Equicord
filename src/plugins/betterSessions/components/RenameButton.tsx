@@ -6,8 +6,8 @@
 
 import { Button } from "@components/Button";
 import { SessionInfo } from "@plugins/betterSessions/types";
-import { openModal } from "@utils/modal";
 import { t } from "@utils/translation";
+import { openModal } from "@webpack/common";
 
 import { RenameModal } from "./RenameModal";
 
