@@ -160,7 +160,7 @@ function Switches() {
 function EquicordSettings() {
     const donateImage = useMemo(() =>
         Math.random() > 0.5 ? DEFAULT_DONATE_IMAGE : SHIGGY_DONATE_IMAGE,
-        []
+    []
     );
 
     const user = UserStore?.getCurrentUser();

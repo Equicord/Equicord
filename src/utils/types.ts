@@ -277,7 +277,7 @@ export const enum OptionType {
 export type SettingsDefinition = Record<string, PluginSettingDef>;
 export type SettingsChecks<D extends SettingsDefinition> = {
     [K in keyof D]?: D[K] extends PluginSettingComponentDef ? IsDisabledOrHidden<DefinedSettings<D>> :
-    (IsDisabledOrHidden<DefinedSettings<D>> & IsValid<PluginSettingType<D[K]>, DefinedSettings<D>>);
+        (IsDisabledOrHidden<DefinedSettings<D>> & IsValid<PluginSettingType<D[K]>, DefinedSettings<D>>);
 };
 
 export type PluginSettingDef =
@@ -396,13 +396,13 @@ export interface PluginSettingComponentProps {
 /** Maps a `PluginSettingDef` to its value type */
 type PluginSettingType<O extends PluginSettingDef> = O extends PluginSettingStringDef ? string :
     O extends PluginSettingNumberDef ? number :
-    O extends PluginSettingBigIntDef ? BigInt :
-    O extends PluginSettingBooleanDef ? boolean :
-    O extends PluginSettingSelectDef ? O["options"][number]["value"] :
-    O extends PluginSettingSliderDef ? number :
-    O extends PluginSettingComponentDef ? O extends { default: infer Default; } ? Default : any :
-    O extends PluginSettingCustomDef ? O extends { default: infer Default; } ? Default : any :
-    never;
+        O extends PluginSettingBigIntDef ? BigInt :
+            O extends PluginSettingBooleanDef ? boolean :
+                O extends PluginSettingSelectDef ? O["options"][number]["value"] :
+                    O extends PluginSettingSliderDef ? number :
+                        O extends PluginSettingComponentDef ? O extends { default: infer Default; } ? Default : any :
+                            O extends PluginSettingCustomDef ? O extends { default: infer Default; } ? Default : any :
+                                never;
 
 type PluginSettingDefaultType<O extends PluginSettingDef> = O extends PluginSettingSelectDef ? (
     O["options"] extends { default?: boolean; }[] ? O["options"][number]["value"] : undefined
@@ -444,8 +444,8 @@ export type IpcRes<V = any> = { ok: true; value: V; } | { ok: false, error: any;
 export type PluginNative<PluginExports extends Record<string, (event: Electron.IpcMainInvokeEvent, ...args: any[]) => any>> = {
     [key in keyof PluginExports]:
     PluginExports[key] extends (event: Electron.IpcMainInvokeEvent, ...args: infer Args) => infer Return
-    ? (...args: Args) => Return extends Promise<any> ? Return : Promise<Return>
-    : never;
+        ? (...args: Args) => Return extends Promise<any> ? Return : Promise<Return>
+        : never;
 };
 
 export type AllOrNothing<T> = T | { [K in keyof T]?: never; };

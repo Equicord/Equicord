@@ -8,6 +8,7 @@ import { Link } from "@components/Link";
 import { Paragraph } from "@components/Paragraph";
 import { settings } from "@plugins/decor/settings";
 import { DecorationModalClasses, requireAvatarDecorationModal } from "@plugins/decor/ui";
+import { t } from "@utils/translation";
 import { RenderModalProps } from "@vencord/discord-types";
 import { ConfirmModal, openModal } from "@webpack/common";
 
@@ -17,8 +18,8 @@ function GuidelinesModal(props: RenderModalProps) {
     return (
         <ConfirmModal
             {...props}
-            title="Hold on"
-            confirmText="Continue"
+            title={t("vencord.decor.holdOn")}
+            confirmText={t("vencord.decor.continue")}
             variant="primary"
             onConfirm={() => {
                 settings.store.agreedToGuidelines = true;
@@ -28,11 +29,13 @@ function GuidelinesModal(props: RenderModalProps) {
         >
             <div className={DecorationModalClasses.modal}>
                 <Paragraph>
-                    By submitting a decoration, you agree to <Link
-                        href="https://github.com/decor-discord/.github/blob/main/GUIDELINES.md"
-                    >
-                        the guidelines
-                    </Link>. Not reading these guidelines may get your account suspended from creating more decorations in the future.
+                    {t("vencord.decor.guidelinesAgreementNotice", {
+                        guidelines: <Link
+                            href="https://github.com/decor-discord/.github/blob/main/GUIDELINES.md"
+                        >
+                            {t("vencord.decor.theGuidelines")}
+                        </Link>
+                    })}
                 </Paragraph>
             </div>
         </ConfirmModal>

@@ -304,6 +304,7 @@
             },
             "enableScreenshotKeybind": "Enable the screenshot keybind feature",
             "enableVoiceOnlyClips": "Enable voice-only clips (audio without video)",
+            "enableSpeakingIndicators": "Enable speaking indicators",
             "enableAdvancedSignals": "Enable advanced clip signals (auto-clip triggers)",
             "ignorePlatformRestriction": "Allow Platform Restricted Clipping (may cause save errors)",
             "clipsLink": "Change FPS and duration options in Clips settings!"

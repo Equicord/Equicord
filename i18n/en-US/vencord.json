@@ -463,7 +463,39 @@
         "removeDecoration": "Remove Decoration",
         "title": "Decor",
         "baseUrl": "Decor api url",
-        "agreedToGuidelines": "Agreed to guidelines"
+        "agreedToGuidelines": "Agreed to guidelines",
+        "options": "Decoration Options",
+        "copyHash": "Copy Decoration Hash",
+        "deleteDecoration": "Delete Decoration",
+        "deleteConfirm": "Are you sure you want to delete {name}?",
+        "delete": "Delete",
+        "yourDecorations": "Your Decorations",
+        "deleteInstructions": "You can delete your own decorations by right clicking on them.",
+        "apply": "Apply",
+        "discordTooltip": "Join Decor's Discord Server for notifications on your decoration's review, and when new presets are released",
+        "discordServer": "Discord Server",
+        "logOut": "Log Out",
+        "confirmLogOut": "Are you sure you want to log out of Decor?",
+        "pendingReview": "Pending review",
+        "presetPart": "Part of the {name} Preset",
+        "createdBy": "Created by",
+        "copyPresetId": "Copy Preset ID",
+        "alreadyPending": "You already have a decoration pending review",
+        "createDecoration": "Create Decoration",
+        "submitForReview": "Submit for Review",
+        "guidelinesNotice": "Make sure your decoration does not violate {guidelines} before submitting it.",
+        "theGuidelines": "the guidelines",
+        "file": "File",
+        "chooseAFile": "Choose a file",
+        "browse": "Browse",
+        "fileNotice": "File should be APNG or PNG.",
+        "name": "Name",
+        "nameNotice": "This name will be used when referring to this decoration.",
+        "discordServerNotice": "To receive updates on your decoration's review, join {link} and allow direct messages.",
+        "decorDiscordServer": "Decor's Discord server",
+        "holdOn": "Hold on",
+        "guidelinesAgreementNotice": "By submitting a decoration, you agree to {guidelines}. Not reading these guidelines may get your account suspended from creating more decorations in the future.",
+        "continue": "Continue"
     },
     "devCompanion": {
         "description": "Dev Companion Plugin. Please report anything not working or being weird (most likely its a bug) to sadan, either ping or dm, thanks!",
@@ -517,7 +549,8 @@
         "customName": "Custom Name",
         "failedToClone": "Failed to clone: {error}",
         "nameValidation": "Name must be between 2 and 32 characters",
-        "somethingWentWrong": "Something went wrong (check console!)"
+        "somethingWentWrong": "Something went wrong (check console!)",
+        "cloneName": "Clone {name}"
     },
     "f8break": {
         "description": "Pause the client when you press F8 with DevTools (+ breakpoints) open."
@@ -538,6 +571,7 @@
             "disableNotice": "You can disable this notice in the plugin settings."
         },
         "sendAnyway": "Send Anyway",
+        "ok": "OK",
         "settings": {
             "disableEmbedPermissionCheck": "Whether to disable the embed permission check when sending fake emojis and stickers",
             "emojiSize": "Size of the emojis when sending",
@@ -1026,6 +1060,7 @@
             "separatedDiffs": "Separate addition and removals in diffs for a more readable differential",
             "showEditDiffs": "Show visual differences between edited message versions"
         },
+        "showDiff": "Show Diff",
         "toggleDeletedHighlight": "Toggle Deleted Highlight"
     },
     "messagePopoverAPI": {
@@ -1465,7 +1500,9 @@
         "unblockUser": "Unblock user",
         "viewReviews": "View Reviews",
         "description": "Review other users (Adds a new settings to profiles)",
-        "userReviews": "User Reviews"
+        "userReviews": "User Reviews",
+        "userOptedOut": "User opted out",
+        "noReviewsYet": "No reviews yet"
     },
     "roleColorEverywhere": {
         "description": "Adds the top role color anywhere possible",
@@ -2113,6 +2150,7 @@
         "settings": {
             "clickMethodDescription": "Change the button to view the raw content/data of any message.",
             "leftClick": "Left Click to view the raw content.",
+            "messageContextMenu": "Show in message context menu",
             "rightClick": "Right click to view the raw content."
         },
         "viewRaw": "View Raw",
@@ -2228,5 +2266,10 @@
             },
             "showMissingKeys": "If the current locale is missing translations, show the keys instead of falling back to English"
         }
+    },
+    "vencordDonor": {
+        "title": "Vencord Donor",
+        "description": "This Badge is a special perk for Vencord Donors",
+        "description2": "Please consider supporting the development of Vencord by becoming a donor. It would mean a lot!!"
     }
 }
