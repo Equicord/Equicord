@@ -234,7 +234,9 @@ function load() {
 migratePluginSettings("CursorBuddy", "Oneko", "oneko");
 export default definePlugin({
     name: "CursorBuddy",
+    nameI18n: "equicord.plugins.cursorBuddy.name",
     description: "Adds a sprite that follows your cursor.",
+    descriptionI18n: "equicord.plugins.cursorBuddy.description",
     tags: ["Appearance", "Customisation", "Fun"],
     authors: [Devs.Ven, Devs.adryd, EquicordDevs.nexpid, EquicordDevs.ZcraftElite],
     searchTerms: ["Oneko", "FatassHorse", "Pet"],

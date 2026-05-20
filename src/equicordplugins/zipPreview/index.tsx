@@ -14,7 +14,9 @@ import { clearZipPreviewCache, getAttachmentFileName, isZipFile, ZipPreviewAttac
 
 export default definePlugin({
     name: "ZipPreview",
+    nameI18n: "equicord.plugins.zipPreview.name",
     description: "Previews ZIP contents inside file attachments.",
+    descriptionI18n: "equicord.plugins.zipPreview.description",
     tags: ["Chat", "Utility"],
     authors: [EquicordDevs.justjxke],
     managedStyle,

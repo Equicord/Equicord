@@ -88,7 +88,9 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "NoBlockedMessages",
+    nameI18n: "equicord.plugins.noBlockedMessages.name",
     description: "Hide all blocked/ignored messages from chat completely.",
+    descriptionI18n: "equicord.plugins.noBlockedMessages.description",
     authors: [Devs.rushii, Devs.Samu, Devs.jamesbt365, Devs.Elvyra, EquicordDevs.Etorix],
     tags: ["Accessibility", "Chat"],
     isModified: true,

@@ -91,7 +91,9 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "IgnoreCalls",
+    nameI18n: "equicord.plugins.ignoreCalls.name",
     description: "Allows you to ignore calls from specific users or dm groups.",
+    descriptionI18n: "equicord.plugins.ignoreCalls.description",
     tags: ["Voice"],
     authors: [EquicordDevs.TheArmagan, Devs.thororen],
     settings,

@@ -60,8 +60,10 @@ const messageContextMenuPatch: NavContextMenuPatchCallback = (
 
 export default definePlugin({
     name: "UnsuppressEmbeds",
+    nameI18n: "equicord.plugins.unsuppressEmbeds.name",
     authors: [Devs.rad, Devs.HypedDomi],
     description: "Allows you to unsuppress embeds in messages",
+    descriptionI18n: "equicord.plugins.unsuppressEmbeds.description",
     tags: ["Chat", "Utility"],
     contextMenus: {
         "message": messageContextMenuPatch

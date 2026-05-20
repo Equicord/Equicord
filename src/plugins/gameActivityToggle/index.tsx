@@ -97,7 +97,9 @@ function GameActivityToggleButton({ iconForeground, hideTooltips, nameplate }: U
 
 export default definePlugin({
     name: "GameActivityToggle",
+    nameI18n: "equicord.plugins.gameActivityToggle.name",
     description: "Adds a button next to the mic and deafen button to toggle game activity.",
+    descriptionI18n: "equicord.plugins.gameActivityToggle.description",
     tags: ["Activity", "Shortcuts"],
     authors: [Devs.Nuckyz, Devs.RuukuLada],
     dependencies: ["UserSettingsAPI", "UserAreaAPI"],

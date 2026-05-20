@@ -59,7 +59,9 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "IrcColors",
+    nameI18n: "equicord.plugins.ircColors.name",
     description: "Makes username colors in chat unique, like in IRC clients",
+    descriptionI18n: "equicord.plugins.ircColors.description",
     tags: ["Appearance", "Customisation"],
     authors: [Devs.Grzesiek11, Devs.jamesbt365],
     settings,

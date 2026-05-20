@@ -47,7 +47,9 @@ function getJumpscareRoot(): Root {
 
 export default definePlugin({
     name: "Jumpscare",
+    nameI18n: "equicord.plugins.jumpscare.name",
     description: "Adds a configurable chance of jumpscaring you whenever you open a channel. Inspired by Geometry Dash Mega Hack",
+    descriptionI18n: "equicord.plugins.jumpscare.description",
     tags: ["Fun"],
     authors: [Devs.surgedevs],
     dependencies: ["AudioPlayerAPI"],

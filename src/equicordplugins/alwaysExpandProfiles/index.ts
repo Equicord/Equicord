@@ -9,7 +9,9 @@ import definePlugin from "@utils/types";
 
 export default definePlugin({
     name: "AlwaysExpandProfiles",
+    nameI18n: "equicord.plugins.alwaysExpandProfiles.name",
     description: "Always expands profile popouts to the full modal",
+    descriptionI18n: "equicord.plugins.alwaysExpandProfiles.description",
     tags: ["Appearance", "Utility"],
     authors: [Devs.thororen],
     patches: [

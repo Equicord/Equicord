@@ -99,7 +99,9 @@ const ChatBarContextCheckbox: NavContextMenuPatchCallback = children => {
 
 export default definePlugin({
     name: "Signature",
+    nameI18n: "equicord.plugins.signature.name",
     description: "Automated fingerprint/end text",
+    descriptionI18n: "equicord.plugins.signature.description",
     dependencies: ["CommandsAPI", "ChatInputButtonAPI", "MessagePopoverAPI"],
     tags: ["Appearance", "Chat"],
     authors: [Devs.Ven, Devs.Rini, Devs.ImBanana, EquicordDevs.KrystalSkull],

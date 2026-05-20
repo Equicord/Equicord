@@ -14,7 +14,9 @@ let recoder: MediaRecorder;
 
 export default definePlugin({
     name: "ScreenRecorder",
+    nameI18n: "equicord.plugins.screenRecorder_equibop.name",
     description: "Adds an option to record your screen and upload the recording to the channel",
+    descriptionI18n: "equicord.plugins.screenRecorder_equibop.description",
     tags: ["Chat"],
     authors: [Devs.AutumnVN],
     contextMenus: {

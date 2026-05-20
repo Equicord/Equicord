@@ -88,7 +88,9 @@ export const userContextPatch: NavContextMenuPatchCallback = (children, { user }
 
 export default definePlugin({
     name: "BiggerStreamPreview",
+    nameI18n: "equicord.plugins.biggerStreamPreview.name",
     description: "This plugin allows you to enlarge stream previews",
+    descriptionI18n: "equicord.plugins.biggerStreamPreview.description",
     tags: ["Media", "Appearance"],
     authors: [Devs.phil],
     contextMenus: {

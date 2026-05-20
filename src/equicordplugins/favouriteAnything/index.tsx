@@ -24,7 +24,9 @@ export const AttachmentContext = proxyLazyWebpack(() => React.createContext<null
 
 export default definePlugin({
     name: "FavouriteAnything",
+    nameI18n: "equicord.plugins.favouriteAnything.name",
     description: "Favourite any image, video, or file attachment",
+    descriptionI18n: "equicord.plugins.favouriteAnything.description",
     tags: ["Chat", "Media"],
     authors: [Devs.nin0dev, EquicordDevs.davri],
     searchTerms: ["favorite"],

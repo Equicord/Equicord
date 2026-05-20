@@ -110,7 +110,9 @@ let clientOldChannelId: string | undefined;
 
 export default definePlugin({
     name: "VoiceJoinMessages",
+    nameI18n: "equicord.plugins.voiceJoinMessages.name",
     description: "Recieve client-side ephemeral messages when your friends join voice channels",
+    descriptionI18n: "equicord.plugins.voiceJoinMessages.description",
     tags: ["Servers", "Utility", "Voice"],
     authors: [Devs.Sqaaakoi, Devs.thororen],
     settings,

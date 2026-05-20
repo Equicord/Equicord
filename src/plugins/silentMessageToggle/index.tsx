@@ -108,8 +108,10 @@ const SilentMessageToggle: ChatBarButtonFactory = ({ isMainChat }) => {
 
 export default definePlugin({
     name: "SilentMessageToggle",
+    nameI18n: "equicord.plugins.silentMessageToggle.name",
     authors: [Devs.Nuckyz, Devs.CatNoir, EquicordDevs.Z1xus],
     description: "Adds a button to the chat bar to toggle sending a silent message.",
+    descriptionI18n: "equicord.plugins.silentMessageToggle.description",
     dependencies: ["ChatInputButtonAPI"],
     tags: ["Chat", "Utility"],
     settings,

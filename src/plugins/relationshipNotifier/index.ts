@@ -25,7 +25,9 @@ import { syncAndRunChecks, syncFriends, syncGroups, syncGuilds } from "./utils";
 
 export default definePlugin({
     name: "RelationshipNotifier",
+    nameI18n: "equicord.plugins.relationshipNotifier.name",
     description: "Notifies you when a friend, group chat, or server removes you.",
+    descriptionI18n: "equicord.plugins.relationshipNotifier.description",
     tags: ["Friends", "Notifications"],
     authors: [Devs.nick],
     settings,

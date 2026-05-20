@@ -89,7 +89,9 @@ export function registerTagCommand(tag: Tag) {
 migratePluginSettings("CustomCommands", "MessageTags");
 export default definePlugin({
     name: "CustomCommands",
+    nameI18n: "equicord.plugins.customCommands.name",
     description: "Allows you to create custom slash commands / tags",
+    descriptionI18n: "equicord.plugins.customCommands.description",
     dependencies: ["CommandsAPI"],
     searchTerms: ["MessageTags"],
     authors: [Devs.Ven, Devs.Luna,],

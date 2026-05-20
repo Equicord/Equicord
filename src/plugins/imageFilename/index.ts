@@ -21,8 +21,10 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "ImageFilename",
+    nameI18n: "equicord.plugins.imageFilename.name",
     authors: [Devs.Ven],
     description: "Display the file name of images & GIFs as a tooltip when hovering over them",
+    descriptionI18n: "equicord.plugins.imageFilename.description",
     tags: ["Media", "Utility"],
     settings,
 

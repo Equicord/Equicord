@@ -21,6 +21,7 @@ import definePlugin from "@utils/types";
 
 export default definePlugin({
     name: "BetterGifAltText",
+    nameI18n: "equicord.plugins.betterGifAltText.name",
     authors: [Devs.Ven],
     description:
         "Change GIF alt text from simply being 'GIF' to containing the gif tags / filename",

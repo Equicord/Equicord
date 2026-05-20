@@ -59,7 +59,9 @@ let shouldAttemptRecover = true;
 
 export default definePlugin({
     name: "CrashHandler",
+    nameI18n: "equicord.plugins.crashHandler.name",
     description: "Utility plugin for handling and possibly recovering from crashes without a restart",
+    descriptionI18n: "equicord.plugins.crashHandler.description",
     authors: [Devs.Nuckyz],
     tags: ["Utility", "Developers"],
     enabledByDefault: true,

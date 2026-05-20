@@ -33,7 +33,9 @@ function lurk(id: string) {
 
 export default definePlugin({
     name: "BetterInvites",
+    nameI18n: "equicord.plugins.betterInvites.name",
     description: "See invites expiration date, view inviter profile and preview servers before joining by clicking the name",
+    descriptionI18n: "equicord.plugins.betterInvites.description",
     tags: ["Appearance", "Customisation", "Chat", "Servers"],
     authors: [EquicordDevs.iamme, Devs.thororen],
     patches: [

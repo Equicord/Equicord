@@ -76,7 +76,9 @@ function VencordPopoutButton() {
 migratePluginSettings("EquicordToolbox", "VencordToolbox");
 export default definePlugin({
     name: "EquicordToolbox",
+    nameI18n: "equicord.plugins.equicordToolbox.name",
     description: "Adds a button next to the inbox button in the channel header that houses Equicord quick actions",
+    descriptionI18n: "equicord.plugins.equicordToolbox.description",
     tags: ["Voice", "Accessibility"],
     authors: [Devs.Ven, Devs.AutumnVN],
     dependencies: ["HeaderBarAPI"],

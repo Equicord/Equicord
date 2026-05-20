@@ -31,7 +31,9 @@ export const settings = definePluginSettings({
 
 export default definePlugin({
     name: "ReplyPingControl",
+    nameI18n: "equicord.plugins.replyPingControl.name",
     description: "Control whether to always or never get pinged on message replies, with whitelist and blacklist features",
+    descriptionI18n: "equicord.plugins.replyPingControl.description",
     tags: ["Chat", "Notifications"],
     authors: [Devs.ant0n, EquicordDevs.MrDiamond, EquicordDevs.keircn],
     settings,

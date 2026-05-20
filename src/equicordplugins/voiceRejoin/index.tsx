@@ -50,7 +50,9 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "VoiceRejoin",
+    nameI18n: "equicord.plugins.voiceRejoin.name",
     description: "Rejoins DM/Server call automatically when restarting Discord.",
+    descriptionI18n: "equicord.plugins.voiceRejoin.description",
     tags: ["Servers", "Utility", "Voice"],
     authors: [EquicordDevs.omaw, EquicordDevs.keircn],
     settings,

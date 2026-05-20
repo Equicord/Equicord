@@ -72,7 +72,9 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "RPCEditor",
+    nameI18n: "equicord.plugins.rpcEditor.name",
     description: "Edit the type and content of any Rich Presence",
+    descriptionI18n: "equicord.plugins.rpcEditor.description",
     tags: ["Customisation"],
     authors: [Devs.Nyako, Devs.nin0dev],
     patches: [

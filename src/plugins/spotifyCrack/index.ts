@@ -37,7 +37,9 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "SpotifyCrack",
+    nameI18n: "equicord.plugins.spotifyCrack.name",
     description: "Free listen along, no auto-pausing in voice chat, and allows activity to continue playing when idling",
+    descriptionI18n: "equicord.plugins.spotifyCrack.description",
     tags: ["Media", "Utility", "Activity"],
     authors: [Devs.Cyn, Devs.Nuckyz],
     settings,

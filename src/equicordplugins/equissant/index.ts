@@ -32,7 +32,9 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "Equissant",
+    nameI18n: "equicord.plugins.equissant.name",
     description: "Crossant every specified amount of clicks :trolley:",
+    descriptionI18n: "equicord.plugins.equissant.description",
     tags: ["Fun"],
     authors: [EquicordDevs.SomeAspy, Devs.thororen],
     dependencies: ["AudioPlayerAPI"],

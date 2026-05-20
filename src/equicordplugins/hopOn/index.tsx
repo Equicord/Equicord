@@ -31,7 +31,9 @@ const settings = definePluginSettings({
 });
 export default definePlugin({
     name: "HopOn",
+    nameI18n: "equicord.plugins.hopOn.name",
     description: "Hop on! Opens a configurable URL when a message matches a custom regex in the current channel.",
+    descriptionI18n: "equicord.plugins.hopOn.description",
     tags: ["Fun"],
     authors: [Devs.ImLvna],
     settings,

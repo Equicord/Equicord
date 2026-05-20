@@ -9,8 +9,10 @@ import definePlugin from "@utils/types";
 
 export default definePlugin({
     name: "WebScreenShareFixes",
+    nameI18n: "equicord.plugins.webScreenShareFixes_web.name",
     authors: [Devs.Kaitlyn],
     description: "Removes 2500kbps bitrate cap on chromium and vesktop clients.",
+    descriptionI18n: "equicord.plugins.webScreenShareFixes_web.description",
     tags: ["Voice"],
     enabledByDefault: true,
 

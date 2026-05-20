@@ -89,8 +89,10 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "Moyai",
+    nameI18n: "equicord.plugins.moyai.name",
     authors: [Devs.Megu, Devs.Nuckyz],
     description: "Plays a 🗿 sound effect whenever a moyai emoji is sent, reacted, or used as a voice effect in your current channel.",
+    descriptionI18n: "equicord.plugins.moyai.description",
     tags: ["Fun"],
     settings,
 

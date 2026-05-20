@@ -24,7 +24,9 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "ShowAllMessageButtons",
+    nameI18n: "equicord.plugins.showAllMessageButtons.name",
     description: "Always show all message buttons no matter if you are holding the shift key or not.",
+    descriptionI18n: "equicord.plugins.showAllMessageButtons.description",
     tags: ["Chat", "Utility"],
     authors: [Devs.Nuckyz],
     settings,

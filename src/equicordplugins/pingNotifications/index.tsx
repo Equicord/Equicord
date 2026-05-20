@@ -91,7 +91,9 @@ function isUserBlocked(userId) {
 
 export default definePlugin({
     name: "PingNotifications",
+    nameI18n: "equicord.plugins.pingNotifications.name",
     description: "Customizable notifications with improved mention formatting",
+    descriptionI18n: "equicord.plugins.pingNotifications.description",
     tags: ["Chat", "Friends", "Notifications", "Servers"],
     authors: [EquicordDevs.smuki],
     settings,

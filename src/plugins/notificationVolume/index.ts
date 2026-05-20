@@ -20,7 +20,9 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "NotificationVolume",
+    nameI18n: "equicord.plugins.notificationVolume.name",
     description: "Save your ears and set a separate volume for notifications and in-app sounds",
+    descriptionI18n: "equicord.plugins.notificationVolume.description",
     tags: ["Notifications", "Voice"],
     authors: [Devs.philipbry],
     settings,

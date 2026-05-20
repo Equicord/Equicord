@@ -37,8 +37,10 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "ShowHiddenThings",
+    nameI18n: "equicord.plugins.showHiddenThings.name",
     searchTerms: ["ShowTimeouts", "ShowInvitesPaused", "ShowModView", "DisableDiscoveryFilters"],
     description: "Displays various hidden & moderator-only things regardless of permissions.",
+    descriptionI18n: "equicord.plugins.showHiddenThings.description",
     tags: ["Servers", "Utility"],
     authors: [Devs.Dolfies],
     settings,

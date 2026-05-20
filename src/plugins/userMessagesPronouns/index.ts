@@ -26,8 +26,10 @@ import { settings } from "./settings";
 migratePluginSettings("UserMessagesPronouns", "PronounDB");
 export default definePlugin({
     name: "UserMessagesPronouns",
+    nameI18n: "equicord.plugins.userMessagesPronouns.name",
     authors: [Devs.Tyman, Devs.TheKodeToad, Devs.Ven, Devs.Elvyra],
     description: "Adds pronouns to chat user messages",
+    descriptionI18n: "equicord.plugins.userMessagesPronouns.description",
     tags: ["Chat", "Appearance"],
     settings,
 

@@ -87,7 +87,9 @@ function fixImageUrl(urlString: string) {
 
 export default definePlugin({
     name: "WebContextMenus",
+    nameI18n: "equicord.plugins.webContextMenus_web.name",
     description: "Re-adds context menus missing in the web version of Discord: Links & Images (Copy/Open Link/Image), Text Area (Copy, Cut, Paste, SpellCheck)",
+    descriptionI18n: "equicord.plugins.webContextMenus_web.description",
     tags: ["Utility"],
     authors: [Devs.Ven],
     enabledByDefault: true,

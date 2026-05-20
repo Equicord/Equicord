@@ -19,8 +19,10 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "NoMosaic",
+    nameI18n: "equicord.plugins.noMosaic.name",
     authors: [Devs.AutumnVN],
     description: "Removes Discord image mosaic",
+    descriptionI18n: "equicord.plugins.noMosaic.description",
     tags: ["Media", "Appearance", "Chat"],
     searchTerms: ["image", "mosaic", "media"],
 

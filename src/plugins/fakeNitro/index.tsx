@@ -188,8 +188,10 @@ function showCannotEmbedNotice() {
 
 export default definePlugin({
     name: "FakeNitro",
+    nameI18n: "equicord.plugins.fakeNitro.name",
     authors: [Devs.Arjix, Devs.D3SOX, Devs.Ven, Devs.fawn, Devs.captain, Devs.Nuckyz, Devs.AutumnVN, Devs.sadan],
     description: "Allows you to send fake emojis/stickers, use nitro themes, and stream in nitro quality",
+    descriptionI18n: "equicord.plugins.fakeNitro.description",
     tags: ["Emotes", "Appearance", "Customisation", "Chat"],
     dependencies: ["MessageEventsAPI"],
 

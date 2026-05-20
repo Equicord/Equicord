@@ -63,7 +63,9 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "PolishWording",
+    nameI18n: "equicord.plugins.polishWording.name",
     description: "Tweaks your messages to make them look nicer and have better grammar. See settings",
+    descriptionI18n: "equicord.plugins.polishWording.description",
     dependencies: ["MessageEventsAPI"],
     tags: ["Chat"],
     authors: [Devs.Samwich, EquicordDevs.WKoA],

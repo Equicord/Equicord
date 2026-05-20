@@ -50,7 +50,9 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "CopyEmojiMarkdown",
+    nameI18n: "equicord.plugins.copyEmojiMarkdown.name",
     description: "Allows you to copy emojis as formatted string (<:blobcatcozy:1026533070955872337>)",
+    descriptionI18n: "equicord.plugins.copyEmojiMarkdown.description",
     tags: ["Emotes", "Utility"],
     authors: [Devs.HappyEnderman, Devs.Vishnya],
     settings,

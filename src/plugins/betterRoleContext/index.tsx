@@ -186,7 +186,9 @@ export function buildExtraRoleContextMenuItems(role: Role, guild: Guild, popoutR
 
 export default definePlugin({
     name: "BetterRoleContext",
+    nameI18n: "equicord.plugins.betterRoleContext.name",
     description: "Adds options to copy role color / edit role / view role icon when right clicking roles in the user profile",
+    descriptionI18n: "equicord.plugins.betterRoleContext.description",
     tags: ["Roles", "Appearance"],
     authors: [Devs.Ven, Devs.goodbee],
     dependencies: ["UserSettingsAPI"],

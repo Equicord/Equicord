@@ -218,7 +218,9 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "PlatformIndicators",
+    nameI18n: "equicord.plugins.platformIndicators.name",
     description: "Adds platform indicators (Desktop, Mobile, Web...) to users",
+    descriptionI18n: "equicord.plugins.platformIndicators.description",
     dependencies: ["MemberListDecoratorsAPI", "MessageDecorationsAPI", "NicknameIconsAPI"],
     tags: ["Appearance"],
     authors: [Devs.kemo, Devs.TheSun, Devs.Nuckyz, Devs.Ven, EquicordDevs.neoarz],

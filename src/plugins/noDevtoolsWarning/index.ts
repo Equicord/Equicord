@@ -21,7 +21,9 @@ import definePlugin from "@utils/types";
 
 export default definePlugin({
     name: "NoDevtoolsWarning",
+    nameI18n: "equicord.plugins.noDevtoolsWarning.name",
     description: "Disables the 'HOLD UP' banner in the console. As a side effect, also prevents Discord from hiding your token, which prevents random logouts.",
+    descriptionI18n: "equicord.plugins.noDevtoolsWarning.description",
     authors: [Devs.Ven],
     tags: ["Developers", "Console"],
     patches: [{

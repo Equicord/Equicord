@@ -243,7 +243,9 @@ const handleThemeNamesChange = () => settings.store.autoRefresh && debouncedRefr
 
 export default definePlugin({
     name: "QuickThemeSwitcher",
+    nameI18n: "equicord.plugins.quickThemeSwitcher_discordDesktop.name",
     description: "Quickly switch between themes using keyboard shortcuts.",
+    descriptionI18n: "equicord.plugins.quickThemeSwitcher_discordDesktop.description",
     tags: ["Appearance", "Utility"],
     authors: [Devs.prism],
     settings,

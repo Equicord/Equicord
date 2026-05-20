@@ -10,8 +10,10 @@ import { MessageStore } from "@webpack/common";
 
 export default definePlugin({
     name: "BetterPlusReacts",
+    nameI18n: "equicord.plugins.betterPlusReacts.name",
     authors: [Devs.Joona],
     description: "The amount of plus before :emoji: is the message to add it to",
+    descriptionI18n: "equicord.plugins.betterPlusReacts.description",
     tags: ["Chat", "Emotes"],
     patches: [
         {

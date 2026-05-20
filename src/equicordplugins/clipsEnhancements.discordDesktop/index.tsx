@@ -47,7 +47,9 @@ const settings = definePluginSettings({
 migratePluginSettings("ClipsEnhancements", "TimelessClips");
 export default definePlugin({
     name: "ClipsEnhancements",
+    nameI18n: "equicord.plugins.clipsEnhancements_discordDesktop.name",
     description: "Add more Clip FPS and duration options, custom clip length, RPC tagging and more",
+    descriptionI18n: "equicord.plugins.clipsEnhancements_discordDesktop.description",
     tags: ["Activity", "Media", "Utility"],
     authors: [Devs.niko, Devs.Joona, EquicordDevs.keircn],
     settings,

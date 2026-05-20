@@ -17,7 +17,9 @@ const PrivateChannelSortStore = findStoreLazy("PrivateChannelSortStore") as { ge
 
 export default definePlugin({
     name: "HomeTyping",
+    nameI18n: "equicord.plugins.homeTyping.name",
     description: "Changes the home button to a typing indicator if someone in your dms is typing",
+    descriptionI18n: "equicord.plugins.homeTyping.description",
     tags: ["Chat"],
     authors: [Devs.Samwich],
     TypingIcon() {

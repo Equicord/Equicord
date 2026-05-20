@@ -26,7 +26,9 @@ const requiredFirstCharacters = ["r", "h", "#"].flatMap(v => [v, v.toUpperCase()
 export default definePlugin({
     authors: [EquicordDevs.Hen],
     name: "MessageColors",
+    nameI18n: "equicord.plugins.messageColors.name",
     description: "Displays color codes like #FF0042 inside of messages",
+    descriptionI18n: "equicord.plugins.messageColors.description",
     tags: ["Appearance", "Chat"],
     settings,
     patches: [

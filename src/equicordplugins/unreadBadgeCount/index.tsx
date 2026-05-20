@@ -31,8 +31,10 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "UnreadCountBadge",
+    nameI18n: "equicord.plugins.unreadBadgeCount.name",
     authors: [Devs.Joona],
     description: "Shows unread message count badges on channels in the channel list",
+    descriptionI18n: "equicord.plugins.unreadBadgeCount.description",
     tags: ["Appearance", "Customisation", "Servers"],
     settings,
 

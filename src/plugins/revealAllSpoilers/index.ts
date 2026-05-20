@@ -25,7 +25,9 @@ const MessagesClasses = findCssClassesLazy("messagesWrapper", "navigationDescrip
 
 export default definePlugin({
     name: "RevealAllSpoilers",
+    nameI18n: "equicord.plugins.revealAllSpoilers.name",
     description: "Reveal all spoilers in a message by Ctrl-clicking a spoiler, or in the chat with Ctrl+Shift-click",
+    descriptionI18n: "equicord.plugins.revealAllSpoilers.description",
     authors: [Devs.whqwert],
     tags: ["Accessibility", "Chat", "Shortcuts", "Utility"],
     patches: [

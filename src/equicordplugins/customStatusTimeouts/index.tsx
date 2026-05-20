@@ -53,7 +53,9 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "CustomStatusTimeouts",
+    nameI18n: "equicord.plugins.customStatusTimeouts.name",
     description: "Adds configurable timeout presets to the status (presence) menu.",
+    descriptionI18n: "equicord.plugins.customStatusTimeouts.description",
     tags: ["Activity", "Utility"],
     authors: [EquicordDevs.Kiri, EquicordDevs.thororen],
     settings,

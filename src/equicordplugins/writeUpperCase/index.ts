@@ -36,7 +36,9 @@ const presendObject: MessageSendListener = (_, msg) => {
 
 export default definePlugin({
     name: "WriteUpperCase",
+    nameI18n: "equicord.plugins.writeUpperCase.name",
     description: "Changes the first Letter of each Sentence in Message Inputs to Uppercase",
+    descriptionI18n: "equicord.plugins.writeUpperCase.description",
     tags: ["Appearance", "Customisation", "Chat"],
     authors: [Devs.Samwich, EquicordDevs.KrystalSkull],
     settings,

@@ -35,7 +35,9 @@ function onActivity() {
 
 export default definePlugin({
     name: "IdleAutoRestart",
+    nameI18n: "equicord.plugins.idleAutoRestart.name",
     description: "Automatically restarts the client after being idle for a configurable amount of time, but avoids restarting while you are in VC.",
+    descriptionI18n: "equicord.plugins.idleAutoRestart.description",
     tags: ["Utility"],
     authors: [EquicordDevs.SteelTech],
     settings,

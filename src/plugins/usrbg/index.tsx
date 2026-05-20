@@ -53,7 +53,9 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "USRBG",
+    nameI18n: "equicord.plugins.usrbg.name",
     description: "Displays user banners from USRBG, allowing anyone to get a banner without Nitro",
+    descriptionI18n: "equicord.plugins.usrbg.description",
     tags: ["Appearance", "Customisation"],
     authors: [Devs.AutumnVN, Devs.katlyn, Devs.pylix, Devs.TheKodeToad],
     settings,

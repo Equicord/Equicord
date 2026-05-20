@@ -35,7 +35,9 @@ const settings = definePluginSettings(
 
 export default definePlugin({
     name: "ImplicitRelationships",
+    nameI18n: "equicord.plugins.implicitRelationships.name",
     description: "Shows your implicit relationships in the Friends tab.",
+    descriptionI18n: "equicord.plugins.implicitRelationships.description",
     tags: ["Friends", "Servers"],
     authors: [Devs.Dolfies],
     settings,

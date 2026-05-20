@@ -21,7 +21,9 @@ import definePlugin from "@utils/types";
 
 export default definePlugin({
     name: "F8Break",
+    nameI18n: "equicord.plugins.f8break.name",
     description: "Pause the client when you press F8 with DevTools (+ breakpoints) open.",
+    descriptionI18n: "equicord.plugins.f8break.description",
     tags: ["Developers", "Shortcuts"],
     authors: [Devs.lewisakura],
 

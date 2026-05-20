@@ -21,7 +21,9 @@ import definePlugin from "@utils/types";
 
 export default definePlugin({
     name: "NoF1",
+    nameI18n: "equicord.plugins.noF1.name",
     description: "Disables F1 help bind.",
+    descriptionI18n: "equicord.plugins.noF1.description",
     tags: ["Utility"],
     authors: [Devs.Cyn],
     patches: [

@@ -137,7 +137,9 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "EquicordHelper",
+    nameI18n: "equicord.plugins.equicordHelper.name",
     description: "Used to provide support, fix discord caused crashes, and other misc features.",
+    descriptionI18n: "equicord.plugins.equicordHelper.description",
     tags: ["Appearance", "Commands", "Utility"],
     dependencies: ["CommandsAPI", "HeaderBarAPI", "MessageAccessoriesAPI"],
     authors: [

@@ -28,7 +28,9 @@ export const settings = definePluginSettings({
 
 export default definePlugin({
     name: "ProfileSets",
+    nameI18n: "equicord.plugins.profileSets.name",
     description: "Allows you to save and load different profile presets, via the Profile Section in Settings.",
+    descriptionI18n: "equicord.plugins.profileSets.description",
     tags: ["Appearance", "Customisation", "Utility"],
     authors: [EquicordDevs.omaw, EquicordDevs.justjxke],
     settings,

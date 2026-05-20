@@ -171,7 +171,9 @@ async function updateData() {
 
 export default definePlugin({
     name: "RPCStats",
+    nameI18n: "equicord.plugins.rpcStats.name",
     description: "Displays stats about your activity as an rpc",
+    descriptionI18n: "equicord.plugins.rpcStats.description",
     tags: ["Utility"],
     authors: [Devs.Samwich],
     async start() {

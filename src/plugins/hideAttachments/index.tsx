@@ -55,7 +55,9 @@ async function toggleHide(channelId: string, messageId: string) {
 
 export default definePlugin({
     name: "HideMedia",
+    nameI18n: "equicord.plugins.hideAttachments.name",
     description: "Hide attachments and embeds for individual messages via hover button",
+    descriptionI18n: "equicord.plugins.hideAttachments.description",
     tags: ["Chat", "Appearance"],
     authors: [Devs.Ven],
     dependencies: ["MessageUpdaterAPI", "MessageAccessoriesAPI", "MessagePopoverAPI"],

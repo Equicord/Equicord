@@ -13,7 +13,9 @@ import { makeDevBanner, settings } from "./components";
 
 export default definePlugin({
     name: "DiscordDevBanner",
+    nameI18n: "equicord.plugins.discordDevBanner.name",
     description: "Enables the Discord developer banner, in which displays the build-ID",
+    descriptionI18n: "equicord.plugins.discordDevBanner.description",
     tags: ["Appearance", "Console", "Developers"],
     authors: [EquicordDevs.KrystalSkull, Devs.thororen],
     settings,

@@ -42,7 +42,9 @@ let previousCache: PreviousChannel | undefined;
 
 export default definePlugin({
     name: "KeepCurrentChannel",
+    nameI18n: "equicord.plugins.keepCurrentChannel.name",
     description: "Attempt to navigate to the channel you were in before switching accounts or loading Discord.",
+    descriptionI18n: "equicord.plugins.keepCurrentChannel.description",
     tags: ["Utility", "Organisation"],
     authors: [Devs.Nuckyz],
 

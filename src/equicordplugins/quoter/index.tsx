@@ -55,7 +55,9 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "Quoter",
+    nameI18n: "equicord.plugins.quoter.name",
     description: "Adds the ability to create an inspirational quote image from a message.",
+    descriptionI18n: "equicord.plugins.quoter.description",
     tags: ["Chat"],
     authors: [Devs.Samwich, Devs.thororen, EquicordDevs.neoarz, Devs.prism],
     settings,

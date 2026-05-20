@@ -1045,7 +1045,9 @@ const UserContextMenuPatch: NavContextMenuPatchCallback = (children, { user }: U
 
 export default definePlugin({
     name: "VcNarratorCustom",
+    nameI18n: "equicord.plugins.vcNarratorCustom.name",
     description: "Announces when users join, leave, or move voice channels via narrator using TikTok TTS. Revamped and back from the dead.",
+    descriptionI18n: "equicord.plugins.vcNarratorCustom.description",
     tags: ["Accessibility", "Voice"],
     authors: [Devs.Ven, Devs.Nyako, EquicordDevs.Loukios, EquicordDevs.examplegit, EquicordDevs.qdnx],
     settings,

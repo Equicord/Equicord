@@ -26,7 +26,9 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "PermissionFreeWill",
+    nameI18n: "equicord.plugins.permissionFreeWill.name",
     description: "Disables the client-side restrictions for channel permission management.",
+    descriptionI18n: "equicord.plugins.permissionFreeWill.description",
     tags: ["Servers", "Roles"],
     authors: [Devs.lewisakura],
 

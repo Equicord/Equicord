@@ -129,7 +129,9 @@ function isStickerBlocked(name) {
 
 export default definePlugin({
     name: "StickerBlocker",
+    nameI18n: "equicord.plugins.stickerBlocker.name",
     description: "Allows you to block stickers from being displayed.",
+    descriptionI18n: "equicord.plugins.stickerBlocker.description",
     tags: ["Chat", "Emotes", "Utility"],
     authors: [Devs.Samwich],
     patches: [

@@ -13,7 +13,9 @@ import style from "./style.css?managed";
 
 export default definePlugin({
     name: "FullVCPFP",
+    nameI18n: "equicord.plugins.fullVcPfp.name",
     description: "Makes avatars take up the entire vc tile",
+    descriptionI18n: "equicord.plugins.fullVcPfp.description",
     tags: ["Appearance", "Voice"],
     authors: [EquicordDevs.mochienya],
     patches: [

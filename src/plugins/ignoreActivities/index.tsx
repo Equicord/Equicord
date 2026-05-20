@@ -231,8 +231,10 @@ function isActivityTypeIgnored(type: number, id?: string) {
 
 export default definePlugin({
     name: "IgnoreActivities",
+    nameI18n: "equicord.plugins.ignoreActivities.name",
     authors: [Devs.Nuckyz, Devs.Kylie],
     description: "Ignore activities from showing up on your status ONLY. You can configure which ones are specifically ignored from the Registered Games and Activities tabs, or use the general settings below",
+    descriptionI18n: "equicord.plugins.ignoreActivities.description",
     tags: ["Activity", "Privacy", "Customisation"],
     dependencies: ["UserSettingsAPI"],
 

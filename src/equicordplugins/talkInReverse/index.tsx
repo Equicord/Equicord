@@ -64,8 +64,10 @@ function ReverseMessageIcon() {
 
 export default definePlugin({
     name: "TalkInReverse",
+    nameI18n: "equicord.plugins.talkInReverse.name",
     authors: [EquicordDevs.Tolgchu],
     description: "Reverses the message content before sending it.",
+    descriptionI18n: "equicord.plugins.talkInReverse.description",
     tags: ["Chat", "Fun"],
     dependencies: ["MessageEventsAPI", "ChatInputButtonAPI"],
     chatBarButton: {

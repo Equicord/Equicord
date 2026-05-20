@@ -19,7 +19,9 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "SecretRingToneEnabler",
+    nameI18n: "equicord.plugins.secretRingTone.name",
     description: "Always play the secret version of the discord ringtone (except during special ringtone events)",
+    descriptionI18n: "equicord.plugins.secretRingTone.description",
     tags: ["Notifications", "Fun"],
     authors: [Devs.AndrewDLO, Devs.FieryFlames, Devs.RamziAH],
     settings,

@@ -130,7 +130,9 @@ const messageContextMenuPatch: NavContextMenuPatchCallback = (children, _props) 
 migratePluginSettings("ReplaceGoogleSearch", "Search");
 export default definePlugin({
     name: "ReplaceGoogleSearch",
+    nameI18n: "equicord.plugins.replaceGoogleSearch.name",
     description: "Replaces the Google search with different Engine(s)",
+    descriptionI18n: "equicord.plugins.replaceGoogleSearch.description",
     tags: ["Utility", "Customisation"],
     authors: [Devs.Moxxie, Devs.Ethan],
 

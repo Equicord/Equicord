@@ -107,7 +107,9 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "ConsoleJanitor",
+    nameI18n: "equicord.plugins.consoleJanitor.name",
     description: "Disables annoying console messages/errors",
+    descriptionI18n: "equicord.plugins.consoleJanitor.description",
     authors: [Devs.Nuckyz, Devs.sadan],
     tags: ["Developers", "Console", "Utility"],
     settings,

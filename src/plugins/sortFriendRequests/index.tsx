@@ -54,8 +54,10 @@ const settings = definePluginSettings({
 migratePluginSettings("SortFriends", "SortFriendRequests");
 export default definePlugin({
     name: "SortFriends",
+    nameI18n: "equicord.plugins.sortFriendRequests.name",
     authors: [Devs.Megu, EquicordDevs.CallMeGii],
     description: "Sorts friend requests by date of receipt",
+    descriptionI18n: "equicord.plugins.sortFriendRequests.description",
     tags: ["Friends", "Organisation"],
     isModified: true,
     settings,

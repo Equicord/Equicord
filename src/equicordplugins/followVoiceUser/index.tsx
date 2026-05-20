@@ -73,7 +73,9 @@ const UserContextMenuPatch: NavContextMenuPatchCallback = (children, { channel, 
 
 export default definePlugin({
     name: "FollowVoiceUser",
+    nameI18n: "equicord.plugins.followVoiceUser.name",
     description: "Follow a friend in voice chat.",
+    descriptionI18n: "equicord.plugins.followVoiceUser.description",
     tags: ["Voice"],
     authors: [EquicordDevs.TheArmagan],
     settings,

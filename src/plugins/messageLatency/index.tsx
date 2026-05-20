@@ -28,7 +28,9 @@ const DISCORD_KT_DELAY = 1471228928;
 
 export default definePlugin({
     name: "MessageLatency",
+    nameI18n: "equicord.plugins.messageLatency.name",
     description: "Displays an indicator for messages that took ≥n seconds to send",
+    descriptionI18n: "equicord.plugins.messageLatency.description",
     tags: ["Chat", "Utility"],
     authors: [Devs.arHSM],
 

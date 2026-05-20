@@ -176,7 +176,9 @@ function MentionWrapper({ data, UserMention, RoleMention, parse, props }: Mentio
 
 export default definePlugin({
     name: "ValidUser",
+    nameI18n: "equicord.plugins.validUser.name",
     description: "Fix mentions for unknown users showing up as '@unknown-user' (hover over a mention to fix it)",
+    descriptionI18n: "equicord.plugins.validUser.description",
     tags: ["Chat", "Utility"],
     authors: [Devs.Ven, Devs.Dolfies],
     searchTerms: ["MentionCacheFix"],

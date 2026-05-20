@@ -1069,7 +1069,9 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "ShowMeYourName",
+    nameI18n: "equicord.plugins.showMeYourName.name",
     description: "Display any permutation of custom nicknames, friend nicknames, server nicknames, display names, and usernames in chat.",
+    descriptionI18n: "equicord.plugins.showMeYourName.description",
     authors: [EquicordDevs.Etorix, Devs.Rini, Devs.TheKodeToad, Devs.sadan, Devs.prism],
     tags: ["Appearance", "Customisation"],
     searchTerms: ["SMYN", "Nicknames", "Custom Nicknames"],

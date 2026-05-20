@@ -119,7 +119,9 @@ const PreviewButton: ChatBarButtonFactory = ({ isAnyChat, isEmpty, type: { attac
 
 export default definePlugin({
     name: "PreviewMessage",
+    nameI18n: "equicord.plugins.previewMessage.name",
     description: "Lets you preview your message before sending it.",
+    descriptionI18n: "equicord.plugins.previewMessage.description",
     dependencies: ["ChatInputButtonAPI"],
     tags: ["Chat", "Utility"],
     authors: [Devs.Aria],

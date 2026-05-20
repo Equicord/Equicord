@@ -32,8 +32,10 @@ function computeClean(name: string, type: number): string {
 
 export default definePlugin({
     name: "CleanChannelName",
+    nameI18n: "equicord.plugins.cleanChannelName.name",
     authors: [Devs.AutumnVN],
     description: "Remove emoji and decoration from channel names. Reverts to the original while you're editing the channel.",
+    descriptionI18n: "equicord.plugins.cleanChannelName.description",
     tags: ["Appearance", "Customisation", "Chat", "Emotes", "Servers"],
     patches: [
         {

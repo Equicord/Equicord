@@ -97,7 +97,9 @@ function makeCommand(name: string, formatUrl: (track: Track) => string): Command
 
 export default definePlugin({
     name: "SpotifyShareCommands",
+    nameI18n: "equicord.plugins.spotifyShareCommands.name",
     description: "Share your current Spotify track, album or artist via slash command (/track, /album, /artist)",
+    descriptionI18n: "equicord.plugins.spotifyShareCommands.description",
     dependencies: ["CommandsAPI"],
     tags: ["Media", "Commands"],
     authors: [Devs.katlyn],

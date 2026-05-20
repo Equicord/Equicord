@@ -162,7 +162,9 @@ function patchChildrenTree(children: any): any {
 
 export default definePlugin({
     name: "ToneIndicators",
+    nameI18n: "equicord.plugins.toneIndicators.name",
     description: "Show tooltips for tone indicators like /srs, /gen, etc. in sent messages.",
+    descriptionI18n: "equicord.plugins.toneIndicators.description",
     tags: ["Chat", "Utility"],
     authors: [EquicordDevs.justjxke],
     settings,

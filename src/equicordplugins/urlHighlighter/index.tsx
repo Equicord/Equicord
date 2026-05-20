@@ -120,7 +120,9 @@ function getMatchingPattern(url: string): PatternEntry | null {
 
 export default definePlugin({
     name: "UrlHighlighter",
+    nameI18n: "equicord.plugins.urlHighlighter.name",
     description: "Highlights URLs in messages that match your patterns.",
+    descriptionI18n: "equicord.plugins.urlHighlighter.description",
     tags: ["Appearance", "Customisation"],
     authors: [Devs.prism],
     settings,

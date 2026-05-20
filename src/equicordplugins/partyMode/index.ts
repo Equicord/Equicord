@@ -43,7 +43,9 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "PartyMode",
+    nameI18n: "equicord.plugins.partyMode.name",
     description: "Allows you to use party mode cause the party never ends ✨",
+    descriptionI18n: "equicord.plugins.partyMode.description",
     tags: ["Fun"],
     authors: [Devs.UwUDev],
     reporterTestable: ReporterTestable.None,

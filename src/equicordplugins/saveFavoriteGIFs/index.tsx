@@ -114,7 +114,9 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "SaveFavoriteGIFs",
+    nameI18n: "equicord.plugins.saveFavoriteGIFs.name",
     description: "Export favorited GIF urls",
+    descriptionI18n: "equicord.plugins.saveFavoriteGIFs.description",
     dependencies: ["CommandsAPI"],
     tags: ["Emotes", "Utility"],
     authors: [Devs.thororen],

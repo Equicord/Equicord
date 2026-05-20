@@ -83,7 +83,9 @@ const Native = VencordNative.pluginHelpers.OpenInApp as PluginNative<typeof impo
 
 export default definePlugin({
     name: "OpenInApp",
+    nameI18n: "equicord.plugins.openInApp.name",
     description: "Open links in their respective apps instead of your browser",
+    descriptionI18n: "equicord.plugins.openInApp.description",
     tags: ["Utility"],
     authors: [Devs.Ven, Devs.surgedevs],
     settings: pluginSettings,

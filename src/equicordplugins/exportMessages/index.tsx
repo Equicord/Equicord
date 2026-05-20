@@ -128,7 +128,9 @@ function getUsernames(contacts: ContactsList[], type: number): string[] {
 
 export default definePlugin({
     name: "ExportMessages",
+    nameI18n: "equicord.plugins.exportMessages.name",
     description: "Allows you to export any message to a file",
+    descriptionI18n: "equicord.plugins.exportMessages.description",
     tags: ["Chat", "Utility"],
     authors: [EquicordDevs.veygax, EquicordDevs.dat_insanity],
     settings,

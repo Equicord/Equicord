@@ -53,7 +53,9 @@ const patchChannelContextMenu: NavContextMenuPatchCallback = (children, { channe
 
 export default definePlugin({
     name: "VoiceChannelLog",
+    nameI18n: "equicord.plugins.voiceChannelLog.name",
     description: "Logs voice channel activity including joins, leaves, soundboard, mute, camera, screenshare, and more.",
+    descriptionI18n: "equicord.plugins.voiceChannelLog.description",
     tags: ["Servers", "Utility", "Voice"],
     authors: [Devs.Sqaaakoi, Devs.thororen, EquicordDevs.nyx, Devs.Moxxie, EquicordDevs.Fres, Devs.amy],
     dependencies: ["AudioPlayerAPI", "HeaderBarAPI"],

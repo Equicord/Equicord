@@ -9,8 +9,10 @@ import definePlugin from "@utils/types";
 
 export default definePlugin({
     name: "NoMaskedUrlPaste",
+    nameI18n: "equicord.plugins.noMaskedUrlPaste.name",
     authors: [Devs.CatNoir],
     description: "Pasting a link while having text selected will not paste as masked URL",
+    descriptionI18n: "equicord.plugins.noMaskedUrlPaste.description",
     tags: ["Chat", "Utility"],
     patches: [
         {

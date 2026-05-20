@@ -21,7 +21,9 @@ import definePlugin from "@utils/types";
 
 export default definePlugin({
     name: "NoUnblockToJump",
+    nameI18n: "equicord.plugins.noUnblockToJump.name",
     description: "Allows you to jump to messages of blocked or ignored users and likely spammers without unblocking them",
+    descriptionI18n: "equicord.plugins.noUnblockToJump.description",
     tags: ["Utility"],
     authors: [Devs.dzshn],
     patches: [

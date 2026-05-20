@@ -26,7 +26,9 @@ migratePluginSettings("FixYoutubeEmbeds", "YoutubeDescription");
 
 export default definePlugin({
     name: "FixYoutubeEmbeds",
+    nameI18n: "equicord.plugins.fixYoutubeEmbeds_desktop.name",
     description: "Bypasses youtube videos being blocked from display on Discord (for example by UMG)",
+    descriptionI18n: "equicord.plugins.fixYoutubeEmbeds_desktop.description",
     tags: ["Media", "Utility"],
     authors: [Devs.coolelectronics, Devs.arHSM],
     settings,

@@ -46,8 +46,10 @@ const UserContextMenuPatch: NavContextMenuPatchCallback = (children, { user }: U
 
 export default definePlugin({
     name: "CopyUserMention",
+    nameI18n: "equicord.plugins.copyUserMention.name",
     authors: [EquicordDevs.Cortex, Devs.castdrian],
     description: "Adds a button to copy user's mention on the user context menu, works best with ValidUser.",
+    descriptionI18n: "equicord.plugins.copyUserMention.description",
     tags: ["Chat", "Utility"],
     contextMenus: {
         "user-context": UserContextMenuPatch

@@ -313,7 +313,9 @@ const createWebsocket = () => {
 
 export default definePlugin({
     name: "OrbolayBridge",
+    nameI18n: "equicord.plugins.orbolayBridge.name",
     description: "Bridge plugin to connect Orbolay to Discord",
+    descriptionI18n: "equicord.plugins.orbolayBridge.description",
     tags: ["Utility", "Voice"],
     authors: [EquicordDevs.SpikeHD],
     settings,

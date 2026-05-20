@@ -114,7 +114,9 @@ function makeContextCallback(
 
 export default definePlugin({
     name: "ViewRawVariant",
+    nameI18n: "equicord.plugins.viewRawVariant.name",
     description: "Copy/View raw content of any message, channel, or guild, but show in the right click menu.",
+    descriptionI18n: "equicord.plugins.viewRawVariant.description",
     tags: ["Appearance", "Customisation", "Chat", "Organisation", "Servers"],
     authors: [Devs.KingFish, Devs.Ven, Devs.rad, Devs.ImLvna, Devs.Kyuuhachi],
     contextMenus: {

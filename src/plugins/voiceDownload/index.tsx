@@ -11,7 +11,9 @@ import definePlugin from "@utils/types";
 
 export default definePlugin({
     name: "VoiceDownload",
+    nameI18n: "equicord.plugins.voiceDownload.name",
     description: "Adds a download to voice messages. (Opens a new browser tab)",
+    descriptionI18n: "equicord.plugins.voiceDownload.description",
     tags: ["Voice", "Media"],
     authors: [Devs.puv],
     patches: [

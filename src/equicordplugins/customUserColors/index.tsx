@@ -98,7 +98,9 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "CustomUserColors",
+    nameI18n: "equicord.plugins.customUserColors.name",
     description: "Lets you add a custom color to any user, anywhere! Highly recommend to use with typingTweaks and roleColorEverywhere",
+    descriptionI18n: "equicord.plugins.customUserColors.description",
     tags: ["Appearance", "Customisation", "Chat"],
     authors: [EquicordDevs.mochienya],
     contextMenus: {

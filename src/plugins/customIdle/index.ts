@@ -28,7 +28,9 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "CustomIdle",
+    nameI18n: "equicord.plugins.customIdle.name",
     description: "Allows you to set the time before Discord goes idle (or disable auto-idle)",
+    descriptionI18n: "equicord.plugins.customIdle.description",
     tags: ["Activity", "Customisation"],
     authors: [Devs.newwares],
     settings,

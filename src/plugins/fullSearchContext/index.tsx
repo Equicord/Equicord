@@ -80,7 +80,9 @@ const contextMenuPatch: NavContextMenuPatchCallback = (children, props: MessageA
 migratePluginSettings("FullSearchContext", "SearchReply");
 export default definePlugin({
     name: "FullSearchContext",
+    nameI18n: "equicord.plugins.fullSearchContext.name",
     description: "Makes the message context menu in message search results have all options you'd expect",
+    descriptionI18n: "equicord.plugins.fullSearchContext.description",
     tags: ["Utility"],
     authors: [Devs.Ven, Devs.Aria],
 

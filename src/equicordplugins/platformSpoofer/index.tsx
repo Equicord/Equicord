@@ -51,7 +51,9 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "PlatformSpoofer",
+    nameI18n: "equicord.plugins.platformSpoofer.name",
     description: "Spoof what platform or device you're on",
+    descriptionI18n: "equicord.plugins.platformSpoofer.description",
     tags: ["Utility"],
     authors: [EquicordDevs.Drag, EquicordDevs.neoarz],
     settingsAboutComponent: () => (

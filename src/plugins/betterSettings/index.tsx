@@ -76,7 +76,9 @@ function Layer({ mode, baseLayer = false, ...props }: LayerProps) {
 
 export default definePlugin({
     name: "BetterSettings",
+    nameI18n: "equicord.plugins.betterSettings.name",
     description: "Enhances your settings-menu-opening experience",
+    descriptionI18n: "equicord.plugins.betterSettings.description",
     authors: [Devs.Kyuuhachi],
     tags: ["Appearance", "Customisation", "Organisation"],
     settings,

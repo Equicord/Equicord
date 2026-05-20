@@ -103,7 +103,9 @@ let original: typeof ChannelActions.selectVoiceChannel;
 
 export default definePlugin({
     name: "ExitSounds",
+    nameI18n: "equicord.plugins.exitSounds.name",
     description: "Play soundboard sounds when you disconnect from voice.",
+    descriptionI18n: "equicord.plugins.exitSounds.description",
     tags: ["Fun", "Voice"],
     authors: [Devs.prism],
     dependencies: ["AudioPlayerAPI"],

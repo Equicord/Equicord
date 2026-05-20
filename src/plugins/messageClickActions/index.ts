@@ -576,7 +576,9 @@ async function executeAction(
 
 export default definePlugin({
     name: "MessageClickActions",
+    nameI18n: "equicord.plugins.messageClickActions.name",
     description: "Customize click actions on messages.",
+    descriptionI18n: "equicord.plugins.messageClickActions.description",
     tags: ["Chat", "Shortcuts"],
     authors: [Devs.Ven, EquicordDevs.keircn, EquicordDevs.ZcraftElite, EquicordDevs.omaw],
     isModified: true,

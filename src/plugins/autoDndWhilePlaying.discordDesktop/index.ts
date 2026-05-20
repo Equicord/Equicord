@@ -47,7 +47,9 @@ const settings = definePluginSettings({
 migratePluginSettings("AutoDNDWhilePlaying", "StatusWhilePlaying");
 export default definePlugin({
     name: "AutoDNDWhilePlaying",
+    nameI18n: "equicord.plugins.autoDndWhilePlaying_discordDesktop.name",
     description: "Automatically updates your online status (online, idle, dnd) when launching games",
+    descriptionI18n: "equicord.plugins.autoDndWhilePlaying_discordDesktop.description",
     tags: ["Activity", "Utility"],
     authors: [Devs.thororen],
     isModified: true,

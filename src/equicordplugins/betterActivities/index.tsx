@@ -18,7 +18,9 @@ migratePluginSettings("BetterActivities", "MemberListActivities");
 
 export default definePlugin({
     name: "BetterActivities",
+    nameI18n: "equicord.plugins.betterActivities.name",
     description: "Shows activity icons in the member list and allows showing all activities",
+    descriptionI18n: "equicord.plugins.betterActivities.description",
     authors: [Devs.D3SOX, Devs.Arjix, Devs.AutumnVN, Devs.thororen],
     tags: ["Activity"],
     settings,

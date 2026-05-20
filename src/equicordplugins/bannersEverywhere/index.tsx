@@ -43,7 +43,9 @@ const DATASTORE_KEY = "bannersEverywhere";
 
 export default definePlugin({
     name: "BannersEverywhere",
+    nameI18n: "equicord.plugins.bannersEverywhere.name",
     description: "Displays banners in the member list ",
+    descriptionI18n: "equicord.plugins.bannersEverywhere.description",
     tags: ["Appearance", "Customisation"],
     authors: [Devs.ImLvna, Devs.AutumnVN],
     settings,

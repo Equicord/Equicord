@@ -11,8 +11,10 @@ import { ChannelStore, GuildMemberStore, SelectedChannelStore, SelectedGuildStor
 
 export default definePlugin({
     name: "AtSomeone",
+    nameI18n: "equicord.plugins.atSomeone.name",
     authors: [Devs.Joona],
     description: "Mention someone randomly",
+    descriptionI18n: "equicord.plugins.atSomeone.description",
     tags: ["Chat", "Fun"],
     patches: [
         {

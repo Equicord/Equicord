@@ -401,7 +401,9 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "WhitelistedEmojis",
+    nameI18n: "equicord.plugins.whitelistedEmojis.name",
     description: "Adds the ability to disable all message emojis except for a whitelisted set.",
+    descriptionI18n: "equicord.plugins.whitelistedEmojis.description",
     tags: ["Chat", "Emotes"],
     authors: [EquicordDevs.creations],
     patches: [

@@ -50,7 +50,9 @@ migratePluginSettings("MoreCommands", "FriendCloud", "GifRoulette", "ImgToGif", 
 
 export default definePlugin({
     name: "MoreCommands",
+    nameI18n: "equicord.plugins.moreCommands.name",
     description: "Adds various fun and useful commands",
+    descriptionI18n: "equicord.plugins.moreCommands.description",
     dependencies: ["CommandsAPI"],
     tags: ["Commands", "Fun", "Shortcuts"],
     authors: [

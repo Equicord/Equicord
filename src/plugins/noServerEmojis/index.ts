@@ -24,8 +24,10 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "NoServerEmojis",
+    nameI18n: "equicord.plugins.noServerEmojis.name",
     authors: [Devs.UlyssesZhan],
     description: "Do not show server emojis in the autocomplete menu.",
+    descriptionI18n: "equicord.plugins.noServerEmojis.description",
     tags: ["Emotes", "Servers"],
     settings,
 

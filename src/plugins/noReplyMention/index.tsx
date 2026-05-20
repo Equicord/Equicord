@@ -61,7 +61,9 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "NoReplyMention",
+    nameI18n: "equicord.plugins.noReplyMention.name",
     description: "Disables reply pings by default",
+    descriptionI18n: "equicord.plugins.noReplyMention.description",
     tags: ["Chat", "Notifications"],
     authors: [Devs.DustyAngel47, Devs.rae, Devs.pylix, Devs.outfoxxed],
     settings,

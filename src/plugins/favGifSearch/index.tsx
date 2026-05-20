@@ -82,8 +82,10 @@ export const settings = definePluginSettings({
 
 export default definePlugin({
     name: "FavoriteGifSearch",
+    nameI18n: "equicord.plugins.favGifSearch.name",
     authors: [Devs.Aria],
     description: "Adds a search bar to favorite gifs.",
+    descriptionI18n: "equicord.plugins.favGifSearch.description",
     tags: ["Media", "Customisation"],
 
     patches: [

@@ -9,7 +9,9 @@ import definePlugin from "@utils/types";
 
 export default definePlugin({
     name: "BlockKrisp",
+    nameI18n: "equicord.plugins.blockKrisp.name",
     description: "Prevent Krisp from loading",
+    descriptionI18n: "equicord.plugins.blockKrisp.description",
     tags: ["Privacy", "Utility", "Voice"],
     authors: [Devs.D3SOX],
     patches: [

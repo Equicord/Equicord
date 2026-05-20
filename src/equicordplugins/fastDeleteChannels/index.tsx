@@ -73,7 +73,9 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "FastDeleteChannels",
+    nameI18n: "equicord.plugins.fastDeleteChannels.name",
     description: "Adds a trash icon to delete channels",
+    descriptionI18n: "equicord.plugins.fastDeleteChannels.description",
     tags: ["Servers", "Utility"],
     authors: [Devs.thororen],
     settings,

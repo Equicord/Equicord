@@ -141,7 +141,9 @@ function activeNowView(cards) {
 
 export default definePlugin({
     name: "ClientSideBlock",
+    nameI18n: "equicord.plugins.clientSideBlock.name",
     description: "Allows you to locally hide almost all content from any user",
+    descriptionI18n: "equicord.plugins.clientSideBlock.description",
     tags: ["Utility"],
     searchTerms: ["blocked", "block", "hide", "hidden", "noblockedmessages"],
     authors: [Devs.Samwich, EquicordDevs.KamiRu],

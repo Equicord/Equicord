@@ -166,7 +166,9 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "TypingIndicator",
+    nameI18n: "equicord.plugins.typingIndicator.name",
     description: "Adds an indicator if someone is typing on a channel.",
+    descriptionI18n: "equicord.plugins.typingIndicator.description",
     tags: ["Notifications", "Appearance", "Servers"],
     authors: [Devs.Nuckyz, Devs.fawn, Devs.Sqaaakoi],
     isModified: true,

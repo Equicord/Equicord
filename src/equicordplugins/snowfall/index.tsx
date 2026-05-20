@@ -450,7 +450,9 @@ let container: HTMLDivElement | null = null;
 
 export default definePlugin({
     name: "Snowfall",
+    nameI18n: "equicord.plugins.snowfall.name",
     description: "Let it snow on Discord",
+    descriptionI18n: "equicord.plugins.snowfall.description",
     tags: ["Appearance"],
     authors: [EquicordDevs.ZcraftElite, EquicordDevs.square],
 

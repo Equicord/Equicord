@@ -12,7 +12,9 @@ import definePlugin from "@utils/types";
 export default definePlugin({
     authors: [EquicordDevs.cassie, EquicordDevs.mochienya, EquicordDevs.secp192k1],
     name: "RichMagnetLinks",
+    nameI18n: "equicord.plugins.richMagnetLinks.name",
     description: "Renders magnet links like message links",
+    descriptionI18n: "equicord.plugins.richMagnetLinks.description",
     tags: ["Appearance", "Chat"],
     patches: [
         {

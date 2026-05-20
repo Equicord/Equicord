@@ -12,7 +12,9 @@ import { UserStore } from "@webpack/common";
 
 export default definePlugin({
     name: "ThemeAttributes",
+    nameI18n: "equicord.plugins.themeAttributes.name",
     description: "Adds data attributes to various elements for theming purposes",
+    descriptionI18n: "equicord.plugins.themeAttributes.description",
     tags: ["Appearance", "Customisation"],
     authors: [Devs.Ven, Devs.Board],
 

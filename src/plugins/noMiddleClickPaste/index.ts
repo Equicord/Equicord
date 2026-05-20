@@ -15,7 +15,9 @@ function preventMiddleClick(e: MouseEvent) {
 
 export default definePlugin({
     name: "NoMiddleClickPaste",
+    nameI18n: "equicord.plugins.noMiddleClickPaste.name",
     description: "Disable Linux middle-click paste - Linux only",
+    descriptionI18n: "equicord.plugins.noMiddleClickPaste.description",
     authors: [Devs.Darxoon],
     hidden: !IS_LINUX,
 

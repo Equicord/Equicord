@@ -50,7 +50,9 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "AlwaysAnimate",
+    nameI18n: "equicord.plugins.alwaysAnimate.name",
     description: "Animates anything that can be animated",
+    descriptionI18n: "equicord.plugins.alwaysAnimate.description",
     tags: ["Appearance", "Fun"],
     authors: [Devs.FieryFlames],
     settings,

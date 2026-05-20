@@ -113,7 +113,9 @@ const TypingUser = ErrorBoundary.wrap(function TypingUser({ user, guildId }: Typ
 migratePluginToSettings(true, "TypingTweaks", "AmITyping", "amITyping");
 export default definePlugin({
     name: "TypingTweaks",
+    nameI18n: "equicord.plugins.typingTweaks.name",
     description: "Show avatars and role colours in the typing indicator",
+    descriptionI18n: "equicord.plugins.typingTweaks.description",
     tags: ["Appearance", "Customisation"],
     authors: [Devs.zt, Devs.sadan, EquicordDevs.MrDiamond],
     settings,

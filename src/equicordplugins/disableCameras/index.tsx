@@ -9,7 +9,9 @@ import definePlugin from "@utils/types";
 
 export default definePlugin({
     name: "DisableCameras",
+    nameI18n: "equicord.plugins.disableCameras.name",
     description: "Disables cameras in a call by default",
+    descriptionI18n: "equicord.plugins.disableCameras.description",
     tags: ["Appearance", "Customisation", "Media", "Privacy"],
     authors: [Devs.Joona],
     patches: [

@@ -9,7 +9,9 @@ import definePlugin from "@utils/types";
 
 export default definePlugin({
     name: "BypassPinPrompt",
+    nameI18n: "equicord.plugins.bypassPinPrompt.name",
     description: "Bypass the pin prompt when using the pin functions",
+    descriptionI18n: "equicord.plugins.bypassPinPrompt.description",
     tags: ["Shortcuts"],
     authors: [Devs.thororen],
     patches: [

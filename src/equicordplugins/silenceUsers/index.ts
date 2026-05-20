@@ -55,7 +55,9 @@ function interceptor(event: any) {
 
 export default definePlugin({
     name: "SilenceUsers",
+    nameI18n: "equicord.plugins.silenceUsers.name",
     description: "Silences @mention pings and server badge counts from specific users. Regular messages and DMs are untouched.",
+    descriptionI18n: "equicord.plugins.silenceUsers.description",
     authors: [EquicordDevs.dka],
     settings,
     start() {

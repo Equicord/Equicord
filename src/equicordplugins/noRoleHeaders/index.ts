@@ -9,7 +9,9 @@ import definePlugin from "@utils/types";
 
 export default definePlugin({
     name: "NoRoleHeaders",
+    nameI18n: "equicord.plugins.noRoleHeaders.name",
     description: "We are all equal!! Removes the role headers in the member list.",
+    descriptionI18n: "equicord.plugins.noRoleHeaders.description",
     tags: ["Appearance", "Fun", "Roles"],
     authors: [Devs.Samwich],
     patches: [

@@ -58,8 +58,10 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "QuickReply",
+    nameI18n: "equicord.plugins.quickReply.name",
     authors: [Devs.fawn, Devs.Ven, Devs.pylix],
     description: "Reply to (ctrl + up/down) and edit (ctrl + shift + up/down) messages via keybinds",
+    descriptionI18n: "equicord.plugins.quickReply.description",
     tags: ["Chat", "Shortcuts"],
     settings,
 

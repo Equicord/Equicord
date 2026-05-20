@@ -23,7 +23,9 @@ import definePlugin from "@utils/types";
 migratePluginSettings("IloveSpam", "iLoveSpam");
 export default definePlugin({
     name: "ILoveSpam",
+    nameI18n: "equicord.plugins.iLoveSpam.name",
     description: "Do not hide messages from 'likely spammers'",
+    descriptionI18n: "equicord.plugins.iLoveSpam.description",
     tags: ["Utility", "Chat"],
     authors: [Devs.botato, Devs.Nyako],
     patches: [

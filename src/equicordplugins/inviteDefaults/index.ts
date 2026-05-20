@@ -44,7 +44,9 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "InviteDefaults",
+    nameI18n: "equicord.plugins.inviteDefaults.name",
     description: "Allows you to edit the default values when creating server invites.",
+    descriptionI18n: "equicord.plugins.inviteDefaults.description",
     tags: ["Servers"],
     authors: [EquicordDevs.VillainsRule],
     settings,

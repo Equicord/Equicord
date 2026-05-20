@@ -34,7 +34,9 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "Experiments",
+    nameI18n: "equicord.plugins.experiments.name",
     description: "Enable Access to Experiments & other dev-only features in Discord!",
+    descriptionI18n: "equicord.plugins.experiments.description",
     tags: ["Developers", "Utility"],
     authors: [
         Devs.Megu,

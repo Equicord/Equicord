@@ -9,7 +9,9 @@ import definePlugin from "@utils/types";
 
 export default definePlugin({
     name: "ShowSongName",
+    nameI18n: "equicord.plugins.showSongName.name",
     description: "Shows song name instead of artist for Spotify activity",
+    descriptionI18n: "equicord.plugins.showSongName.description",
     tags: ["Activity"],
     authors: [Devs.prism],
 

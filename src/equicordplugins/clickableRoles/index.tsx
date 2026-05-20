@@ -145,7 +145,9 @@ const WrappedClickableRole = ErrorBoundary.wrap(ClickableRole, { noop: true });
 
 export default definePlugin({
     name: "ClickableRoles",
+    nameI18n: "equicord.plugins.clickableRoles.name",
     description: "Click on roles in user profiles and the member list to see which members have them.",
+    descriptionI18n: "equicord.plugins.clickableRoles.description",
     tags: ["Appearance", "Roles"],
     authors: [Devs.prism],
 

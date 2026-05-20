@@ -411,7 +411,9 @@ const expressionPickerPatch: NavContextMenuPatchCallback = (children, props: { t
 migratePluginSettings("ExpressionCloner", "EmoteCloner");
 export default definePlugin({
     name: "ExpressionCloner",
+    nameI18n: "equicord.plugins.expressionCloner.name",
     description: "Allows you to clone Emotes & Stickers to your own server (right click them)",
+    descriptionI18n: "equicord.plugins.expressionCloner.description",
     tags: ["Emotes", "Servers"],
     searchTerms: ["StickerCloner", "EmoteCloner", "EmojiCloner"],
     authors: [Devs.Ven, Devs.Nuckyz],

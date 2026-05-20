@@ -51,7 +51,9 @@ const settings = definePluginSettings({
 migratePluginSettings("MoreQuickReactions", "BetterQuickReact");
 export default definePlugin({
     name: "MoreQuickReactions",
+    nameI18n: "equicord.plugins.moreQuickReactions.name",
     description: "Improves the quick react buttons in the message context menu.",
+    descriptionI18n: "equicord.plugins.moreQuickReactions.description",
     tags: ["Emotes", "Reactions", "Customisation", "Shortcuts"],
     authors: [Devs.Ven, Devs.Sqaaakoi, Devs.iamme],
     isModified: true,

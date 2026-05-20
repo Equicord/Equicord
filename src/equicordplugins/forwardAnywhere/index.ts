@@ -24,7 +24,9 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "ForwardAnywhere",
+    nameI18n: "equicord.plugins.forwardAnywhere.name",
     description: "If a forward fails send it as a normal message also allows nsfw forwards",
+    descriptionI18n: "equicord.plugins.forwardAnywhere.description",
     tags: ["Chat", "Utility"],
     authors: [Devs.thororen],
     settings,

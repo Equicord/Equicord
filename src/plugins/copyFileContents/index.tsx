@@ -21,7 +21,9 @@ const CheckMarkIcon = () => {
 
 export default definePlugin({
     name: "CopyFileContents",
+    nameI18n: "equicord.plugins.copyFileContents.name",
     description: "Adds a button to text file attachments to copy their contents",
+    descriptionI18n: "equicord.plugins.copyFileContents.description",
     tags: ["Utility"],
     authors: [Devs.Obsidian, Devs.Nuckyz],
     patches: [

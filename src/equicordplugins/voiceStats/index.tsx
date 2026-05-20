@@ -136,7 +136,9 @@ const VoiceStatsSection = ErrorBoundary.wrap(({ userId, isSideBar }: { userId: s
 
 export default definePlugin({
     name: "VoiceStats",
+    nameI18n: "equicord.plugins.voiceStats.name",
     description: "Shows how long you've spent in voice with each user in their profile",
+    descriptionI18n: "equicord.plugins.voiceStats.description",
     tags: ["Voice", "Friends"],
     authors: [EquicordDevs.Moowi],
     dependencies: ["ProfileSectionsAPI"],

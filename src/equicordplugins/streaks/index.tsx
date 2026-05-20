@@ -65,7 +65,9 @@ const StreakBadge = ({ userId }: { userId: string; }) => {
 
 export default definePlugin({
     name: "Streaks",
+    nameI18n: "equicord.plugins.streaks.name",
     description: "Shows a streak next to a user when you exchange DMs with them on consecutive days.",
+    descriptionI18n: "equicord.plugins.streaks.description",
     authors: [EquicordDevs.Moowi, Devs.thororen],
     tags: ["Friends", "Fun"],
     dependencies: ["MessageDecorationsAPI", "MemberListDecoratorsAPI", "ConcatenatedModules"],
