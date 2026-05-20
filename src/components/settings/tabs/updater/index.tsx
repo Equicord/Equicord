@@ -16,6 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+import { t } from "@api/I18n";
 import { useSettings } from "@api/Settings";
 import { Button } from "@components/Button";
 import { Card } from "@components/Card";
@@ -48,19 +49,19 @@ function EquibopSection() {
     return (
         <Flex className={Margins.bottom20} flexDirection="column" gap="1em">
             <Card variant="brand">
-                <HeadingSecondary>Equibop & Equicord</HeadingSecondary>
-                <Paragraph>Equibop and Equicord are two separate things. This updater is for Equicord.</Paragraph>
+                <HeadingSecondary>{t("equicord.ui.updater.equibopEquicord", "Equibop & Equicord")}</HeadingSecondary>
+                <Paragraph>{t("equicord.ui.updater.separateExplanation", "Equibop and Equicord are two separate things. This updater is for Equicord.")}</Paragraph>
                 <Paragraph className={Margins.top8}>
-                    You receive separate popups for Equibop updates. You can also manually update by installing the <Link href="https://equibop.org/install">latest version</Link>.
+                    {t("equicord.ui.updater.manualUpdatePrefix", "You receive separate popups for Equibop updates. You can also manually update by installing the")} <Link href="https://equibop.org/install">{t("equicord.ui.updater.latestVersion", "latest version")}</Link>{t("equicord.ui.updater.manualUpdateSuffix", ".")}
                 </Paragraph>
             </Card>
 
             {isEquibopOutdated && (
                 <Card variant="warning">
-                    <HeadingSecondary>Equibop Outdated</HeadingSecondary>
+                    <HeadingSecondary>{t("equicord.ui.updater.equibopOutdated", "Equibop Outdated")}</HeadingSecondary>
                     <Flex flexDirection="column" gap="0.5em">
-                        <Paragraph>Your version of Equibop is outdated!</Paragraph>
-                        <Button variant="link" onClick={() => VesktopNative.app.openUpdater()}>Open Equibop Updater</Button>
+                        <Paragraph>{t("equicord.ui.updater.equibopOutdatedDesc", "Your version of Equibop is outdated!")}</Paragraph>
+                        <Button variant="link" onClick={() => VesktopNative.app.openUpdater()}>{t("equicord.ui.updater.openEquibopUpdater", "Open Equibop Updater")}</Button>
                     </Flex>
                 </Card>
             )}
@@ -86,14 +87,14 @@ function Updater() {
     return (
         <SettingsTab>
             <EquibopSection />
-            <Heading className={Margins.top16}>Update Preferences</Heading>
+            <Heading className={Margins.top16}>{t("equicord.ui.updater.updatePreferences", "Update Preferences")}</Heading>
             <Paragraph className={Margins.bottom20}>
-                Control how Equicord keeps itself up to date. You can choose to update automatically in the background or be notified when new updates are available.
+                {t("equicord.ui.updater.updatePreferencesDesc", "Control how Equicord keeps itself up to date. You can choose to update automatically in the background or be notified when new updates are available.")}
             </Paragraph>
 
             <FormSwitch
-                title="Automatically update"
-                description="When enabled, Equicord will automatically download and install updates in the background without asking for confirmation. You'll need to restart Discord to apply the changes."
+                title={t("equicord.ui.updater.autoUpdate", "Automatically update")}
+                description={t("equicord.ui.updater.autoUpdateDesc", "When enabled, Equicord will automatically download and install updates in the background without asking for confirmation. You'll need to restart Discord to apply the changes.")}
                 value={settings.autoUpdate}
                 onChange={(v: boolean) => settings.autoUpdate = v}
                 hideBorder
@@ -101,23 +102,23 @@ function Updater() {
             <FormSwitch
                 value={settings.autoUpdateNotification}
                 onChange={(v: boolean) => settings.autoUpdateNotification = v}
-                title="Get notified when an automatic update completes"
-                description="Receive a notification when Equicord finishes downloading an update in the background, so you know when to restart Discord."
+                title={t("equicord.ui.updater.autoUpdateNotify", "Get notified when an automatic update completes")}
+                description={t("equicord.ui.updater.autoUpdateNotifyDesc", "Receive a notification when Equicord finishes downloading an update in the background, so you know when to restart Discord.")}
                 disabled={!settings.autoUpdate}
                 hideBorder
             />
 
             <Divider className={Margins.top20} />
 
-            <Heading className={Margins.top20}>Repository</Heading>
+            <Heading className={Margins.top20}>{t("equicord.ui.updater.repository", "Repository")}</Heading>
             <Paragraph className={Margins.bottom8}>
-                This is the GitHub repository where Equicord fetches updates from.
+                {t("equicord.ui.updater.repositoryDesc", "This is the GitHub repository where Equicord fetches updates from.")}
             </Paragraph>
             <Paragraph color="text-subtle">
                 {repoPending
                     ? repo
                     : err
-                        ? "Failed to retrieve - check console"
+                        ? t("equicord.ui.updater.failedToRetrieve", "Failed to retrieve - check console")
                         : (
                             <Link href={repo}>
                                 {repo.split("/").slice(-2).join("/")}
@@ -129,7 +130,7 @@ function Updater() {
 
             <Divider className={Margins.top20} />
 
-            <Heading className={Margins.top20}>Updates</Heading>
+            <Heading className={Margins.top20}>{t("equicord.ui.updater.updates", "Updates")}</Heading>
             {isNewer ? <Newer {...commonProps} /> : <Updatable {...commonProps} />}
         </SettingsTab>
     );

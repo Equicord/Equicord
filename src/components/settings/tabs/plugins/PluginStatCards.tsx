@@ -7,6 +7,7 @@
 import "./styles.css";
 
 import { BaseText } from "@components/BaseText";
+import { t } from "@api/I18n";
 import { Tooltip } from "@webpack/common";
 
 export function StockPluginsCard({ totalStockPlugins, enabledStockPlugins }) {
@@ -14,12 +15,12 @@ export function StockPluginsCard({ totalStockPlugins, enabledStockPlugins }) {
         <div className="vc-plugin-stats vc-stockplugins-stats-card">
             <div className="vc-plugin-stats-card-container">
                 <div className="vc-plugin-stats-card-section">
-                    <BaseText size="md" weight="semibold">Enabled Plugins</BaseText>
+                    <BaseText size="md" weight="semibold">{t("equicord.ui.pluginStatCards.enabledPlugins", "Enabled Plugins")}</BaseText>
                     <BaseText size="xl" weight="bold">{enabledStockPlugins}</BaseText>
                 </div>
                 <div className="vc-plugin-stats-card-divider"></div>
                 <div className="vc-plugin-stats-card-section">
-                    <BaseText size="md" weight="semibold">Total Plugins</BaseText>
+                    <BaseText size="md" weight="semibold">{t("equicord.ui.pluginStatCards.totalPlugins", "Total Plugins")}</BaseText>
                     <BaseText size="xl" weight="bold">{totalStockPlugins}</BaseText>
                 </div>
             </div>
@@ -33,7 +34,7 @@ export function UserPluginsCard({ totalUserPlugins, enabledUserPlugins }) {
             <div className="vc-plugin-stats vc-stockplugins-stats-card">
                 <div className="vc-plugin-stats-card-container ">
                     <div className="vc-plugin-stats-card-section">
-                        <BaseText size="md" weight="semibold">Total Userplugins</BaseText>
+                        <BaseText size="md" weight="semibold">{t("equicord.ui.pluginStatCards.totalUserPlugins", "Total Userplugins")}</BaseText>
                         <Tooltip
                             text={
                                 <img
@@ -59,12 +60,12 @@ export function UserPluginsCard({ totalUserPlugins, enabledUserPlugins }) {
             <div className="vc-plugin-stats vc-stockplugins-stats-card">
                 <div className="vc-plugin-stats-card-container">
                     <div className="vc-plugin-stats-card-section">
-                        <BaseText size="md" weight="semibold">Enabled Userplugins</BaseText>
+                        <BaseText size="md" weight="semibold">{t("equicord.ui.pluginStatCards.enabledUserPlugins", "Enabled Userplugins")}</BaseText>
                         <BaseText size="xl" weight="bold">{enabledUserPlugins}</BaseText>
                     </div>
                     <div className="vc-plugin-stats-card-divider"></div>
                     <div className="vc-plugin-stats-card-section">
-                        <BaseText size="md" weight="semibold">Total Userplugins</BaseText>
+                        <BaseText size="md" weight="semibold">{t("equicord.ui.pluginStatCards.totalUserPlugins", "Total Userplugins")}</BaseText>
                         <BaseText size="xl" weight="bold">{totalUserPlugins}</BaseText>
                     </div>
                 </div>

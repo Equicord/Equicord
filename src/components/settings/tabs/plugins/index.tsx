@@ -38,6 +38,7 @@ import { classes } from "@utils/misc";
 import { useAwaiter, useCleanupEffect, useIntersection } from "@utils/react";
 import { PluginTag, PluginTags } from "@utils/types";
 import { Alerts, ConfirmModal, lodash, openModal, Parser, React, SearchableSelect, Select, TextInput, Toasts, Tooltip, useCallback, useMemo, useRef, useState } from "@webpack/common";
+import { t } from "@api/I18n";
 import { JSX } from "react";
 
 import Plugins, { ExcludedPlugins, PluginMeta } from "~plugins";
@@ -66,19 +67,19 @@ function ReloadRequiredCard({ required, enabledPlugins, openWarningModal, resetC
         <Card className={classes(cl("info-card"), required && "vc-warning-card")}>
             {required ? (
                 <>
-                    <HeadingTertiary>Restart required!</HeadingTertiary>
+                    <HeadingTertiary>{t("equicord.ui.pluginsIndex.restartRequired", "Restart required!")}</HeadingTertiary>
                     <Paragraph className={cl("dep-text")}>
-                        Restart now to apply new plugins and their settings
+                        {t("equicord.ui.pluginsIndex.restartToApply", "Restart now to apply new plugins and their settings")}
                     </Paragraph>
                     <Button variant="primary" className={cl("restart-button")} onClick={() => location.reload()}>
-                        Restart
+                        {t("equicord.ui.pluginsIndex.restart", "Restart")}
                     </Button>
                 </>
             ) : (
                 <>
-                    <HeadingTertiary>Plugin Management</HeadingTertiary>
-                    <Paragraph>Press the cog wheel or info icon to get more info on a plugin</Paragraph>
-                    <Paragraph>Plugins with a cog wheel have settings you can modify!</Paragraph>
+                    <HeadingTertiary>{t("equicord.ui.pluginsIndex.pluginManagement", "Plugin Management")}</HeadingTertiary>
+                    <Paragraph>{t("equicord.ui.pluginsIndex.cogWheelInfo", "Press the cog wheel or info icon to get more info on a plugin")}</Paragraph>
+                    <Paragraph>{t("equicord.ui.pluginsIndex.cogWheelSettings", "Plugins with a cog wheel have settings you can modify!")}</Paragraph>
                 </>
             )}
             {enabledPlugins.length > 0 && !required && (
@@ -90,7 +91,7 @@ function ReloadRequiredCard({ required, enabledPlugins, openWarningModal, resetC
                         return openWarningModal(null, undefined, false, enabledPlugins.length, resetCheckAndDo);
                     }}
                 >
-                    Disable All Plugins
+                    {t("equicord.ui.pluginsIndex.disableAllPlugins", "Disable All Plugins")}
                 </Button>
             )}
         </Card>
@@ -127,16 +128,16 @@ function ExcludedPluginsList({ search }: { search: string; }) {
         <Paragraph className={Margins.top16}>
             {matchingExcludedPlugins.length
                 ? <>
-                    <Paragraph>Are you looking for:</Paragraph>
+                    <Paragraph>{t("equicord.ui.pluginsIndex.areYouLookingFor", "Are you looking for:")}</Paragraph>
                     <ul>
                         {matchingExcludedPlugins.map(([name, reason]) => (
                             <li key={name}>
-                                <b>{name}</b>: Only available on the {ExcludedReasons[reason]}
+                                <b>{name}</b>: {t("equicord.ui.pluginsIndex.onlyAvailableOn", "Only available on the")} {t(`equicord.ui.excludedReasons.${reason}`, ExcludedReasons[reason])}
                             </li>
                         ))}
                     </ul>
                 </>
-                : "No plugins meet the search criteria."
+                : t("equicord.ui.pluginsIndex.noPluginsFound", "No plugins meet the search criteria.")
             }
         </Paragraph>
     );
@@ -160,14 +161,14 @@ export default function PluginSettings() {
             openModal(props => (
                 <ConfirmModal
                     {...props}
-                    title="Restart required"
-                    confirmText="Restart now"
-                    cancelText="Later!"
+                    title={t("equicord.ui.pluginsIndex.restartRequiredTitle", "Restart required")}
+                    confirmText={t("equicord.ui.pluginsIndex.restartNow", "Restart now")}
+                    cancelText={t("equicord.ui.pluginsIndex.later", "Later!")}
                     variant="primary"
                     onConfirm={() => location.reload()}
                 >
                     <>
-                        <p>The following plugins require a restart:</p>
+                        <p>{t("equicord.ui.pluginsIndex.followingPluginsNeedRestart", "The following plugins require a restart:")}</p>
                         <div>
                             {displayed.map((s, i) => (
                                 <span key={i}>
@@ -175,7 +176,7 @@ export default function PluginSettings() {
                                     {Parser.parse("`" + s + "`")}
                                 </span>
                             ))}
-                            {remainingCount > 0 && <span> and {remainingCount} more</span>}
+                            {remainingCount > 0 && <span>{t("equicord.ui.pluginsIndex.andNMore", " and {count} more").replace("{count}", String(remainingCount))}</span>}
                         </div>
                     </>
                 </ConfirmModal>
@@ -337,15 +338,15 @@ export default function PluginSettings() {
 
         if (restartNeeded) {
             Alerts.show({
-                title: "Restart Required",
+                title: t("equicord.ui.pluginsIndex.restartRequiredTitle", "Restart Required"),
                 body: (
                     <>
-                        <p style={{ textAlign: "center" }}>Some plugins require a restart to fully disable.</p>
-                        <p style={{ textAlign: "center" }}>Would you like to restart now?</p>
+                        <p style={{ textAlign: "center" }}>{t("equicord.ui.pluginsIndex.somePluginsNeedRestart", "Some plugins require a restart to fully disable.")}</p>
+                        <p style={{ textAlign: "center" }}>{t("equicord.ui.pluginsIndex.wouldYouLikeToRestart", "Would you like to restart now?")}</p>
                     </>
                 ),
-                confirmText: "Restart Now",
-                cancelText: "Later",
+                confirmText: t("equicord.ui.pluginsIndex.restartNow", "Restart Now"),
+                cancelText: t("equicord.ui.pluginsIndex.later2", "Later"),
                 onConfirm: () => location.reload()
             });
         }
@@ -401,13 +402,13 @@ export default function PluginSettings() {
             </div>
 
             <HeadingTertiary className={classes(Margins.top20, Margins.bottom8)}>
-                Filters
+                {t("equicord.ui.pluginsIndex.filters", "Filters")}
             </HeadingTertiary>
 
             <ErrorBoundary noop>
                 <TextInput
                     inputClassName={cl("filter-control")}
-                    placeholder="Search for a plugin..."
+                    placeholder={t("equicord.ui.pluginsIndex.searchPlaceholder", "Search for a plugin...")}
                     value={searchValue.value}
                     onChange={onSearch}
                     autoFocus
@@ -418,33 +419,33 @@ export default function PluginSettings() {
                 <div className={classes(Margins.bottom20, Margins.top8, cl("filter-controls"))}>
                     <Select
                         options={[
-                            { label: "Show All", value: SearchStatus.ALL, default: true },
-                            { label: "Show Enabled", value: SearchStatus.ENABLED },
-                            { label: "Show Disabled", value: SearchStatus.DISABLED },
-                            { label: "Show Equicord", value: SearchStatus.EQUICORD },
-                            { label: "Show Vencord", value: SearchStatus.VENCORD },
-                            { label: "Show New", value: SearchStatus.NEW },
-                            hasUserPlugins && { label: "Show UserPlugins", value: SearchStatus.USER_PLUGINS },
-                            { label: "Show API Plugins", value: SearchStatus.API_PLUGINS },
+                            { label: t("equicord.ui.pluginsIndex.showAll", "Show All"), value: SearchStatus.ALL, default: true },
+                            { label: t("equicord.ui.pluginsIndex.showEnabled", "Show Enabled"), value: SearchStatus.ENABLED },
+                            { label: t("equicord.ui.pluginsIndex.showDisabled", "Show Disabled"), value: SearchStatus.DISABLED },
+                            { label: t("equicord.ui.pluginsIndex.showEquicord", "Show Equicord"), value: SearchStatus.EQUICORD },
+                            { label: t("equicord.ui.pluginsIndex.showVencord", "Show Vencord"), value: SearchStatus.VENCORD },
+                            { label: t("equicord.ui.pluginsIndex.showNew", "Show New"), value: SearchStatus.NEW },
+                            hasUserPlugins && { label: t("equicord.ui.pluginsIndex.showUserPlugins", "Show UserPlugins"), value: SearchStatus.USER_PLUGINS },
+                            { label: t("equicord.ui.pluginsIndex.showApiPlugins", "Show API Plugins"), value: SearchStatus.API_PLUGINS },
                         ].filter(isTruthy)}
                         serialize={String}
                         select={status => setSearchValue(prev => ({ ...prev, status }))}
                         isSelected={v => v === searchValue.status}
                         closeOnSelect={true}
-                        placeholder="Filter by Type"
+                        placeholder={t("equicord.ui.pluginsIndex.filterByType", "Filter by Type")}
                     />
                     <SearchableSelect
                         options={PluginTags.map(tag => ({ label: tag, value: tag }))}
                         value={searchValue.tags}
                         onChange={tags => setSearchValue(prev => ({ ...prev, tags }))}
                         closeOnSelect={false}
-                        placeholder="Filter by Tags"
+                        placeholder={t("equicord.ui.pluginsIndex.filterByTags", "Filter by Tags")}
                         multi
                     />
                 </div>
             </ErrorBoundary>
 
-            <HeadingTertiary className={Margins.top20}>Plugins</HeadingTertiary>
+            <HeadingTertiary className={Margins.top20}>{t("equicord.ui.pluginsIndex.plugins", "Plugins")}</HeadingTertiary>
 
             {plugins.length || requiredPlugins.length
                 ? (
@@ -452,7 +453,7 @@ export default function PluginSettings() {
                         <div className={cl("grid")}>
                             {visiblePlugins.length
                                 ? visiblePlugins
-                                : <Paragraph>No plugins meet the search criteria.</Paragraph>
+                                : <Paragraph>{t("equicord.ui.pluginsIndex.noPluginsFound", "No plugins meet the search criteria.")}</Paragraph>
                             }
                         </div>
                         {visibleCount < plugins.length && (
@@ -466,13 +467,13 @@ export default function PluginSettings() {
             <Divider className={Margins.top20} />
 
             <HeadingTertiary className={classes(Margins.top20, Margins.bottom8)}>
-                Required Plugins
+                {t("equicord.ui.pluginsIndex.requiredPlugins", "Required Plugins")}
             </HeadingTertiary>
 
             <div className={cl("grid")}>
                 {requiredPlugins.length
                     ? requiredPlugins
-                    : <Paragraph>No plugins meet the search criteria.</Paragraph>
+                    : <Paragraph>{t("equicord.ui.pluginsIndex.noPluginsFound", "No plugins meet the search criteria.")}</Paragraph>
                 }
             </div>
         </SettingsTab >
@@ -482,7 +483,7 @@ export default function PluginSettings() {
 export function PluginDependencyList({ deps }: { deps: string[]; }) {
     return (
         <>
-            <Paragraph>This plugin is required by:</Paragraph>
+            <Paragraph>{t("equicord.ui.pluginsIndex.requiredBy", "This plugin is required by:")}</Paragraph>
             {deps.map((dep: string) => <Paragraph key={dep} className={cl("dep-text")}>{dep}</Paragraph>)}
         </>
     );
