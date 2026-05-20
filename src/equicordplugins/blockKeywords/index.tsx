@@ -125,7 +125,7 @@ export function containsBlockedKeywords(message: Message) {
 
     return blockedKeywords.some(regex =>
         regex.test(message.content)) || message.embeds.some(embed =>
-            testField(embed.rawDescription) || testField(embed.rawTitle));
+        testField(embed.rawDescription) || testField(embed.rawTitle));
 }
 
 export default definePlugin({
