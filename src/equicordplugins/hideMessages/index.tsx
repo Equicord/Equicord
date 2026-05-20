@@ -149,7 +149,7 @@ export default definePlugin({
                         role="button"
                         tabIndex={0}
                         aria-label={label}
-                        style={{ height: "16px", marginRight: "0.2rem" }}
+                        style={{ width: "16px", height: "16px", marginRight: "0.2rem", display: "flex", alignItems: "center", justifyContent: "center" }}
                         aria-disabled={!hasHiddenDms}
                         onClick={event => {
                             event.preventDefault();
@@ -159,7 +159,7 @@ export default definePlugin({
                             notifyHiddenDmsUpdate();
                         }}
                     >
-                        <EyeIcon width={16} height={16} />
+                        <EyeIcon width={14} height={14} />
                     </Clickable>
                 )}
             </Tooltip>
