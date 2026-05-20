@@ -351,6 +351,8 @@ function SettingsTooltip({
                 position={position}
                 color="brand"
                 tooltipStyle={{ maxWidth: wider ? "602px" : "350px" }}
+                tooltipClassName={q("settings-tooltip")}
+                tooltipPointerClassName={q("settings-tooltip-pointer")}
                 tooltipContentClassName={q("settings-tooltip-content")}
                 delay={50}
             >
