@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
+ */
 
 import { useSettings } from "@api/Settings";
 import { authorizeCloud, deauthorizeCloud } from "@api/SettingsSync/cloudSetup";
@@ -35,15 +35,16 @@ import { Margins } from "@utils/margins";
 import { useForceUpdater } from "@utils/react";
 import { findComponentByCodeLazy } from "@webpack";
 import { Alerts, SearchableSelect, Select, useState } from "@webpack/common";
+import { t } from "@api/I18n";
 
 const ICON_STYLE: React.CSSProperties = { width: 20, height: 20, borderRadius: 4, verticalAlign: "middle" };
 
 function EquicordIcon() {
-    return <img src="https://equicord.org/assets/favicon.png" alt="Equicord" style={ICON_STYLE} />;
+    return <img src="https://equicord.org/assets/favicon.png" alt={t("equicord.ui.cloud.equicordAlt", "Equicord")} style={ICON_STYLE} />;
 }
 
 function VencordIcon() {
-    return <img src="https://equicord.org/assets/icons/vencord/icon-light.png" alt="Vencord" style={ICON_STYLE} />;
+    return <img src="https://equicord.org/assets/icons/vencord/icon-light.png" alt={t("equicord.ui.cloud.vencordAlt", "Vencord")} style={ICON_STYLE} />;
 }
 
 const RefreshIcon = findComponentByCodeLazy("M4 12a8 8 0 0 1 14.93-4H15");
@@ -55,7 +56,7 @@ function validateUrl(url: string) {
         new URL(url);
         return true;
     } catch {
-        return "Invalid URL";
+        return t("equicord.ui.cloud.invalidUrl", "Invalid URL");
     }
 }
 
@@ -65,10 +66,10 @@ const cloudBackendOptions = [
 ];
 
 const syncDirectionOptions = [
-    { label: "Two-way sync (changes go both directions)", value: "both" },
-    { label: "This device is the source (upload only)", value: "push" },
-    { label: "The cloud is the source (download only)", value: "pull" },
-    { label: "Do not sync automatically (manual sync via buttons below only)", value: "manual" }
+    { label: t("equicord.ui.cloud.syncTwoWay", "Two-way sync (changes go both directions)"), value: "both" },
+    { label: t("equicord.ui.cloud.syncPush", "This device is the source (upload only)"), value: "push" },
+    { label: t("equicord.ui.cloud.syncPull", "The cloud is the source (download only)"), value: "pull" },
+    { label: t("equicord.ui.cloud.syncManual", "Do not sync automatically (manual sync via buttons below only)"), value: "manual" }
 ];
 
 function CloudTab() {
@@ -92,20 +93,18 @@ function CloudTab() {
 
     return (
         <SettingsTab>
-            <Heading className={Margins.top16}>Cloud Integration</Heading>
+            <Heading className={Margins.top16}>{t("equicord.ui.cloud.title", "Cloud Integration")}</Heading>
             <Paragraph className={Margins.bottom16}>
-                Equicord's cloud integration allows you to sync your settings across multiple devices and Discord installations. Your data is securely stored and can be easily restored at any time.
+                {t("equicord.ui.cloud.description", "Equicord's cloud integration allows you to sync your settings across multiple devices and Discord installations. Your data is securely stored and can be easily restored at any time.")}
             </Paragraph>
 
             <Notice.Info className={Margins.bottom16}>
-                We use our own <Link href="https://github.com/Equicord/Equicloud">Equicloud backend</Link> with enhanced features.
-                View our <Link href="https://equicord.org/cloud/policy">privacy policy</Link> to see what we store and how we use your data.
-                Equicloud is BSD 3.0 licensed, so you can self-host if preferred.
+                {t("equicord.ui.cloud.notice", "We use our own ")}<Link href="https://github.com/Equicord/Equicloud">{t("equicord.ui.cloud.equicloudBackend", "Equicloud backend")}</Link>{t("equicord.ui.cloud.noticeMid", " with enhanced features.\n                View our ")}<Link href="https://equicord.org/cloud/policy">{t("equicord.ui.cloud.privacyPolicy", "privacy policy")}</Link>{t("equicord.ui.cloud.noticeEnd", " to see what we store and how we use your data.\n                Equicloud is BSD 3.0 licensed, so you can self-host if preferred.")}
             </Notice.Info>
 
             <FormSwitch
-                title="Enable Cloud Integration"
-                description="Connect to the cloud backend for settings synchronization. This will request authorization if you haven't set up cloud integration yet."
+                title={t("equicord.ui.cloud.enableCloud", "Enable Cloud Integration")}
+                description={t("equicord.ui.cloud.enableCloudDesc", "Connect to the cloud backend for settings synchronization. This will request authorization if you haven't set up cloud integration yet.")}
                 value={isAuthenticated}
                 onChange={v => {
                     if (v)
@@ -118,9 +117,9 @@ function CloudTab() {
 
             <Divider className={Margins.top20} />
 
-            <Heading className={Margins.top20}>Cloud Backend</Heading>
+            <Heading className={Margins.top20}>{t("equicord.ui.cloud.cloudBackend", "Cloud Backend")}</Heading>
             <Paragraph className={Margins.bottom16}>
-                Choose which cloud backend to use for storing your settings. You can switch between Equicord's and Vencord's cloud services, or use a self-hosted instance.
+                {t("equicord.ui.cloud.cloudBackendDesc", "Choose which cloud backend to use for storing your settings. You can switch between Equicord's and Vencord's cloud services, or use a self-hosted instance.")}
             </Paragraph>
 
             <div className={Margins.bottom8}>
@@ -156,21 +155,21 @@ function CloudTab() {
                 >
                     <Flex gap="8px" alignItems="center">
                         <RefreshIcon color="currentColor" />
-                        Reauthorize
+                        {t("equicord.ui.cloud.reauthorize", "Reauthorize")}
                     </Flex>
                 </Button>
             </Flex>
 
             <Divider className={Margins.top20} />
 
-            <Heading className={Margins.top20}>Settings Sync</Heading>
+            <Heading className={Margins.top20}>{t("equicord.ui.cloud.settingsSync", "Settings Sync")}</Heading>
             <Paragraph className={Margins.bottom16}>
-                Synchronize your Equicord settings to the cloud. This makes it easy to keep your configuration consistent across multiple devices without manual import/export.
+                {t("equicord.ui.cloud.settingsSyncDesc", "Synchronize your Equicord settings to the cloud. This makes it easy to keep your configuration consistent across multiple devices without manual import/export.")}
             </Paragraph>
 
             <FormSwitch
-                title="Enable Settings Sync"
-                description="When enabled, your settings can be synced to and from the cloud. Use the actions below to manually sync."
+                title={t("equicord.ui.cloud.enableSync", "Enable Settings Sync")}
+                description={t("equicord.ui.cloud.enableSyncDesc", "When enabled, your settings can be synced to and from the cloud. Use the actions below to manually sync.")}
                 value={cloud.settingsSync}
                 onChange={v => { cloud.settingsSync = v; }}
                 disabled={!isAuthenticated}
@@ -179,9 +178,9 @@ function CloudTab() {
 
             <Divider className={Margins.top20} />
 
-            <Heading className={Margins.top20}>Sync Rules for This Device</Heading>
+            <Heading className={Margins.top20}>{t("equicord.ui.cloud.syncRules", "Sync Rules for This Device")}</Heading>
             <Paragraph className={Margins.bottom16}>
-                This setting controls how settings move between <strong>this device</strong> and the cloud. You can let changes flow both ways, or choose one place to be the main source of truth.
+                {t("equicord.ui.cloud.syncRulesDesc", "This setting controls how settings move between ")}<strong>{t("equicord.ui.cloud.thisDevice", "this device")}</strong>{t("equicord.ui.cloud.syncRulesDescEnd", " and the cloud. You can let changes flow both ways, or choose one place to be the main source of truth.")}
             </Paragraph>
 
             <Select
@@ -203,7 +202,7 @@ function CloudTab() {
                 >
                     <Flex gap="8px" alignItems="center">
                         <CloudUploadIcon />
-                        Sync to Cloud
+                        {t("equicord.ui.cloud.syncToCloud", "Sync to Cloud")}
                     </Flex>
                 </Button>
                 <Button
@@ -213,22 +212,22 @@ function CloudTab() {
                 >
                     <Flex gap="8px" alignItems="center">
                         <CloudDownloadIcon />
-                        Sync from Cloud
+                        {t("equicord.ui.cloud.syncFromCloud", "Sync from Cloud")}
                     </Flex>
                 </Button>
             </Flex>
 
             {!isAuthenticated && (
                 <Notice.Warning className={Margins.top8}>
-                    Enable cloud integration above to use settings sync features.
+                    {t("equicord.ui.cloud.enableCloudFirst", "Enable cloud integration above to use settings sync features.")}
                 </Notice.Warning>
             )}
 
             <Divider className={Margins.top20} />
 
-            <Heading className={Margins.top20}>Danger Zone</Heading>
+            <Heading className={Margins.top20}>{t("equicord.ui.cloud.dangerZone", "Danger Zone")}</Heading>
             <Paragraph className={Margins.bottom16}>
-                Permanently delete all your data from the cloud. This action cannot be undone and will remove all synced settings and any other data stored on the cloud backend.
+                {t("equicord.ui.cloud.dangerZoneDesc", "Permanently delete all your data from the cloud. This action cannot be undone and will remove all synced settings and any other data stored on the cloud backend.")}
             </Paragraph>
 
             <Flex gap="8px">
@@ -240,7 +239,7 @@ function CloudTab() {
                 >
                     <Flex gap="8px" alignItems="center">
                         <TrashIcon color="currentColor" />
-                        Delete Cloud Settings
+                        {t("equicord.ui.cloud.deleteCloudSettings", "Delete Cloud Settings")}
                     </Flex>
                 </Button>
                 <Button
@@ -248,17 +247,17 @@ function CloudTab() {
                     size="medium"
                     disabled={!isAuthenticated}
                     onClick={() => Alerts.show({
-                        title: "Delete Cloud Account",
-                        body: "Are you sure you want to permanently delete your cloud account and all associated data? This action cannot be undone.",
+                        title: t("equicord.ui.cloud.deleteAccount", "Delete Cloud Account"),
+                        body: t("equicord.ui.cloud.deleteAccountDesc", "Are you sure you want to permanently delete your cloud account and all associated data? This action cannot be undone."),
                         onConfirm: eraseAllCloudData,
-                        confirmText: "Delete Account",
+                        confirmText: t("equicord.ui.cloud.deleteAccountConfirm", "Delete Account"),
                         confirmColor: "vc-cloud-erase-data-danger-btn",
-                        cancelText: "Cancel"
+                        cancelText: t("equicord.ui.cloud.cancel", "Cancel")
                     })}
                 >
                     <Flex gap="8px" alignItems="center">
                         <SkullIcon color="currentColor" />
-                        Delete Cloud Account
+                        {t("equicord.ui.cloud.deleteAccount", "Delete Cloud Account")}
                     </Flex>
                 </Button>
             </Flex>

@@ -36,6 +36,7 @@ import { NotificationType, ReviewType } from "./entities";
 import { getCurrentUserInfo, getReviews, readNotification } from "./reviewDbApi";
 import { settings } from "./settings";
 import { cl, showToast } from "./utils";
+import { t } from "@api/I18n";
 
 const DMSideBarClasses = findCssClassesLazy("widgetPreviews");
 const ProfileCardClasses = findCssClassesLazy("cardsList", "firstCardContainer", "card", "container");
@@ -159,7 +160,7 @@ export default definePlugin({
                             onClick={() => !reviewData?.hasOptedOut && openReviewsModal(user.id, user.username, ReviewType.User)}
                         >
                             <div className={classes(ProfileCardOverlayClasses.overlay, ProfileCardContainerClasses.innerContainer, ProfileCardClasses.card)}>
-                                <Paragraph size={isSideBar ? "sm" : "xs"} weight="medium">User Reviews</Paragraph>
+                                <Paragraph size={isSideBar ? "sm" : "xs"} weight="medium">{t("equicord.ui.reviewDB.userReviews", "User Reviews")}</Paragraph>
                                 {!!reviewData?.reviewCount
                                     ? (
                                         <div className={ProfileCardContainerClasses.icons}>

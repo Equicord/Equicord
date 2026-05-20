@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
+ */
 
 import { Button } from "@components/Button";
 import { CodeBlock } from "@components/CodeBlock";
@@ -31,6 +31,7 @@ import { stripIndent } from "@utils/text";
 import { ReplaceFn } from "@utils/types";
 import { search } from "@webpack";
 import { React, TextInput, useMemo, useState } from "@webpack/common";
+import { t } from "@api/I18n";
 
 import { FullPatchInput } from "./FullPatchInput";
 import { PatchPreview } from "./PatchPreview";
@@ -42,9 +43,9 @@ const findCandidates = debounce(function ({ find, setModule, setError }) {
     const len = keys.length;
 
     if (len === 0)
-        setError("No match. Perhaps that module is lazy loaded?");
+        setError(t("equicord.ui.patchHelper.noMatch", "No match. Perhaps that module is lazy loaded?"));
     else if (len !== 1)
-        setError("Multiple matches. Please refine your filter");
+        setError(t("equicord.ui.patchHelper.multipleMatches", "Multiple matches. Please refine your filter"));
     else
         setModule([keys[0], candidates[keys[0]]]);
 });
@@ -108,13 +109,13 @@ function PatchHelper() {
 
     return (
         <SettingsTab>
-            <Heading className={Margins.top16}>Patch Helper</Heading>
+            <Heading className={Margins.top16}>{t("equicord.ui.patchHelper.title", "Patch Helper")}</Heading>
             <Paragraph className={Margins.bottom16}>
-                A developer tool to help you create patches for Equicord plugins.
+                {t("equicord.ui.patchHelper.description", "A developer tool to help you create patches for Equicord plugins.")}
             </Paragraph>
 
-            <Heading className="">Full Patch</Heading>
-            <Paragraph className={Margins.bottom8}>Paste your full JSON patch here to fill out the fields</Paragraph>
+            <Heading className="">{t("equicord.ui.patchHelper.fullPatch", "Full Patch")}</Heading>
+            <Paragraph className={Margins.bottom8}>{t("equicord.ui.patchHelper.fullPatchDesc", "Paste your full JSON patch here to fill out the fields")}</Paragraph>
             <FullPatchInput
                 setFind={onFindChange}
                 setParsedFind={setParsedFind}
@@ -123,7 +124,7 @@ function PatchHelper() {
             />
 
             <div className={Margins.top20}>
-                <Heading className="">Find</Heading>
+                <Heading className="">{t("equicord.ui.patchHelper.find", "Find")}</Heading>
                 <TextInput
                     type="text"
                     value={find}
@@ -132,7 +133,7 @@ function PatchHelper() {
                 />
             </div>
             <div className={Margins.top20}>
-                <Heading className="">Match</Heading>
+                <Heading className="">{t("equicord.ui.patchHelper.match", "Match")}</Heading>
                 <TextInput
                     type="text"
                     value={match}
@@ -152,7 +153,7 @@ function PatchHelper() {
             {module && (
                 <>
                     <Divider className={Margins.top16 + " " + Margins.bottom16} />
-                    <Span size="md" weight="medium" color="text-strong">Preview</Span>
+                    <Span size="md" weight="medium" color="text-strong">{t("equicord.ui.patchHelper.preview", "Preview")}</Span>
                     <PatchPreview
                         module={module}
                         match={match}
@@ -165,16 +166,16 @@ function PatchHelper() {
             {!!(find && match && replacement) && (
                 <>
                     <Divider className={Margins.top16 + " " + Margins.bottom16} />
-                    <Span size="md" weight="medium" color="text-strong">Generated Code</Span>
+                    <Span size="md" weight="medium" color="text-strong">{t("equicord.ui.patchHelper.generatedCode", "Generated Code")}</Span>
                     <div style={{ width: "100%", marginTop: 8 }}>
                         <CodeBlock lang="js" content={code} />
                     </div>
                     <Flex className={Margins.top8} gap="8px">
                         <Button size="small" onClick={() => copyWithToast(code)}>
-                            Copy to Clipboard
+                            {t("equicord.ui.patchHelper.copyToClipboard", "Copy to Clipboard")}
                         </Button>
                         <Button size="small" onClick={() => copyWithToast("```ts\n" + code + "\n```")}>
-                            Copy as Codeblock
+                            {t("equicord.ui.patchHelper.copyAsCodeblock", "Copy as Codeblock")}
                         </Button>
                     </Flex>
                 </>
