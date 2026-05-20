@@ -1,8 +1,8 @@
 {
     "accountPanelServerProfile": {
-        "description": "वर्तमान सर्वर में अपनी प्रोफ़ाइल देखने के लिए नीचे बाईं ओर अपने खाता पैनल पर राइट क्लिक करें",
+        "description": "वर्तमान सर्वर में अपनी प्रोफ़ाइल देखने के लिए नीचे-बाईं तरफ के खाता पैनल पर राइट-क्लिक करें",
         "prioritizeServerProfile": "सर्वर प्रोफ़ाइल को प्राथमिकता दें",
-        "prioritizeServerProfileDescription": "अपने खाता पैनल पर बाईं ओर क्लिक करते समय सर्वर प्रोफ़ाइल को प्राथमिकता दें",
+        "prioritizeServerProfileDescription": "अपने खाता पैनल पर बायाँ क्लिक करने पर server profile को प्राथमिकता दें",
         "viewAccountProfile": "खाता प्रोफ़ाइल देखें",
         "viewServerProfile": "सर्वर प्रोफ़ाइल देखें"
     },
@@ -10,50 +10,50 @@
         "new": "नया"
     },
     "alwaysAnimate": {
-        "description": "ऐसी किसी भी चीज़ को एनिमेट करता है जिसे एनिमेट किया जा सकता है",
+        "description": "ऐसी किसी भी चीज़ को animate करता है जिसे animate किया जा सकता है",
         "settings": {
-            "icons": "हमेशा सर्वर आइकन, अवतार, सजावट और बहुत कुछ एनिमेट करें",
-            "nameplates": "नेमप्लेट को हमेशा चेतन करें",
-            "roleGradients": "हमेशा भूमिका ग्रेडिएंट्स को चेतन करें",
-            "serverBanners": "सर्वर बैनर को हमेशा एनिमेट करें",
-            "statusEmojis": "स्टेटस इमोजी को हमेशा एनिमेट करें"
+            "icons": "हमेशा server icons, avatars, decor और बाकियों को animate करें",
+            "nameplates": "Nameplates को हमेशा animate करें",
+            "roleGradients": "हमेशा role gradients को animate करें",
+            "serverBanners": "server banners को हमेशा animate करें",
+            "statusEmojis": "status emojis को हमेशा animate करें"
         }
     },
     "alwaysExpandRoles": {
-        "description": "प्रोफ़ाइल पॉपआउट में हमेशा भूमिका सूची का विस्तार होता है",
+        "description": "Profile popouts में हमेशा role सूची को expand करता है",
         "settings": {
             "hideArrow": "तीर छिपाएँ"
         }
     },
     "alwaysTrust": {
-        "description": "कष्टप्रद अविश्वसनीय डोमेन और संदिग्ध फ़ाइल पॉपअप को हटा देता है",
+        "description": "कष्टप्रद untrusted domain और suspicious file popup को हटा देता है",
         "settings": {
-            "confirmModal": "क्या \"क्या आप वाकई हटाना चाहते हैं\" मोडल दिखाया जाना चाहिए?",
-            "domain": "लिंक खोलते समय अविश्वसनीय डोमेन पॉपअप हटा दें",
-            "file": "लिंक खोलते समय 'संभावित रूप से खतरनाक डाउनलोड' पॉपअप हटा दें",
-            "noDeleteSafety": "किसी सर्वर को हटाते समय एंटर सर्वर नाम की आवश्यकता को हटा देता है"
+            "confirmModal": "क्या \"क्या आप वाकई हटाना चाहते हैं\" modal दिखाया जाना चाहिए?",
+            "domain": "Links खोलते समय अविश्वसनीय domain popup हटा दें",
+            "file": "Links खोलते समय 'संभावित रूप से खतरनाक डाउनलोड' popup हटा दें",
+            "noDeleteSafety": "किसी server को हटाते समय enter server name की आवश्यकता को हटा देता है"
         },
         "ui": {
-            "deleteServerBody": "यह स्थायी है, यदि यह स्पष्ट न हो।",
-            "deleteServerConfirm": "मिटाना",
-            "deleteServerTitle": "सर्वर हटाएं?"
+            "deleteServerBody": "यह स्थायी है, अगर यह पहले से स्पष्ट नहीं था।",
+            "deleteServerConfirm": "मिटाए",
+            "deleteServerTitle": "सर्वर हटाएं ?"
         }
     },
     "anonymiseFileNames": {
         "commands": {
             "spoiler": {
-                "description": "अपने स्पॉयलर को टॉगल करें",
-                "disabled": "स्पॉइलर अक्षम!",
-                "enabled": "स्पॉइलर सक्षम!",
-                "name": "बिगाड़ने वाला",
-                "optionDescription": "अपने स्पॉइलर को टॉगल करें (डिफ़ॉल्ट टॉगल है)",
-                "optionName": "कीमत"
+                "description": "अपने spoiler को toggle करें",
+                "disabled": "Spoiler अक्षम!",
+                "enabled": "Spoiler सक्षम!",
+                "name": "Spoiler",
+                "optionDescription": "अपने spoiler को toggle करें (default टॉगल है)",
+                "optionName": "value"
             }
         },
-        "description": "अपलोड किए गए फ़ाइल नाम अज्ञात करें",
+        "description": "Uploaded file के नाम anonymise करे",
         "methods": {
-            "consistent": "सुसंगत",
-            "random": "यादृच्छिक पात्र",
+            "consistent": "Consistent",
+            "random": "Random Characters",
             "timestamp": "समय-चिह्न"
         },
         "settings": {
@@ -64,15 +64,15 @@
             "spoilerMessages": "बिगाड़ने वाले संदेश"
         },
         "usingAnonymous": "अनाम फ़ाइल नाम का उपयोग करना",
-        "usingNormal": "सामान्य फ़ाइल नाम का उपयोग करना"
+        "usingNormal": "सामान्य file नाम का उपयोग करा जा रहा है"
     },
     "appleMusicRichPresence": {
         "activityTypes": {
             "listening": "सुनना",
-            "playing": "खेलना"
+            "playing": "बज रहा है"
         },
         "assetImageTypes": {
-            "album": "एल्बम कलाकृति",
+            "album": "Album कलाकृति",
             "artist": "कलाकार कलाकृति",
             "disabled": "अक्षम"
         },
@@ -85,16 +85,16 @@
         "defaultName": "एप्पल संगीत",
         "defaultSmallText": "{artist}",
         "defaultState": "{artist} · {album}",
-        "description": "Discord आपके Apple Music के लिए समृद्ध उपस्थिति!",
-        "name": "एप्पलम्यूजिकरिचप्रेजेंस",
+        "description": "Discord rich presence आपके Apple Music के लिए !",
+        "name": "AppleMusicRichPresence",
         "settings": {
             "activityType": "किस प्रकार की गतिविधि",
-            "detailsString": "गतिविधि विवरण प्रारूप स्ट्रिंग",
-            "enableButtons": "बटन सक्षम करना है या नहीं",
-            "enableTimestamps": "टाइमस्टैम्प सक्षम करना है या नहीं",
-            "largeImageType": "गतिविधि परिसंपत्तियाँ बड़ी छवि प्रकार",
-            "largeTextString": "गतिविधि संपत्ति बड़ी पाठ प्रारूप स्ट्रिंग",
-            "nameString": "गतिविधि नाम प्रारूप स्ट्रिंग",
+            "detailsString": "गतिविधि विवरण प्रारूप string",
+            "enableButtons": "Buttons सक्षम करने हैं या नहीं",
+            "enableTimestamps": "Timestamps सक्षम करने हैं या नहीं",
+            "largeImageType": "गतिविधि assets बड़ी image type",
+            "largeTextString": "गतिविधि assets बड़ी text प्रारूप string",
+            "nameString": "गतिविधि नाम प्रारूप string",
             "refreshInterval": "गतिविधि ताज़ा होने के बीच का अंतराल (सेकंड)",
             "smallImageType": "गतिविधि परिसंपत्तियाँ छोटी छवि प्रकार",
             "smallTextString": "गतिविधि परिसंपत्तियाँ छोटी पाठ प्रारूप स्ट्रिंग",
@@ -105,16 +105,16 @@
             "albumPlaceholder": "{album} को एल्बम नाम से बदल दिया गया है।",
             "artistPlaceholder": "{artist} को कलाकार(कलाकारों) के नाम से बदल दिया गया है",
             "intro": "अनुकूलन योग्य गतिविधि प्रारूप स्ट्रिंग्स के लिए, आप गतिविधियों में ट्रैक डेटा शामिल करने के लिए कई विशेष स्ट्रिंग्स का उपयोग कर सकते हैं!",
-            "namePlaceholder": "{name} को ट्रैक नाम से बदल दिया गया है"
+            "namePlaceholder": "{name} को track name से बदल दिया गया है"
         },
         "statusDisplayTypes": {
             "artist": "कलाकार का नाम दिखाएँ",
             "off": "न दिखाएं (सामान्य श्रवण संदेश दिखाता है)",
-            "track": "ट्रैक नाम दिखाएँ"
+            "track": "Track का नाम दिखाएँ"
         }
     },
     "arRPC": {
-        "connected": "एआरआरपीसी से जुड़ा",
+        "connected": "Connected to arRPC",
         "connectionFailed": "ArRPC से कनेक्ट करने में विफल, क्या यह चल रहा है?",
         "retry": "पुन: प्रयास करें",
         "settingsAbout": {
@@ -130,7 +130,7 @@
         },
         "statusOptions": {
             "dnd": "परेशान मत करो",
-            "idle": "निठल्ला",
+            "idle": "खाली",
             "invisible": "अदृश्य",
             "online": "ऑनलाइन"
         }
@@ -171,7 +171,7 @@
         }
     },
     "betterRoleContext": {
-        "copyRoleColor": "भूमिका का रंग कॉपी करें",
+        "copyRoleColor": "भूमिका का रंग Copy करें",
         "description": "उपयोगकर्ता प्रोफ़ाइल में भूमिकाओं पर राइट क्लिक करने पर भूमिका का रंग कॉपी करने/भूमिका संपादित करने/भूमिका आइकन देखने के विकल्प जोड़ता है",
         "editRole": "भूमिका संपादित करें",
         "name": "BetterRoleContext",
@@ -193,8 +193,8 @@
         "rename": "नाम बदलें",
         "renameModal": {
             "newDeviceName": "नये उपकरण का नाम",
-            "resetName": "नाम रीसेट करें",
-            "save": "बचाना",
+            "resetName": "नाम reset करें",
+            "save": "Save",
             "title": "नाम बदलें"
         },
         "settings": {
@@ -214,14 +214,14 @@
     },
     "biggerStreamPreview": {
         "description": "यह प्लगइन आपको स्ट्रीम पूर्वावलोकन को बड़ा करने की अनुमति देता है",
-        "name": "बड़ास्ट्रीमपूर्वावलोकन",
-        "viewStreamPreview": "स्ट्रीम पूर्वावलोकन देखें"
+        "name": "BiggerStreamPreview",
+        "viewStreamPreview": "Stream Preview देखें"
     },
     "blurNsfw": {
-        "description": "होवर होने तक NSFW चैनलों में अटैचमेंट को धुंधला करें",
+        "description": "hover करने तक NSFW channels में attachments को धुंधला करें",
         "settings": {
             "blurAllChannels": "सभी चैनलों में अनुलग्नकों को धुंधला करें (सिर्फ NSFW नहीं)",
-            "blurAmount": "धुंधला राशि (पिक्सेल में)"
+            "blurAmount": "धुंधलेपन की मात्रा (in pixels)"
         }
     },
     "callTimer": {
@@ -260,7 +260,7 @@
             "failedToRetrieveOAuth": "सेटअप विफल रहा (OAuth कॉन्फ़िगरेशन पुनर्प्राप्त नहीं किया जा सका)।",
             "header": "क्लाउड एकीकरण",
             "noSecret": "सेटअप विफल (कोई रहस्य नहीं लौटा?)।",
-            "reauthenticateOtherClient": "हमने देखा है कि आपके पास किसी अन्य क्लाइंट में क्लाउड एकीकरण सक्षम है! सीमाओं के कारण, आपको उनका उपयोग जारी रखने के लिए पुनः प्रमाणित करने की आवश्यकता होगी। ऐसा करने के लिए सेटिंग पृष्ठ पर जाने के लिए यहां क्लिक करें!"
+            "reauthenticateOtherClient": "हमने देखा है कि आपने किसी दूसरे client में cloud integrations सक्षम किया हुए हैं! सीमाओं के कारण, उनका इस्तेमाल जारी रखने के लिए आपको re-authenticate करना होगा। ये करने के लिए और settings page पर जाने के लिए यहाँ क्लिक करें !"
         },
         "settings": {
             "accountChanged": "क्लाउड सिंक अक्षम कर दिया गया था क्योंकि यह खाता क्लाउड ऐप से कनेक्ट नहीं है। आप इस खाते को क्लाउड सेटिंग्स में कनेक्ट करके इसे फिर से सक्षम कर सकते हैं। (ध्यान दें: यह आपकी प्राथमिकताओं को अलग से संग्रहीत करेगा)",
@@ -450,8 +450,8 @@
     "decor": {
         "accessFromProfiles": "आप {link} पेज से सजावट की सजावट तक भी पहुंच सकते हैं।",
         "changeDecoration": "सजावट बदलें",
-        "description": "अपनी स्वयं की कस्टम अवतार सजावट बनाएं और उपयोग करें, या प्रीसेट से अपना पसंदीदा चुनें।",
-        "enableAndRestart": "सजावट सक्षम करें और अपने अवतार सजावट को बदलने के लिए अपने क्लाइंट को पुनरारंभ करें।",
+        "description": "अपनी स्वयं की custom avatar decorations बनाएं और उपयोग करें, या presets से अपना पसंदीदा चुनें।",
+        "enableAndRestart": "Decor सक्षम करें और अपने avatar decoration को बदलने के लिए अपने क्लाइंट को restart करें।",
         "profilesLink": "प्रोफाइल",
         "removeDecoration": "सजावट हटाएँ",
         "title": "असबाब"
@@ -732,20 +732,20 @@
         "description": "संदेशों में छवि लिंक कभी न छिपाएँ, भले ही वह एकमात्र सामग्री हो"
     },
     "imageZoom": {
-        "lensSize": "लेंस का आकार",
-        "nearestNeighbour": "निकटतम पड़ोसी",
+        "lensSize": "Lens का आकार",
+        "nearestNeighbour": "Nearest Neighbour",
         "settings": {
             "invertScroll": "उलटा स्क्रॉल",
-            "nearestNeighbour": "छवियों को स्केल करते समय निकटतम पड़ोसी इंटरपोलेशन का उपयोग करें",
-            "saveZoomValues": "ज़ूम और लेंस आकार मानों को सहेजना है या नहीं",
-            "size": "लेंस की त्रिज्या/आकार",
-            "square": "लेंस को चौकोर बनाएं",
-            "zoom": "लेंस का ज़ूम",
-            "zoomSpeed": "ज़ूम/लेंस का आकार कितनी तेजी से बदलता है"
+            "nearestNeighbour": "Image scaling करते समय Nearest Neighbour Interpolation का उपयोग करें",
+            "saveZoomValues": "zoom और lens size के मानों को सहेजना है या नहीं",
+            "size": "लेंस की त्रिज्या / आकार",
+            "square": "Lens को चौकोर बनाएं",
+            "zoom": "Lens का zoom",
+            "zoomSpeed": "zoom / lens का आकार कितनी तेजी से बदलता है"
         },
-        "squareLens": "चौकोर लेंस",
-        "zoom": "ज़ूम",
-        "zoomSpeed": "ज़ूम गति"
+        "squareLens": "चौकोर Lens",
+        "zoom": "Zoom",
+        "zoomSpeed": "Zoom करनेकी गति"
     },
     "implicitRelationships": {
         "description": "मित्र टैब में आपके अंतर्निहित संबंधों को दिखाता है।",
@@ -771,7 +771,7 @@
         "description": "खाते स्विच करने या Discord लोड करने से पहले उस चैनल पर नेविगेट करने का प्रयास करें जिसमें आप थे।"
     },
     "lastfmRichPresence": {
-        "apiKeyInstructions": "<0>एप्लिकेशन का नाम</0> और <1>एप्लिकेशन विवरण</1> को किसी भी चीज़ पर सेट करें और बाकी को खाली छोड़ दें।",
+        "apiKeyInstructions": "<0>Application name</0> and <1>Application description</1> को किसी भी चीज़ पर सेट करें और बाकी को खाली छोड़ दें।",
         "createApiKey": "API कुंजी बनाएं",
         "description": "Last.fm की समृद्ध उपस्थिति के लिए छोटा प्लगइन",
         "howToCreateApiKey": "API कुंजी कैसे बनाएं",
@@ -850,9 +850,9 @@
         "description": "API सदस्य सूची में डेकोरेटर जोड़ने के लिए (सर्वर और डीएम दोनों में)"
     },
     "mentionAvatars": {
-        "description": "उल्लेखों के अंदर उपयोगकर्ता अवतार और भूमिका चिह्न दिखाता है",
+        "description": "mentions के अंदर user avatars और role icons दिखाता है",
         "settings": {
-            "showAtSymbol": "क्या उपयोगकर्ता उल्लेखों पर @ प्रतीक प्रदर्शित किया जाना चाहिए"
+            "showAtSymbol": "क्या user mentions पर @ प्रतीक प्रदर्शित किया जाना चाहिए"
         }
     },
     "menuItemDemanglerAPI": {
@@ -917,7 +917,7 @@
             "messageContentCopied": "संदेश सामग्री की प्रतिलिपि बनाई गई!",
             "messageIdCopied": "संदेश आईडी कॉपी की गई!",
             "selectAdditionalEmojis": "अतिरिक्त इमोजी चुनें",
-            "selectEmojiForReactions": "प्रतिक्रियाओं के लिए इमोजी चुनें",
+            "selectEmojiForReactions": "Reactions के लिए emoji चुनें",
             "userIdCopied": "उपयोगकर्ता आईडी की प्रतिलिपि बनाई गई!"
         }
     },
@@ -961,7 +961,7 @@
         "channelLabels": {
             "directMessage": "सीधा संदेश",
             "groupDM": "Group डीएम",
-            "server": "सर्वर"
+            "server": "Server"
         },
         "description": "उन संदेशों में पूर्वावलोकन जोड़ता है जो किसी अन्य संदेश को लिंक करते हैं",
         "listModeOptions": {
@@ -1047,9 +1047,9 @@
         "description": "API संदेशों को अद्यतन करने और पुनः प्रस्तुत करने के लिए"
     },
     "moreQuickReactions": {
-        "description": "संदेश संदर्भ मेनू में त्वरित प्रतिक्रिया बटन में सुधार करता है।",
+        "description": "message संदर्भ मेनू में quick react buttons में सुधार करता है।",
         "settings": {
-            "columns": "प्रदर्शित करने के लिए त्वरित प्रतिक्रियाओं के कॉलम",
+            "columns": "Quick reactions जिनके columns display करने हैं",
             "compactMode": "बटनों को उनके मूल पैमाने के 75% तक स्केल करता है, जबकि आंतरिक इमोजी को 125% स्केल तक बढ़ाता है। इमोजी मूल आकार का 93.75% होंगे। कम से कम 5 कॉलम रखने की अनुशंसा की जाती है",
             "frequentEmojis": "पसंदीदा इमोजी के बजाय अक्सर उपयोग किए जाने वाले इमोजी का उपयोग करें",
             "reactionCount": "प्रतिक्रियाओं की संख्या (0-42)",
@@ -1076,12 +1076,12 @@
             "everyone": "@everyone और @here को दबाएँ",
             "guild": "गिल्ड को स्वचालित रूप से म्यूट करें",
             "highlights": "हाइलाइट्स को स्वचालित रूप से दबाएँ",
-            "messages": "सर्वर अधिसूचना सेटिंग्स",
+            "messages": "Server अधिसूचना Settings",
             "mobilePush": "Mobile पुश नोटिफिकेशन को स्वचालित रूप से म्यूट करें",
             "nothing": "कुछ नहीं",
             "onlyMentions": "केवल @उल्लेख",
             "role": "सभी भूमिका @उल्लेखों को दबाएँ",
-            "serverDefault": "सर्वर डिफ़ॉल्ट",
+            "serverDefault": "Server default",
             "showAllChannels": "सभी चैनल स्वचालित रूप से दिखाएं",
             "voiceChannels": "वॉयस चैनलों में नाम स्वचालित रूप से छिपाएँ"
         }
@@ -1253,10 +1253,10 @@
                 "options": {
                     "delay": "एमएस में प्रत्येक फ़्रेम के बीच विलंब। निकटतम 10ms तक पूर्णांकित किया गया। 20 के न्यूनतम मान पर डिफ़ॉल्ट।",
                     "image": "उपयोग हेतु छवि अनुलग्नक",
-                    "noServerPfp": "'उपयोगकर्ता' विकल्प का उपयोग करते समय सर्वर विशिष्ट के बजाय सामान्य अवतार का उपयोग करें",
+                    "noServerPfp": "'user' विकल्प का उपयोग करते समय server विशिष्ट के बजाय सामान्य avatar का उपयोग करें",
                     "resolution": "GIF के लिए संकल्प. 120 पर डिफ़ॉल्ट। यदि आप एक पागल संख्या दर्ज करते हैं और यह फ्रीज हो जाता है Discord तो यह आपकी गलती है।",
                     "url": "URL से छवि लाने के लिए",
-                    "user": "उपयोगकर्ता जिसका अवतार छवि के रूप में उपयोग करना है"
+                    "user": "User जिसके avatar को image के रूप में इस्तेमाल करना है"
                 }
             }
         },
@@ -1509,9 +1509,9 @@
             "mutualUsers": "पारस्परिक उपयोगकर्ता",
             "preferredLocale": "पसंदीदा स्थान",
             "roles": "भूमिकाएँ",
-            "serverBoosts": "सर्वर बूस्ट",
-            "serverInfo": "सर्वर जानकारी",
-            "serverOwner": "सर्वर स्वामी",
+            "serverBoosts": "Server Boosts",
+            "serverInfo": "Server की जानकारी",
+            "serverOwner": "Server Owner",
             "vanityLink": "वैनिटी लिंक",
             "verificationLevel": "सत्यापन स्तर"
         }
@@ -1522,7 +1522,7 @@
     "serverListIndicators": {
         "description": "सर्वर सूची में ऑनलाइन मित्र संख्या या सर्वर संख्या जोड़ें",
         "friends": "दोस्त",
-        "servers": "सर्वर",
+        "servers": "Servers",
         "settings": {
             "mode": "तरीका",
             "modeBoth": "सर्वर और ऑनलाइन मित्र दोनों मायने रखते हैं",
@@ -1952,8 +1952,8 @@
         "description": "यदि कोई व्यक्ति किसी चैनल पर टाइप कर रहा है तो एक संकेतक जोड़ता है।",
         "settings": {
             "animatedDots": "एनिमेटेड बिंदु",
-            "avatars": "अवतारों",
-            "avatarsAndDots": "अवतार और एनिमेटेड बिंदु",
+            "avatars": "Avatars",
+            "avatarsAndDots": "Avatars और animated dots",
             "includeBlockedUsers": "क्या अवरुद्ध उपयोगकर्ताओं के लिए टाइपिंग संकेतक दिखाना है।",
             "includeCurrentChannel": "वर्तमान में चयनित चैनल के लिए टाइपिंग संकेतक दिखाना है या नहीं",
             "includeIgnoredUsers": "उपेक्षित उपयोगकर्ताओं के लिए टाइपिंग संकेतक दिखाना है या नहीं।",
@@ -1963,11 +1963,11 @@
     },
     "typingTweaks": {
         "andOthersTyping": "और {count} अन्य लोग टाइप कर रहे हैं..।",
-        "description": "टाइपिंग इंडिकेटर में अवतार और भूमिका रंग दिखाएँ",
+        "description": "typing indicator में avatars और role colours दिखाएँ",
         "settings": {
             "alternativeFormatting": "जब कई उपयोगकर्ता टाइप कर रहे हों तो अधिक उपयोगी संदेश दिखाएँ",
             "amITyping": "आपको दिखाता है कि क्या अन्य लोग आपको टाइप करते हुए देख सकते हैं",
-            "showAvatars": "टाइपिंग इंडिकेटर में अवतार दिखाएँ",
+            "showAvatars": "typing indicator में avatars दिखाएँ",
             "showRoleColors": "टाइपिंग सूचक में भूमिका रंग दिखाएँ"
         }
     },
@@ -1975,9 +1975,9 @@
         "description": "कोडब्लॉक से अग्रणी इंडेंटेशन को ट्रिम करता है"
     },
     "unlockedAvatarZoom": {
-        "description": "आपको अपना अवतार बदलते समय इमेज क्रॉप टूल में और अधिक ज़ूम करने की अनुमति देता है",
+        "description": "आपको अपना avatar बदलते समय image crop tool में और अधिक zoom करने की अनुमति देता है",
         "settings": {
-            "zoomMultiplier": "ज़ूम गुणक"
+            "zoomMultiplier": "Zoom multiplier"
         }
     },
     "unsuppressEmbeds": {
@@ -2062,15 +2062,15 @@
         "speechSynthesisNotSupported": "स्पीचसिंथेसिस समर्थित नहीं है या कोई नैरेटर आवाज नहीं मिली। इस प्रकार, यह प्लगइन काम नहीं करेगा. अधिक जानकारी के लिए मेरी सेटिंग्स जांचें"
     },
     "viewIcons": {
-        "description": "उपयोगकर्ता प्रोफ़ाइल में अवतारों और बैनरों को क्लिक करने योग्य बनाता है, उपयोगकर्ता, सर्वर और समूह चैनल संदर्भ मेनू में व्यू आइकन/बैनर प्रविष्टियाँ जोड़ता है।",
+        "description": "User profile में avatars और banners को क्लिक करने योग्य बनाता है, और user, server तथा group channel के संदर्भ मेनू में “View Icon/Banner” प्रविष्टियाँ जोड़ता है।",
         "settings": {
             "formatDescription": "गैर एनिमेटेड छवियों के लिए उपयोग करने के लिए छवि प्रारूप चुनें। एनिमेटेड छवियाँ हमेशा .gif का उपयोग करेंगी",
             "imgSizeDescription": "उपयोग हेतु छवि का आकार"
         },
-        "viewAvatar": "अवतार देखें",
+        "viewAvatar": "View Avatar",
         "viewBanner": "बैनर देखें",
         "viewIcon": "चिह्न देखें",
-        "viewServerAvatar": "सर्वर अवतार देखें"
+        "viewServerAvatar": "Server Avatar देखें"
     },
     "viewRaw": {
         "content": "सामग्री",
@@ -2110,7 +2110,7 @@
     "volumeBooster": {
         "description": "आपको उपयोगकर्ता और स्ट्रीम वॉल्यूम को डिफ़ॉल्ट अधिकतम से ऊपर सेट करने की अनुमति देता है",
         "settings": {
-            "multiplier": "आयतन गुणक"
+            "multiplier": "Volume Multiplier"
         }
     },
     "webContextMenus": {
@@ -2127,7 +2127,7 @@
     },
     "whoReacted": {
         "settings": {
-            "avatarClick": "प्रतिक्रियाओं में अवतारों पर क्लिक करने को टॉगल करें"
+            "avatarClick": "reactions में avatars पर clicking करने को toggle करें"
         }
     },
     "xsOverlay": {

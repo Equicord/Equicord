@@ -139,6 +139,7 @@
         "description": "Kullanıcılara rozet eklemek için API"
     },
     "betterFolders": {
+        "description": "Sunucu klasörlerini özel bir yan çubukta gösterir ve klasörlerle ilgili iyileştirmeler ekler",
         "settings": {
             "closeAllFolders": "Klasörde olmayan bir sunucuyu seçerken tüm klasörleri kapatın",
             "closeAllHomeButton": "Giriş düğmesine tıkladığınızda tüm klasörleri kapatın",
@@ -188,6 +189,7 @@
         }
     },
     "betterSessions": {
+        "description": "Oturumlar (cihazlar) menüsünü geliştirir. Tam zaman damgalarını görüntülemenizi, her oturuma özel bir ad vermenizi ve yeni oturumlar hakkında bildirim almanızı sağlar.",
         "newBadge": "YENİ",
         "newSession": "Yeni oturum:",
         "rename": "Yeniden isimlendirmek",
@@ -203,6 +205,7 @@
         }
     },
     "betterSettings": {
+        "description": "Ayarlar menüsünü açma deneyiminizi iyileştirir",
         "settings": {
             "disableFade": "Crossfade animasyonunu devre dışı bırak",
             "eagerLoad": "Menüyü ilk kez açarken yükleme gecikmesini ortadan kaldırır",
@@ -384,6 +387,7 @@
         "button1Url": "Düğme1 URL",
         "button2Text": "Düğme2 Metni",
         "button2Url": "Düğme2 URL",
+        "description": "Discord profilinize tamamen özelleştirilebilir bir Oynuyor (Oyun durumu) ekleyin",
         "detailLine1": "Ayrıntı (satır 1)",
         "detailUrl": "Ayrıntı URL",
         "endTimestamp": "Bitiş Zaman Damgası (milisaniye cinsinden)",
@@ -449,6 +453,8 @@
     },
     "decor": {
         "accessFromProfiles": "Dekor dekorasyonlarına {link} sayfasından da erişebilirsiniz.",
+        "agreedToGuidelines": "Kullanım şartları kabul edildi",
+        "baseUrl": "Decor api url",
         "changeDecoration": "Dekorasyonu Değiştir",
         "description": "Kendi özel avatar dekorasyonlarınızı yaratın ve kullanın veya ön ayarlardan favorinizi seçin.",
         "enableAndRestart": "Dekoru etkinleştirin ve avatar dekorasyonunuzu değiştirmek için istemcinizi yeniden başlatın.",
@@ -505,6 +511,7 @@
         "cloneTo": "{guild}'a klonla",
         "clonedSuccess": "{name} başarıyla {guild}'e klonlandı!",
         "customName": "Özel Ad",
+        "description": "İfadeleri ve Çıkartmaları kendi sunucunuza kopyalamanıza olanak tanır (üzerlerine sağ tıklayın)",
         "failedToClone": "Klonlama başarısız oldu: {error}",
         "nameValidation": "Ad 2 ila 32 karakter arasında olmalıdır",
         "somethingWentWrong": "Bir şeyler ters gitti (konsolu kontrol edin!)"
@@ -699,6 +706,7 @@
         "description": "'Muhtemelen spam gönderenlerden' gelen mesajları gizlemeyin"
     },
     "ignoreActivities": {
+        "description": "Etkinliklerin YALNIZCA durumunuzda görünmesini engeller. Hangilerinin yoksayılacağını Kayıtlı Oyunlar ve Etkinlikler sekmelerinden yapılandırabilir veya aşağıdaki genel ayarları kullanabilirsiniz.",
         "disableActivity": "Etkinliği devre dışı bırak",
         "enableActivity": "Etkinliği etkinleştir",
         "filterList": {
@@ -732,6 +740,7 @@
         "description": "Tek içerik olsa bile mesajlardaki resim bağlantılarını asla gizlemeyin"
     },
     "imageZoom": {
+        "description": "Resimlere ve GIF'lere yakınlaştırma yapmanızı sağlar. Yakınlaştırmak için fare tekerleğini, mercek yarıçapını/boyutunu artırmak için ise Shift + fare tekerleğini kullanın.",
         "lensSize": "Mercek Boyutu",
         "nearestNeighbour": "En Yakın Komşu",
         "settings": {
@@ -840,6 +849,7 @@
         "showLogs": "Günlükleri Göster"
     },
     "memberCount": {
+        "description": "Üye listesinde ve ipucunda; sunucudaki çevrimiçi üye sayısını, toplam üye sayısını ve ses kanallarındaki kullanıcıları gösterir.",
         "settings": {
             "memberList": "Üye listesinde üye sayısını göster",
             "toolTip": "Sunucu ipucunda üye sayısını göster",
@@ -930,6 +940,7 @@
     "messageLatency": {
         "clockAhead": "Bu kullanıcının saati {delta} ileri.",
         "delayedMessage": "Gecikmeli Mesaj",
+        "description": "Gönderilmesi ≥n saniye süren mesajlar için bir gösterge görüntüler",
         "messageDelayed": "Bu mesaj {delta} gecikmeyle gönderildi.",
         "oldAndroidClient": "Eski Discord Android istemcisi",
         "oldDiscordAndroid": "Kullanıcının eski bir Discord Android istemcisinde olduğundan şüpheleniliyor",
@@ -989,6 +1000,7 @@
         "deletedMessages_one": "{count} mesajı sildi",
         "deletedMessages_other": "{count} silinmiş mesajlar",
         "deletedMessages_zero": "Silinen mesaj yok",
+        "description": "Silinen ve düzenlenen mesajları geçici olarak günlüğe kaydeder.",
         "disableDiffView": "Fark Görünümünü Devre Dışı Bırak",
         "editHistory": "Mesaj Düzenleme Geçmişi",
         "enableDiffView": "Fark Görünümünü Etkinleştir",
@@ -1230,6 +1242,7 @@
         }
     },
     "permissionsViewer": {
+        "description": "Bir kullanıcının veya kanalın sahip olduğu izinleri ve bir sunucunun rollerini görüntüleyin",
         "noPermissions": "Görüntüleme izni yok!",
         "owner": "mal sahibi",
         "permissions": "İzinler",
@@ -1280,6 +1293,7 @@
         "color": "Renk",
         "create": "Oluştur",
         "deleteCategory": "Kategoriyi Sil",
+        "description": "Özel kanalları DM listenizin en üstüne sabitlemenize olanak tanır. Sabitlemek, sabitlemeyi kaldırmak veya sıralamayı değiştirmek için DM'lere sağ tıklayın.",
         "editCategory": "Kategoriyi Düzenle",
         "editCategoryTitle": "Kategoriyi Düzenle",
         "moveDown": "Aşağı Taşı",
@@ -1414,6 +1428,7 @@
         "confirmDelete": "Bu incelemeyi gerçekten silmek istiyor musunuz?",
         "confirmReport": "Bu yorumu gerçekten bildirmek istiyor musunuz?",
         "delete": "Sil",
+        "description": "Diğer kullanıcıları değerlendirin (Profillere yeni bir ayar ekler)",
         "failedToFetchBlocks": "Bloklar getirilemedi: {error}",
         "mustBeLoggedInBlock": "Kullanıcıları engellemek için giriş yapmalısınız.",
         "mustBeLoggedInDelete": "Yorumları silmek için giriş yapmalısınız.",
@@ -1604,7 +1619,7 @@
         },
         "frameless": {
             "description": "Daha temiz bir görünüm için yerel pencere çerçevesini çıkarın. Başlık çubuğu alanını sürükleyerek pencereyi hâlâ taşıyabilirsiniz.",
-            "title": "Pencere çerçevesini devre dışı bırak"
+            "title": "Tüm Pencere Çerçevelerini Devre Dışı Bırak"
         },
         "hint": "İpucu: Bu ayarlar bölümünün konumunu <0>Ayarlar eklentisinin ayarlarında</0> değiştirebilirsiniz!",
         "macosVibrancyStyle": {
@@ -1653,6 +1668,16 @@
             "description": "Discord'ın özel başlık çubuğunu standart Windows başlık çubuğuyla değiştirin. Bu, bazı pencere yönetimi araçlarıyla uyumluluğu geliştirebilir.",
             "title": "Discord'un özel başlığı yerine Windows'un yerel başlık çubuğunu kullanın"
         }
+    },
+    "settingsPlugin": {
+        "aboveActivity": "Etkinlik Ayarlarının üstünde",
+        "aboveNitro": "Nitro bölümünün üstünde",
+        "belowActivity": "Etkinlik Ayarlarının altında",
+        "belowNitro": "Nitro bölümünün altında",
+        "bottom": "En altta",
+        "description": "Ayarlar arayüzünü ve hata ayıklama bilgilerini ekler",
+        "settingsLocation": "Equicord ayarlar bölümünün nereye yerleştirileceği",
+        "top": "En üstte"
     },
     "settingsSync": {
         "failedToImport": "Ayarlar içe aktarılamadı: {e}",
@@ -1853,6 +1878,7 @@
             "membersListIndicators": "Üye Listesi Göstergeleri",
             "silentTyping": "Sessiz Yazma"
         },
+        "description": "Yazıyor göstergenizi sohbetten gizleyin",
         "noChanges": "Sessiz yazma ayarlarında herhangi bir değişiklik yapılmadı.",
         "settings": {
             "chatContextMenu": "Hareket halindeyken eklenti ayarlarını değiştirmek için sohbet içerik menüsünde bir açılır menü gösterin.",
@@ -1914,17 +1940,25 @@
             "unlimitedSuperReactionPlaying": "Tek seferde oynatılan Süper Reaksiyonlardaki limiti kaldırın"
         }
     },
+    "supportHelper": {
+        "debug": "Equicord hata ayıklama bilgilerini gönder",
+        "description": "Size destek sağlamamıza yardımcı olur",
+        "plugins": "Equicord eklenti listesini gönder"
+    },
     "tabs": {
         "settings": "Equicord Ayarlar"
     },
     "textReplace": {
+        "description": "Kendi mesajlarınızdaki veya başkalarının mesajlarındaki metinleri değiştirin. Hazır kuralları Vencord Sunucusu'ndaki #textreplace-rules kanalında bulabilirsiniz.",
         "find": "Bul",
         "messageWithRules": "Kuralların uygulandığı mesaj",
         "onlyIfIncludes": "Yalnızca şunları içeriyorsa",
+        "regexRules": "Düzenli ifadeler kullanarak metin değiştirmek için kurallar.",
         "replace": "Yer değiştirmek",
         "scope.allMessages": "Apply to all messages",
         "scope.myMessages": "Apply to your messages (visible to everyone)",
         "scope.othersMessages": "Apply to others' messages (only visible to you)",
+        "stringRules": "Dize eşleştirme kullanarak metin değiştirmek için kurallar.",
         "testRules": "Test Kuralları",
         "typeMessage": "Bir mesaj yazın",
         "usingRegex": "Regex'i kullanma",
@@ -1940,6 +1974,7 @@
             "title": "Equicord Otomatik Çeviri Etkin"
         },
         "autoTranslateEnabledLabel": "Otomatik Çeviri Etkin",
+        "description": "Mesajları Google Çeviri veya DeepL ile çevirin",
         "disableAutoTranslate": "Otomatik Çeviriyi Devre Dışı Bırak",
         "dontShowAgain": "Bir daha gösterme",
         "gotIt": "Anladım",
@@ -2061,6 +2096,11 @@
         },
         "speechSynthesisNotSupported": "SpeechSynthesis desteklenmiyor veya Anlatıcı sesi bulunamadı. Bu nedenle bu eklenti çalışmayacaktır. Daha fazla bilgi için Ayarlarımı kontrol edin"
     },
+    "vencordDonor": {
+        "description": "Bu Rozet, Vencord Bağışçıları için özel bir ayrıcalıktır",
+        "description2": "Lütfen bir bağışçı olarak Vencord'un gelişimini desteklemeyi düşünün. Bu bizim için çok şey ifade eder!!",
+        "title": "Vencord Bağışçısı"
+    },
     "viewIcons": {
         "description": "Kullanıcı profillerindeki avatarları ve bannerları tıklanabilir hale getirir, kullanıcı, sunucu ve grup kanalı içerik menüsüne Simge/Banner Görüntüleme girişleri ekler.",
         "settings": {
@@ -2094,6 +2134,7 @@
         "downloadVoiceMessage": "Sesli mesajı indir"
     },
     "voiceMessages": {
+        "description": "Mobildeki gibi sesli mesajlar göndermenize olanak tanır. Bunu yapmak için yükle butonuna sağ tıklayın ve \"Sesli Mesaj Gönder\"e tıklayın.",
         "echoCancellation": "Yankı Engelleme",
         "failedToParse": "Seçilen ses dosyası ayrıştırılamadı: {error}",
         "failedToUpload": "Sesli mesaj yüklenemedi",
@@ -2126,6 +2167,7 @@
         "description": "Krom ve vesktop istemcilerinde 2500kbps bit hızı sınırını kaldırır."
     },
     "whoReacted": {
+        "description": "Bir mesaja tepki veren kullanıcıların avatarlarını gösterir",
         "settings": {
             "avatarClick": "Tepkilerdeki avatarlara tıklamayı aç/kapa"
         }

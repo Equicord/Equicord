@@ -2,7 +2,7 @@
     "description": "Ajută la traducerea Equicord",
     "settings": {
         "forceLocale": {
-            "description": "Forțați o altă locație pentru utilizarea Equicord",
+            "description": "Forțează o altă locație pentru utilizarea Equicord",
             "followDiscord": "Implicit (urmăriți Discord)"
         },
         "showMissingKeys": "Dacă în localitatea actuală lipsesc traduceri, afișați cheile în loc să reveniți la engleză"

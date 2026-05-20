@@ -2149,6 +2149,9 @@
             "urlPatterns": "[[PH0]]] Modele"
         }
     },
+    "userAreaAPI": {
+        "description": "API pentru a adăuga butoane în panoul zonei de utilizator."
+    },
     "userpfp": {
         "avatarOptions": {
             "nitro": "Nitro",

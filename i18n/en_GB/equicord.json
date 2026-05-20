@@ -334,6 +334,8 @@
     "commandPalette": {
         "description": "Quickly run actions through a searchable command palette",
         "settings": {
+            "closeAfterExecute": "Close palette after executing a command.",
+            "compactStartEnabled": "Open the palette in compact mode first.",
             "customCommands": "Manage custom command palette entries",
             "enableTagFilter": "Show the tag filter bar",
             "hotkey": "Hotkey used to open the command palette",

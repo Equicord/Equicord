@@ -5,7 +5,7 @@
             "description": "Inserisci il tuo server AudioBookShelf URL, nome utente e password per visualizzare gli audiolibri attualmente in riproduzione come Discord Rich Presence.",
             "title": "Come connettersi a AudioBookShelf"
         },
-        "description": "Ricca presenza per il server multimediale AudioBookShelf",
+        "description": "Rich Presence per il server multimediale AudioBookShelf",
         "settings": {
             "password": "Password dello scaffale audiolibri",
             "serverUrl": "Server AudioBookShelf URL (ad esempio, https://abs.example.com)",
@@ -54,6 +54,9 @@
             "someone": "Menziona qualcuno a caso"
         },
         "description": "Menziona qualcuno a caso"
+    },
+    "audioPlayerAPI": {
+        "description": "API per riprodurre file audio interni di Discord o link audio esterni."
     },
     "autoZipper": {
         "description": "Comprime automaticamente i tipi di file e le cartelle specificati prima del caricamento su Discord",
@@ -551,6 +554,11 @@
             "reset": "Ripristina"
         }
     },
+    "equicordDonor": {
+        "description": "Questo badge è un vantaggio speciale per i donatori di Equicord (non di Vencord).",
+        "description2": "Vi preghiamo di considerare la possibilità di sostenere lo sviluppo di Equicord diventando donatori. Sarebbe importantissimo!",
+        "title": "Donatore Equicord <3"
+    },
     "equicordHelper": {
         "alerts": {
             "equicordSupport": "Equicord Supporto",
@@ -598,6 +606,10 @@
             "themes": "Temi",
             "tooltip": "Equicord Casella degli strumenti"
         }
+    },
+    "equicordTranslator": {
+        "description": "Riconoscimento assegnato ai collaboratori che ampliano il supporto linguistico di Equicord traducendo contenuti per la community.",
+        "title": "Traduttore Equicord"
     },
     "equissant": {
         "description": "Croissant ogni numero di clic specificato :trolley:",
@@ -934,6 +946,9 @@
             "hideTags": "Nascondi tag"
         }
     },
+    "headerBarAPI": {
+        "description": "API per aggiungere pulsanti alla barra di intestazione e alla barra degli strumenti del canale."
+    },
     "hideChatButtons": {
         "description": "In grado di nascondere i pulsanti della chat",
         "settings": {
@@ -976,7 +991,7 @@
         "description": "Cambia il pulsante Home in un indicatore di digitazione se qualcuno nel tuo DMS sta digitando"
     },
     "hopOn": {
-        "description": "Salta su Fortnite o salta sui bloons:3",
+        "description": "Hop on! Apre un URL configurabile quando un messaggio corrisponde a una regex personalizzata nel canale corrente.",
         "settings": {
             "regex": "Regex su cui attivare",
             "url": "URL per aprire"
@@ -1315,6 +1330,10 @@
             "scanQrCode": "Scansiona il codice QR"
         }
     },
+    "mainWindowFrameless": {
+        "description": "Rimuovi il telaio della finestra nativa per un aspetto più pulito. È comunque possibile spostare la finestra trascinando l'area della barra del titolo.",
+        "title": "Disabilita il bordo della finestra principale."
+    },
     "mediaPlaybackSpeed": {
         "description": "Controlla la velocità di riproduzione multimediale per messaggi vocali, video e allegati audio",
         "settings": {
@@ -1496,7 +1515,7 @@
         }
     },
     "moyai": {
-        "description": "Riproduci l'effetto sonoro moyai quando viene utilizzato 🗿 emoji",
+        "description": "Riproduce un effetto sonoro 🗿 ogni volta che un'emoji moyai viene inviata, usata come reazione o come effetto vocale nel canale corrente.",
         "settings": {
             "ignoreBlocked": "Ignora i messaggi degli utenti bloccati",
             "ignoreBots": "Ignora i messaggi dei bot",
@@ -2148,6 +2167,9 @@
             "patternPlaceholder": "*.esempio.com",
             "urlPatterns": "URL Modelli"
         }
+    },
+    "userAreaAPI": {
+        "description": "API per aggiungere pulsanti al pannello dell'area utente."
     },
     "userpfp": {
         "avatarOptions": {

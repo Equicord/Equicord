@@ -116,6 +116,7 @@
     "arRPC": {
         "connected": "Подключено к arRPC",
         "connectionFailed": "Не удалось подключиться к arRPC, он работает?",
+        "description": "Плагин arRPC для включения Discord RPC в браузере (экспериментально)",
         "retry": "Повторить",
         "settingsAbout": {
             "description": "Следуйте инструкциям в репозитории GitHub, чтобы запустить сервер, а затем включите плагин.",
