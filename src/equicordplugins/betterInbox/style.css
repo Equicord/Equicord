@@ -1,0 +1,22 @@
+.vc-betterinbox-synth-line {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.vc-betterinbox-reaction-emoji {
+    height: 1.1em;
+    width: 1.1em;
+    vertical-align: middle;
+}
+
+.vc-betterinbox-reply-quote {
+    display: block;
+    padding-left: 8px;
+    margin-top: 4px;
+    border-left: 3px solid var(--background-modifier-accent);
+    color: var(--text-muted);
+    font-size: 0.9em;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
