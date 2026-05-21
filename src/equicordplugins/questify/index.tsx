@@ -321,7 +321,7 @@ export default definePlugin({
                 {
                     // Set the initial filters and update the filters and sort method when they change.
                     match: /(get\(\i\)\)\?\?)(\i,\[)(\i)(\]\),\i=\i.useCallback\((\i)=>{)(.{0,60}?useCallback\((\i)=>{)/,
-                    replace: "$1$self.getLastFilterChoices()??$2$3$4$self.setLastSortChoice($5);$6$self.setLastFilterChoices($7);$self.rerenderQuests();"
+                    replace: "$1$self.getLastFilterChoices()??$2$3,questRerenderTrigger$4$self.setLastSortChoice($5);$6$self.setLastFilterChoices($7);$self.rerenderQuests();"
                 },
                 {
                     // Update the last used sort and filter choices when the toggle setting for either is changed.
