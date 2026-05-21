@@ -43,6 +43,10 @@ const settings = definePluginSettings({
             { label: "Top right", value: "topright" },
             { label: "Bottom left", value: "bottomleft" },
             { label: "Bottom right", value: "bottomright" },
+            { label: "Top center", value: "topcenter" },
+            { label: "Bottom center", value: "bottomcenter" },
+            { label: "Center left", value: "centerleft" },
+            { label: "Center right", value: "centerright" },
         ],
         default: "topright",
         onChange: liveUpdate,
@@ -67,6 +71,10 @@ const settings = definePluginSettings({
             { label: "Top right", value: "topright" },
             { label: "Bottom left", value: "bottomleft" },
             { label: "Bottom right", value: "bottomright" },
+            { label: "Top center", value: "topcenter" },
+            { label: "Bottom center", value: "bottomcenter" },
+            { label: "Center left", value: "centerleft" },
+            { label: "Center right", value: "centerright" },
         ],
         default: "topleft",
         onChange: liveUpdate,
@@ -108,7 +116,7 @@ const sendConfig = () => {
         config[key] = settings.store[key];
     }
 
-    ws.send(JSON.stringify({ cmd: "REGISTER_CONFIG", ...config }));
+    ws?.send(JSON.stringify({ cmd: "REGISTER_CONFIG", ...config }));
 };
 
 let ws: WebSocket | null = null;
