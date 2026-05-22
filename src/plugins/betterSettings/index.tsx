@@ -20,6 +20,11 @@ import fullHeightStyle from "./fullHeightContext.css?managed";
 const cl = classNameFactory("");
 const Classes = findCssClassesLazy("animating", "baseLayer", "bg", "layer", "layers");
 
+const SECTION_ICON_SOURCE: Record<string, string> = {
+    billing_section: "billing_sidebar_item",
+    app_section: "appearance_sidebar_item",
+};
+
 const settings = definePluginSettings({
     disableFade: {
         description: "Disable the crossfade animation",
@@ -195,9 +200,11 @@ export default definePlugin({
                     </Menu.MenuItem>
                 );
             } else if (key.endsWith("_section") && props.label) {
-                const firstChild = (props.children as any[])?.find(c => c?.props);
-                const iconLeft = firstChild?.props?.iconLeft;
-                const leadingAccessory = firstChild?.props?.leadingAccessory;
+                const children = (props.children as any[]) ?? [];
+                const preferred = SECTION_ICON_SOURCE[key];
+                const source = (preferred && children.find(c => c?.key === preferred)) || children.find(c => c?.props);
+                const iconLeft = source?.props?.iconLeft;
+                const leadingAccessory = source?.props?.leadingAccessory;
                 items.push(
                     <Menu.MenuItem
                         key={key}
