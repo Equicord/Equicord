@@ -315,7 +315,7 @@ export default definePlugin({
             // Billing settings
             find: ".BILLING_SECTION,",
             replacement: {
-                match: /(?<=buildLayout:\(\)=>)\[.+?\]/,
+                match: /(?<=#{intl::BILLING}\),buildLayout:\(\)=>)\[.+?\]/,
                 replace: "[]",
             },
             predicate: () => settings.store.removeBillingSettings,
