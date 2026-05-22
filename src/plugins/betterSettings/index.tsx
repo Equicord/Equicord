@@ -195,8 +195,17 @@ export default definePlugin({
                     </Menu.MenuItem>
                 );
             } else if (key.endsWith("_section") && props.label) {
+                const firstChild = (props.children as any[])?.find(c => c?.props);
+                const iconLeft = firstChild?.props?.iconLeft;
+                const leadingAccessory = firstChild?.props?.leadingAccessory;
                 items.push(
-                    <Menu.MenuItem key={key} label={props.label} id={props.label}>
+                    <Menu.MenuItem
+                        key={key}
+                        label={props.label}
+                        id={props.label}
+                        {...(iconLeft && { iconLeft })}
+                        {...(leadingAccessory && { leadingAccessory })}
+                    >
                         {this.transformSettingsEntries(props.children)}
                     </Menu.MenuItem>
                 );
