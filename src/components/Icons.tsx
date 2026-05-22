@@ -1028,7 +1028,7 @@ export function VencordIcon(props: IconProps) {
     return (
         <Icon
             {...props}
-            viewBox="0 0 27 27"
+            viewBox="0 0 96 96"
         >
             <path
                 fill={props.fill || "currentColor"}
