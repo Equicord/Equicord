@@ -6,7 +6,7 @@
 
 import { definePluginSettings } from "@api/Settings";
 import { disableStyle, enableStyle } from "@api/Styles";
-import { AppsIcon, CreditCardIcon, DeveloperIcon, EquicordIcon, GameControllerIcon } from "@components/Icons";
+import { AppsIcon, CreditCardIcon, DeveloperIcon, EquicordIcon, GameControllerIcon, MainSettingsIcon, ShieldIcon } from "@components/Icons";
 import { buildPluginMenuEntries, buildThemeMenuEntries } from "@equicordplugins/equicordToolbox/menu";
 import { Devs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
@@ -14,16 +14,21 @@ import { Logger } from "@utils/Logger";
 import definePlugin, { OptionType } from "@utils/types";
 import { findCssClassesLazy } from "@webpack";
 import { ComponentDispatch, FocusLock, Menu, useEffect, useRef } from "@webpack/common";
-import type { HTMLAttributes, ReactNode } from "react";
+import type { ComponentType, HTMLAttributes, ReactNode, SVGProps } from "react";
 
 import fullHeightStyle from "./fullHeightContext.css?managed";
 
 const cl = classNameFactory("");
 const Classes = findCssClassesLazy("animating", "baseLayer", "bg", "layer", "layers");
 
-const SECTION_ICON_SOURCE: Record<string, string> = {
-    billing_section: "billing_sidebar_item",
-    app_section: "appearance_sidebar_item",
+const SECTION_ICONS: Record<string, ComponentType<SVGProps<SVGSVGElement>>> = {
+    user_section: MainSettingsIcon,
+    equicord_section: EquicordIcon,
+    billing_section: CreditCardIcon,
+    app_section: AppsIcon,
+    activity_section: GameControllerIcon,
+    developer_section: DeveloperIcon,
+    staff_only_section: ShieldIcon,
 };
 
 const settings = definePluginSettings({
@@ -190,8 +195,6 @@ export default definePlugin({
             const { key, props } = item;
             if (!props) continue;
 
-            console.log(item);
-
             if (key === "equicord_plugins" || key === "equicord_themes") {
                 const children = key === "equicord_plugins"
                     ? buildPluginMenuEntries()
@@ -203,16 +206,14 @@ export default definePlugin({
                     </Menu.MenuItem>
                 );
             } else if (key.endsWith("_section") && props.label) {
-                const iconMap = {
-                    billing_section: CreditCardIcon,
-                    app_section: AppsIcon,
-                    equicord_section: EquicordIcon,
-                    activity_section: GameControllerIcon,
-                    developer_section: DeveloperIcon,
-                };
-
+                const iconLeft = SECTION_ICONS[key];
                 items.push(
-                    <Menu.MenuItem key={key} label={props.label} id={props.label} iconLeft={iconMap[key]}>
+                    <Menu.MenuItem
+                        key={key}
+                        label={props.label}
+                        id={props.label}
+                        {...(iconLeft && { iconLeft })}
+                    >
                         {this.transformSettingsEntries(props.children)}
                     </Menu.MenuItem>
                 );
