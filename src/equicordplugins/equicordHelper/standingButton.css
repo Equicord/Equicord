@@ -1,0 +1,9 @@
+.vc-eqh-standing {
+    color: currentColor;
+    transition: color 120ms ease;
+}
+
+:hover > .vc-eqh-standing,
+:hover .vc-eqh-standing {
+    color: var(--vc-eqh-standing-hover, currentColor);
+}
