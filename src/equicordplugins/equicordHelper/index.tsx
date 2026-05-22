@@ -55,7 +55,7 @@ function StandingButton() {
             tooltip={config.label}
             position="bottom"
             icon={props => <config.Icon {...props} className="vc-eqh-standing" style={{ "--vc-eqh-standing-hover": config.hoverColor } as React.CSSProperties} />}
-            onClick={() => SettingsRouter.openUserSettings("account_standing_panel")}
+            onClick={() => SettingsRouter.openUserSettings("account_standing_nested_category")}
         />
     );
 }
