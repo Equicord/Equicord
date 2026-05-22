@@ -52,6 +52,7 @@ Does NOT get merged:
    * SPDX-License-Identifier: GPL-3.0-or-later
    */
   ```
+  Header says `Vencord, a Discord client mod` even on new Equicord-only files. Equicord is a Vencord fork, upstream attribution is kept across the whole tree. Don't change it to "Equicord".
   Older files carry the full GPL preamble. Leave existing headers alone, don't rewrite them.
 - Folder per plugin. `src/plugins/<name>/index.tsx` or `src/equicordplugins/<name>/index.tsx`. Single-file plugins still get a folder.
 - Folder suffixes the build filters on: `.desktop`, `.web`, `.dev`, `.discordDesktop`, `.vesktop`, `.equibop`.
