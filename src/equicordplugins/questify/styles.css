@@ -21,6 +21,11 @@
     overflow: visible;
 }
 
+/* Prevent shifting in the progress subtitle. */
+[class*="questProgressHint_"] {
+    font-variant-numeric: tabular-nums;
+}
+
 /* Settings */
 
 .questify-setting {

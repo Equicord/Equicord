@@ -4,8 +4,6 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import "./styles.css";
-
 import { playAudio } from "@api/AudioPlayer";
 import { addServerListElement, removeServerListElement, ServerListRenderPosition } from "@api/ServerList";
 import { PlainSettings, Settings } from "@api/Settings";
@@ -26,6 +24,7 @@ import { rerenderQuests, useQuestRerender } from "./settings/rerender";
 import { disposeRestartTracking, initializeRestartTracking, promptToRestartIfDirty, setRestartDirty } from "./settings/restartTracking";
 import { settings } from "./settings/store";
 import { getSettingsModalOpen, initialQuestDataFetched, setInitialQuestDataFetched, setSettingsModalOpen } from "./state";
+import managedStyle from "./styles.css?managed";
 import { canAutoCompleteQuest, getActiveAutoCompletes, getQuestAutoCompleteProgress, getQuestButtonProps, getQuestPanelSubtitleText, hasEnabledAutoCompleteQuestTypes, processQuestForAutoComplete, resumeInterruptedAutoCompletes, setHeartbeatStackTracePatchSucceeded, setVideoProgressStackTracePatchSucceeded, stopAllAutoCompletes, stopAutoCompletesForRunningGames, stopQuestAutoComplete } from "./utils/completion";
 import { canOpenDevToolsWindow, fetchAndDispatchQuests, openDevToolsWindow, snakeToCamel } from "./utils/fetching";
 import { normalizeQuestName } from "./utils/filtering";
@@ -103,6 +102,7 @@ export default definePlugin({
     authors: [EquicordDevs.Etorix],
     dependencies: ["AudioPlayerAPI", "ServerListAPI"],
     startAt: StartAt.Init, // Needed in order to beat Read All Messages to inserting above the server list.
+    managedStyle,
     settings,
 
     canOpenDevToolsWindow,

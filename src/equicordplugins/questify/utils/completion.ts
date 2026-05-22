@@ -5,10 +5,10 @@
  */
 
 import type { PluginNative } from "@utils/types";
-import type { Quest } from "@vencord/discord-types";
+import type { Quest, User } from "@vencord/discord-types";
 import { QuestTaskType } from "@vencord/discord-types/enums";
 import { findByCodeLazy, findLazy } from "@webpack";
-import { FluxDispatcher, QuestStore, RestAPI, showToast, Toasts } from "@webpack/common";
+import { FluxDispatcher, QuestStore, RestAPI, showToast, Toasts, UserStore } from "@webpack/common";
 
 import { getCurrentUserId, getQuestifySettings } from "../settings/access";
 import { autoCompleteQuestTaskTypes, isDesktopCompatible } from "../settings/def";
@@ -75,6 +75,7 @@ type QuestCompletionStateTuple = [text: string | null, state: QuestCompletionSta
 
 interface QuestRewardItem {
     orbQuantity?: number;
+    premiumOrbQuantity?: number | null;
     messages?: {
         nameWithArticle?: string;
     };
@@ -89,7 +90,10 @@ const sendHeartbeat = findByCodeLazy(".QUESTS_HEARTBEAT(") as (options: {
     executableFingerprint?: unknown;
 }) => Promise<void>;
 export const enrollInQuest = findByCodeLazy('type:"QUESTS_ENROLL_BEGIN",') as (questId: string, options: QuestEnrollmentMetadata) => Promise<QuestEnrollResult>;
-
+const getQuestOrbQuantity = findByCodeLazy("premiumOrbQuantity??", "orbQuantity") as (
+    config: Quest["config"],
+    user: User | null | undefined
+) => number | null;
 const QuestCTA = findLazy(m => !!m?.START_QUEST && !!m?.ACCEPT_QUEST) as QuestCTAConstants;
 
 function resolveQuestCTA(taskType?: QuestTaskType): string | undefined {
@@ -511,7 +515,7 @@ export function getQuestPanelSubtitleText(quest: Quest): string | null {
     }
 
     const rewardItem = (quest.config.rewardsConfig.rewards[0] ?? null) as QuestRewardItem | null;
-    const orbsReward = rewardItem?.orbQuantity ?? 0;
+    const orbsReward = getQuestOrbQuantity(quest.config, UserStore.getCurrentUser()) ?? 0;
 
     if (orbsReward > 0) {
         return `${statusText} for ${orbsReward} Orbs.`;
