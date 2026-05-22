@@ -4,5 +4,5 @@
 }
 
 [role="button"]:hover > .vc-eqh-standing {
-    color: var(--vc-eqh-standing-hover, currentColor);
+    color: var(--vc-eqh-standing-hover, currentcolor);
 }
