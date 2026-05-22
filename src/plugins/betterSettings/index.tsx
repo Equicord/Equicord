@@ -6,6 +6,7 @@
 
 import { definePluginSettings } from "@api/Settings";
 import { disableStyle, enableStyle } from "@api/Styles";
+import { AppsIcon, CreditCardIcon, DeveloperIcon, EquicordIcon, GameControllerIcon } from "@components/Icons";
 import { buildPluginMenuEntries, buildThemeMenuEntries } from "@equicordplugins/equicordToolbox/menu";
 import { Devs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
@@ -189,6 +190,8 @@ export default definePlugin({
             const { key, props } = item;
             if (!props) continue;
 
+            console.log(item);
+
             if (key === "equicord_plugins" || key === "equicord_themes") {
                 const children = key === "equicord_plugins"
                     ? buildPluginMenuEntries()
@@ -200,19 +203,16 @@ export default definePlugin({
                     </Menu.MenuItem>
                 );
             } else if (key.endsWith("_section") && props.label) {
-                const children = (props.children as any[]) ?? [];
-                const preferred = SECTION_ICON_SOURCE[key];
-                const source = (preferred && children.find(c => c?.key === preferred)) || children.find(c => c?.props);
-                const iconLeft = source?.props?.iconLeft;
-                const leadingAccessory = source?.props?.leadingAccessory;
+                const iconMap = {
+                    billing_section: CreditCardIcon,
+                    app_section: AppsIcon,
+                    equicord_section: EquicordIcon,
+                    activity_section: GameControllerIcon,
+                    developer_section: DeveloperIcon,
+                };
+
                 items.push(
-                    <Menu.MenuItem
-                        key={key}
-                        label={props.label}
-                        id={props.label}
-                        {...(iconLeft && { iconLeft })}
-                        {...(leadingAccessory && { leadingAccessory })}
-                    >
+                    <Menu.MenuItem key={key} label={props.label} id={props.label} iconLeft={iconMap[key]}>
                         {this.transformSettingsEntries(props.children)}
                     </Menu.MenuItem>
                 );

@@ -56,7 +56,7 @@ function StandingButton() {
                 tooltip={config.label}
                 position="bottom"
                 icon={props => <config.Icon {...props} color={hovered ? config.hoverColor : "currentColor"} />}
-                onClick={() => SettingsRouter.openUserSettings("my_account_panel")}
+                onClick={() => SettingsRouter.openUserSettings("account_standing_panel")}
             />
         </div>
     );
