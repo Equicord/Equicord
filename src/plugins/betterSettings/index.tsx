@@ -12,16 +12,17 @@ import { Devs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
 import { Logger } from "@utils/Logger";
 import definePlugin, { OptionType } from "@utils/types";
+import { Icon } from "@vencord/discord-types";
 import { findCssClassesLazy } from "@webpack";
 import { ComponentDispatch, FocusLock, Menu, useEffect, useRef } from "@webpack/common";
-import type { ComponentType, HTMLAttributes, ReactNode, SVGProps } from "react";
+import type { HTMLAttributes, ReactNode } from "react";
 
 import fullHeightStyle from "./fullHeightContext.css?managed";
 
 const cl = classNameFactory("");
 const Classes = findCssClassesLazy("animating", "baseLayer", "bg", "layer", "layers");
 
-const SECTION_ICONS: Record<string, ComponentType<SVGProps<SVGSVGElement>>> = {
+const SECTION_ICONS: Record<string, Icon> = {
     user_section: MainSettingsIcon,
     equicord_section: EquicordIcon,
     billing_section: CreditCardIcon,
