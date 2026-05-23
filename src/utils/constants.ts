@@ -1339,7 +1339,7 @@ export const EquicordDevs = Object.freeze({
     },
     LOSTSTR: {
         name: "LOSTSTR",
-        id: 136630586n
+        id: 681465758127226900n
     },
 } satisfies Record<string, Dev>);
 
