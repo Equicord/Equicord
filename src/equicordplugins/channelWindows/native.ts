@@ -170,7 +170,10 @@ export async function openConversationWindow(event: IpcMainInvokeEvent, url: str
     win.on("closed", () => windows.delete(windowKey));
     win.webContents.setUserAgent(event.sender.getUserAgent());
     win.webContents.setWindowOpenHandler(({ url }) => {
-        void shell.openExternal(url);
+        try {
+            const parsed = new URL(url);
+            if (parsed.protocol === "https:" || parsed.protocol === "http:") void shell.openExternal(url);
+        } catch { /* invalid URL, ignore */ }
         return { action: "deny" };
     });
 
