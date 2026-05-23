@@ -104,7 +104,7 @@ export default definePlugin({
 
         MESSAGE_UPDATE({ message }: { message: Message; }) {
             const oldContent = messageCache.get(message.id);
-            if (settings.store.editDiff && oldContent !== undefined && oldContent !== message.content) {
+            if (settings.plain.editDiff && oldContent !== undefined && oldContent !== message.content) {
                 const history = editHistory.get(message.id);
                 if (!history) {
                     if (editHistory.size >= MAX_CACHE_SIZE) {
@@ -120,7 +120,7 @@ export default definePlugin({
         },
 
         CHANNEL_SELECT({ channelId }: { channelId: string; }) {
-            if (!channelId || !settings.store.channelBrief) return;
+            if (!channelId || !settings.plain.channelBrief) return;
 
             const prev = channelVisitData.get(channelId);
             const msgsArray = MessageStore.getMessages(channelId)?._array ?? [];
@@ -130,8 +130,8 @@ export default definePlugin({
                 const newCount = newMsgs.length;
                 const elapsed = Math.floor((Date.now() - prev.time) / 60000);
 
-                if (newCount > 0 && elapsed >= settings.store.briefThresholdMinutes) {
-                    const previewCount = Math.max(1, settings.store.briefPreviewCount ?? 5);
+                if (newCount > 0 && elapsed >= settings.plain.briefThresholdMinutes) {
+                    const previewCount = Math.max(1, settings.plain.briefPreviewCount ?? 5);
                     const preview = newMsgs.slice(-previewCount);
                     openModal(props => (
                         <ErrorBoundary>
