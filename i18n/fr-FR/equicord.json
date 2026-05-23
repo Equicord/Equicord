@@ -324,6 +324,7 @@
             "clipsLink": "Modifiez les options de FPS et de durée dans les paramètres des clips !",
             "enableAdvancedSignals": "Activer les signaux de clip avancés (déclencheurs de clips automatiques)",
             "enableScreenshotKeybind": "Activer la fonction de raccourci clavier de capture d'écran",
+            "enableSpeakingIndicators": "Activez les indications de paroles",
             "enableVoiceOnlyClips": "Activer les clips vocaux uniquement (audio sans vidéo)",
             "ignorePlatformRestriction": "Autoriser le découpage restreint à la plate-forme (peut provoquer des erreurs de sauvegarde)",
             "richPresenceTagging": "Quand les clips doivent-ils être étiquetés avec la Rich Presence actuelle ?",
