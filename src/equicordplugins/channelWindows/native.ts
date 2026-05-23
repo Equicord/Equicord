@@ -17,6 +17,7 @@ export interface ConversationWindowOptions {
     autoHideMenuBar: boolean;
     backgroundColor: string;
     compactMode: boolean;
+    customCss: string;
     devTools: boolean;
     focusExistingWindow: boolean;
     height: number;
@@ -31,6 +32,7 @@ const defaultOptions: ConversationWindowOptions = {
     autoHideMenuBar: true,
     backgroundColor: "#313338",
     compactMode: true,
+    customCss: "",
     devTools: false,
     focusExistingWindow: true,
     height: 800,
@@ -40,51 +42,6 @@ const defaultOptions: ConversationWindowOptions = {
     title: "Discord",
     width: 1100
 };
-
-const compactConversationCss = `
-    body {
-        overflow: hidden !important;
-    }
-
-    #app-mount {
-        height: 100vh !important;
-        width: 100vw !important;
-    }
-
-    nav[aria-label="Servers"],
-    [data-list-id="guildsnav"],
-    [aria-label="Private channels"],
-    [aria-label="Channels"],
-    [class*="guilds_"],
-    [class*="sidebar_"],
-    [class*="sidebarList_"],
-    [class*="membersWrap_"],
-    [class*="members_"],
-    [class*="profilePanel_"],
-    [class*="nowPlayingColumn_"] {
-        display: none !important;
-    }
-
-    [class*="base_"] > [class*="content_"] {
-        display: flex !important;
-        left: 0 !important;
-        margin-left: 0 !important;
-        max-width: none !important;
-        width: 100vw !important;
-    }
-
-    #app-mount [class*="base_"] > [class*="content_"] > [class*="chat_"] {
-        flex: 1 1 auto !important;
-        left: 0 !important;
-        margin-left: 0 !important;
-        max-width: none !important;
-        width: 100vw !important;
-    }
-
-    #app-mount [class*="base_"] > [class*="content_"] > [class*="chat_"] [class*="chatContent_"] {
-        flex: 1 1 auto !important;
-    }
-`;
 
 function isAllowedChannelUrl(url: string, senderUrl: string) {
     try {
@@ -113,6 +70,14 @@ function sanitizeColor(value: string) {
     return /^#[\da-f]{6}$/i.test(value) ? value : defaultOptions.backgroundColor;
 }
 
+function isSafeExternalUrl(url: string) {
+    try {
+        return new URL(url).protocol === "https:";
+    } catch {
+        return false;
+    }
+}
+
 function sanitizeOptions(options: Partial<ConversationWindowOptions> | null | undefined): ConversationWindowOptions {
     const merged = { ...defaultOptions, ...options };
 
@@ -120,6 +85,7 @@ function sanitizeOptions(options: Partial<ConversationWindowOptions> | null | un
         autoHideMenuBar: merged.autoHideMenuBar,
         backgroundColor: sanitizeColor(merged.backgroundColor),
         compactMode: merged.compactMode,
+        customCss: typeof merged.customCss === "string" ? merged.customCss : defaultOptions.customCss,
         devTools: merged.devTools,
         focusExistingWindow: merged.focusExistingWindow,
         height: clampInteger(merged.height, defaultOptions.height, 320, 2160),
@@ -132,57 +98,76 @@ function sanitizeOptions(options: Partial<ConversationWindowOptions> | null | un
 }
 
 export async function openConversationWindow(event: IpcMainInvokeEvent, url: string, channelId: string, rawOptions?: Partial<ConversationWindowOptions> | null): Promise<boolean> {
-    if (event.sender.isDestroyed()) return false;
-    if (!isAllowedChannelUrl(url, event.sender.getURL())) return false;
+    let createdWindow: BrowserWindow | null = null;
+    let windowKey: string | null = null;
 
-    const options = sanitizeOptions(rawOptions);
-    const existing = windows.get(channelId);
-    if (options.reuseExistingWindow && existing && !existing.isDestroyed()) {
-        if (existing.webContents.getURL() !== url) await existing.loadURL(url);
-        if (options.focusExistingWindow) existing.focus();
+    try {
+        if (event.sender.isDestroyed()) return false;
+        if (!isAllowedChannelUrl(url, event.sender.getURL())) return false;
+
+        const options = sanitizeOptions(rawOptions);
+        const existing = windows.get(channelId);
+        if (options.reuseExistingWindow && existing && !existing.isDestroyed()) {
+            if (existing.webContents.getURL() !== url) await existing.loadURL(url);
+            if (options.focusExistingWindow) existing.focus();
+            return true;
+        }
+
+        windowKey = options.reuseExistingWindow
+            ? channelId
+            : `${channelId}-${Date.now()}-${windows.size}`;
+
+        const win = new BrowserWindow({
+            width: options.width,
+            height: options.height,
+            minWidth: options.minWidth,
+            minHeight: options.minHeight,
+            title: options.title,
+            backgroundColor: options.backgroundColor,
+            autoHideMenuBar: options.autoHideMenuBar,
+            show: false,
+            webPreferences: {
+                backgroundThrottling: false,
+                contextIsolation: true,
+                devTools: options.devTools,
+                preload: process.env.DISCORD_PRELOAD,
+                sandbox: false,
+                session: event.sender.session
+            }
+        });
+
+        createdWindow = win;
+        windows.set(windowKey, win);
+        win.on("closed", () => {
+            if (windowKey) windows.delete(windowKey);
+        });
+        win.webContents.setUserAgent(event.sender.getUserAgent());
+        win.webContents.setWindowOpenHandler(({ url }) => {
+            if (isSafeExternalUrl(url)) void shell.openExternal(url);
+            return { action: "deny" };
+        });
+
+        win.webContents.once("dom-ready", () => {
+            void applyCompactCssAndShow(win, options);
+        });
+
+        await win.loadURL(url);
         return true;
+    } catch {
+        if (createdWindow && !createdWindow.isDestroyed()) createdWindow.destroy();
+        if (windowKey) windows.delete(windowKey);
+        return false;
+    }
+}
+
+async function applyCompactCssAndShow(win: BrowserWindow, options: ConversationWindowOptions) {
+    try {
+        if (options.compactMode && options.customCss.trim()) await win.webContents.insertCSS(options.customCss);
+    } catch {
+        if (win.isDestroyed()) return;
     }
 
-    const windowKey = options.reuseExistingWindow
-        ? channelId
-        : `${channelId}-${Date.now()}-${windows.size}`;
-
-    const win = new BrowserWindow({
-        width: options.width,
-        height: options.height,
-        minWidth: options.minWidth,
-        minHeight: options.minHeight,
-        title: options.title,
-        backgroundColor: options.backgroundColor,
-        autoHideMenuBar: options.autoHideMenuBar,
-        show: false,
-        webPreferences: {
-            backgroundThrottling: false,
-            contextIsolation: true,
-            devTools: options.devTools,
-            preload: process.env.DISCORD_PRELOAD,
-            sandbox: false,
-            session: event.sender.session
-        }
-    });
-
-    windows.set(windowKey, win);
-    win.on("closed", () => windows.delete(windowKey));
-    win.webContents.setUserAgent(event.sender.getUserAgent());
-    win.webContents.setWindowOpenHandler(({ url }) => {
-        try {
-            const parsed = new URL(url);
-            if (parsed.protocol === "https:" || parsed.protocol === "http:") void shell.openExternal(url);
-        } catch { /* invalid URL, ignore */ }
-        return { action: "deny" };
-    });
-
-    win.webContents.once("dom-ready", async () => {
-        if (options.compactMode) await win.webContents.insertCSS(compactConversationCss);
-        win.show();
-        win.focus();
-    });
-
-    await win.loadURL(url);
-    return true;
+    if (win.isDestroyed()) return;
+    win.show();
+    win.focus();
 }

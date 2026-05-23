@@ -7,8 +7,10 @@
 import { findGroupChildrenByChildId, type NavContextMenuPatchCallback } from "@api/ContextMenu";
 import { definePluginSettings } from "@api/Settings";
 import { EquicordDevs } from "@utils/constants";
+import { classNameToSelector } from "@utils/css";
 import definePlugin, { OptionType, type PluginNative } from "@utils/types";
 import type { Channel, Message } from "@vencord/discord-types";
+import { findCssClassesLazy } from "@webpack";
 import { ChannelStore, Menu, React, showToast, Toasts } from "@webpack/common";
 import type { ReactElement } from "react";
 
@@ -16,6 +18,14 @@ import type { ConversationWindowOptions } from "./native";
 
 const Native = VencordNative.pluginHelpers.ChannelWindows as PluginNative<typeof import("./native")>;
 const middleClickButton = 1;
+const GuildClasses = findCssClassesLazy("guilds");
+const SidebarClasses = findCssClassesLazy("sidebar");
+const SidebarListClasses = findCssClassesLazy("sidebarList");
+const MemberClasses = findCssClassesLazy("membersWrap", "members");
+const ProfilePanelClasses = findCssClassesLazy("profilePanel");
+const NowPlayingClasses = findCssClassesLazy("nowPlayingColumn");
+const LayoutClasses = findCssClassesLazy("base", "content");
+const ChatClasses = findCssClassesLazy("chat", "chatContent");
 
 const settings = definePluginSettings({
     openNativeWindow: {
@@ -124,6 +134,70 @@ function getChannelUrl(channel: Channel) {
     return new URL(`/channels/${channel.guild_id || "@me"}/${channel.id}`, window.location.origin).toString();
 }
 
+function toSelector(className: string | undefined) {
+    return className ? classNameToSelector(className) : null;
+}
+
+function getCompactConversationCss() {
+    const hiddenSelectors = [
+        "nav[aria-label=\"Servers\"]",
+        "[data-list-id=\"guildsnav\"]",
+        "[aria-label=\"Private channels\"]",
+        "[aria-label=\"Channels\"]",
+        "div[data-collapsed]:has([aria-label=\"Private channels\"])",
+        "div[data-collapsed]:has([aria-label=\"Channels\"])",
+        toSelector(GuildClasses.guilds),
+        toSelector(SidebarClasses.sidebar),
+        toSelector(SidebarListClasses.sidebarList),
+        toSelector(MemberClasses.membersWrap),
+        toSelector(MemberClasses.members),
+        toSelector(ProfilePanelClasses.profilePanel),
+        toSelector(NowPlayingClasses.nowPlayingColumn)
+    ].filter((selector): selector is string => Boolean(selector));
+    const base = toSelector(LayoutClasses.base);
+    const content = toSelector(LayoutClasses.content);
+    const chat = toSelector(ChatClasses.chat);
+    const chatContent = toSelector(ChatClasses.chatContent);
+
+    return `
+        body {
+            overflow: hidden !important;
+        }
+
+        #app-mount {
+            height: 100vh !important;
+            width: 100vw !important;
+        }
+
+        ${hiddenSelectors.join(",\n        ")} {
+            display: none !important;
+        }
+
+        ${base && content ? `
+        ${base} > ${content} {
+            display: flex !important;
+            left: 0 !important;
+            margin-left: 0 !important;
+            max-width: none !important;
+            width: 100vw !important;
+        }` : ""}
+
+        ${base && content && chat ? `
+        #app-mount ${base} > ${content} > ${chat} {
+            flex: 1 1 auto !important;
+            left: 0 !important;
+            margin-left: 0 !important;
+            max-width: none !important;
+            width: 100vw !important;
+        }` : ""}
+
+        ${base && content && chat && chatContent ? `
+        #app-mount ${base} > ${content} > ${chat} ${chatContent} {
+            flex: 1 1 auto !important;
+        }` : ""}
+    `;
+}
+
 function getWindowOptions(): ConversationWindowOptions {
     const {
         autoHideMenuBar,
@@ -143,6 +217,7 @@ function getWindowOptions(): ConversationWindowOptions {
         autoHideMenuBar,
         backgroundColor,
         compactMode,
+        customCss: compactMode ? getCompactConversationCss() : "",
         devTools,
         focusExistingWindow,
         height: clampInteger(windowHeight, 800, 320, 2160),
