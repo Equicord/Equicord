@@ -14,9 +14,7 @@ import type { ReactElement } from "react";
 
 import type { ConversationWindowOptions } from "./native";
 
-const Native = typeof VencordNative === "undefined"
-    ? undefined
-    : (VencordNative.pluginHelpers?.ChannelWindows ?? VencordNative.pluginHelpers?.ConversationWindows) as PluginNative<typeof import("./native")> | undefined;
+const Native = VencordNative.pluginHelpers.ChannelWindows as PluginNative<typeof import("./native")>;
 const middleClickButton = 1;
 
 const settings = definePluginSettings({
