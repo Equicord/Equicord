@@ -1,0 +1,158 @@
+/* MessageInsight plugin styles */
+
+.vc-messageinsight-diff-view {
+    font-family: var(--font-code);
+    font-size: 14px;
+    background: var(--background-secondary);
+    padding: 10px 14px;
+    border-radius: 4px;
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+    line-height: 1.6;
+}
+
+.vc-messageinsight-diff-add {
+    background: rgb(59 165 92 / 25%);
+    color: var(--text-positive);
+    border-radius: 2px;
+    padding: 0 2px;
+}
+
+.vc-messageinsight-diff-remove {
+    background: rgb(237 66 69 / 25%);
+    color: var(--text-danger);
+    text-decoration: line-through;
+    border-radius: 2px;
+    padding: 0 2px;
+}
+
+.vc-messageinsight-reply-item {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    padding: 10px 14px;
+    border-radius: 4px;
+    margin-bottom: 4px;
+    background: var(--background-secondary);
+    cursor: pointer;
+    transition: background 0.15s ease;
+    border: none;
+    width: 100%;
+    text-align: left;
+    font: inherit;
+    color: inherit;
+}
+
+.vc-messageinsight-reply-item:hover {
+    background: var(--background-modifier-hover);
+}
+
+.vc-messageinsight-reply-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.vc-messageinsight-reply-avatar {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.vc-messageinsight-reply-author {
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--header-primary);
+}
+
+.vc-messageinsight-reply-time {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-left: 2px;
+}
+
+.vc-messageinsight-reply-attachment {
+    font-size: 12px;
+    line-height: 1;
+}
+
+.vc-messageinsight-reply-content {
+    font-size: 13px;
+    color: var(--text-muted);
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+}
+
+.vc-messageinsight-brief-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 8px 12px;
+    border-radius: 4px;
+    margin-bottom: 4px;
+    background: var(--background-secondary);
+}
+
+.vc-messageinsight-brief-content-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+.vc-messageinsight-brief-jump {
+    background: none;
+    border: none;
+    color: var(--text-link);
+    cursor: pointer;
+    font-size: 14px;
+    padding: 0 4px;
+    flex-shrink: 0;
+    line-height: 1.4;
+    border-radius: 3px;
+    transition: background 0.1s ease;
+}
+
+.vc-messageinsight-brief-jump:hover {
+    background: var(--background-modifier-hover);
+}
+
+.vc-messageinsight-modal-body {
+    padding: 16px 0;
+}
+
+.vc-messageinsight-brief-body {
+    padding: 8px 0 16px;
+}
+
+.vc-messageinsight-empty-text {
+    color: var(--text-muted);
+}
+
+.vc-messageinsight-edit-entry {
+    margin-bottom: 16px;
+}
+
+.vc-messageinsight-edit-label {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+}
+
+.vc-messageinsight-meta-text {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+}
+
+.vc-messageinsight-reply-count {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+}
+
+.vc-messageinsight-brief-header {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+}
