@@ -30,11 +30,11 @@ export default definePlugin({
     if (vcModule?.handleVoiceConnect) {
       const originalFn = vcModule.handleVoiceConnect;
       vcModule.handleVoiceConnect = Object.assign(
-        (...args: any[]) =>
+        (...args: unknown[]) =>
           originalFn.call(
             vcModule,
             {
-              ...args[0],
+              ...(args[0] as Record<string, unknown>),
               bypassChangeModal: true,
             },
             ...args.slice(1),
