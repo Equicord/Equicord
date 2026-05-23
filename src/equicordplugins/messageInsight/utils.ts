@@ -18,13 +18,13 @@ export function sanitizeContent(content: string): string {
         });
 }
 
-export function avatarUrl(author: { id: string; avatar?: string | null; }): string {
+export function avatarUrl(author: { id: string; }): string {
     const user = UserStore.getUser(author.id);
     if (user) return IconUtils.getUserAvatarURL(user, false, 32);
     return IconUtils.getDefaultAvatarURL(author.id);
 }
 
-export function formatTime(timestamp: string | Date | undefined): string {
+export function formatTime(timestamp: Date | string | undefined): string {
     if (!timestamp) return "";
     try {
         return new Date(timestamp).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });

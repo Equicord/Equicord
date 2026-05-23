@@ -10,7 +10,8 @@ import { addMessagePopoverButton, removeMessagePopoverButton } from "@api/Messag
 import ErrorBoundary from "@components/ErrorBoundary";
 import { EquicordDevs } from "@utils/constants";
 import definePlugin from "@utils/types";
-import { ChannelStore, FluxDispatcher, MessageStore, openModal, React } from "@webpack/common";
+import { Message } from "@vencord/discord-types";
+import { ChannelStore, MessageStore, openModal, React } from "@webpack/common";
 
 import { ChannelBriefModal } from "./ChannelBrief";
 import { EditDiffModal } from "./EditDiff";
@@ -25,67 +26,6 @@ const editHistory = new Map<string, string[]>();
 const messageCache = new Map<string, string>();
 // channelId -> { lastVisitTime, messageCount }
 const channelVisitData = new Map<string, { time: number; count: number; }>();
-
-function onMessageCreate({ message }: any) {
-    if (message?.id && message.content !== undefined) {
-        if (messageCache.size >= MAX_CACHE_SIZE) {
-            messageCache.delete(messageCache.keys().next().value!);
-        }
-        messageCache.set(message.id, message.content);
-    }
-}
-
-function onMessageUpdate({ message }: any) {
-    if (!settings.store.editDiff) return;
-    if (!message?.id || message.content === undefined) return;
-
-    const oldContent = messageCache.get(message.id);
-    if (oldContent !== undefined && oldContent !== message.content) {
-        const history = editHistory.get(message.id);
-        if (!history) {
-            if (editHistory.size >= MAX_CACHE_SIZE) {
-                editHistory.delete(editHistory.keys().next().value!);
-            }
-            editHistory.set(message.id, [oldContent, message.content]);
-        } else {
-            history.push(message.content);
-        }
-    }
-    messageCache.set(message.id, message.content);
-}
-
-function onChannelSelect({ channelId }: any) {
-    if (!channelId || !settings.store.channelBrief) return;
-
-    const prev = channelVisitData.get(channelId);
-    const msgsArray = MessageStore.getMessages(channelId)?._array ?? [];
-
-    if (prev) {
-        const newMsgs = msgsArray.filter(m => {
-            const ts = Number(new Date(m.timestamp.toString()));
-            return !isNaN(ts) && ts > prev.time;
-        });
-        const newCount = newMsgs.length;
-        const elapsed = Math.floor((Date.now() - prev.time) / 60000);
-
-        if (newCount > 0 && elapsed >= settings.store.briefThresholdMinutes) {
-            const previewCount = Math.max(1, settings.store.briefPreviewCount ?? 5);
-            const preview = newMsgs.slice(-previewCount);
-            openModal(props => (
-                <ErrorBoundary>
-                    <ChannelBriefModal
-                        modalProps={props}
-                        newMessages={preview}
-                        totalCount={newCount}
-                        elapsed={elapsed}
-                    />
-                </ErrorBoundary>
-            ));
-        }
-    }
-
-    channelVisitData.set(channelId, { time: Date.now(), count: msgsArray.length });
-}
 
 function EditDiffIcon() {
     return (
@@ -103,7 +43,7 @@ function ReplyTreeIcon() {
     );
 }
 
-function renderEditDiffButton(message: any) {
+function renderEditDiffButton(message: Message) {
     if (!settings.store.editDiff) return null;
     const history = editHistory.get(message.id);
     if (!history || history.length < 2) return null;
@@ -123,7 +63,7 @@ function renderEditDiffButton(message: any) {
     };
 }
 
-function renderReplyTreeButton(message: any) {
+function renderReplyTreeButton(message: Message) {
     if (!settings.store.replyTree) return null;
 
     return {
@@ -134,7 +74,7 @@ function renderReplyTreeButton(message: any) {
         channel: ChannelStore.getChannel(message.channel_id),
         onClick: () => {
             const replies = (MessageStore.getMessages(message.channel_id)?._array ?? []).filter(
-                (m: any) => m.messageReference?.message_id === message.id
+                m => m.messageReference?.message_id === message.id
             );
             openModal(props => (
                 <ErrorBoundary>
@@ -153,20 +93,71 @@ export default definePlugin({
     settings,
     dependencies: ["MessagePopoverAPI"],
 
+    flux: {
+        MESSAGE_CREATE({ message }: { message: Message; }) {
+            if (messageCache.size >= MAX_CACHE_SIZE) {
+                const oldest = messageCache.keys().next().value;
+                if (oldest !== undefined) messageCache.delete(oldest);
+            }
+            messageCache.set(message.id, message.content);
+        },
+
+        MESSAGE_UPDATE({ message }: { message: Message; }) {
+            const oldContent = messageCache.get(message.id);
+            if (settings.store.editDiff && oldContent !== undefined && oldContent !== message.content) {
+                const history = editHistory.get(message.id);
+                if (!history) {
+                    if (editHistory.size >= MAX_CACHE_SIZE) {
+                        const oldest = editHistory.keys().next().value;
+                        if (oldest !== undefined) editHistory.delete(oldest);
+                    }
+                    editHistory.set(message.id, [oldContent, message.content]);
+                } else {
+                    history.push(message.content);
+                }
+            }
+            messageCache.set(message.id, message.content);
+        },
+
+        CHANNEL_SELECT({ channelId }: { channelId: string; }) {
+            if (!channelId || !settings.store.channelBrief) return;
+
+            const prev = channelVisitData.get(channelId);
+            const msgsArray = MessageStore.getMessages(channelId)?._array ?? [];
+
+            if (prev) {
+                const newMsgs = msgsArray.filter(m => m.timestamp.getTime() > prev.time);
+                const newCount = newMsgs.length;
+                const elapsed = Math.floor((Date.now() - prev.time) / 60000);
+
+                if (newCount > 0 && elapsed >= settings.store.briefThresholdMinutes) {
+                    const previewCount = Math.max(1, settings.store.briefPreviewCount ?? 5);
+                    const preview = newMsgs.slice(-previewCount);
+                    openModal(props => (
+                        <ErrorBoundary>
+                            <ChannelBriefModal
+                                modalProps={props}
+                                newMessages={preview}
+                                totalCount={newCount}
+                                elapsed={elapsed}
+                            />
+                        </ErrorBoundary>
+                    ));
+                }
+            }
+
+            channelVisitData.set(channelId, { time: Date.now(), count: msgsArray.length });
+        },
+    },
+
     start() {
         addMessagePopoverButton("MessageInsight-editDiff", renderEditDiffButton, EditDiffIcon);
         addMessagePopoverButton("MessageInsight-replyTree", renderReplyTreeButton, ReplyTreeIcon);
-        FluxDispatcher.subscribe("MESSAGE_CREATE", onMessageCreate);
-        FluxDispatcher.subscribe("MESSAGE_UPDATE", onMessageUpdate);
-        FluxDispatcher.subscribe("CHANNEL_SELECT", onChannelSelect);
     },
 
     stop() {
         removeMessagePopoverButton("MessageInsight-editDiff");
         removeMessagePopoverButton("MessageInsight-replyTree");
-        FluxDispatcher.unsubscribe("MESSAGE_CREATE", onMessageCreate);
-        FluxDispatcher.unsubscribe("MESSAGE_UPDATE", onMessageUpdate);
-        FluxDispatcher.unsubscribe("CHANNEL_SELECT", onChannelSelect);
         editHistory.clear();
         messageCache.clear();
         channelVisitData.clear();
