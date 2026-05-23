@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { Devs } from "@utils/constants";
+import { EquicordDevs } from "@utils/constants";
 import definePlugin from "@utils/types";
 import { findByProps } from "@webpack";
 
@@ -13,7 +13,7 @@ export default definePlugin({
   name: "BetterAudioDefaults",
   description:
     "Enables Studio Profile and QoS while disabling audio attenuation and VC-switching/mic silence warnings.",
-  authors: [Devs.greyxp1],
+  authors: [EquicordDevs.greyxp1],
   tags: ["Voice", "Utility"],
 
   start() {
