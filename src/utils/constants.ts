@@ -657,13 +657,13 @@ export const Devs = /* #__PURE__*/ Object.freeze({
         name: "prism",
         id: 390884143749136386n,
     },
+} satisfies Record<string, Dev>);
+
+export const EquicordDevs = Object.freeze({
     greyxp1: {
         name: "greyxp1",
         id: 1233920168196046892n,
     },
-} satisfies Record<string, Dev>);
-
-export const EquicordDevs = Object.freeze({
     nobody: {
         name: "nobody",
         id: 0n
