@@ -457,13 +457,45 @@
     "decor": {
         "accessFromProfiles": "Vous pouvez également accéder aux décorations Décor depuis la page {link}.",
         "agreedToGuidelines": "Accepté les directives",
+        "alreadyPending": "Vous avez une décoration en attente d'approbation.",
+        "apply": "Appliquer",
         "baseUrl": "URL de l’API de Decor",
+        "browse": "Naviguer",
         "changeDecoration": "Changer la décoration",
+        "chooseAFile": "Choisissez un fichier",
+        "confirmLogOut": "Es-tu sur de vouloir te déconnecter de Decor?",
+        "continue": "Continuez",
+        "copyHash": "Copier le hash des décorations.",
+        "copyPresetId": "Copier l'identifiant du préréglage",
+        "createDecoration": "Créer une décoration",
+        "createdBy": "Créer  par",
+        "decorDiscordServer": "Serveur Discord de Decor.",
+        "delete": "Supprimer",
+        "deleteConfirm": "Es-tu sur de vouloir supprimer {name}?",
+        "deleteDecoration": "Supprimer la décoration.",
+        "deleteInstructions": "Tu peut supprimer tes décorations en faisant un clic droit dessus.",
         "description": "Créez et utilisez vos propres décorations d'avatar personnalisées ou choisissez votre favori parmi les préréglages.",
+        "discordServer": "Serveur Discord",
+        "discordServerNotice": "Pour recevoir des mises à jour sur l'approbation de votre décoration, rejoignez {link} et autorisez les messages privés.",
+        "discordTooltip": "Rejoingnez le Serveur Discord de Decor pour avoir des notification sur les mises a jours de tes décorations et quand des nouvelles options prédéfinis sont disponibles.",
         "enableAndRestart": "Activez Décor et redémarrez votre client pour modifier la décoration de votre avatar.",
+        "file": "Fichier",
+        "fileNotice": "Le fichier doit être APNG ou PNG.",
+        "guidelinesAgreementNotice": "En soumettant une décoration, vous acceptez de {guidelines}. Le non-respect de ces rêgles peut entraîner la suspension de votre compte et vous empêcher de créer d'autres décorations à l'avenir.",
+        "guidelinesNotice": "Faites attention a que votre décoration ne viole pas {guidelines} avant de l'envoyer.",
+        "holdOn": "Patientez",
+        "logOut": "Se déconnecter",
+        "name": "Nom",
+        "nameNotice": "Ce nom sera utilisé pour identifier cette décoration.",
+        "options": "Options de decorations",
+        "pendingReview": "En attente d'approbation.",
+        "presetPart": "Fait partie du préréglage {name}",
         "profilesLink": "Profils",
         "removeDecoration": "Supprimer la décoration",
-        "title": "Décor"
+        "submitForReview": "Envoyer pour être approuvé.",
+        "theGuidelines": "les rêgles",
+        "title": "Décor",
+        "yourDecorations": "Tes décorations"
     },
     "devCompanion": {
         "description": "Plugin Dev Companion. Veuillez signaler tout dysfonctionnement ou comportement étrange (probablement un bug) à sadan, soit par ping, soit par message privé, merci !",
@@ -510,6 +542,7 @@
     },
     "expressionCloner": {
         "cloneEmoji": "Cloner l'émoji",
+        "cloneName": "Clonez {name}",
         "cloneSticker": "Cloner l’autocollant",
         "cloneTo": "Cloner vers {guild}",
         "clonedSuccess": "Clonage réussi de {name} vers {guild} !",
@@ -537,6 +570,7 @@
             "body3": "Êtes-vous sûr de vouloir envoyer ce message ? Vos articles FakeNitro apparaîtront uniquement sous forme de lien.",
             "disableNotice": "Vous pouvez désactiver cet avis dans les paramètres du plugin."
         },
+        "ok": "OK",
         "sendAnyway": "Envoyer quand même",
         "settings": {
             "disableEmbedPermissionCheck": "S'il faut désactiver la vérification des autorisations d'intégration lors de l'envoi de faux emojis et autocollants",
@@ -1026,6 +1060,7 @@
             "separatedDiffs": "Ajout et suppression séparés dans les différences pour un différentiel plus lisible",
             "showEditDiffs": "Afficher les différences visuelles entre les versions de messages modifiés"
         },
+        "showDiff": "Affichez les changements",
         "toggleDeletedHighlight": "Basculer la surbrillance supprimée"
     },
     "messagePopoverAPI": {
@@ -1445,6 +1480,7 @@
         "nevermind": "Tout compte fait, non.",
         "newReviews": "Vous avez de nouveaux avis sur votre profil !",
         "noBlockedUsers": "Aucun utilisateur bloqué.",
+        "noReviewsYet": "Aucun avis pour l'instant.",
         "notLoggedIn": "Vous n'êtes pas connecté à ReviewDB !",
         "ok": "D'accord",
         "readMore": "En savoir plus",
@@ -1470,6 +1506,7 @@
         },
         "system": "Système",
         "unblockUser": "Débloquer l'utilisateur",
+        "userOptedOut": "L'utilisateur a demandé de ne plus faire partie de reviewDB.",
         "userReviews": "Avis des utilisateurs",
         "viewReviews": "Voir les avis"
     },
@@ -2149,6 +2186,7 @@
         "settings": {
             "clickMethodDescription": "Modifiez le bouton pour afficher le contenu/les données brutes de n'importe quel message.",
             "leftClick": "Clic gauche pour afficher le contenu brut.",
+            "messageContextMenu": "Affichez dans le menu des messages.",
             "rightClick": "Faites un clic droit pour afficher le contenu brut."
         },
         "viewRaw": "Voir brut",
