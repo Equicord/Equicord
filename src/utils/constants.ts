@@ -659,7 +659,7 @@ export const Devs = /* #__PURE__*/ Object.freeze({
     },
     greyxp1: {
         name: "greyxp1",
-        id: 1233920168196046892n
+        id: 1233920168196046892n,
     },
 } satisfies Record<string, Dev>);
 
