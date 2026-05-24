@@ -94,7 +94,7 @@ export default definePlugin({
                 // Add a custom class to identify the quick reactions have been modified and a CSS variable for the number of columns to display
                 {
                     match: /className:(\i\.\i),(?=children:)/,
-                    replace: "className:\"vc-better-quick-react \"+($self.settings.store.compactMode?\"vc-better-quick-react-compact \":\"\")+$1,style:{\"--vc-better-quick-react-columns\":$self.settings.store.columns},"
+                    replace: 'className:"vc-better-quick-react "+($self.settings.store.compactMode?"vc-better-quick-react-compact ":"")+$1,style:{"--vc-better-quick-react-columns":$self.settings.store.columns},'
                 },
                 // Scroll handler + Apply the emoji count limit from earlier with custom logic
                 {
@@ -109,6 +109,13 @@ export default definePlugin({
             replacement: {
                 match: /role:"group",/,
                 replace: "$&style:arguments[0].style,onWheel:arguments[0].onWheel,"
+            }
+        },
+        {
+            find: '"--custom-menu-viewport-padding"',
+            replacement: {
+                match: /className:\i\(\)\(\i\.menu/,
+                replace: '$&,"vc-better-quick-react-padding"'
             }
         }
     ],

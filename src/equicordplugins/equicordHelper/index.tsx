@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import "./standingButton.css";
+
 import { ApplicationCommandInputType, sendBotMessage } from "@api/Commands";
 import { HeaderBarButton } from "@api/HeaderBar";
 import { addMessagePreSendListener, removeMessagePreSendListener } from "@api/MessageEvents";
@@ -42,7 +44,6 @@ const StandingConfig: Record<number, { label: string; hoverColor: string; Icon: 
 function StandingButton() {
     const standing = useStateFromStores([SafetyHubStore], () => SafetyHubStore.getAccountStanding());
     const isInitialized = useStateFromStores([SafetyHubStore], () => SafetyHubStore.isInitialized());
-    const [hovered, setHovered] = React.useState(false);
 
     React.useEffect(() => {
         if (!isInitialized) fetchSafetyHub().catch(() => { });
@@ -51,14 +52,12 @@ function StandingButton() {
     const config = StandingConfig[standing?.state] ?? StandingConfig[StandingState.ALL_GOOD];
 
     return (
-        <div style={{ display: "contents" }} onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
-            <HeaderBarButton
-                tooltip={config.label}
-                position="bottom"
-                icon={props => <config.Icon {...props} color={hovered ? config.hoverColor : "currentColor"} />}
-                onClick={() => SettingsRouter.openUserSettings("my_account_panel")}
-            />
-        </div>
+        <HeaderBarButton
+            tooltip={config.label}
+            position="bottom"
+            icon={props => <config.Icon {...props} className="vc-eqh-standing" style={{ "--vc-eqh-standing-hover": config.hoverColor } as React.CSSProperties} />}
+            onClick={() => SettingsRouter.openUserSettings("account_standing_panel")}
+        />
     );
 }
 

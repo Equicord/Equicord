@@ -8,7 +8,6 @@ import "./styles.css";
 
 import { Settings, useSettings } from "@api/Settings";
 import { BaseText } from "@components/BaseText";
-import { Button } from "@components/Button";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { PluginDependencyList } from "@components/settings/tabs/plugins";
 import { PluginCard } from "@components/settings/tabs/plugins/PluginCard";
@@ -17,7 +16,7 @@ import { classNameFactory } from "@utils/css";
 import { useForceUpdater } from "@utils/react";
 import { RenderModalProps } from "@vencord/discord-types";
 import { findComponentByCodeLazy } from "@webpack";
-import { closeModal, Modal,openModal, Tooltip, useMemo } from "@webpack/common";
+import { closeModal, Modal, openModal, Tooltip, useMemo } from "@webpack/common";
 import { ReactNode } from "react";
 
 import Plugins from "~plugins";
@@ -133,43 +132,24 @@ function NewPluginsModal({ modalProps, newPlugins, newSettings }: ModalComponent
                     </BaseText>
                 </div>
             }
+            actions={[
+                {
+                    text: "Don't show this again",
+                    onClick: () => {
+                        Settings.plugins.NewPluginsManager.enabled = !settings?.plugins?.NewPluginsManager?.enabled;
+                    },
+                    variant: "secondary"
+                },
+                {
+                    text: changes.hasChanges ? "Restart" : "Continue",
+                    onClick: handleContinue,
+                    variant: "primary"
+                }
+            ]}
         >
             <div className={cl("grid")}>
                 {pluginCards}
                 {requiredPluginCards}
-            </div>
-
-            <div className={cl("footer")} style={{ marginTop: "20px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <Tooltip
-                    text={
-                        <>
-                            The following plugins require a restart:
-                            <ul className={cl("restart-list")}>
-                                {changes.map(p => <li key={p}>{p}</li>)}
-                            </ul>
-                        </>
-                    }
-                    shouldShow={changes.hasChanges}
-                >
-                    {tooltipProps => (
-                        <Button
-                            {...tooltipProps}
-                            onClick={handleContinue}
-                        >
-                            {changes.hasChanges ? "Restart" : "Continue"}
-                        </Button>
-                    )}
-                </Tooltip>
-
-                <Checkbox
-                    type="inverted"
-                    value={!settings?.plugins?.NewPluginsManager?.enabled}
-                    onChange={() => {
-                        Settings.plugins.NewPluginsManager.enabled = !settings?.plugins?.NewPluginsManager?.enabled;
-                    }}
-                >
-                    Don't show this again
-                </Checkbox>
             </div>
         </Modal>
     );

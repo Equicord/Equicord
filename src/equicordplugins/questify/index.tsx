@@ -4,8 +4,6 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import "./styles.css";
-
 import { playAudio } from "@api/AudioPlayer";
 import { addServerListElement, removeServerListElement, ServerListRenderPosition } from "@api/ServerList";
 import { PlainSettings, Settings } from "@api/Settings";
@@ -26,6 +24,7 @@ import { rerenderQuests, useQuestRerender } from "./settings/rerender";
 import { disposeRestartTracking, initializeRestartTracking, promptToRestartIfDirty, setRestartDirty } from "./settings/restartTracking";
 import { settings } from "./settings/store";
 import { getSettingsModalOpen, initialQuestDataFetched, setInitialQuestDataFetched, setSettingsModalOpen } from "./state";
+import managedStyle from "./styles.css?managed";
 import { canAutoCompleteQuest, getActiveAutoCompletes, getQuestAutoCompleteProgress, getQuestButtonProps, getQuestPanelSubtitleText, hasEnabledAutoCompleteQuestTypes, processQuestForAutoComplete, resumeInterruptedAutoCompletes, setHeartbeatStackTracePatchSucceeded, setVideoProgressStackTracePatchSucceeded, stopAllAutoCompletes, stopAutoCompletesForRunningGames, stopQuestAutoComplete } from "./utils/completion";
 import { canOpenDevToolsWindow, fetchAndDispatchQuests, openDevToolsWindow, snakeToCamel } from "./utils/fetching";
 import { normalizeQuestName } from "./utils/filtering";
@@ -103,6 +102,7 @@ export default definePlugin({
     authors: [EquicordDevs.Etorix],
     dependencies: ["AudioPlayerAPI", "ServerListAPI"],
     startAt: StartAt.Init, // Needed in order to beat Read All Messages to inserting above the server list.
+    managedStyle,
     settings,
 
     canOpenDevToolsWindow,
@@ -211,10 +211,9 @@ export default definePlugin({
             find: "QUEST_HOME)},[]),",
             predicate: () => !getQuestifySettings().disableQuestsEverything && getQuestifySettings().disableSponsoredBanner,
             replacement: {
-                match: /(?<=(\i),isLoading:(\i)}=\(0,\i.\i\)\(\i\);)/,
-                replace: "if(true){$1=null;$2=false;};"
+                match: /(?<=,{questHomeHero:(\i),isLoading:(\i)}=.{0,300}?ORBS_BALANCE_MENU}\)},\[\]\);)/,
+                replace: "$1=null;$2=false;"
             }
-
         },
         {
             // Hides the Quest & Orbs badges on user profiles.
@@ -260,7 +259,7 @@ export default definePlugin({
             find: ",{progressTextAnimation:",
             predicate: () => !getQuestifySettings().disableQuestsEverything,
             replacement: {
-                match: /(let{percentComplete:.{0,115}?children:\i}=)(\i)/,
+                match: /(let{percentComplete:.{0,115}?children:\i,useAltStyle:\i=!1}=)(\i)/,
                 replace: "const questifyProgress=$self.getQuestPanelPercentComplete({...$2,quest:$2.children?.props?.quest});$1Object.assign({},$2,questifyProgress??{})"
             }
         },
@@ -322,7 +321,7 @@ export default definePlugin({
                 {
                     // Set the initial filters and update the filters and sort method when they change.
                     match: /(get\(\i\)\)\?\?)(\i,\[)(\i)(\]\),\i=\i.useCallback\((\i)=>{)(.{0,60}?useCallback\((\i)=>{)/,
-                    replace: "$1$self.getLastFilterChoices()??$2$3$4$self.setLastSortChoice($5);$6$self.setLastFilterChoices($7);$self.rerenderQuests();"
+                    replace: "$1$self.getLastFilterChoices()??$2$3,questRerenderTrigger$4$self.setLastSortChoice($5);$6$self.setLastFilterChoices($7);$self.rerenderQuests();"
                 },
                 {
                     // Update the last used sort and filter choices when the toggle setting for either is changed.
@@ -343,7 +342,7 @@ export default definePlugin({
                 },
                 {
                     // Overwrite button props for ENROLLED/INCOMPLETE Quests.
-                    match: /(?<=let{quest:\i,taskType:\i,surface:\i.{0,150}?size:\i}=\i;return)(.{0,300}?taskType:\i,size:\i,analyticsCtxQuestContent:\i,analyticsCtxSourceQuestContent:\i}\))/,
+                    match: /(?<=let{quest:\i,taskType:\i,surface:\i.{0,150}?size:\i}=\i;return)(.{0,300}?,size:\i,surface:\i,analyticsCtxQuestContent:\i,analyticsCtxSourceQuestContent:\i}\))/,
                     replace: " $self.enrolledIncompleteButton(arguments[0])||($1)"
                 }
             ]
@@ -353,8 +352,8 @@ export default definePlugin({
             find: "QUESTS_BAR,questId",
             predicate: () => !getQuestifySettings().disableQuestsEverything && hasEnabledAutoCompleteQuestTypes(),
             replacement: {
-                match: /(?<=SELECT&&!\i&&!\i,\i=\i\.\i\.useConfig\({location:\i\.\i\.QUESTS_BAR}\),\i=\(0,\i\.\i\)\((\i)\);)(if\()(.{0,300}?let (\i)=null;return )/,
-                replace: 'const questifyButton=$self.enrolledIncompleteButton({quest:$1,size:"sm"});$2!questifyButton&&$3questifyButton?$4=questifyButton:'
+                match: /(?<=SELECT&&!\i&&!\i,(\i)=null;)(return )(\i\?\i=\(0,\i.\i\)\(\i,{quest:(\i))/,
+                replace: "const questifyButton=$self.enrolledIncompleteButton({quest:$4,size:\"sm\"});$2questifyButton?$1=questifyButton:$3"
             }
         },
         {
@@ -367,7 +366,7 @@ export default definePlugin({
             }
         },
         {
-            find: ".rowIndex,trackGuildAndChannelMetadata",
+            find: "return`quest-tile-",
             group: true,
             predicate: () => !getQuestifySettings().disableQuestsEverything,
             replacement: [
@@ -410,7 +409,7 @@ export default definePlugin({
             ]
         },
         {
-            find: ".rowIndex,trackGuildAndChannelMetadata",
+            find: "return`quest-tile-",
             group: true,
             predicate: () => !getQuestifySettings().disableQuestsEverything,
             replacement: [
@@ -476,7 +475,7 @@ export default definePlugin({
                 },
                 {
                     // Bypasses Discord's memo cache while the Questify sort is active.
-                    match: /(if\(\i\.current\.length>0&&\i\.current===\i\.length&&\i\.current===\i\.sortMethod&&\i\.current===\i\.filters&&\i\.current===\i)(\)return \i\.current;)/,
+                    match: /(if\(\i\.current\.length>0&&\i\.current===\i\.length&&\i\.current===\i\.sortMethod&&\i\.current===\i\.filters)(\)return \i\.current;)/,
                     replace: "$1&&arguments[1]?.sortMethod!==\"questify\"$2"
                 },
                 {
@@ -486,7 +485,7 @@ export default definePlugin({
                 },
                 {
                     // Recomputes Discord's Quest list memo when Questify settings or rerenders change.
-                    match: /(?<=\.id\);return \i\.current=\i,\i\.current=\i\.sortMethod,\i\.current=\i\.filters,\i\.current=\i\.length,\i\.current=\i,\i\},\[)(\i,\i,\i)(?=\]\)\))/,
+                    match: /(?<=\.id\);return \i\.current=\i,\i\.current=\i\.sortMethod,\i\.current=\i\.filters,\i\.current=\i\.length,\i\},\[)(\i,\i)(?=\]\)\))/,
                     replace: "$1,questRerenderTrigger,questifySorted"
                 }
             ]

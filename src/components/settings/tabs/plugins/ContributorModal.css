@@ -50,11 +50,6 @@
         0 2px 6px rgb(0 0 0 / 35%);
 }
 
-div:has(.vc-author-modal-root) > [class*="actionBar"] {
-    padding: 8px 16px;
-    min-height: unset;
-}
-
 .vc-author-modal-links {
     display: flex;
     gap: 4px;

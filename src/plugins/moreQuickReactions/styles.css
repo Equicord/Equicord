@@ -24,7 +24,6 @@
     height: 25px;
 }
 
-/* 8 or more columns exceeds the default max width */
-[class*="menu"]:has(>div>.vc-better-quick-react) {
-    max-width: fit-content;
+.vc-better-quick-react-padding {
+    min-width: fit-content;
 }

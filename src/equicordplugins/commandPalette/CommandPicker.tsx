@@ -4,11 +4,12 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { Heading } from "@components/Heading";
 import { CogWheel } from "@components/Icons";
 import { classNameFactory } from "@utils/css";
 import { classes } from "@utils/misc";
 import { RenderModalProps } from "@vencord/discord-types";
-import { Modal,openModal, TextInput, useCallback, useEffect, useMemo, useRef, useState } from "@webpack/common";
+import { Modal, openModal, TextInput, useCallback, useEffect, useMemo, useRef, useState } from "@webpack/common";
 
 import {
     type CommandEntry, getCategoryGroupLabel, getCategoryWeight, getCommandSearchText, getRecentRank, getRegistryVersion, listCommands, subscribeRegistry
@@ -64,6 +65,7 @@ function CommandPickerModal({ modalProps, commands: providedCommands, allowMulti
     const [pickedIds, setPickedIds] = useState<string[]>(() => normalizedInitialSelected);
     const itemRefs = useRef<(HTMLButtonElement | null)[]>([]);
     const pickedIdsRef = useRef<string[]>([]);
+    const listRef = useRef<any>(null);
 
     useEffect(() => {
         if (providedCommands) return;
@@ -142,7 +144,12 @@ function CommandPickerModal({ modalProps, commands: providedCommands, allowMulti
 
             for (const entry of availableCommands) {
                 if (!includeHiddenInSearch && entry.hiddenInSearch) continue;
-                const searchText = getCommandSearchText(entry.id);
+                const searchText = getCommandSearchText(entry.id) || [
+                    entry.label,
+                    entry.description ?? "",
+                    ...entry.keywords ?? [],
+                    ...entry.tags ?? []
+                ].filter(Boolean).join(" ").toLowerCase();
                 if (!searchText.includes(lowerQuery)) continue;
 
                 const score = scoreCommand(entry);
@@ -203,8 +210,22 @@ function CommandPickerModal({ modalProps, commands: providedCommands, allowMulti
 
     useEffect(() => {
         if (selectedIndex < 0) return;
+        const rawContainer = listRef.current as any;
+        const container = rawContainer?.getScrollerNode ? rawContainer.getScrollerNode() : rawContainer;
         const node = itemRefs.current[selectedIndex];
-        node?.scrollIntoView({ block: "nearest" });
+        if (!container || !node) return;
+
+        const containerRect = container.getBoundingClientRect();
+        const nodeRect = node.getBoundingClientRect();
+
+        if (nodeRect.bottom > containerRect.bottom) {
+            container.scrollTop += nodeRect.bottom - containerRect.bottom;
+            return;
+        }
+
+        if (nodeRect.top < containerRect.top) {
+            container.scrollTop -= containerRect.top - nodeRect.top;
+        }
     }, [selectedIndex, items]);
 
     itemRefs.current = itemRefs.current.slice(0, items.length);
@@ -321,17 +342,26 @@ function CommandPickerModal({ modalProps, commands: providedCommands, allowMulti
     };
 
     return (
-        <Modal {...modalProps} size="sm" title="Command Picker">
-            <div className={classes(cl("shell"), cl("picker-shell"), cn("vc-command-palette"), cl("picker"))} onKeyDown={handleKeyDown}>
-                <div className={cl("input")}>
-                    <TextInput
-                        autoFocus
-                        value={query}
-                        onChange={setQuery}
-                        placeholder="Search commands"
-                        className={cl("main-input")}
-                    />
+        <Modal
+            {...modalProps}
+            size="lg"
+            scrollerRef={listRef}
+            title={
+                <div className={classes(cl("shell"), cl("picker-shell"), cn("vc-command-palette"), cl("picker"))} onKeyDown={handleKeyDown}>
+                    <Heading tag="h1" className={cl("title")}>Command Palette</Heading>
+
+                    <div className={cl("input")}>
+                        <TextInput
+                            autoFocus
+                            value={query}
+                            onChange={setQuery}
+                            placeholder="Search commands"
+                        />
+                    </div>
                 </div>
+            }
+        >
+            <div className={classes(cl("shell"), cl("picker-shell"), cn("vc-command-palette"), cl("picker"))} onKeyDown={handleKeyDown}>
                 <div className={cl("list")}>
                     {!hasCommands && <div className={cl("empty")}>{emptyStateText}</div>}
                     {items.map((item, index) => {

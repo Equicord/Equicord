@@ -78,8 +78,7 @@ export function LogsModal({ modalProps, initalQuery }: Props) {
             {...modalProps}
             size="lg"
             title={
-                <div style={{ display: "flex", flexDirection: "column", gap: "10px", width: "100%", paddingRight: "20px" }}>
-                    <TextInput value={queryEh} onChange={e => setQuery(e)} style={{ width: "100%" }} placeholder="Filter Messages" />
+                <div className={cl("modal")}>
                     <TabBar
                         type="top"
                         look="brand"
@@ -110,6 +109,9 @@ export function LogsModal({ modalProps, initalQuery }: Props) {
                             Ghost Pinged
                         </TabBar.Item>
                     </TabBar>
+                    <div className={cl("modal-filter")}>
+                        <TextInput value={queryEh} onChange={e => setQuery(e)} placeholder="Filter Messages" />
+                    </div>
                 </div>
             }
             actions={[

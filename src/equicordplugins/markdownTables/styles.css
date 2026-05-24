@@ -1,7 +1,9 @@
 .vc-markdownTables-root {
+    --vc-markdown-tables-ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 4px;
     max-width: 100%;
     margin: 0.25rem 0;
 }
@@ -9,57 +11,60 @@
 .vc-markdownTables-toolbar {
     display: inline-flex;
     align-self: flex-start;
-    padding: 2px;
-    border: 1px solid var(--background-modifier-accent);
+    gap: 1px;
+    padding: 1px;
+    border: 1px solid transparent;
     border-radius: 4px;
-    background: var(--background-secondary);
+    background: transparent;
 }
 
 .vc-markdownTables-toggle {
-    min-width: 44px;
-    padding: 2px 8px;
+    min-width: 38px;
+    padding: 1px 6px;
     border: 0;
     border-radius: 3px;
     color: var(--text-muted);
     font: inherit;
     font-size: 0.75rem;
-    line-height: 1.25rem;
+    line-height: 1.125rem;
     background: transparent;
     cursor: pointer;
+    transition:
+        color 140ms var(--vc-markdown-tables-ease-out),
+        background-color 140ms var(--vc-markdown-tables-ease-out),
+        transform 140ms var(--vc-markdown-tables-ease-out);
 }
 
-.vc-markdownTables-toggle:hover {
+.vc-markdownTables-toggle:active {
+    transform: scale(0.98);
+}
+
+.vc-markdownTables-toggle:focus-visible {
+    outline: 1px solid var(--text-muted);
+    outline-offset: 2px;
+}
+
+.vc-markdownTables-toggle-active {
     color: var(--text-normal);
     background: var(--background-modifier-hover);
 }
 
-.vc-markdownTables-toggle-active,
-.vc-markdownTables-toggle-active:hover {
-    color: var(--interactive-active);
-    background: var(--background-modifier-selected);
+@media (hover: hover) and (pointer: fine) {
+    .vc-markdownTables-toggle:hover {
+        color: var(--text-normal);
+        background: var(--background-modifier-hover);
+    }
 }
 
-.vc-markdownTables-raw {
+.vc-markdownTables-rawBlock {
     max-width: 100%;
-    margin: 0;
-    padding: 8px 10px;
-    border: 1px solid var(--background-modifier-accent);
-    border-radius: 4px;
-    overflow-x: auto;
-    color: inherit;
-    background: var(--background-secondary);
-    font-size: 0.875rem;
-    line-height: 1.25rem;
-    scrollbar-width: thin;
-    scrollbar-color: gray transparent;
-    white-space: pre;
 }
 
 .vc-markdownTables-scrollFrame {
-    --vc-markdown-tables-mask-size: 42px;
+    --vc-markdown-tables-mask-size: 30px;
     --vc-markdown-tables-fade-color: var(--background-primary);
-    --vc-markdown-tables-fade-mid: color-mix(in srgb, var(--vc-markdown-tables-fade-color) 74%, transparent);
-    --vc-markdown-tables-fade-soft: color-mix(in srgb, var(--vc-markdown-tables-fade-color) 36%, transparent);
+    --vc-markdown-tables-fade-mid: color-mix(in srgb, var(--vc-markdown-tables-fade-color) 58%, transparent);
+    --vc-markdown-tables-fade-soft: color-mix(in srgb, var(--vc-markdown-tables-fade-color) 24%, transparent);
 
     position: relative;
     max-width: 100%;
@@ -80,26 +85,30 @@
     opacity: 0;
     pointer-events: none;
     transition:
-        opacity 180ms ease,
-        width 180ms ease;
+        opacity 160ms var(--vc-markdown-tables-ease-out),
+        width 160ms var(--vc-markdown-tables-ease-out);
 }
 
 .vc-markdownTables-scrollFrame::before {
     left: 0;
-    background: linear-gradient(to right,
-            var(--vc-markdown-tables-fade-color) 0,
-            var(--vc-markdown-tables-fade-mid) 42%,
-            var(--vc-markdown-tables-fade-soft) 70%,
-            transparent 100%);
+    background: linear-gradient(
+        to right,
+        var(--vc-markdown-tables-fade-color) 0,
+        var(--vc-markdown-tables-fade-mid) 42%,
+        var(--vc-markdown-tables-fade-soft) 70%,
+        transparent 100%
+    );
 }
 
 .vc-markdownTables-scrollFrame::after {
     right: 0;
-    background: linear-gradient(to left,
-            var(--vc-markdown-tables-fade-color) 0,
-            var(--vc-markdown-tables-fade-mid) 42%,
-            var(--vc-markdown-tables-fade-soft) 70%,
-            transparent 100%);
+    background: linear-gradient(
+        to left,
+        var(--vc-markdown-tables-fade-color) 0,
+        var(--vc-markdown-tables-fade-mid) 42%,
+        var(--vc-markdown-tables-fade-soft) 70%,
+        transparent 100%
+    );
 }
 
 .vc-markdownTables-mask-left::before,
@@ -109,7 +118,7 @@
 
 .vc-markdownTables-scroll-left::before,
 .vc-markdownTables-scroll-right::after {
-    width: calc(var(--vc-markdown-tables-mask-size) + 10px);
+    width: calc(var(--vc-markdown-tables-mask-size) + 6px);
 }
 
 .vc-markdownTables-scroll {
@@ -123,25 +132,31 @@
 }
 
 .vc-markdownTables-mask-left .vc-markdownTables-scroll {
-    mask-image: linear-gradient(to right,
-            transparent 0,
-            black var(--vc-markdown-tables-mask-size),
-            black 100%);
+    mask-image: linear-gradient(
+        to right,
+        transparent 0,
+        black var(--vc-markdown-tables-mask-size),
+        black 100%
+    );
 }
 
 .vc-markdownTables-mask-right .vc-markdownTables-scroll {
-    mask-image: linear-gradient(to right,
-            black 0,
-            black calc(100% - var(--vc-markdown-tables-mask-size)),
-            transparent 100%);
+    mask-image: linear-gradient(
+        to right,
+        black 0,
+        black calc(100% - var(--vc-markdown-tables-mask-size)),
+        transparent 100%
+    );
 }
 
 .vc-markdownTables-mask-left.vc-markdownTables-mask-right .vc-markdownTables-scroll {
-    mask-image: linear-gradient(to right,
-            transparent 0,
-            black var(--vc-markdown-tables-mask-size),
-            black calc(100% - var(--vc-markdown-tables-mask-size)),
-            transparent 100%);
+    mask-image: linear-gradient(
+        to right,
+        transparent 0,
+        black var(--vc-markdown-tables-mask-size),
+        black calc(100% - var(--vc-markdown-tables-mask-size)),
+        transparent 100%
+    );
 }
 
 .vc-markdownTables-table {
@@ -149,14 +164,14 @@
     min-width: 100%;
     border-collapse: collapse;
     color: inherit;
-    font-size: 0.9375rem;
-    line-height: 1.25rem;
+    font-size: 0.875rem;
+    line-height: 1.2rem;
 }
 
 .vc-markdownTables-table th,
 .vc-markdownTables-table td {
     max-width: 440px;
-    padding: 6px 10px;
+    padding: 5px 8px;
     border-right: 1px solid var(--background-modifier-accent);
     border-bottom: 1px solid var(--background-modifier-accent);
     vertical-align: top;
@@ -168,8 +183,10 @@
     background: var(--background-modifier-hover);
 }
 
-.vc-markdownTables-table tbody tr:hover {
-    background: var(--background-modifier-hover);
+@media (hover: hover) and (pointer: fine) {
+    .vc-markdownTables-table tbody tr:hover {
+        background: var(--background-modifier-hover);
+    }
 }
 
 .vc-markdownTables-table th:last-child,
@@ -183,26 +200,50 @@
 
 @supports (color: color-mix(in srgb, white, black)) {
     .vc-markdownTables-scrollFrame {
-        border-color: color-mix(in srgb, currentcolor 24%, transparent);
+        border-color: color-mix(in srgb, currentcolor 14%, transparent);
     }
 
-    .vc-markdownTables-toolbar,
-    .vc-markdownTables-raw {
-        border-color: color-mix(in srgb, currentcolor 18%, transparent);
+    .vc-markdownTables-toolbar {
+        border-color: color-mix(in srgb, currentcolor 8%, transparent);
+    }
+
+    .vc-markdownTables-toggle-active {
+        color: color-mix(in srgb, currentcolor 86%, transparent);
+        background: color-mix(in srgb, currentcolor 7%, transparent);
+    }
+
+    .vc-markdownTables-toggle:focus-visible {
+        outline-color: color-mix(in srgb, currentcolor 44%, transparent);
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+        .vc-markdownTables-toggle:hover {
+            background: color-mix(in srgb, currentcolor 6%, transparent);
+        }
+
+        .vc-markdownTables-toggle-active:hover {
+            background: color-mix(in srgb, currentcolor 9%, transparent);
+        }
     }
 
     .vc-markdownTables-table th,
     .vc-markdownTables-table td {
-        border-right-color: color-mix(in srgb, currentcolor 18%, transparent);
-        border-bottom-color: color-mix(in srgb, currentcolor 18%, transparent);
+        border-right-color: color-mix(in srgb, currentcolor 12%, transparent);
+        border-bottom-color: color-mix(in srgb, currentcolor 12%, transparent);
     }
 
     .vc-markdownTables-table th {
-        background: color-mix(in srgb, currentcolor 7%, transparent);
+        background: color-mix(in srgb, currentcolor 4%, transparent);
     }
 
-    .vc-markdownTables-table tbody tr:hover {
-        background: color-mix(in srgb, currentcolor 5%, transparent);
+    @media (hover: hover) and (pointer: fine) {
+        .vc-markdownTables-table tbody tr:hover {
+            background: color-mix(in srgb, currentcolor 4%, transparent);
+        }
+    }
+
+    .vc-markdownTables-scroll {
+        scrollbar-color: color-mix(in srgb, currentcolor 24%, transparent) transparent;
     }
 }
 
@@ -214,21 +255,23 @@
     --vc-markdown-tables-fade-color: color-mix(in srgb, var(--background-primary) 88%, white);
 }
 
-.vc-markdownTables-raw::-webkit-scrollbar,
 .vc-markdownTables-scroll::-webkit-scrollbar {
     width: 8px;
     height: 8px;
 }
 
-.vc-markdownTables-raw::-webkit-scrollbar-thumb,
 .vc-markdownTables-scroll::-webkit-scrollbar-thumb {
     border-radius: 999px;
     background-color: gray;
 }
 
-.vc-markdownTables-raw::-webkit-scrollbar-track,
+@supports (color: color-mix(in srgb, white, black)) {
+    .vc-markdownTables-scroll::-webkit-scrollbar-thumb {
+        background-color: color-mix(in srgb, currentcolor 24%, transparent);
+    }
+}
+
 .vc-markdownTables-scroll::-webkit-scrollbar-track,
-.vc-markdownTables-raw::-webkit-scrollbar-corner,
 .vc-markdownTables-scroll::-webkit-scrollbar-corner {
     background: transparent;
 }

@@ -21,6 +21,11 @@
     overflow: visible;
 }
 
+/* Prevent shifting in the progress subtitle. */
+[class*="questProgressHint_"] {
+    font-variant-numeric: tabular-nums;
+}
+
 /* Settings */
 
 .questify-setting {
@@ -74,7 +79,7 @@
     line-height: 0.2em;
 }
 
-[class*="clickTrapContainer"] > div > div:has(.questify-settings-tooltip-content) {
+[class*="clickTrapContainer"] > div > .questify-settings-tooltip {
     margin-right: 4px;
 }
 

@@ -80,15 +80,6 @@
     margin-left: 48px;
 }
 
-.vc-more-stickers-picker-content:has(.temporary-text-will-be-removed) {
-    display: flex;
-    text-align: center;
-    justify-content: center;
-    align-items: center;
-    width: 90%;
-    height: 80%;
-}
-
 .vc-more-stickers-category-scroller {
     overflow: hidden scroll;
     padding-right: 0;

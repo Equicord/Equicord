@@ -194,6 +194,15 @@ export default function PluginModal({ plugin, onRestartNeeded, onClose, transiti
                 </div>
             }
         >
+            {!!plugin.settingsAboutComponent && (
+                <div className={classes(Margins.top16, cl("about-box"))}>
+                    <section>
+                        <ErrorBoundary message="An error occurred while rendering this plugin's custom Info Component">
+                            <plugin.settingsAboutComponent />
+                        </ErrorBoundary>
+                    </section>
+                </div>
+            )}
             <div className={"vc-settings-modal-content"}>
                 <section>
                     <Text variant="heading-lg/semibold" className={classes(Margins.top8, Margins.bottom8)}>Authors</Text>
