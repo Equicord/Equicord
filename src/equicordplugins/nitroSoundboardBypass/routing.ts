@@ -5,7 +5,6 @@
  */
 
 import { Logger } from "@utils/Logger";
-import { findByPropsLazy } from "@webpack";
 import {
     ChannelStore,
     lodash,
@@ -19,7 +18,7 @@ import {
 
 import { syncMixerGains } from "./mixer";
 import { settings } from "./settings";
-import { PLUGIN_NAME, routedElements, type SoundboardSound,state } from "./state";
+import { PLUGIN_NAME, routedElements, type SoundboardSound, state } from "./state";
 
 const logger = new Logger(PLUGIN_NAME);
 
@@ -27,12 +26,6 @@ type SoundboardStoreLike = {
     getSound?(guildId: string, soundId: string): SoundboardSound | undefined;
     getSoundById?(soundId: string): SoundboardSound | undefined;
 };
-
-type SoundboardSoundURLModule = {
-    getSoundboardSoundURL(soundId: string): string;
-};
-
-const SoundboardSoundURLs: SoundboardSoundURLModule = findByPropsLazy("getSoundboardSoundURL");
 
 export function cleanupRoutedElement(
     element: HTMLMediaElement,
@@ -197,15 +190,6 @@ export async function playSoundViaAudioElement(
         }
     }
 
-    let urlString: string;
-    try {
-        urlString = SoundboardSoundURLs.getSoundboardSoundURL(sound.soundId);
-    } catch (err) {
-        logger.error("getSoundboardSoundURL unavailable", err);
-        showToast(`Could not resolve URL for "${sound.name ?? sound.soundId}".`, Toasts.Type.FAILURE);
-        return;
-    }
-
     const rawVolume = sound.volume;
     const initialVolume = typeof rawVolume === "number" && Number.isFinite(rawVolume)
         ? lodash.clamp(rawVolume > 1 ? rawVolume / 100 : rawVolume, 0, 1)
@@ -215,7 +199,7 @@ export async function playSoundViaAudioElement(
     audio.crossOrigin = "anonymous";
     audio.preload = "auto";
     audio.volume = initialVolume;
-    audio.src = urlString;
+    audio.src = `https://${window.GLOBAL_ENV.CDN_HOST}/soundboard-sounds/${sound.soundId}`;
 
     const localPlayback = options.localPlayback ?? settings.store.keepLocalPlayback;
 
