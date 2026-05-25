@@ -294,11 +294,11 @@ export default definePlugin({
             predicate: () => !getQuestifySettings().disableQuestsEverything && hasEnabledAutoCompleteQuestTypes(),
             replacement: [
                 {
-                    match: /(async function \i\(\i,\i\)\{await \i\.\i\.post\(\{url:\i\.\i\.QUESTS_VIDEO_PROGRESS.{0,200}?stack_trace:)Error\(\)\.stack\?\?""/,
+                    match: /(async function \i\(\i,\i\)\{await \i\.\i\.post\(\{url:\i\.\i\.QUESTS_VIDEO_PROGRESS.{0,250}?stack_trace:)Error\(\)\.stack\?\?""/,
                     replace: '$self.setVideoProgressStackTracePatchSucceeded();$1""'
                 },
                 {
-                    match: /(async function \i\(\i\)\{let\{questId:\i,streamKey:\i.{0,350}?stack_trace:)Error\(\)\.stack\?\?""/,
+                    match: /(async function \i\(\i\)\{let\{questId:\i,streamKey:\i.{0,450}?stack_trace:)Error\(\)\.stack\?\?""/,
                     replace: '$self.setHeartbeatStackTracePatchSucceeded();$1""'
                 }
             ]
