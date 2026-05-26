@@ -171,6 +171,11 @@
     pointer-events: none;
 }
 
+[data-vc-collapsible-ui-user-area-collapsed] > * {
+    opacity: 0;
+    pointer-events: none;
+}
+
 [data-vc-collapsible-ui-header-bar-collapsed][data-vc-collapsible-ui-header-bar-interaction-expanded] {
     height: var(--vc-cui-header-bar-height) !important;
     min-height: var(--vc-cui-header-bar-height) !important;
@@ -197,11 +202,6 @@
     max-height: var(--vc-cui-peek-size) !important;
     padding-block: 0 !important;
     border-top-width: 0 !important;
-}
-
-[data-vc-collapsible-ui-user-area-collapsed] > * {
-    opacity: 0;
-    pointer-events: none;
 }
 
 [data-vc-collapsible-ui-user-area-collapsed]:is(:hover, :focus-within) {
