@@ -13,7 +13,7 @@ export const settings = definePluginSettings({
     format: {
         component: ({ setValue }) => FormatSetting(setValue),
         type: OptionType.COMPONENT,
-        default: "{buildChannel} {buildNumber} ({buildHash}) | {equicordName} {equicordVersion} ({equicordHash})",
+        default: "{buildChannel} {buildNumber} ({buildHash}) | {clientName} {equicordVersion} ({equicordHash})",
         restartNeeded: true
     }
 });
