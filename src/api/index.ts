@@ -32,15 +32,17 @@ import * as $MessageUpdater from "./MessageUpdater";
 import * as $NicknameIcons from "./NicknameIcons";
 import * as $Notices from "./Notices";
 import * as $Notifications from "./Notifications";
-import * as $UserArea from "./UserArea";
-export * as PluginManager from "./PluginManager";
 import * as $ProfileCollections from "./ProfileCollections";
 import * as $ProfileSections from "./ProfileSections";
 import * as $ServerList from "./ServerList";
 import * as $Settings from "./Settings";
 import * as $Styles from "./Styles";
+import * as $SurfaceClasses from "./SurfaceClasses";
 import * as $Themes from "./Themes";
+import * as $UserArea from "./UserArea";
 import * as $UserSettings from "./UserSettings";
+
+export * as PluginManager from "./PluginManager";
 
 /**
  * An API allowing you to listen to Message Clicks or run your own logic
@@ -96,6 +98,11 @@ export const Badges = $Badges;
  * An API allowing you to add custom elements to the server list.
  */
 export const ServerList = $ServerList;
+
+/**
+ * An API allowing plugins to add semantic surface classes and limited state props without coupling to Discord className output.
+ */
+export const SurfaceClasses = $SurfaceClasses;
 
 /**
  * An API allowing you to add components as message accessories.
