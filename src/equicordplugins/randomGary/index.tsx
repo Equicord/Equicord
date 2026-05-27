@@ -59,7 +59,6 @@ const GARY_SETTINGS_KEYS = ["randomGaryImageSource"] as const;
 
 async function sendGaryLink(channelId: string, link: string) {
     const reply = PendingReplyStore.getPendingReply(channelId);
-    if (reply) FluxDispatcher.dispatch({ type: "DELETE_PENDING_REPLY", channelId });
     try {
         if (getSlowmodeCooldownGuess(channelId) === 0) {
             const channel = ChannelStore.getChannel(channelId);
@@ -68,7 +67,7 @@ async function sendGaryLink(channelId: string, link: string) {
                 return;
             }
 
-
+            if (reply) FluxDispatcher.dispatch({ type: "DELETE_PENDING_REPLY", channelId });
             sendMessage(channelId, {
                 content: link
             }, true, {
@@ -85,7 +84,6 @@ async function sendGaryLink(channelId: string, link: string) {
 
 async function uploadGaryImage(url: string, channelId: string) {
     const reply = PendingReplyStore.getPendingReply(channelId);
-    if (reply) FluxDispatcher.dispatch({ type: "DELETE_PENDING_REPLY", channelId });
     try {
         if (getSlowmodeCooldownGuess(channelId) === 0) {
             const channel = ChannelStore.getChannel(channelId);
@@ -107,7 +105,7 @@ async function uploadGaryImage(url: string, channelId: string) {
             }, channelId, false, 0);
 
             upload.on("complete", () => {
-
+                if (reply) FluxDispatcher.dispatch({ type: "DELETE_PENDING_REPLY", channelId });
                 sendMessage(channelId, {
                     content: "",
                 }, true, {
