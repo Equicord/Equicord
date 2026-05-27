@@ -172,13 +172,21 @@ export const GaryChatBarIcon: ChatBarButton = ({ isMainChat }) => {
         setTimeout(() => setIsAnimating(false), 1000);
 
         if (currentChannelId) {
-            const link = await getUrl();
-            const isMinker = settings.store.randomGaryImageSource === "minker";
-            const invert = !!settings.store.randomGaryInvertBehavior;
-            if (!invert && !isMinker) {
-                await sendGaryLink(currentChannelId, link);
-            } else {
-                await uploadGaryImage(link, currentChannelId);
+            try {
+                const link = await getUrl();
+                if (!link) {
+                    showToast("Failed to fetch image URL.", Toasts.Type.FAILURE);
+                    return;
+                }
+                const isMinker = settings.store.randomGaryImageSource === "minker";
+                const invert = !!settings.store.randomGaryInvertBehavior;
+                if (!invert && !isMinker) {
+                    await sendGaryLink(currentChannelId, link);
+                } else {
+                    await uploadGaryImage(link, currentChannelId);
+                }
+            } catch (err) {
+                showToast("Failed to fetch image. Check your connection.", Toasts.Type.FAILURE);
             }
         }
     };
@@ -188,13 +196,21 @@ export const GaryChatBarIcon: ChatBarButton = ({ isMainChat }) => {
         setTimeout(() => setIsAnimating(false), 1000);
 
         if (currentChannelId) {
-            const link = await getUrl();
-            const isMinker = settings.store.randomGaryImageSource === "minker";
-            const invert = !!settings.store.randomGaryInvertBehavior;
-            if (invert && !isMinker) {
-                await sendGaryLink(currentChannelId, link);
-            } else {
-                await uploadGaryImage(link, currentChannelId);
+            try {
+                const link = await getUrl();
+                if (!link) {
+                    showToast("Failed to fetch image URL.", Toasts.Type.FAILURE);
+                    return;
+                }
+                const isMinker = settings.store.randomGaryImageSource === "minker";
+                const invert = !!settings.store.randomGaryInvertBehavior;
+                if (invert && !isMinker) {
+                    await sendGaryLink(currentChannelId, link);
+                } else {
+                    await uploadGaryImage(link, currentChannelId);
+                }
+            } catch (err) {
+                showToast("Failed to fetch image. Check your connection.", Toasts.Type.FAILURE);
             }
         }
     };
@@ -267,24 +283,32 @@ export default definePlugin({
 
 export async function getUrl() {
     switch (settings.store.randomGaryImageSource) {
-        case "gary":
+        case "gary": {
             const response = await fetch("https://api.garythe.cat/gary");
+            if (!response.ok) throw new Error("Gary API error: " + response.status);
             const json = await response.json();
             return json.url;
-        case "goober":
+        }
+        case "goober": {
             const gooberResponse = await fetch("https://api.garythe.cat/goober");
+            if (!gooberResponse.ok) throw new Error("Goober API error: " + gooberResponse.status);
             const gooberJson = await gooberResponse.json();
             return gooberJson.url;
-        case "catapi":
+        }
+        case "catapi": {
             const catResponse = await fetch("https://api.thecatapi.com/v1/images/search");
+            if (!catResponse.ok) throw new Error("Cat API error: " + catResponse.status);
             const catJson = await catResponse.json();
-            return catJson[0].url;
+            return catJson[0]?.url;
+        }
         case "minker":
             return "https://minky.materii.dev/";
-        case "gully":
+        case "gully": {
             const gullyResponse = await fetch("https://api.garythe.cat/gully");
+            if (!gullyResponse.ok) throw new Error("Gully API error: " + gullyResponse.status);
             const gullyJson = await gullyResponse.json();
             return gullyJson.url;
+        }
         default:
             throw new Error("Invalid randomGaryImageSource value");
     }
