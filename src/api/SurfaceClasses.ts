@@ -5,7 +5,8 @@
  */
 
 import { classes } from "@utils/misc";
-import { useEffect, useState } from "@webpack/common";
+import { useForceUpdater } from "@utils/react";
+import { useEffect } from "@webpack/common";
 import type { FocusEventHandler, MouseEventHandler } from "react";
 
 export type SurfaceId =
@@ -194,10 +195,10 @@ export function _getSurfaceProps(surfaceId: SurfaceId) {
 
 /** @internal Injected by SurfaceClassesAPI patch (do NOT call directly) */
 export function _useSurfaceProps(surfaceId: SurfaceId) {
-    const [, forceUpdate] = useState(0);
+    const forceUpdate = useForceUpdater();
 
     useEffect(() => {
-        const listener = () => forceUpdate(version => version + 1);
+        const listener = () => forceUpdate();
 
         getListenerSet(surfaceId).add(listener);
         return () => { listeners.get(surfaceId)?.delete(listener); };
