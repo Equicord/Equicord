@@ -97,6 +97,7 @@ async function uploadGaryImage(url: string, channelId: string) {
 
             showToast("Uploading image, this may take a few seconds.", Toasts.Type.MESSAGE);
             const buffer = await Native.getImageBuffer(url);
+            if (!buffer) { showToast("Failed to fetch image", Toasts.Type.FAILURE); return; }
             const blob = new Blob([buffer], { type: "image/jpeg" });
             const file = new File([blob], "gary.jpg", { type: "image/jpeg" });
             const upload = new CloudUpload({
