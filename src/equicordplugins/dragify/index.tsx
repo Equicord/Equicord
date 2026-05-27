@@ -216,7 +216,7 @@ export default definePlugin({
             find: ']="BADGES"',
             replacement: {
                 match: /(?="data-username-has-gradient")/,
-                replace: "draggable:!0,onDragStart:e=>$self.onUserDragStart(e,arguments[0].message.author),\"data-dragify-user\":!0,\"data-user-id\":arguments[0].message.author.id,"
+                replace: "draggable:!0,onDragStart:e=>$self.onUserDragStart(e,arguments[0].message?.author),\"data-dragify-user\":!0,\"data-user-id\":arguments[0].message?.author?.id,"
             }
         },
         // Call avatars (DM/group call tiles)
