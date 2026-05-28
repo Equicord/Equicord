@@ -63,7 +63,6 @@ export default definePlugin({
     description: "Adds the mention count as a prefix to the window title. Useful for setups where the mention badge isn't visible.",
     authors: [EquicordDevs.Nekro],
     tags: ["Notifications", "Appearance"],
-    hidden: !IS_DISCORD_DESKTOP,
     settings,
 
     start() {
