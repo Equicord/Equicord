@@ -7,7 +7,7 @@
 import { definePluginSettings } from "@api/Settings";
 import { EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
-import { Callback } from "@vencord/discord-types";
+import type { Callback } from "@vencord/discord-types";
 import { findStoreLazy } from "@webpack";
 import { RelationshipStore } from "@webpack/common";
 
@@ -26,13 +26,13 @@ const MessageRequestStore = findStoreLazy("MessageRequestStore") as {
 const settings = definePluginSettings({
     includeFriendRequests: {
         type: OptionType.BOOLEAN,
-        description: "Includes friend requests in the count",
+        description: "Includes friend requests in the count.",
         default: true,
         onChange: refreshTitle
     },
     includeMessageRequests: {
         type: OptionType.BOOLEAN,
-        description: "Includes message requests in the count",
+        description: "Includes message requests in the count.",
         default: true,
         onChange: refreshTitle
     }
@@ -68,13 +68,15 @@ export default definePlugin({
 
     start() {
         const titleDescriptor = Object.getOwnPropertyDescriptor(Document.prototype, "title");
-        if (!titleDescriptor?.set) return;
+
+        const titleSetter = titleDescriptor?.set;
+        if (!titleSetter) return;
 
         Object.defineProperty(document, "title", {
             configurable: true,
             enumerable: true,
             set(value: string) {
-                titleDescriptor.set!.call(document, getPrefix() + value.replace(/^\(\d+\) /, ""));
+                titleSetter.call(document, getPrefix() + value.replace(/^\(\d+\) /, ""));
             },
             get: titleDescriptor.get
         });
@@ -91,7 +93,7 @@ export default definePlugin({
         RelationshipStore.removeChangeListener(refreshTitle);
         MessageRequestStore.removeChangeListener(refreshTitle);
 
-        delete (document as any).title;
+        Reflect.deleteProperty(document, "title");
         document.title = document.title.replace(/^\(\d+\) /, "");
     },
 });
