@@ -4,8 +4,6 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-// Based on https://github.com/yellowsink/shelter-plugins/tree/master/plugins/fast-gif-picker
-
 import { definePluginSettings } from "@api/Settings";
 import { EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
@@ -14,16 +12,19 @@ import { FluxDispatcher } from "@webpack/common";
 enum Quality {
     Highest,
     High,
+    Default,
     Reasonable,
     Low,
+    Horrible,
 }
 
 const qualities = [
-    { giphy: "giphy", tenor: "Ax", cap: 480 }, // webp ~ 480px
-    { giphy: "480w", tenor: "AC", cap: 360 }, // gif  ~ 480w
-    { giphy: "200w", tenor: "A1", cap: 200 }, // tinywebp ~ 200px
-    { giphy: "200w", tenor: "AM", cap: 200 }, // tinygif ~ 200px
-    { giphy: "100w", tenor: "A2", cap: 120 }, // nanowebp ~ 100px
+    { giphy: "giphy", tenor: "Ax", cap: 480 }, // webp
+    { giphy: "480w", tenor: "A5", cap: 360 }, // webppreview
+    { giphy: "giphy", tenor: "", cap: 300 }, // no change
+    { giphy: "200", tenor: "A1", cap: 200 }, // tinywebp
+    { giphy: "100", tenor: "A2", cap: 120 }, // nanowebp
+    { giphy: "giphy-preview", tenor: "A4", cap: 90 }, // nanowebppreview
 ];
 
 const mediaTenorLinkRegex = /^https:\/\/(?:media\d?|c)\.tenor\.com(?:\/m)?\/(?<id>.+?)(?<quality>.{2})\/(?<name>[^/]+)\./i;
@@ -44,7 +45,7 @@ function getCleanLink(link: string) {
 }
 
 function parseLink(link: string, quality: number, sizes?: [width: number, height: number]) {
-    const q = qualities[quality] ?? qualities[Quality.Reasonable];
+    const q = qualities[quality] ?? qualities[Quality.Default];
     let url: URL;
     try {
         url = new URL(normalizeLink(link));
@@ -55,8 +56,8 @@ function parseLink(link: string, quality: number, sizes?: [width: number, height
     const cleanLink = getCleanLink(link);
     const tenorMatch = cleanLink.match(mediaTenorLinkRegex);
     if (tenorMatch) {
-        const { code, name } = tenorMatch.groups!;
-        return `https://media.tenor.com/${code}${q.tenor}/${name}.webp`;
+        const { id, name } = tenorMatch.groups!;
+        return `https://media.tenor.com/${id}${q.tenor}/${name}.webp`;
     }
 
     const giphyMatch = cleanLink.match(giphyLinkRegex);
@@ -84,10 +85,12 @@ const settings = definePluginSettings({
         type: OptionType.SELECT,
         description: "GIF quality",
         options: [
-            { label: "Highest", value: Quality.Highest },
-            { label: "High", value: Quality.High },
-            { label: "Reasonable", value: Quality.Reasonable, default: true },
-            { label: "Low", value: Quality.Low },
+            { label: "Highest (480px)", value: Quality.Highest },
+            { label: "High (360px)", value: Quality.High },
+            { label: "Default", value: Quality.Default, default: true },
+            { label: "Reasonable (200px)", value: Quality.Reasonable },
+            { label: "Low (120px)", value: Quality.Low },
+            { label: "Horrible (90px)", value: Quality.Horrible },
         ],
     },
 });
@@ -133,7 +136,7 @@ function createInterceptor(settings: any) {
         ) return;
 
         const quality = settings.store.gifQuality;
-        if (quality === Quality.Reasonable) return;
+        if (quality === Quality.Default) return;
 
         const items = event.items ?? event.results ?? [];
 
