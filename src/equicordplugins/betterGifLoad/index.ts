@@ -92,7 +92,23 @@ const settings = definePluginSettings({
     },
 });
 
-let interceptor: ((event: any) => void) | null = null;
+interface GifPickerItem {
+    src?: string;
+    gif_src?: string;
+    gifSrc?: string;
+    preview?: string;
+    url?: string;
+    width?: number;
+    height?: number;
+}
+
+interface GifPickerEvent {
+    type: string;
+    items?: GifPickerItem[];
+    results?: GifPickerItem[];
+}
+
+let interceptor: ((event: GifPickerEvent) => void) | null = null;
 
 export default definePlugin({
     name: "BetterGifLoad",
@@ -102,16 +118,54 @@ export default definePlugin({
     settings,
     patches: [
         {
-            find: /GIF_PICKER_QUERY_SUCCESS:\s*function/,
+            find: "GIF_PICKER_QUERY_SUCCESS:function",
             replacement: {
-                match: /(src:(\i\(\i\)),.+?format:)\i/,
+                match: /(src:(?:\i\(\i\)),.{0,100}?format:)\i/,
                 replace: "$1 1",
             },
         },
     ],
 
     start() {
-        interceptor = createInterceptor(settings);
+        interceptor = (event: GifPickerEvent) => {
+            if (
+                event.type !== "GIF_PICKER_QUERY_SUCCESS" &&
+                event.type !== "GIF_PICKER_TRENDING_FETCH_SUCCESS" &&
+                event.type !== "GIF_PICKER_SUGGESTIONS_SUCCESS"
+            ) return;
+
+            const quality = settings.store.gifQuality;
+            if (quality === Quality.Lossless) return;
+
+            const items = event.items ?? event.results ?? [];
+            for (const item of items) {
+                const sizes: [number, number] | undefined =
+                    item.width != null && item.height != null
+                        ? [item.width, item.height]
+                        : undefined;
+
+                if (item.src) {
+                    const normalized = normalizeLink(item.src);
+                    item.src = parseLink(normalized, quality, sizes);
+                }
+                if (item.gif_src) {
+                    const normalized = normalizeLink(item.gif_src);
+                    item.gif_src = parseLink(normalized, quality, sizes);
+                }
+                if (item.gifSrc) {
+                    const normalized = normalizeLink(item.gifSrc);
+                    item.gifSrc = parseLink(normalized, quality, sizes);
+                }
+                if (item.preview) {
+                    const normalized = normalizeLink(item.preview);
+                    item.preview = parseLink(normalized, quality, sizes);
+                }
+                if (item.url) {
+                    const normalized = normalizeLink(item.url);
+                    item.url = parseLink(normalized, quality, sizes);
+                }
+            }
+        };
         FluxDispatcher.addInterceptor(interceptor);
     },
 
@@ -123,41 +177,3 @@ export default definePlugin({
         interceptor = null;
     },
 });
-
-function createInterceptor(settings: any) {
-    return (event: any) => {
-        if (
-            event.type !== "GIF_PICKER_QUERY_SUCCESS" &&
-            event.type !== "GIF_PICKER_TRENDING_FETCH_SUCCESS" &&
-            event.type !== "GIF_PICKER_SUGGESTIONS_SUCCESS"
-        ) return;
-
-        const quality = settings.store.gifQuality;
-        if (quality === Quality.Lossless) return;
-
-        const items = event.items ?? event.results ?? [];
-
-        for (const item of items) {
-            if (item.src) {
-                const normalized = normalizeLink(item.src);
-                item.src = parseLink(normalized, quality, [item.width, item.height]);
-            }
-            if (item.gif_src) {
-                const normalized = normalizeLink(item.gif_src);
-                item.gif_src = parseLink(normalized, quality, [item.width, item.height]);
-            }
-            if (item.gifSrc) {
-                const normalized = normalizeLink(item.gifSrc);
-                item.gifSrc = parseLink(normalized, quality, [item.width, item.height]);
-            }
-            if (item.preview) {
-                const normalized = normalizeLink(item.preview);
-                item.preview = parseLink(normalized, quality, [item.width, item.height]);
-            }
-            if (item.url) {
-                const normalized = normalizeLink(item.url);
-                item.url = parseLink(normalized, quality, [item.width, item.height]);
-            }
-        }
-    };
-}
