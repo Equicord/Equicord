@@ -406,6 +406,11 @@ export default definePlugin({
                     // Force the CTA-aware complete branch.
                     match: /(?<=analyticsCtxQuestContentRowIndex:\i}\)}\):\i&&\i)(.{0,200}?fullWidth:!0}\)}\):)(\i.enabled.{0,50}?CLAIMED\)&&\i.\i.has\(\i\))(\?\i=)(\i)/,
                     replace: "&&false$1((arguments[0].quest.config.ctaConfig&&arguments[0].quest.userStatus?.completedAt)||($2))$3(true||$4)"
+                },
+                {
+                    // Prefer the CTA + progress button branch when Questify can complete the Quest.
+                    match: /(?<="data-migration-pending":.{0,100}?enabledQuestStates.has\(\i\)\?)/,
+                    replace: "!$self.canAutoCompleteQuest(arguments[0].quest)&&"
                 }
             ]
         },
