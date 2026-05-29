@@ -57,16 +57,12 @@ function setPendingChanges(payload: Record<string, unknown>, guildId?: string) {
     dispatch("USER_PROFILE_SETTINGS_SET_PENDING_CHANGES", guildId ? { guildId, ...payload } : payload);
 }
 
-function openProfileCustomizationPreviewModal(payload: Record<string, unknown>) {
-    dispatch("PROFILE_CUSTOMIZATION_OPEN_PREVIEW_MODAL", payload);
-}
-
 function openProfileImagePreview(
     uploadType: "AVATAR" | "BANNER",
     image: Extract<ImageInput, { imageUri: string; }>,
     guildId?: string
 ) {
-    openProfileCustomizationPreviewModal({
+    dispatch("PROFILE_CUSTOMIZATION_OPEN_PREVIEW_MODAL", {
         image,
         file: {},
         uploadType,
@@ -364,7 +360,7 @@ export async function loadPresetAsPending(preset: ProfilePreset, guildId?: strin
                 if (isNonEmptyString(avatarImageUri)) {
                     openProfileImagePreview("AVATAR", { ...Object(avatarPayload), imageUri: avatarImageUri }, guildId);
                 } else {
-                    setPending({ avatar: avatarPayload });
+                    setPending({ pendingAvatar: avatarPayload });
                 }
             }
         }
@@ -384,7 +380,7 @@ export async function loadPresetAsPending(preset: ProfilePreset, guildId?: strin
             if (isNonEmptyString(bannerImageUri)) {
                 openProfileImagePreview("BANNER", { ...Object(bannerPayload), imageUri: bannerImageUri }, guildId);
             } else {
-                setPending({ banner: bannerPayload });
+                setPending({ pendingBanner: bannerPayload });
             }
         }
 
@@ -414,7 +410,7 @@ export async function loadPresetAsPending(preset: ProfilePreset, guildId?: strin
 
         if (preset.nameplate !== undefined && !nameplateEq(preset.nameplate, current.nameplate)) {
             setPending({
-                nameplate: preset.nameplate
+                pendingNameplate: preset.nameplate
             });
         }
 

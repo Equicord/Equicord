@@ -7,9 +7,8 @@
 import { Button } from "@components/Button";
 import { Heading } from "@components/Heading";
 import { classes } from "@utils/misc";
-import { openModal } from "@utils/modal";
 import { findComponentByCodeLazy } from "@webpack";
-import { React, SelectedGuildStore, TextInput, useStateFromStores } from "@webpack/common";
+import { openModal, React, SelectedGuildStore, TextInput, useStateFromStores } from "@webpack/common";
 
 import { cl, settings } from "../index";
 import { exportPresets, ImportDecision, importPresets, savePreset } from "../utils/actions";
