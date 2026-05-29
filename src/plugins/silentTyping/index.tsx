@@ -392,7 +392,11 @@ export default definePlugin({
 
     flux: {
         VOICE_STATE_UPDATES({ voiceStates }) {
-            const state = voiceStates[0];
+            const state = voiceStates?.[0];
+
+            if (!state) {
+                return;
+            }
 
             if (state.userId !== UserStore.getCurrentUser().id) {
                 return;
