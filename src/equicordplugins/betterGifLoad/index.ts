@@ -59,8 +59,8 @@ export default definePlugin({
             find: '"GIFPickerViewStore"',
             replacement: [
                 {
-                    match: /default:/,
-                    replace: 'case"webp":$&',
+                    match: /\?(\i\.\i\.IMAGE):(\i\.\i\.VIDEO)/,
+                    replace: "?$1:$1",
                 },
                 {
                     match: /(GIF_PICKER_QUERY_SUCCESS.{0,200}width:(\i),height:(\i),)src:(\i\(\i\)),gifSrc:(\i\(\i\))/,
