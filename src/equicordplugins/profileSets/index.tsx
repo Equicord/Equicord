@@ -23,14 +23,14 @@ export const settings = definePluginSettings({
         markers: [56, 64, 72, 80, 88, 96],
         default: 56,
         stickToMarkers: true
-    },
+    }
 });
 
 export default definePlugin({
     name: "ProfileSets",
     description: "Allows you to save and load different profile presets, via the Profile Section in Settings.",
-    tags: ["Appearance", "Customisation", "Utility"],
     authors: [EquicordDevs.omaw, EquicordDevs.justjxke],
+    tags: ["Appearance", "Customisation", "Utility"],
     settings,
     patches: [
         {
