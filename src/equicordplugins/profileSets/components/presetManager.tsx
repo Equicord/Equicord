@@ -7,7 +7,6 @@
 import { Button } from "@components/Button";
 import { Heading } from "@components/Heading";
 import { classes } from "@utils/misc";
-import { findComponentByCodeLazy } from "@webpack";
 import { openModal, React, SelectedGuildStore, TextInput, useStateFromStores } from "@webpack/common";
 
 import { cl, settings } from "../index";
