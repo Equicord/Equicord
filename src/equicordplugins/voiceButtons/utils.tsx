@@ -96,7 +96,7 @@ export function UserChatButton({ user }: { user: User; }) {
                     NavigationRouter.transitionTo("/users/@me/");
                     return;
                 }
-                ChannelActionCreators.openPrivateChannel({recipientIds: [user.id], navigateToChannel: true});
+                ChannelActionCreators.openPrivateChannel({ recipientIds: [user.id], navigateToChannel: true });
             }}
         />
     );
