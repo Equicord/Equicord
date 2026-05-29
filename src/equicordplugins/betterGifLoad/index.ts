@@ -7,7 +7,6 @@
 import { definePluginSettings } from "@api/Settings";
 import { EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
-import { FluxDispatcher } from "@webpack/common";
 
 const Quality = {
     Lossless: 0,
@@ -29,53 +28,12 @@ const mediaTenorLinkRegex = /^https:\/\/(?:media\d?|c)\.tenor\.com(?:\/m)?\/(?<i
 const giphyLinkRegex = /^https:\/\/media\d?\.giphy\.com\/media\/.*?\/(?<code>.*?)\/giphy/i;
 const mediaProxyParser = /^https:\/\/images-ext-\d\.discordapp.net\/external\/.*?\.*?\/(?<protocol>.*?)\/(?<rest>.*?)$/i;
 
-function normalizeLink(link: string) {
-    if (link.startsWith("//")) return `https:${link}`;
-    return link;
-}
-
 function getCleanLink(link: string) {
-    const normalized = normalizeLink(link);
+    const normalized = link.startsWith("//") ? `https:${link}` : link;
     const match = normalized.match(mediaProxyParser);
     if (!match) return normalized;
     const { protocol, rest } = match.groups!;
     return `${decodeURIComponent(protocol)}://${decodeURIComponent(rest)}`;
-}
-
-function parseLink(link: string, quality: number, sizes?: [width: number, height: number]) {
-    const q = qualities[quality - 1] ?? qualities[0];
-    let url: URL;
-    try {
-        url = new URL(normalizeLink(link));
-    } catch {
-        return link;
-    }
-
-    const cleanLink = getCleanLink(link);
-    const tenorMatch = cleanLink.match(mediaTenorLinkRegex);
-    if (tenorMatch) {
-        const { id, name } = tenorMatch.groups!;
-        return `https://media.tenor.com/${id}${q.tenor}/${name}.webp`;
-    }
-
-    const giphyMatch = cleanLink.match(giphyLinkRegex);
-    if (giphyMatch) {
-        const { code } = giphyMatch.groups!;
-        return `https://i.giphy.com/media/${code}/${q.giphy}.webp`;
-    }
-
-    if (url.hostname.endsWith(".discordapp.net") || url.hostname === "cdn.discordapp.com") {
-        url.searchParams.set("format", "webp");
-        url.searchParams.set("animated", "true");
-        if (sizes && sizes.length === 2) {
-            const smaller = Math.min(...sizes);
-            url.searchParams.set("width", String(Math.floor((sizes[0] / smaller) * q.cap)));
-            url.searchParams.set("height", String(Math.floor((sizes[1] / smaller) * q.cap)));
-        }
-        return url.toString();
-    }
-
-    return link;
 }
 
 const settings = definePluginSettings({
@@ -83,32 +41,13 @@ const settings = definePluginSettings({
         type: OptionType.SELECT,
         description: "GIF quality",
         options: [
-            { label: "Lossless", value: Quality.Lossless, default: true },
-            { label: "High", value: Quality.High },
+            { label: "High", value: Quality.High, default: true },
             { label: "Reasonable", value: Quality.Reasonable },
             { label: "Low", value: Quality.Low },
             { label: "Horrible", value: Quality.Horrible },
         ],
     },
 });
-
-interface GifPickerItem {
-    src?: string;
-    gif_src?: string;
-    gifSrc?: string;
-    preview?: string;
-    url?: string;
-    width?: number;
-    height?: number;
-}
-
-interface GifPickerEvent {
-    type: string;
-    items?: GifPickerItem[];
-    results?: GifPickerItem[];
-}
-
-let interceptor: ((event: GifPickerEvent) => void) | null = null;
 
 export default definePlugin({
     name: "BetterGifLoad",
@@ -118,62 +57,56 @@ export default definePlugin({
     settings,
     patches: [
         {
-            find: "GIF_PICKER_QUERY_SUCCESS:function",
-            replacement: {
-                match: /(src:(?:\i\(\i\)),.{0,100}?format:)\i/,
-                replace: "$1 1",
-            },
+            find: '"GIFPickerViewStore"',
+            replacement: [
+                {
+                    match: /(src:(?:\i\(\i\)),.{0,100}?format):\i/,
+                    replace: "$1:1",
+                },
+                {
+                    match: /(GIF_PICKER_QUERY_SUCCESS.{0,200}width:(\i),height:(\i),)src:(\i\(\i\)),gifSrc:(\i\(\i\))/,
+                    replace: "$1src:$self.parseLink($4,[$2,$3]),gifSrc:$self.parseLink($5,[$2,$3])",
+                },
+                {
+                    match: /(GIF_PICKER_TRENDING_FETCH_SUCCESS.{0,400})src:(\i\(\i\.trendingGIFPreview\.src\))/,
+                    replace: "$1src:$self.parseLink($2)",
+                },
+                {
+                    match: /src:(\i\(\i\.src\))(,type:\i\.\i\.TRENDING_CATEGORY,)/,
+                    replace: "src:$self.parseLink($1)$2",
+                },
+            ]
         },
     ],
+    parseLink(link: string, sizes?: [width: number, height: number]) {
+        const quality = settings.store.gifQuality;
+        const q = qualities[quality - 1] ?? qualities[0];
+        const url: URL = new URL(link.startsWith("//") ? `https:${link}` : link);
 
-    start() {
-        interceptor = (event: GifPickerEvent) => {
-            if (
-                event.type !== "GIF_PICKER_QUERY_SUCCESS" &&
-                event.type !== "GIF_PICKER_TRENDING_FETCH_SUCCESS" &&
-                event.type !== "GIF_PICKER_SUGGESTIONS_SUCCESS"
-            ) return;
+        const cleanLink = getCleanLink(link);
+        const tenorMatch = cleanLink.match(mediaTenorLinkRegex);
+        if (tenorMatch) {
+            const { id, name } = tenorMatch.groups!;
+            return `https://media.tenor.com/${id}${q.tenor}/${name}.webp`;
+        }
 
-            const quality = settings.store.gifQuality;
-            if (quality === Quality.Lossless) return;
+        const giphyMatch = cleanLink.match(giphyLinkRegex);
+        if (giphyMatch) {
+            const { code } = giphyMatch.groups!;
+            return `https://i.giphy.com/media/${code}/${q.giphy}.webp`;
+        }
 
-            const items = event.items ?? event.results ?? [];
-            for (const item of items) {
-                const sizes: [number, number] | undefined =
-                    item.width != null && item.height != null
-                        ? [item.width, item.height]
-                        : undefined;
-
-                if (item.src) {
-                    const normalized = normalizeLink(item.src);
-                    item.src = parseLink(normalized, quality, sizes);
-                }
-                if (item.gif_src) {
-                    const normalized = normalizeLink(item.gif_src);
-                    item.gif_src = parseLink(normalized, quality, sizes);
-                }
-                if (item.gifSrc) {
-                    const normalized = normalizeLink(item.gifSrc);
-                    item.gifSrc = parseLink(normalized, quality, sizes);
-                }
-                if (item.preview) {
-                    const normalized = normalizeLink(item.preview);
-                    item.preview = parseLink(normalized, quality, sizes);
-                }
-                if (item.url) {
-                    const normalized = normalizeLink(item.url);
-                    item.url = parseLink(normalized, quality, sizes);
-                }
+        if (url.hostname.endsWith(".discordapp.net") || url.hostname === "cdn.discordapp.com") {
+            url.searchParams.set("format", "webp");
+            url.searchParams.set("animated", "true");
+            if (sizes && sizes.length === 2) {
+                const smaller = Math.min(...sizes);
+                url.searchParams.set("width", String(Math.floor((sizes[0] / smaller) * q.cap)));
+                url.searchParams.set("height", String(Math.floor((sizes[1] / smaller) * q.cap)));
             }
-        };
-        FluxDispatcher.addInterceptor(interceptor);
-    },
+            return url.toString();
+        }
 
-    stop() {
-        if (!interceptor) return;
-        const list = FluxDispatcher._interceptors ?? [];
-        const idx = list.indexOf(interceptor);
-        if (idx !== -1) list.splice(idx, 1);
-        interceptor = null;
-    },
+        return link;
+    }
 });
