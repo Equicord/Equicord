@@ -1,11 +1,5 @@
-/*
- * Toggled at runtime via enableStyle/disableStyle (settings.hideNativeTabs).
- * [--tab] is replaced with Discord's runtime-hashed inbox tab class via
- * setStyleClassNames({ tab: tabClass.tab }).
- */
-
 [--tab]:not(.vc-betterinbox-our-tab),
-[class*="recentMentionsPopout"] [role="tab"]:not(.vc-betterinbox-our-tab),
-[class*="recentMentionsPopout"] [role="tablist"] > *:not(.vc-betterinbox-our-tab) {
+[--popout] [role="tab"]:not(.vc-betterinbox-our-tab),
+[--popout] [role="tablist"] > *:not(.vc-betterinbox-our-tab) {
     display: none !important;
 }

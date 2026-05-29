@@ -18,5 +18,5 @@
     color: var(--text-muted);
     font-size: 0.9em;
     white-space: pre-wrap;
-    word-break: break-word;
+    overflow-wrap: break-word;
 }
