@@ -4,12 +4,13 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+// Based on https://github.com/yellowsink/shelter-plugins/tree/master/plugins/fast-gif-picker
+
 import { definePluginSettings } from "@api/Settings";
 import { EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 
 const Quality = {
-    Lossless: 0,
     High: 1,
     Reasonable: 2,
     Low: 3,
@@ -18,10 +19,10 @@ const Quality = {
 type Quality = typeof Quality[keyof typeof Quality];
 
 const qualities = [
-    { giphy: "giphy", tenor: "Ax", cap: 480 },
-    { giphy: "480w", tenor: "A5", cap: 360 },
-    { giphy: "200", tenor: "A1", cap: 200 },
-    { giphy: "100", tenor: "A2", cap: 120 },
+    { giphy: "giphy", tenor: "Ax", cap: 480 }, // webp
+    { giphy: "480w", tenor: "A5", cap: 360 }, // webppreview
+    { giphy: "200", tenor: "A1", cap: 200 }, // tinywebp
+    { giphy: "100", tenor: "A2", cap: 120 }, // nanowebp
 ];
 
 const mediaTenorLinkRegex = /^https:\/\/(?:media\d?|c)\.tenor\.com(?:\/m)?\/(?<id>.+?)(?<quality>.{2})\/(?<name>[^/]+)\./i;
