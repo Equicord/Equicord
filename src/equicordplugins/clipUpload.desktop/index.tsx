@@ -9,13 +9,13 @@ import ErrorBoundary from "@components/ErrorBoundary";
 import { CloudUploadIcon } from "@components/Icons";
 import { EquicordDevs } from "@utils/constants";
 import definePlugin from "@utils/types";
-import { findByCodeLazy } from "@webpack";
+import { findComponentByCodeLazy } from "@webpack";
 import { Menu } from "@webpack/common";
 
 import { abortActiveClipUploads, type ClipMetadata } from "./upload";
 import { openUploadClipFileModal } from "./UploadClipFileModal";
 
-const ActionBarIcon = findByCodeLazy("Children.map", "isValidElement", "dangerous:");
+const ActionBarIcon = findComponentByCodeLazy("Children.map", "isValidElement", "dangerous:");
 
 interface ClipUploadActionProps {
     channelId: string;
