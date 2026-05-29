@@ -504,7 +504,7 @@ export default definePlugin({
                 {
                     // Bypasses Discord's memo cache while the Questify sort is active.
                     match: /(?<=if\()(?=\i\.current\.length>0&&\i\.current===)/,
-                    replace: "$1&&arguments[1]?.sortMethod!==\"questify\"$2"
+                    replace: "arguments[1]?.sortMethod!==\"questify\"&&"
                 },
                 {
                     // If we already applied Questify's sort, skip further sorting.
