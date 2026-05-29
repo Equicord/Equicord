@@ -6,7 +6,8 @@
 
 import { Flex } from "@components/Flex";
 import { getTheme, Theme } from "@utils/discord";
-import { ApplicationStore, Button, Checkbox, Forms, IconUtils, lodash, RunningGameStore, SearchableSelect, TextArea, TextInput, UserStore, useState, useStateFromStores } from "@webpack/common";
+import { Margins } from "@utils/margins";
+import { ApplicationStore, Checkbox, Forms, IconUtils, lodash, RelationshipStore, RunningGameStore, SearchableSelect, TextArea, TextInput, UserStore, useStateFromStores } from "@webpack/common";
 import type { PointerEvent as ReactPointerEvent } from "react";
 
 import { getString } from "./upload";
@@ -95,20 +96,15 @@ function getSelectedParticipantIds(value: unknown) {
     return value.filter((id): id is string => typeof id === "string");
 }
 
-function isSnowflake(value: string) {
-    return /^\d{17,20}$/.test(value);
-}
-
 function getUserLabel(user: ReturnType<typeof UserStore.getCurrentUser>) {
     return user.globalName ? `${user.globalName} (@${user.username})` : user.tag;
 }
 
 export function ParticipantField({ value, onChange, disabled }: ParticipantFieldProps) {
-    const [customId, setCustomId] = useState("");
-    const options = useStateFromStores([UserStore], () => {
+    const options = useStateFromStores([UserStore, RelationshipStore], () => {
         const selectedIds = new Set(value);
         const userOptions = Object.values(UserStore.getUsers())
-            .filter(user => !user.bot && !user.system)
+            .filter(user => !user.bot && !user.system && RelationshipStore.isFriend(user.id))
             .sort((a, b) => getUserLabel(a).localeCompare(getUserLabel(b)))
             .map(user => {
                 selectedIds.delete(user.id);
@@ -127,26 +123,18 @@ export function ParticipantField({ value, onChange, disabled }: ParticipantField
             }))
         ];
     }, [value], lodash.isEqual);
-    const trimmedCustomId = customId.trim();
-    const canAddCustomId = isSnowflake(trimmedCustomId) && !value.includes(trimmedCustomId) && !disabled;
-
-    function addCustomId() {
-        if (!canAddCustomId) return;
-
-        onChange([...value, trimmedCustomId]);
-        setCustomId("");
-    }
 
     return (
         <section>
             <Forms.FormTitle tag="h5">Participants</Forms.FormTitle>
             <Flex flexDirection="column" gap={8}>
+                <Forms.FormText className={Margins.bottom8}>Only tag people who were present and have consented to being in this clip.</Forms.FormText>
                 <SearchableSelect
                     options={options}
                     value={value}
                     onChange={(selected: unknown) => onChange(getSelectedParticipantIds(selected))}
                     closeOnSelect={false}
-                    placeholder="Select users"
+                    placeholder="Select friends"
                     isDisabled={disabled}
                     multi
                     renderOptionPrefix={option => {
@@ -164,17 +152,6 @@ export function ParticipantField({ value, onChange, disabled }: ParticipantField
                         );
                     }}
                 />
-                <Flex alignItems="center" gap={8}>
-                    <TextInput
-                        value={customId}
-                        onChange={setCustomId}
-                        placeholder="Custom user ID"
-                        disabled={disabled}
-                    />
-                    <Button onClick={addCustomId} disabled={!canAddCustomId}>
-                        Add
-                    </Button>
-                </Flex>
             </Flex>
         </section>
     );
