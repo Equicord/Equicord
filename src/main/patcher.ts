@@ -133,17 +133,15 @@ if (!IS_VANILLA) {
                 this.setMinimumSize = (_width: number, _height: number) => { };
             }
 
-            if (isMainWindow && settings.htmlFullscreenFix !== false) {
+            if (isMainWindow && settings.htmlFullscreenFix) {
                 // When an HTML5 video (e.g. a YouTube embed) requests fullscreen, Discord calls
-                // setFullScreen(true) on the OS window, hijacking the entire display. We intercept
-                // those specific event registrations so the video stays inside the Discord window.
-                // OS-level fullscreen (F11 / window maximize) is unaffected — those paths don't
-                // go through enter-html-full-screen.
-                const _on = this.on.bind(this) as (...args: any[]) => this;
-                (this as any).on = function (event: string, ...args: any[]) {
-                    if (event === "enter-html-full-screen" || event === "leave-html-full-screen") return this;
-                    return _on(event, ...args);
-                };
+                // setFullScreen(true) on the OS window, hijacking the entire display. Removing
+                // these listeners keeps the video inside the Discord window.
+                // OS-level fullscreen (F11 / window maximize) is unaffected.
+                this.once("ready-to-show", () => {
+                    this.removeAllListeners("enter-html-full-screen");
+                    this.removeAllListeners("leave-html-full-screen");
+                });
             }
         }
     }
@@ -191,7 +189,7 @@ if (!IS_VANILLA) {
     app.commandLine.appendSwitch("disable-background-timer-throttling");
     app.commandLine.appendSwitch("disable-backgrounding-occluded-windows");
 
-    if (settings.hardwareVideoAcceleration !== false) {
+    if (settings.hardwareVideoAcceleration) {
         // Offload video decode/encode from CPU to GPU.
         // On Windows/macOS: DXVA2/D3D11VA and VideoToolbox handle H.264, VP9, AV1.
         // On Linux: VA-API covers the same codecs on Intel/AMD; NVDEC on NVIDIA.
