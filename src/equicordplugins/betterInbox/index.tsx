@@ -11,12 +11,13 @@ import { Button } from "@components/Button";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { EquicordDevs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
+import { openPrivateChannel } from "@utils/discord";
 import { Logger } from "@utils/Logger";
 import { classes } from "@utils/misc";
 import { useForceUpdater } from "@utils/react";
 import definePlugin from "@utils/types";
 import { findByCodeLazy, findCssClassesLazy } from "@webpack";
-import { ChannelStore, ContextMenuApi, GuildStore, IconUtils, Menu, MessageStore, ReadStateUtils, SelectedChannelStore, TabBar, Tooltip, useEffect, UserStore } from "@webpack/common";
+import { ChannelRouter, ChannelStore, ContextMenuApi, GuildStore, IconUtils, Menu, MessageActions, MessageStore, ReadStateUtils, SelectedChannelStore, TabBar, Tooltip, useEffect, UserStore } from "@webpack/common";
 
 import hideNativesStyle from "./hideNatives.css?managed";
 import { settings } from "./settings";
@@ -137,6 +138,32 @@ function renderSyntheticContent(kind: ActivityKind, meta?: ActivityMeta) {
     return null;
 }
 
+function jumpToInboxEntry(msg: InboxRecord, owning?: StoredEntry) {
+    if (!owning) {
+        MessageActions.jumpToMessage({ channelId: msg.channel_id, messageId: msg.id, flash: true });
+        return;
+    }
+
+    const { kind, raw } = owning;
+
+    if (kind === "group-add" || kind === "scheduled-event") {
+        ChannelRouter.transitionToChannel(raw.channel_id);
+        return;
+    }
+    if (kind === "friend-request" || kind === "friend-added") {
+        openPrivateChannel(raw.channel_id);
+        return;
+    }
+
+    const ref = raw.message_reference;
+    if ((kind === "reaction" || kind === "thread-created" || kind === "pinned") && ref?.channel_id && ref.message_id) {
+        MessageActions.jumpToMessage({ channelId: ref.channel_id, messageId: ref.message_id, flash: true });
+        return;
+    }
+
+    MessageActions.jumpToMessage({ channelId: raw.channel_id, messageId: raw.id, flash: true });
+}
+
 function openEntryContextMenu(event: React.MouseEvent, msg: InboxRecord, owning?: StoredEntry) {
     event.preventDefault();
     event.stopPropagation();
@@ -209,7 +236,7 @@ function BetterInboxContent({ tabId, onJump, renderInboxMsg }: BetterInboxConten
 
     const snapshot = getDisplayMessages(tabId);
 
-    const messageRender = (msg: InboxRecord, jump?: JumpFn) => {
+    const messageRender = (msg: InboxRecord) => {
         const owning = getActivityLog().find(e => e.record === msg);
         if (owning) msg._betterInbox = { id: owning.id };
 
@@ -225,7 +252,7 @@ function BetterInboxContent({ tabId, onJump, renderInboxMsg }: BetterInboxConten
             message: msg,
             gotoMessage: () => {
                 if (owning) markEntryRead(owning.id, false);
-                jump?.(msg.channel_id, msg.id, msg);
+                jumpToInboxEntry(msg, owning);
             },
             dismissible: true
         });

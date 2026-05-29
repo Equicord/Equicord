@@ -185,7 +185,7 @@ function shouldDropForFilters(record: InboxRecord): boolean {
         if (selfId) {
             const { mentionEveryone, mentionRoles, mentions } = record;
             const hasRoleMention = Array.isArray(mentionRoles) && mentionRoles.length > 0;
-            const directlyMentioned = Array.isArray(mentions) && mentions.includes(selfId);
+            const directlyMentioned = Array.isArray(mentions) && mentions.some((m: { id?: string; } | string) => (typeof m === "string" ? m : m.id) === selfId);
             if ((mentionEveryone || hasRoleMention) && !directlyMentioned) return true;
         }
     }
