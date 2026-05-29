@@ -132,6 +132,19 @@ if (!IS_VANILLA) {
                 // Disable the Electron call entirely so that Discord can't dynamically change the size
                 this.setMinimumSize = (_width: number, _height: number) => { };
             }
+
+            if (isMainWindow && settings.htmlFullscreenFix !== false) {
+                // When an HTML5 video (e.g. a YouTube embed) requests fullscreen, Discord calls
+                // setFullScreen(true) on the OS window, hijacking the entire display. We intercept
+                // those specific event registrations so the video stays inside the Discord window.
+                // OS-level fullscreen (F11 / window maximize) is unaffected — those paths don't
+                // go through enter-html-full-screen.
+                const _on = this.on.bind(this) as (...args: any[]) => this;
+                (this as any).on = function (event: string, ...args: any[]) {
+                    if (event === "enter-html-full-screen" || event === "leave-html-full-screen") return this;
+                    return _on(event, ...args);
+                };
+            }
         }
     }
     Object.assign(BrowserWindow, electron.BrowserWindow);
@@ -177,6 +190,19 @@ if (!IS_VANILLA) {
     app.commandLine.appendSwitch("disable-renderer-backgrounding");
     app.commandLine.appendSwitch("disable-background-timer-throttling");
     app.commandLine.appendSwitch("disable-backgrounding-occluded-windows");
+
+    if (settings.hardwareVideoAcceleration !== false) {
+        // Offload video decode/encode from CPU to GPU.
+        // On Windows/macOS: DXVA2/D3D11VA and VideoToolbox handle H.264, VP9, AV1.
+        // On Linux: VA-API covers the same codecs on Intel/AMD; NVDEC on NVIDIA.
+        // Zero-copy skips the CPU round-trip when transferring decoded frames to the compositor.
+        const features = ["AcceleratedVideoDecoder", "AcceleratedVideoEncoder"];
+        if (process.platform === "linux") features.push("VaapiVideoDecoder", "VaapiVideoEncoder");
+        app.commandLine.appendSwitch("enable-features", features.join(","));
+        app.commandLine.appendSwitch("enable-accelerated-video-decode");
+        app.commandLine.appendSwitch("enable-gpu-rasterization");
+        app.commandLine.appendSwitch("enable-zero-copy");
+    }
 } else {
     console.log("[Equicord] Running in vanilla mode. Not loading Equicord");
 }

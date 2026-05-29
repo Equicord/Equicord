@@ -73,6 +73,8 @@ export interface Settings {
     windowsMaterial: "none" | "mica" | "tabbed" | "acrylic";
     disableMinSize: boolean;
     winNativeTitleBar: boolean;
+    hardwareVideoAcceleration: boolean;
+    htmlFullscreenFix: boolean;
     plugins: {
         [plugin: string]: {
             enabled: boolean;
@@ -130,6 +132,8 @@ const DefaultSettings: Settings = {
     windowsMaterial: "none",
     disableMinSize: false,
     winNativeTitleBar: false,
+    hardwareVideoAcceleration: true,
+    htmlFullscreenFix: true,
     plugins: {},
 
     uiElements: {

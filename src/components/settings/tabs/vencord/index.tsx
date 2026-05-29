@@ -49,7 +49,7 @@ type KeysOfType<Object, Type> = {
 }[keyof Object];
 
 function Switches() {
-    const settings = useSettings(["useQuickCss", "enableReactDevtools", "mainWindowFrameless", "frameless", "winNativeTitleBar", "transparent", "winCtrlQ", "disableMinSize"]);
+    const settings = useSettings(["useQuickCss", "enableReactDevtools", "mainWindowFrameless", "frameless", "winNativeTitleBar", "transparent", "winCtrlQ", "disableMinSize", "hardwareVideoAcceleration", "htmlFullscreenFix"]);
 
     const Switches = [
         {
@@ -102,6 +102,18 @@ function Switches() {
             key: "winCtrlQ",
             title: "Register Ctrl+Q as shortcut to close Discord",
             description: "Add Ctrl+Q as a keyboard shortcut to close Discord. This provides an alternative to Alt+F4 for quickly closing the application.",
+            restartRequired: true,
+        },
+        !IS_WEB && {
+            key: "hardwareVideoAcceleration",
+            title: "Hardware Video Acceleration",
+            description: "Use the GPU to decode and encode video instead of the CPU. Reduces CPU usage during video calls, screen sharing, and embedded video playback. Disable this if you run into graphical glitches with an older GPU.",
+            restartRequired: true,
+        },
+        !IS_WEB && {
+            key: "htmlFullscreenFix",
+            title: "Fix HTML5 video fullscreen",
+            description: "Prevents embedded HTML5 videos (e.g. YouTube or Twitch clips) from forcing the entire Discord window into OS-level fullscreen. The video plays inside Discord's window instead.",
             restartRequired: true,
         },
     ] satisfies Array<false | {
