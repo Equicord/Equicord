@@ -57,6 +57,45 @@ function setPendingChanges(payload: Record<string, unknown>, guildId?: string) {
     dispatch("USER_PROFILE_SETTINGS_SET_PENDING_CHANGES", guildId ? { guildId, ...payload } : payload);
 }
 
+function setPendingBanner(banner: ImageInput, guildId?: string) {
+    if (banner === undefined) return;
+    dispatch("USER_PROFILE_SETTINGS_SET_PENDING_BANNER", guildId ? { guildId, banner } : { banner });
+}
+
+function openProfileCustomizationPreviewModal(payload: Record<string, unknown>) {
+    dispatch("PROFILE_CUSTOMIZATION_OPEN_PREVIEW_MODAL", payload);
+}
+
+function openProfileImagePreview(
+    uploadType: "AVATAR" | "BANNER",
+    image: { imageUri: string; [key: string]: unknown; },
+    guildId?: string
+) {
+    openProfileCustomizationPreviewModal({
+        image,
+        file: {},
+        uploadType,
+        guildId,
+        analyticsSource: guildId ? "user settings guild profile" : "user settings user profile",
+        isTryItOut: false
+    });
+}
+
+function buildNewAssetPayload(dataUrl: string, presetName?: string): { assetOrigin: "NEW_ASSET"; imageUri: string; description: string; } {
+    return {
+        assetOrigin: "NEW_ASSET",
+        imageUri: dataUrl,
+        description: `profilesets-${presetName ?? "preset"}`
+    };
+}
+
+function toBannerPayload(bannerValue: ImageInput, presetName?: string): ImageInput {
+    if (typeof bannerValue === "string" && bannerValue.startsWith("data:")) {
+        return buildNewAssetPayload(bannerValue, presetName);
+    }
+    return bannerValue;
+}
+
 function isNonEmptyString(value: unknown): value is string {
     return typeof value === "string" && value.length > 0;
 }
@@ -121,6 +160,28 @@ async function processImage(imageData: ImageInput, userId: string, type: "avatar
         }
 
         const isAnimated = imageData.startsWith("a_");
+
+        if (type === "banner") {
+            const bannerUrl = useGuildPath && guildId
+                ? IconUtils.getGuildMemberBannerURL?.({
+                    id: userId,
+                    guildId,
+                    banner: imageData,
+                    canAnimate: isAnimated,
+                    size: 1024
+                })
+                : IconUtils.getUserBannerURL?.({
+                    id: userId,
+                    banner: imageData,
+                    canAnimate: isAnimated,
+                    size: 1024
+                });
+            if (bannerUrl) {
+                const fromUtils = await imageUrlToBase64(bannerUrl);
+                if (fromUtils) return fromUtils;
+            }
+        }
+
         const size = type === "banner" ? 1024 : 512;
         const urlPath = type === "banner" ? "banners" : "avatars";
         const guildPath = guildId ? `guilds/${guildId}/users/${userId}/${type === "banner" ? "banners" : "avatars"}` : urlPath;
@@ -237,10 +298,12 @@ export async function getCurrentProfile(guildId?: string, options: CurrentProfil
     const avatarDataUrl = await processImage(avatarInput, currentUser.id, "avatar", effectiveGuildId, useGuildAvatar);
     const resolvedAvatarDataUrl = avatarDataUrl ?? IconUtils.getDefaultAvatarURL(currentUser.id);
 
-    const { pendingBanner } = pendingChanges;
+    const pendingBanner = pendingChanges.pendingBanner ?? (pendingChanges as { banner?: ImageInput; }).banner;
     const bannerToUse: ImageInput = hasImageInput(pendingBanner)
         ? pendingBanner
-        : (isGuildProfile ? (guildProfile?.banner ?? baseProfile?.banner) : baseProfile?.banner);
+        : (isGuildProfile
+            ? (guildProfile?.banner ?? baseProfile?.banner)
+            : (baseProfile?.banner ?? currentUser.banner ?? null));
     const useGuildBanner = !!(effectiveGuildId && isGuildProfile && guildProfile?.banner && bannerToUse === guildProfile?.banner);
 
     const bannerDataUrl = await processImage(bannerToUse, currentUser.id, "banner", effectiveGuildId, useGuildBanner);
@@ -283,6 +346,13 @@ function resolvePendingAvatar(pendingChanges: PendingChanges | null): ImageInput
     if (!pendingChanges) return null;
 
     return hasImageInput(pendingChanges.pendingAvatar) ? pendingChanges.pendingAvatar : null;
+}
+
+function resolvePendingBanner(pendingChanges: PendingChanges | null): ImageInput {
+    if (!pendingChanges) return null;
+
+    const pending = pendingChanges.pendingBanner ?? (pendingChanges as { banner?: ImageInput; }).banner;
+    return hasImageInput(pending) ? pending : null;
 }
 
 function normalizeImageValue(value: unknown): string | null {
@@ -344,14 +414,26 @@ export async function loadPresetAsPending(preset: ProfilePreset, guildId?: strin
         }
 
         if ("bannerDataUrl" in preset && preset.bannerDataUrl !== current.bannerDataUrl) {
-            const bannerPayload = preset.bannerDataUrl?.startsWith?.("data:")
-                ? {
-                    assetOrigin: "NEW_ASSET",
-                    imageUri: preset.bannerDataUrl,
-                    description: `profilesets-${preset.name ?? "preset"}`
-                }
-                : preset.bannerDataUrl;
-            setPending({ pendingBanner: bannerPayload });
+            const bannerPayload = toBannerPayload(preset.bannerDataUrl, preset.name);
+            const bannerImageUri = normalizeImageValue(bannerPayload);
+            const effectiveGuildId = isGuild ? guildId : undefined;
+
+            if (isNonEmptyString(bannerImageUri)) {
+                // Data-URL banners must go through the profile customization preview modal to apply.
+                openProfileImagePreview(
+                    "BANNER",
+                    typeof bannerPayload === "object" && bannerPayload != null && "imageUri" in bannerPayload
+                        ? { ...bannerPayload, imageUri: bannerImageUri }
+                        : { imageUri: bannerImageUri },
+                    effectiveGuildId
+                );
+            } else if (bannerPayload != null) {
+                setPending({ pendingBanner: bannerPayload });
+                setPendingBanner(bannerPayload, effectiveGuildId);
+            } else {
+                setPending({ pendingBanner: null });
+                setPendingBanner(null, effectiveGuildId);
+            }
         }
 
         if (!options.skipBio && preset?.bio !== current?.bio) {
