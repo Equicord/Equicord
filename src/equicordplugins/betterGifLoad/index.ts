@@ -4,8 +4,6 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-// Based on https://github.com/yellowsink/shelter-plugins/tree/master/plugins/fast-gif-picker
-
 import { definePluginSettings } from "@api/Settings";
 import { EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
@@ -54,15 +52,15 @@ export default definePlugin({
     name: "BetterGifLoad",
     description: "Allows you to change the quality of GIFs in the GIF picker",
     tags: ["Media", "Utility"],
-    authors: [EquicordDevs.Leon135],
+    authors: [EquicordDevs.Leon135, EquicordDevs.nexpid],
     settings,
     patches: [
         {
             find: '"GIFPickerViewStore"',
             replacement: [
                 {
-                    match: /(src:(?:\i\(\i\)),.{0,100}?format):\i/,
-                    replace: "$1:1",
+                    match: /case"tinywebm":/,
+                    replace: 'case"webp":$&',
                 },
                 {
                     match: /(GIF_PICKER_QUERY_SUCCESS.{0,200}width:(\i),height:(\i),)src:(\i\(\i\)),gifSrc:(\i\(\i\))/,
