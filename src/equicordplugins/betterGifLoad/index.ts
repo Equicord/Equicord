@@ -59,7 +59,7 @@ export default definePlugin({
             find: '"GIFPickerViewStore"',
             replacement: [
                 {
-                    match: /\?(\i\.\i\.IMAGE):(\i\.\i\.VIDEO)/,
+                    match: /\?(\i\.\i\.IMAGE):\i\.\i\.VIDEO/,
                     replace: "?$1:$1",
                 },
                 {
