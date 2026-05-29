@@ -129,12 +129,19 @@ async function readStampedVideoFile(path: string, name: string, type: string) {
     const mediaEngine: unknown = MediaEngineStore.getMediaEngine();
     if (!isClipMetadataWriter(mediaEngine)) throw new Error("Couldn't access Discord's clip metadata writer.");
 
-    await mediaEngine.updateClipMetadata(path, "{}");
+    const tempPath = await Native.createTempVideoFile(path);
+    if (!tempPath) throw new Error("Couldn't prepare the selected file.");
 
-    const data = await Native.readVideoFile(path);
+    try {
+        await mediaEngine.updateClipMetadata(tempPath, "{}");
+
+        const data = await Native.readVideoFile(tempPath);
     if (!data) throw new Error("Couldn't read the selected file.");
 
     return new File([new Uint8Array(data)], name, { type });
+    } finally {
+        await Native.deleteTempVideoFile(tempPath);
+    }
 }
 
 export async function pickClipFile() {
