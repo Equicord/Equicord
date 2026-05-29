@@ -62,16 +62,12 @@ function setPendingBanner(banner: ImageInput, guildId?: string) {
     dispatch("USER_PROFILE_SETTINGS_SET_PENDING_BANNER", guildId ? { guildId, banner } : { banner });
 }
 
-function openProfileCustomizationPreviewModal(payload: Record<string, unknown>) {
-    dispatch("PROFILE_CUSTOMIZATION_OPEN_PREVIEW_MODAL", payload);
-}
-
 function openProfileImagePreview(
     uploadType: "AVATAR" | "BANNER",
     image: { imageUri: string; [key: string]: unknown; },
     guildId?: string
 ) {
-    openProfileCustomizationPreviewModal({
+    dispatch("PROFILE_CUSTOMIZATION_OPEN_PREVIEW_MODAL", {
         image,
         file: {},
         uploadType,
@@ -348,13 +344,6 @@ function resolvePendingAvatar(pendingChanges: PendingChanges | null): ImageInput
     return hasImageInput(pendingChanges.pendingAvatar) ? pendingChanges.pendingAvatar : null;
 }
 
-function resolvePendingBanner(pendingChanges: PendingChanges | null): ImageInput {
-    if (!pendingChanges) return null;
-
-    const pending = pendingChanges.pendingBanner ?? (pendingChanges as { banner?: ImageInput; }).banner;
-    return hasImageInput(pending) ? pending : null;
-}
-
 function normalizeImageValue(value: unknown): string | null {
     if (typeof value === "string") return value;
     if (value && typeof value === "object" && "imageUri" in value) {
@@ -415,18 +404,10 @@ export async function loadPresetAsPending(preset: ProfilePreset, guildId?: strin
 
         if ("bannerDataUrl" in preset && preset.bannerDataUrl !== current.bannerDataUrl) {
             const bannerPayload = toBannerPayload(preset.bannerDataUrl, preset.name);
-            const bannerImageUri = normalizeImageValue(bannerPayload);
             const effectiveGuildId = isGuild ? guildId : undefined;
 
-            if (isNonEmptyString(bannerImageUri)) {
-                // Data-URL banners must go through the profile customization preview modal to apply.
-                openProfileImagePreview(
-                    "BANNER",
-                    typeof bannerPayload === "object" && bannerPayload != null && "imageUri" in bannerPayload
-                        ? { ...bannerPayload, imageUri: bannerImageUri }
-                        : { imageUri: bannerImageUri },
-                    effectiveGuildId
-                );
+            if (typeof bannerPayload === "object" && bannerPayload !== null) {
+                openProfileImagePreview("BANNER", bannerPayload, effectiveGuildId);
             } else if (bannerPayload != null) {
                 setPending({ pendingBanner: bannerPayload });
                 setPendingBanner(bannerPayload, effectiveGuildId);
