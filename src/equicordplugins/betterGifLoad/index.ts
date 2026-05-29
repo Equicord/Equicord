@@ -59,7 +59,7 @@ export default definePlugin({
             find: '"GIFPickerViewStore"',
             replacement: [
                 {
-                    match: /case"tinywebm":/,
+                    match: /default:/,
                     replace: 'case"webp":$&',
                 },
                 {
