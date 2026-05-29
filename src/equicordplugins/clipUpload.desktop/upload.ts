@@ -259,7 +259,7 @@ export async function uploadClipFile(file: File, options: ClipUploadOptions) {
     }
 }
 
-function getErrorMessage(error: unknown) {
+export function getErrorMessage(error: unknown) {
     if (error instanceof DOMException && error.name === "AbortError") return "Upload canceled.";
     if (error instanceof Error) return error.message;
 

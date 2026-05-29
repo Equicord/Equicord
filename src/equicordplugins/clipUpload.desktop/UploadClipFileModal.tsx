@@ -6,10 +6,10 @@
 
 import { Flex } from "@components/Flex";
 import type { RenderModalProps } from "@vencord/discord-types";
-import { Button, Forms, Modal, openModal, useEffect, useState } from "@webpack/common";
+import { Button, Forms, Modal, openModal, showToast, Toasts, useEffect, useState } from "@webpack/common";
 
 import { ApplicationField, BooleanField, DateTimeField, getDateTimeLocalValue, ParticipantField, TextField } from "./fields";
-import { abortActiveClipUploads, type ClipMetadata, getClipCreatedAt, getClipTitleFromName, getDefaultClipTitle, getDefaultFileName, getParticipantIds, getString, isValidDate, pickClipFile, uploadClipFile } from "./upload";
+import { abortActiveClipUploads, type ClipMetadata, getClipCreatedAt, getClipTitleFromName, getDefaultClipTitle, getDefaultFileName, getErrorMessage, getParticipantIds, getString, isValidDate, pickClipFile, uploadClipFile } from "./upload";
 
 export function openUploadClipFileModal(channelId: string, clip?: ClipMetadata | null) {
     openModal(modalProps => (
@@ -43,8 +43,14 @@ function UploadClipFileModal({ modalProps, channelId, clip }: { modalProps: Rend
     useEffect(() => abortActiveClipUploads, []);
 
     async function chooseClipFile() {
-        const picked = await pickClipFile();
-        if (!picked) return;
+        let picked: File | null;
+        try {
+            picked = await pickClipFile();
+            if (!picked) return;
+        } catch (error) {
+            showToast(getErrorMessage(error), Toasts.Type.FAILURE);
+            return;
+        }
 
         setFile(picked);
         setFileName(name => name === defaultFileName ? picked.name : name);
