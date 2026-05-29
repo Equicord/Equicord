@@ -23,6 +23,7 @@ import { plugins } from "@api/PluginManager";
 import { definePluginSettings } from "@api/Settings";
 import { openPluginModal } from "@components/settings";
 import { Devs, EquicordDevs } from "@utils/constants";
+import { useForceUpdater } from "@utils/react";
 import definePlugin, { OptionType } from "@utils/types";
 import { Channel } from "@vencord/discord-types";
 import { ChannelStore, FluxDispatcher, Menu, MessageStore, React, SelectedChannelStore, useEffect, UserStore } from "@webpack/common";
@@ -168,7 +169,7 @@ const SilentTypingChatToggle: ChatBarButtonFactory = ({ channel, type }) => {
         "chatIconRightClickAction",
     ]);
 
-    const [, forceUpdate] = React.useReducer(x => x + 1, 0);
+    const forceUpdate = useForceUpdater();
 
     useEffect(() => {
         rerenderListeners.add(forceUpdate);
@@ -183,7 +184,7 @@ const SilentTypingChatToggle: ChatBarButtonFactory = ({ channel, type }) => {
     if (!validChat || !chatIcon) return null;
 
     const effectiveList = getEffectiveList();
-    const enabledLocallyExplicitly = isExplicitlyDisallowed(channel);
+    const isLocallyDisallowed = isExplicitlyDisallowed(channel);
     const allowedLocallyImplicitly = isImplicitlyAllowed(channel);
     const location = channel.guild_id && effectiveList.includes(channel.guild_id) ? "Guild" : effectiveList.includes(channel.id) ? "Channel" : "Global";
 
@@ -192,7 +193,7 @@ const SilentTypingChatToggle: ChatBarButtonFactory = ({ channel, type }) => {
             ? "Typing Always Visible In The Connected Voice Channel Chat"
             : allowedLocallyImplicitly === 2
                 ? "Typing Temporarily Visible In This Channel Due To A Recent Message"
-                : enabledLocallyExplicitly
+                : isLocallyDisallowed
                     ? `Typing Hidden (${location})` : `Typing Visible (${location})`
     ) : "Typing Visible (Global)";
 
@@ -233,7 +234,7 @@ const SilentTypingChatToggle: ChatBarButtonFactory = ({ channel, type }) => {
             }}>
             <svg width="20" height="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style={{ scale: "1.2" }}>
                 <path fill="currentColor" mask={`url(#silent-typing-msg-mask-${channel.id})`} d="M18.333 15.556H1.667a1.667 1.667 0 0 1 -1.667 -1.667v-10a1.667 1.667 0 0 1 1.667 -1.667h16.667a1.667 1.667 0 0 1 1.667 1.667v10a1.667 1.667 0 0 1 -1.667 1.667M4.444 6.25V4.861a0.417 0.417 0 0 0 -0.417 -0.417H2.639a0.417 0.417 0 0 0 -0.417 0.417V6.25a0.417 0.417 0 0 0 0.417 0.417h1.389a0.417 0.417 0 0 0 0.417 -0.417m3.333 0V4.861a0.417 0.417 0 0 0 -0.417 -0.417H5.973a0.417 0.417 0 0 0 -0.417 0.417V6.25a0.417 0.417 0 0 0 0.417 0.417h1.389a0.417 0.417 0 0 0 0.417 -0.417m3.333 0V4.861a0.417 0.417 0 0 0 -0.417 -0.417h-1.389a0.417 0.417 0 0 0 -0.417 0.417V6.25a0.417 0.417 0 0 0 0.417 0.417h1.389a0.417 0.417 0 0 0 0.417 -0.417m3.333 0V4.861a0.417 0.417 0 0 0 -0.417 -0.417h-1.389a0.417 0.417 0 0 0 -0.417 0.417V6.25a0.417 0.417 0 0 0 0.417 0.417h1.389a0.417 0.417 0 0 0 0.417 -0.417m3.333 0V4.861a0.417 0.417 0 0 0 -0.417 -0.417h-1.389a0.417 0.417 0 0 0 -0.417 0.417V6.25a0.417 0.417 0 0 0 0.417 0.417h1.389a0.417 0.417 0 0 0 0.417 -0.417m-11.667 3.333V8.194a0.417 0.417 0 0 0 -0.417 -0.417H4.306a0.417 0.417 0 0 0 -0.417 0.417V9.583a0.417 0.417 0 0 0 0.417 0.417h1.389a0.417 0.417 0 0 0 0.417 -0.417m3.333 0V8.194a0.417 0.417 0 0 0 -0.417 -0.417H7.639a0.417 0.417 0 0 0 -0.417 0.417V9.583a0.417 0.417 0 0 0 0.417 0.417h1.389a0.417 0.417 0 0 0 0.417 -0.417m3.333 0V8.194a0.417 0.417 0 0 0 -0.417 -0.417h-1.389a0.417 0.417 0 0 0 -0.417 0.417V9.583a0.417 0.417 0 0 0 0.417 0.417h1.389a0.417 0.417 0 0 0 0.417 -0.417m3.333 0V8.194a0.417 0.417 0 0 0 -0.417 -0.417h-1.389a0.417 0.417 0 0 0 -0.417 0.417V9.583a0.417 0.417 0 0 0 0.417 0.417h1.389a0.417 0.417 0 0 0 0.417 -0.417m-11.667 3.333v-1.389a0.417 0.417 0 0 0 -0.417 -0.417H2.639a0.417 0.417 0 0 0 -0.417 0.417V12.917a0.417 0.417 0 0 0 0.417 0.417h1.389a0.417 0.417 0 0 0 0.417 -0.417m10 0v-1.389a0.417 0.417 0 0 0 -0.417 -0.417H5.973a0.417 0.417 0 0 0 -0.417 0.417V12.917a0.417 0.417 0 0 0 0.417 0.417h8.056a0.417 0.417 0 0 0 0.417 -0.417m3.333 0v-1.389a0.417 0.417 0 0 0 -0.417 -0.417h-1.389a0.417 0.417 0 0 0 -0.417 0.417V12.917a0.417 0.417 0 0 0 0.417 0.417h1.389a0.417 0.417 0 0 0 0.417 -0.417" transform="translate(2, 3)" />
-                {(enabledLocallyExplicitly && !allowedLocallyImplicitly) && (
+                {(isLocallyDisallowed && !allowedLocallyImplicitly) && (
                     <>
                         <mask id={`silent-typing-msg-mask-${channel.id}`}>
                             <path fill="#fff" d="M0 0h24v24H0Z"></path>
