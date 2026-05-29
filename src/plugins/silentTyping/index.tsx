@@ -25,7 +25,7 @@ import { openPluginModal } from "@components/settings";
 import { Devs, EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 import { Channel } from "@vencord/discord-types";
-import { ChannelStore, FluxDispatcher, Menu, React } from "@webpack/common";
+import { ChannelStore, FluxDispatcher, Menu, MessageStore, React, SelectedChannelStore } from "@webpack/common";
 
 const settings = definePluginSettings({
     enabledGlobally: {
@@ -97,6 +97,21 @@ const settings = definePluginSettings({
         type: OptionType.STRING,
         description: "Disable functionality for these IDs. Accepts a comma separated list of DM IDs, channel IDs, and guild IDs. Only used if \"Default Hidden\" is enabled.",
         default: "",
+    },
+    currentVC: {
+        type: OptionType.BOOLEAN,
+        description: "Always show you are typing in your current voice channel",
+        default: true,
+    },
+    threshold: {
+        type: OptionType.NUMBER,
+        description: "Last message must be sent in the current channel within the past [threshold] seconds for the typing indicator to be shown",
+        default: 300,
+    },
+    thresholdInDms: {
+        type: OptionType.NUMBER,
+        description: "Threshold above, for DMs and group chats",
+        default: 86400,
     },
 });
 
@@ -288,6 +303,13 @@ function shouldHideChatBarTypingIndicators(): boolean {
     return hideChatBoxTypingIndicators;
 }
 
+function checkThreshold(channelId: string): boolean {
+    if (settings.store.currentVC && SelectedChannelStore.getVoiceChannelId() === channelId) return true;
+    const threshold = Date.now() - (settings.store[ChannelStore.getChannel(channelId).isPrivate() ? "thresholdInDms" : "threshold"] * 1000);
+    const lastMessage = (MessageStore as any).getLastEditableMessage(channelId);
+    return lastMessage?.timestamp > threshold;
+}
+
 function shouldHideMembersListTypingIndicators(): boolean {
     const { hideMembersListTypingIndicators } = settings.use(["hideMembersListTypingIndicators"]);
     return hideMembersListTypingIndicators;
@@ -295,7 +317,7 @@ function shouldHideMembersListTypingIndicators(): boolean {
 
 export default definePlugin({
     name: "SilentTyping",
-    authors: [Devs.Ven, Devs.Rini, Devs.ImBanana, EquicordDevs.Etorix],
+    authors: [Devs.Ven, Devs.Rini, Devs.ImBanana, EquicordDevs.Etorix, EquicordDevs.keircn],
     description: "Hide that you are typing",
     dependencies: ["CommandsAPI", "ChatInputButtonAPI"],
     tags: ["Chat", "Privacy"],
@@ -438,7 +460,7 @@ export default definePlugin({
     ],
 
     async startTyping(channelId: string) {
-        if (checkEnabled(channelId)) return;
+        if (checkEnabled(channelId) || !checkThreshold(channelId)) return;
         FluxDispatcher.dispatch({ type: "TYPING_START_LOCAL", channelId });
     },
 });
