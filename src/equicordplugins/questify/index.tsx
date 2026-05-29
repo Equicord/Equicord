@@ -503,7 +503,7 @@ export default definePlugin({
                 },
                 {
                     // Bypasses Discord's memo cache while the Questify sort is active.
-                    match: /(if\(\i\.current\.length>0&&\i\.current===\i\.length&&\i\.current===\i\.sortMethod&&\i\.current===\i\.filters)(\)return \i\.current;)/,
+                    match: /(?<=if\()(?=\i\.current\.length>0&&\i\.current===)/,
                     replace: "$1&&arguments[1]?.sortMethod!==\"questify\"$2"
                 },
                 {
@@ -513,8 +513,8 @@ export default definePlugin({
                 },
                 {
                     // Recomputes Discord's Quest list memo when Questify settings or rerenders change.
-                    match: /(?<=\.id\);return \i\.current=\i,\i\.current=\i\.sortMethod,\i\.current=\i\.filters,\i\.current=\i\.length,\i\},\[)(\i,\i)(?=\]\)\))/,
-                    replace: "$1,questRerenderTrigger,questifySorted"
+                    match: /(?=]\)\),\i=\(\i=\i.useMemo\(\(\)=>\i.filter)/,
+                    replace: ",questRerenderTrigger,questifySorted"
                 }
             ]
         },
