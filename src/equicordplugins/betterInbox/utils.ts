@@ -64,6 +64,7 @@ export function makeSyntheticRaw(opts: SyntheticOpts): RawMessage {
         id: opts.id,
         type: 0,
         channel_id: opts.channelId,
+        guild_id: guildId,
         author: opts.author,
         content: opts.content,
         timestamp: new Date().toISOString(),

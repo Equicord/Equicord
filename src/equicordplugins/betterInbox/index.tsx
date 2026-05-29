@@ -17,7 +17,7 @@ import { classes } from "@utils/misc";
 import { useForceUpdater } from "@utils/react";
 import definePlugin from "@utils/types";
 import { findByCodeLazy, findCssClassesLazy } from "@webpack";
-import { ChannelRouter, ChannelStore, ContextMenuApi, GuildStore, IconUtils, Menu, MessageActions, MessageStore, ReadStateUtils, SelectedChannelStore, TabBar, Tooltip, useEffect, UserStore } from "@webpack/common";
+import { ChannelRouter, ChannelStore, ContextMenuApi, GuildStore, IconUtils, Menu, MessageStore, NavigationRouter, ReadStateUtils, SelectedChannelStore, TabBar, Tooltip, useEffect, UserStore } from "@webpack/common";
 
 import hideNativesStyle from "./hideNatives.css?managed";
 import { settings } from "./settings";
@@ -69,7 +69,7 @@ const SYNTHETIC_KINDS = new Set<ActivityKind>([
     "friend-request", "friend-added", "scheduled-event"
 ]);
 
-type JumpFn = (channelId: string, messageId: string, message: InboxRecord) => void;
+type JumpFn = (...args: unknown[]) => void;
 
 interface InboxMsgProps {
     message: InboxRecord;
@@ -138,12 +138,7 @@ function renderSyntheticContent(kind: ActivityKind, meta?: ActivityMeta) {
     return null;
 }
 
-function jumpToInboxEntry(msg: InboxRecord, owning?: StoredEntry) {
-    if (!owning) {
-        MessageActions.jumpToMessage({ channelId: msg.channel_id, messageId: msg.id, flash: true });
-        return;
-    }
-
+function jumpToInboxEntry(owning: StoredEntry) {
     const { kind, raw } = owning;
 
     if (kind === "group-add" || kind === "scheduled-event") {
@@ -155,13 +150,17 @@ function jumpToInboxEntry(msg: InboxRecord, owning?: StoredEntry) {
         return;
     }
 
+    let { channel_id: channelId, id: messageId, guild_id: guildId } = raw;
+
     const ref = raw.message_reference;
     if ((kind === "reaction" || kind === "thread-created" || kind === "pinned") && ref?.channel_id && ref.message_id) {
-        MessageActions.jumpToMessage({ channelId: ref.channel_id, messageId: ref.message_id, flash: true });
-        return;
+        channelId = ref.channel_id;
+        messageId = ref.message_id;
+        guildId = ref.guild_id ?? guildId;
     }
+    guildId ??= ChannelStore.getChannel(channelId)?.guild_id;
 
-    MessageActions.jumpToMessage({ channelId: raw.channel_id, messageId: raw.id, flash: true });
+    NavigationRouter.transitionTo(`/channels/${guildId ?? "@me"}/${channelId}/${messageId}`);
 }
 
 function openEntryContextMenu(event: React.MouseEvent, msg: InboxRecord, owning?: StoredEntry) {
@@ -236,7 +235,7 @@ function BetterInboxContent({ tabId, onJump, renderInboxMsg }: BetterInboxConten
 
     const snapshot = getDisplayMessages(tabId);
 
-    const messageRender = (msg: InboxRecord) => {
+    const messageRender = (msg: InboxRecord, jump?: JumpFn) => {
         const owning = getActivityLog().find(e => e.record === msg);
         if (owning) msg._betterInbox = { id: owning.id };
 
@@ -250,9 +249,14 @@ function BetterInboxContent({ tabId, onJump, renderInboxMsg }: BetterInboxConten
 
         const rendered = renderInboxMsg({
             message: msg,
-            gotoMessage: () => {
+            gotoMessage: (...args: unknown[]) => {
                 if (owning) markEntryRead(owning.id, false);
-                jumpToInboxEntry(msg, owning);
+                if (!owning) {
+                    jump?.(...args);
+                    return;
+                }
+                try { onJump?.(...args); } catch (err) { logger.error("onJump failed", err); }
+                jumpToInboxEntry(owning);
             },
             dismissible: true
         });
