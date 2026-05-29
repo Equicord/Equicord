@@ -193,8 +193,9 @@ function getApplicationOptions(selectedId: string) {
         if (game.id) options.set(game.id, `${game.name} (${game.id})`);
     }
 
-    for (const app of ApplicationStore._getAllApplications()) {
-        options.set(app.id, `${app.name} (${app.id})`);
+    const selectedApp = selectedId ? ApplicationStore.getApplication(selectedId) : null;
+    if (selectedApp) {
+        options.set(selectedApp.id, `${selectedApp.name} (${selectedApp.id})`);
     }
 
     if (selectedId && !options.has(selectedId)) {

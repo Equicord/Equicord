@@ -136,9 +136,9 @@ async function readStampedVideoFile(path: string, name: string, type: string) {
         await mediaEngine.updateClipMetadata(tempPath, "{}");
 
         const data = await Native.readVideoFile(tempPath);
-    if (!data) throw new Error("Couldn't read the selected file.");
+        if (!data) throw new Error("Couldn't read the selected file.");
 
-    return new File([new Uint8Array(data)], name, { type });
+        return new File([new Uint8Array(data)], name, { type });
     } finally {
         await Native.deleteTempVideoFile(tempPath);
     }

@@ -43,7 +43,7 @@ export default definePlugin({
 
     patches: [
         {
-            find: "clipId:",
+            find: /clipId:.{0,400}?actions:\(0,\i\.jsxs\)\(\i\.Fragment,\{children:\[/,
             replacement: {
                 match: /(actions:\(0,\i\.jsxs\)\(\i\.Fragment,\{children:\[)/,
                 replace: "$1$self.UploadClipFileButton(arguments[0]),"

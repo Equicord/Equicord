@@ -7,9 +7,11 @@
 import { dialog, type IpcMainInvokeEvent } from "electron";
 import { mkdtemp, readFile, rm, writeFile } from "fs/promises";
 import { tmpdir } from "os";
-import { basename, extname, join, normalize } from "path";
+import { basename, dirname, extname, join, normalize } from "path";
 
 const selectedFiles = new Set<string>();
+const tempFiles = new Set<string>();
+const tempDirPrefix = normalize(join(tmpdir(), "equicord-clip-upload-"));
 
 const mimeTypes: Record<string, string> = {
     ".mp4": "video/mp4",
@@ -17,12 +19,12 @@ const mimeTypes: Record<string, string> = {
 };
 
 function getMimeType(path: string) {
-    return mimeTypes[extname(path).toLowerCase()] ?? null;
+    return mimeTypes[extname(path).toLowerCase()] ?? "application/octet-stream";
 }
 
 export async function chooseVideoFile(_event: IpcMainInvokeEvent) {
     try {
-        // chooseFile cannot expose the native path needed by updateClipMetadata.
+        // @utils/web chooseFile returns a File, but Discord's metadata writer needs a native path.
         const { filePaths } = await dialog.showOpenDialog({
             title: "Select clip file",
             filters: [
@@ -36,7 +38,6 @@ export async function chooseVideoFile(_event: IpcMainInvokeEvent) {
 
         const path = normalize(rawPath);
         const type = getMimeType(path);
-        if (!type) return null;
 
         selectedFiles.add(path);
 
@@ -54,15 +55,13 @@ export async function readVideoFile(_event: IpcMainInvokeEvent, rawPath: string)
     if (typeof rawPath !== "string") return null;
 
     const path = normalize(rawPath);
-    if (!selectedFiles.has(path)) return null;
+    if (!tempFiles.has(path)) return null;
 
     try {
         const buf = await readFile(path);
         return new Uint8Array(buf.buffer, buf.byteOffset, buf.byteLength);
     } catch {
         return null;
-    } finally {
-        selectedFiles.delete(path);
     }
 }
 
@@ -70,13 +69,13 @@ export async function createTempVideoFile(_event: IpcMainInvokeEvent, rawPath: s
     if (typeof rawPath !== "string") return null;
 
     const path = normalize(rawPath);
-    if (!selectedFiles.has(path)) return null;
+    if (!selectedFiles.delete(path)) return null;
 
     try {
         const tmpDir = await mkdtemp(join(tmpdir(), "equicord-clip-upload-"));
         const tmpPath = join(tmpDir, basename(path));
         await writeFile(tmpPath, await readFile(path));
-        selectedFiles.add(tmpPath);
+        tempFiles.add(tmpPath);
         return tmpPath;
     } catch {
         return null;
@@ -87,8 +86,14 @@ export async function deleteTempVideoFile(_event: IpcMainInvokeEvent, rawPath: s
     if (typeof rawPath !== "string") return;
 
     const path = normalize(rawPath);
-    if (!selectedFiles.delete(path)) return;
+    if (!tempFiles.delete(path)) return;
 
-    await rm(path, { force: true });
-    await rm(join(path, ".."), { force: true, recursive: true });
+    const dir = dirname(path);
+    if (!dir.startsWith(tempDirPrefix)) return;
+
+    try {
+        await rm(dir, { force: true, recursive: true });
+    } catch {
+        return;
+    }
 }
