@@ -4,7 +4,6 @@ import { Divider } from "@components/Divider";
 import { FormSwitch } from "@components/FormSwitch";
 import { HeadingSecondary } from "@components/Heading";
 import { EquicordDevs } from "@utils/constants";
-import { classes } from "@utils/misc";
 import definePlugin, { IconComponent, OptionType } from "@utils/types";
 import { RenderModalProps } from "@vencord/discord-types";
 import { Modal, SearchableSelect, openModal, useMemo } from "@webpack/common";
@@ -38,12 +37,12 @@ const LANGUAGE_KEYS = Object.keys(LANGUAGES) as LanguageKey[];
 const settings = definePluginSettings({
     enabled: {
         type: OptionType.BOOLEAN,
-        description: "Enable CodeTyper",
+        description: "turn the plugin on or off",
         default: true
     },
     selectedLanguage: {
         type: OptionType.SELECT,
-        description: "Default language",
+        description: "default language to use",
         options: LANGUAGE_KEYS.map(key => ({
             label: LANGUAGES[key].name,
             value: key
@@ -52,12 +51,12 @@ const settings = definePluginSettings({
     },
     wrapInCodeblock: {
         type: OptionType.BOOLEAN,
-        description: "Wrap sent output in a code block",
+        description: "wrap the message in a code block before sending",
         default: true
     },
     onlyConvertPlainText: {
         type: OptionType.BOOLEAN,
-        description: "Do not convert messages that already look like code blocks",
+        description: "skip messages that already look like code",
         default: true
     }
 });
@@ -71,53 +70,49 @@ function shouldSkipContent(content: string) {
 
 function formatMessage(text: string, language: LanguageKey) {
     const trimmed = text.trim();
-
     if (!settings.store.wrapInCodeblock) return trimmed;
     return `\`\`\`${LANGUAGES[language].codeblock}\n${trimmed}\n\`\`\``;
 }
 
-const CodeTyperIcon: IconComponent = ({ height = 20, width = 20, className }) => {
-    return (
-        <svg
-            viewBox="0 0 24 24"
-            width={width}
-            height={height}
-            className={className}
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-        >
-            <path
-                d="M8 8L4 12L8 16M16 8L20 12L16 16M14 5L10 19"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-            />
-        </svg>
-    );
-};
+const CodeTyperIcon: IconComponent = ({ height = 20, width = 20, className }) => (
+    <svg
+        viewBox="0 0 24 24"
+        width={width}
+        height={height}
+        className={className}
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+    >
+        <path
+            d="M8 8L4 12L8 16M16 8L20 12L16 16M14 5L10 19"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        />
+    </svg>
+);
 
 function LanguageSelect() {
     const currentValue = settings.use(["selectedLanguage"]).selectedLanguage as LanguageKey;
 
     const options = useMemo(
-        () =>
-            LANGUAGE_KEYS.map(value => ({
-                value,
-                label: LANGUAGES[value].name
-            })),
+        () => LANGUAGE_KEYS.map(value => ({
+            value,
+            label: LANGUAGES[value].name
+        })),
         []
     );
 
     return (
         <div style={{ marginBottom: "16px" }}>
             <HeadingSecondary style={{ marginBottom: "8px" }}>
-                Language
+                language
             </HeadingSecondary>
             <SearchableSelect
                 options={options}
                 value={currentValue}
-                placeholder="Search for a language..."
+                placeholder="pick a language..."
                 maxVisibleItems={10}
                 closeOnSelect={true}
                 select={v => settings.store.selectedLanguage = v as LanguageKey}
@@ -135,7 +130,7 @@ function EnabledToggle() {
             onChange={v => settings.store.enabled = v}
             hideBorder
         >
-            Enable CodeTyper
+            enabled
         </FormSwitch>
     );
 }
@@ -149,7 +144,7 @@ function CodeblockToggle() {
             onChange={v => settings.store.wrapInCodeblock = v}
             hideBorder
         >
-            Wrap output in code block
+            wrap in code block
         </FormSwitch>
     );
 }
@@ -163,7 +158,7 @@ function PlainTextToggle() {
             onChange={v => settings.store.onlyConvertPlainText = v}
             hideBorder
         >
-            Only convert plain text
+            skip messages that already have code
         </FormSwitch>
     );
 }
@@ -172,7 +167,6 @@ const {
     ModalRoot,
     ModalHeader,
     ModalContent,
-    ModalFooter,
     ModalCloseButton,
     ModalSize
 } = Modal;
@@ -180,41 +174,35 @@ const {
 function CodeTyperModal({ rootProps }: { rootProps: RenderModalProps; }) {
     return (
         <ModalRoot {...rootProps} size={ModalSize.SMALL}>
-            <ModalHeader className={classes("vcd-codetyper-modal-header")}>
-                <HeadingSecondary>CodeTyper</HeadingSecondary>
+            <ModalHeader className="vcd-codetyper-modal-header">
+                <HeadingSecondary>codetyper</HeadingSecondary>
+                <ModalCloseButton onClick={rootProps.onClose} />
             </ModalHeader>
 
-            <ModalContent className={classes("vcd-codetyper-modal-content")}>
+            <ModalContent className="vcd-codetyper-modal-content">
                 <LanguageSelect />
                 <Divider style={{ marginBottom: "16px" }} />
                 <EnabledToggle />
                 <CodeblockToggle />
                 <PlainTextToggle />
             </ModalContent>
-
-            <ModalFooter>
-                <ModalCloseButton onClick={rootProps.onClose} />
-            </ModalFooter>
         </ModalRoot>
     );
 }
 
-function openCodeTyperModal() {
-    openModal(props => <CodeTyperModal rootProps={props} />);
-}
-
 export const CodeTyperChatBarIcon: ChatBarButtonFactory = ({ isMainChat }) => {
     const s = settings.use(["enabled", "selectedLanguage"]);
+    const lang = LANGUAGES[s.selectedLanguage as LanguageKey];
 
     if (!isMainChat) return null;
 
     return (
         <ChatBarButton
-            tooltip={`CodeTyper: ${LANGUAGES[s.selectedLanguage as LanguageKey].name}`}
-            onClick={() => openCodeTyperModal()}
+            tooltip={`codetyper: ${lang.name}`}
+            onClick={() => openModal(props => <CodeTyperModal rootProps={props} />)}
             onContextMenu={e => {
                 e.preventDefault();
-                openCodeTyperModal();
+                openModal(props => <CodeTyperModal rootProps={props} />);
             }}
             buttonProps={{
                 "aria-haspopup": "dialog"
@@ -227,7 +215,7 @@ export const CodeTyperChatBarIcon: ChatBarButtonFactory = ({ isMainChat }) => {
 
 export default definePlugin({
     name: "CodeTyper",
-    description: "Wraps outgoing messages in syntax-highlighted code blocks using a selectable language.",
+    description: "sends your messages wrapped in a code block. pick the language from the chat bar.",
     authors: [EquicordDevs.rzxu],
     tags: ["Chat", "Utility", "Developer"],
     dependencies: ["ChatInputButtonAPI"],
