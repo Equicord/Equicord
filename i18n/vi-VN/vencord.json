@@ -116,7 +116,7 @@
     "arRPC": {
         "connected": "Đã kết nối với arRPC",
         "connectionFailed": "Không kết nối được với arRPC, nó có đang chạy không?",
-        "description": "إضافة عميل لـ arRPC لتمكين RPC على متصفح Discord (تجريبي)",
+        "description": "Plugin dành cho arRPC để kích hoạt RPC trên Discord Web (thử nghiệm)",
         "retry": "Thử lại",
         "settingsAbout": {
             "description": "Làm theo hướng dẫn trong repo GitHub để chạy máy chủ, sau đó kích hoạt plugin.",
@@ -459,8 +459,11 @@
         "agreedToGuidelines": "Đã đồng ý với các quy định",
         "baseUrl": "Url api Decor",
         "changeDecoration": "Thay đổi trang trí",
+        "confirmLogOut": "Bạn có chắc chắn muốn đăng xuất khỏi Decor?",
         "description": "Tạo và sử dụng trang trí hình đại diện tùy chỉnh của riêng bạn, hoặc chọn mục yêu thích của bạn từ các cài đặt trước.",
+        "discordServer": "Máy Chủ Discord",
         "enableAndRestart": "Bật Decor và khởi động lại ứng dụng của bạn để thay đổi trang trí hình đại diện của bạn.",
+        "logOut": "Đăng Xuất",
         "profilesLink": "Hồ sơ",
         "removeDecoration": "Xóa trang trí",
         "title": "Decor"
@@ -1991,6 +1994,13 @@
         "openTranslateModal": "Mở cửa sổ dịch",
         "selectLanguage": "Chọn một ngôn ngữ",
         "translate": "Dịch"
+    },
+    "translation": {
+        "settings": {
+            "forceLocale": {
+                "followDiscord": "Mặc Định (theo Discord)"
+            }
+        }
     },
     "typingIndicator": {
         "description": "Thêm chỉ báo nếu ai đó đang soạn thảo trên một kênh.",
