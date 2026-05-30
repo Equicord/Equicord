@@ -1,3 +1,9 @@
+/*
+ * Vencord, a Discord client mod
+ * Copyright (c) 2025 Vendicated and contributors
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
 import { ChatBarButton, ChatBarButtonFactory } from "@api/ChatButtons";
 import { definePluginSettings } from "@api/Settings";
 import { Divider } from "@components/Divider";
@@ -115,7 +121,7 @@ function LanguageSelect() {
                 placeholder="pick a language..."
                 maxVisibleItems={10}
                 closeOnSelect={true}
-                select={v => settings.store.selectedLanguage = v as LanguageKey}
+                onChange={v => settings.store.selectedLanguage = v as LanguageKey}
             />
         </div>
     );
