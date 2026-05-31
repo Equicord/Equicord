@@ -111,7 +111,7 @@
             "oscilloscopeColor": "Kleur voor oscilloscoop",
             "oscilloscopeSolidColor": "Gebruik effen kleuren voor oscilloscoop",
             "spectrograph": "Spectrograaf-visualizer inschakelen",
-            "spectrographColor": "Kleur voor spectrograaf",
+            "spectrographColor": "cv",
             "spectrographSolidColor": "Gebruik effen kleuren voor spectrograaf"
         },
         "toasts": {
