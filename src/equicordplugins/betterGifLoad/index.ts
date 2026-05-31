@@ -17,13 +17,14 @@ const Quality = {
 type Quality = typeof Quality[keyof typeof Quality];
 
 const qualities = [
-    { giphy: "giphy", tenor: "Ax", cap: 480 }, // webp
-    { giphy: "480w", tenor: "A5", cap: 360 }, // webppreview
-    { giphy: "200", tenor: "A1", cap: 200 }, // tinywebp
-    { giphy: "100", tenor: "A2", cap: 120 }, // nanowebp
+    { giphy: "giphy", tenor: "Ax", cap: 480, video: "Po" },
+    { giphy: "480w", tenor: "A5", cap: 360, video: "P3" },
+    { giphy: "200", tenor: "A1", cap: 200, video: "P2" },
+    { giphy: "100", tenor: "A2", cap: 100, video: "P4" },
 ];
 
 const mediaTenorLinkRegex = /^https:\/\/(?:media\d?|c)\.tenor\.com(?:\/m)?\/(?<id>.+?)(?<quality>.{2})\/(?<name>[^/]+)\./i;
+const mediaTenorVideoLinkRegex = /^https:\/\/(?:media\d?|c)\.tenor\.com(?:\/m)?\/(?<id>.+?)(?<quality>P\w{1,2})\/(?<name>[^/]+)\.mp4$/i;
 const giphyLinkRegex = /^https:\/\/media\d?\.giphy\.com\/media\/.*?\/(?<code>.*?)\/giphy/i;
 const mediaProxyParser = /^https:\/\/images-ext-\d\.discordapp.net\/external\/.*?\.*?\/(?<protocol>.*?)\/(?<rest>.*?)$/i;
 
@@ -76,6 +77,19 @@ export default definePlugin({
                 },
             ]
         },
+        {
+            find: "renderEmptyFavorite",
+            replacement: [
+                {
+                    match: /src:\(t=[\s\S]{0,200}?\(e=\i\.\i\.toURLSafe\((\i)\)\)[\s\S]{0,500}?:\i\),[\s\S]{0,50}?width:\s{0,10}(\i),[\s\S]{0,50}?height:\s{0,10}(\i)/,
+                    replace: "src:$self.parseLink($1,[$2,$3]),width:$2,height:$3",
+                },
+                {
+                    match: /(\i)\.oncanplay=this\.(\i),[\s\S]{0,100}?\i\.src=(\i),[\s\S]{0,100}?\i\.width=(\i),[\s\S]{0,100}?\i\.height=(\i)/,
+                    replace: "$1.oncanplay=this.$2,$1.src=$self.parseLink($3,[$4,$5]),$1.width=$4,$1.height=$5",
+                },
+            ],
+        },
     ],
     parseLink(link: string, sizes?: [width: number, height: number]) {
         const quality = settings.store.gifQuality;
@@ -83,6 +97,12 @@ export default definePlugin({
         const url: URL = new URL(link.startsWith("//") ? `https:${link}` : link);
 
         const cleanLink = getCleanLink(link);
+        const tenorVideoMatch = cleanLink.match(mediaTenorVideoLinkRegex);
+        if (tenorVideoMatch) {
+            const { id, name } = tenorVideoMatch.groups!;
+            return `https://media.tenor.com/${id}${q.video}/${name}.mp4`;
+        }
+
         const tenorMatch = cleanLink.match(mediaTenorLinkRegex);
         if (tenorMatch) {
             const { id, name } = tenorMatch.groups!;
@@ -105,7 +125,6 @@ export default definePlugin({
             }
             return url.toString();
         }
-
         return link;
     }
 });
