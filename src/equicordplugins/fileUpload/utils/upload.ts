@@ -451,7 +451,14 @@ async function uploadToNest(fileBlob: Blob, filename: string): Promise<string> {
 type EncryptingHostUrlStyle = "query" | "param" | "fakelink" | "embed";
 
 function parseEncryptingHostDomains(raw: string): string[] {
-    const parsed = JSON.parse(raw);
+    let parsed: unknown;
+
+    try {
+        parsed = JSON.parse(raw);
+    } catch {
+        throw new Error("Encrypting.host domains must be a JSON array of non-empty strings");
+    }
+
     if (!Array.isArray(parsed) || parsed.some(domain => typeof domain !== "string" || !domain.trim())) {
         throw new Error("Encrypting.host domains must be a JSON array of non-empty strings");
     }
@@ -505,29 +512,6 @@ function getEncryptingHostConfig(): {
     };
 }
 
-function getFirstStringValue(value: unknown): string {
-    if (!value || typeof value !== "object") {
-        return "";
-    }
-
-    const keys = ["url", "link", "downloadUrl", "download_url", "fileUrl", "file_url", "result"];
-    for (const key of keys) {
-        const candidate = (value as Record<string, unknown>)[key];
-        if (typeof candidate === "string" && candidate.trim()) {
-            return candidate.trim();
-        }
-
-        if (candidate && typeof candidate === "object") {
-            const nested = getFirstStringValue(candidate);
-            if (nested) {
-                return nested;
-            }
-        }
-    }
-
-    return "";
-}
-
 async function uploadToEncryptingHost(fileBlob: Blob, filename: string): Promise<string> {
     const config = getEncryptingHostConfig();
 
@@ -553,10 +537,10 @@ async function uploadToEncryptingHost(fileBlob: Blob, filename: string): Promise
     });
 
     const text = await response.text();
-    let data: unknown = null;
+    let data: { url?: string; error?: string; } | null = null;
 
     try {
-        data = text ? JSON.parse(text) : null;
+        data = text ? JSON.parse(text) as { url?: string; error?: string; } : null;
     } catch {
         data = null;
     }
@@ -565,7 +549,7 @@ async function uploadToEncryptingHost(fileBlob: Blob, filename: string): Promise
         throw new Error(`Upload failed: ${response.status} ${text}`);
     }
 
-    const parsedUrl = getFirstStringValue(data);
+    const parsedUrl = data?.url?.trim() || "";
     const fallbackUrl = text.trim().startsWith("http") ? text.trim() : "";
     const url = parsedUrl || fallbackUrl;
     if (!url) {
@@ -593,12 +577,7 @@ export function isConfigured(): boolean {
         case ServiceType.EZHOST:
             return Boolean((settings.store as { ezHostKey?: string; }).ezHostKey);
         case ServiceType.ENCRYPTINGHOST:
-            try {
-                getEncryptingHostConfig();
-                return true;
-            } catch {
-                return false;
-            }
+            return Boolean((settings.store as { encryptingHostKey?: string; }).encryptingHostKey);
         case ServiceType.S3:
             return isS3Configured();
         case ServiceType.CATBOX:
