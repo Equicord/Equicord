@@ -664,6 +664,10 @@ export const EquicordDevs = Object.freeze({
         name: "nobody",
         id: 0n
     },
+    LOSTSTR: {
+        name: "LOSTSTR",
+        id: 681465758127226900n
+    },
     thororen: {
         name: "thororen",
         id: 848339671629299742n

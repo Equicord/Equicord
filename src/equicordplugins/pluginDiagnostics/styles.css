@@ -1,0 +1,173 @@
+/* PluginDiagnostics — premium, dark, glassmorphism panel */
+
+.vc-diag {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 16px 4px;
+}
+
+.vc-diag-sub {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-top: -6px;
+}
+
+.vc-diag-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.vc-diag-search {
+    flex: 1;
+    min-width: 160px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    background: var(--background-secondary);
+    border: 1.5px solid var(--background-modifier-accent);
+    color: var(--text-normal);
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.15s ease;
+}
+
+.vc-diag-search:focus {
+    border-color: var(--brand-experiment);
+}
+
+.vc-diag-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.vc-diag-heap {
+    font-family: monospace;
+    font-size: 12px;
+    color: var(--text-muted);
+    padding: 4px 8px;
+    border-radius: 6px;
+    background: var(--background-secondary);
+}
+
+.vc-diag-btn {
+    padding: 6px 12px;
+    border-radius: 7px;
+    border: 1.5px solid var(--background-modifier-accent);
+    background: var(--background-secondary);
+    color: var(--text-normal);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.vc-diag-btn:hover {
+    background: var(--background-modifier-hover);
+    border-color: var(--brand-experiment);
+}
+
+.vc-diag-tablewrap {
+    max-height: 440px;
+    overflow: auto;
+    border-radius: 10px;
+    border: 1px solid var(--background-modifier-accent);
+    background: linear-gradient(180deg, rgb(255 255 255 / 3%), rgb(255 255 255 / 0%));
+    backdrop-filter: blur(6px);
+}
+
+.vc-diag-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+.vc-diag-table thead th {
+    position: sticky;
+    top: 0;
+    background: var(--background-secondary-alt, var(--background-secondary));
+    color: var(--header-secondary);
+    text-align: start;
+    padding: 9px 12px;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    cursor: pointer;
+    user-select: none;
+    white-space: nowrap;
+}
+
+.vc-diag-table th.num,
+.vc-diag-table td.num {
+    text-align: end;
+    font-variant-numeric: tabular-nums;
+}
+
+.vc-diag-table td.num {
+    font-family: monospace;
+    color: var(--text-normal);
+}
+
+.vc-diag-row {
+    border-top: 1px solid var(--background-modifier-accent);
+    transition: background 0.12s ease;
+}
+
+.vc-diag-row td {
+    padding: 8px 12px;
+    color: var(--text-normal);
+}
+
+.vc-diag-row:hover {
+    background: var(--background-modifier-hover);
+}
+
+.vc-diag-row.lvl-low {
+    background: linear-gradient(90deg, rgb(59 165 92 / 7%), transparent);
+}
+
+.vc-diag-row.lvl-medium {
+    background: linear-gradient(90deg, rgb(250 168 26 / 8%), transparent);
+}
+
+.vc-diag-row.lvl-high {
+    background: linear-gradient(90deg, rgb(237 66 69 / 10%), transparent);
+}
+
+.vc-diag-badge {
+    font-family: monospace;
+    font-weight: 700;
+    font-size: 12px;
+    padding: 2px 9px;
+    border-radius: 11px;
+}
+
+.vc-diag-badge.low {
+    background: rgb(59 165 92 / 20%);
+    color: #3ba55c;
+}
+
+.vc-diag-badge.medium {
+    background: rgb(250 168 26 / 20%);
+    color: #faa81a;
+}
+
+.vc-diag-badge.high {
+    background: rgb(237 66 69 / 20%);
+    color: var(--text-danger, #ed4245);
+}
+
+.vc-diag-empty {
+    text-align: center;
+    padding: 28px;
+    color: var(--text-muted);
+}
+
+.vc-diag-foot {
+    font-size: 12px;
+    color: var(--text-muted);
+    text-align: end;
+}
