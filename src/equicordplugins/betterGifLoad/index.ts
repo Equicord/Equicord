@@ -21,7 +21,7 @@ const qualities = [
     { giphy: "giphy", tenor: "Ax", cap: 480, video: "Po" }, // High ~ 480-native
     { giphy: "480w", tenor: "A5", cap: 360, video: "P3" }, // Reasonable ~ 360
     { giphy: "200", tenor: "A1", cap: 200, video: "P2" }, // Low ~ 200
-    { giphy: "120", tenor: "A2", cap: 100, video: "P4" }, // Horrible ~ 100
+    { giphy: "100", tenor: "A2", cap: 120, video: "P4" }, // Horrible ~ 120
 ];
 
 const mediaTenorLinkRegex = /^https:\/\/(?:media\d?|c)\.tenor\.com(?:\/m)?\/(?<id>.+?)(?<quality>.{2})\/(?<name>[^/]+)\./i;
