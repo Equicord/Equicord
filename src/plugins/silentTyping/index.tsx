@@ -23,9 +23,18 @@ import { plugins } from "@api/PluginManager";
 import { definePluginSettings } from "@api/Settings";
 import { openPluginModal } from "@components/settings";
 import { Devs, EquicordDevs } from "@utils/constants";
+import { useForceUpdater } from "@utils/react";
 import definePlugin, { OptionType } from "@utils/types";
 import { Channel } from "@vencord/discord-types";
-import { ChannelStore, FluxDispatcher, Menu, React } from "@webpack/common";
+import { ChannelStore, FluxDispatcher, Menu, MessageStore, React, SelectedChannelStore, useEffect, UserStore } from "@webpack/common";
+
+const rerenderListeners = new Set<() => void>();
+
+function triggerChatToggleRerender() {
+    for (const listener of rerenderListeners) {
+        listener();
+    }
+}
 
 const settings = definePluginSettings({
     enabledGlobally: {
@@ -88,6 +97,21 @@ const settings = definePluginSettings({
         description: "If enabled, the plugin will hide your typing from others in any DMs/channels/guilds not listed in \"Disabled Locations\" below. If disabled, the plugin will show your typing to others for any DMs/channels/guilds not listed in \"Enabled Locations\" below.",
         default: true,
     },
+    alwaysEnableInActiveVoiceChat: {
+        type: OptionType.BOOLEAN,
+        description: "Always allow your typing indicator to show when typing in a voice channel you are connected to.",
+        default: false
+    },
+    temporaryEnableThresholdServers: {
+        type: OptionType.NUMBER,
+        description: "Temporarily allow your typing indicator to show for this many seconds after sending a message in a server channel. If the typing indicator is already visible in the channel, this setting will have no effect.",
+        default: 0,
+    },
+    temporaryEnableThresholdDirectMessages: {
+        type: OptionType.NUMBER,
+        description: "Temporarily allow your typing indicator to show for this many seconds after sending a message in a DM or Group DM. If the typing indicator is already visible in the channel, this setting will have no effect.",
+        default: 0,
+    },
     enabledLocations: {
         type: OptionType.STRING,
         description: "Enable functionality for these IDs. Accepts a comma separated list of DM IDs, channel IDs, and guild IDs. Only used if \"Default Hidden\" is disabled.",
@@ -125,6 +149,9 @@ const SilentTypingChatToggle: ChatBarButtonFactory = ({ channel, type }) => {
         defaultHidden,
         enabledLocations,
         disabledLocations,
+        alwaysEnableInActiveVoiceChat,
+        temporaryEnableThresholdServers,
+        temporaryEnableThresholdDirectMessages,
         chatIconLeftClickAction,
         chatIconMiddleClickAction,
         chatIconRightClickAction,
@@ -134,21 +161,40 @@ const SilentTypingChatToggle: ChatBarButtonFactory = ({ channel, type }) => {
         "defaultHidden",
         "enabledLocations",
         "disabledLocations",
+        "alwaysEnableInActiveVoiceChat",
+        "temporaryEnableThresholdServers",
+        "temporaryEnableThresholdDirectMessages",
         "chatIconLeftClickAction",
         "chatIconMiddleClickAction",
         "chatIconRightClickAction",
     ]);
+
+    const forceUpdate = useForceUpdater();
+
+    useEffect(() => {
+        rerenderListeners.add(forceUpdate);
+
+        return () => {
+            rerenderListeners.delete(forceUpdate);
+        };
+    }, []);
 
     const validChat = ["normal", "sidebar"].some(x => type.analyticsName === x);
 
     if (!validChat || !chatIcon) return null;
 
     const effectiveList = getEffectiveList();
-    const enabledLocally = enabledGlobally && checkEnabled(channel);
+    const isLocallyDisallowed = isExplicitlyDisallowed(channel);
+    const allowedLocallyImplicitly = isImplicitlyAllowed(channel);
     const location = channel.guild_id && effectiveList.includes(channel.guild_id) ? "Guild" : effectiveList.includes(channel.id) ? "Channel" : "Global";
 
     const tooltip = enabledGlobally ? (
-        enabledLocally ? `Typing Hidden (${location})` : `Typing Visible (${location})`
+        allowedLocallyImplicitly === 1
+            ? "Typing Always Visible In The Connected Voice Channel Chat"
+            : allowedLocallyImplicitly === 2
+                ? "Typing Temporarily Visible In This Channel Due To A Recent Message"
+                : isLocallyDisallowed
+                    ? `Typing Hidden (${location})` : `Typing Visible (${location})`
     ) : "Typing Visible (Global)";
 
     function performAction(action: string): void {
@@ -188,7 +234,7 @@ const SilentTypingChatToggle: ChatBarButtonFactory = ({ channel, type }) => {
             }}>
             <svg width="20" height="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style={{ scale: "1.2" }}>
                 <path fill="currentColor" mask={`url(#silent-typing-msg-mask-${channel.id})`} d="M18.333 15.556H1.667a1.667 1.667 0 0 1 -1.667 -1.667v-10a1.667 1.667 0 0 1 1.667 -1.667h16.667a1.667 1.667 0 0 1 1.667 1.667v10a1.667 1.667 0 0 1 -1.667 1.667M4.444 6.25V4.861a0.417 0.417 0 0 0 -0.417 -0.417H2.639a0.417 0.417 0 0 0 -0.417 0.417V6.25a0.417 0.417 0 0 0 0.417 0.417h1.389a0.417 0.417 0 0 0 0.417 -0.417m3.333 0V4.861a0.417 0.417 0 0 0 -0.417 -0.417H5.973a0.417 0.417 0 0 0 -0.417 0.417V6.25a0.417 0.417 0 0 0 0.417 0.417h1.389a0.417 0.417 0 0 0 0.417 -0.417m3.333 0V4.861a0.417 0.417 0 0 0 -0.417 -0.417h-1.389a0.417 0.417 0 0 0 -0.417 0.417V6.25a0.417 0.417 0 0 0 0.417 0.417h1.389a0.417 0.417 0 0 0 0.417 -0.417m3.333 0V4.861a0.417 0.417 0 0 0 -0.417 -0.417h-1.389a0.417 0.417 0 0 0 -0.417 0.417V6.25a0.417 0.417 0 0 0 0.417 0.417h1.389a0.417 0.417 0 0 0 0.417 -0.417m3.333 0V4.861a0.417 0.417 0 0 0 -0.417 -0.417h-1.389a0.417 0.417 0 0 0 -0.417 0.417V6.25a0.417 0.417 0 0 0 0.417 0.417h1.389a0.417 0.417 0 0 0 0.417 -0.417m-11.667 3.333V8.194a0.417 0.417 0 0 0 -0.417 -0.417H4.306a0.417 0.417 0 0 0 -0.417 0.417V9.583a0.417 0.417 0 0 0 0.417 0.417h1.389a0.417 0.417 0 0 0 0.417 -0.417m3.333 0V8.194a0.417 0.417 0 0 0 -0.417 -0.417H7.639a0.417 0.417 0 0 0 -0.417 0.417V9.583a0.417 0.417 0 0 0 0.417 0.417h1.389a0.417 0.417 0 0 0 0.417 -0.417m3.333 0V8.194a0.417 0.417 0 0 0 -0.417 -0.417h-1.389a0.417 0.417 0 0 0 -0.417 0.417V9.583a0.417 0.417 0 0 0 0.417 0.417h1.389a0.417 0.417 0 0 0 0.417 -0.417m3.333 0V8.194a0.417 0.417 0 0 0 -0.417 -0.417h-1.389a0.417 0.417 0 0 0 -0.417 0.417V9.583a0.417 0.417 0 0 0 0.417 0.417h1.389a0.417 0.417 0 0 0 0.417 -0.417m-11.667 3.333v-1.389a0.417 0.417 0 0 0 -0.417 -0.417H2.639a0.417 0.417 0 0 0 -0.417 0.417V12.917a0.417 0.417 0 0 0 0.417 0.417h1.389a0.417 0.417 0 0 0 0.417 -0.417m10 0v-1.389a0.417 0.417 0 0 0 -0.417 -0.417H5.973a0.417 0.417 0 0 0 -0.417 0.417V12.917a0.417 0.417 0 0 0 0.417 0.417h8.056a0.417 0.417 0 0 0 0.417 -0.417m3.333 0v-1.389a0.417 0.417 0 0 0 -0.417 -0.417h-1.389a0.417 0.417 0 0 0 -0.417 0.417V12.917a0.417 0.417 0 0 0 0.417 0.417h1.389a0.417 0.417 0 0 0 0.417 -0.417" transform="translate(2, 3)" />
-                {(enabledLocally) && (
+                {(isLocallyDisallowed && !allowedLocallyImplicitly) && (
                     <>
                         <mask id={`silent-typing-msg-mask-${channel.id}`}>
                             <path fill="#fff" d="M0 0h24v24H0Z"></path>
@@ -228,17 +274,47 @@ function getEffectiveList(): string[] {
     }
 }
 
-function checkEnabled(channel: string | Channel): boolean {
+function isImplicitlyAllowed(channel: string | Channel): number {
+    const resolvedChannel = typeof channel === "string" ? ChannelStore.getChannel(channel) : channel;
+
+    if (!resolvedChannel) {
+        return 0;
+    }
+
+    const connectedVoiceChannelID = SelectedChannelStore.getVoiceChannelId();
+    const guildID = resolvedChannel.guild_id;
+
+    if (settings.store.alwaysEnableInActiveVoiceChat && connectedVoiceChannelID === resolvedChannel.id) {
+        return 1;
+    }
+
+    const lastMessage = MessageStore.getLastEditableMessage(resolvedChannel.id);
+    const messageTimestamp = lastMessage?.timestamp?.getTime?.();
+
+    if (messageTimestamp) {
+        const addedThreshold = !guildID
+            ? settings.store.temporaryEnableThresholdDirectMessages
+            : settings.store.temporaryEnableThresholdServers;
+
+        if (Date.now() < messageTimestamp + (addedThreshold * 1000)) {
+            return 2;
+        }
+    }
+
+    return 0;
+}
+
+function isExplicitlyDisallowed(channel: string | Channel): boolean {
     if (!settings.store.enabledGlobally) return false;
 
-    const channelId = typeof channel === "string" ? channel : channel.id;
-    const guildId = typeof channel === "string" ? ChannelStore.getChannel(channelId)?.guild_id : channel.guild_id;
+    const channelID = typeof channel === "string" ? channel : channel.id;
+    const guildID = typeof channel === "string" ? ChannelStore.getChannel(channelID)?.guild_id : channel.guild_id;
     const effectiveChannels = getEffectiveList();
 
     if (settings.store.defaultHidden) {
-        return !effectiveChannels.includes(guildId) && !effectiveChannels.includes(channelId);
+        return !effectiveChannels.includes(guildID) && !effectiveChannels.includes(channelID);
     } else {
-        return effectiveChannels.includes(guildId) || effectiveChannels.includes(channelId);
+        return effectiveChannels.includes(guildID) || effectiveChannels.includes(channelID);
     }
 }
 
@@ -308,9 +384,48 @@ export default definePlugin({
     contextMenus: {
         "textarea-context": ChatBarContextCheckbox
     },
+
     chatBarButton: {
         icon: SilentTypingChatIcon,
         render: SilentTypingChatToggle
+    },
+
+    flux: {
+        VOICE_STATE_UPDATES({ voiceStates }) {
+            const state = voiceStates?.[0];
+
+            if (!state) {
+                return;
+            }
+
+            if (state.userId !== UserStore.getCurrentUser().id) {
+                return;
+            }
+
+            if (state.channelId === state.oldChannelId) {
+                return;
+            }
+
+            if (settings.store.alwaysEnableInActiveVoiceChat) {
+                triggerChatToggleRerender();
+            }
+        },
+
+        MESSAGE_CREATE({ message }) {
+            if (message.author.id === UserStore.getCurrentUser().id) {
+                const threshold = message.guild_id
+                    ? settings.store.temporaryEnableThresholdServers
+                    : settings.store.temporaryEnableThresholdDirectMessages;
+
+                if (threshold > 0) {
+                    triggerChatToggleRerender();
+
+                    setTimeout(() => {
+                        triggerChatToggleRerender();
+                    }, (threshold * 1000) + 25);
+                }
+            }
+        }
     },
 
     patches: [
@@ -438,7 +553,10 @@ export default definePlugin({
     ],
 
     async startTyping(channelId: string) {
-        if (checkEnabled(channelId)) return;
+        if (isExplicitlyDisallowed(channelId) && !isImplicitlyAllowed(channelId)) {
+            return;
+        }
+
         FluxDispatcher.dispatch({ type: "TYPING_START_LOCAL", channelId });
     },
 });

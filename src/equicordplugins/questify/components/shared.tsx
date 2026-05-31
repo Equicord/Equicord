@@ -266,7 +266,7 @@ interface SettingsSwitchLayoutProps extends SwitchWithLabelProps {
     tooltip?: { position: "top" | "bottom", text: string; };
 }
 
-const SwitchWithLabel = findComponentByCodeLazy('"data-toggleable-component":"switch"') as React.ComponentType<SwitchWithLabelProps>;
+const SwitchWithLabel = findComponentByCodeLazy('auxiliaryContentPosition:"under-label"') as React.ComponentType<SwitchWithLabelProps>;
 
 export type SettingsSubtleSwitchProps = Omit<SettingsSwitchLayoutProps, "description">;
 

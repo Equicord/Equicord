@@ -102,7 +102,6 @@ export default definePlugin({
             const { id, name } = tenorVideoMatch.groups!;
             return `https://media.tenor.com/${id}${q.video}/${name}.mp4`;
         }
-
         const tenorMatch = cleanLink.match(mediaTenorLinkRegex);
         if (tenorMatch) {
             const { id, name } = tenorMatch.groups!;

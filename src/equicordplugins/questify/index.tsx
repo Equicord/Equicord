@@ -29,7 +29,7 @@ import { canAutoCompleteQuest, getActiveAutoCompletes, getQuestAutoCompleteProgr
 import { canOpenDevToolsWindow, fetchAndDispatchQuests, openDevToolsWindow, snakeToCamel } from "./utils/fetching";
 import { normalizeQuestName } from "./utils/filtering";
 import { notifyQuestCompletion, QL } from "./utils/logging";
-import { getQuestPanelOverride, getQuestPanelPercentComplete, shouldForceQuestPanelVisible } from "./utils/questState";
+import { getQuestEmbedProgress, getQuestPanelOverride, getQuestPanelPercentComplete, shouldForceQuestPanelVisible } from "./utils/questState";
 import { getLastFilterChoices, getLastSortChoice, getQuestTileClasses, getQuestTileStyle, setLastFilterChoices, setLastSortChoice, shouldPreloadQuestAssets, sortQuests } from "./utils/questTiles";
 import { formatLowerBadge, QUEST_PAGE } from "./utils/ui";
 
@@ -114,6 +114,7 @@ export default definePlugin({
     getLastFilterChoices,
     getLastSortChoice,
     getQuestAutoCompleteProgress,
+    getQuestEmbedProgress,
     getQuestButtonProps,
     getQuestPanelOverride,
     getQuestPanelPercentComplete,
@@ -405,6 +406,33 @@ export default definePlugin({
                     // Force the CTA-aware complete branch.
                     match: /(?<=analyticsCtxQuestContentRowIndex:\i}\)}\):\i&&\i)(.{0,200}?fullWidth:!0}\)}\):)(\i.enabled.{0,50}?CLAIMED\)&&\i.\i.has\(\i\))(\?\i=)(\i)/,
                     replace: "&&false$1((arguments[0].quest.config.ctaConfig&&arguments[0].quest.userStatus?.completedAt)||($2))$3(true||$4)"
+                },
+                {
+                    // Prefer the CTA + progress button branch when Questify can complete the Quest.
+                    match: /(?<="data-migration-pending":.{0,400}?enabledQuestStates.has\(\i\)\?)/,
+                    replace: "!$self.canAutoCompleteQuest(arguments[0].quest)&&"
+                }
+            ]
+        },
+        {
+            find: "EMBED_DESKTOP}),",
+            group: true,
+            predicate: () => !getQuestifySettings().disableQuestsEverything,
+            replacement: [
+                {
+                    // Subscribes each Quest message embed to Questify's manual rerender trigger.
+                    match: /(?<=function \i\(\i\){)(?=let\{quest:\i,location:\i,questContentPosition:\i,sourceQuestContent:)/,
+                    replace: "void $self.useQuestRerender();"
+                },
+                {
+                    // Overrides the progress tracking for Quest embeds.
+                    match: /(?<=\{completedRatio:\i,completedRatioDisplay:\i\}=)(\(0,\i\.\i\)\((\i)\))/,
+                    replace: "Object.assign({},$1,$self.getQuestEmbedProgress($2)??{})"
+                },
+                {
+                    // Adds Questify tile classes and inline CSS variables.
+                    match: /(?<=className:)(\i\(\)\(\i.\i,\i.\i\)(?=,onMouseEnter:\i))/,
+                    replace: "$self.getQuestTileClasses($1,arguments[0].quest),style:$self.getQuestTileStyle(arguments[0].quest)"
                 }
             ]
         },
@@ -475,8 +503,8 @@ export default definePlugin({
                 },
                 {
                     // Bypasses Discord's memo cache while the Questify sort is active.
-                    match: /(if\(\i\.current\.length>0&&\i\.current===\i\.length&&\i\.current===\i\.sortMethod&&\i\.current===\i\.filters)(\)return \i\.current;)/,
-                    replace: "$1&&arguments[1]?.sortMethod!==\"questify\"$2"
+                    match: /(?<=if\()(?=\i\.current\.length>0&&\i\.current===)/,
+                    replace: "arguments[1]?.sortMethod!==\"questify\"&&"
                 },
                 {
                     // If we already applied Questify's sort, skip further sorting.
@@ -485,8 +513,8 @@ export default definePlugin({
                 },
                 {
                     // Recomputes Discord's Quest list memo when Questify settings or rerenders change.
-                    match: /(?<=\.id\);return \i\.current=\i,\i\.current=\i\.sortMethod,\i\.current=\i\.filters,\i\.current=\i\.length,\i\},\[)(\i,\i)(?=\]\)\))/,
-                    replace: "$1,questRerenderTrigger,questifySorted"
+                    match: /(?=]\)\),\i=\(\i=\i.useMemo\(\(\)=>\i.filter)/,
+                    replace: ",questRerenderTrigger,questifySorted"
                 }
             ]
         },

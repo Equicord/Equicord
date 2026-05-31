@@ -8,7 +8,7 @@ import "./styles.css";
 
 import { Icon, User } from "@vencord/discord-types";
 import { findComponentByCodeLazy, findStoreLazy } from "@webpack";
-import { Button, ChannelStore, GuildActions, MediaEngineStore, NavigationRouter, PermissionsBits, PermissionStore, Tooltip, UserStore, VoiceActions, VoiceStateStore } from "@webpack/common";
+import { Button, ChannelActionCreators, ChannelStore, GuildActions, MediaEngineStore, NavigationRouter, PermissionsBits, PermissionStore, Tooltip, UserStore, VoiceActions, VoiceStateStore } from "@webpack/common";
 import { JSX } from "react";
 
 import { settings } from "./settings";
@@ -96,8 +96,7 @@ export function UserChatButton({ user }: { user: User; }) {
                     NavigationRouter.transitionTo("/users/@me/");
                     return;
                 }
-                const chanId = ChannelStore.getDMFromUserId(user.id);
-                NavigationRouter.transitionTo(`/channels/@me/${chanId}/`);
+                ChannelActionCreators.openPrivateChannel({ recipientIds: [user.id], navigateToChannel: true });
             }}
         />
     );
