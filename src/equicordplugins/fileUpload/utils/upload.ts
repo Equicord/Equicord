@@ -448,6 +448,133 @@ async function uploadToNest(fileBlob: Blob, filename: string): Promise<string> {
     throw new Error("No URL returned from upload");
 }
 
+type EncryptingHostUrlStyle = "query" | "param" | "fakelink" | "embed";
+
+function parseEncryptingHostDomains(raw: string): string[] {
+    const parsed = JSON.parse(raw);
+    if (!Array.isArray(parsed) || parsed.some(domain => typeof domain !== "string" || !domain.trim())) {
+        throw new Error("Encrypting.host domains must be a JSON array of non-empty strings");
+    }
+
+    return parsed.map(domain => domain.trim());
+}
+
+function getEncryptingHostConfig(): {
+    key: string;
+    urlStyle: EncryptingHostUrlStyle;
+    domains: string[];
+    title: string;
+    color: string;
+    fakelink: string;
+} {
+    const {
+        encryptingHostKey,
+        encryptingHostUrlStyle,
+        encryptingHostDomains,
+        encryptingHostTitle,
+        encryptingHostColor,
+        encryptingHostFakelink
+    } = settings.store as {
+        encryptingHostKey?: string;
+        encryptingHostUrlStyle?: string;
+        encryptingHostDomains?: string;
+        encryptingHostTitle?: string;
+        encryptingHostColor?: string;
+        encryptingHostFakelink?: string;
+    };
+
+    const key = encryptingHostKey?.trim() || "";
+    if (!key) {
+        throw new Error("Encrypting.host API key is required");
+    }
+
+    const style = encryptingHostUrlStyle || "query";
+    if (style !== "query" && style !== "param" && style !== "fakelink" && style !== "embed") {
+        throw new Error("Invalid Encrypting.host URL style");
+    }
+
+    const domainsRaw = encryptingHostDomains?.trim() || "[\"offensive\"]";
+
+    return {
+        key,
+        urlStyle: style,
+        domains: parseEncryptingHostDomains(domainsRaw),
+        title: encryptingHostTitle?.trim() || "",
+        color: encryptingHostColor?.trim() || "",
+        fakelink: encryptingHostFakelink?.trim() || ""
+    };
+}
+
+function getFirstStringValue(value: unknown): string {
+    if (!value || typeof value !== "object") {
+        return "";
+    }
+
+    const keys = ["url", "link", "downloadUrl", "download_url", "fileUrl", "file_url", "result"];
+    for (const key of keys) {
+        const candidate = (value as Record<string, unknown>)[key];
+        if (typeof candidate === "string" && candidate.trim()) {
+            return candidate.trim();
+        }
+
+        if (candidate && typeof candidate === "object") {
+            const nested = getFirstStringValue(candidate);
+            if (nested) {
+                return nested;
+            }
+        }
+    }
+
+    return "";
+}
+
+async function uploadToEncryptingHost(fileBlob: Blob, filename: string): Promise<string> {
+    const config = getEncryptingHostConfig();
+
+    const formData = new FormData();
+    formData.append("password", makeRandomHex(16));
+    formData.append("userKey", config.key);
+    formData.append("urlStyle", config.urlStyle);
+    formData.append("domains", JSON.stringify(config.domains));
+    if (config.title) {
+        formData.append("title", config.title);
+    }
+    if (config.color) {
+        formData.append("color", config.color);
+    }
+    if (config.fakelink) {
+        formData.append("fakelink", config.fakelink);
+    }
+    formData.append("file", fileBlob, filename);
+
+    const response = await uploadRequestWithTimeout("https://encrypting.host/upload", {
+        method: "POST",
+        body: formData
+    });
+
+    const text = await response.text();
+    let data: unknown = null;
+
+    try {
+        data = text ? JSON.parse(text) : null;
+    } catch {
+        data = null;
+    }
+
+    if (!response.ok) {
+        throw new Error(`Upload failed: ${response.status} ${text}`);
+    }
+
+    const parsedUrl = getFirstStringValue(data);
+    const fallbackUrl = text.trim().startsWith("http") ? text.trim() : "";
+    const url = parsedUrl || fallbackUrl;
+    if (!url) {
+        throw new Error("No URL returned from upload");
+    }
+
+    return url;
+}
+
 export function isConfigured(): boolean {
     const {
         serviceType,
@@ -465,6 +592,13 @@ export function isConfigured(): boolean {
             return Boolean(nestToken);
         case ServiceType.EZHOST:
             return Boolean((settings.store as { ezHostKey?: string; }).ezHostKey);
+        case ServiceType.ENCRYPTINGHOST:
+            try {
+                getEncryptingHostConfig();
+                return true;
+            } catch {
+                return false;
+            }
         case ServiceType.S3:
             return isS3Configured();
         case ServiceType.CATBOX:
@@ -867,6 +1001,8 @@ async function uploadToService(serviceType: ServiceType, fileBlob: Blob, filenam
             return uploadToNest(fileBlob, filename);
         case ServiceType.EZHOST:
             return uploadToEzHost(fileBlob, filename);
+        case ServiceType.ENCRYPTINGHOST:
+            return uploadToEncryptingHost(fileBlob, filename);
         case ServiceType.S3:
             return uploadToS3(fileBlob, filename, Native, uploadRequestWithTimeout);
         case ServiceType.CATBOX:

@@ -24,6 +24,7 @@ const serviceOptions = [
     { label: "Zipline", value: ServiceType.ZIPLINE, default: true },
     { label: "E-Z Host", value: ServiceType.EZHOST },
     { label: "Nest", value: ServiceType.NEST },
+    { label: "Encrypting.host", value: ServiceType.ENCRYPTINGHOST },
     { label: "S3-Compatible", value: ServiceType.S3 },
     { label: "Catbox.moe", value: ServiceType.CATBOX },
     ...(IS_DISCORD_DESKTOP ? [{ label: "0x0.st", value: ServiceType.ZEROX0 }] : []),
@@ -48,6 +49,13 @@ const litterboxOptions = [
 const embedProxyOptions = [
     { label: "CORS Proxy", value: "cors", default: true },
     { label: "discord.nfp.is", value: "nfp" }
+];
+
+const encryptingHostUrlStyleOptions = [
+    { label: "Query", value: "query", default: true },
+    { label: "Param", value: "param" },
+    { label: "Fake Link", value: "fakelink" },
+    { label: "Embed", value: "embed" }
 ];
 
 export const settings = definePluginSettings({
@@ -84,6 +92,43 @@ export const settings = definePluginSettings({
     nestToken: {
         type: OptionType.STRING,
         description: "Nest API token",
+        default: "",
+        hidden: true
+    },
+    encryptingHostKey: {
+        type: OptionType.STRING,
+        description: "Encrypting.host API key",
+        default: "",
+        hidden: true
+    },
+    encryptingHostUrlStyle: {
+        type: OptionType.SELECT,
+        description: "Encrypting.host URL style",
+        options: encryptingHostUrlStyleOptions,
+        default: "query",
+        hidden: true
+    },
+    encryptingHostDomains: {
+        type: OptionType.STRING,
+        description: "Encrypting.host domains JSON list",
+        default: "[\"offensive\"]",
+        hidden: true
+    },
+    encryptingHostTitle: {
+        type: OptionType.STRING,
+        description: "Optional Encrypting.host embed title",
+        default: "",
+        hidden: true
+    },
+    encryptingHostColor: {
+        type: OptionType.STRING,
+        description: "Optional Encrypting.host embed color",
+        default: "",
+        hidden: true
+    },
+    encryptingHostFakelink: {
+        type: OptionType.STRING,
+        description: "Optional Encrypting.host fake link",
         default: "",
         hidden: true
     },
@@ -421,6 +466,7 @@ export function SettingsComponent() {
     const sharexFileInputRef = React.useRef<HTMLInputElement>(null);
     const isNest = store.serviceType === ServiceType.NEST;
     const isEzHost = store.serviceType === ServiceType.EZHOST;
+    const isEncryptingHost = store.serviceType === ServiceType.ENCRYPTINGHOST;
     const isS3 = store.serviceType === ServiceType.S3;
     const isZipline = store.serviceType === ServiceType.ZIPLINE;
     const isCatbox = store.serviceType === ServiceType.CATBOX;
@@ -523,6 +569,59 @@ export function SettingsComponent() {
                         value={store.nestToken}
                         onChange={v => store.nestToken = v}
                         placeholder="Your Nest API token"
+                    />
+                </SettingGroup>
+            )}
+
+            {isEncryptingHost && (
+                <SettingGroup name="Encrypting.host" description="Connection details for Encrypting.host uploads.">
+                    <SettingTextInput
+                        name="Encrypting.host API Key"
+                        description="Your Encrypting.host API key"
+                        value={(store as { encryptingHostKey?: string; }).encryptingHostKey || ""}
+                        onChange={v => (store as { encryptingHostKey?: string; }).encryptingHostKey = v}
+                        placeholder="Your Encrypting.host API key"
+                    />
+                    <SettingsSection name="URL Style" description="How Encrypting.host should format returned links.">
+                        <Select
+                            options={encryptingHostUrlStyleOptions}
+                            isSelected={v => v === (store as { encryptingHostUrlStyle?: string; }).encryptingHostUrlStyle}
+                            select={v => {
+                                (store as { encryptingHostUrlStyle?: string; }).encryptingHostUrlStyle = v;
+                                update();
+                            }}
+                            serialize={v => v}
+                            placeholder="Select URL style"
+                        />
+                    </SettingsSection>
+                    <SettingsSection name="Domains JSON" description={"JSON array of domains to use, for example [\"offensive\"]."}>
+                        <TextArea
+                            value={(store as { encryptingHostDomains?: string; }).encryptingHostDomains || ""}
+                            rows={3}
+                            placeholder='["offensive"]'
+                            onChange={v => (store as { encryptingHostDomains?: string; }).encryptingHostDomains = v}
+                        />
+                    </SettingsSection>
+                    <SettingTextInput
+                        name="Embed Title"
+                        description="Optional title for embed style responses."
+                        value={(store as { encryptingHostTitle?: string; }).encryptingHostTitle || ""}
+                        onChange={v => (store as { encryptingHostTitle?: string; }).encryptingHostTitle = v}
+                        placeholder="Optional title"
+                    />
+                    <SettingTextInput
+                        name="Embed Color"
+                        description="Optional color for embed style responses."
+                        value={(store as { encryptingHostColor?: string; }).encryptingHostColor || ""}
+                        onChange={v => (store as { encryptingHostColor?: string; }).encryptingHostColor = v}
+                        placeholder="Optional color"
+                    />
+                    <SettingTextInput
+                        name="Fake Link"
+                        description="Optional fake link value for fakelink style responses."
+                        value={(store as { encryptingHostFakelink?: string; }).encryptingHostFakelink || ""}
+                        onChange={v => (store as { encryptingHostFakelink?: string; }).encryptingHostFakelink = v}
+                        placeholder="Optional fake link"
                     />
                 </SettingGroup>
             )}
