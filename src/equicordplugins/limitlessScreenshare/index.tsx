@@ -59,45 +59,44 @@ export default definePlugin({
   ],
   OptionsRange(changeStream: Function, params: any[], isResolution: boolean) {
     const { maxFPS, maxResolution } = settings.store;
+    const [group, id, initialValue] = params;
     const minValue = isResolution ? MIN_RESOLUTION : MIN_FPS,
       maxValue = isResolution ? maxResolution : maxFPS;
-    const initialValue = params[2];
 
     return this.CustomRange(
       (value: number) => changeStream(value),
       initialValue,
       [minValue, maxValue],
-      params[0],
-      params[1] + "-custom",
+      group,
+      id + "-custom",
       (isResolution ? "p" : " FPS")
     );
   },
   SettingsRange(changeStream: Function, params: any[], isResolution: boolean) {
     const { maxFPS, maxResolution } = settings.store;
+    const [resolution, fps, group, id, p1, p2] = params;
     const minValue = isResolution ? MIN_RESOLUTION : MIN_FPS,
       maxValue = isResolution ? maxResolution : maxFPS;
-    const initialValue = params[isResolution ? 0 : 1];
+    const initialValue = isResolution ? resolution : fps;
 
     return this.CustomRange(
-      (value: number) => changeStream(params[4], isResolution ? value : params[0], !isResolution ? value : params[1], params[5]),
+      (value: number) => changeStream(p1, isResolution ? value : resolution, !isResolution ? value : fps, p2),
       initialValue,
       [minValue, maxValue],
-      params[2],
-      params[3] + "-custom",
+      group,
+      id + "-custom",
       (isResolution ? "p" : " FPS")
     );
   },
 
   CustomRange(onChange: Function, initialValue: number, minMax: [number, number], group: string, id: string, suffix: string) {
     const [value, setValue] = useState(initialValue);
-    const minValue = minMax[0],
-      maxValue = minMax[1];
+    const [minValue, maxValue] = minMax;
 
-    const onChangeHandler = (number: number) => {
-      let tmp = denormalize(number, minValue, maxValue);
-      tmp = Math.round(tmp);
-      setValue(tmp);
-      cooldown(() => onChange(tmp));
+    const onChangeHandler = (newValue: number) => {
+      let roundedValue = Math.round(denormalize(newValue, minValue, maxValue));
+      setValue(roundedValue);
+      cooldown(() => onChange(roundedValue));
     };
     return (<Menu.MenuControlItem group={`${group}`} id={`${id}`} interactive={true} control={
       (props, ref) =>
