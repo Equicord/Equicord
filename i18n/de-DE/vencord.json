@@ -459,11 +459,16 @@
         "agreedToGuidelines": "Den Richtlinien zugestimmt",
         "baseUrl": "URL für die Decor-API",
         "changeDecoration": "Dekoration ändern",
+        "delete": "Löschen",
+        "deleteConfirm": "Bist du sicher, dass du [Name] löschen willst?",
+        "deleteDecoration": "Dekoration löschen",
         "description": "Erstellen und verwenden Sie Ihre eigenen benutzerdefinierten Avatar-Dekorationen oder wählen Sie Ihren Favoriten aus den Voreinstellungen aus.",
         "enableAndRestart": "Aktivieren Sie Dekor und starten Sie Ihren Client neu, um die Dekoration Ihres Avatars zu ändern.",
+        "options": "Dekorationsoptionen",
         "profilesLink": "Profile",
         "removeDecoration": "Dekoration entfernen",
-        "title": "Dekor"
+        "title": "Dekor",
+        "yourDecorations": "Deine Dekorationen"
     },
     "devCompanion": {
         "description": "Dev Companion-Plugin. Bitte melden Sie alles, was nicht funktioniert oder seltsam ist (höchstwahrscheinlich handelt es sich um einen Fehler), entweder per Ping oder DM, danke!",
