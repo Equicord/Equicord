@@ -55,6 +55,9 @@
         },
         "description": "Noem iemand willekeurig"
     },
+    "audioPlayerAPI": {
+        "description": "API voor het afspelen van interne Discord-audiobestanden of externe audiolinks."
+    },
     "autoZipper": {
         "description": "Zipt automatisch gespecificeerde bestandstypen en mappen voordat deze worden geüpload naar Discord",
         "settings": {
@@ -321,6 +324,7 @@
             "clipsLink": "Wijzig de FPS- en duuropties in de Clips-instellingen!",
             "enableAdvancedSignals": "Geavanceerde clipsignalen inschakelen (automatische cliptriggers)",
             "enableScreenshotKeybind": "Schakel de screenshot-keybind-functie in",
+            "enableSpeakingIndicators": "Spraakindicatoren inschakelen",
             "enableVoiceOnlyClips": "Schakel alleen-spraakfragmenten in (audio zonder video)",
             "ignorePlatformRestriction": "Platformbeperkt knippen toestaan (kan opslagfouten veroorzaken)",
             "richPresenceTagging": "Wanneer moeten clips worden getagd met de huidige Rich Presence?",
@@ -334,6 +338,8 @@
     "commandPalette": {
         "description": "Voer snel acties uit via een doorzoekbaar opdrachtenpalet",
         "settings": {
+            "closeAfterExecute": "Sluit palet na het uitvoeren van een commando.",
+            "compactStartEnabled": "Open het palet eerst in de compacte modus.",
             "customCommands": "Beheer aangepaste opdrachtpaletitems",
             "enableTagFilter": "Toon de tagfilterbalk",
             "hotkey": "Sneltoets die wordt gebruikt om het opdrachtenpalet te openen",
@@ -551,6 +557,11 @@
             "reset": "Resetten"
         }
     },
+    "equicordDonor": {
+        "description": "Deze badge is een speciaal extraatje voor Equicord-donateurs (niet Vencord).",
+        "description2": "Overweeg alsjeblieft om de ontwikkeling van Equicord te steunen door donateur te worden. Het zou veel voor ons betekenen!!",
+        "title": "Equicord Donateur"
+    },
     "equicordHelper": {
         "alerts": {
             "equicordSupport": "Equicord Ondersteuning",
@@ -598,6 +609,10 @@
             "themes": "Thema's",
             "tooltip": "Equicord Gereedschapskist"
         }
+    },
+    "equicordTranslator": {
+        "description": "Wordt toegekend aan bijdragers die de taalondersteuning van Equicord uitbreiden door inhoud te vertalen voor de gemeenschap.",
+        "title": "Equicord Vertaler"
     },
     "equissant": {
         "description": "Croissant elk gespecificeerd aantal klikken :trolley:",
@@ -889,6 +904,7 @@
     },
     "githubRepos": {
         "description": "Toont de openbare GitHub-opslagplaatsen van een gebruiker in zijn of haar profiel",
+        "githubRepos": "GitHub Repositories",
         "settings": {
             "showInMiniProfile": "Toon de volledige ui in het miniprofiel in plaats van slechts een knop",
             "showLanguage": "Toon repositorytaal",
@@ -933,6 +949,9 @@
             "disableAdoptTagPrompt": "Schakel de prompt om tags over te nemen uit",
             "hideTags": "Tags verbergen"
         }
+    },
+    "headerBarAPI": {
+        "description": "API voor het toevoegen van knoppen aan de kopbalk en de kanaalwerkbalk."
     },
     "hideChatButtons": {
         "description": "Kan chatknoppen verbergen",
@@ -1314,6 +1333,10 @@
             "enableAndRestart": "Schakel de plug-in in en start uw client opnieuw op om een login-QR-code te scannen",
             "scanQrCode": "QR-code scannen"
         }
+    },
+    "mainWindowFrameless": {
+        "description": "Verwijder het standaard vensterkader voor een strakkere uitstraling. Je kunt het venster nog steeds verplaatsen door de titelbalk te verslepen.",
+        "title": "Disable the Main Window Frame"
     },
     "mediaPlaybackSpeed": {
         "description": "Beheer de afspeelsnelheid van media voor spraakberichten, video's en audiobijlagen",
@@ -2091,7 +2114,10 @@
         "description": "Een plug-in waarmee u trivia-vragen kunt beantwoorden met behulp van AI.",
         "settings": {
             "apiKey": "API Toets.",
+            "autoReply": "Automatisch antwoorden",
             "autoRespond": "Automatisch reageren op berichten wanneer u een reactie ontvangt.",
+            "bot": "Clyde",
+            "chatbar": "Chatbortekst vervangen",
             "endpoint": "OpenAI-compatibel AI-eindpunt.",
             "maxTokens": "Maximaal aantal tokens in het antwoord.",
             "model": "AI-model om te gebruiken.",
@@ -2148,6 +2174,9 @@
             "patternPlaceholder": "*.voorbeeld.com",
             "urlPatterns": "URL Patronen"
         }
+    },
+    "userAreaAPI": {
+        "description": "API voor het toevoegen van knoppen aan het gebruikerspaneel."
     },
     "userpfp": {
         "avatarOptions": {
