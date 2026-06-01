@@ -116,6 +116,7 @@
     "arRPC": {
         "connected": "Verbonden met arRPC",
         "connectionFailed": "Kan geen verbinding maken met arRPC. Is deze actief?",
+        "description": "Cliënt-plugin voor arRPC om RPC in te schakelen op Discord Web (experimenteel)",
         "retry": "Opnieuw proberen",
         "settingsAbout": {
             "description": "Volg de instructies in de GitHub-repository om de server draaiende te krijgen en schakel vervolgens de plug-in in.",
@@ -139,6 +140,7 @@
         "description": "API om badges aan gebruikers toe te voegen"
     },
     "betterFolders": {
+        "description": "Toont servermappen in een speciale zijbalk en voegt mapgerelateerde verbeteringen toe",
         "settings": {
             "closeAllFolders": "Sluit alle mappen wanneer u een server selecteert die niet in een map staat",
             "closeAllHomeButton": "Sluit alle mappen door op de homeknop te klikken",
@@ -188,6 +190,7 @@
         }
     },
     "betterSessions": {
+        "description": "Verbetert het menu voor sessies (apparaten). Je kunt hiermee exacte tijdstempels zien, elke sessie een eigen naam geven en meldingen krijgen wanneer er een nieuwe sessie start.",
         "newBadge": "NIEUW",
         "newSession": "Nieuwe sessie:",
         "rename": "Hernoemen",
@@ -203,6 +206,7 @@
         }
     },
     "betterSettings": {
+        "description": "Verbetert de manier waarop je het instellingenmenu opent",
         "settings": {
             "disableFade": "Schakel de crossfade-animatie uit",
             "eagerLoad": "Verwijdert de laadvertraging bij het voor de eerste keer openen van het menu",
@@ -272,10 +276,12 @@
             "failedToDelete": "Kan instellingen niet verwijderen ({e}).",
             "failedToSync": "Kan de instellingen niet synchroniseren met de cloud ({e}).",
             "header": "Cloud-instellingen",
+            "manifest": "Kon manifest niet ophalen voor verwijdering (API retourneerde {e}).",
             "newerThanCloud": "Uw lokale instellingen zijn nieuwer dan de cloudinstellingen.",
             "noSettings": "Er zijn geen instellingen in de cloud.",
             "success": "Gesynchroniseerde instellingen naar de cloud!",
             "syncFromCloud": "Kan instellingen uit de cloud ({e}) niet synchroniseren.",
+            "syncedCloud": "Cloudgegevens gesynchroniseerd.",
             "upToDate": "Uw instellingen zijn up-to-date.",
             "updated": "Je instellingen zijn bijgewerkt! Klik hier om opnieuw te starten en de wijzigingen volledig toe te passen!",
             "updatedRemote": "Je instellingen zijn bijgewerkt! Klik hier om opnieuw te starten en de wijzigingen volledig toe te passen!"
@@ -384,6 +390,7 @@
         "button1Url": "Knop1 URL",
         "button2Text": "Knop2 Tekst",
         "button2Url": "Knop2 URL",
+        "description": "Voeg een volledig aanpasbare Rich Presence (spelstatus) toe aan je Discord-profiel",
         "detailLine1": "Detail (regel 1)",
         "detailUrl": "Detail URL",
         "endTimestamp": "Eindtijdstempel (in milliseconden)",
@@ -449,12 +456,46 @@
     },
     "decor": {
         "accessFromProfiles": "Je hebt ook toegang tot Decordecoraties via de pagina {link}.",
+        "agreedToGuidelines": "Richtlijnen geaccepteerd",
+        "alreadyPending": "Je hebt al een decoratie in afwachting van beoordeling",
+        "apply": "Toepassen",
+        "baseUrl": "Decor api url",
+        "browse": "Bladeren",
         "changeDecoration": "Decoratie wijzigen",
+        "chooseAFile": "Kies een bestand",
+        "confirmLogOut": "Weet je zeker dat je wilt uitloggen bij Decor?",
+        "continue": "Ga door",
+        "copyHash": "Decoratie hash kopiëren",
+        "copyPresetId": "Preset ID kopiëren",
+        "createDecoration": "Decoratie maken",
+        "createdBy": "Gemaakt door",
+        "decorDiscordServer": "Decor's Discord server",
+        "delete": "Verwijderen",
+        "deleteConfirm": "Weet je zeker dat je {name} wilt verwijderen?",
+        "deleteDecoration": "Decoratie verwijderen",
+        "deleteInstructions": "Je kunt je eigen decoraties verwijderen door er met de rechtermuisknop op te klikken.",
         "description": "Creëer en gebruik je eigen aangepaste avatardecoraties, of kies je favoriet uit de presets.",
+        "discordServer": "Discord Server",
+        "discordServerNotice": "Sluit je aan bij {link} en sta directe berichten toe om updates te ontvangen over de beoordeling van je decoratie.",
+        "discordTooltip": "Word lid van Decors Discord-server voor meldingen over de beoordeling van je decoratie en wanneer er nieuwe presets worden uitgebracht",
         "enableAndRestart": "Schakel Decor in en start uw client opnieuw op om uw avatardecoratie te wijzigen.",
+        "file": "Bestand",
+        "fileNotice": "Bestand moet een APNG of PNG zijn.",
+        "guidelinesAgreementNotice": "Door een decoratie in te dienen, ga je akkoord met {guidelines}. Het niet lezen van deze richtlijnen kan ertoe leiden dat je account wordt geschorst voor het maken van toekomstige decoraties.",
+        "guidelinesNotice": "Zorg ervoor dat je decoratie de {guidelines} niet schendt voordat je deze indient.",
+        "holdOn": "Wacht even",
+        "logOut": "Uitloggen",
+        "name": "Naam",
+        "nameNotice": "Deze naam zal worden gebruikt om naar deze decoratie te verwijzen.",
+        "options": "Decoratie Opties",
+        "pendingReview": "In afwachting van beoordeling",
+        "presetPart": "Onderdeel van de {name} preset",
         "profilesLink": "Profielen",
         "removeDecoration": "Decoratie verwijderen",
-        "title": "Decor"
+        "submitForReview": "Indienen voor beoordeling",
+        "theGuidelines": "de richtlijnen",
+        "title": "Decor",
+        "yourDecorations": "Je decoraties"
     },
     "devCompanion": {
         "description": "Dev Companion-plug-in. Meld alles wat niet werkt of raar is (hoogstwaarschijnlijk is het een bug) aan Sadan, ping of dm, bedankt!",
@@ -501,10 +542,12 @@
     },
     "expressionCloner": {
         "cloneEmoji": "Kloon Emoji",
+        "cloneName": "{name} klonen",
         "cloneSticker": "Kloon-sticker",
         "cloneTo": "Klonen naar {guild}",
         "clonedSuccess": "{name} is succesvol gekloond naar {guild}!",
         "customName": "Aangepaste naam",
+        "description": "Hiermee kun je emotes en stickers naar je eigen server klonen (klik er met de rechtermuisknop op)",
         "failedToClone": "Kan niet klonen: {error}",
         "nameValidation": "Naam moet tussen 2 en 32 tekens lang zijn",
         "somethingWentWrong": "Er is iets misgegaan (controleer de console!)"
@@ -527,6 +570,7 @@
             "body3": "Weet u zeker dat u dit bericht wilt verzenden? Uw FakeNitro-items verschijnen alleen als link.",
             "disableNotice": "U kunt deze melding uitschakelen in de plug-ininstellingen."
         },
+        "ok": "OK",
         "sendAnyway": "Hoe dan ook verzenden",
         "settings": {
             "disableEmbedPermissionCheck": "Of de controle op het insluiten van toestemming moet worden uitgeschakeld bij het verzenden van nep-emoji's en stickers",
@@ -699,6 +743,7 @@
         "description": "Verberg geen berichten voor 'waarschijnlijke spammers'"
     },
     "ignoreActivities": {
+        "description": "Zorg dat bepaalde activiteiten ALLEEN niet op jouw status te zien zijn. Je kunt bij de tabbladen Geregistreerde spellen en Activiteiten instellen welke je precies wilt negeren, of gebruik de algemene instellingen hieronder.",
         "disableActivity": "Schakel activiteit uit",
         "enableActivity": "Activiteit inschakelen",
         "filterList": {
@@ -732,6 +777,7 @@
         "description": "Verberg nooit afbeeldingslinks in berichten, ook al is dit de enige inhoud"
     },
     "imageZoom": {
+        "description": "Hiermee kun je inzoomen op afbeeldingen en gifs. Gebruik je scrollwiel om in te zoomen, en Shift + scrollwiel om de grootte van de lens aan te passen.",
         "lensSize": "Lensgrootte",
         "nearestNeighbour": "Dichtstbijzijnde buurman",
         "settings": {
@@ -840,6 +886,7 @@
         "showLogs": "Logboeken weergeven"
     },
     "memberCount": {
+        "description": "Toont het aantal online leden, het totale aantal leden en gebruikers in spraakkanalen op de server — in de ledenlijst en de tooltip.",
         "settings": {
             "memberList": "Toon het aantal leden in de ledenlijst",
             "toolTip": "Toon het aantal leden op de servertooltip",
@@ -930,6 +977,7 @@
     "messageLatency": {
         "clockAhead": "De klok van deze gebruiker loopt {delta} vooruit.",
         "delayedMessage": "Vertraagd bericht",
+        "description": "Toont een indicator bij berichten die er ≥n seconden over deden om te worden verzonden",
         "messageDelayed": "Dit bericht is verzonden met een vertraging van {delta}.",
         "oldAndroidClient": "Oude Discord Android-client",
         "oldDiscordAndroid": "Er wordt vermoed dat de gebruiker een oude Discord Android-client gebruikt",
@@ -989,6 +1037,7 @@
         "deletedMessages_one": "{count} heeft bericht verwijderd",
         "deletedMessages_other": "{count} heeft berichten verwijderd",
         "deletedMessages_zero": "Geen verwijderde berichten",
+        "description": "Slaat verwijderde en bewerkte berichten tijdelijk op in een logboek.",
         "disableDiffView": "Schakel Diff-weergave uit",
         "editHistory": "Berichtbewerkingsgeschiedenis",
         "enableDiffView": "Schakel Diff-weergave in",
@@ -1011,6 +1060,7 @@
             "separatedDiffs": "Afzonderlijke toevoegingen en verwijderingen in diffs voor een beter leesbaar verschil",
             "showEditDiffs": "Toon visuele verschillen tussen bewerkte berichtversies"
         },
+        "showDiff": "Wijzigingen tonen",
         "toggleDeletedHighlight": "Schakel Verwijderde hoogtepunt in"
     },
     "messagePopoverAPI": {
@@ -1157,6 +1207,12 @@
     "noSystemBadge": {
         "description": "Schakelt de taakbalk en het systeemvak uit voor het aantal ongelezen tellingen."
     },
+    "noTrack": {
+        "description": "Schakel Discord's tracking (analytics/'science'), statistieken en Sentry crash rapportage uit",
+        "settings": {
+            "disableAnalytics": "Schakel Discord's tracking (analytics/'science') uit"
+        }
+    },
     "noTypingAnimation": {
         "description": "Schakelt de CPU-intensieve typepuntanimatie uit"
     },
@@ -1230,6 +1286,7 @@
         }
     },
     "permissionsViewer": {
+        "description": "Bekijk de rechten van een gebruiker of kanaal, en de rollen van een server",
         "noPermissions": "Geen rechten om weer te geven!",
         "owner": "eigenaar",
         "permissions": "Machtigingen",
@@ -1280,6 +1337,7 @@
         "color": "Kleur",
         "create": "Creëren",
         "deleteCategory": "Categorie verwijderen",
+        "description": "Hiermee kun je privékanalen bovenaan je DM-lijst vastpinnen. Klik met de rechtermuisknop op een DM om deze vast of los te pinnen, of om de volgorde te wijzigen.",
         "editCategory": "Categorie bewerken",
         "editCategoryTitle": "Categorie bewerken",
         "moveDown": "Ga naar beneden",
@@ -1414,6 +1472,7 @@
         "confirmDelete": "Wilt u deze recensie echt verwijderen?",
         "confirmReport": "Wilt u deze review echt melden?",
         "delete": "Verwijderen",
+        "description": "Beoordeel andere gebruikers (voegt een nieuwe instelling toe aan profielen)",
         "failedToFetchBlocks": "Kan blokken niet ophalen: {error}",
         "mustBeLoggedInBlock": "U moet ingelogd zijn om gebruikers te blokkeren.",
         "mustBeLoggedInDelete": "Om beoordelingen te verwijderen moet u ingelogd zijn.",
@@ -1421,6 +1480,7 @@
         "nevermind": "Laat maar",
         "newReviews": "Je hebt nieuwe recensies op je profiel!",
         "noBlockedUsers": "Geen geblokkeerde gebruikers.",
+        "noReviewsYet": "Nog geen beoordelingen",
         "notLoggedIn": "U bent niet ingelogd bij ReviewDB!",
         "ok": "OK",
         "readMore": "Lees meer",
@@ -1446,6 +1506,8 @@
         },
         "system": "Systeem",
         "unblockUser": "Deblokkeer gebruiker",
+        "userOptedOut": "Gebruiker heeft zich afgemeld",
+        "userReviews": "Gebruikersbeoordelingen",
         "viewReviews": "Bekijk beoordelingen"
     },
     "roleColorEverywhere": {
@@ -1654,6 +1716,16 @@
             "title": "Gebruik de eigen titelbalk van Windows in plaats van de aangepaste titelbalk van Discord."
         }
     },
+    "settingsPlugin": {
+        "aboveActivity": "Boven de activiteitsinstellingen",
+        "aboveNitro": "Boven het Nitro gedeelte",
+        "belowActivity": "Onder de activiteitsinstellingen",
+        "belowNitro": "Onder het Nitro gedeelte",
+        "bottom": "Helemaal onderaan",
+        "description": "Voegt instellingen-UI en debug-informatie toe.",
+        "settingsLocation": "Waar moet het gedeelte met de Equicord instellingen worden geplaatst",
+        "top": "Helemaal bovenaan"
+    },
     "settingsSync": {
         "failedToImport": "Kan instellingen niet importeren: {e}",
         "imported": "Instellingen succesvol geïmporteerd. Start opnieuw om de wijzigingen toe te passen!"
@@ -1853,6 +1925,7 @@
             "membersListIndicators": "Ledenlijstindicatoren",
             "silentTyping": "Stil typen"
         },
+        "description": "Verberg je typ-indicator in de chat.",
         "noChanges": "Er zijn geen wijzigingen aangebracht in de instellingen voor stil typen.",
         "settings": {
             "chatContextMenu": "Toon een vervolgkeuzelijst in het chatcontextmenu om plug-ininstellingen onderweg te wijzigen.",
@@ -1914,17 +1987,30 @@
             "unlimitedSuperReactionPlaying": "Verwijder de limiet voor het tegelijk spelen van Super Reactions"
         }
     },
+    "supportHelper": {
+        "debug": "Verstuur Equicord debug informatie",
+        "description": "Helpt ons om je ondersteuning te bieden",
+        "plugins": "Verstuur Equicord pluginlijst"
+    },
     "tabs": {
         "settings": "Equicord Instellingen"
     },
     "textReplace": {
+        "description": "Vervang tekst in jouw berichten of die van anderen. Je kunt kant-en-klare regels vinden in het kanaal #textreplace-rules op de server van Vencord.",
         "find": "Zoeken",
+        "findDesc": "De te vervangen tekst",
+        "findDescRegex": "Het regex-patroon",
         "messageWithRules": "Bericht waarop regels zijn toegepast",
         "onlyIfIncludes": "Alleen als inclusief",
+        "onlyIfIncludesDesc": "Deze regel wordt alleen toegepast als het bericht deze tekst bevat. Dit is optioneel.",
+        "regexRules": "Krachtigere vervangingen met behulp van reguliere expressies. Dit gedeelte is voor gevorderde gebruikers. Als je dit niet begrijpt, negeer het dan.",
         "replace": "Vervangen",
+        "replaceDesc": "De tekst waarmee de gevonden tekst moet worden vervangen",
         "scope.allMessages": "Apply to all messages",
         "scope.myMessages": "Apply to your messages (visible to everyone)",
         "scope.othersMessages": "Apply to others' messages (only visible to you)",
+        "stringRules": "Eenvoudige regels voor zoeken en vervangen. Zoek bijvoorbeeld naar 'brb' en vervang dit door 'be right back'",
+        "testMessage": "Type a message to test rules on",
         "testRules": "Testregels",
         "typeMessage": "Typ een bericht",
         "usingRegex": "Regex gebruiken",
@@ -1940,6 +2026,7 @@
             "title": "Equicord Automatisch vertalen ingeschakeld"
         },
         "autoTranslateEnabledLabel": "Automatisch vertalen ingeschakeld",
+        "description": "Translate messages with Google Translate or DeepL",
         "disableAutoTranslate": "Schakel automatisch vertalen uit",
         "dontShowAgain": "Niet meer laten zien",
         "gotIt": "Ik heb het",
@@ -1947,6 +2034,16 @@
         "openTranslateModal": "Open Vertaalmodaal",
         "selectLanguage": "Selecteer een taal",
         "translate": "Vertalen"
+    },
+    "translation": {
+        "description": "Helpt bij het vertalen van Equicord",
+        "settings": {
+            "forceLocale": {
+                "description": "Forceer een andere landinstelling voor Equicord",
+                "followDiscord": "Standaard (volg Discord)"
+            },
+            "showMissingKeys": "Als de huidige landinstelling vertalingen mist, toon dan de sleutels in plaats van terug te vallen op Engels"
+        }
     },
     "typingIndicator": {
         "description": "Voegt een indicator toe als iemand op een kanaal typt.",
@@ -2061,6 +2158,11 @@
         },
         "speechSynthesisNotSupported": "Spraaksynthese wordt niet ondersteund of er zijn geen Verteller-stemmen gevonden. Deze plug-in zal dus niet werken. Controleer mijn Instellingen voor meer informatie"
     },
+    "vencordDonor": {
+        "description": "Deze badge is een speciaal extraatje voor Vencord donateurs.",
+        "description2": "Overweeg alsjeblieft om de ontwikkeling van Vencord te steunen door donateur te worden. Het zou veel voor ons betekenen!!",
+        "title": "Vencord Donateur"
+    },
     "viewIcons": {
         "description": "Maakt avatars en banners in gebruikersprofielen klikbaar, voegt View Icon/Banner-items toe in het gebruikers-, server- en groepskanaalcontextmenu.",
         "settings": {
@@ -2084,6 +2186,7 @@
         "settings": {
             "clickMethodDescription": "Wijzig de knop om de onbewerkte inhoud/gegevens van elk bericht te bekijken.",
             "leftClick": "Klik met de linkermuisknop om de onbewerkte inhoud te bekijken.",
+            "messageContextMenu": "Show in message context menu",
             "rightClick": "Klik met de rechtermuisknop om de onbewerkte inhoud te bekijken."
         },
         "viewRaw": "Bekijk Ruw",
@@ -2094,6 +2197,7 @@
         "downloadVoiceMessage": "Spraakbericht downloaden"
     },
     "voiceMessages": {
+        "description": "Stelt je in staat om spraakberichten te versturen, net als op mobiel. Klik hiervoor met de rechtermuisknop op de uploadknop en klik op Spraakbericht verzenden.",
         "echoCancellation": "Echoreductie",
         "failedToParse": "Kan het geselecteerde audiobestand niet parseren: {error}",
         "failedToUpload": "Kan spraakbericht niet uploaden",
@@ -2126,6 +2230,7 @@
         "description": "Verwijdert de bitratelimiet van 2500 kbps op chroom- en vesktop-clients."
     },
     "whoReacted": {
+        "description": "Renders the avatars of users who reacted to a message",
         "settings": {
             "avatarClick": "Schakel klikken op avatars in reacties in"
         }
