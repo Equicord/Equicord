@@ -111,7 +111,7 @@
             "oscilloscopeColor": "Osciloskopo spalva",
             "oscilloscopeSolidColor": "Osciloskopui naudokite vientisą spalvą",
             "spectrograph": "Įgalinti spektrografo vizualizatorių",
-            "spectrographColor": "Spalva spektrografui",
+            "spectrographColor": "Spalva spektrografui (R, G, B arba #hex)",
             "spectrographSolidColor": "Spektrografui naudokite vientisą spalvą"
         },
         "toasts": {
