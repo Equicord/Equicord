@@ -43,9 +43,9 @@
         "commands": {
             "spoiler": {
                 "description": "Basculez votre spoiler",
-                "disabled": "Spoiler désactivé !",
-                "enabled": "Spoiler activé !",
-                "name": "Becquet",
+                "disabled": "Spoiler désactivé !",
+                "enabled": "Spoiler activé !",
+                "name": "Spoiler",
                 "optionDescription": "Basculez votre spoiler (la valeur par défaut est bascule)",
                 "optionName": "valeur"
             }
@@ -82,16 +82,16 @@
         },
         "defaultDetails": "{name}",
         "defaultLargeText": "{album}",
-        "defaultName": "Pomme Musique",
+        "defaultName": "Apple Music",
         "defaultSmallText": "{artist}",
         "defaultState": "{artist} · {album}",
-        "description": "Discord riche présence pour votre Apple Music !",
-        "name": "PommeMusiqueRichePrésence",
+        "description": "Discord rich presence pour votre Apple Music !",
+        "name": "AppleMusicRichPresence",
         "settings": {
             "activityType": "Quel type d'activité",
             "detailsString": "Chaîne de format des détails de l'activité",
-            "enableButtons": "S'il faut ou non activer les boutons",
-            "enableTimestamps": "S'il faut ou non activer les horodatages",
+            "enableButtons": "Indique si les boutons doivent être activés",
+            "enableTimestamps": "Indique si les horodatages doivent être activés",
             "largeImageType": "Type d'image de grande taille pour les actifs d'activité",
             "largeTextString": "Chaîne de grand format de texte des actifs d'activité",
             "nameString": "Chaîne de format du nom de l'activité",
@@ -104,7 +104,7 @@
         "settingsAbout": {
             "albumPlaceholder": "{album} est remplacé par le nom de l'album.",
             "artistPlaceholder": "{artist} est remplacé par le(s) nom(s) du ou des artistes",
-            "intro": "Pour les chaînes de format d'activité personnalisables, vous pouvez utiliser plusieurs chaînes spéciales pour inclure des données de suivi dans les activités !",
+            "intro": "Pour les chaînes de format d'activité personnalisables, vous pouvez utiliser plusieurs chaînes spéciales pour inclure des données de suivi dans les activités !",
             "namePlaceholder": "{name} est remplacé par le nom de la piste"
         },
         "statusDisplayTypes": {
@@ -115,7 +115,7 @@
     },
     "arRPC": {
         "connected": "Connecté à arRPC",
-        "connectionFailed": "Échec de la connexion à arRPC, est-il en cours d'exécution ?",
+        "connectionFailed": "Échec de la connexion à arRPC, est-il en cours d'exécution ?",
         "description": "Plugin client pour arRPC permettant d'activer le RPC sur Discord Web (expérimental)",
         "retry": "Réessayer",
         "settingsAbout": {
@@ -166,7 +166,7 @@
         }
     },
     "betterNotesBox": {
-        "description": "Masquer les notes ou désactiver la vérification orthographique (Configurer dans les paramètres !!)",
+        "description": "Masquer les notes ou désactiver la vérification orthographique (Configurer dans les paramètres !!)",
         "settings": {
             "hide": "Masquer les notes",
             "noSpellCheck": "Désactiver la vérification orthographique dans les notes"
@@ -180,10 +180,10 @@
         "settings": {
             "roleIconFileFormat": "Format de fichier à utiliser lors de l'affichage des icônes de rôle"
         },
-        "viewRoleIcon": "Icône Afficher le rôle"
+        "viewRoleIcon": "Afficher l'icône du rôle"
     },
     "betterRoleDot": {
-        "description": "Copiez la couleur du rôle sur RoleDot (paramètre d'accessibilité), cliquez sur. Permet également d'utiliser simultanément les noms RoleDot et colorés",
+        "description": "Copie la couleur du rôle sur le RoleDot (paramètre d'accessibilité) lors du clic. Permet également d'utiliser simultanément les noms RoleDot et colorés",
         "settings": {
             "bothStyles": "Afficher à la fois le point de rôle et les noms en couleur",
             "copyRoleColorInProfilePopout": "Autoriser le clic sur le point de rôle dans la fenêtre contextuelle du profil pour copier la couleur du rôle"
@@ -192,7 +192,7 @@
     "betterSessions": {
         "description": "Améliore le menu des sessions (appareils). Permet d'afficher les horodatages exacts, de donner un nom personnalisé à chaque session et de recevoir des notifications lors de nouvelles sessions.",
         "newBadge": "NOUVEAU",
-        "newSession": "Nouvelle séance :",
+        "newSession": "Nouvelle session :",
         "rename": "Rebaptiser",
         "renameModal": {
             "newDeviceName": "Nouveau nom d'appareil",
@@ -201,7 +201,7 @@
             "title": "Rebaptiser"
         },
         "settings": {
-            "backgroundCheck": "Recherchez de nouvelles sessions en arrière-plan et affichez des notifications lorsqu'elles sont détectées",
+            "backgroundCheck": "Vérifier les nouvelles sessions en arrière-plan et afficher des notifications lorsqu'elles sont détectées",
             "checkInterval": "À quelle fréquence vérifier les nouvelles sessions en arrière-plan (si activé), en minutes"
         }
     },
@@ -214,29 +214,29 @@
         }
     },
     "betterUploadButton": {
-        "description": "Téléchargez en un seul clic, ouvrez le menu avec un clic droit"
+        "description": "Envoyer d'un seul clic, ouvrir le menu avec un clic droit"
     },
     "biggerStreamPreview": {
         "description": "Ce plugin vous permet d'agrandir les aperçus des flux",
-        "name": "BiggerStreamAperçu",
+        "name": "BiggerStreamPreview",
         "viewStreamPreview": "Afficher l'aperçu du flux"
     },
     "blurNsfw": {
-        "description": "Flou les pièces jointes dans les canaux NSFW jusqu'à leur survol",
+        "description": "Floute les pièces jointes dans les salons NSFW jusqu'au survol",
         "settings": {
-            "blurAllChannels": "Flou des pièces jointes dans tous les canaux (pas seulement NSFW)",
+            "blurAllChannels": "Floute les pièces jointes dans tous les salons (pas seulement NSFW)",
             "blurAmount": "Quantité de flou (en pixels)"
         }
     },
     "callTimer": {
-        "description": "Ajoutez des minuteries d'appel pour tous les utilisateurs dans les canaux vocaux et dans l'état de connexion.",
+        "description": "Ajoute des minuteries d'appel pour tous les utilisateurs dans les salons vocaux et dans le statut de connexion.",
         "settings": {
             "allCallTimers": "Ajouter une minuterie d'appel à tous les utilisateurs d'un salon vocal de serveur",
             "format": "Format compact ou lisible par l'homme :",
             "showRoleColor": "Afficher la couleur du rôle de l'utilisateur (si ce plugin est activé)",
             "showSeconds": "Afficher les secondes dans la minuterie",
             "showWithoutHover": "Afficher toujours la minuterie sans avoir besoin de survoler",
-            "trackSelf": "Suivez-vous également",
+            "trackSelf": "Vous suivre également",
             "watchLargeGuilds": "Suivez les utilisateurs dans les grandes guildes. Cela peut entraîner un décalage si vous faites partie de nombreuses grandes guildes avec des utilisateurs vocaux actifs. Testé avec jusqu'à 2 000 utilisateurs vocaux actifs sans problème."
         }
     },
@@ -255,23 +255,23 @@
         "switchToMode": "Passer en mode {mode}",
         "themeColor": "Couleur du thème",
         "themeColorDescription": "Ajoutez une couleur à votre thème client Discord",
-        "themeWontLookGood": "Votre thème n'aura pas l'air bien !"
+        "themeWontLookGood": "Votre thème n'aura pas l'air bien !"
     },
     "cloud": {
         "integrations": {
-            "enabled": "Intégrations cloud activées !",
+            "enabled": "Intégrations cloud activées !",
             "error": "Échec de l'installation ({e})",
             "failedToRetrieveOAuth": "Échec de l'installation (impossible de récupérer la configuration OAuth).",
             "header": "Intégrations cloud",
-            "noSecret": "L'installation a échoué (aucun secret n'a été renvoyé ?).",
-            "reauthenticateOtherClient": "Nous avons remarqué que les intégrations cloud sont activées dans un autre client ! En raison de limitations, vous devrez vous réauthentifier pour continuer à les utiliser. Cliquez ici pour accéder à la page des paramètres et le faire !"
+            "noSecret": "L'installation a échoué (aucun secret n'a été renvoyé ?).",
+            "reauthenticateOtherClient": "Nous avons remarqué que les intégrations cloud sont activées dans un autre client ! En raison de limitations, vous devrez vous réauthentifier pour continuer à les utiliser. Cliquez ici pour accéder à la page des paramètres et le faire !"
         },
         "settings": {
             "accountChanged": "La synchronisation cloud a été désactivée car ce compte n'est pas connecté à l'application cloud. Vous pouvez le réactiver en connectant ce compte dans les paramètres Cloud. (remarque : il stockera vos préférences séparément)",
             "apiDelete": "Impossible de supprimer les paramètres (API a renvoyé {e}).",
             "apiEraseAll": "Impossible d'effacer toutes les données (API a renvoyé {e}), veuillez contacter l'assistance.",
             "apiReject": "Impossible de synchroniser les paramètres avec le cloud (API a renvoyé {e}).",
-            "deleted": "Paramètres supprimés du cloud !",
+            "deleted": "Paramètres supprimés du cloud !",
             "erased": "Toutes les données ont été effacées avec succès.",
             "failedToDelete": "Impossible de supprimer les paramètres ({e}).",
             "failedToSync": "Impossible de synchroniser les paramètres avec le cloud ({e}).",
@@ -279,12 +279,12 @@
             "manifest": "Impossible de récupérer le manifeste pour suppression (l’API a retourné {e}).",
             "newerThanCloud": "Vos paramètres locaux sont plus récents que ceux du cloud.",
             "noSettings": "Il n'y a aucun paramètre dans le cloud.",
-            "success": "Paramètres synchronisés avec le cloud !",
+            "success": "Paramètres synchronisés avec le cloud !",
             "syncFromCloud": "Impossible de synchroniser les paramètres depuis le cloud ({e}).",
             "syncedCloud": "Données cloud synchronisées.",
             "upToDate": "Vos paramètres sont à jour.",
-            "updated": "Vos paramètres ont été mis à jour ! Cliquez ici pour redémarrer et appliquer pleinement les modifications !",
-            "updatedRemote": "Paramètres synchronisés dans le cloud !"
+            "updated": "Vos paramètres ont été mis à jour ! Cliquez ici pour redémarrer et appliquer pleinement les modifications !",
+            "updatedRemote": "Paramètres synchronisés dans le cloud !"
         }
     },
     "colorSighted": {
@@ -299,7 +299,7 @@
         "filterList": "Liste de filtres",
         "name": "ConsoleConcierge",
         "settings": {
-            "disableLoggers": "Désactive les enregistreurs Discords",
+            "disableLoggers": "Désactive les enregistreurs de Discord",
             "disableSpotifyLogger": "Désactivez l'enregistreur Spotify, qui divulgue les informations de compte et le jeton d'accès",
             "whitelistedLoggers": "Liste des enregistreurs séparés par des points-virgules à autoriser même si d'autres sont masqués"
         }
@@ -312,15 +312,15 @@
     },
     "contributorCard": {
         "contributionsButton": "Découvrez à quoi vous avez contribué",
-        "description": "Depuis que vous avez contribué à Equicord, vous avez maintenant un nouveau badge sympa !",
-        "subtitle": "Merci d'avoir contribué !",
-        "title": "Cotisations"
+        "description": "Depuis que vous avez contribué à Equicord, vous avez maintenant un nouveau badge sympa !",
+        "subtitle": "Merci d'avoir contribué !",
+        "title": "Contributions"
     },
     "copyEmojiMarkdown": {
         "copyEmojiMarkdown": "Copier Emoji Markdown",
-        "copyUnicodeDescription": "Copiez le caractère Unicode brut au lieu de :name: pour les emojis par défaut (👽)",
+        "copyUnicodeDescription": "Copiez le caractère Unicode brut au lieu de :name: pour les emojis par défaut (👽)",
         "description": "Vous permet de copier des emojis sous forme de chaîne formatée (<:blobcatcozy:1026533070955872337>)",
-        "success": "Succès! Démarquage emoji copié."
+        "success": "Succès ! Emoji markdown copié."
     },
     "copyFileContents": {
         "copied": "Copié!",
@@ -331,26 +331,26 @@
     "copyStickerLinks": {
         "copyLink": "Copier le lien",
         "description": "Ajoute la possibilité de copier et d'ouvrir des liens d'autocollants",
-        "linkCopied": "Lien copié !",
+        "linkCopied": "Lien copié !",
         "openLink": "Ouvrir le lien"
     },
     "copyUserURLs": {
-        "copyUserURL": "Copier l'utilisateur URL",
-        "description": "Ajoute une option « Copier l'utilisateur URL » au menu contextuel de l'utilisateur."
+        "copyUserURL": "Copier l'URL de l'utilisateur",
+        "description": "Ajoute une option « Copier l'URL de l'utilisateur » au menu contextuel de l'utilisateur."
     },
     "crashHandler": {
         "description": "Plugin utilitaire pour la gestion et éventuellement la récupération après un crash sans redémarrage",
         "notifications": {
-            "crashedBody": "Awn :( Discord s'est écrasé deux fois rapidement, sans tenter de récupérer. Cliquez ici pour rejoindre notre serveur d'assistance !",
-            "crashedTitle": "Discord a planté !",
+            "crashedBody": "Awn :( Discord s'est écrasé deux fois rapidement, sans tenter de récupérer. Cliquez ici pour rejoindre notre serveur d'assistance !",
+            "crashedTitle": "Discord a planté !",
             "invalidInvite": "Invitation invalide ou expirée",
-            "recoveringBody": "Tentative de récupération... Cliquez ici pour rejoindre notre serveur d'assistance !"
+            "recoveringBody": "Tentative de récupération... Cliquez ici pour rejoindre notre serveur d'assistance !"
         },
         "settings": {
-            "attemptToNavigateToHome": "S'il faut tenter de naviguer vers la maison pour éviter les plantages de Discord.",
+            "attemptToNavigateToHome": "S'il faut tenter de naviguer vers l'accueil pour éviter les plantages de Discord.",
             "attemptToPreventCrashes": "S'il faut tenter d'empêcher les plantages de Discord."
         },
-        "updatePrompt": "Oh oh, Discord vient de planter... mais bonne nouvelle, une mise à jour de Equicord est disponible qui pourrait résoudre ce problème ! Souhaitez-vous mettre à jour maintenant ?"
+        "updatePrompt": "Oh oh, Discord vient de planter... mais bonne nouvelle, une mise à jour de Equicord est disponible qui pourrait résoudre ce problème ! Souhaitez-vous mettre à jour maintenant ?"
     },
     "ctrlEnterSend": {
         "description": "Utilisez Ctrl+Entrée pour envoyer des messages (personnalisable)",
@@ -360,19 +360,19 @@
         },
         "submitRuleOptions": {
             "ctrlEnter": "Ctrl+Entrée (Entrée ou Maj+Entrée pour une nouvelle ligne) (cmd+Entrée sur macOS)",
-            "enter": "Entrée (Maj+Entrée pour une nouvelle ligne ; Discord par défaut)",
+            "enter": "Entrée (Maj+Entrée pour une nouvelle ligne ; Discord par défaut)",
             "shiftEnter": "Maj+Entrée (Entrée pour une nouvelle ligne)"
         }
     },
     "customIdle": {
-        "description": "Vous permet de définir le temps avant que Discord ne passe au ralenti (ou désactive le mode veille automatique).",
+        "description": "Vous permet de définir le temps avant que Discord ne passe en inactif (ou désactive la mise en veille automatique).",
         "settings": {
             "idleTimeout": "Minutes avant que Discord ne devienne inactif (0 pour désactiver la mise en veille automatique)",
             "remainInIdle": "Lorsque vous revenez sur Discord, restez inactif jusqu'à ce que vous confirmiez que vous souhaitez vous connecter."
         },
         "ui": {
             "backOnlineMessage": "Content de te revoir! Cliquez sur le bouton pour aller en ligne. Cliquez sur le X pour rester inactif jusqu'au rechargement.",
-            "exitIdle": "Quitter le mode veille"
+            "exitIdle": "Quitter le mode inactif"
         }
     },
     "customRPC": {
@@ -385,27 +385,27 @@
             "watching": "Regarde"
         },
         "appId": "Identifiant d'application",
-        "appName": "Nom de la demande",
+        "appName": "Nom de l'application",
         "button1Text": "Texte du bouton 1",
         "button1Url": "Bouton 1 URL",
         "button2Text": "Texte du bouton 2",
         "button2Url": "Bouton2 URL",
-        "description": "Ferme la palette après exécution d'une commande",
+        "description": "Ajoute une Rich Presence complètement personnalisable (statut de jeu) à votre profil Discord",
         "detailLine1": "Détail (ligne 1)",
         "detailUrl": "Détail URL",
         "endTimestamp": "Horodatage de fin (en millisecondes)",
         "instructions": {
-            "buttons": "Vous ne pouvez pas voir vos propres boutons sur votre profil, mais tout le monde peut le voir correctement.",
+            "buttons": "Vous ne pouvez pas voir vos propres boutons sur votre profil, mais tous pourraient les voir correctement.",
             "devPortal": "Accédez au <0>Discord Portail des développeurs</0> pour créer une application et obtenir l'ID de l'application.",
             "imgur": "Si vous souhaitez utiliser un lien d'image, téléchargez votre image et téléchargez à nouveau l'image sur <0>Imgur</0> et obtenez le lien d'image en cliquant avec le bouton droit sur l'image et en sélectionnant \"Copier l'adresse de l'image\".",
             "unicode": "Certains textes Unicode étranges (\"polices\" 𝖑𝖎𝖐𝖊 𝖙𝖍𝖎𝖘) peuvent empêcher la riche présence d'apparaître, essayez plutôt d'utiliser des lettres normales.",
             "uploadImages": "Téléchargez des images dans l’onglet Rich Presence pour obtenir les clés des images."
         },
-        "largeImageClickUrl": "Grande image cliquable URL",
+        "largeImageClickUrl": "URL cliquable de la grande image",
         "largeImageText": "Texte de grande image",
         "largeImageUrl": "Grande image URL/Clé",
         "notice": {
-            "body": "Le partage d'activité n'est pas activé, les gens ne pourront pas voir votre riche présence personnalisée !",
+            "body": "Le partage d'activité n'est pas activé, les gens ne pourront pas voir votre riche présence personnalisée !",
             "enable": "Activer",
             "title": "Avis"
         },
@@ -427,7 +427,7 @@
             "currentTime": "Identique à votre heure actuelle (pas réinitialisé après 24h)",
             "custom": "Personnalisés",
             "none": "Aucun",
-            "sinceOpen": "depuis que la discorde est ouverte"
+            "sinceOpen": "depuis que Discord est ouvert"
         },
         "validation": {
             "discordId": "Il doit s'agir d'un identifiant Discord valide.",
@@ -437,18 +437,18 @@
             "number": "Doit être un nombre.",
             "positiveNumber": "Doit être un nombre positif.",
             "required": "Ce champ est obligatoire.",
-            "streamingLink": "Le lien de streaming doit être un URL.",
+            "streamingLink": "Le lien de streaming doit être une URL.",
             "streamingLinkLength": "Le lien de streaming ne doit pas comporter plus de 512 caractères.",
             "tenorDirect": "Le lien Tenor doit être un lien direct vers l'image (par exemple https://media.tenor.com/...). Cliquez avec le bouton droit sur le GIF et cliquez sur \"Copier l'adresse de l'image\".",
             "url": "Doit être un URL valide."
         }
     },
     "dearrow": {
-        "clickToDearrow": "Cliquez pour désaffiler",
-        "dearrowByDefault": "Supprimer automatiquement les vidéos",
-        "dearrowedClickRestore": "Cette intégration a été supprimée, cliquez pour restaurer",
+        "clickToDearrow": "Cliquez pour DeArrow",
+        "dearrowByDefault": "DeArrow automatiquement les vidéos",
+        "dearrowedClickRestore": "Cette intégration a été DeArrowée, cliquez pour restaurer",
         "description": "Rend les titres et les miniatures intégrés sur YouTube moins sensationnalistes, optimisé par Dearrow",
-        "everything": "Tout (titres et vignettes)",
+        "everything": "Tout (Titres et Miniatures)",
         "hideButton": "Masque le bouton Dearrow des intégrations YouTube",
         "replaceElementsDescription": "Choisissez quels éléments de l'intégration seront remplacés",
         "thumbnails": "Miniatures",
@@ -463,7 +463,7 @@
         "browse": "Naviguer",
         "changeDecoration": "Changer la décoration",
         "chooseAFile": "Choisissez un fichier",
-        "confirmLogOut": "Es-tu sur de vouloir te déconnecter de Decor?",
+        "confirmLogOut": "Es-tu sûr de vouloir te déconnecter de Décor ?",
         "continue": "Continuez",
         "copyHash": "Copier le hash des décorations.",
         "copyPresetId": "Copier l'identifiant du préréglage",
@@ -473,11 +473,11 @@
         "delete": "Supprimer",
         "deleteConfirm": "Es-tu sur de vouloir supprimer {name}?",
         "deleteDecoration": "Supprimer la décoration.",
-        "deleteInstructions": "Tu peut supprimer tes décorations en faisant un clic droit dessus.",
+        "deleteInstructions": "Vous pouvez supprimer vos décorations en faisant un clic droit dessus.",
         "description": "Créez et utilisez vos propres décorations d'avatar personnalisées ou choisissez votre favori parmi les préréglages.",
         "discordServer": "Serveur Discord",
         "discordServerNotice": "Pour recevoir des mises à jour sur l'approbation de votre décoration, rejoignez {link} et autorisez les messages privés.",
-        "discordTooltip": "Rejoingnez le Serveur Discord de Decor pour avoir des notification sur les mises a jours de tes décorations et quand des nouvelles options prédéfinis sont disponibles.",
+        "discordTooltip": "Rejoignez le serveur Discord de Decor pour recevoir des notifications sur l'examen de vos décorations et lorsque de nouveaux préréglages sont publiés.",
         "enableAndRestart": "Activez Décor et redémarrez votre client pour modifier la décoration de votre avatar.",
         "file": "Fichier",
         "fileNotice": "Le fichier doit être APNG ou PNG.",
@@ -488,14 +488,14 @@
         "name": "Nom",
         "nameNotice": "Ce nom sera utilisé pour identifier cette décoration.",
         "options": "Options de decorations",
-        "pendingReview": "En attente d'approbation.",
+        "pendingReview": "En attente d'examen.",
         "presetPart": "Fait partie du préréglage {name}",
         "profilesLink": "Profils",
         "removeDecoration": "Supprimer la décoration",
         "submitForReview": "Envoyer pour être approuvé.",
         "theGuidelines": "les rêgles",
         "title": "Décor",
-        "yourDecorations": "Tes décorations"
+        "yourDecorations": "Vos décorations"
     },
     "devCompanion": {
         "description": "Plugin Dev Companion. Veuillez signaler tout dysfonctionnement ou comportement étrange (probablement un bug) à sadan, soit par ping, soit par message privé, merci !",
@@ -1914,12 +1914,12 @@
             "membersListIndicatorsOption": "Masquez les indicateurs de saisie des autres utilisateurs de la liste des membres.",
             "toggleChannel": "Salon",
             "toggleGlobal": "Mondial",
-            "toggleGuild": "Guilde",
-            "toggleOption": "Basculez la fonctionnalité globalement, pour la chaîne ou pour la guilde."
+            "toggleGuild": "Serveur",
+            "toggleOption": "Basculez la fonctionnalité globalement, pour le salon ou pour le serveur."
         },
         "contextMenu": {
             "chatBarIndicators": "Chat Indicateurs à barres",
-            "chatIcon": "Icône Chat",
+            "chatIcon": "Icône de Chat",
             "defaultHidden": "Masqué par défaut",
             "enabled": "Activé",
             "membersListIndicators": "Indicateurs de la liste des membres",
