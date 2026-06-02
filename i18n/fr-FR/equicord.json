@@ -59,7 +59,7 @@
         "description": "API pour lire des fichiers audio Discord internes ou des liens audio externes."
     },
     "autoZipper": {
-        "description": "Compresse automatiquement en zip les types de fichiers et dossiers spécifiés avant leur envois vers Discord",
+        "description": "Compresse automatiquement en zip les types de fichiers et dossiers spécifiés avant leur envoi vers Discord",
         "settings": {
             "extensions": "Liste séparée par des virgules des extensions de fichiers à zipper automatiquement (par exemple: .psd,.blend,.exe,.dmg)"
         }
@@ -145,7 +145,7 @@
                 "description": "Actualise les commandes d'application Discord localement",
                 "failed": "Échec de l'actualisation des commandes. Vérifiez la console pour plus de détails.",
                 "refreshing": "Actualisation des commandes de l'application...",
-                "success": "Commandes actualisées avec succès !",
+                "success": "Commandes actualisées avec succès !",
                 "userOption": "utilisateur spécifique à essayer d'actualiser"
             }
         },
@@ -165,7 +165,7 @@
         }
     },
     "betterPlusReacts": {
-        "description": "Le montant du plus avant :emoji: est le message auquel l'ajouter"
+        "description": "Le montant du plus avant :emoji: est le message auquel l'ajouter"
     },
     "betterUserArea": {
         "description": "Personnalisez et rendez la zone utilisateur plus propre.",
@@ -196,7 +196,7 @@
     "bypassStatus": {
         "contextMenu": {
             "addStatusBypass": "Ajouter un contournement de statut",
-            "removeStatusBypass": "Suppriwer un contournement de statut"
+            "removeStatusBypass": "Supprimer un contournement de statut"
         },
         "description": "Continuez à recevoir des notifications provenant de sources spécifiques lorsque vous êtes en mode \"Ne pas déranger\". Cliquez avec le bouton droit sur les utilisateurs/salons/serveur pour les configurer afin qu'ils contournent le mode \"Ne pas déranger\".",
         "placeholder": {
@@ -206,7 +206,7 @@
             "allowOutsideOfDms": "Autoriser les utilisateurs sélectionnés à contourner le statut hors messages privés également (agit comme un contournement de salon/guilde, mais pour tous les messages envoyés par ces utilisateurs)",
             "channels": "Salons autorisées à contourner (notifié quand mentionné n'importe où dans le salon)",
             "guilds": "Serveurs autorisées à contourner (notifié quand mentionné n'importe où dans le serveur)",
-            "notificationSound": "Si le son de notification doit être joué",
+            "notificationSound": "Indique si le son de notification doit être joué",
             "respectSilentPings": "Respecter les pings silencieux (@silent / supprimer les notifications)",
             "statusToUse": "Statut à utiliser pour la liste blanche",
             "users": "Utilisateurs autorisées à contourner (notifié pour tous les messages privés)"
@@ -219,31 +219,31 @@
         }
     },
     "channelBadges": {
-        "description": "Ajoute des badges aux chaînes en fonction de leur type",
+        "description": "Ajoute des badges aux salons en fonction de leur type",
         "settings": {
             "announcementBadgeColor": "Couleur du badge d'annonce",
             "announcementBadgeLabel": "Étiquette de badge d'annonce",
             "announcementThreadBadgeColor": "Couleur du badge du fil d'annonce",
-            "announcementThreadBadgeLabel": "Étiquette du badge du sujet d'annonce",
+            "announcementThreadBadgeLabel": "Étiquette du badge du fil d'annonce",
             "categoryBadgeColor": "Couleur du badge de catégorie",
             "categoryBadgeLabel": "Étiquette de badge de catégorie",
-            "directoryBadgeColor": "Couleur du badge de l'annuaire",
-            "directoryBadgeLabel": "Étiquette de badge d'annuaire",
+            "directoryBadgeColor": "Couleur du badge Répertoire",
+            "directoryBadgeLabel": "Étiquette du badge Répertoire",
             "forumBadgeColor": "Couleur du badge du forum",
-            "forumBadgeLabel": "Étiquette d'insigne du forum",
+            "forumBadgeLabel": "Étiquette du badge du forum",
             "lockedBadgeColor": "Couleur du badge verrouillé",
-            "lockedBadgeLabel": "Étiquette de badge verrouillée",
-            "mediaBadgeColor": "Couleur du badge média",
-            "mediaBadgeLabel": "Étiquette de badge média",
+            "lockedBadgeLabel": "Étiquette du badge verrouillé",
+            "mediaBadgeColor": "Couleur du badge Médias",
+            "mediaBadgeLabel": "Étiquette du badge Médias",
             "nsfwBadgeColor": "Couleur du badge NSFW",
-            "nsfwBadgeLabel": "Étiquette d'insigne NSFW",
-            "oneBadgePerChannel": "Afficher un seul badge par chaîne",
+            "nsfwBadgeLabel": "Étiquette du badge NSFW",
+            "oneBadgePerChannel": "Afficher un seul badge par salon",
             "privateThreadBadgeColor": "Couleur du badge du fil privé",
-            "privateThreadBadgeLabel": "Libellé du badge du sujet privé",
-            "publicThreadBadgeColor": "Couleur du badge du sujet public",
-            "publicThreadBadgeLabel": "Étiquette de badge de discussion publique",
+            "privateThreadBadgeLabel": "Étiquette du badge du fil privé",
+            "publicThreadBadgeColor": "Couleur du badge du fil public",
+            "publicThreadBadgeLabel": "Étiquette du badge du fil public",
             "rulesBadgeColor": "Couleur du badge des règles",
-            "rulesBadgeLabel": "Étiquette de badge de règles",
+            "rulesBadgeLabel": "Étiquette du badge Règles",
             "showAnnouncementBadge": "Afficher le badge d'annonce",
             "showAnnouncementThreadBadge": "Afficher le badge du fil d'annonce",
             "showCategoryBadge": "Afficher le badge de catégorie",
@@ -260,17 +260,17 @@
             "showUnknownBadge": "Afficher le badge Inconnu",
             "showVoiceBadge": "Afficher le badge vocal",
             "stageBadgeColor": "Couleur du badge de scène",
-            "stageBadgeLabel": "Étiquette d'insigne de scène",
+            "stageBadgeLabel": "Étiquette du badge de scène",
             "textBadgeColor": "Couleur du badge texte",
             "textBadgeLabel": "Étiquette de badge texte",
-            "unknownBadgeColor": "Couleur du badge inconnue",
-            "unknownBadgeLabel": "Étiquette de badge inconnue",
+            "unknownBadgeColor": "Couleur du badge Inconnu",
+            "unknownBadgeLabel": "Étiquette du badge Inconnu",
             "voiceBadgeColor": "Couleur du badge vocal",
             "voiceBadgeLabel": "Étiquette de badge vocal"
         },
         "tooltips": {
-            "lockedChannel": "Cette chaîne est verrouillée.",
-            "nsfwChannel": "Cette chaîne est marquée comme NSFW.",
+            "lockedChannel": "Ce salon est verrouillé.",
+            "nsfwChannel": "Ce salon est marqué comme NSFW.",
             "rulesChannel": "Ce salon est le salon des règles du serveur."
         }
     },
@@ -278,7 +278,7 @@
         "contextMenu": {
             "openInNewTab": "Ouvrir dans un nouvel onglet"
         },
-        "description": "Group vos chaînes fréquemment visitées dans des onglets, comme un navigateur"
+        "description": "Groupezvos chaînes fréquemment visitées dans des onglets, comme un navigateur"
     },
     "characterCounter": {
         "description": "Ajoute un compteur de caractères à l'entrée du chat",
@@ -299,7 +299,7 @@
         "noMembers": "Aucun membre trouvé."
     },
     "clientSideBlock": {
-        "description": "Vous permet de masquer localement presque tout le contenu de n'importe quel utilisateur",
+        "description": "Vous permet de masquer localement presque tout le contenu de n'importe quel contenu",
         "reply": {
             "replyingToBlocked": "Répondre au message bloqué"
         },
@@ -321,13 +321,13 @@
     "clipsEnhancements": {
         "description": "Ajoutez plus d'options de FPS et de durée de clip, de longueur de clip personnalisée, de marquage RPC et bien plus encore.",
         "settings": {
-            "clipsLink": "Modifiez les options de FPS et de durée dans les paramètres des clips !",
+            "clipsLink": "Modifiez les options de FPS et de durée dans les paramètres des clips !",
             "enableAdvancedSignals": "Activer les signaux de clip avancés (déclencheurs de clips automatiques)",
             "enableScreenshotKeybind": "Activer la fonction de raccourci clavier de capture d'écran",
             "enableSpeakingIndicators": "Activez les indications de paroles",
             "enableVoiceOnlyClips": "Activer les clips vocaux uniquement (audio sans vidéo)",
             "ignorePlatformRestriction": "Autoriser le découpage restreint à la plate-forme (peut provoquer des erreurs de sauvegarde)",
-            "richPresenceTagging": "Quand les clips doivent-ils être étiquetés avec la Rich Presence actuelle ?",
+            "richPresenceTagging": "Quand les clips doivent-ils être étiquetés avec la Rich Presence actuelle ?",
             "richPresenceTaggingOptions": {
                 "always": "Toujours",
                 "never": "Jamais",
@@ -376,15 +376,15 @@
         },
         "description": "Un plugin pour copier les couleurs du dégradé du profil des personnes dans le presse-papiers.",
         "toast": {
-            "copied": "Couleurs de profil copiées dans le presse-papier !",
-            "error": "Erreur lors de la copie des couleurs du profil !",
-            "noColorsFound": "Aucune couleur de profil trouvée !"
+            "copied": "Couleurs de profil copiées dans le presse-papier !",
+            "error": "Erreur lors de la copie des couleurs du profil !",
+            "noColorsFound": "Aucune couleur de profil trouvée !"
         }
     },
     "copyStatusUrls": {
         "description": "Copiez l'URL du statut de l'utilisateur lorsque vous cliquez dessus avec le bouton droit de la souris.",
         "toast": {
-            "copied": "Copié URL",
+            "copied": "! URL copiée",
             "error": "Erreur lors de la copie de URL, consultez la console pour plus d'informations"
         }
     },
@@ -397,19 +397,19 @@
     "cursorBuddy": {
         "description": "Ajoute un sprite qui suit votre curseur.",
         "settings": {
-            "buddy": "Choisissez un copain curseur",
+            "buddy": "Choisissez un compagnon curseur",
             "buddyOptions": {
                 "fathorse": "Cheval Fatass",
                 "oneko": "Oneko"
             },
             "fade": "Si le cheval s'efface lorsque le curseur est proche",
-            "fps": "Framerate de votre copain",
+            "fps": "Taux de rafraîchissement de votre compagnon",
             "freeroam": "Si le cheval doit se déplacer librement lorsqu'il est inactif",
-            "furColor": "Couleur hexagonale de la fourrure pour Oneko",
-            "outlineColor": "Couleur hexagonale du contour pour Oneko",
+            "furColor": "Couleur hexadécimale de la fourrure pour Oneko",
+            "outlineColor": "Couleur hexadécimale du contour pour Oneko",
             "shake": "Si le cheval doit secouer la fenêtre quand il marche",
-            "size": "Taille du cheval fatass",
-            "speed": "Vitesse de ton copain"
+            "size": "Taille du Cheval Fatass",
+            "speed": "Vitesse de ton compagnon"
         },
         "ui": {
             "furColor": "Couleur de la fourrure",
@@ -432,9 +432,9 @@
         "toast": {
             "exportSuccess": "Paramètres {count} exportés (fichiers audio non inclus)",
             "importError": "Erreur lors de l'importation des paramètres. Consultez la console pour plus de détails.",
-            "importSuccess": "Paramètres importés avec succès !",
+            "importSuccess": "Paramètres importés avec succès !",
             "loadError": "Erreur lors du chargement du fichier son personnalisé",
-            "resetSuccess": "Tous les remplacements ont été réinitialisés avec succès !"
+            "resetSuccess": "Tous les remplacements ont été réinitialisés avec succès !"
         }
     },
     "customTimestamps": {
@@ -455,7 +455,7 @@
         "contextMenu": {
             "setColor": "Définir la couleur"
         },
-        "description": "Vous permet d’ajouter une couleur personnalisée à n’importe quel utilisateur, n’importe où ! Il est fortement recommandé de l'utiliser avec typingTweaks et roleColorEverywhere",
+        "description": "Vous permet d’ajouter une couleur personnalisée à n’importe quel utilisateur, n’importe où ! Il est fortement recommandé de l'utiliser avec typingTweaks et roleColorEverywhere",
         "settings": {
             "colorInServers": "Si les couleurs des noms doivent être modifiées au sein des serveurs",
             "dmList": "Les utilisateurs avec des couleurs personnalisées définies verront leur nom dans la liste MP coloré"
@@ -471,7 +471,7 @@
         },
         "settings": {
             "alwaysShowUsername": "Affichez toujours le nom d'utilisateur au lieu du statut.",
-            "removeAudioMenus": "Supprimez les menus à côté des boutons de sourdine et d'assourdissement.",
+            "removeAudioMenus": "Supprimez les menus à côté des boutons de sourdine et de désactivation du son.",
             "removeAvatarDecoration": "Supprimez la décoration de l'avatar.",
             "removeBillingSettings": "Supprimez les paramètres de facturation.",
             "removeButtonTooltips": "Supprimez les info-bulles des boutons.",
@@ -480,7 +480,7 @@
             "removeNameplate": "Supprimez le style de la plaque signalétique.",
             "removeProfileEffect": "Supprimez les effets d’animation du profil à l’ouverture.",
             "removeQuestsAboveDM": "Supprimez les quêtes au-dessus de la liste des MP.",
-            "removeServerBoostInfo": "Supprimez les informations de boost du serveur au-dessus de la liste des chaînes.",
+            "removeServerBoostInfo": "Supprimez les informations de boost du serveur au-dessus de la liste des salons.",
             "removeShopAboveDM": "Supprimez les boutiques au-dessus de la liste des MP.",
             "removeUnavailableEmojiPicker": "Supprimez les catégories indisponibles du sélecteur d'emoji."
         }
@@ -495,13 +495,13 @@
         "description": "Ajoute la possibilité de modifier l'ordre de vos émoticônes préférées"
     },
     "dragify": {
-        "description": "Déposez des utilisateurs, des canaux ou des serveurs dans le chat pour insérer des mentions ou des invitations.",
+        "description": "Déposez des utilisateurs, des salons ou des serveurs dans le chat pour insérer des mentions ou des invitations.",
         "settings": {
             "allowChatBodyDrop": "Autoriser le passage dans le corps principal du chat pour insérer du texte.",
-            "channelOutput": "Sortie de suppression de salon.",
+            "channelOutput": "Sortie du dépôt du salon.",
             "channelOutputOptions": {
-                "link": "Lien de chaîne",
-                "mention": "mention de la #chaîne"
+                "link": "Lien du salon",
+                "mention": "Mention du #salon"
             },
             "inviteExpireAfter": "Expiration de l'invitation.",
             "inviteExpireAfterOptions": {
@@ -513,7 +513,7 @@
                 "7days": "7 jours",
                 "never": "Jamais"
             },
-            "inviteMaxUses": "Invitez un maximum d'utilisations.",
+            "inviteMaxUses": "Nombre maximal d'utilisations de l'invitation.",
             "inviteMaxUsesOptions": {
                 "100uses": "100 utilisations",
                 "10uses": "10 utilisations",
@@ -525,7 +525,7 @@
             },
             "inviteTemporaryMembership": "Accorder une adhésion temporaire.",
             "reuseExistingInvites": "Réutilisez l’invitation existante au lieu d’en créer une nouvelle.",
-            "userOutput": "L'utilisateur abandonne la sortie.",
+            "userOutput": "Sortie du dépôt d'utilisateur.",
             "userOutputOptions": {
                 "id": "ID de l'utilisateur",
                 "mention": "Mentionner l'utilisateur"
@@ -535,7 +535,7 @@
             "dropFailed": "Dragify n'a pas réussi à gérer le dépôt.",
             "inviteCreated": "Invitation créée.",
             "inviteFailed": "Impossible de créer une invitation.",
-            "noChannelForInvites": "Aucune chaîne disponible pour les invitations."
+            "noChannelForInvites": "Aucun salon disponible pour les invitations."
         }
     },
     "elementHighlighter": {
@@ -1437,7 +1437,7 @@
             "ignoreBots": "S'il faut ignorer les messages des robots",
             "ignoreMutedCategories": "Les messages dans les canaux appartenant aux catégories désactivées ne seront pas enregistrés. Les utilisateurs/canaux sur liste blanche dans les guildes désactivées seront toujours enregistrés.",
             "ignoreMutedChannels": "Les messages dans les canaux muets ne seront pas enregistrés. Les utilisateurs/canaux sur liste blanche dans les guildes désactivées seront toujours enregistrés.",
-            "ignoreMutedGuilds": "Les messages dans les guildes désactivées ne seront pas enregistrés. Les utilisateurs/canaux sur liste blanche dans les guildes désactivées seront toujours enregistrés.",
+            "ignoreMutedGuilds": "Les messages dans les guildes muettes ne seront pas enregistrés. Les utilisateurs/salons sur liste blanche dans les guildes muettes seront toujours enregistrés.",
             "ignoreSelf": "S'il faut ignorer les messages par vous-même",
             "ignoreWebhooks": "S'il faut ignorer les messages des webhooks",
             "importLogsFromFile": "Importer des journaux à partir d'un fichier",
@@ -1448,12 +1448,12 @@
             "permanentlyRemoveLogByDefault": "Le bouton de suppression du journal de MessageLogger de base de Vencord supprimera les journaux de manière permanente",
             "preserveCurrentChannel": "Lorsqu'il est activé, les messages de votre salon actuellement sélectionné ne sont pas affectés par le nettoyage temporel.",
             "saveImages": "Enregistrez les pièces jointes supprimées.",
-            "saveMessages": "S'il faut enregistrer les messages supprimés et modifiés.",
+            "saveMessages": "S'il faut enregistrer les messages supprimés et édités.",
             "selectImageCacheDir": "Sélectionnez le répertoire des images enregistrées",
             "selectLogsDir": "Sélectionnez le répertoire des journaux",
             "showLogsButton": "Basculer pour afficher ou non la boîte à outils",
             "showWhereMessageIsFrom": "Afficher le nom du salon de message/de l'auteur et le nom du serveur",
-            "sortNewest": "Trier les journaux par plus récent.",
+            "sortNewest": "Trier les logs par plus récent.",
             "timeBasedCleanupMinutes": "Supprimez automatiquement les messages des serveurs datant de plus de ce nombre de minutes. Définissez sur 0 pour désactiver le nettoyage temporel.",
             "whitelistedIds": "ID de serveur, de salon ou d'utilisateur sur liste blanche."
         }
@@ -2201,7 +2201,7 @@
     "vcNarratorCustom": {
         "contextMenu": {
             "stateFilter": "Filtre de changement d'état",
-            "vcNarrator": "Narrateur de CV",
+            "vcNarrator": "Narrateur de  Chat Vocal",
             "voice": "Voix"
         },
         "description": "Narrateur de salon vocal personnalisé avec TTS pour les connexions/sorties d'utilisateurs et les changements d'état",
