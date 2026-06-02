@@ -68,7 +68,7 @@ export default definePlugin({
       initialValue,
       [minValue, maxValue],
       group,
-      id + "-custom",
+      id + "custom",
       (isResolution ? "p" : " FPS")
     );
   },
@@ -84,7 +84,7 @@ export default definePlugin({
       initialValue,
       [minValue, maxValue],
       group,
-      id + "-custom",
+      id + "custom",
       (isResolution ? "p" : " FPS")
     );
   },
@@ -98,7 +98,7 @@ export default definePlugin({
       setValue(roundedValue);
       cooldown(() => onChange(roundedValue));
     };
-    return (<Menu.MenuControlItem group={`${group}`} id={`${id}`} interactive={true} control={
+    return (<Menu.MenuControlItem group={`${group}`} id={`${id}`} label={value + suffix} control={
       (props, ref) =>
         <Menu.MenuSliderControl
           {...props}
