@@ -1,10 +1,16 @@
+/*
+ * Vencord, a Discord client mod
+ * Copyright (c) 2024 Vendicated and contributors
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
 import { definePluginSettings } from "@api/Settings";
 import { EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
-import { Menu, useState } from "@webpack/common";
-import { cooldown, denormalize, normalize } from "./utils";
+import { lodash, MediaEngineStore, Menu, useEffect, useMemo, useState } from "@webpack/common";
+import { denormalize, normalize } from "./utils";
 
-const MIN_FPS = 1, MIN_RESOLUTION = 22; // 0 FPS freezes (obviously) and anything less than 22p doesn't work
+const COOLDOWN_MS = 1000, MIN_FPS = 1, MIN_RESOLUTION = 22; // 0 FPS freezes (obviously) and anything less than 22p doesn't work
 
 const settings = definePluginSettings({
   maxFPS: {
@@ -37,78 +43,91 @@ export default definePlugin({
     {
       find: "id:\"frame-rate\",",
       replacement: [{
-        match: /(PRESET_CUSTOM&&.+id:"[^"]+".+?children:)(\i.+?group:.(resolution).+?id:.([^$]+).+?(\i)===\i,.+?(function.+?\}\)\})\).+?)(}\)[,\]])/,
+        match: /(id:"resolution".{32,48}children:)(\i.{64,96}group:"(resolution)",id:`([^$]{1,32}).{4}`.{9}(\i).{64,96}(function.{150,170}}\)})\).{8,16})(}\),)/,
         replace: "$1[$self.OptionsRange(($6),['$3','$4',$5],true),...$2]$7"
       },
       {
-        match: /(PRESET_CUSTOM&&.+id:"[^"]+".+?children:)(\i.+?group:.(frame-rate).+?id:.([^$]+).+?(\i)===\i,.+?(function.+?\}\)\})\).+?)(}\)[,\]])/,
+        match: /(id:"frame-rate".{32,48}children:)(\i.{24,32}group:.(frame-rate).{2}id:`([^$]{1,32}).{4}`.{9}(\i).{64,96}(function.{140,150}}\)})\).{8,16})(}\)\])/,
         replace: "$1[$self.OptionsRange(($6),['$3','$4',$5],false),...$2]$7"
       }]
     },
     {
       find: "\"stream-settings-resolution\"",
       replacement: [{
-        match: /({preset:\i,resolution:(\i),fps:(\i),soundshareEnabled:\i}.+?\i=)(\i.\i.map\(\i=>[^"]+?group:"([^"]+?fps)\".+?id:.([^$]+).+?action:\(\)=>(\i)\((\i),\i,\i,([^\)]+).+?\${\i}`\)}\))/,
-        replace: "$1[$self.SettingsRange($7,[$2,$3,'$5','$6',$8,$9],false),...$4]"
+        match: /(\i.\i.map\(\i=>[^"]{64,96}group:"([^"]{8,16}fps)\",id:.([^$]{1,32}).{32,48}action:\(\)=>(\i)\((\i),\i,\i,([^\)]{1,64}).{1,32}\${\i}`\)}\))/,
+        replace: "[$self.SettingsRange($4,['$2','$3',$5,$6],false),...$1]"
       },
       {
-        match: /({preset:\i,resolution:(\i),fps:(\i),soundshareEnabled:\i}.+?\i=)(\i.\i.map\(\i=>[^"]+?group:"([^"]+?resolution)\".+?id:.([^$]+).+?action:\(\)=>(\i)\((\i),\i,\i,([^\)]+).+?\${\i}`\)}\))/,
-        replace: "$1[$self.SettingsRange($7,[$2,$3,'$5','$6',$8,$9],true),...$4]"
+        match: /(\i.\i.map\(\i=>[^"]{64,96}group:"([^"]{8,16}resolution)\",id:.([^$]{1,32}).{32,48}action:\(\)=>(\i)\((\i),\i,\i,([^\)]{1,64}).{1,32}\${\i}`\)}\))/,
+        replace: "[$self.SettingsRange($4,['$2','$3',$5,$6],true),...$1]"
       }]
     }
   ],
-  OptionsRange(changeStream: Function, params: any[], isResolution: boolean) {
+  OptionsRange(changeStream: (value: number) => void, params: [string, string, number], isResolution: boolean) {
     const { maxFPS, maxResolution } = settings.store;
     const [group, id, initialValue] = params;
     const minValue = isResolution ? MIN_RESOLUTION : MIN_FPS,
       maxValue = isResolution ? maxResolution : maxFPS;
-
-    return this.CustomRange(
-      (value: number) => changeStream(value),
+    return CustomRange({
+      onChange: (value: number) => changeStream(value),
       initialValue,
-      [minValue, maxValue],
+      minMax: [minValue, maxValue],
       group,
-      id + "custom",
-      (isResolution ? "p" : " FPS")
-    );
+      id: id + "custom",
+      suffix: (isResolution ? "p" : " FPS")
+    });
   },
-  SettingsRange(changeStream: Function, params: any[], isResolution: boolean) {
+  SettingsRange(changeStream: (boolean: boolean, resolution: number, fps: number, analyticsType: string) => void, params: [string, string, boolean, string], isResolution: boolean) {
     const { maxFPS, maxResolution } = settings.store;
-    const [resolution, fps, group, id, p1, p2] = params;
+    const [group, id, p1, p2] = params;
     const minValue = isResolution ? MIN_RESOLUTION : MIN_FPS,
       maxValue = isResolution ? maxResolution : maxFPS;
-    const initialValue = isResolution ? resolution : fps;
+    const initialQuality = MediaEngineStore.getState().goLiveSource?.quality;
+    const initialResolution = initialQuality?.resolution || 720,
+      initialFPS = initialQuality?.frameRate || 30;
+    const initialValue = isResolution ? initialResolution : initialFPS;
 
-    return this.CustomRange(
-      (value: number) => changeStream(p1, isResolution ? value : resolution, !isResolution ? value : fps, p2),
+    return CustomRange({
+      onChange: (value: number) => changeStream(p1, isResolution ? value : initialResolution, !isResolution ? value : initialFPS, p2),
       initialValue,
-      [minValue, maxValue],
+      minMax: [minValue, maxValue],
       group,
-      id + "custom",
-      (isResolution ? "p" : " FPS")
-    );
+      id: id + "custom",
+      suffix: (isResolution ? "p" : " FPS")
+    });
   },
-
-  CustomRange(onChange: Function, initialValue: number, minMax: [number, number], group: string, id: string, suffix: string) {
-    const [value, setValue] = useState(initialValue);
-    const [minValue, maxValue] = minMax;
-
-    const onChangeHandler = (newValue: number) => {
-      let roundedValue = Math.round(denormalize(newValue, minValue, maxValue));
-      setValue(roundedValue);
-      cooldown(() => onChange(roundedValue));
-    };
-    return (<Menu.MenuControlItem group={`${group}`} id={`${id}`} label={value + suffix} control={
-      (props, ref) =>
-        <Menu.MenuSliderControl
-          {...props}
-          ref={ref}
-          onChange={onChangeHandler}
-          renderValue={() => value + suffix}
-          value={normalize(initialValue, minValue, maxValue) || 0}
-          minValue={0}
-          maxValue={100}>
-        </Menu.MenuSliderControl>}
-    />);
-  }
 });
+
+type CustomRangeProps = {
+  onChange: (value: number) => void,
+  initialValue: number,
+  minMax: [number, number],
+  group: string,
+  id: string,
+  suffix: string;
+};
+const CustomRange = ({ onChange, initialValue, minMax, group, id, suffix }: CustomRangeProps) => {
+  const [value, setValue] = useState(initialValue);
+  const [minValue, maxValue] = minMax;
+
+  const changeStreamSettings = useMemo(() => lodash.throttle((value: number) => onChange(value), COOLDOWN_MS), []);
+  useEffect(() => () => changeStreamSettings.cancel(), [changeStreamSettings]);
+
+  const onChangeHandler = (newValue: number) => {
+    let roundedValue = Math.round(denormalize(newValue, minValue, maxValue));
+    setValue(roundedValue);
+    changeStreamSettings(roundedValue);
+  };
+  return (<Menu.MenuControlItem group={`${group}`} id={`${id}`} label={value + suffix} control={
+    (props, ref) =>
+      <Menu.MenuSliderControl
+        {...props}
+        ref={ref}
+        onChange={onChangeHandler}
+        renderValue={() => value + suffix}
+        value={normalize(value, minValue, maxValue) || 0}
+        minValue={0}
+        maxValue={100}>
+      </Menu.MenuSliderControl>}
+  />);
+};
