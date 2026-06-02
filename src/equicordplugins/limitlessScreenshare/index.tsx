@@ -7,7 +7,7 @@
 import { definePluginSettings } from "@api/Settings";
 import { EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
-import { lodash, MediaEngineStore, Menu, useEffect, useMemo, useState } from "@webpack/common";
+import { lodash, MediaEngineStore, Menu, useEffect, useMemo, useState, useStateFromStores } from "@webpack/common";
 import { denormalize, normalize } from "./utils";
 
 const COOLDOWN_MS = 1000, MIN_FPS = 1, MIN_RESOLUTION = 22; // 0 FPS freezes (obviously) and anything less than 22p doesn't work
@@ -82,13 +82,17 @@ export default definePlugin({
     const [group, id, p1, p2] = params;
     const minValue = isResolution ? MIN_RESOLUTION : MIN_FPS,
       maxValue = isResolution ? maxResolution : maxFPS;
-    const initialQuality = MediaEngineStore.getState().goLiveSource?.quality;
-    const initialResolution = initialQuality?.resolution || 720,
-      initialFPS = initialQuality?.frameRate || 30;
-    const initialValue = isResolution ? initialResolution : initialFPS;
+    const initialValue = isResolution ? MediaEngineStore.getState().goLiveSource?.quality.resolution || 720 : MediaEngineStore.getState().goLiveSource?.quality.frameRate || 30;
+
+    const onChange = (value: number) => {
+      const otherValue = !isResolution
+        ? MediaEngineStore.getState().goLiveSource?.quality.resolution || 720
+        : MediaEngineStore.getState().goLiveSource?.quality.frameRate || 30;
+      return changeStream(p1, isResolution ? value : otherValue, !isResolution ? value : otherValue, p2);
+    };
 
     return CustomRange({
-      onChange: (value: number) => changeStream(p1, isResolution ? value : initialResolution, !isResolution ? value : initialFPS, p2),
+      onChange,
       initialValue,
       minMax: [minValue, maxValue],
       group,
