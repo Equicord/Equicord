@@ -127,6 +127,7 @@ interface IMessageCreate {
 }
 
 const Native = VencordNative.pluginHelpers.RPCStats as PluginNative<typeof import("./native")>;
+let updateInterval: ReturnType<typeof setInterval> | undefined;
 
 async function updateData() {
     switch (settings.store.statDisplay) {
@@ -174,19 +175,24 @@ export default definePlugin({
     description: "Displays stats about your activity as an rpc",
     tags: ["Utility"],
     authors: [Devs.Samwich],
-    async start() {
+async start() {
+    updateData();
+
+    updateInterval = setInterval(() => {
+        checkForNewDay();
         updateData();
+    }, 1000);
 
-        setInterval(() => {
-            checkForNewDay();
-            updateData();
-        }, 1000);
-
-    },
+},
     settings,
-    stop() {
-        setRpc(true);
-    },
+stop() {
+    if (updateInterval !== undefined) {
+        clearInterval(updateInterval);
+        updateInterval = undefined;
+    }
+
+    setRpc(true);
+},
     flux:
     {
         async MESSAGE_CREATE({ optimistic, type, message }: IMessageCreate) {
