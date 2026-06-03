@@ -7,7 +7,7 @@
 import { isObject } from "@utils/misc";
 import type { PluginNative } from "@utils/types";
 import { User } from "@vencord/discord-types";
-import { Constants, MediaEngineStore, RestAPI, showToast, SnowflakeUtils, Toasts } from "@webpack/common";
+import { Constants, RestAPI, showToast, SnowflakeUtils, Toasts } from "@webpack/common";
 
 const Native = VencordNative.pluginHelpers.ClipUpload as PluginNative<typeof import("./native")>;
 
@@ -108,13 +108,10 @@ function getFileExtension(fileName: string) {
 }
 
 async function readStampedVideoFile(token: string, name: string, type: string) {
-    const mediaEngine = MediaEngineStore.getMediaEngine();
     const tmpToken = await Native.createTempVideoFile(token);
     if (!tmpToken) throw new Error("Couldn't prepare the selected file.");
 
     try {
-        await mediaEngine.updateClipMetadata(tmpToken, "{}" as any);
-
         const data = await Native.readVideoFile(tmpToken);
         if (!data) throw new Error("Couldn't read the selected file.");
 
