@@ -1,13 +1,13 @@
 /*
  * Vencord, a Discord client mod
- * Copyright (c) 2024 Vendicated and contributors
+ * Copyright (c) 2026 Vendicated and contributors
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 import { definePluginSettings } from "@api/Settings";
 import { EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
-import { lodash, MediaEngineStore, Menu, useEffect, useMemo, useState, useStateFromStores } from "@webpack/common";
+import { lodash, MediaEngineStore, Menu, useEffect, useMemo, useState } from "@webpack/common";
 import { denormalize, normalize } from "./utils";
 
 const COOLDOWN_MS = 1000, MIN_FPS = 1, MIN_RESOLUTION = 22; // 0 FPS freezes (obviously) and anything less than 22p doesn't work
@@ -36,19 +36,19 @@ export default definePlugin({
     {
       find: "\"canStreamWithSettings\"",
       replacement: {
-        match: /if\(\i===\i\.\i.PRESET_AUTO\)/,
-        replace: "return !0;$&"
+        match: /(?=if\(\i===\i\.\i.PRESET_AUTO\))/,
+        replace: "return !0;"
       }
     },
     {
       find: "id:\"frame-rate\",",
       replacement: [{
-        match: /(id:"resolution".{32,48}children:)(\i.{64,96}group:"(resolution)",id:`([^$]{1,32}).{4}`.{9}(\i).{64,96}(function.{150,170}}\)})\).{8,16})(}\),)/,
-        replace: "$1[$self.OptionsRange(($6),['$3','$4',$5],true),...$2]$7"
+        match: /(?<=id:"resolution".{32,48}children:)(\i.{64,96}group:"(resolution)",id:`([^$]{1,32}).{4}`.{9}(\i).{64,96}(function.{150,170}}\)})\).{8,16})(?=}\),)/,
+        replace: "[$self.OptionsRange(($5),['$2','$3',$4],true),...$1]"
       },
       {
-        match: /(id:"frame-rate".{32,48}children:)(\i.{24,32}group:.(frame-rate).{2}id:`([^$]{1,32}).{4}`.{9}(\i).{64,96}(function.{140,150}}\)})\).{8,16})(}\)\])/,
-        replace: "$1[$self.OptionsRange(($6),['$3','$4',$5],false),...$2]$7"
+        match: /(?<=id:"frame-rate".{32,48}children:)(\i.{24,32}group:.(frame-rate).{2}id:`([^$]{1,32}).{4}`.{9}(\i).{64,96}(function.{140,150}}\)})\).{8,16})(?=}\)\])/,
+        replace: "[$self.OptionsRange(($5),['$2','$3',$4],false),...$1]"
       }]
     },
     {
