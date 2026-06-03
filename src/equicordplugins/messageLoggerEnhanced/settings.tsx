@@ -283,7 +283,7 @@ export const settings = definePluginSettings({
                     || settings.store.imageCacheDir == null
                     || settings.store.imageCacheDir === DEFAULT_IMAGE_CACHE_DIR
                 }
-                onClick={() => Native.showItemInFolder(settings.store.imageCacheDir)}
+                onClick={() => Native.showItemInFolder()}
             >
                 Open Image Cache Folder
             </Button>
