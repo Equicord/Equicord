@@ -33,7 +33,7 @@ async function downloadTheme(theme: Theme) {
 }
 
 export const ThemeInfoModal: React.FC<ThemeInfoModalProps> = ({ author, theme, ...props }) => {
-    const { type, content, likes, guild, tags, last_updated, requiresThemeAttributes } = theme;
+    const { name, type, content, likes, guild, tags, last_updated, requiresThemeAttributes } = theme;
 
     const themeContent = window.atob(content);
     const metadata = themeContent.match(/\/\*\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*\*+\//g)?.[0] || "";
@@ -49,19 +49,19 @@ export const ThemeInfoModal: React.FC<ThemeInfoModalProps> = ({ author, theme, .
         <Modal
             {...props}
             size="md"
-            title={`${type} Details`}
+            title={`${name} details`}
             actions={[
                 {
                     text: "Close",
-                    variant: "dangerPrimary",
+                    variant: "secondary",
                     onClick: () => props.onClose()
                 },
                 {
                     text: "Download",
-                    variant: "positive",
+                    variant: "primary",
                     disabled: !theme.content || theme.id === "preview",
                     onClick: async () => {
-const validThemesDir = await Native.getThemesDir(theme);
+                        const validThemesDir = await VencordNative.themes.getThemesDir() + `/${theme?.name}.theme.css`;
                         if (!validThemesDir) {
                             showToast(`Failed to download ${theme.name}!`, Toasts.Type.FAILURE);
                             return;
