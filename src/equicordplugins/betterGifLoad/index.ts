@@ -82,12 +82,12 @@ export default definePlugin({
             find: "renderEmptyFavorite",
             replacement: [
                 {
-                    match: /src:\(\i=.{0,200}?\(\i=\i\.\i\.toURLSafe\((\i)\)\).{0,500}?:\i\),.{0,50}?width:\s{0,10}(\i),.{0,50}?height:\s{0,10}(\i)/,
-                    replace: "src:$self.parseLink($1,[$2,$3]),width:$2,height:$3",
+                    match: /src:\(\i=.{0,300}"animated","true"\),\i\.toString\(\)\):\i\),/,
+                    replace: "src:$self.parseLink(this.props.src,[this.props.coords.width,this.props.coords.height]),",
                 },
                 {
-                    match: /(\i)\.oncanplay=this\.(\i),.{0,100}?\i\.src=(\i),.{0,100}?\i\.width=(\i),.{0,100}?\i\.height=(\i)/,
-                    replace: "$1.oncanplay=this.$2,$1.src=$self.parseLink($3,[$4,$5]),$1.width=$4,$1.height=$5",
+                    match: /(this\.handleCanPlay,\i)\.src=(\i)/,
+                    replace: "$1.src=$self.parseLink(this.props.src,[this.props.coords.width,this.props.coords.height])",
                 },
             ],
         },
