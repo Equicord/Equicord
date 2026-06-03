@@ -19,71 +19,16 @@ import { LOGS_DATA_FILENAME } from "../utils/constants";
 import { ensureDirectoryExists, getAttachmentIdFromFilename, sleep } from "./utils";
 
 export { getSettings };
-
-// so we can filter the native helpers by this key
 export function messageLoggerEnhancedUniqueIdThingyIdkMan() { }
 
-// Map<attachmetId, path>()
 const nativeSavedImages = new Map<string, string>();
 export const getNativeSavedImages = () => nativeSavedImages;
 
 let logsDir: string;
 let imageCacheDir: string;
 
-const allowedAttachmentHosts = new Set(["cdn.discordapp.com", "media.discordapp.net"]);
-const pathSeparators = /[\\/]/;
-
 const getImageCacheDir = async () => imageCacheDir ?? await getDefaultNativeImageDir();
 const getLogsDir = async () => logsDir ?? await getDefaultNativeDataDir();
-
-function getPathInsideDir(dir: string, filename: string) {
-    const targetPath = path.normalize(path.join(dir, filename));
-    const normalizedDir = path.normalize(dir);
-    const pathPrefix = normalizedDir.endsWith(path.sep) ? normalizedDir : normalizedDir + path.sep;
-
-    return targetPath.startsWith(pathPrefix) ? targetPath : null;
-}
-
-function getSafeAttachmentId(attachmentId: unknown) {
-    if (typeof attachmentId !== "string" || !attachmentId || pathSeparators.test(attachmentId) || attachmentId.includes("."))
-        return null;
-
-    return attachmentId;
-}
-
-function getSafeFilename(filename: unknown) {
-    if (typeof filename !== "string" || !filename || pathSeparators.test(filename))
-        return null;
-
-    return filename;
-}
-
-function getSafeFileExtension(fileExtension: unknown) {
-    if (typeof fileExtension !== "string" || !fileExtension)
-        return null;
-
-    const normalizedExtension = fileExtension.startsWith(".") ? fileExtension : `.${fileExtension}`;
-    return /^\.[a-zA-Z0-9]+$/.test(normalizedExtension) ? normalizedExtension : null;
-}
-
-function getSafeAttachmentUrl(url: unknown) {
-    if (typeof url !== "string")
-        return null;
-
-    try {
-        const parsedUrl = new URL(url);
-
-        if (parsedUrl.protocol !== "https:" || !allowedAttachmentHosts.has(parsedUrl.hostname))
-            return null;
-
-        if (!parsedUrl.pathname.startsWith("/attachments/") && !parsedUrl.pathname.startsWith("/ephemeral-attachments/"))
-            return null;
-
-        return parsedUrl.toString();
-    } catch {
-        return null;
-    }
-}
 
 export async function initDirs() {
     const { logsDir: ld, imageCacheDir: icd } = await getSettings();
@@ -105,10 +50,7 @@ export async function init(_event: IpcMainInvokeEvent) {
 }
 
 export async function getImageNative(_event: IpcMainInvokeEvent, attachmentId: string): Promise<Uint8Array | Buffer | null> {
-    const safeAttachmentId = getSafeAttachmentId(attachmentId);
-    if (!safeAttachmentId) return null;
-
-    const imagePath = nativeSavedImages.get(safeAttachmentId);
+    const imagePath = nativeSavedImages.get(attachmentId);
     if (!imagePath) return null;
 
     try {
@@ -120,20 +62,14 @@ export async function getImageNative(_event: IpcMainInvokeEvent, attachmentId: s
 }
 
 export async function writeImageNative(_event: IpcMainInvokeEvent, filename: string, content: Uint8Array) {
-    const safeFilename = getSafeFilename(filename);
-    if (!safeFilename || !content) return;
+    if (!filename || !content) return;
     const imageDir = await getImageCacheDir();
-
-    // returns the file name
-    // ../../someMalicousPath.png -> someMalicousPath
-    const attachmentId = getSafeAttachmentId(getAttachmentIdFromFilename(safeFilename));
-    if (!attachmentId) return;
+    const attachmentId = getAttachmentIdFromFilename(filename);
 
     const existingImage = nativeSavedImages.get(attachmentId);
     if (existingImage) return;
 
-    const imagePath = getPathInsideDir(imageDir, safeFilename);
-    if (!imagePath) return;
+    const imagePath = path.join(imageDir, filename);
     await ensureDirectoryExists(imageDir);
     await writeFile(imagePath, content);
 
@@ -141,22 +77,16 @@ export async function writeImageNative(_event: IpcMainInvokeEvent, filename: str
 }
 
 export async function deleteFileNative(_event: IpcMainInvokeEvent, attachmentId: string) {
-    const safeAttachmentId = getSafeAttachmentId(attachmentId);
-    if (!safeAttachmentId) return;
-
-    const imagePath = nativeSavedImages.get(safeAttachmentId);
+    const imagePath = nativeSavedImages.get(attachmentId);
     if (!imagePath) return;
 
     await unlink(imagePath);
-    nativeSavedImages.delete(safeAttachmentId);
 }
 
 export async function writeLogs(_event: IpcMainInvokeEvent, contents: string) {
-    if (typeof contents !== "string") return;
     const logsDir = await getLogsDir();
 
-    await ensureDirectoryExists(logsDir);
-    await writeFile(path.join(logsDir, LOGS_DATA_FILENAME), contents);
+    writeFile(path.join(logsDir, LOGS_DATA_FILENAME), contents);
 }
 
 export async function getDefaultNativeImageDir(): Promise<string> {
@@ -168,9 +98,6 @@ export async function getDefaultNativeDataDir(): Promise<string> {
 }
 
 export async function chooseDir(event: IpcMainInvokeEvent, logKey: "logsDir" | "imageCacheDir") {
-        if (logKey !== "logsDir" && logKey !== "imageCacheDir")
-        return "";
-
     const settings = await getSettings();
     const defaultPath = settings[logKey] || await getDefaultNativeDataDir();
 
@@ -207,25 +134,35 @@ export async function chooseFile(_event: IpcMainInvokeEvent, title: string, filt
     return await readFile(path, "utf-8");
 }
 
-// doing it in native because you can only fetch images from the renderer
-// other types of files will cause cors issues
 export async function downloadAttachment(_event: IpcMainInvokeEvent, attachment: LoggedAttachment, attempts = 0, useOldUrl = false): Promise<{ error: string | null; path: string | null; }> {
     try {
-        const attachmentId = getSafeAttachmentId(attachment?.id);
-        const fileExtension = getSafeFileExtension(attachment?.fileExtension);
-        const attachmentUrl = getSafeAttachmentUrl(useOldUrl ? attachment?.oldUrl : attachment?.url);
-
-        if (!attachmentId || !fileExtension || !attachmentUrl)
+        if (!attachment?.url || !attachment.oldUrl || !attachment?.id)
             return { error: "Invalid Attachment", path: null };
 
-        const existingImage = nativeSavedImages.get(attachmentId);
+        if (attachment.id.match(/[\\/.]/)) {
+            return { error: "Invalid Attachment ID", path: null };
+        }
+
+        const settings = await getSettings();
+        const allowedExtensionsStr = (settings as any).attachmentFileExtensions?.trim() || "";
+
+        if (allowedExtensionsStr !== "") {
+            const allowedList = allowedExtensionsStr.split(",").map((ext: string) => ext.trim().toLowerCase());
+            const cleanExt = attachment.fileExtension?.replace(".", "").toLowerCase();
+
+            if (!cleanExt || !allowedList.includes(cleanExt)) {
+                return { error: `File type .${cleanExt} is blocked by settings configurations.`, path: null };
+            }
+        }
+
+        const existingImage = nativeSavedImages.get(attachment.id);
         if (existingImage)
             return {
                 error: null,
                 path: existingImage
             };
 
-        const res = await fetch(attachmentUrl);
+        const res = await fetch(useOldUrl ? attachment.oldUrl : attachment.url);
 
         if (res.status !== 200) {
             if (res.status === 404 || res.status === 403 || res.status === 415)
@@ -234,7 +171,7 @@ export async function downloadAttachment(_event: IpcMainInvokeEvent, attachment:
             attempts++;
             if (attempts > 3) {
                 return {
-                    error: `Failed to get attachment ${attachmentId} for caching. too many attempts, error code ${res.status}`,
+                    error: `Failed to get attachment ${attachment.id} for caching. too many attempts, error code ${res.status}`,
                     path: null,
                 };
             }
@@ -247,12 +184,10 @@ export async function downloadAttachment(_event: IpcMainInvokeEvent, attachment:
         const imageCacheDir = await getImageCacheDir();
         await ensureDirectoryExists(imageCacheDir);
 
-        const finalPath = getPathInsideDir(imageCacheDir, `${attachmentId}${fileExtension}`);
-        if (!finalPath)
-            return { error: "Invalid Attachment", path: null };
+        const finalPath = path.join(imageCacheDir, `${attachment.id}${attachment.fileExtension}`);
         await writeFile(finalPath, Buffer.from(ab));
 
-        nativeSavedImages.set(attachmentId, finalPath);
+        nativeSavedImages.set(attachment.id, finalPath);
 
         return {
             error: null,
