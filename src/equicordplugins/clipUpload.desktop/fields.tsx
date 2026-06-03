@@ -6,9 +6,10 @@
 
 import { Flex } from "@components/Flex";
 import { Heading } from "@components/Heading";
+import { Paragraph } from "@components/Paragraph";
 import { getTheme, Theme } from "@utils/discord";
 import { Margins } from "@utils/margins";
-import { ApplicationStore, Checkbox, Forms, IconUtils, lodash, RelationshipStore, RunningGameStore, SearchableSelect, TextArea, TextInput, UserStore, useStateFromStores } from "@webpack/common";
+import { ApplicationStore, Checkbox, IconUtils, lodash, RelationshipStore, RunningGameStore, SearchableSelect, TextArea, TextInput, UserStore, useStateFromStores } from "@webpack/common";
 import type { PointerEvent as ReactPointerEvent } from "react";
 
 import { getString } from "./upload";
@@ -125,9 +126,9 @@ export function ParticipantField({ value, onChange, disabled }: ParticipantField
 
     return (
         <section>
-            <Forms.FormTitle tag="h5">Participants</Forms.FormTitle>
+            <Heading tag="h5">Participants</Heading>
             <Flex flexDirection="column" gap={8}>
-                <Forms.FormText className={Margins.bottom8}>Only tag people who were present and have consented to being in this clip.</Forms.FormText>
+                <Paragraph className={Margins.bottom8}>Only tag people who were present and have consented to being in this clip.</Paragraph>
                 <SearchableSelect
                     options={options}
                     value={value}
@@ -187,7 +188,7 @@ export function ApplicationField({ value, onChange, disabled }: ApplicationField
 
     return (
         <section>
-            <Forms.FormTitle tag="h5">Game/Application</Forms.FormTitle>
+            <Heading tag="h5">Game/Application</Heading>
             <Flex flexDirection="column" gap={8}>
                 <SearchableSelect
                     options={options}
