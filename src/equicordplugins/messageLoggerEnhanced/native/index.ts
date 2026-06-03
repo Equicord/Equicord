@@ -14,8 +14,9 @@ import { getSettings, saveSettings } from "./settings";
 export * from "./export";
 export * from "./import";
 
+import { blockedExts } from "../list";
 import { LoggedAttachment } from "../types";
-import { LOGS_DATA_FILENAME } from "../utils/constants";
+import { DEFAULT_ATTACHMENT_FILE_EXTENSIONS, LOGS_DATA_FILENAME } from "../utils/constants";
 import { ensureDirectoryExists, getAttachmentIdFromFilename, sleep } from "./utils";
 
 export { getSettings };
@@ -97,6 +98,10 @@ export async function getDefaultNativeDataDir(): Promise<string> {
     return path.join(DATA_DIR, "MessageLoggerData");
 }
 
+export async function getDefaultAttachmentFileExtensions(): Promise<string> {
+    return DEFAULT_ATTACHMENT_FILE_EXTENSIONS;
+}
+
 export async function chooseDir(event: IpcMainInvokeEvent, logKey: "logsDir" | "imageCacheDir") {
     const settings = await getSettings();
     const defaultPath = settings[logKey] || await getDefaultNativeDataDir();
@@ -144,15 +149,16 @@ export async function downloadAttachment(_event: IpcMainInvokeEvent, attachment:
         }
 
         const settings = await getSettings();
-        const allowedExtensionsStr = (settings as any).attachmentFileExtensions?.trim() || "";
+        const allowedExtensionsStr = settings.attachmentFileExtensions?.trim() || "";
+        if (allowedExtensionsStr === "" || allowedExtensionsStr.toLowerCase() === "none") {
+            return { error: "All attachment downloads are currently blocked by settings configurations.", path: null };
+        }
 
-        if (allowedExtensionsStr !== "") {
-            const allowedList = allowedExtensionsStr.split(",").map((ext: string) => ext.trim().toLowerCase());
-            const cleanExt = attachment.fileExtension?.replace(".", "").toLowerCase();
+        const allowedList = allowedExtensionsStr.split(",").map((ext: string) => ext.trim().toLowerCase());
+        const cleanExt = attachment.fileExtension?.replace(".", "").toLowerCase();
 
-            if (!cleanExt || !allowedList.includes(cleanExt)) {
-                return { error: `File type .${cleanExt} is blocked by settings configurations.`, path: null };
-            }
+        if (!cleanExt || !allowedList.includes(cleanExt)) {
+            return { error: `File type .${cleanExt} is blocked by settings configurations.`, path: null };
         }
 
         const existingImage = nativeSavedImages.get(attachment.id);
@@ -198,4 +204,28 @@ export async function downloadAttachment(_event: IpcMainInvokeEvent, attachment:
         console.error(error);
         return { error: error.message, path: null };
     }
+}
+
+export async function updateAllowedExtensions(_event: IpcMainInvokeEvent, cleanExtensionsString: string | undefined) {
+    const settings = await getSettings();
+    const incomingRaw = cleanExtensionsString?.trim() || "";
+
+    if (incomingRaw === "") {
+        settings.attachmentFileExtensions = "none";
+        await saveSettings(settings);
+        return;
+    }
+
+    const validatedExtensions = incomingRaw
+        .split(",")
+        .map(ext => ext.trim().toLowerCase())
+        .filter(ext => ext.length > 0 && !blockedExts.includes(ext));
+
+    if (validatedExtensions.length === 0) {
+        settings.attachmentFileExtensions = "none";
+    } else {
+        settings.attachmentFileExtensions = validatedExtensions.join(",");
+    }
+
+    await saveSettings(settings);
 }

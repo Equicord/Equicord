@@ -191,19 +191,27 @@ export const settings = definePluginSettings({
         type: OptionType.STRING,
         description: "Comma separated list of file extensions to save. Attachments with file extensions not in this list will not be saved. Leave empty to save all attachments.",
         onChange: (value: string) => {
-            if (!value) return;
-            const exts = value.split(",").map(ext => ext.trim().toLowerCase());
+            let processedValue = "";
 
-            const invalid = exts.filter(ext => blockedExts.includes(ext));
-            if (invalid.length > 0) {
-                console.warn("Rejected invalid file extensions:", invalid);
-                return exts.filter(ext => !blockedExts.includes(ext)).join(",");
+            if (value) {
+                const exts = value.split(",").map(ext => ext.trim().toLowerCase());
+                const invalid = exts.filter(ext => blockedExts.includes(ext));
+
+                if (invalid.length > 0) {
+                    console.warn("Rejected invalid file extensions:", invalid);
+                    processedValue = exts.filter(ext => !blockedExts.includes(ext)).join(",");
+                } else {
+                    processedValue = exts.join(",");
+                }
             }
 
-            return exts.join(",");
+            Native.updateAllowedExtensions(processedValue).catch((err: any) => {
+                console.error("Failed to sync attachment extensions natively:", err);
+            });
+
+            return processedValue;
         }
     },
-
     cacheLimit: {
         default: 1000,
         type: OptionType.NUMBER,
