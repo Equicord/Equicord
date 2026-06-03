@@ -5,6 +5,7 @@
  */
 
 import { Flex } from "@components/Flex";
+import { Heading } from "@components/Heading";
 import { getTheme, Theme } from "@utils/discord";
 import { Margins } from "@utils/margins";
 import { ApplicationStore, Checkbox, Forms, IconUtils, lodash, RelationshipStore, RunningGameStore, SearchableSelect, TextArea, TextInput, UserStore, useStateFromStores } from "@webpack/common";
@@ -54,7 +55,7 @@ export function TextField({ title, value, onChange, placeholder, disabled, multi
 export function DateTimeField({ value, onChange, disabled }: { value: string; onChange(value: string): void; disabled?: boolean; }) {
     return (
         <section>
-            <Forms.FormTitle tag="h5">Created at</Forms.FormTitle>
+            <Heading tag="h5">Created at</Heading>
             <input
                 type="datetime-local"
                 value={value}

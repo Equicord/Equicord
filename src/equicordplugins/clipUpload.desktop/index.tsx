@@ -43,10 +43,10 @@ export default definePlugin({
 
     patches: [
         {
-            find: /clipId:.{0,400}?actions:\(0,\i\.jsxs\)\(\i\.Fragment,\{children:\[/,
+            find: '"ChannelAttachmentUpload"',
             replacement: {
-                match: /(actions:\(0,\i\.jsxs\)\(\i\.Fragment,\{children:\[)/,
-                replace: "$1$self.UploadClipFileButton(arguments[0]),"
+                match: /(,\{children:\[)(?=.{0,80}#{intl::CLIPS_ATTACHMENT_UTILITIES_SPOILER})/,
+                replace: "$&$self.UploadClipFileButton(arguments[0]),"
             }
         }
     ],

@@ -4,96 +4,96 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { ensureSafePath } from "@main/ipcMain";
+import { DATA_DIR } from "@main/utils/constants";
+import { randomUUID } from "crypto";
 import { dialog, type IpcMainInvokeEvent } from "electron";
-import { mkdtemp, readFile, rm, writeFile } from "fs/promises";
-import { tmpdir } from "os";
-import { basename, dirname, extname, join, normalize } from "path";
+import { mkdir, readFile, rm, writeFile } from "fs/promises";
+import { basename, extname, join, resolve } from "path";
 
-const selectedFiles = new Set<string>();
-const tempFiles = new Set<string>();
-const tempDirPrefix = normalize(join(tmpdir(), "equicord-clip-upload-"));
+interface TempEntry {
+    tmpDir: string;
+    tmpPath: string;
+}
 
-const mimeTypes: Record<string, string> = {
+const pendingTokens = new Map<string, string>();
+const tempEntries = new Map<string, TempEntry>();
+const CLIP_UPLOAD_DIR = join(DATA_DIR, "clipUpload");
+const ALLOWED_EXTENSIONS = new Set([".mp4", ".m4v"]);
+const MIME_TYPES: Record<string, string> = {
     ".mp4": "video/mp4",
     ".m4v": "video/mp4",
 };
 
-function getMimeType(path: string) {
-    return mimeTypes[extname(path).toLowerCase()] ?? "application/octet-stream";
+function getMimeType(filePath: string): string {
+    return MIME_TYPES[extname(filePath).toLowerCase()] ?? "application/octet-stream";
 }
 
-export async function chooseVideoFile(_event: IpcMainInvokeEvent) {
+export async function chooseVideoFile(_: IpcMainInvokeEvent): Promise<{ token: string; name: string; type: string; } | null> {
     try {
-        // @utils/web chooseFile returns a File, but Discord's metadata writer needs a native path.
-        const { filePaths } = await dialog.showOpenDialog({
+        const { filePaths, canceled } = await dialog.showOpenDialog({
             title: "Select clip file",
-            filters: [
-                { name: "MP4 Video", extensions: ["mp4", "m4v"] }
-            ],
-            properties: ["openFile"]
+            filters: [{ name: "MP4 Video", extensions: ["mp4", "m4v"] }],
+            properties: ["openFile"],
         });
 
-        const [rawPath] = filePaths;
-        if (!rawPath) return null;
+        if (canceled || filePaths.length === 0) return null;
 
-        const path = normalize(rawPath);
-        const type = getMimeType(path);
+        const resolvedPath = resolve(filePaths[0]);
+        if (!ALLOWED_EXTENSIONS.has(extname(resolvedPath).toLowerCase())) return null;
 
-        selectedFiles.add(path);
+        const token = randomUUID();
+        pendingTokens.set(token, resolvedPath);
 
-        return {
-            path,
-            name: basename(path),
-            type
-        };
+        return { token, name: basename(resolvedPath), type: getMimeType(resolvedPath) };
     } catch {
         return null;
     }
 }
 
-export async function readVideoFile(_event: IpcMainInvokeEvent, rawPath: string) {
-    if (typeof rawPath !== "string") return null;
-
-    const path = normalize(rawPath);
-    if (!tempFiles.has(path)) return null;
+export async function createTempVideoFile(_: IpcMainInvokeEvent, token: string): Promise<string | null> {
+    const originalPath = pendingTokens.get(token);
+    if (!originalPath) return null;
+    pendingTokens.delete(token);
 
     try {
-        const buf = await readFile(path);
+        const tmpDir = join(CLIP_UPLOAD_DIR, randomUUID());
+        const tmpPath = join(tmpDir, basename(originalPath));
+
+        if (!ensureSafePath(tmpDir, basename(originalPath))) return null;
+
+        await mkdir(tmpDir, { recursive: true });
+        await writeFile(tmpPath, await readFile(originalPath));
+
+        const tmpToken = randomUUID();
+        tempEntries.set(tmpToken, { tmpDir, tmpPath });
+        return tmpToken;
+    } catch {
+        return null;
+    }
+}
+
+export async function readVideoFile(_: IpcMainInvokeEvent, token: string): Promise<Uint8Array | null> {
+    const entry = tempEntries.get(token);
+    if (!entry) return null;
+
+    try {
+        const buf = await readFile(entry.tmpPath);
         return new Uint8Array(buf.buffer, buf.byteOffset, buf.byteLength);
     } catch {
         return null;
     }
 }
 
-export async function createTempVideoFile(_event: IpcMainInvokeEvent, rawPath: string) {
-    if (typeof rawPath !== "string") return null;
+export async function deleteTempVideoFile(_: IpcMainInvokeEvent, token: string): Promise<void> {
+    const entry = tempEntries.get(token);
+    if (!entry) return;
 
-    const path = normalize(rawPath);
-    if (!selectedFiles.delete(path)) return null;
+    tempEntries.delete(token);
 
-    try {
-        const tmpDir = await mkdtemp(join(tmpdir(), "equicord-clip-upload-"));
-        const tmpPath = join(tmpDir, basename(path));
-        await writeFile(tmpPath, await readFile(path));
-        tempFiles.add(tmpPath);
-        return tmpPath;
-    } catch {
-        return null;
-    }
-}
-
-export async function deleteTempVideoFile(_event: IpcMainInvokeEvent, rawPath: string) {
-    if (typeof rawPath !== "string") return;
-
-    const path = normalize(rawPath);
-    if (!tempFiles.delete(path)) return;
-
-    const dir = dirname(path);
-    if (!dir.startsWith(tempDirPrefix)) return;
+    if (!ensureSafePath(CLIP_UPLOAD_DIR, entry.tmpDir)) return;
 
     try {
-        await rm(dir, { force: true, recursive: true });
-    } catch {
-        return;
-    }
+        await rm(entry.tmpDir, { force: true, recursive: true });
+    } catch { }
 }

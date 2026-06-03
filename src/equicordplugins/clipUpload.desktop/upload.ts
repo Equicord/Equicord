@@ -6,6 +6,7 @@
 
 import { isObject } from "@utils/misc";
 import type { PluginNative } from "@utils/types";
+import { User } from "@vencord/discord-types";
 import { Constants, MediaEngineStore, RestAPI, showToast, SnowflakeUtils, Toasts } from "@webpack/common";
 
 const Native = VencordNative.pluginHelpers.ClipUpload as PluginNative<typeof import("./native")>;
@@ -15,12 +16,12 @@ const compatibleExtensions = [".mp4", ".m4v"];
 const uploadAbortControllers = new Set<AbortController>();
 
 export interface ClipMetadata {
-    name?: unknown;
+    name?: string;
     applicationId?: unknown;
-    createdAt?: unknown;
-    users?: unknown;
-    remoteClipId?: unknown;
-    eventsTimeline?: unknown;
+    createdAt?: number | string | Date;
+    users?: User[];
+    remoteClipId?: string | number;
+    eventsTimeline?: any;
 }
 
 export interface ClipUploadOptions {
@@ -38,12 +39,6 @@ export interface ClipUploadOptions {
     eventsTimeline?: unknown;
 }
 
-interface PickedVideoFile {
-    path: string;
-    name: string;
-    type: string;
-}
-
 interface AttachmentUploadResponse {
     attachments?: Array<{
         upload_url: string;
@@ -57,14 +52,6 @@ interface RestResponse {
     text?: string;
 }
 
-interface ClipMetadataWriter {
-    updateClipMetadata(path: string, metadata: string): Promise<void>;
-}
-
-function isClipMetadataWriter(value: unknown): value is ClipMetadataWriter {
-    return isObject(value) && "updateClipMetadata" in value && typeof value.updateClipMetadata === "function";
-}
-
 export function getString(value: unknown) {
     return typeof value === "string" ? value : undefined;
 }
@@ -73,7 +60,6 @@ export function abortActiveClipUploads() {
     for (const controller of uploadAbortControllers) {
         controller.abort();
     }
-
     uploadAbortControllers.clear();
 }
 
@@ -83,9 +69,7 @@ export function getClipTitleFromName(name: string) {
 }
 
 export function getDefaultClipTitle(clip?: ClipMetadata | null) {
-    if (typeof clip?.name === "string" && clip.name.trim()) return clip.name;
-
-    return "";
+    return typeof clip?.name === "string" ? clip.name.trim() : "";
 }
 
 export function getClipCreatedAt(clip?: ClipMetadata | null) {
@@ -101,16 +85,14 @@ export function getClipCreatedAt(clip?: ClipMetadata | null) {
     return new Date().toISOString();
 }
 
-export function getParticipantIds(clip?: ClipMetadata | null) {
+export function getParticipantIds(clip?: ClipMetadata | null): string[] {
     if (!Array.isArray(clip?.users)) return [];
 
-    return clip.users
-        .map(user => {
-            if (typeof user === "string") return user;
-            if (isObject(user) && "id" in user && typeof user.id === "string") return user.id;
-            return null;
-        })
-        .filter((id): id is string => id != null);
+    return clip.users.flatMap(user => {
+        if (typeof user === "string") return user;
+        if (isObject(user) && typeof user.id === "string") return user.id;
+        return [];
+    });
 }
 
 export function isValidDate(value: string) {
@@ -125,30 +107,28 @@ function getFileExtension(fileName: string) {
     return fileName.match(/\.[a-z0-9]+$/i)?.[0].toLowerCase() ?? ".mp4";
 }
 
-async function readStampedVideoFile(path: string, name: string, type: string) {
-    const mediaEngine: unknown = MediaEngineStore.getMediaEngine();
-    if (!isClipMetadataWriter(mediaEngine)) throw new Error("Couldn't access Discord's clip metadata writer.");
-
-    const tempPath = await Native.createTempVideoFile(path);
-    if (!tempPath) throw new Error("Couldn't prepare the selected file.");
+async function readStampedVideoFile(token: string, name: string, type: string) {
+    const mediaEngine = MediaEngineStore.getMediaEngine();
+    const tmpToken = await Native.createTempVideoFile(token);
+    if (!tmpToken) throw new Error("Couldn't prepare the selected file.");
 
     try {
-        await mediaEngine.updateClipMetadata(tempPath, "{}");
+        await mediaEngine.updateClipMetadata(tmpToken, "{}" as any);
 
-        const data = await Native.readVideoFile(tempPath);
+        const data = await Native.readVideoFile(tmpToken);
         if (!data) throw new Error("Couldn't read the selected file.");
 
         return new File([new Uint8Array(data)], name, { type });
     } finally {
-        await Native.deleteTempVideoFile(tempPath);
+        await Native.deleteTempVideoFile(tmpToken);
     }
 }
 
 export async function pickClipFile() {
-    const picked = await Native.chooseVideoFile() as PickedVideoFile | null;
+    const picked = await Native.chooseVideoFile();
     if (!picked) return null;
 
-    return readStampedVideoFile(picked.path, picked.name, picked.type);
+    return readStampedVideoFile(picked.token, picked.name, picked.type);
 }
 
 function isCompatibleClipFile(file: File) {
@@ -156,15 +136,15 @@ function isCompatibleClipFile(file: File) {
 }
 
 function prepareClipFile(file: File, fileName: string) {
-    if (isCompatibleClipFile(file)) return new File([file], fileName, { type: file.type || "video/mp4" });
-
+    if (isCompatibleClipFile(file)) {
+        return new File([file], fileName, { type: file.type || "video/mp4" });
+    }
     throw new Error("This file is not compatible. Use an MP4 clip with H.264 video and AAC audio.");
 }
 
-function parseAttachmentUploadResponse(response: RestResponse) {
+function parseAttachmentUploadResponse(response: RestResponse): AttachmentUploadResponse {
     if (isObject(response.body)) return response.body as AttachmentUploadResponse;
-
-    return JSON.parse(response.text ?? "{}") as AttachmentUploadResponse;
+    return parseJSON<AttachmentUploadResponse>(response.text) ?? {};
 }
 
 async function reserveClipUpload(options: ClipUploadOptions, file: File) {
@@ -191,8 +171,7 @@ async function reserveClipUpload(options: ClipUploadOptions, file: File) {
         }
     }) as RestResponse;
 
-    const body = parseAttachmentUploadResponse(response);
-    return body.attachments?.[0];
+    return parseAttachmentUploadResponse(response).attachments?.[0];
 }
 
 export async function uploadClipFile(file: File, options: ClipUploadOptions) {
@@ -259,25 +238,17 @@ export async function uploadClipFile(file: File, options: ClipUploadOptions) {
     }
 }
 
-export function getErrorMessage(error: unknown) {
+export function getErrorMessage(error: unknown): string {
+    console.error(error);
     if (error instanceof DOMException && error.name === "AbortError") return "Upload canceled.";
     if (error instanceof Error) return error.message;
-
-    if (isObject(error)) {
-        if ("body" in error && isObject(error.body) && "message" in error.body && typeof error.body.message === "string") return error.body.message;
-        if ("text" in error && typeof error.text === "string") {
-            const parsed = parseErrorText(error.text);
-            if (isObject(parsed) && "message" in parsed && typeof parsed.message === "string") return parsed.message;
-        }
-        if ("message" in error && typeof error.message === "string") return error.message;
-    }
-
     return "Failed to upload clip.";
 }
 
-function parseErrorText(text: string) {
+function parseJSON<T>(text?: string): T | null {
+    if (!text) return null;
     try {
-        return JSON.parse(text) as unknown;
+        return JSON.parse(text) as T;
     } catch {
         return null;
     }

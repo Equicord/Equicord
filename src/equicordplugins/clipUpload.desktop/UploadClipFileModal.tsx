@@ -4,9 +4,12 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { Button } from "@components/Button";
 import { Flex } from "@components/Flex";
+import { Heading } from "@components/Heading";
+import { Paragraph } from "@components/Paragraph";
 import type { RenderModalProps } from "@vencord/discord-types";
-import { Button, Forms, Modal, openModal, showToast, Toasts, useEffect, useState } from "@webpack/common";
+import { Modal, openModal, showToast, Toasts, useEffect, useState } from "@webpack/common";
 
 import { ApplicationField, BooleanField, DateTimeField, getDateTimeLocalValue, ParticipantField, TextField } from "./fields";
 import { abortActiveClipUploads, type ClipMetadata, getClipCreatedAt, getClipTitleFromName, getDefaultClipTitle, getDefaultFileName, getErrorMessage, getParticipantIds, getString, isValidDate, pickClipFile, uploadClipFile } from "./upload";
@@ -107,12 +110,12 @@ function UploadClipFileModal({ modalProps, channelId, clip }: { modalProps: Rend
         >
             <Flex flexDirection="column" gap={12}>
                 <section>
-                    <Forms.FormTitle tag="h5">File</Forms.FormTitle>
+                    <Heading tag="h5">File</Heading>
                     <Flex alignItems="center" gap={8}>
                         <Button onClick={() => void chooseClipFile()} disabled={uploading}>
                             Select File
                         </Button>
-                        <Forms.FormText>{file?.name ?? "No file selected"}</Forms.FormText>
+                        <Paragraph>{file?.name ?? "No file selected"}</Paragraph>
                     </Flex>
                 </section>
 
