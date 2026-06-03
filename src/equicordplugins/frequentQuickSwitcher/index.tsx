@@ -8,29 +8,34 @@ import { Devs } from "@utils/constants";
 import definePlugin from "@utils/types";
 import { ChannelStore, UserSettingsActionCreators } from "@webpack/common";
 
-function generateSearchResults(query) {
-    const frequentChannelsWithQuery = Object.entries(UserSettingsActionCreators.FrecencyUserSettingsActionCreators.getCurrentValue().guildAndChannelFrecency.guildAndChannels)
-        .map(([key, value]) => key)
-        .filter(id => ChannelStore.getChannel(id) != null)
-        .filter(id => ChannelStore.getChannel(id).name.includes(query))
-        .sort((id1, id2) => {
-            const channel1 = UserSettingsActionCreators.FrecencyUserSettingsActionCreators.getCurrentValue().guildAndChannelFrecency.guildAndChannels[id1];
-            const channel2 = UserSettingsActionCreators.FrecencyUserSettingsActionCreators.getCurrentValue().guildAndChannelFrecency.guildAndChannels[id2];
-            return channel2.totalUses - channel1.totalUses;
+function getGuildAndChannels(): Record<string, { totalUses: number; }> | null {
+    const { guildAndChannelFrecency } = UserSettingsActionCreators.FrecencyUserSettingsActionCreators.getCurrentValue() ?? {};
+    return guildAndChannelFrecency?.guildAndChannels ?? null;
+}
+
+function generateSearchResults(query: string) {
+    const guildAndChannels = getGuildAndChannels();
+    if (!guildAndChannels) return null;
+
+    const normalizedQuery = query.toLowerCase();
+
+    const frequentChannelsWithQuery = Object.keys(guildAndChannels)
+        .filter(id => {
+            const channel = ChannelStore.getChannel(id);
+            return channel != null && channel.name.toLowerCase().includes(normalizedQuery);
         })
+        .sort((id1, id2) => (guildAndChannels[id2]?.totalUses ?? 0) - (guildAndChannels[id1]?.totalUses ?? 0))
         .slice(0, 20);
 
     return frequentChannelsWithQuery.map(channelID => {
-        const channel = ChannelStore.getChannel(channelID);
-        return (
-            {
-                "type": "TEXT_CHANNEL",
-                "record": channel,
-                "score": 20,
-                "comparator": query,
-                "sortable": query
-            }
-        );
+        const channel = ChannelStore.getChannel(channelID)!;
+        return {
+            type: "TEXT_CHANNEL",
+            record: channel,
+            score: 20,
+            comparator: query,
+            sortable: query
+        };
     });
 }
 
@@ -39,13 +44,16 @@ export default definePlugin({
     description: "Rewrites and filters the quick switcher results to be your most frequent channels",
     tags: ["Shortcuts", "Servers"],
     authors: [Devs.Samwich],
-    generateSearchResults: generateSearchResults,
+    generateSearchResults,
+    start() {
+        UserSettingsActionCreators.FrecencyUserSettingsActionCreators.loadIfNecessary();
+    },
     patches: [
         {
             find: "#{intl::QUICKSWITCHER_PLACEHOLDER}",
             replacement: {
                 match: /let{selectedIndex:\i,results:\i}/,
-                replace: "this.props.results = $self.generateSearchResults(this.state.query);$&"
+                replace: "var _fqsResults=$self.generateSearchResults(this.state.query);if(_fqsResults!=null)this.props.results=_fqsResults;$&"
             },
         }
     ]
