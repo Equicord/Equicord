@@ -114,7 +114,7 @@
             "oscilloscopeColor": "Osiloskop için renk",
             "oscilloscopeSolidColor": "Osiloskop için düz renk kullanın",
             "spectrograph": "Spektrograf görselleştiricisini etkinleştir",
-            "spectrographColor": "Spektrograf için renk",
+            "spectrographColor": "Spektrograf için renk (R, G, B ya da #hex)",
             "spectrographSolidColor": "Spektrograf için düz renk kullanın"
         },
         "toasts": {
@@ -149,7 +149,7 @@
                 "userOption": "denemek ve yenilemek için belirli bir kullanıcı"
             }
         },
-        "description": "Komuta sistemini çeşitli iyileştirmelerle geliştirir.",
+        "description": "Belirtilen uygulamaların komutlarını yerel olarak yeniler.",
         "settings": {
             "allowNewlinesInCommands": "Komut girişlerinde yeni satırlara izin ver (CTRL + Shift + Enter)",
             "autoFillArguments": "Komutu yalnızca gerekli olanlar yerine tüm argümanlarla otomatik olarak doldur"
@@ -324,6 +324,7 @@
             "clipsLink": "Klip ayarlarında FPS ve süre seçeneklerini değiştirin!",
             "enableAdvancedSignals": "Gelişmiş klip sinyallerini etkinleştirin (otomatik klip tetikleyicileri)",
             "enableScreenshotKeybind": "Ekran görüntüsü tuş atama özelliğini etkinleştirin",
+            "enableSpeakingIndicators": "Konuşma göstergelerini etkinleştir",
             "enableVoiceOnlyClips": "Yalnızca ses kliplerini etkinleştirin (videosuz ses)",
             "ignorePlatformRestriction": "Platform Kısıtlı Kırpmaya İzin Ver (kaydetme hatalarına neden olabilir)",
             "richPresenceTagging": "Klipler ne zaman mevcut Zengin Durum ile etiketlenmelidir?",
@@ -337,6 +338,8 @@
     "commandPalette": {
         "description": "Aranabilir bir komut paleti aracılığıyla eylemleri hızlı bir şekilde çalıştırın",
         "settings": {
+            "closeAfterExecute": "Bir komutu çalıştırdıktan sonra paleti kapat.",
+            "compactStartEnabled": "Paleti önce kompakt modda açın.",
             "customCommands": "Özel komut paleti girişlerini yönetin",
             "enableTagFilter": "Etiket filtre çubuğunu göster",
             "hotkey": "Komut paletini açmak için kullanılan kısayol tuşu",
@@ -901,6 +904,7 @@
     },
     "githubRepos": {
         "description": "Kullanıcının genel GitHub depolarını profilinde görüntüler",
+        "githubRepos": "GitHub Depoları",
         "settings": {
             "showInMiniProfile": "Mini profilde yalnızca bir düğme yerine tam kullanıcı arayüzünü göster",
             "showLanguage": "Depo dilini göster",
@@ -2110,7 +2114,10 @@
         "description": "Yapay zekayı kullanarak önemsiz soruları yanıtlamanıza yardımcı olan bir eklenti.",
         "settings": {
             "apiKey": "API Anahtarı.",
-            "autoRespond": "Yanıt alındığında mesajlara otomatik olarak yanıt verin.",
+            "autoReply": "Otomatik Yanıt",
+            "autoRespond": "Cevaplar nasıl ele alınmalıdır?",
+            "bot": "Clyde",
+            "chatbar": "Sohbet Çubuğu Metnini Değiştir",
             "endpoint": "OpenAI Uyumlu Yapay Zeka Uç Noktası.",
             "maxTokens": "Yanıttaki maksimum jeton sayısı.",
             "model": "Kullanılacak AI Modeli.",
