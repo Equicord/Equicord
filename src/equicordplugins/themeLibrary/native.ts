@@ -11,7 +11,7 @@ import { existsSync, writeFileSync } from "fs";
 
 import type { Theme } from "./types";
 
-export function getThemePath(theme: Theme): string | null {
+function getThemePath(theme: Theme): string | null {
     if (!theme?.name) return null;
     return ensureSafePath(THEMES_DIR, `${theme.name}.theme.css`);
 }
