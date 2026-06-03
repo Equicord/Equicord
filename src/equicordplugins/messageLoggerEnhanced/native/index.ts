@@ -170,7 +170,7 @@ export async function getDefaultNativeDataDir(): Promise<string> {
 export async function chooseDir(event: IpcMainInvokeEvent, logKey: "logsDir" | "imageCacheDir") {
         if (logKey !== "logsDir" && logKey !== "imageCacheDir")
         return "";
-    
+
     const settings = await getSettings();
     const defaultPath = settings[logKey] || await getDefaultNativeDataDir();
 
