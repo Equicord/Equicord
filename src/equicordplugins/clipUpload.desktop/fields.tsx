@@ -44,7 +44,7 @@ interface ApplicationFieldProps {
 export function TextField({ title, value, onChange, placeholder, disabled, multiline }: TextFieldProps) {
     return (
         <section>
-            <Forms.FormTitle tag="h5">{title}</Forms.FormTitle>
+            <Heading tag="h5">{title}</Heading>
             {multiline
                 ? <TextArea value={value} onChange={onChange} placeholder={placeholder} disabled={disabled} autosize />
                 : <TextInput value={value} onChange={onChange} placeholder={placeholder} disabled={disabled} />}
@@ -56,14 +56,12 @@ export function DateTimeField({ value, onChange, disabled }: { value: string; on
     return (
         <section>
             <Heading tag="h5">Created at</Heading>
-            <input
+            <TextInput
                 type="datetime-local"
                 value={value}
-                onChange={event => onChange(event.currentTarget.value)}
+                onChange={v => onChange(v)}
                 disabled={disabled}
                 style={{
-                    boxSizing: "border-box",
-                    width: "100%",
                     colorScheme: getTheme() === Theme.Light ? "light" : "dark"
                 }}
             />
