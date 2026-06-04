@@ -36,6 +36,10 @@
     pointer-events: none;
 }
 
+.vc-youtube-sponsorblock-root-fullscreen .vc-youtube-sponsorblock-activity-active {
+    pointer-events: auto;
+}
+
 .vc-youtube-sponsorblock-overlay {
     opacity: 1;
     pointer-events: none;

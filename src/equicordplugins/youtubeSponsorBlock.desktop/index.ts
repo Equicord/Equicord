@@ -450,15 +450,12 @@ function YoutubeSponsorBlockEmbed({ Component, props, patchIframeProps }: {
     const [overlayVisible, setOverlayVisible] = useState(true);
     const [fakeFullscreen, setFakeFullscreen] = useState(false);
     const rootRef = useRef<HTMLDivElement | null>(null);
-    const pointerInOverlay = useRef(false);
     const hideTimeout = useRef<number | undefined>(undefined);
 
     const showOverlay = () => {
         setOverlayVisible(true);
         if (hideTimeout.current !== undefined) window.clearTimeout(hideTimeout.current);
-        hideTimeout.current = window.setTimeout(() => {
-            if (!pointerInOverlay.current) setOverlayVisible(false);
-        }, 5200);
+        hideTimeout.current = window.setTimeout(() => setOverlayVisible(false), 5200);
     };
 
     useEffect(() => {
@@ -511,15 +508,9 @@ function YoutubeSponsorBlockEmbed({ Component, props, patchIframeProps }: {
     return React.createElement("div", { className: cl("root", { "root-fullscreen": fakeFullscreen }), ref: rootRef },
         React.createElement(Component, patchedProps),
         React.createElement("div", {
-            className: cl("activity"),
-            onMouseEnter: () => {
-                pointerInOverlay.current = true;
-                showOverlay();
-            },
-            onMouseLeave: () => {
-                pointerInOverlay.current = false;
-                showOverlay();
-            },
+            className: cl("activity", { "activity-active": fakeFullscreen && !overlayVisible }),
+            onMouseEnter: showOverlay,
+            onMouseLeave: showOverlay,
             onMouseMove: showOverlay,
             onPointerMove: showOverlay
         },
