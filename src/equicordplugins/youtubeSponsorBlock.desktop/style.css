@@ -1,0 +1,142 @@
+/*
+ * Vencord, a Discord client mod
+ * Copyright (c) 2026 Vendicated and contributors
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+.vc-youtube-sponsorblock-root {
+    display: contents;
+}
+
+.vc-youtube-sponsorblock-root-fullscreen {
+    position: fixed;
+    z-index: 10000;
+    inset: 0;
+    display: block;
+    background: #000;
+}
+
+.vc-youtube-sponsorblock-root-fullscreen iframe {
+    /* Override Discord embed max width while using fake fullscreen. */
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    max-width: none !important;
+    max-height: none !important;
+}
+
+.vc-youtube-sponsorblock-activity,
+.vc-youtube-sponsorblock-overlay {
+    position: absolute;
+    inset: 0;
+}
+
+.vc-youtube-sponsorblock-activity {
+    pointer-events: none;
+}
+
+.vc-youtube-sponsorblock-overlay {
+    opacity: 1;
+    pointer-events: none;
+    transition: opacity 0.1s cubic-bezier(0.2, 0, 0.6, 1);
+}
+
+.vc-youtube-sponsorblock-overlay-hidden {
+    opacity: 0;
+}
+
+.vc-youtube-sponsorblock-bar {
+    position: absolute;
+    right: 30px;
+    bottom: 72px;
+    left: 30px;
+    height: 3px;
+    overflow: hidden;
+    border-radius: 1.5px;
+}
+
+.vc-youtube-sponsorblock-segment {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+}
+
+.vc-youtube-sponsorblock-sponsor {
+    background: #00d400;
+}
+
+.vc-youtube-sponsorblock-selfpromo {
+    background: #ff0;
+}
+
+.vc-youtube-sponsorblock-interaction {
+    background: #c0f;
+}
+
+.vc-youtube-sponsorblock-intro {
+    background: #0ff;
+}
+
+.vc-youtube-sponsorblock-outro {
+    background: #0202ed;
+}
+
+.vc-youtube-sponsorblock-preview {
+    background: #008fd6;
+}
+
+.vc-youtube-sponsorblock-filler {
+    background: #7300ff;
+}
+
+.vc-youtube-sponsorblock-music-offtopic {
+    background: #f90;
+}
+
+.vc-youtube-sponsorblock-skip,
+.vc-youtube-sponsorblock-unskip {
+    position: absolute;
+    right: 26px;
+    padding: 8px 12px;
+    border: 0;
+    border-radius: 3px;
+    color: var(--white-500);
+    background: rgb(0 0 0 / 80%);
+    font-size: 13px;
+    font-weight: 600;
+    pointer-events: auto;
+}
+
+.vc-youtube-sponsorblock-skip {
+    bottom: 126px;
+}
+
+.vc-youtube-sponsorblock-unskip {
+    bottom: 170px;
+}
+
+.vc-youtube-sponsorblock-fullscreen {
+    position: absolute;
+    right: 24px;
+    bottom: 82px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    padding: 10px;
+    border: 0;
+    border-radius: 3px;
+    color: var(--white-500);
+    background: transparent;
+    pointer-events: auto;
+}
+
+.vc-youtube-sponsorblock-fullscreen svg {
+    display: inherit;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    fill: currentcolor;
+}
