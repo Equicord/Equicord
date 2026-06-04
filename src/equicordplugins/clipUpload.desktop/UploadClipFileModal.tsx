@@ -9,7 +9,7 @@ import { Flex } from "@components/Flex";
 import { Heading } from "@components/Heading";
 import { Paragraph } from "@components/Paragraph";
 import type { RenderModalProps } from "@vencord/discord-types";
-import { Modal, openModal, showToast, Toasts, useEffect, useState } from "@webpack/common";
+import { Checkbox, Modal, openModal, showToast, Toasts, useEffect, useState } from "@webpack/common";
 
 import { ApplicationField, BooleanField, DateTimeField, getDateTimeLocalValue, ParticipantField, TextField } from "./fields";
 import { abortActiveClipUploads, type ClipMetadata, getClipCreatedAt, getClipTitleFromName, getDefaultClipTitle, getDefaultFileName, getErrorMessage, getParticipantIds, getString, isValidDate, pickClipFile, uploadClipFile } from "./upload";
@@ -37,6 +37,7 @@ function UploadClipFileModal({ modalProps, channelId, clip }: { modalProps: Rend
     const [message, setMessage] = useState("");
     const [applicationId, setApplicationId] = useState(getString(clip?.applicationId) ?? "");
     const [uploading, setUploading] = useState(false);
+    const [parseMetadata, setParseMetadata] = useState(false);
 
     const canUpload = Boolean(file && fileName.trim() && title.trim() && isValidDate(createdAt)) && !uploading;
     const notice = createdAt && !isValidDate(createdAt)
@@ -46,18 +47,26 @@ function UploadClipFileModal({ modalProps, channelId, clip }: { modalProps: Rend
     useEffect(() => abortActiveClipUploads, []);
 
     async function chooseClipFile() {
-        let picked: File | null;
+        let result;
         try {
-            picked = await pickClipFile();
-            if (!picked) return;
+            result = await pickClipFile(parseMetadata);
+            if (!result) return;
         } catch (error) {
             showToast(getErrorMessage(error), Toasts.Type.FAILURE);
             return;
         }
 
+        const { file: picked, metadata } = result;
+
         setFile(picked);
         setFileName(name => name === defaultFileName ? picked.name : name);
         setTitle(currentTitle => currentTitle || getClipTitleFromName(picked.name));
+
+        if (metadata) {
+            if (metadata.applicationName) setTitle(current => current || metadata.applicationName!);
+            if (metadata.users?.length) setParticipants(current => current.length ? current : metadata.users!);
+            if (metadata.applicationId) setApplicationId(current => current || metadata.applicationId!);
+        }
     }
 
     async function submit() {
@@ -117,6 +126,14 @@ function UploadClipFileModal({ modalProps, channelId, clip }: { modalProps: Rend
                         </Button>
                         <Paragraph>{file?.name ?? "No file selected"}</Paragraph>
                     </Flex>
+                    <Checkbox
+                        value={parseMetadata}
+                        onChange={(_event, checked) => setParseMetadata(checked)}
+                        disabled={uploading}
+                        type="row"
+                    >
+                        Parse clip metadata from file
+                    </Checkbox>
                 </section>
 
                 <TextField title="File name" value={fileName} onChange={setFileName} placeholder="my_clip.mp4" disabled={uploading} />
