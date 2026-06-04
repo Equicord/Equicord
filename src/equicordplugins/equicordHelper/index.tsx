@@ -15,7 +15,7 @@ import { Devs, EquicordDevs, GUILD_ID, SUPPORT_CHANNEL_ID, SUPPORT_CHANNEL_IDS, 
 import { isAnyPluginDev } from "@utils/misc";
 import definePlugin, { OptionType } from "@utils/types";
 import { StandingState } from "@vencord/discord-types/enums";
-import { findByCodeLazy, findStoreLazy } from "@webpack";
+import { extractAndLoadChunksLazy, findByCodeLazy, findStoreLazy } from "@webpack";
 import { Alerts, ApplicationCommandIndexStore, NavigationRouter, React, SettingsRouter, UserGuildSettingsStore, UserStore, useStateFromStores, VoiceStateStore } from "@webpack/common";
 import { ComponentType } from "react";
 
@@ -30,6 +30,7 @@ let clicked = false;
 
 const SafetyHubStore = findStoreLazy("SafetyHubStore");
 const fetchSafetyHub: () => Promise<void> = findByCodeLazy("SAFETY_HUB_FETCH_START");
+const requireSafetyHub = extractAndLoadChunksLazy(["USER_SETTINGS_MODAL_KEY"]);
 
 const StandingConfig: Record<number, { label: string; hoverColor: string; Icon: ComponentType<any>; }> = {
     [StandingState.ALL_GOOD]: { label: "All good!", hoverColor: "var(--status-positive)", Icon: ShieldIcon },
@@ -40,6 +41,14 @@ const StandingConfig: Record<number, { label: string; hoverColor: string; Icon: 
 };
 
 function StandingButton() {
+    const [loaded, setLoaded] = React.useState(false);
+
+    React.useEffect(() => { requireSafetyHub().then(() => setLoaded(true)); }, []);
+
+    return loaded ? <AccountStandingButton /> : null;
+}
+
+function AccountStandingButton() {
     const standing = useStateFromStores([SafetyHubStore], () => SafetyHubStore.getAccountStanding());
     const isInitialized = useStateFromStores([SafetyHubStore], () => SafetyHubStore.isInitialized());
     const [hovered, setHovered] = React.useState(false);
