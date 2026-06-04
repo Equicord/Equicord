@@ -219,6 +219,7 @@ async function registerIframe(iframe: HTMLIFrameElement, videoId: string) {
     startListening(iframe);
     sendCommand(iframe, "addEventListener", ["onStateChange"]);
     controller.segments = await loadSegments(videoId);
+    if (!controllers.has(iframe)) return;
     tick(controller);
     emit(controller);
 }
