@@ -10,8 +10,9 @@ import { definePluginSettings } from "@api/Settings";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { EquicordDevs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
+import { useForceUpdater } from "@utils/react";
 import definePlugin, { OptionType } from "@utils/types";
-import { React, useEffect, useRef, useState } from "@webpack/common";
+import { Button, React, useEffect, useRef, useState } from "@webpack/common";
 
 type Category =
     | "sponsor"
@@ -302,11 +303,15 @@ async function loadSegments(videoId: string) {
     url.searchParams.set("videoID", videoId);
     url.searchParams.set("categories", JSON.stringify(categories));
 
-    const response = await fetch(url.toString());
-    if (!response.ok) return [];
+    try {
+        const response = await fetch(url.toString());
+        if (!response.ok) return [];
 
-    const segments = await response.json() as Segment[];
-    return segments.filter(({ segment }) => Array.isArray(segment) && segment.length === 2);
+        const segments = await response.json() as Segment[];
+        return segments.filter(({ segment }) => Array.isArray(segment) && segment.length === 2);
+    } catch {
+        return [];
+    }
 }
 
 function unregisterIframe(iframe: HTMLIFrameElement) {
@@ -346,7 +351,7 @@ async function registerIframe(iframe: HTMLIFrameElement, videoId: string) {
 }
 
 function useController(iframe: HTMLIFrameElement | null) {
-    const [, forceUpdate] = useState(0);
+    const forceUpdate = useForceUpdater();
 
     useEffect(() => {
         if (!iframe) return;
@@ -354,7 +359,7 @@ function useController(iframe: HTMLIFrameElement | null) {
         const controller = controllers.get(iframe);
         if (!controller) return;
 
-        const listener = () => forceUpdate(value => value + 1);
+        const listener = () => forceUpdate();
         controller.listeners.add(listener);
         listener();
 
@@ -398,14 +403,20 @@ function SponsorBlockOverlay({ iframe, visible, fakeFullscreen, setFakeFullscree
                 )
                 : null,
             manualSegment
-                ? React.createElement("button", {
+                ? React.createElement(Button, {
                     className: cl("skip"),
+                    color: Button.Colors.TRANSPARENT,
+                    look: Button.Looks.FILLED,
+                    size: Button.Sizes.SMALL,
                     onClick: () => skipSegment(controller, manualSegment)
                 }, `Skip ${categoryLabels[manualSegment.category]}`)
                 : null,
             unskipSegment
-                ? React.createElement("button", {
+                ? React.createElement(Button, {
                     className: cl("unskip"),
+                    color: Button.Colors.TRANSPARENT,
+                    look: Button.Looks.FILLED,
+                    size: Button.Sizes.SMALL,
                     onClick: () => {
                         controller.lastSkippedSegment = null;
                         controller.currentTime = unskipSegment.segment[0];

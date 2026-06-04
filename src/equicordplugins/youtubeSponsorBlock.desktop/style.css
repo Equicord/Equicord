@@ -102,8 +102,8 @@
 .vc-youtube-sponsorblock-unskip {
     position: absolute;
     right: 26px;
+    min-width: 0;
     padding: 8px 12px;
-    border: 0;
     border-radius: 3px;
     color: var(--white-500);
     background: rgb(0 0 0 / 80%);
