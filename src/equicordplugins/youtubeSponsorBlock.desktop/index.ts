@@ -6,76 +6,15 @@
 
 import "./style.css";
 
-import { definePluginSettings } from "@api/Settings";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { EquicordDevs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
 import { useForceUpdater } from "@utils/react";
-import definePlugin, { OptionType } from "@utils/types";
+import definePlugin from "@utils/types";
 import { Button, React, useEffect, useRef, useState } from "@webpack/common";
 
-type Category =
-    | "sponsor"
-    | "selfpromo"
-    | "interaction"
-    | "intro"
-    | "outro"
-    | "preview"
-    | "filler"
-    | "music_offtopic";
-
-type Segment = {
-    segment: [number, number];
-    category: Category;
-};
-
-type CategoryAction = "skip" | "progress" | "manual" | "none";
-type CategorySetting =
-    | "sponsorAction"
-    | "selfPromoAction"
-    | "interactionAction"
-    | "introAction"
-    | "outroAction"
-    | "previewAction"
-    | "fillerAction"
-    | "musicOfftopicAction";
-
-type IframeProps = {
-    src?: unknown;
-    onLoad?: (event: Event) => void;
-    onMouseEnter?: (event: React.MouseEvent<HTMLIFrameElement>) => void;
-    onMouseLeave?: (event: React.MouseEvent<HTMLIFrameElement>) => void;
-    onMouseMove?: (event: React.MouseEvent<HTMLIFrameElement>) => void;
-    onPointerMove?: (event: React.PointerEvent<HTMLIFrameElement>) => void;
-    [key: string]: unknown;
-};
-
-type Controller = {
-    iframe: HTMLIFrameElement;
-    videoId: string;
-    segments: Segment[];
-    interval: number;
-    skipTimeout: number | undefined;
-    currentTime: number;
-    duration: number;
-    lastTimeUpdate: number;
-    playing: boolean;
-    lastSkipAt: number;
-    lastSkippedSegment: Segment | null;
-    skippedSegments: Set<string>;
-    listeners: Set<() => void>;
-};
-
-const categorySettings = [
-    ["sponsor", "sponsorAction"],
-    ["selfpromo", "selfPromoAction"],
-    ["interaction", "interactionAction"],
-    ["intro", "introAction"],
-    ["outro", "outroAction"],
-    ["preview", "previewAction"],
-    ["filler", "fillerAction"],
-    ["music_offtopic", "musicOfftopicAction"]
-] as const satisfies readonly (readonly [Category, CategorySetting])[];
+import { getCategoryAction, getEnabledCategories, settings } from "./settings";
+import type { Category, CategoryAction, Controller, IframeProps, Segment } from "./types";
 
 const controllers = new Map<HTMLIFrameElement, Controller>();
 const cl = classNameFactory("vc-youtube-sponsorblock-");
@@ -87,76 +26,10 @@ const categoryLabels: Record<Category, string> = {
     intro: "Intro",
     outro: "Outro",
     preview: "Preview",
-    filler: "Filler",
+    hook: "Hook/Greeting",
+    filler: "Tangents/Jokes",
     music_offtopic: "Non-music"
 };
-const defaultActionOptions = [
-    { label: "Skip automatically", value: "skip", default: true },
-    { label: "Show in progress bar", value: "progress" },
-    { label: "Manual skip button", value: "manual" },
-    { label: "None", value: "none" }
-] as const;
-const disabledActionOptions = [
-    { label: "Skip automatically", value: "skip" },
-    { label: "Show in progress bar", value: "progress" },
-    { label: "Manual skip button", value: "manual" },
-    { label: "None", value: "none", default: true }
-] as const;
-
-const settings = definePluginSettings({
-    sponsorAction: {
-        type: OptionType.SELECT,
-        description: "Sponsor segments.",
-        options: defaultActionOptions
-    },
-    selfPromoAction: {
-        type: OptionType.SELECT,
-        description: "Unpaid/self promotion segments.",
-        options: defaultActionOptions
-    },
-    interactionAction: {
-        type: OptionType.SELECT,
-        description: "Interaction reminder segments.",
-        options: defaultActionOptions
-    },
-    introAction: {
-        type: OptionType.SELECT,
-        description: "Intro segments.",
-        options: disabledActionOptions
-    },
-    outroAction: {
-        type: OptionType.SELECT,
-        description: "Endcard and credits segments.",
-        options: disabledActionOptions
-    },
-    previewAction: {
-        type: OptionType.SELECT,
-        description: "Preview and recap segments.",
-        options: disabledActionOptions
-    },
-    fillerAction: {
-        type: OptionType.SELECT,
-        description: "Filler tangent and joke segments.",
-        options: disabledActionOptions
-    },
-    musicOfftopicAction: {
-        type: OptionType.SELECT,
-        description: "Non-music sections in music videos.",
-        options: disabledActionOptions
-    }
-});
-
-function getCategoryAction(category: Category): CategoryAction {
-    const setting = categorySettings.find(([candidate]) => candidate === category)?.[1];
-    return setting ? settings.store[setting] as CategoryAction : "none";
-}
-
-function getEnabledCategories() {
-    return categorySettings
-        .filter(([, setting]) => settings.store[setting] !== "none")
-        .map(([category]) => category);
-}
-
 function getYoutubeVideoId(src: string) {
     try {
         const url = new URL(src);
