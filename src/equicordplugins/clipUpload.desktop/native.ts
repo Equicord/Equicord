@@ -17,11 +17,11 @@ interface TempEntry {
 }
 
 interface RawClipAttachment {
-    is_clip: boolean;
-    clip_created_at: string;
-    clip_participant_ids: string[];
-    title?: string;
-    application_id?: string;
+    id?: string;
+    applicationId?: string;
+    applicationName?: string;
+    users?: string[];
+    version?: number;
 }
 
 const pendingTokens = new Map<string, string>();

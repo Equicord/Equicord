@@ -60,13 +60,15 @@ function UploadClipFileModal({ modalProps, channelId, clip }: { modalProps: Rend
 
         setFile(picked);
         setFileName(name => name === defaultFileName ? picked.name : name);
-        setTitle(currentTitle => currentTitle || getClipTitleFromName(picked.name));
 
-        if (metadata) {
-            if (metadata.applicationName) setTitle(current => current || metadata.applicationName!);
-            if (metadata.users?.length) setParticipants(current => current.length ? current : metadata.users!);
-            if (metadata.applicationId) setApplicationId(current => current || metadata.applicationId!);
-        }
+        const appName = metadata?.applicationName;
+        const appUsers = metadata?.users;
+        const appId = metadata?.applicationId;
+
+        setTitle(currentTitle => appName || currentTitle || getClipTitleFromName(picked.name));
+
+        if (appUsers?.length) setParticipants(current => current.length ? current : appUsers);
+        if (appId) setApplicationId(current => current || appId);
     }
 
     async function submit() {
