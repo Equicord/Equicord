@@ -43,7 +43,7 @@ const StandingConfig: Record<number, { label: string; hoverColor: string; Icon: 
 function StandingButton() {
     const [loaded, setLoaded] = React.useState(false);
 
-    React.useEffect(() => { requireSafetyHub().then(() => setLoaded(true)); }, []);
+    React.useEffect(() => { requireSafetyHub().then(() => setLoaded(true)).catch(() => { }); }, []);
 
     return loaded ? <AccountStandingButton /> : null;
 }
