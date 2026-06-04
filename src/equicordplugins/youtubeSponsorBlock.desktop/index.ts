@@ -441,7 +441,11 @@ function SponsorBlockOverlay({ iframe, visible, fakeFullscreen, setFakeFullscree
     );
 }
 
-function YoutubeSponsorBlockEmbed({ Component, props }: { Component: React.ComponentType<IframeProps>; props: IframeProps; }) {
+function YoutubeSponsorBlockEmbed({ Component, props, patchIframeProps }: {
+    Component: React.ComponentType<IframeProps>;
+    props: IframeProps;
+    patchIframeProps: (props: IframeProps) => IframeProps;
+}) {
     const [iframe, setIframe] = useState<HTMLIFrameElement | null>(null);
     const [overlayVisible, setOverlayVisible] = useState(true);
     const [fakeFullscreen, setFakeFullscreen] = useState(false);
@@ -488,7 +492,7 @@ function YoutubeSponsorBlockEmbed({ Component, props }: { Component: React.Compo
         }
     }, [fakeFullscreen]);
 
-    const patchedProps = plugin.patchIframeProps({
+    const patchedProps = patchIframeProps({
         ...props,
         onLoad: event => {
             props.onLoad?.(event);
@@ -526,7 +530,7 @@ function YoutubeSponsorBlockEmbed({ Component, props }: { Component: React.Compo
 
 const WrappedYoutubeSponsorBlockEmbed = ErrorBoundary.wrap(YoutubeSponsorBlockEmbed, { noop: true });
 
-const plugin = definePlugin({
+export default definePlugin({
     name: "YoutubeSponsorBlock",
     description: "Adds SponsorBlock skipping to YouTube embeds.",
     tags: ["Media", "Utility"],
@@ -584,8 +588,6 @@ const plugin = definePlugin({
             return React.createElement(Component, props);
         }
 
-        return React.createElement(WrappedYoutubeSponsorBlockEmbed, { Component, props });
+        return React.createElement(WrappedYoutubeSponsorBlockEmbed, { Component, props, patchIframeProps: this.patchIframeProps });
     }
 });
-
-export default plugin;
