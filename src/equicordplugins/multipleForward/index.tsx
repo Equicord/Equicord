@@ -150,7 +150,7 @@ async function forwardMessagesToChannels(messages: Message[], channelIds: string
                     },
                 },
             });
-            sleep(800);
+            await sleep(800);
         }
     }
 }
