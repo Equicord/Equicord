@@ -9,6 +9,7 @@ import { findGroupChildrenByChildId, NavContextMenuPatchCallback } from "@api/Co
 import { managedStyleRootNode } from "@api/Styles";
 import { Button } from "@components/Button";
 import { createAndAppendStyle } from "@utils/css";
+import { EquicordDevs } from "@utils/index";
 import { sleep } from "@utils/misc";
 import definePlugin from "@utils/types";
 import { Message, RenderModalProps } from "@vencord/discord-types";
@@ -296,7 +297,7 @@ const messageCtxPatch: NavContextMenuPatchCallback = (children, { message }: { m
 export default definePlugin({
     name: "MultipleForward",
     description: "Select multiple messages and forward them all at once to any channel or DM",
-    authors: [{ name: "windowsed", id: 906415095473655810n }],
+    authors: [EquicordDevs.windowsed],
     dependencies: ["ChatInputButtonAPI"],
     tags: ["Chat", "Utility"],
     contextMenus: {
