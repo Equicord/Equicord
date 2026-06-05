@@ -6,9 +6,13 @@
 
 import { addChatBarButton, ChatBarButton, removeChatBarButton } from "@api/ChatButtons";
 import { findGroupChildrenByChildId, NavContextMenuPatchCallback } from "@api/ContextMenu";
+import { managedStyleRootNode } from "@api/Styles";
+import { Button } from "@components/Button";
+import { createAndAppendStyle } from "@utils/css";
+import { sleep } from "@utils/misc";
 import definePlugin from "@utils/types";
 import { Message, RenderModalProps } from "@vencord/discord-types";
-import { ChannelStore, ConfirmModal, GuildChannelStore, GuildStore, Menu, Modal, NavigationRouter, openMediaModal, openModal, RestAPI, SelectedChannelStore, showToast, Toasts, useEffect, UserStore, useState } from "@webpack/common";
+import { ChannelStore, ConfirmModal, Menu, Modal, NavigationRouter, openMediaModal, openModal, RestAPI, SelectedChannelStore, showToast, Toasts, useEffect, UserStore, useState } from "@webpack/common";
 
 // --- Selection store ---
 
@@ -23,9 +27,7 @@ function notifyListeners() {
 
 function updateHighlightStyles() {
     if (!styleEl) {
-        styleEl = document.createElement("style");
-        styleEl.id = "multi-forward-highlight";
-        document.head.appendChild(styleEl);
+        styleEl = createAndAppendStyle("multi-forward-highlight", managedStyleRootNode);
     }
     if (selectedMessages.size === 0) {
         styleEl.textContent = "";
@@ -34,7 +36,7 @@ function updateHighlightStyles() {
     const selectors = [...selectedMessages.keys()]
         .map(id => `li[id$="-${id}"]`)
         .join(", ");
-    styleEl.textContent = `${selectors} { background: hsl(235, 85.6%, 64.7%, 0.2) !important; outline: 1px solid hsl(235, 85.6%, 64.7%, 0.5); border-radius: 4px; }`;
+    styleEl.textContent = `${selectors} { background: var(--brand-experiment-15a) !important; outline: 1px solid var(--brand-experiment-30a); border-radius: 4px; }`;
 }
 
 function isSelected(id: string) {
@@ -129,33 +131,6 @@ interface ChannelOption {
     subtext?: string;
 }
 
-function buildChannelOptions(): ChannelOption[] {
-    const opts: ChannelOption[] = [];
-
-    const dmChannels = ChannelStore.getSortedPrivateChannels?.() ?? [];
-    for (const ch of dmChannels) {
-        if (ch.type === 1) {
-            const recipientId = ch.recipients?.[0];
-            const user = recipientId ? UserStore.getUser(recipientId) : null;
-            opts.push({ label: user?.username ?? ch.name ?? ch.id, value: ch.id, subtext: "DM" });
-        } else if (ch.type === 3) {
-            opts.push({ label: ch.name || "Group DM", value: ch.id, subtext: "Group DM" });
-        }
-    }
-
-    for (const guild of Object.values(GuildStore.getGuilds())) {
-        const guildChannels = GuildChannelStore.getChannels(guild.id);
-        const rows = [...(guildChannels?.SELECTABLE ?? []), ...(guildChannels?.VOCAL ?? [])];
-        for (const { channel } of rows) {
-            if ([0, 5, 10, 11, 12].includes(channel.type)) {
-                opts.push({ label: `#${channel.name}`, value: channel.id, subtext: guild.name });
-            }
-        }
-    }
-
-    return opts;
-}
-
 // --- Forward logic ---
 
 async function forwardMessagesToChannels(messages: Message[], channelIds: string[]) {
@@ -170,11 +145,11 @@ async function forwardMessagesToChannels(messages: Message[], channelIds: string
                         type: 1,
                         message_id: msg.id,
                         channel_id: msg.channel_id,
-                        guild_id: (ChannelStore.getChannel(msg.channel_id) as any)?.guild_id,
+                        guild_id: ChannelStore.getChannel(msg.channel_id)?.guild_id,
                     },
                 },
             });
-            await new Promise(r => setTimeout(r, 800));
+            sleep(800);
         }
     }
 }
@@ -255,31 +230,25 @@ function QueueModal({ props }: { props: RenderModalProps; }) {
                             })()}
                         </div>
                     </div>
-                    <button
+                    <Button
+                        variant="link"
+                        size="iconOnly"
                         onClick={() => {
-                            const guildId = (ChannelStore.getChannel(msg.channel_id) as any)?.guild_id ?? "@me";
+                            const guildId = ChannelStore.getChannel(msg.channel_id)?.guild_id ?? "@me";
                             NavigationRouter.transitionTo(`/channels/${guildId}/${msg.channel_id}/${msg.id}`);
-                        }}
-                        style={{
-                            background: "transparent", border: "none",
-                            color: "var(--text-link)", cursor: "pointer",
-                            padding: "0 4px", flexShrink: 0, display: "flex", alignItems: "center",
                         }}
                         title="Jump to message"
                     >
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                             <path d="M10 6V8H5V19H16V14H18V20C18 20.5523 17.5523 21 17 21H4C3.44772 21 3 20.5523 3 20V7C3 6.44772 3.44772 6 4 6H10ZM21 3V11H19L18.9999 6.413L11.2071 14.2071L9.79289 12.7929L17.5849 5H13V3H21Z" />
                         </svg>
-                    </button>
-                    <button
+                    </Button>
+                    <Button
+                        variant="dangerSecondary"
+                        size="iconOnly"
                         onClick={() => remove(msg.id)}
-                        style={{
-                            background: "transparent", border: "none",
-                            color: "var(--text-danger)", cursor: "pointer",
-                            fontSize: 20, lineHeight: 1, padding: "0 4px", flexShrink: 0,
-                        }}
                         title="Remove"
-                    >×</button>
+                    >×</Button>
                 </div>
             ))}
         </Modal>
