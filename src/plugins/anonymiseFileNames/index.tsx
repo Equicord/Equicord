@@ -172,8 +172,7 @@ export default definePlugin({
                         .replace(/ss/g, now.getSeconds().toString().padStart(2, "0"))
                         .replace(/SSS/g, now.getMilliseconds().toString().padStart(3, "0"));
 
-                    const finalName = format ? addSpoilerPrefix(format + ext) : addSpoilerPrefix(Date.now().toString() + ext);
-                    return addSpoilerPrefix(finalName);
+                    return format ? addSpoilerPrefix(format + ext) : addSpoilerPrefix(Date.now().toString() + ext);
             }
         })();
 
