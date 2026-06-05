@@ -70,7 +70,7 @@ const settings = definePluginSettings({
         default: "image"
     },
     dateFormat: {
-        description: "Date format",
+        description: "Date format (YYYY, MM, DD, HH, mm, ss, SSS are supported)",
         type: OptionType.STRING,
         default: "YYYY-MM-DD_HH-mm-ss-SSS"
     }
