@@ -31,8 +31,8 @@ export default definePlugin({
                     // Adds an optional persistent boolean as well as a callback and error handler to the
                     // audio player which is called after the audio finishes playing and when an error occurs.
                     // Also processes the audio before playing to apply override functions set by plugins.
-                    match: /(?<=constructor\((\i,\i,\i,\i)).{0,200}outputChannel=\i/,
-                    replace: ",options){$self.buildPlayer(this,$1,options);"
+                    match: /(?<=constructor\(([^)]+))\)[^}]+/,
+                    replace: ",options){$self.buildPlayer(this,options,$1);"
                 },
                 {
                     // Prevents an error from the source being cleared during destroyAudio().
@@ -46,8 +46,8 @@ export default definePlugin({
                 },
                 {
                     // Makes use of the error handler if an error occurs during playback.
-                    match: /(onerror=\()(\)=>)(\i\(Error\("[^"]+"\)\)),/,
-                    replace: "$1error$2{this.onError?.(error);$3;},"
+                    match: /(onerror=\()(\)=>{)(?=let)/,
+                    replace: "$1error$2this.onError?.(error);"
                 },
                 {
                     // Makes use of the onEnded callback and persists flag once the audio ends.
@@ -144,11 +144,11 @@ export default definePlugin({
 
     buildPlayer(
         player: AudioPlayerInternal,
+        options: AudioPlayerOptions = {},
         audio: string,
         unused: any,
         internalVolume: number,
-        channel: string,
-        options: AudioPlayerOptions = {}
+        channel: string
     ) {
         player.preprocessDataOriginal = {
             audio: audio,
