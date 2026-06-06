@@ -6,9 +6,7 @@
 
 import { addChatBarButton, ChatBarButton, removeChatBarButton } from "@api/ChatButtons";
 import { findGroupChildrenByChildId, NavContextMenuPatchCallback } from "@api/ContextMenu";
-import { managedStyleRootNode } from "@api/Styles";
 import { Button } from "@components/Button";
-import { createAndAppendStyle } from "@utils/css";
 import { EquicordDevs } from "@utils/index";
 import { sleep } from "@utils/misc";
 import definePlugin from "@utils/types";
@@ -28,7 +26,9 @@ function notifyListeners() {
 
 function updateHighlightStyles() {
     if (!styleEl) {
-        styleEl = createAndAppendStyle("multi-forward-highlight", managedStyleRootNode);
+        styleEl = document.createElement("style");
+        styleEl.id = "multi-forward-highlight";
+        document.head.appendChild(styleEl);
     }
     if (selectedMessages.size === 0) {
         styleEl.textContent = "";
@@ -37,9 +37,8 @@ function updateHighlightStyles() {
     const selectors = [...selectedMessages.keys()]
         .map(id => `li[id$="-${id}"]`)
         .join(", ");
-    styleEl.textContent = `${selectors} { background: var(--brand-experiment-15a) !important; outline: 1px solid var(--brand-experiment-30a); border-radius: 4px; }`;
+    styleEl.textContent = `${selectors} { background: hsl(235, 85.6%, 64.7%, 0.2) !important; outline: 1px solid hsl(235, 85.6%, 64.7%, 0.5); border-radius: 4px; }`;
 }
-
 function isSelected(id: string) {
     return selectedMessages.has(id);
 }
