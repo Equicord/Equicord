@@ -6,10 +6,12 @@
 
 import "./styles.css";
 
+import { updateMessage } from "@api/MessageUpdater";
 import { EquicordDevs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
 import definePlugin from "@utils/types";
-import { ChannelStore, FluxDispatcher, MessageStore, UserStore } from "@webpack/common";
+import { ChannelStore, UserStore } from "@webpack/common";
+import type { ReactNode } from "react";
 
 import { getIgnoredChannels, getIgnoredGuilds, getIgnoredUsers, settings } from "./settings";
 import { MessageWithContent } from "./types";
@@ -28,7 +30,6 @@ function shouldTranslate(message: MessageWithContent): boolean {
     }
 
     if (settings.store.skipBotMessages && message.author?.bot) return false;
-
     if (message.author && getIgnoredUsers().has(message.author.id)) return false;
     if (message.channel_id && getIgnoredChannels().has(message.channel_id)) return false;
 
@@ -39,13 +40,7 @@ function shouldTranslate(message: MessageWithContent): boolean {
 }
 
 function triggerReRender(message: MessageWithContent) {
-    const current = MessageStore.getMessage(message.channel_id, message.id);
-    if (!current) return;
-
-    FluxDispatcher.dispatch({
-        type: "MESSAGE_UPDATE",
-        message: current,
-    });
+    updateMessage(message.channel_id, message.id);
 }
 
 export default definePlugin({
@@ -53,6 +48,7 @@ export default definePlugin({
     description: "Auto translate messages to your language with caching, per-channel toggles, and more options.",
     tags: ["Chat", "Utility"],
     authors: [EquicordDevs.creations],
+    dependencies: ["MessageUpdaterAPI"],
     settings,
 
     patches: [
@@ -60,12 +56,12 @@ export default definePlugin({
             find: '.CUSTOM_GIFT?""',
             replacement: [
                 {
-                    match: /message:(\i),message:\{id:\i\}.{0,200}renderContentOnly:\i\}=\i;/,
-                    replace: "$&$1=$self.transformMessage($1);",
+                    match: /(message:(\i),message:\{id:\i\},channel:\i,channel:\{id:\i\}.{0,140}renderContentOnly:\i,hideInviteEmbedBanner:\i\}=\i;)/,
+                    replace: "$1$2=$self.transformMessage($2);",
                 },
                 {
-                    match: /childrenMessageContent:(\i),/g,
-                    replace: "childrenMessageContent:$self.wrapContent($1,arguments[0].message.id),",
+                    match: /childrenMessageContent:(\i),onMouseMove:/g,
+                    replace: "childrenMessageContent:$self.wrapContent($1,arguments[0].message.id),onMouseMove:",
                 },
             ],
         },
@@ -84,6 +80,7 @@ export default definePlugin({
                 translatedMessages.delete(message.id);
                 return message;
             }
+
             translatedMessages.set(message.id, cached.sourceLang);
             return Object.assign(Object.create(Object.getPrototypeOf(message)), message, {
                 content: cached.translated,
@@ -100,7 +97,7 @@ export default definePlugin({
         return message;
     },
 
-    wrapContent(content: any, messageId: string) {
+    wrapContent(content: ReactNode, messageId: string): ReactNode {
         const sourceLang = translatedMessages.get(messageId);
         if (!sourceLang) return content;
         return (

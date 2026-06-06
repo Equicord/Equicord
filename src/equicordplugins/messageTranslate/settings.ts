@@ -14,9 +14,10 @@ export const settings = definePluginSettings({
         default: "en",
     },
     confidenceRequirement: {
-        type: OptionType.NUMBER,
+        type: OptionType.SLIDER,
         description: "Minimum confidence (0 to 1) required to show a translation.",
         default: 0.8,
+        markers: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1],
     },
     autoTranslate: {
         type: OptionType.BOOLEAN,
