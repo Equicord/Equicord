@@ -35,7 +35,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgb(0 0 0 / 50%);
     border-radius: 8px;
     color: #fff;
     font-weight: 600;
@@ -47,7 +47,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgb(0 0 0 / 50%);
     border-radius: 8px;
     color: #f66;
     font-weight: 600;
