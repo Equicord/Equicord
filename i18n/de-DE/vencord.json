@@ -457,16 +457,43 @@
     "decor": {
         "accessFromProfiles": "Sie können auch über die Seite {link} auf Dekordekorationen zugreifen.",
         "agreedToGuidelines": "Den Richtlinien zugestimmt",
+        "alreadyPending": "Du hast bereits eine Dekoration zur Überprüfung eingereicht",
+        "apply": "Bewerben",
         "baseUrl": "URL für die Decor-API",
+        "browse": "Durchsuchen",
         "changeDecoration": "Dekoration ändern",
+        "chooseAFile": "Datei auswählen",
+        "confirmLogOut": "Möchten Sie sich wirklich bei Decor abmelden?",
+        "continue": "Weiter",
+        "copyHash": "Hash der Dekoration kopieren",
+        "copyPresetId": "Voreinstellungs-ID kopieren",
+        "createDecoration": "Dekoration erstellen",
+        "createdBy": "Erstellt von",
+        "decorDiscordServer": "Der Discord-Server von Decor",
         "delete": "Löschen",
         "deleteConfirm": "Bist du sicher, dass du [Name] löschen willst?",
         "deleteDecoration": "Dekoration löschen",
+        "deleteInstructions": "Du kannst deine eigenen Dekorationen löschen, indem du mit der rechten Maustaste darauf klickst.",
         "description": "Erstellen und verwenden Sie Ihre eigenen benutzerdefinierten Avatar-Dekorationen oder wählen Sie Ihren Favoriten aus den Voreinstellungen aus.",
+        "discordServer": "Discord Server",
+        "discordServerNotice": "Um über den Stand der Bewertung deiner Dekoration auf dem Laufenden zu bleiben, melde dich unter {link} an und aktiviere Direktnachrichten.",
+        "discordTooltip": "Tritt dem Discord-Server von Decor bei, um Benachrichtigungen über die Bewertung deiner Dekoration sowie über die Veröffentlichung neuer Voreinstellungen zu erhalten",
         "enableAndRestart": "Aktivieren Sie Dekor und starten Sie Ihren Client neu, um die Dekoration Ihres Avatars zu ändern.",
+        "file": "Datei",
+        "fileNotice": "Die Datei sollte im APNG- oder PNG-Format vorliegen.",
+        "guidelinesAgreementNotice": "Mit dem Einreichen einer Dekoration erklärst du dich mit den {Richtlinien} einverstanden. Wenn du diese Richtlinien nicht liest, kann dies dazu führen, dass dein Konto gesperrt wird und du in Zukunft keine Dekorationen mehr erstellen kannst.",
+        "guidelinesNotice": "Vergewissere dich vor dem Einreichen, dass deine Dekoration nicht gegen die {Richtlinien} verstößt.",
+        "holdOn": "Einen Moment bitte",
+        "logOut": "Abmelden",
+        "name": "Name",
+        "nameNotice": "Dieser Name wird verwendet, wenn von dieser Auszeichnung die Rede ist.",
         "options": "Dekorationsoptionen",
+        "pendingReview": "Zur Prüfung",
+        "presetPart": "Teil der {name} Voreinstellung",
         "profilesLink": "Profile",
         "removeDecoration": "Dekoration entfernen",
+        "submitForReview": "Zur Überprüfung einreichen",
+        "theGuidelines": "die Richtlinien",
         "title": "Dekor",
         "yourDecorations": "Deine Dekorationen"
     },
@@ -515,6 +542,7 @@
     },
     "expressionCloner": {
         "cloneEmoji": "Klon-Emoji",
+        "cloneName": "{name} klonen",
         "cloneSticker": "Klon-Aufkleber",
         "cloneTo": "Klonen nach {guild}",
         "clonedSuccess": "{name} erfolgreich nach {guild} geklont!",
@@ -542,6 +570,7 @@
             "body3": "Sind Sie sicher, dass Sie diese Nachricht senden möchten? Ihre FakeNitro-Artikel werden nur als Link angezeigt.",
             "disableNotice": "Sie können diesen Hinweis in den Plugin-Einstellungen deaktivieren."
         },
+        "ok": "OK",
         "sendAnyway": "Trotzdem senden",
         "settings": {
             "disableEmbedPermissionCheck": "Ob die Einbettungsberechtigungsprüfung beim Senden gefälschter Emojis und Aufkleber deaktiviert werden soll",
@@ -1031,6 +1060,7 @@
             "separatedDiffs": "Separate Hinzufügung und Entfernung in Diffs für eine besser lesbare Unterscheidung",
             "showEditDiffs": "Zeigen Sie visuelle Unterschiede zwischen bearbeiteten Nachrichtenversionen an"
         },
+        "showDiff": "Unterschiede anzeigen",
         "toggleDeletedHighlight": "Gelöschte Hervorhebung umschalten"
     },
     "messagePopoverAPI": {
@@ -1450,6 +1480,7 @@
         "nevermind": "Vergiss es",
         "newReviews": "Sie haben neue Bewertungen auf Ihrem Profil!",
         "noBlockedUsers": "Keine blockierten Benutzer.",
+        "noReviewsYet": "Noch keine Bewertungen",
         "notLoggedIn": "Sie sind nicht bei ReviewDB angemeldet!",
         "ok": "Ok",
         "readMore": "Mehr lesen",
@@ -1475,6 +1506,7 @@
         },
         "system": "System",
         "unblockUser": "Benutzer entsperren",
+        "userOptedOut": "Der Nutzer hat sich abgemeldet",
         "userReviews": "Nutzerbewertungen",
         "viewReviews": "Bewertungen anzeigen"
     },
@@ -2154,6 +2186,7 @@
         "settings": {
             "clickMethodDescription": "Ändern Sie die Schaltfläche, um den Rohinhalt/die Rohdaten einer beliebigen Nachricht anzuzeigen.",
             "leftClick": "Klicken Sie mit der linken Maustaste, um den Rohinhalt anzuzeigen.",
+            "messageContextMenu": "Im Kontextmenü der Nachricht anzeigen",
             "rightClick": "Klicken Sie mit der rechten Maustaste, um den Rohinhalt anzuzeigen."
         },
         "viewRaw": "Roh anzeigen",
