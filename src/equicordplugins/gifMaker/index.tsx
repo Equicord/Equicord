@@ -177,6 +177,7 @@ function GifMakerModal({ url, isVideo, sourceWidth, sourceHeight, ...props }: Re
     const [error, setError] = useState<string | null>(null);
     const previewRef = useRef<HTMLImageElement>(null);
     const optionsRef = useRef(options);
+    const generationRef = useRef(0);
     optionsRef.current = options;
 
     const patch = (partial: Partial<GifMakerOptions>) => {
@@ -203,10 +204,15 @@ function GifMakerModal({ url, isVideo, sourceWidth, sourceHeight, ...props }: Re
 
     useEffect(() => {
         const timer = setTimeout(() => {
+            const gen = ++generationRef.current;
             setGenerating(true);
 
             const { current } = optionsRef;
             createGif(url, isVideo, current).then(blob => {
+                if (gen !== generationRef.current) {
+                    URL.revokeObjectURL(URL.createObjectURL(blob));
+                    return;
+                }
                 setError(null);
                 setGifBlob(blob);
                 setPreviewUrl(prev => {
@@ -215,6 +221,7 @@ function GifMakerModal({ url, isVideo, sourceWidth, sourceHeight, ...props }: Re
                 });
                 setGenerating(false);
             }).catch((err: unknown) => {
+                if (gen !== generationRef.current) return;
                 logger.error("GIF generation failed", err);
                 setError(err instanceof Error ? err.message : String(err));
                 setGenerating(false);
@@ -223,12 +230,6 @@ function GifMakerModal({ url, isVideo, sourceWidth, sourceHeight, ...props }: Re
 
         return () => clearTimeout(timer);
     }, [JSON.stringify(options.effectTypes), options.width, options.height, options.frameDelay, options.grayscale, options.captionMode, options.captionText, options.captionSize, options.bubbleTipX, options.bubbleTipY, options.bubbleTipBase]);
-
-    useEffect(() => {
-        return () => {
-            if (previewUrl) URL.revokeObjectURL(previewUrl);
-        };
-    }, [previewUrl]);
 
     const handlePreviewClick = (e: React.MouseEvent<HTMLImageElement>) => {
         if (options.captionMode !== "speechbubble") return;
