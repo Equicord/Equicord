@@ -20,7 +20,7 @@ import { ApplicationCommandInputType, ApplicationCommandOptionType, findOption, 
 import { definePluginSettings, Settings } from "@api/Settings";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { reverseExtensionMap } from "@equicordplugins/fixFileExtensions";
-import { Devs } from "@utils/constants";
+import { Devs, EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 import { CloudUpload } from "@vencord/discord-types";
 import { findByCodeLazy } from "@webpack";
@@ -88,7 +88,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "AnonymiseFileNames",
-    authors: [Devs.fawn],
+    authors: [Devs.fawn, EquicordDevs.SankyuChoko],
     description: "Anonymise uploaded file names",
     dependencies: ["CommandsAPI"],
     tags: ["Privacy", "Utility"],

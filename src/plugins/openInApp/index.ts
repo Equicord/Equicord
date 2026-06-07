@@ -17,7 +17,7 @@
 */
 
 import { definePluginSettings } from "@api/Settings";
-import { Devs } from "@utils/constants";
+import { Devs, EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType, PluginNative, SettingsDefinition } from "@utils/types";
 import { showToast, Toasts } from "@webpack/common";
 import type { MouseEvent } from "react";
@@ -90,7 +90,7 @@ export default definePlugin({
     name: "OpenInApp",
     description: "Open links in their respective apps instead of your browser",
     tags: ["Utility"],
-    authors: [Devs.Ven, Devs.surgedevs],
+    authors: [Devs.Ven, Devs.surgedevs, EquicordDevs.SankyuChoko],
     settings: pluginSettings,
 
     patches: [
