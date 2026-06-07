@@ -90,17 +90,57 @@ const settings = definePluginSettings({
 const GIFMAKER_ID = "vc-gifmaker";
 
 const MEDIA_TYPES = ["image/png", "image/jpeg", "image/jpg", "image/webp", "image/gif", "video/mp4", "video/webm", "video/quicktime"];
+const MEDIA_EXT_RE = /\.(png|jpe?g|webp|gif|mp4|webm|mov)([?#]|$)/i;
+const VIDEO_EXT_RE = /\.(mp4|webm|mov)([?#]|$)/i;
 
+// Bunch of strategies for it to properly work. Took a lot of time to figure out
 function getMediaInfo(props: Record<string, unknown>): { url: string; isVideo: boolean; sourceWidth?: number; sourceHeight?: number; } | null {
-    const attachment: Record<string, any> | undefined = (props.attachment as any) ?? (props.message as any)?.attachments?.find((a: any) => MEDIA_TYPES.some(t => a.content_type?.startsWith(t)));
-    const url = props.itemHref ?? props.itemSrc ?? props.src ?? attachment?.proxy_url ?? attachment?.url;
-    if (!url) return null;
+    const msg = props.message as Record<string, any> | undefined;
 
-    const isVideo = attachment
-        ? attachment.content_type?.startsWith("video/")
-        : /\.(mp4|webm|mov)([?#]|$)/i.test(url);
+    // 1. Direct attachment prop (right-click on file upload)
+    const directAttachment = props.attachment as Record<string, any> | undefined;
+    if (directAttachment?.proxy_url && MEDIA_TYPES.some(t => directAttachment.content_type?.startsWith(t))) {
+        return {
+            url: directAttachment.proxy_url ?? directAttachment.url,
+            isVideo: directAttachment.content_type?.startsWith("video/"),
+            sourceWidth: directAttachment.width,
+            sourceHeight: directAttachment.height
+        };
+    }
 
-    return { url, isVideo, sourceWidth: attachment?.width, sourceHeight: attachment?.height };
+    // 2. Message attachments (find by content type)
+    const msgAttachment = msg?.attachments?.find((a: any) => MEDIA_TYPES.some(t => a.content_type?.startsWith(t)));
+    if (msgAttachment?.proxy_url) {
+        return {
+            url: msgAttachment.proxy_url ?? msgAttachment.url,
+            isVideo: msgAttachment.content_type?.startsWith("video/"),
+            sourceWidth: msgAttachment.width,
+            sourceHeight: msgAttachment.height
+        };
+    }
+
+    // 3. Embeds (Tenor, Giphy)
+    if (msg?.embeds) {
+        for (const embed of msg.embeds) {
+            const v = embed?.video;
+            if (v?.proxyURL || v?.url)
+                return { url: v.proxyURL ?? v.url, isVideo: true, sourceWidth: v.width, sourceHeight: v.height };
+            const i = embed?.image ?? embed?.thumbnail;
+            if (i?.proxyURL || i?.url)
+                return { url: i.proxyURL ?? i.url, isVideo: false, sourceWidth: i.width, sourceHeight: i.height };
+        }
+    }
+
+    // 4. Link/image props (itemHref from links, src from image elements)
+    const linkUrl = (props.itemHref ?? props.itemSrc ?? props.src) as string | undefined;
+    if (linkUrl && MEDIA_EXT_RE.test(linkUrl)) {
+        return {
+            url: linkUrl,
+            isVideo: VIDEO_EXT_RE.test(linkUrl)
+        };
+    }
+
+    return null;
 }
 
 const messageContextMenuPatch: NavContextMenuPatchCallback = (children, props) => {
