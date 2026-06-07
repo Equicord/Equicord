@@ -284,7 +284,7 @@ function GifMakerModal({ url, isVideo, sourceWidth, sourceHeight, ...props }: Re
 
     const handleExport = () => {
         if (!gifBlob) return;
-        saveFile(gifBlob as File);
+        saveFile(new File([gifBlob], "export.gif", { type: "image/gif" }));
     };
 
     const handleSend = () => {

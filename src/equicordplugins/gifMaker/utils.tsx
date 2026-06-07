@@ -213,10 +213,11 @@ async function createGifFromVideo(url: string, options: GifMakerOptions): Promis
     try {
         const { duration } = video;
         const enabledEffects = EFFECTS.filter(e => options.effectTypes.includes(e.type));
-        const frameCount = Math.min(
+        const frameCount = Math.max(1, Math.min(
             Math.floor((duration * 1000) / options.frameDelay),
             MAX_VIDEO_FRAMES
-        );
+        ));
+
         const interval = duration / frameCount;
 
         return await encodeFrames(options.width, options.height, options, enabledEffects, frameCount, async (ctx, i) => {
