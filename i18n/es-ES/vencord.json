@@ -1610,7 +1610,7 @@
         },
         "frameless": {
             "description": "Retire el marco de la ventana original para una apariencia más limpia. Aún puedes mover la ventana arrastrando el área de la barra de título.",
-            "title": "Desactivar el marco de la ventana"
+            "title": "Desactivar todos los marcos de ventana"
         },
         "hint": "Sugerencia: ¡Puedes cambiar la posición de esta sección de configuración en la <0>configuración del plugin de Configuración</0>!",
         "macosVibrancyStyle": {
@@ -1933,8 +1933,8 @@
         "scope.othersMessages": "Aplicar a los mensajes de otros (solo visible para usted)",
         "testRules": "Reglas de prueba",
         "typeMessage": "Escribe un mensaje",
-        "usingRegex": "Usando expresiones regulares",
-        "usingString": "Usando cadena"
+        "usingRegex": "Sustituciones con expresiones regulares",
+        "usingString": "Sustituciones sencillas"
     },
     "themeAttributes": {
         "description": "Agrega atributos de datos a varios elementos con fines temáticos."
