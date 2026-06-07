@@ -1,0 +1,7 @@
+/* with emojis on + extended menu at the same time, the emotes just
+   sort to the middle, this this puts the emojis back on the left */
+
+[class*='popover_'] {
+  >span:has(>[class*='hoverBarButton_'] >[class*='icon_'] >.emoji) {order: -1;}
+  >[class*='separator_'] {display: none;} 
+}

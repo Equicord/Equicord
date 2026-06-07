@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import "./style.css";
+
 import { definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
@@ -19,6 +21,12 @@ const settings = definePluginSettings({
         type: OptionType.BOOLEAN,
         description: "Remove requirement to hold shift for pinning a message.",
         default: true,
+    },
+    noQuickReacts: {
+        default: false,
+        restartNeeded: true,
+        type: OptionType.BOOLEAN,
+        description: "Hide quick reacts. By default, showing the full menu hides quick react buttons.",
     },
 });
 
@@ -36,6 +44,11 @@ export default definePlugin({
                 {
                     match: /isExpanded:\i&&(.+?),/,
                     replace: "isExpanded:$1,"
+                },
+                {
+                    predicate: () => !settings.store.noQuickReacts,
+                    match: /\i(\?null:\(0,\i\.jsxs\)\(\i\.Fragment,\{children:\[\(0,\i\.jsx\)\(\i,)/,
+                    replace: "false$1"
                 },
                 {
                     predicate: () => settings.store.noShiftDelete,
