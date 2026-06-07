@@ -244,14 +244,7 @@ function GifMakerModal({ url, isVideo, sourceWidth, sourceHeight, ...props }: Re
 
     const handleExport = () => {
         if (!gifBlob) return;
-
-        const objUrl = URL.createObjectURL(gifBlob);
-        const link = document.createElement("a");
-        link.href = objUrl;
-        link.download = "export.gif";
-        link.click();
-        link.remove();
-        URL.revokeObjectURL(objUrl);
+        saveFile(gifBlob, "export.gif");
     };
 
     const handleSend = () => {
