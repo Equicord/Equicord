@@ -94,8 +94,8 @@ export default definePlugin({
 
             const today = moment().format("YYYY-MM-DD");
             const cached = useStreaksStore.getState().streaks[recipientId];
-            const myFlag = cached && cached.today_date === today && (cached.user_a_id === me ? cached.user_a_today : cached.user_b_today);
-            const theirFlag = cached && cached.today_date === today && (cached.user_a_id === me ? cached.user_b_today : cached.user_a_today);
+            const myFlag = cached && cached.today_date != null && cached.today_date === today && (cached.user_a_id === me ? cached.user_a_today : cached.user_b_today);
+            const theirFlag = cached && cached.today_date != null && cached.today_date === today && (cached.user_a_id === me ? cached.user_b_today : cached.user_a_today);
 
             if (message.author.id === me) {
                 if (!myFlag) {

@@ -65,6 +65,11 @@ const UrlReplacementRules: Record<string, URLReplacementRule> = {
         match: /^https:\/\/vrchat.com\/home\/(user|avatar|world|group)\/(.+)$/,
         replace: (_, type, id) => `vrcx://${type}/${id}`,
         description: "Open VRChat links in the VRCX app"
+    },
+    telegram: {
+        match: /^https:\/\/t\.me\/([a-zA-Z0-9_]+)$/,
+        replace: (_, username) => `tg://resolve?domain=${username}`,
+        description: "Open Telegram links in the Telegram app"
     }
 };
 

@@ -121,11 +121,27 @@ async function readStampedVideoFile(token: string, name: string, type: string) {
     }
 }
 
-export async function pickClipFile() {
+export interface ParsedClipMetadata {
+    id?: string;
+    applicationId?: string;
+    applicationName?: string;
+    users?: string[];
+    version?: number;
+}
+
+export async function pickClipFile(parseFileMetadata: boolean) {
     const picked = await Native.chooseVideoFile();
     if (!picked) return null;
 
-    return readStampedVideoFile(picked.token, picked.name, picked.type);
+    let metadata: ParsedClipMetadata | null = null;
+    if (parseFileMetadata) {
+        const result = await Native.parseClipFileMetadata(picked.token);
+        metadata = result?.[0] ?? null;
+    }
+
+    const file = await readStampedVideoFile(picked.token, picked.name, picked.type);
+
+    return { file, metadata };
 }
 
 function isCompatibleClipFile(file: File) {

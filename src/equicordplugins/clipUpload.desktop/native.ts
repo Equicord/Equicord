@@ -16,6 +16,14 @@ interface TempEntry {
     tmpPath: string;
 }
 
+interface RawClipAttachment {
+    id?: string;
+    applicationId?: string;
+    applicationName?: string;
+    users?: string[];
+    version?: number;
+}
+
 const pendingTokens = new Map<string, string>();
 const tempEntries = new Map<string, TempEntry>();
 const CLIP_UPLOAD_DIR = join(DATA_DIR, "clipUpload");
@@ -25,8 +33,36 @@ const MIME_TYPES: Record<string, string> = {
     ".m4v": "video/mp4",
 };
 
+const CLIP_FOOTER = Buffer.from([
+    0x75, 0x75, 0x69, 0x64,
+    0xA1, 0xC8, 0x52, 0x99, 0x33, 0x46, 0x4D, 0xB8, 0x88, 0xF0, 0x83, 0xF5, 0x7A, 0x75, 0xA5, 0xEF,
+]);
+const CLIP_FOOTER_SIZE = CLIP_FOOTER.length;
+
 function getMimeType(filePath: string): string {
     return MIME_TYPES[extname(filePath).toLowerCase()] ?? "application/octet-stream";
+}
+
+function stripClipFooter(data: Buffer): Buffer {
+    const idx = data.indexOf(CLIP_FOOTER);
+    return idx === -1 ? data : data.subarray(0, idx);
+}
+
+async function parseClipMetadata(filePath: string): Promise<RawClipAttachment[] | null> {
+    try {
+        const buf = await readFile(filePath);
+        if (buf.length <= CLIP_FOOTER_SIZE) return null;
+
+        const footerIdx = buf.indexOf(CLIP_FOOTER);
+        if (footerIdx === -1) return null;
+
+        const jsonStr = buf.subarray(footerIdx + CLIP_FOOTER_SIZE).toString("utf-8");
+        const parsed = JSON.parse(jsonStr);
+        if (parsed && typeof parsed === "object") return Array.isArray(parsed) ? parsed : [parsed];
+        return null;
+    } catch {
+        return null;
+    }
 }
 
 export async function chooseVideoFile(_: IpcMainInvokeEvent): Promise<{ token: string; name: string; type: string; } | null> {
@@ -63,7 +99,7 @@ export async function createTempVideoFile(_: IpcMainInvokeEvent, token: string):
         if (!ensureSafePath(tmpDir, basename(originalPath))) return null;
 
         await mkdir(tmpDir, { recursive: true });
-        await writeFile(tmpPath, await readFile(originalPath));
+        await writeFile(tmpPath, stripClipFooter(await readFile(originalPath)));
 
         const tmpToken = randomUUID();
         tempEntries.set(tmpToken, { tmpDir, tmpPath });
@@ -96,4 +132,11 @@ export async function deleteTempVideoFile(_: IpcMainInvokeEvent, token: string):
     try {
         await rm(entry.tmpDir, { force: true, recursive: true });
     } catch { }
+}
+
+export async function parseClipFileMetadata(_: IpcMainInvokeEvent, token: string): Promise<RawClipAttachment[] | null> {
+    const originalPath = pendingTokens.get(token);
+    if (!originalPath) return null;
+
+    return parseClipMetadata(originalPath);
 }
