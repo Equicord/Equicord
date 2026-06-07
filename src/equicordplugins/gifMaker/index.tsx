@@ -38,11 +38,15 @@ const settings = definePluginSettings({
         hidden: true,
         description: ""
     },
-    lastFrameDelay: {
+    lastFps: {
         type: OptionType.NUMBER,
-        default: DEFAULT_OPTIONS.frameDelay,
-        hidden: true,
-        description: ""
+        default: DEFAULT_OPTIONS.fps,
+        description: "Frames per second"
+    },
+    lastMaxDuration: {
+        type: OptionType.NUMBER,
+        default: DEFAULT_OPTIONS.maxDuration,
+        description: "Max GIF duration in seconds"
     },
     lastEffectTypes: {
         type: OptionType.STRING,
@@ -199,7 +203,8 @@ function GifMakerModal({ url, isVideo, sourceWidth, sourceHeight, ...props }: Re
         const [width, height] = getInitialSize(sourceWidth, sourceHeight, settings.store.lastWidth, settings.store.lastHeight);
         return {
             width: width, height: height,
-            frameDelay: settings.store.lastFrameDelay,
+            fps: settings.store.lastFps,
+            maxDuration: settings.store.lastMaxDuration,
             effectTypes: JSON.parse(settings.store.lastEffectTypes as string || "[]"),
             grayscale: settings.store.lastGrayscale,
             captionMode: settings.store.lastCaptionMode as GifMakerOptions["captionMode"],
@@ -225,7 +230,8 @@ function GifMakerModal({ url, isVideo, sourceWidth, sourceHeight, ...props }: Re
             const next = { ...prev, ...partial };
             settings.store.lastWidth = next.width;
             settings.store.lastHeight = next.height;
-            settings.store.lastFrameDelay = next.frameDelay;
+            settings.store.lastFps = next.fps;
+            settings.store.lastMaxDuration = next.maxDuration;
             settings.store.lastEffectTypes = JSON.stringify(next.effectTypes);
             settings.store.lastGrayscale = next.grayscale;
             settings.store.lastCaptionMode = next.captionMode;
@@ -269,7 +275,7 @@ function GifMakerModal({ url, isVideo, sourceWidth, sourceHeight, ...props }: Re
         }, 300);
 
         return () => clearTimeout(timer);
-    }, [JSON.stringify(options.effectTypes), options.width, options.height, options.frameDelay, options.grayscale, options.captionMode, options.captionText, options.captionSize, options.bubbleTipX, options.bubbleTipY, options.bubbleTipBase]);
+    }, [JSON.stringify(options.effectTypes), options.width, options.height, options.fps, options.maxDuration, options.grayscale, options.captionMode, options.captionText, options.captionSize, options.bubbleTipX, options.bubbleTipY, options.bubbleTipBase]);
 
     const handlePreviewClick = (e: React.MouseEvent<HTMLImageElement>) => {
         if (options.captionMode !== "speechbubble") return;
@@ -426,18 +432,33 @@ function GifMakerModal({ url, isVideo, sourceWidth, sourceHeight, ...props }: Re
                         ))}
                     </div>
 
-                    <div className={cl("field")}>
-                        <label className={cl("label")}>Delay (ms)</label>
-                        <input
-                            type="number"
-                            min={20}
-                            max={1000}
-                            step={10}
-                            value={options.frameDelay}
-                            onChange={e => patch({ frameDelay: Number(e.target.value) })}
-                            onBlur={e => patch({ frameDelay: clamp(Number(e.target.value), 20, 1000, 20) })}
-                            className={cl("input")}
-                        />
+                    <div className={cl("dims-row")}>
+                        <div className={cl("field")}>
+                            <label className={cl("label")}>FPS</label>
+                            <input
+                                type="number"
+                                min={1}
+                                max={60}
+                                step={1}
+                                value={options.fps}
+                                onChange={e => patch({ fps: Number(e.target.value) })}
+                                onBlur={e => patch({ fps: clamp(Number(e.target.value), 1, 60, 10) })}
+                                className={cl("input")}
+                            />
+                        </div>
+                        <div className={cl("field")}>
+                            <label className={cl("label")}>Duration (s)</label>
+                            <input
+                                type="number"
+                                min={1}
+                                max={10}
+                                step={0.5}
+                                value={options.maxDuration}
+                                onChange={e => patch({ maxDuration: Number(e.target.value) })}
+                                onBlur={e => patch({ maxDuration: clamp(Number(e.target.value), 1, 10, 3) })}
+                                className={cl("input")}
+                            />
+                        </div>
                     </div>
 
                     <div className={cl("section-heading")}>Dimensions</div>

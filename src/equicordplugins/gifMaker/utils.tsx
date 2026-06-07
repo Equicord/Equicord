@@ -184,7 +184,7 @@ async function encodeFrames(
 
         const index = applyPalette(data, palette!);
         gif.writeFrame(index, width, canvas.height, {
-            delay: options.frameDelay,
+            delay: Math.round(1000 / options.fps),
             palette: i === 0 ? palette : undefined,
         });
     }
@@ -214,7 +214,8 @@ async function createGifFromVideo(url: string, options: GifMakerOptions): Promis
         const { duration } = video;
         const enabledEffects = EFFECTS.filter(e => options.effectTypes.includes(e.type));
         const frameCount = Math.max(1, Math.min(
-            Math.floor((duration * 1000) / options.frameDelay),
+            options.fps * options.maxDuration,
+            Math.floor(duration * options.fps),
             MAX_VIDEO_FRAMES
         ));
 

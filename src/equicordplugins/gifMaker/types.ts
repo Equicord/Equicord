@@ -25,7 +25,8 @@ export interface EffectDefinition {
 export interface GifMakerOptions {
     width: number;
     height: number;
-    frameDelay: number;
+    fps: number;
+    maxDuration: number;
     grayscale: boolean;
     effectTypes: EffectType[];
     captionMode: CaptionMode;
@@ -39,7 +40,8 @@ export interface GifMakerOptions {
 export const DEFAULT_OPTIONS: GifMakerOptions = {
     width: 256,
     height: 256,
-    frameDelay: 100,
+    fps: 10,
+    maxDuration: 3,
     grayscale: false,
     effectTypes: [],
     captionMode: "none",
