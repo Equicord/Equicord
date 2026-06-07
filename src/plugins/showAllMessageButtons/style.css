@@ -1,8 +1,8 @@
 /* with emojis on + extended menu at the same time, the emotes just
    sort to the middle, this this puts the emojis back on the left */
 
-[class*='popover_'] {
+[class*='popover'] {
   /* regular buttons go >div >svg, but tbh idrk the best way to use the selector for speed */
   >span:has(>div >div) {order: -2;}
-  >[class*='separator_'] {order: -1;}
+  >[class*='separator'] {order: -1;}
 }
