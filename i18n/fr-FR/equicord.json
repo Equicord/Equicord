@@ -384,7 +384,7 @@
     "copyStatusUrls": {
         "description": "Copiez l'URL du statut de l'utilisateur lorsque vous cliquez dessus avec le bouton droit de la souris.",
         "toast": {
-            "copied": "! URL copiée",
+            "copied": "URL copiée",
             "error": "Erreur lors de la copie de URL, consultez la console pour plus d'informations"
         }
     },
@@ -397,18 +397,18 @@
     "cursorBuddy": {
         "description": "Ajoute un sprite qui suit votre curseur.",
         "settings": {
-            "buddy": "Choisissez un compagnon curseur",
+            "buddy": "Choisis un compagnon de curseur",
             "buddyOptions": {
-                "fathorse": "Cheval Fatass",
+                "fathorse": "Cheval gros",
                 "oneko": "Oneko"
             },
-            "fade": "Si le cheval s'efface lorsque le curseur est proche",
-            "fps": "Taux de rafraîchissement de votre compagnon",
+            "fade": "Si le cheval venait à s'éloigner lorsque le curseur est à proximité",
+            "fps": "Fréquence d'images de votre compagnon",
             "freeroam": "Si le cheval doit se déplacer librement lorsqu'il est inactif",
-            "furColor": "Couleur hexadécimale de la fourrure pour Oneko",
-            "outlineColor": "Couleur hexadécimale du contour pour Oneko",
+            "furColor": "Code hexadécimal de la couleur de la fourrure d'Oneko",
+            "outlineColor": "Couleur hexadécimale du contour d'Oneko",
             "shake": "Si le cheval doit secouer la fenêtre quand il marche",
-            "size": "Taille du Cheval Fatass",
+            "size": "La taille du cheval obèse",
             "speed": "Vitesse de ton compagnon"
         },
         "ui": {
