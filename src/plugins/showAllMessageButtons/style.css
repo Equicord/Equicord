@@ -2,6 +2,7 @@
    sort to the middle, this this puts the emojis back on the left */
 
 [class*='popover_'] {
-  >span:has(>[class*='hoverBarButton_'] >[class*='icon_'] >.emoji) {order: -1;}
-  >[class*='separator_'] {display: none;} 
+  /* regular buttons go >div >svg, but tbh idrk the best way to use the selector for speed */
+  >span:has(>div >div) {order: -1;}
+  >[class*='separator_'] {display: none;}
 }
