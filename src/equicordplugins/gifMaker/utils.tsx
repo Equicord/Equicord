@@ -125,13 +125,9 @@ function waitForSeek(video: HTMLVideoElement): Promise<void> {
 }
 
 export function getCaptionHeight(ctx: CanvasRenderingContext2D, width: number, options: GifMakerOptions): number {
-    if (options.captionMode === "none") return 0;
     if (options.captionMode === "caption" && options.captionText) {
         const { lines, lineHeight } = measureTextLines(ctx, options.captionText, options.captionSize, width - 20);
         return lines.length * lineHeight + 20;
-    }
-    if (options.captionMode === "speechbubble") {
-        return Math.round(width * 0.15);
     }
     return 0;
 }
@@ -174,9 +170,9 @@ async function encodeFrames(
         ctx.restore();
 
         const caption = CAPTIONS.find(c => c.type === options.captionMode);
-        if (caption && captionHeight > 0) {
+        if (caption) {
             ctx.save();
-            caption.render(ctx, width, captionHeight, options);
+            caption.render(ctx, width, captionHeight > 0 ? captionHeight : height, options);
             ctx.restore();
         }
 

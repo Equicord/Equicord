@@ -20,7 +20,7 @@ import { CAPTIONS } from "./captions";
 import { EFFECTS } from "./effects";
 import css from "./styles.css?managed";
 import { DEFAULT_OPTIONS, GifMakerOptions } from "./types";
-import { createGif, getCaptionHeight } from "./utils";
+import { createGif } from "./utils";
 
 const cl = classNameFactory("vc-gifmaker-");
 const logger = new Logger("GifMaker");
@@ -235,14 +235,10 @@ function GifMakerModal({ url, isVideo, sourceWidth, sourceHeight, ...props }: Re
         const img = previewRef.current;
         if (!img) return;
 
-        const tempCtx = document.createElement("canvas").getContext("2d")!;
-        const capHeight = getCaptionHeight(tempCtx, options.width, options);
-
         const rect = img.getBoundingClientRect();
         const x = (e.clientX - rect.left) / rect.width * options.width;
-        const totalHeight = options.height + capHeight;
-        const y = (e.clientY - rect.top) / rect.height * totalHeight;
-        patch({ bubbleTipX: x, bubbleTipY: Math.max(0, y - capHeight) });
+        const y = (e.clientY - rect.top) / rect.height * options.height;
+        patch({ bubbleTipX: x, bubbleTipY: y });
     };
 
     const handleExport = () => {
