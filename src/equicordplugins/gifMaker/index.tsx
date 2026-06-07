@@ -211,9 +211,9 @@ function GifMakerModal({ url, isVideo, sourceWidth, sourceHeight, ...props }: Re
                     return URL.createObjectURL(blob);
                 });
                 setGenerating(false);
-            }).catch((err: any) => {
-                console.error("[GifMaker]", err);
-                setError(err?.message ?? String(err));
+            }).catch((err: unknown) => {
+                logger.error("GIF generation failed", err);
+                setError(err instanceof Error ? err.message : String(err));
                 setGenerating(false);
             });
         }, 300);
