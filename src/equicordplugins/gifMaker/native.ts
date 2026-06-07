@@ -5,6 +5,7 @@
  */
 
 // Ignore CORS policy
+// Linked with utils, cannot export or import this
 
 const ALLOWED_MEDIA_HOSTS = new Set([
     "cdn.discordapp.com",

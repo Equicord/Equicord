@@ -145,7 +145,8 @@ async function encodeFrames(
     drawFrame: (ctx: CanvasRenderingContext2D, i: number) => void | Promise<void>,
 ): Promise<Blob> {
     const canvas = document.createElement("canvas");
-    const ctx = canvas.getContext("2d")!;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return new Blob();
     const captionHeight = getCaptionHeight(ctx, width, options);
     canvas.width = width;
     canvas.height = height + captionHeight;
