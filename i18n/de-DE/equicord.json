@@ -324,6 +324,7 @@
             "clipsLink": "Ändern Sie die FPS- und Daueroptionen in den Clip-Einstellungen!",
             "enableAdvancedSignals": "Erweiterte Clip-Signale aktivieren (Auto-Clip-Trigger)",
             "enableScreenshotKeybind": "Aktivieren Sie die Screenshot-Tastenkombinationsfunktion",
+            "enableSpeakingIndicators": "Sprechanzeigen aktivieren",
             "enableVoiceOnlyClips": "Nur-Sprach-Clips aktivieren (Audio ohne Video)",
             "ignorePlatformRestriction": "Plattformbeschränktes Clipping zulassen (kann zu Speicherfehlern führen)",
             "richPresenceTagging": "Wann sollten Clips mit der aktuellen Rich Presence getaggt werden?",
