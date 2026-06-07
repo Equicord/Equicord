@@ -86,9 +86,9 @@ const GIFMAKER_ID = "vc-gifmaker";
 
 const MEDIA_TYPES = ["image/png", "image/jpeg", "image/jpg", "image/webp", "image/gif", "video/mp4", "video/webm", "video/quicktime"];
 
-function getMediaInfo(props: any): { url: string; isVideo: boolean; sourceWidth?: number; sourceHeight?: number; } | null {
-    const { message } = props;
-    const attachment = props.attachment ?? message?.attachments?.find((a: any) => MEDIA_TYPES.some(t => a.content_type?.startsWith(t)));
+function getMediaInfo(props: Record<string, unknown>): { url: string; isVideo: boolean; sourceWidth?: number; sourceHeight?: number; } | null {
+    const message = props.message as { attachments?: { content_type?: string; proxy_url?: string; url?: string; width?: number; height?: number; }[] } | undefined;
+    const attachment = (props.attachment as typeof message extends { attachments?: (infer A)[] } ? A : never) ?? message?.attachments?.find(a => MEDIA_TYPES.some(t => a.content_type?.startsWith(t)));
     const url = props.itemHref ?? props.itemSrc ?? props.src ?? attachment?.proxy_url ?? attachment?.url;
     if (!url) return null;
 
