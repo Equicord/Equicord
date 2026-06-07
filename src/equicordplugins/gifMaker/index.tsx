@@ -8,6 +8,7 @@ import { NavContextMenuPatchCallback } from "@api/ContextMenu";
 import { definePluginSettings } from "@api/Settings";
 import { FormSwitch } from "@components/FormSwitch";
 import { EquicordDevs } from "@utils/constants";
+import { classNameFactory } from "@utils/css";
 import { getCurrentChannel } from "@utils/discord";
 import { Logger } from "@utils/Logger";
 import definePlugin, { OptionType } from "@utils/types";
@@ -21,6 +22,7 @@ import css from "./styles.css?managed";
 import { DEFAULT_OPTIONS, GifMakerOptions } from "./types";
 import { createGif, getCaptionHeight } from "./utils";
 
+const cl = classNameFactory("vc-gifmaker-");
 const logger = new Logger("GifMaker");
 
 const settings = definePluginSettings({
@@ -277,40 +279,40 @@ function GifMakerModal({ url, isVideo, sourceWidth, sourceHeight, ...props }: Re
                 }
             ]}
         >
-            <div className="vc-gifmaker-modal-body">
-                <div className="vc-gifmaker-preview-section">
-                    <div className="vc-gifmaker-preview-wrapper">
+            <div className={cl("modal-body")}>
+                <div className={cl("preview-section")}>
+                    <div className={cl("preview-wrapper")}>
                         <img
                             ref={previewRef}
                             alt="GIF preview"
                             src={previewUrl ?? ""}
                             onClick={handlePreviewClick}
-                            className={"vc-gifmaker-preview" + (generating ? " vc-gifmaker-preview-generating" : "") + (options.captionMode === "speechbubble" ? " vc-gifmaker-preview-crosshair" : "")}
+                            className={cl("preview", { "preview-generating": generating, "preview-crosshair": options.captionMode === "speechbubble" })}
                         />
 
                         {generating && (
-                            <div className="vc-gifmaker-generating-overlay">
+                            <div className={cl("generating-overlay")}>
                                 Generating GIF...
                             </div>
                         )}
 
                         {error && !generating && (
-                            <div className="vc-gifmaker-error-overlay">
+                            <div className={cl("error-overlay")}>
                                 {error}
                             </div>
                         )}
                     </div>
                 </div>
 
-                <div className="vc-gifmaker-controls-section">
+                <div className={cl("controls-section")}>
 
-                    <div className="vc-gifmaker-section-heading">Captions</div>
-                    <div className="vc-gifmaker-tab-row">
+                    <div className={cl("section-heading")}>Captions</div>
+                    <div className={cl("tab-row")}>
                         {CAPTIONS.map(c => (
                             <button
                                 key={c.type}
                                 onClick={() => patch({ captionMode: c.type })}
-                                className={"vc-gifmaker-tab-btn" + (options.captionMode === c.type ? " vc-gifmaker-tab-btn-active" : "")}
+                                className={cl("tab-btn", { "tab-btn-active": options.captionMode === c.type })}
                             >
                                 {c.name}
                             </button>
@@ -318,55 +320,55 @@ function GifMakerModal({ url, isVideo, sourceWidth, sourceHeight, ...props }: Re
                     </div>
 
                     {options.captionMode === "caption" && (
-                        <div className="vc-gifmaker-section">
+                        <div className={cl("section")}>
                             <div style={{ marginBottom: "8px" }}>
-                                <label className="vc-gifmaker-label">Text</label>
+                                <label className={cl("label")}>Text</label>
                                 <input
                                     type="text"
                                     value={options.captionText}
                                     onChange={e => patch({ captionText: e.target.value })}
                                     placeholder="Enter caption..."
-                                    className="vc-gifmaker-input"
+                                    className={cl("input")}
                                 />
                             </div>
                             <div>
-                                <label className="vc-gifmaker-label">Font Size: {options.captionSize}px</label>
+                                <label className={cl("label")}>Font Size: {options.captionSize}px</label>
                                 <input
                                     type="range"
                                     min={10}
                                     max={120}
                                     value={options.captionSize}
                                     onChange={e => patch({ captionSize: Number(e.target.value) })}
-                                    className="vc-gifmaker-slider"
+                                    className={cl("slider")}
                                 />
                             </div>
                         </div>
                     )}
 
                     {options.captionMode === "speechbubble" && (
-                        <div className="vc-gifmaker-section">
-                            <div className="vc-gifmaker-section-hint">
+                        <div className={cl("section")}>
+                            <div className={cl("section-hint")}>
                                 Click on the preview to position the bubble tip
                             </div>
                             <div>
-                                <label className="vc-gifmaker-label">Tip Base: {Math.round(options.bubbleTipBase * 100)}%</label>
+                                <label className={cl("label")}>Tip Base: {Math.round(options.bubbleTipBase * 100)}%</label>
                                 <input
                                     type="range"
                                     min={0}
                                     max={80}
                                     value={Math.round(options.bubbleTipBase * 100)}
                                     onChange={e => patch({ bubbleTipBase: Number(e.target.value) / 100 })}
-                                    className="vc-gifmaker-slider"
+                                    className={cl("slider")}
                                 />
                             </div>
                         </div>
                     )}
 
-                    <div className="vc-gifmaker-section-heading">Effects</div>
-                    <div className="vc-gifmaker-tab-row">
+                    <div className={cl("section-heading")}>Effects</div>
+                    <div className={cl("tab-row")}>
                         <button
                             onClick={() => patch({ effectTypes: [] })}
-                            className={"vc-gifmaker-tab-btn" + (options.effectTypes.length === 0 ? " vc-gifmaker-tab-btn-active" : "")}
+                            className={cl("tab-btn", { "tab-btn-active": options.effectTypes.length === 0 })}
                         >
                             None
                         </button>
@@ -380,15 +382,15 @@ function GifMakerModal({ url, isVideo, sourceWidth, sourceHeight, ...props }: Re
                                         patch({ effectTypes: [...options.effectTypes, e.type] });
                                     }
                                 }}
-                                className={"vc-gifmaker-tab-btn" + (options.effectTypes.includes(e.type) ? " vc-gifmaker-tab-btn-active" : "")}
+                                className={cl("tab-btn", { "tab-btn-active": options.effectTypes.includes(e.type) })}
                             >
                                 {e.name}
                             </button>
                         ))}
                     </div>
 
-                    <div className="vc-gifmaker-field">
-                        <label className="vc-gifmaker-label">Delay (ms)</label>
+                    <div className={cl("field")}>
+                        <label className={cl("label")}>Delay (ms)</label>
                         <input
                             type="number"
                             min={20}
@@ -397,14 +399,14 @@ function GifMakerModal({ url, isVideo, sourceWidth, sourceHeight, ...props }: Re
                             value={options.frameDelay}
                             onChange={e => patch({ frameDelay: Number(e.target.value) })}
                             onBlur={e => patch({ frameDelay: clamp(Number(e.target.value), 20, 1000, 20) })}
-                            className="vc-gifmaker-input"
+                            className={cl("input")}
                         />
                     </div>
 
-                    <div className="vc-gifmaker-section-heading">Dimensions</div>
-                    <div className="vc-gifmaker-dims-row">
-                        <div className="vc-gifmaker-field">
-                            <label className="vc-gifmaker-label">Width</label>
+                    <div className={cl("section-heading")}>Dimensions</div>
+                    <div className={cl("dims-row")}>
+                        <div className={cl("field")}>
+                            <label className={cl("label")}>Width</label>
                             <input
                                 type="number"
                                 min={32}
@@ -412,11 +414,11 @@ function GifMakerModal({ url, isVideo, sourceWidth, sourceHeight, ...props }: Re
                                 value={options.width}
                                 onChange={e => patch({ width: Number(e.target.value) })}
                                 onBlur={e => patch({ width: clamp(Number(e.target.value), 32, 1024, 32) })}
-                                className="vc-gifmaker-input"
+                                className={cl("input")}
                             />
                         </div>
-                        <div className="vc-gifmaker-field">
-                            <label className="vc-gifmaker-label">Height</label>
+                        <div className={cl("field")}>
+                            <label className={cl("label")}>Height</label>
                             <input
                                 type="number"
                                 min={32}
@@ -424,7 +426,7 @@ function GifMakerModal({ url, isVideo, sourceWidth, sourceHeight, ...props }: Re
                                 value={options.height}
                                 onChange={e => patch({ height: Number(e.target.value) })}
                                 onBlur={e => patch({ height: clamp(Number(e.target.value), 32, 1024, 32) })}
-                                className="vc-gifmaker-input"
+                                className={cl("input")}
                             />
                         </div>
                     </div>
