@@ -321,6 +321,7 @@
             "clipsLink": "¡Cambie las opciones de FPS y duración en la configuración de Clips!",
             "enableAdvancedSignals": "Habilitar señales de clip avanzadas (activadores de clip automático)",
             "enableScreenshotKeybind": "Habilite la función de combinación de teclas de captura de pantalla",
+            "enableSpeakingIndicators": "Activar los indicadores de turno de palabra",
             "enableVoiceOnlyClips": "Habilitar clips de solo voz (audio sin video)",
             "ignorePlatformRestriction": "Permitir recorte restringido por plataforma (puede provocar errores al guardar)",
             "richPresenceTagging": "¿Cuándo se deben etiquetar los clips con la presencia enriquecida actual?",
@@ -891,6 +892,7 @@
     },
     "githubRepos": {
         "description": "Muestra los repositorios públicos GitHub de un usuario en su perfil.",
+        "githubRepos": "Repositorios de GitHub",
         "settings": {
             "showInMiniProfile": "Muestra la interfaz de usuario completa en el miniperfil en lugar de solo un botón",
             "showLanguage": "Mostrar idioma del repositorio",
@@ -978,7 +980,7 @@
         "description": "Cambia el botón de inicio a un indicador de escritura si alguien en tu DM está escribiendo"
     },
     "hopOn": {
-        "description": "Súbete a Fortnite o Súbete a los bloons:3",
+        "description": "¡Únete! Abre una URL configurable cuando un mensaje coincida con una expresión regular personalizada en el canal actual.",
         "settings": {
             "regex": "Regex para activar",
             "url": "URL para abrir"
@@ -2093,7 +2095,9 @@
         "description": "Un complemento que te ayuda a responder preguntas de trivia utilizando IA.",
         "settings": {
             "apiKey": "API Tecla.",
+            "autoReply": "Respuesta automática",
             "autoRespond": "Responda automáticamente a los mensajes al recibir una respuesta.",
+            "chatbar": "Cambiar el texto de la barra de chat",
             "endpoint": "Punto final de IA compatible con OpenAI.",
             "maxTokens": "Número máximo de tokens en la respuesta.",
             "model": "Modelo de IA a utilizar.",
