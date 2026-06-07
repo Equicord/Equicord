@@ -448,10 +448,5 @@ export default definePlugin({
         "message": messageContextMenuPatch,
         "image-context": imageContextMenuPatch
     },
-    start() {
-        enableStyle(css);
-    },
-    stop() {
-        disableStyle(css);
-    }
+    managedStyle: css,
 });
