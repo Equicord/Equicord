@@ -84,10 +84,15 @@ const settings = definePluginSettings({
         hidden: true,
         description: ""
     },
-    maxDimension: {
+    maxWidth: {
         type: OptionType.NUMBER,
-        default: 1024,
-        description: "Maximum auto-fit dimension for GIF width/height"
+        default: 1280,
+        description: "Maximum auto-fit width"
+    },
+    maxHeight: {
+        type: OptionType.NUMBER,
+        default: 720,
+        description: "Maximum auto-fit height"
     },
 });
 
@@ -104,6 +109,7 @@ function getMediaInfo(props: Record<string, unknown>): { url: string; isVideo: b
     // 1. Direct attachment prop (right-click on file upload)
     const directAttachment = props.attachment as Record<string, any> | undefined;
     if (directAttachment?.proxy_url && MEDIA_TYPES.some(t => directAttachment.content_type?.startsWith(t))) {
+        logger.info("getMediaInfo path 1 (direct attachment):", directAttachment.proxy_url, "w:", directAttachment.width, "h:", directAttachment.height);
         return {
             url: directAttachment.proxy_url ?? directAttachment.url,
             isVideo: directAttachment.content_type?.startsWith("video/"),
@@ -115,6 +121,7 @@ function getMediaInfo(props: Record<string, unknown>): { url: string; isVideo: b
     // 2. Message attachments (find by content type)
     const msgAttachment = msg?.attachments?.find((a: any) => MEDIA_TYPES.some(t => a.content_type?.startsWith(t)));
     if (msgAttachment?.proxy_url) {
+        logger.info("getMediaInfo path 2 (msg attachment):", msgAttachment.proxy_url, "w:", msgAttachment.width, "h:", msgAttachment.height);
         return {
             url: msgAttachment.proxy_url ?? msgAttachment.url,
             isVideo: msgAttachment.content_type?.startsWith("video/"),
@@ -127,29 +134,36 @@ function getMediaInfo(props: Record<string, unknown>): { url: string; isVideo: b
     if (msg?.embeds) {
         for (const embed of msg.embeds) {
             const v = embed?.video;
-            if (v?.proxyURL || v?.url)
+            if (v?.proxyURL || v?.url) {
+                logger.info("getMediaInfo path 3a (embed video):", v.url || v.proxyURL, "w:", v.width, "h:", v.height);
                 return { url: v.proxyURL ?? v.url, isVideo: true, sourceWidth: v.width, sourceHeight: v.height };
+            }
             const i = embed?.image ?? embed?.thumbnail;
-            if (i?.proxyURL || i?.url)
+            if (i?.proxyURL || i?.url) {
+                logger.info("getMediaInfo path 3b (embed image):", i.url || i.proxyURL, "w:", i.width, "h:", i.height);
                 return { url: i.proxyURL ?? i.url, isVideo: false, sourceWidth: i.width, sourceHeight: i.height };
+            }
         }
     }
 
     // 4. Link/image props (itemHref from links, src from image elements)
     const linkUrl = (props.itemHref ?? props.itemSrc ?? props.src) as string | undefined;
     if (linkUrl && MEDIA_EXT_RE.test(linkUrl)) {
+        logger.info("getMediaInfo path 4 (src link):", linkUrl);
         return {
             url: linkUrl,
             isVideo: VIDEO_EXT_RE.test(linkUrl)
         };
     }
 
+    logger.info("getMediaInfo: no match found");
     return null;
 }
 
 const messageContextMenuPatch: NavContextMenuPatchCallback = (children, props) => {
     const info = getMediaInfo(props);
     if (!info) return;
+    logger.info("messageContextMenu: url:", info.url, "w:", info.sourceWidth, "h:", info.sourceHeight);
 
     children.push(
         <Menu.MenuItem
@@ -169,6 +183,7 @@ const imageContextMenuPatch: NavContextMenuPatchCallback = (children, props) => 
 
     const info = getMediaInfo(props);
     if (!info) return;
+    logger.info("imageContextMenu: url:", info.url, "w:", info.sourceWidth, "h:", info.sourceHeight);
 
     children.push(
         <Menu.MenuItem
@@ -184,23 +199,24 @@ function clamp(val: number, min: number, max: number, fallback: number): number 
 }
 
 function getInitialSize(sourceWidth?: number, sourceHeight?: number, storedWidth?: number, storedHeight?: number): [number, number] {
-    const maxDim = settings.store.maxDimension;
     if (sourceWidth && sourceHeight) {
-        if (sourceWidth <= maxDim && sourceHeight <= maxDim) {
+        const maxW = settings.store.maxWidth;
+        const maxH = settings.store.maxHeight;
+        if (sourceWidth <= maxW && sourceHeight <= maxH) {
             return [sourceWidth, sourceHeight];
         }
-        const aspect = sourceWidth / sourceHeight;
-        if (sourceWidth > sourceHeight) {
-            return [maxDim, Math.round(maxDim / aspect)];
-        }
-        return [Math.round(maxDim * aspect), maxDim];
+        const scale = Math.min(maxW / sourceWidth, maxH / sourceHeight);
+        return [Math.round(sourceWidth * scale), Math.round(sourceHeight * scale)];
     }
     return [storedWidth ?? DEFAULT_OPTIONS.width, storedHeight ?? DEFAULT_OPTIONS.height];
 }
 
 function GifMakerModal({ url, isVideo, sourceWidth, sourceHeight, ...props }: RenderModalProps & { url: string; isVideo: boolean; sourceWidth?: number; sourceHeight?: number; }) {
+    logger.info("GifMakerModal mounted with url:", url, "isVideo:", isVideo, "sourceWidth:", sourceWidth, "sourceHeight:", sourceHeight);
+
     const [options, setOptions] = useState<GifMakerOptions>(() => {
         const [width, height] = getInitialSize(sourceWidth, sourceHeight, settings.store.lastWidth, settings.store.lastHeight);
+        logger.info("GifMakerModal initial size:", width, "x", height, "(source:", sourceWidth, "x", sourceHeight, "last:", settings.store.lastWidth, "x", settings.store.lastHeight, ")");
         return {
             width: width, height: height,
             fps: settings.store.lastFps,
@@ -243,9 +259,30 @@ function GifMakerModal({ url, isVideo, sourceWidth, sourceHeight, ...props }: Re
     };
 
     useEffect(() => {
-        if (!sourceWidth || !sourceHeight) return;
-        const [w, h] = getInitialSize(sourceWidth, sourceHeight);
-        setOptions(prev => ({ ...prev, width: w, height: h }));
+        logger.info("useEffect sourceWidth/sourceHeight:", sourceWidth, sourceHeight);
+        if (sourceWidth && sourceHeight) {
+            const [w, h] = getInitialSize(sourceWidth, sourceHeight);
+            logger.info("useEffect: source dims available, setting to", w, "x", h);
+            setOptions(prev => ({ ...prev, width: w, height: h }));
+            return;
+        }
+        // Try to auto-detect natural dimensions from the URL
+        if (isVideo) {
+            logger.info("useEffect: no source dims and isVideo, can't auto-detect");
+            return;
+        }
+        logger.info("useEffect: no source dims, trying auto-detect from URL:", url);
+        const img = new Image();
+        img.onload = () => {
+            logger.info("useEffect: auto-detect loaded", img.naturalWidth, "x", img.naturalHeight);
+            const [w, h] = getInitialSize(img.naturalWidth, img.naturalHeight);
+            logger.info("useEffect: auto-detect setting to", w, "x", h);
+            setOptions(prev => ({ ...prev, width: w, height: h }));
+        };
+        img.onerror = () => {
+            logger.info("useEffect: auto-detect failed to load image");
+        };
+        img.src = url;
     }, [sourceWidth, sourceHeight]);
 
     useEffect(() => {
