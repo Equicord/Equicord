@@ -3,6 +3,6 @@
 
 [class*='popover_'] {
   /* regular buttons go >div >svg, but tbh idrk the best way to use the selector for speed */
-  >span:has(>div >div) {order: -1;}
-  >[class*='separator_'] {display: none;}
+  >span:has(>div >div) {order: -2;}
+  >[class*='separator_'] {order: -1;}
 }
