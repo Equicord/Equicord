@@ -6,11 +6,12 @@
 
 import { NavContextMenuPatchCallback } from "@api/ContextMenu";
 import { definePluginSettings } from "@api/Settings";
-import { disableStyle, enableStyle } from "@api/Styles";
 import { FormSwitch } from "@components/FormSwitch";
 import { EquicordDevs } from "@utils/constants";
 import { getCurrentChannel } from "@utils/discord";
+import { Logger } from "@utils/Logger";
 import definePlugin, { OptionType } from "@utils/types";
+import { saveFile } from "@utils/web";
 import { RenderModalProps } from "@vencord/discord-types";
 import { Menu, Modal, openModal, UploadHandler, useEffect, useRef, useState } from "@webpack/common";
 
@@ -19,6 +20,8 @@ import { EFFECTS } from "./effects";
 import css from "./styles.css?managed";
 import { DEFAULT_OPTIONS, GifMakerOptions } from "./types";
 import { createGif, getCaptionHeight } from "./utils";
+
+const logger = new Logger("GifMaker");
 
 const settings = definePluginSettings({
     lastWidth: {
@@ -87,8 +90,7 @@ const GIFMAKER_ID = "vc-gifmaker";
 const MEDIA_TYPES = ["image/png", "image/jpeg", "image/jpg", "image/webp", "image/gif", "video/mp4", "video/webm", "video/quicktime"];
 
 function getMediaInfo(props: Record<string, unknown>): { url: string; isVideo: boolean; sourceWidth?: number; sourceHeight?: number; } | null {
-    const message = props.message as { attachments?: { content_type?: string; proxy_url?: string; url?: string; width?: number; height?: number; }[] } | undefined;
-    const attachment = (props.attachment as typeof message extends { attachments?: (infer A)[] } ? A : never) ?? message?.attachments?.find(a => MEDIA_TYPES.some(t => a.content_type?.startsWith(t)));
+    const attachment: Record<string, any> | undefined = (props.attachment as any) ?? (props.message as any)?.attachments?.find((a: any) => MEDIA_TYPES.some(t => a.content_type?.startsWith(t)));
     const url = props.itemHref ?? props.itemSrc ?? props.src ?? attachment?.proxy_url ?? attachment?.url;
     if (!url) return null;
 
@@ -126,7 +128,6 @@ const imageContextMenuPatch: NavContextMenuPatchCallback = (children, props) => 
         <Menu.MenuItem
             id={GIFMAKER_ID}
             label="Make GIF"
-            icon={GifIcon}
             action={() => openModal(modalProps => <GifMakerModal url={info.url} isVideo={info.isVideo} sourceWidth={info.sourceWidth} sourceHeight={info.sourceHeight} {...modalProps} />)}
         />
     );
@@ -244,7 +245,7 @@ function GifMakerModal({ url, isVideo, sourceWidth, sourceHeight, ...props }: Re
 
     const handleExport = () => {
         if (!gifBlob) return;
-        saveFile(gifBlob, "export.gif");
+        saveFile(gifBlob as File);
     };
 
     const handleSend = () => {

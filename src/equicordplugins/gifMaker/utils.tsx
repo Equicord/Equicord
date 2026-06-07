@@ -151,7 +151,7 @@ async function encodeFrames(
     canvas.height = height + captionHeight;
 
     const gif = GIFEncoder();
-    let palette: Uint8Array | undefined;
+    let palette: number[][] | undefined;
 
     for (let i = 0; i < frameCount; i++) {
         ctx.clearRect(0, 0, width, canvas.height);
