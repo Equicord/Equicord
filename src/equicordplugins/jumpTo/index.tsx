@@ -10,7 +10,6 @@ import definePlugin from "@utils/types";
 import { Channel, Message, User } from "@vencord/discord-types";
 import { ChannelStore, Constants, Menu, NavigationRouter, RestAPI, SelectedChannelStore, SelectedGuildStore, Toasts } from "@webpack/common";
 
-// up
 const JumpIconFirst = () => {
     return (
         <svg
@@ -25,7 +24,6 @@ const JumpIconFirst = () => {
     );
 };
 
-// dn
 const JumpIconLast = () => {
     return (
         <svg
