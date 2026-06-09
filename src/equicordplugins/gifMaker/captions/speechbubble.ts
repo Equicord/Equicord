@@ -22,6 +22,7 @@ function moveAway(point: Point, from: Point, distance: number): Point {
     const dx = point[0] - from[0];
     const dy = point[1] - from[1];
     const length = Math.sqrt(dx ** 2 + dy ** 2);
+    if (length === 0) return point;
     const scale = distance / length;
 
     return [point[0] + dx * scale, point[1] + dy * scale];

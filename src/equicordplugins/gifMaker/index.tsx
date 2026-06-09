@@ -22,7 +22,7 @@ import { fetchAllGoogleFonts, getFontFamilyCss, loadGoogleFont } from "./fonts";
 import css from "./styles.css?managed";
 import { DEFAULT_OPTIONS, type GifMakerOptions, type GoogleFontMetadata } from "./types";
 import { clamp, getInitialSize, getMediaInfo } from "./utils/contextMenu";
-import { createGif, getSourceFrameInfo, loadImage, loadVideo } from "./utils/encoder";
+import { createGif, loadImage, loadVideo } from "./utils/encoder";
 import { applyTenorMp4Fix, collectCandidateUrls, type GifPickerItemInstance, isLikelyVideoUrl, normalizeUrl, orderCandidateUrls } from "./utils/gifPicker";
 
 const cl = classNameFactory("vc-gifmaker-");
