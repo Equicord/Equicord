@@ -10,6 +10,37 @@ import definePlugin from "@utils/types";
 import { Channel, Message, User } from "@vencord/discord-types";
 import { ChannelStore, Constants, Menu, NavigationRouter, RestAPI, SelectedChannelStore, SelectedGuildStore, Toasts } from "@webpack/common";
 
+// up
+const JumpIconFirst = () => {
+    return (
+        <svg
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            aria-hidden="true"
+            width="20"
+            height="20"
+        >
+            <path d="M12 1.9A1 1 90 0012 22.1 1 1 90 0012 1.9ZM12 5 18.1 11.1 16 13.1 14 11.1 14 18.2 10 18.2 10 11.1 7.9 13.1 5.9 11.1 12 5Z" />
+        </svg>
+    );
+};
+
+// dn
+const JumpIconLast = () => {
+    return (
+        <svg
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            aria-hidden="true"
+            width="20"
+            height="20"
+        >
+            <path d="M12 22.1A1 1 270 0012 1.9 1 1 270 0012 22.1ZM12 19 5.9 12.9 8 10.9 10 12.9 10 5.8 14 5.8 14 12.9 16.1 10.9 18.1 12.9 12 19Z" />
+        </svg>
+    );
+};
+
+
 function jumpToFirstMessage(channelId: string, guildId?: string | null) {
     NavigationRouter.transitionTo(`/channels/${guildId ?? "@me"}/${channelId}/0`);
 }
@@ -73,11 +104,13 @@ const ChannelMenuPatch: NavContextMenuPatchCallback = (
             id="vc-jump-to-first"
             label="Jump To First Message"
             action={() => jumpToFirstMessage(targetChannel.id, targetChannel.guild_id)}
+            icon={JumpIconFirst}
         />,
         <Menu.MenuItem
             id="vc-jump-to-last"
             label="Jump To Last Message"
             action={() => jumpToLastMessage(targetChannel.id, targetChannel.guild_id)}
+            icon={JumpIconLast}
         />
     );
 };
@@ -90,11 +123,13 @@ const UserMenuPatch: NavContextMenuPatchCallback = (children, { user, channel }:
             id="vc-jump-to-first"
             label="Jump To First Message"
             action={() => jumpToFirstMessage(channel.id, null)}
+            icon={JumpIconFirst}
         />,
         <Menu.MenuItem
             id="vc-jump-to-last"
             label="Jump To Last Message"
             action={() => jumpToLastMessage(channel.id, null)}
+            icon={JumpIconLast}
         />
     );
 };
@@ -109,11 +144,13 @@ const MessageMenuPatch: NavContextMenuPatchCallback = (children, { message }: { 
             id="vc-jump-to-first-user"
             label="Jump To First Message"
             action={() => jumpToUserMessage(channelId, guildId, message.author.id, true)}
+            icon={JumpIconFirst}
         />,
         <Menu.MenuItem
             id="vc-jump-to-last-user"
             label="Jump To Last Message"
             action={() => jumpToUserMessage(channelId, guildId, message.author.id, false)}
+            icon={JumpIconLast}
         />
     );
 };
