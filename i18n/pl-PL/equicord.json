@@ -111,7 +111,7 @@
             "oscilloscopeColor": "Kolor dla oscyloskopu",
             "oscilloscopeSolidColor": "Użyj jednolitego koloru dla oscyloskopu",
             "spectrograph": "Włącz wizualizator spektrografu",
-            "spectrographColor": "Kolor dla spektrografu",
+            "spectrographColor": "Kolor dla spektrografu (R,G,B lub #hex)",
             "spectrographSolidColor": "Użyj jednolitego koloru dla spektrografu"
         },
         "toasts": {
@@ -146,7 +146,7 @@
                 "userOption": "konkretnego użytkownika, aby spróbować odświeżyć"
             }
         },
-        "description": "Ulepsza system dowodzenia różnymi ulepszeniami.",
+        "description": "Odświeża lokalnie komendy wybranych aplikacji.",
         "settings": {
             "allowNewlinesInCommands": "Zezwalaj na znaki nowej linii we wprowadzanych poleceniach (CTRL + Shift + Enter)",
             "autoFillArguments": "Automatycznie wypełniaj polecenie wszystkimi argumentami, a nie tylko wymaganymi"
@@ -321,6 +321,7 @@
             "clipsLink": "Zmień opcje FPS i czasu trwania w ustawieniach klipów!",
             "enableAdvancedSignals": "Włącz zaawansowane sygnały klipu (wyzwalacze automatycznego klipu)",
             "enableScreenshotKeybind": "Włącz funkcję skrótu klawiszowego zrzutu ekranu",
+            "enableSpeakingIndicators": "Włącz oznaczenia mówiących osób",
             "enableVoiceOnlyClips": "Włącz klipy głosowe (audio bez wideo)",
             "ignorePlatformRestriction": "Zezwalaj na przycinanie z ograniczeniami platformy (może powodować błędy zapisywania)",
             "richPresenceTagging": "Kiedy klipy powinny być oznaczone bieżącym Rich Presence?",
@@ -334,6 +335,8 @@
     "commandPalette": {
         "description": "Szybko wykonuj akcje za pomocą przeszukiwalnej palety poleceń",
         "settings": {
+            "closeAfterExecute": "Zamykaj paletę po wykonaniu komendy.",
+            "compactStartEnabled": "Otwieraj paletę w trybie kompaktowym.",
             "customCommands": "Zarządzaj niestandardowymi wpisami palety poleceń",
             "enableTagFilter": "Pokaż pasek filtra tagów",
             "hotkey": "Skrót używany do otwierania palety poleceń",
@@ -890,6 +893,7 @@
     },
     "githubRepos": {
         "description": "Pokazuje publiczne repozytoria GitHub użytkownika w ich profilu",
+        "githubRepos": "Repozytoria GitHub",
         "settings": {
             "showInMiniProfile": "Pokaż pełny interfejs użytkownika w miniprofilu zamiast tylko przycisku",
             "showLanguage": "Pokaż język repozytorium",
@@ -977,7 +981,7 @@
         "description": "Zmienia przycisk Home na wskaźnik pisania, jeśli ktoś z Twojego dms pisze"
     },
     "hopOn": {
-        "description": "Wskocz na Fortnite lub Hop na balony :3",
+        "description": "Otwiera ustawiony adres URL, gdy wiadomość na obecnym kanale pasuje do customowego regexa.",
         "settings": {
             "regex": "Regex, który ma zostać uruchomiony",
             "url": "URL, aby otworzyć"
@@ -1497,7 +1501,7 @@
         }
     },
     "moyai": {
-        "description": "Odtwórz efekt dźwiękowy moyai, gdy używany jest emoji 🗿",
+        "description": "Odtwarza dźwięk 🗿, gdy ktoś wyśle emoji moyai, użyje go w reakcji albo jako efektu głosowego na obecnym kanale.",
         "settings": {
             "ignoreBlocked": "Ignoruj wiadomości od zablokowanych użytkowników",
             "ignoreBots": "Ignoruj wiadomości od botów",
@@ -2092,7 +2096,8 @@
         "description": "Wtyczka, która pomaga odpowiadać na ciekawostki za pomocą sztucznej inteligencji.",
         "settings": {
             "apiKey": "Klawisz API",
-            "autoRespond": "Automatycznie odpowiadaj na wiadomości po otrzymaniu odpowiedzi.",
+            "autoReply": "Automatyczna odpowiedź",
+            "autoRespond": "Jak mają być obsługiwane odpowiedzi?",
             "endpoint": "Punkt końcowy AI zgodny z OpenAI.",
             "maxTokens": "Maksymalna liczba tokenów w odpowiedzi.",
             "model": "Model AI do użycia.",
