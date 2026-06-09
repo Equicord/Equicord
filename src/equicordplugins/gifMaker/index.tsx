@@ -253,14 +253,6 @@ function GifMakerModal({ url, isVideo, sourceWidth, sourceHeight, ...props }: Re
     }, [sourceWidth, sourceHeight]);
 
     useEffect(() => {
-        getSourceFrameInfo(url, isVideo).then(info => {
-            if (info?.fps) {
-                // FPS auto-detected, used internally
-            }
-        });
-    }, []);
-
-    useEffect(() => {
         const timer = setTimeout(() => {
             const gen = ++generationRef.current;
             setGenerating(true);
