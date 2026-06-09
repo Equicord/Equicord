@@ -12,11 +12,10 @@ import { classNameFactory } from "@utils/css";
 import { getCurrentChannel } from "@utils/discord";
 import { Logger } from "@utils/Logger";
 import { Margins } from "@utils/margins";
-import { classes } from "@utils/misc";
 import definePlugin, { OptionType } from "@utils/types";
 import { saveFile } from "@utils/web";
 import type { RenderModalProps } from "@vencord/discord-types";
-import { Menu, Modal, openModal, React, Select, UploadHandler, useEffect, useRef, useState } from "@webpack/common";
+import { Button, Menu, Modal, openModal, React, Select, Slider, TextInput, UploadHandler, useEffect, useRef, useState } from "@webpack/common";
 
 import { CAPTIONS } from "./captions";
 import { fetchAllGoogleFonts, getFontFamilyCss, loadGoogleFont } from "./fonts";
@@ -27,7 +26,7 @@ import { createGif, getSourceFrameInfo, loadImage, loadVideo } from "./utils/enc
 import { applyTenorMp4Fix, collectCandidateUrls, type GifPickerItemInstance, isLikelyVideoUrl, normalizeUrl, orderCandidateUrls } from "./utils/gifPicker";
 
 const cl = classNameFactory("vc-gifmaker-");
-const logger = new Logger("GifMaker");
+const logger = new Logger("gifMaker");
 
 const settings = definePluginSettings({
     lastWidth: {
@@ -243,7 +242,6 @@ function GifMakerModal({ url, isVideo, sourceWidth, sourceHeight, ...props }: Re
             loadVideo(url).then(v => {
                 const [w, h] = resolveInitialSize(v.videoWidth, v.videoHeight);
                 setOptions(prev => ({ ...prev, width: w, height: h }));
-                (v as any).__gifmaker_blobUrl && URL.revokeObjectURL((v as any).__gifmaker_blobUrl);
                 v.remove();
             }).catch(err => logger.error("auto-detect video failed", err));
             return;
@@ -251,7 +249,6 @@ function GifMakerModal({ url, isVideo, sourceWidth, sourceHeight, ...props }: Re
         loadImage(url).then(img => {
             const [w, h] = resolveInitialSize(img.naturalWidth, img.naturalHeight);
             setOptions(prev => ({ ...prev, width: w, height: h }));
-            (img as any).__gifmaker_blobUrl && URL.revokeObjectURL((img as any).__gifmaker_blobUrl);
         }).catch(err => logger.error("auto-detect image failed", err));
     }, [sourceWidth, sourceHeight]);
 
@@ -363,17 +360,17 @@ function GifMakerModal({ url, isVideo, sourceWidth, sourceHeight, ...props }: Re
                 </div>
 
                 <div className={cl("controls-section")}>
-
                     <div className={cl("section-heading")}>Captions</div>
-                    <div className={cl("tab-row")}>
+                    <div style={{ display: "flex", gap: 8 }} className={Margins.bottom16}>
                         {CAPTIONS.map(c => (
-                            <button
+                            <Button
                                 key={c.type}
+                                size="min"
                                 onClick={() => patch({ captionMode: c.type })}
-                                className={cl("tab-btn", { "tab-btn-active": options.captionMode === c.type })}
+                                variant={options.captionMode === c.type ? "primary" : "secondary"}
                             >
                                 {c.name}
-                            </button>
+                            </Button>
                         ))}
                     </div>
 
@@ -381,16 +378,14 @@ function GifMakerModal({ url, isVideo, sourceWidth, sourceHeight, ...props }: Re
                         <div className={cl("section")}>
                             <div className={Margins.bottom16}>
                                 <label className={cl("label")}>Text</label>
-                                <input
-                                    type="text"
+                                <TextInput
                                     value={options.captionText}
-                                    onChange={e => patch({ captionText: e.target.value })}
+                                    onChange={v => patch({ captionText: v })}
                                     placeholder="Enter caption..."
-                                    className={cl("input")}
                                 />
                             </div>
-                            <div className={cl("font-range")}>
-                                <div className={cl("font-range-label")}>Font</div>
+                            <div className="vc-gifmaker-font-range">
+                                <div>Font</div>
                                 <div className={cl("font-selector")}>
                                     <FontSelector
                                         initialFont={options.fontFamily}
@@ -400,17 +395,15 @@ function GifMakerModal({ url, isVideo, sourceWidth, sourceHeight, ...props }: Re
                                     />
                                 </div>
                             </div>
-                            <div className={cl("font-range")}>
-                                <div className={cl("font-range-label")}>Font size</div>
-                                <input
-                                    type="range"
-                                    min={10}
-                                    max={120}
-                                    value={options.captionSize}
-                                    onChange={e => patch({ captionSize: Number(e.target.value) })}
-                                    className={cl("slider")}
+                            <div className="vc-gifmaker-font-range">
+                                <div>Font size</div>
+                                <Slider
+                                    initialValue={options.captionSize}
+                                    onValueChange={v => patch({ captionSize: v })}
+                                    minValue={10}
+                                    maxValue={120}
                                 />
-                                <span className={cl("slider-value")}>{options.captionSize}px</span>
+                                <span>{options.captionSize}px</span>
                             </div>
                         </div>
                     )}
@@ -420,17 +413,15 @@ function GifMakerModal({ url, isVideo, sourceWidth, sourceHeight, ...props }: Re
                             <div className={cl("section-hint")}>
                                 Click on the preview to position the bubble tip
                             </div>
-                            <div className={cl("font-range")}>
-                                <div className={cl("font-range-label")}>Tip Base</div>
-                                <input
-                                    type="range"
-                                    min={0}
-                                    max={80}
-                                    value={Math.round(options.bubbleTipBase * 100)}
-                                    onChange={e => patch({ bubbleTipBase: Number(e.target.value) / 100 })}
-                                    className={cl("slider")}
+                            <div className="vc-gifmaker-font-range">
+                                <div>Tip Base</div>
+                                <Slider
+                                    initialValue={Math.round(options.bubbleTipBase * 100)}
+                                    onValueChange={v => patch({ bubbleTipBase: v / 100 })}
+                                    minValue={0}
+                                    maxValue={80}
                                 />
-                                <span className={cl("slider-value")}>{Math.round(options.bubbleTipBase * 100)}%</span>
+                                <span>{Math.round(options.bubbleTipBase * 100)}%</span>
                             </div>
                         </div>
                     )}
@@ -499,9 +490,8 @@ export default definePlugin({
         const directUrl = typeof props.src === "string" ? props.src : null;
 
         return (
-            <button
-                type="button"
-                className={classes(cl("trigger"), cl("trigger-icon"))}
+            <Button
+                size="min"
                 onClick={async event => {
                     event.stopPropagation();
 
@@ -531,7 +521,7 @@ export default definePlugin({
                     width={16}
                     height={16}
                 />
-            </button>
+            </Button>
         );
     },
     managedStyle: css,

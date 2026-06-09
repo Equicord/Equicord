@@ -32,7 +32,9 @@ const ALLOWED_MEDIA_HOSTS = new Set([
     "media4.giphy.com",
 ]);
 
-const Native = VencordNative?.pluginHelpers?.GifMaker as PluginNative<typeof import("../native")> | undefined;
+const MediaNative = VencordNative?.pluginHelpers?.gifMaker as PluginNative<typeof import("../native")> | undefined;
+
+const blobUrlMap = new WeakMap<HTMLElement, string>();
 
 function isDiscordCdnUrl(url: string): boolean {
     try {
@@ -43,8 +45,8 @@ function isDiscordCdnUrl(url: string): boolean {
 }
 
 async function getMediaBlobUrl(url: string): Promise<string> {
-    if (Native) {
-        const { data, type } = await Native.fetchMedia(url);
+    if (MediaNative) {
+        const { data, type } = await MediaNative.fetchMedia(url);
         if (data) return URL.createObjectURL(new Blob([data], { type }));
     }
     const res = await fetch(url);
@@ -64,6 +66,14 @@ function resolveMediaUrl(url: string): string {
     return normalized;
 }
 
+function cleanupBlobUrl(el: HTMLElement) {
+    const blobUrl = blobUrlMap.get(el);
+    if (blobUrl) {
+        URL.revokeObjectURL(blobUrl);
+        blobUrlMap.delete(el);
+    }
+}
+
 export function loadImage(url: string): Promise<HTMLImageElement> {
     return new Promise((resolve, reject) => {
         const img = new Image();
@@ -74,7 +84,7 @@ export function loadImage(url: string): Promise<HTMLImageElement> {
         const resolved = resolveMediaUrl(url);
         if (isDiscordCdnUrl(resolved)) {
             getMediaBlobUrl(resolved).then(blobUrl => {
-                (img as any).__gifmaker_blobUrl = blobUrl;
+                blobUrlMap.set(img, blobUrl);
                 img.src = blobUrl;
             }).catch(reject);
         } else {
@@ -113,7 +123,7 @@ export function loadVideo(url: string): Promise<HTMLVideoElement> {
     if (isDiscordCdnUrl(resolved)) {
         return getMediaBlobUrl(resolved).then(blobUrl =>
             createVideoElement(blobUrl).then(video => {
-                (video as any).__gifmaker_blobUrl = blobUrl;
+                blobUrlMap.set(video, blobUrl);
                 return video;
             })
         );
@@ -196,8 +206,7 @@ async function createGifFromImage(url: string, options: GifMakerOptions): Promis
             ctx.drawImage(img, 0, 0, options.width, options.height);
         });
     } finally {
-        const blobUrl = (img as any).__gifmaker_blobUrl;
-        if (blobUrl) URL.revokeObjectURL(blobUrl);
+        cleanupBlobUrl(img);
     }
 }
 
@@ -219,8 +228,7 @@ async function createGifFromVideo(url: string, options: GifMakerOptions): Promis
             ctx.drawImage(video, 0, 0, options.width, options.height);
         });
     } finally {
-        const blobUrl = (video as any).__gifmaker_blobUrl;
-        if (blobUrl) URL.revokeObjectURL(blobUrl);
+        cleanupBlobUrl(video);
     }
 }
 
@@ -261,9 +269,10 @@ export async function createGif(url: string, isVideo: boolean, options: GifMaker
 }
 
 export async function getGifInfo(url: string): Promise<SourceFrameInfo | null> {
+    if (!MediaNative) return null;
     try {
         const resolved = resolveMediaUrl(url);
-        const { data } = await Native.fetchMedia(resolved);
+        const { data } = await MediaNative.fetchMedia(resolved);
         const bytes = new Uint8Array(data);
 
         if (bytes[0] !== 0x47 || bytes[1] !== 0x49 || bytes[2] !== 0x46) return null;
@@ -297,9 +306,10 @@ export async function getGifInfo(url: string): Promise<SourceFrameInfo | null> {
 }
 
 async function getWebpInfo(url: string): Promise<SourceFrameInfo | null> {
+    if (!MediaNative) return null;
     try {
         const resolved = resolveMediaUrl(url);
-        const { data } = await Native.fetchMedia(resolved);
+        const { data } = await MediaNative.fetchMedia(resolved);
         const bytes = new Uint8Array(data);
 
         if (bytes[0] !== 0x52 || bytes[1] !== 0x49 || bytes[2] !== 0x46 || bytes[3] !== 0x46 ||
@@ -392,7 +402,7 @@ async function createGifFromAnimatedImage(url: string, options: GifMakerOptions)
     img.crossOrigin = "anonymous";
 
     const wrapper = document.createElement("div");
-    wrapper.style.cssText = "position:fixed;top:0;left:0;width:1px;height:1px;opacity:0.01;pointer-events:none;overflow:hidden;";
+    wrapper.className = "vc-gifmaker-capture-wrapper";
     wrapper.appendChild(img);
     document.body.appendChild(wrapper);
 
@@ -406,7 +416,7 @@ async function createGifFromAnimatedImage(url: string, options: GifMakerOptions)
         };
         if (isDiscordCdnUrl(resolved)) {
             getMediaBlobUrl(resolved).then(blobUrl => {
-                (img as any).__gifmaker_blobUrl = blobUrl;
+                blobUrlMap.set(img, blobUrl);
                 img.src = blobUrl;
             }).catch(reject);
         } else {
@@ -426,7 +436,6 @@ async function createGifFromAnimatedImage(url: string, options: GifMakerOptions)
         });
     } finally {
         wrapper.remove();
-        const blobUrl = (img as any).__gifmaker_blobUrl;
-        if (blobUrl) URL.revokeObjectURL(blobUrl);
+        cleanupBlobUrl(img);
     }
 }
