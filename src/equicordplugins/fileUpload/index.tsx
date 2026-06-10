@@ -19,7 +19,7 @@ import { DraftType, FluxDispatcher, Menu, PermissionsBits, PermissionStore, Reac
 import { settings } from "./settings";
 import { serviceLabels, ServiceType } from "./types";
 import { getMediaUrl } from "./utils/getMediaUrl";
-import { cancelCurrentUpload, getUploadState, isConfigured, isFileTypeAllowed, subscribeUploadState, uploadFile, uploadPickedFile, uploadProvidedFiles } from "./utils/upload";
+import { cancelCurrentUpload, getUploadState, isConfigured, isFileTypeAllowed, logger, subscribeUploadState, uploadFile, uploadPickedFile, uploadProvidedFiles } from "./utils/upload";
 const cl = classNameFactory("vc-file-upload-");
 const { getUserMaxFileSize } = findByPropsLazy("getUserMaxFileSize");
 let uploadAddFilesInterceptor: ((event: unknown) => void) | null = null;
@@ -242,15 +242,11 @@ async function handleUploadFileFromDraft(upload: CloudUpload) {
         return;
     }
 
-    const originalAutoSend = settings.store.autoSend;
-    settings.store.autoSend = true;
     try {
-        await uploadProvidedFiles([file]);
+        await uploadProvidedFiles([file], true);
         upload.removeFromMsgDraft();
-    } catch {
-        // error handled by uploadProvidedFiles
-    } finally {
-        settings.store.autoSend = originalAutoSend;
+    } catch (e) {
+        logger.warn("Draft upload encountered an unexpected error", e);
     }
 }
 
@@ -260,7 +256,7 @@ const channelAttachMenuPatch: NavContextMenuPatchCallback = (children, props) =>
     const channel = props?.channel;
     if (!channel) return;
     if (channel.guild_id && !PermissionStore.can(PermissionsBits.SEND_MESSAGES, channel)) return;
-    if (children.some(child => child?.props?.id === "file-upload-manual")) return;
+    if (children.some(child => child?.props?.id === "file-upload-manual" || child?.props?.id === "file-upload-uploads")) return;
 
     const uploads = UploadAttachmentStore.getUploads(channel.id, DraftType.ChannelMessage);
     const draftUploads = Array.isArray(uploads) ? uploads.filter((u: CloudUpload) => u.item?.file && isFileTypeAllowed(u.item.file)) : [];
