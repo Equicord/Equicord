@@ -36,7 +36,8 @@ const serviceOptions = [
     { label: "filebin.net", value: ServiceType.FILEBIN },
     { label: "PixelVault", value: ServiceType.PIXELVAULT },
     { label: "PixelDrain", value: ServiceType.PIXELDRAIN },
-    { label: "ShareX Custom Uploader", value: ServiceType.SHAREX }
+    { label: "ShareX Custom Uploader", value: ServiceType.SHAREX },
+    { label: "WebDAV (Nextcloud/Owncloud)", value: ServiceType.WEBDAV }
 ];
 
 const litterboxOptions = [
@@ -313,6 +314,36 @@ export const settings = definePluginSettings({
         description: "Automatically upload files from clipboard to image host when pasting in chat input.",
         default: false
     },
+    webdavUrl: {
+        type: OptionType.STRING,
+        description: "WebDAV server URL",
+        default: "",
+        hidden: true
+    },
+    webdavUsername: {
+        type: OptionType.STRING,
+        description: "WebDAV username",
+        default: "",
+        hidden: true
+    },
+    webdavPassword: {
+        type: OptionType.STRING,
+        description: "WebDAV password or app token",
+        default: "",
+        hidden: true
+    },
+    webdavDirectory: {
+        type: OptionType.STRING,
+        description: "Optional subdirectory on the WebDAV server",
+        default: "",
+        hidden: true
+    },
+    uploadAllowedFileTypes: {
+        type: OptionType.STRING,
+        description: "Comma-separated list of allowed file extensions (e.g. png,jpg,gif,mp4). Leave empty to allow all files.",
+        default: "",
+        hidden: true
+    },
     settingsComponent: {
         type: OptionType.COMPONENT,
         description: "Settings",
@@ -475,6 +506,7 @@ export function SettingsComponent() {
     const isPixelVault = store.serviceType === ServiceType.PIXELVAULT;
     const isPixelDrain = store.serviceType === ServiceType.PIXELDRAIN;
     const isShareX = store.serviceType === ServiceType.SHAREX;
+    const isWebdav = store.serviceType === ServiceType.WEBDAV;
 
     const validateShareXConfig = () => {
         try {
@@ -785,6 +817,39 @@ export function SettingsComponent() {
                 </SettingGroup>
             )}
 
+            {isWebdav && (
+                <SettingGroup name="WebDAV" description="Connection details for WebDAV servers (Nextcloud, Owncloud, etc.).">
+                    <SettingTextInput
+                        name="Server URL"
+                        description="Base WebDAV URL (e.g. https://nextcloud.example.com/remote.php/dav/files/username)"
+                        value={store.webdavUrl}
+                        onChange={v => store.webdavUrl = v}
+                        placeholder="https://nextcloud.example.com/remote.php/dav/files/username"
+                    />
+                    <SettingTextInput
+                        name="Username"
+                        description="WebDAV username"
+                        value={store.webdavUsername}
+                        onChange={v => store.webdavUsername = v}
+                        placeholder="username"
+                    />
+                    <SettingTextInput
+                        name="Password or App Token"
+                        description="WebDAV password or app token"
+                        value={store.webdavPassword}
+                        onChange={v => store.webdavPassword = v}
+                        placeholder="password or app token"
+                    />
+                    <SettingTextInput
+                        name="Upload Directory"
+                        description="Optional subdirectory on the server to upload into (e.g. uploads)"
+                        value={store.webdavDirectory}
+                        onChange={v => store.webdavDirectory = v}
+                        placeholder="Leave empty for root directory"
+                    />
+                </SettingGroup>
+            )}
+
             <SettingGroup name="Upload Behavior" description="Control what FileUpload does after a host returns a URL.">
                 <SettingSwitch
                     name="Strip Query Parameters"
@@ -881,6 +946,14 @@ export function SettingsComponent() {
                     description="Use FileUpload only for files larger than your current Discord upload limit."
                     checked={store.bypassDiscordUploadOnlyOverLimit}
                     onChange={v => store.bypassDiscordUploadOnlyOverLimit = v}
+                />
+
+                <SettingTextInput
+                    name="Allowed File Types"
+                    description="Comma-separated list of extensions (e.g. png,jpg,gif). Leave empty to allow all."
+                    value={store.uploadAllowedFileTypes}
+                    onChange={v => store.uploadAllowedFileTypes = v}
+                    placeholder="png,jpg,gif,mp4,webp"
                 />
             </SettingGroup>
 
