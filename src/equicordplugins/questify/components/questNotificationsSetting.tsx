@@ -10,7 +10,6 @@ import type { JSX, MouseEvent } from "react";
 
 import { getQuestifySettings, useQuestifySettings } from "../settings/access";
 import { startAutoFetchingQuests } from "../settings/fetching";
-import { QL } from "../utils/logging";
 import { q } from "../utils/ui";
 import { ManaSelectFormattedOption, ManaSelectOption, SettingsCard, SettingsDescription, SettingsHeader, SettingsRow, SettingsRowItem, SettingsSelect, SettingsSlider, SettingsSubheader, SettingsSubtleSwitch } from "./shared";
 
@@ -158,7 +157,6 @@ export function QuestNotificationsSetting(): JSX.Element {
     const disabled = questNotifications.disableQuestsEverything;
 
     function clearActivePlayer(): void {
-        QL.info("CLEAR ACTIVE PLAYER RAN");
         const player = activePlayer.current;
         activePlayer.current = null;
         player?.stop();
