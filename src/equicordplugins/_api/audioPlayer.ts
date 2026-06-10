@@ -70,7 +70,7 @@ export default definePlugin({
             // Pass undefined for options in default Discord calls to the audio constructor.
             find: "SoundUtils",
             replacement: {
-                match: /return new (\i)\((.{0,50}?(?=}function))/,
+                match: /return new (\i)\((.{0,50}?)(?=}function)/,
                 replace: "return new $1(undefined,$2"
             }
         },
