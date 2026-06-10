@@ -298,7 +298,7 @@ function getRestErrorCode(error: unknown) {
 
 function shouldRetryWithFFmpeg(error: unknown) {
     const errorText = getSearchableErrorText(error).toLowerCase();
-    return getRestErrorCode(error) === 50174 || errorText.includes("ffmpeg") || errorText.includes("not a valid clip");
+    return getRestErrorCode(error) === 50174 || errorText.includes("not a valid clip");
 }
 
 export async function uploadClipFile(file: File, options: ClipUploadOptions) {
