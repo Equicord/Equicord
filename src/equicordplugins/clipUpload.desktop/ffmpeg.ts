@@ -40,6 +40,7 @@ async function loadFFmpeg() {
             ffmpeg = null;
             throw error;
         } finally {
+            URL.revokeObjectURL(classWorkerURL);
             ffmpegLoading = null;
         }
     })();
