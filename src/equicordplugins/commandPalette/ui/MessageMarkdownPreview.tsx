@@ -8,9 +8,9 @@ import { generateId } from "@api/Commands";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { classNameFactory } from "@utils/css";
 import { LazyComponent } from "@utils/react";
-import { find, findByCodeLazy } from "@webpack";
-import { moment, SelectedChannelStore, UserStore, useEffect, useMemo, useRef, useState } from "@webpack/common";
 import type { Message, MessageAttachment } from "@vencord/discord-types";
+import { find, findByCodeLazy } from "@webpack";
+import { moment, SelectedChannelStore, useEffect, useMemo, useRef, UserStore, useState } from "@webpack/common";
 
 const cl = classNameFactory("vc-cmdpal-");
 

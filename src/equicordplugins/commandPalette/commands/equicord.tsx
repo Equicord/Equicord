@@ -4,10 +4,9 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { openSettingsPage } from "./openSettings";
-
 import type { PaletteCommand } from "../api/types";
 import { BoltIcon, GearIcon, PaintIcon, RestartIcon } from "../ui/icons";
+import { openSettingsPage } from "./openSettings";
 
 const SECTION = "Equicord";
 

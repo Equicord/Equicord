@@ -10,9 +10,9 @@ import { showToast, Toasts } from "@webpack/common";
 
 import { registerCommands } from "../api/registry";
 import type { FormPageSpec, PageEntry, PaletteAction, PaletteCommand } from "../api/types";
+import { filterOptions } from "../search/ranker";
 import { createPersistedValue } from "../state/persist";
 import { BoltIcon, GearIcon, LinkIcon, PencilIcon, PlusIcon, TextIcon, TrashIcon } from "../ui/icons";
-import { filterOptions } from "../search/ranker";
 import { DISCORD_SETTINGS_ROUTES, openSettingsPage } from "./openSettings";
 
 type CustomCommandKind = "url" | "settings" | "message";

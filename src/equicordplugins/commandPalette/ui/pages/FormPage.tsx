@@ -9,9 +9,8 @@ import { ChannelStore, useEffect, useLayoutEffect, useMemo, useRef, useState } f
 import type { KeyboardEvent } from "react";
 
 import type { FormField, FormFieldOption, FormPageSpec, FormSubmitExtras, FormValues, PaletteContext } from "../../api/types";
-import { filterOptions, fuzzyScore } from "../../search/ranker";
-import { MessageMarkdownPreview } from "../MessageMarkdownPreview";
 import { tryMaskedLinkPaste } from "../markdownPaste";
+import { MessageMarkdownPreview } from "../MessageMarkdownPreview";
 import { PaletteIcon } from "../PaletteIcon";
 
 const cl = classNameFactory("vc-cmdpal-");
@@ -224,7 +223,7 @@ export function FormPage({ spec, ctx, formRef }: FormPageProps) {
     let firstAssigned = false;
 
     const previewChannelId = useMemo(() => {
-        const recipient = values.recipient;
+        const { recipient } = values;
         if (typeof recipient !== "string" || !recipient) return null;
         return ChannelStore.getDMFromUserId(recipient) ?? null;
     }, [values.recipient]);

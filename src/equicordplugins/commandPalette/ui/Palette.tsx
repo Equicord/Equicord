@@ -35,7 +35,7 @@ const SUGGESTION_LIMIT = 6;
 
 function commandToRow(command: PaletteCommand): RowItem | null {
     const ownActions = command.actions ?? [];
-    const page = command.page;
+    const { page } = command;
     const actions: PaletteAction[] = page
         ? [
             {
