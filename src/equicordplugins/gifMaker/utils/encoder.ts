@@ -7,11 +7,10 @@
 import { sleep } from "@utils/misc";
 import type { PluginNative } from "@utils/types";
 
-import { createGifEncoderWorker, terminateWorker } from "./encoder.worker";
-
 import { CAPTIONS } from "../captions";
 import { measureTextLines } from "../captions/caption";
 import type { GifMakerOptions } from "../types";
+import { createGifEncoderWorker, terminateWorker } from "./encoder.worker";
 
 const MAX_FRAMES = 50;
 const INTERNAL_FPS = 10;
