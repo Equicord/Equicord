@@ -24,8 +24,7 @@ const qualities = [
     { giphy: "100", tenor: "A2", cap: 120, video: "P4" }, // Horrible ~ 120
 ];
 
-const mediaTenorLinkRegex = /^https:\/\/(?:media\d?|c)\.tenor\.com(?:\/m)?\/(?<id>.+?)(?<quality>.{2})\/(?<name>[^/]+)\./i;
-const mediaTenorVideoLinkRegex = /^https:\/\/(?:media\d?|c)\.tenor\.com(?:\/m)?\/(?<id>.+?)(?<quality>P\w{1,2})\/(?<name>[^/]+)\.(?:mp4|webm)$/i;
+const mediaTenorRegex = /^https:\/\/(?:media\d?|c)\.tenor\.com(?:\/m)?\/(?<id>.+?)(?<quality>\w{2})\/(?<name>[^/]+)\.(?<ext>gif|webp|mp4|webm)$/i;
 const giphyLinkRegex = /^https:\/\/media\d?\.giphy\.com\/media\/.*?\/(?<code>.*?)\/giphy/i;
 const mediaProxyParser = /^https:\/\/images-ext-\d\.discordapp.net\/external\/.*?\.*?\/(?<protocol>.*?)\/(?<rest>.*?)$/i;
 
@@ -66,15 +65,15 @@ export default definePlugin({
                 },
                 {
                     match: /(GIF_PICKER_QUERY_SUCCESS.{0,200}width:(\i),height:(\i),)src:(\i\(\i\)),gifSrc:(\i\(\i\))/,
-                    replace: "$1src:$self.parseLink($4,[$2,$3]),gifSrc:$self.parseLink($5,[$2,$3])",
+                    replace: "$1src:$self.parseLink($4,[$2,$3],true),gifSrc:$self.parseLink($5,[$2,$3],true)",
                 },
                 {
                     match: /(GIF_PICKER_TRENDING_FETCH_SUCCESS.{0,400})src:(\i\(\i\.trendingGIFPreview\.src\))/,
-                    replace: "$1src:$self.parseLink($2)",
+                    replace: "$1src:$self.parseLink($2,undefined,true)",
                 },
                 {
                     match: /src:(\i\(\i\.src\))(,type:\i\.\i\.TRENDING_CATEGORY,)/,
-                    replace: "src:$self.parseLink($1)$2",
+                    replace: "src:$self.parseLink($1,undefined,true)$2",
                 },
             ]
         },
@@ -92,21 +91,18 @@ export default definePlugin({
             ],
         },
     ],
-    parseLink(link: string, sizes?: [width: number, height: number]) {
+    parseLink(link: string, sizes?: [width: number, height: number], forceImage?: boolean) {
         const quality = settings.store.gifQuality;
         const q = qualities[quality - 1] ?? qualities[0];
         const url: URL = new URL(link.startsWith("//") ? `https:${link}` : link);
 
         const cleanLink = getCleanLink(link);
-        const tenorVideoMatch = cleanLink.match(mediaTenorVideoLinkRegex);
-        if (tenorVideoMatch) {
-            const { id, name } = tenorVideoMatch.groups!;
-            return `https://media.tenor.com/${id}${q.video}/${name}.mp4`;
-        }
-        const tenorMatch = cleanLink.match(mediaTenorLinkRegex);
+
+        const tenorMatch = cleanLink.match(mediaTenorRegex);
         if (tenorMatch) {
-            const { id, name } = tenorMatch.groups!;
-            return `https://media.tenor.com/${id}${q.tenor}/${name}.webp`;
+            const { id, name, ext } = tenorMatch.groups!;
+            const isVideo = !forceImage && (ext === "mp4" || ext === "webm");
+            return `https://media.tenor.com/${id}${isVideo ? q.video : q.tenor}/${name}.${isVideo ? ext : "webp"}`;
         }
 
         const giphyMatch = cleanLink.match(giphyLinkRegex);

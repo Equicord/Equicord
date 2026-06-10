@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { isObject } from "@utils/misc";
 import { Logger } from "@utils/Logger";
+import { isObject } from "@utils/misc";
 import type { PluginNative } from "@utils/types";
 import type { User } from "@vencord/discord-types";
 import { Constants, MediaEngineStore, RestAPI, showToast, SnowflakeUtils, Toasts } from "@webpack/common";
@@ -181,7 +181,15 @@ export async function pickClipFile(parseFileMetadata: boolean) {
     const picked = await Native.chooseVideoFile();
     if (!picked) return null;
 
-    return readStampedVideoFile(picked.token, picked.name, picked.type);
+    let metadata: ParsedClipMetadata | null = null;
+    if (parseFileMetadata) {
+        const result = await Native.parseClipFileMetadata(picked.token);
+        metadata = result?.[0] ?? null;
+    }
+
+    const file = await readStampedVideoFile(picked.token, picked.name, picked.type);
+
+    return { file, metadata };
 }
 
 function isCompatibleClipFile(file: File) {

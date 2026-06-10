@@ -7,7 +7,7 @@
 import * as DataStore from "@api/DataStore";
 import { proxyLazy } from "@utils/lazy";
 import { Logger } from "@utils/Logger";
-import { OAuth2AuthorizeModal, openModal,showToast, Toasts, UserStore, zustandCreate, zustandPersist } from "@webpack/common";
+import { OAuth2AuthorizeModal, openModal, showToast, Toasts, UserStore, zustandCreate, zustandPersist } from "@webpack/common";
 
 import { AUTHORIZE_URL, CLIENT_ID } from "../constants";
 import { useStreaksStore } from "./StreaksStore";
@@ -21,7 +21,6 @@ interface AuthorizationState {
     remove: (id: string) => void;
     isAuthorized: () => boolean;
 }
-
 const indexedDBStorage = {
     async getItem(name: string): Promise<string | null> {
         return DataStore.get(name).then(v => v ?? null);
@@ -33,7 +32,6 @@ const indexedDBStorage = {
         await DataStore.del(name);
     },
 };
-
 export const useAuthorizationStore = proxyLazy(() => zustandCreate(
     zustandPersist(
         (set: any, get: any) => ({
@@ -50,7 +48,6 @@ export const useAuthorizationStore = proxyLazy(() => zustandCreate(
                 const newTokens = { ...tokens };
                 delete newTokens[id];
                 set({ tokens: newTokens });
-
                 init();
             },
             async authorize() {
@@ -71,14 +68,12 @@ export const useAuthorizationStore = proxyLazy(() => zustandCreate(
                                     const url = new URL(response.location);
                                     const code = url.searchParams.get("code");
                                     if (!code) throw new Error("No code in redirect");
-
-                                    const req = await fetch(`${AUTHORIZE_URL}?code=${code}`);
-
+                                    const req = await fetch(`${AUTHORIZE_URL}?code=${encodeURIComponent(code)}`);
                                     if (req?.ok) {
-                                        const token = await req.text();
-                                        get().setToken(token);
+                                        const { access_token: token } = await req.json();
+                                        if (token) get().setToken(token);
                                     } else {
-                                        throw new Error("Request not OK");
+                                        throw new Error(`Request not OK: ${req.status}`);
                                     }
                                     resolve(void 0);
                                 } catch (e) {
