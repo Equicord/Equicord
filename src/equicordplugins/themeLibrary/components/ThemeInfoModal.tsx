@@ -148,7 +148,7 @@ export const ThemeInfoModal: React.FC<ThemeInfoModalProps> = ({ author, theme, .
                             </Paragraph>
                             <Paragraph style={{ marginTop: "10px" }}>
                                 <Button onClick={() => VencordNative.native.openExternal(donate)}>
-                                    <Heart />
+                                    <Heart className={Margins.right4} />
                                     Donate
                                 </Button>
                             </Paragraph>
@@ -239,3 +239,7 @@ export const ThemeInfoModal: React.FC<ThemeInfoModalProps> = ({ author, theme, .
         </Modal>
     );
 };
+
+export function openThemeInfoModal(theme: Theme, authors: any[]) {
+    openModal(props => <ThemeInfoModal {...props} author={authors} theme={theme} />);
+}

@@ -31,11 +31,13 @@ export { PlainSettings, Settings };
 
 import { coreStyleRootNode, initStyles } from "@api/Styles";
 import { openSettingsTabModal, UpdaterTab } from "@components/settings";
+import { makeDummyUser } from "@equicordplugins/themeLibrary/components/ThemeCard";
+import { openThemeInfoModal } from "@equicordplugins/themeLibrary/components/ThemeInfoModal";
 import { debounce } from "@shared/debounce";
 import { IS_WINDOWS } from "@utils/constants";
 import { createAndAppendStyle } from "@utils/css";
 import { StartAt } from "@utils/types";
-import { SettingsRouter } from "@webpack/common";
+import { SettingsRouter, UserUtils } from "@webpack/common";
 
 import { get as dsGet } from "./api/DataStore";
 import { popNotice, showNotice } from "./api/Notices";
@@ -198,12 +200,35 @@ function initTrayIpc() {
     VencordNative.tray.setUpdateState(getIsOutdated);
 }
 
+function initProtocol() {
+    if (IS_WEB || IS_UPDATER_DISABLED) return;
+
+    VencordNative.themes.onInstallTheme(async id => {
+        try {
+            const res = await fetch("https://themes.equicord.org/api/themes");
+            const themes = await res.json();
+            const theme = themes.find(t => String(t.id) === String(id));
+            if (!theme) throw new Error("Theme not found");
+
+            const getUser = (id, username) => UserUtils.getUser(id) ?? makeDummyUser({ username, id });
+            const authors = Array.isArray(theme.author)
+                ? await Promise.all(theme.author.map(author => getUser(author.discord_snowflake, author.discord_name)))
+                : [await getUser(theme.author.discord_snowflake, theme.author.discord_name)];
+
+            openThemeInfoModal(theme, authors);
+        } catch (err) {
+            console.error("[Equicord] Failed to handle install-theme IPC", err);
+        }
+    });
+}
+
 async function init() {
     await onceReady;
     startAllPlugins(StartAt.WebpackReady);
 
     syncSettings();
     initTrayIpc();
+    initProtocol();
 
     if (!IS_DEV && !IS_WEB && !IS_UPDATER_DISABLED) {
         runUpdateCheck();

@@ -27,6 +27,46 @@ import { IS_VANILLA, THEMES_DIR } from "./utils/constants";
 import { installExt } from "./utils/extensions";
 
 if (!IS_VANILLA && !IS_EXTENSION) {
+    app.setAsDefaultProtocolClient("equicord");
+
+    const handleEquicordUrl = (urlStr: string) => {
+        try {
+            const url = new URL(urlStr);
+            if (url.protocol === "equicord:") {
+                switch (url.hostname) {
+                    case "install-theme":
+                        const id = url.searchParams.get("id");
+                        if (id) {
+                            const { BrowserWindow } = require("electron");
+                            BrowserWindow.getAllWindows().forEach(win => {
+                                win.webContents.send("VencordInstallTheme", id);
+                            });
+                        }
+                        break;
+
+                }
+            }
+        } catch (e) {
+            console.error("[Equicord] Failed to parse protocol URL", e);
+        }
+    };
+
+    app.on("second-instance", (event, commandLine, workingDirectory) => {
+        const url = commandLine.find(arg => arg.startsWith("equicord://"));
+        if (url) {
+            console.log("[Equicord] Protocol URL opened:", url);
+            handleEquicordUrl(url);
+        }
+    });
+
+    app.on("open-url", (event, url) => {
+        if (url.startsWith("equicord://")) {
+            event.preventDefault();
+            console.log("[Equicord] Protocol URL opened:", url);
+            handleEquicordUrl(url);
+        }
+    });
+
     app.whenReady().then(() => {
         protocol.handle("vencord", ({ url: unsafeUrl }) => {
             let url = decodeURI(unsafeUrl).slice("vencord://".length).replace(/\?v=\d+$/, "");

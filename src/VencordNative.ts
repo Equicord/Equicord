@@ -41,6 +41,9 @@ export default {
         getSystemValues: () => invoke<Record<string, string>>(IpcEvents.GET_THEME_SYSTEM_VALUES),
 
         openFolder: () => invoke<void>(IpcEvents.OPEN_THEMES_FOLDER),
+        onInstallTheme: (cb: (id: string) => void) => {
+            ipcRenderer.on(IpcEvents.INSTALL_THEME, (_, id) => cb(id));
+        }
     },
 
     updater: {
