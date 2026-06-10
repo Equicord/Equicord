@@ -169,7 +169,15 @@ function isClipMetadataUpdater(value: unknown): value is ClipMetadataUpdater {
     return isObject(value) && typeof (value as { updateClipMetadata?: unknown; }).updateClipMetadata === "function";
 }
 
-export async function pickClipFile() {
+export interface ParsedClipMetadata {
+    id?: string;
+    applicationId?: string;
+    applicationName?: string;
+    users?: string[];
+    version?: number;
+}
+
+export async function pickClipFile(parseFileMetadata: boolean) {
     const picked = await Native.chooseVideoFile();
     if (!picked) return null;
 
