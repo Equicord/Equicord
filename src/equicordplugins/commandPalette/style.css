@@ -83,16 +83,6 @@
     height: auto;
 }
 
-.vc-cmdpal-root-form .vc-cmdpal-body {
-    flex: none;
-    min-height: 0;
-}
-
-.vc-cmdpal-root-form .vc-cmdpal-form {
-    flex: none;
-    overflow: visible;
-}
-
 .vc-cmdpal-header {
     display: flex;
     align-items: center;
@@ -462,6 +452,16 @@
     padding: 18px;
 }
 
+.vc-cmdpal-root-form .vc-cmdpal-body {
+    flex: none;
+    min-height: 0;
+}
+
+.vc-cmdpal-root-form .vc-cmdpal-form {
+    flex: none;
+    overflow: visible;
+}
+
 .vc-cmdpal-field {
     display: flex;
     flex-direction: column;
@@ -526,7 +526,7 @@
     border-radius: 9px;
     border: 1px solid var(--cmdpal-hairline);
     background: var(--cmdpal-bg-elevated);
-    word-break: break-word;
+    overflow-wrap: break-word;
     overflow: hidden;
 }
 
@@ -707,8 +707,7 @@
     box-shadow: 0 12px 40px rgb(0 0 0 / 50%);
     max-height: 180px;
     min-height: 0;
-    overflow-x: hidden;
-    overflow-y: auto;
+    overflow: hidden auto;
     overscroll-behavior: contain;
     scrollbar-width: thin;
     scrollbar-color: var(--cmdpal-soft) transparent;
