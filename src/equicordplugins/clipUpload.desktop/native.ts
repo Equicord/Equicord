@@ -20,6 +20,7 @@ const pendingTokens = new Map<string, string>();
 const tempEntries = new Map<string, TempEntry>();
 const CLIP_UPLOAD_DIR = join(DATA_DIR, "clipUpload");
 const ALLOWED_EXTENSIONS = new Set([".mp4", ".m4v"]);
+const MAX_CLIP_SIZE = 500 * 1024 * 1024; // 500MB
 const MIME_TYPES: Record<string, string> = {
     ".mp4": "video/mp4",
     ".m4v": "video/mp4",
@@ -74,7 +75,7 @@ export async function createTempVideoFile(_: IpcMainInvokeEvent, token: string):
 }
 
 export async function createTempVideoFileFromBytes(_: IpcMainInvokeEvent, name: string, data: Uint8Array): Promise<string | null> {
-    if (typeof name !== "string" || !(data instanceof Uint8Array) || data.byteLength === 0) return null;
+    if (typeof name !== "string" || !(data instanceof Uint8Array) || data.byteLength === 0 || data.byteLength > MAX_CLIP_SIZE) return null;
 
     const fileName = basename(name);
     if (fileName !== name || !ALLOWED_EXTENSIONS.has(extname(fileName).toLowerCase())) return null;
