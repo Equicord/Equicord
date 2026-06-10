@@ -179,23 +179,18 @@
 
 .vc-gifmaker-trigger {
     position: absolute;
-    top: 0;
-    left: 0;
+    top: 4px;
+    left: 4px;
     z-index: 10;
-    display: inline-flex;
+    background-color: var(--background-base-low);
+    border-radius: 5px;
+    padding: 6px;
+    color: var(--icon-strong);
+    border: 0;
+    cursor: pointer;
+    display: flex;
     align-items: center;
     justify-content: center;
-    margin: 0;
-    padding: 2px;
-    background: transparent;
-    border: 0;
-    color: var(--text-normal);
-    cursor: pointer;
-}
-
-.vc-gifmaker-trigger-icon {
-    color: var(--text-normal);
-    filter: drop-shadow(0 0 1px var(--background-primary));
 }
 
 .vc-gifmaker-capture-wrapper {

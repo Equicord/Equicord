@@ -66,7 +66,7 @@ function resolveMediaUrl(url: string): string {
     return normalized;
 }
 
-function cleanupBlobUrl(el: HTMLElement) {
+export function cleanupBlobUrl(el: HTMLElement) {
     const blobUrl = blobUrlMap.get(el);
     if (blobUrl) {
         URL.revokeObjectURL(blobUrl);

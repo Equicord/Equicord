@@ -6,6 +6,8 @@
 
 import { NavContextMenuPatchCallback } from "@api/ContextMenu";
 import { definePluginSettings } from "@api/Settings";
+import { Button } from "@components/Button";
+import ErrorBoundary from "@components/ErrorBoundary";
 import { PencilIcon } from "@components/Icons";
 import { EquicordDevs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
@@ -15,14 +17,14 @@ import { Margins } from "@utils/margins";
 import definePlugin, { OptionType } from "@utils/types";
 import { saveFile } from "@utils/web";
 import type { RenderModalProps } from "@vencord/discord-types";
-import { Button, Menu, Modal, openModal, React, Select, Slider, TextInput, UploadHandler, useEffect, useRef, useState } from "@webpack/common";
+import { Menu, Modal, openModal, React, Select, Slider, TextInput, UploadHandler, useEffect, useRef, useState } from "@webpack/common";
 
 import { CAPTIONS } from "./captions";
 import { fetchAllGoogleFonts, getFontFamilyCss, loadGoogleFont } from "./fonts";
 import css from "./styles.css?managed";
 import { DEFAULT_OPTIONS, type GifMakerOptions, type GoogleFontMetadata } from "./types";
 import { clamp, getInitialSize, getMediaInfo } from "./utils/contextMenu";
-import { createGif, loadImage, loadVideo } from "./utils/encoder";
+import { cleanupBlobUrl, createGif, loadImage, loadVideo } from "./utils/encoder";
 import { applyTenorMp4Fix, collectCandidateUrls, type GifPickerItemInstance, isLikelyVideoUrl, normalizeUrl, orderCandidateUrls } from "./utils/gifPicker";
 
 const cl = classNameFactory("vc-gifmaker-");
@@ -242,6 +244,7 @@ function GifMakerModal({ url, isVideo, sourceWidth, sourceHeight, ...props }: Re
             loadVideo(url).then(v => {
                 const [w, h] = resolveInitialSize(v.videoWidth, v.videoHeight);
                 setOptions(prev => ({ ...prev, width: w, height: h }));
+                cleanupBlobUrl(v);
                 v.remove();
             }).catch(err => logger.error("auto-detect video failed", err));
             return;
@@ -249,6 +252,7 @@ function GifMakerModal({ url, isVideo, sourceWidth, sourceHeight, ...props }: Re
         loadImage(url).then(img => {
             const [w, h] = resolveInitialSize(img.naturalWidth, img.naturalHeight);
             setOptions(prev => ({ ...prev, width: w, height: h }));
+            cleanupBlobUrl(img);
         }).catch(err => logger.error("auto-detect image failed", err));
     }, [sourceWidth, sourceHeight]);
 
@@ -451,6 +455,50 @@ function GifMakerModal({ url, isVideo, sourceWidth, sourceHeight, ...props }: Re
     );
 }
 
+const GifPickerButton = ErrorBoundary.wrap(({ instance }: { instance: GifPickerItemInstance; }) => {
+    const props = instance?.props;
+    if (!props) return null;
+
+    const isGif = props.format === 1;
+    const directUrl = typeof props.src === "string" ? props.src : null;
+
+    return (
+        <Button
+            size="min"
+            className={cl("trigger")}
+            onClick={async event => {
+                event.stopPropagation();
+
+                const candidates = collectCandidateUrls(props);
+                const adjustedCandidates = new Set<string>();
+                if (directUrl) adjustedCandidates.add(applyTenorMp4Fix(normalizeUrl(directUrl), isGif));
+
+                for (const candidate of candidates) {
+                    adjustedCandidates.add(applyTenorMp4Fix(candidate, isGif));
+                }
+
+                const preferredUrl = directUrl ? applyTenorMp4Fix(normalizeUrl(directUrl), isGif) : null;
+                const orderedUrls = orderCandidateUrls(preferredUrl, adjustedCandidates);
+
+                if (!orderedUrls.length) return;
+
+                const firstUrl = orderedUrls[0];
+                const isVideo = isLikelyVideoUrl(firstUrl);
+
+                openModal(modalProps => (
+                    <GifMakerModal url={firstUrl} isVideo={isVideo} {...modalProps} />
+                ));
+            }}
+        >
+            <PencilIcon
+                className={cl("trigger-icon")}
+                width={16}
+                height={16}
+            />
+        </Button>
+    );
+}, { noop: true });
+
 export default definePlugin({
     name: "gifMaker",
     description: "Create and caption GIFs from any media in chat or the GIF picker.",
@@ -475,46 +523,7 @@ export default definePlugin({
     },
 
     renderGifPickerButton(instance: GifPickerItemInstance) {
-        const props = instance?.props;
-        if (!props) return null;
-
-        const isGif = props.format === 1;
-        const directUrl = typeof props.src === "string" ? props.src : null;
-
-        return (
-            <Button
-                size="min"
-                onClick={async event => {
-                    event.stopPropagation();
-
-                    const candidates = collectCandidateUrls(props);
-                    const adjustedCandidates = new Set<string>();
-                    if (directUrl) adjustedCandidates.add(applyTenorMp4Fix(normalizeUrl(directUrl), isGif));
-
-                    for (const candidate of candidates) {
-                        adjustedCandidates.add(applyTenorMp4Fix(candidate, isGif));
-                    }
-
-                    const preferredUrl = directUrl ? applyTenorMp4Fix(normalizeUrl(directUrl), isGif) : null;
-                    const orderedUrls = orderCandidateUrls(preferredUrl, adjustedCandidates);
-
-                    if (!orderedUrls.length) return;
-
-                    const firstUrl = orderedUrls[0];
-                    const isVideo = isLikelyVideoUrl(firstUrl);
-
-                    openModal(modalProps => (
-                        <GifMakerModal url={firstUrl} isVideo={isVideo} {...modalProps} />
-                    ));
-                }}
-            >
-                <PencilIcon
-                    className={cl("trigger-icon")}
-                    width={16}
-                    height={16}
-                />
-            </Button>
-        );
+        return <GifPickerButton instance={instance} />;
     },
     managedStyle: css,
 });
