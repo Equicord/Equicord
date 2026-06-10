@@ -38,7 +38,7 @@ export function getMediaInfo(props: Record<string, unknown>): { url: string; isV
     if (directAttachment?.proxy_url && MEDIA_TYPES.some(t => directAttachment.content_type?.startsWith(t))) {
         return {
             url: directAttachment.proxy_url ?? directAttachment.url,
-            isVideo: directAttachment.content_type?.startsWith("video/"),
+            isVideo: directAttachment.content_type?.startsWith("video/") || false,
             sourceWidth: directAttachment.width,
             sourceHeight: directAttachment.height
         };
@@ -48,7 +48,7 @@ export function getMediaInfo(props: Record<string, unknown>): { url: string; isV
     if (msgAttachment?.proxy_url) {
         return {
             url: msgAttachment.proxy_url ?? msgAttachment.url,
-            isVideo: msgAttachment.content_type?.startsWith("video/"),
+            isVideo: msgAttachment.content_type?.startsWith("video/") || false,
             sourceWidth: msgAttachment.width,
             sourceHeight: msgAttachment.height
         };
@@ -58,11 +58,11 @@ export function getMediaInfo(props: Record<string, unknown>): { url: string; isV
         for (const embed of msg.embeds) {
             const v = embed?.video;
             if (v?.proxyURL || v?.url) {
-                return { url: v.proxyURL ?? v.url, isVideo: true, sourceWidth: v.width, sourceHeight: v.height };
+                return { url: v.proxyURL ?? (v.url || ""), isVideo: true, sourceWidth: v.width, sourceHeight: v.height };
             }
             const i = embed?.image ?? embed?.thumbnail;
             if (i?.proxyURL || i?.url) {
-                return { url: i.proxyURL ?? i.url, isVideo: false, sourceWidth: i.width, sourceHeight: i.height };
+                return { url: i.proxyURL ?? (i.url || ""), isVideo: false, sourceWidth: i.width, sourceHeight: i.height };
             }
         }
     }
