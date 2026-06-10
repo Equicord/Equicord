@@ -5,11 +5,13 @@
  */
 
 import { isObject } from "@utils/misc";
+import { Logger } from "@utils/Logger";
 import type { PluginNative } from "@utils/types";
 import type { User } from "@vencord/discord-types";
 import { Constants, MediaEngineStore, RestAPI, showToast, SnowflakeUtils, Toasts } from "@webpack/common";
 
 import { convertClipToMp4 } from "./ffmpeg";
+const logger = new Logger("ClipUpload");
 
 const Native = VencordNative.pluginHelpers.ClipUpload as PluginNative<typeof import("./native")>;
 
@@ -319,6 +321,7 @@ export async function uploadClipFile(file: File, options: ClipUploadOptions) {
         showToast("Clip uploaded.", Toasts.Type.SUCCESS);
         return true;
     } catch (error) {
+        logger.error(error);
         showToast(getErrorMessage(error), Toasts.Type.FAILURE);
         return false;
     }
