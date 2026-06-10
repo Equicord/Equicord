@@ -73,6 +73,33 @@ export async function createTempVideoFile(_: IpcMainInvokeEvent, token: string):
     }
 }
 
+export async function createTempVideoFileFromBytes(_: IpcMainInvokeEvent, name: string, data: Uint8Array): Promise<string | null> {
+    if (typeof name !== "string" || !(data instanceof Uint8Array) || data.byteLength === 0) return null;
+
+    const fileName = basename(name);
+    if (fileName !== name || !ALLOWED_EXTENSIONS.has(extname(fileName).toLowerCase())) return null;
+
+    try {
+        const tmpDir = join(CLIP_UPLOAD_DIR, randomUUID());
+        const tmpPath = join(tmpDir, fileName);
+
+        if (!ensureSafePath(tmpDir, fileName)) return null;
+
+        await mkdir(tmpDir, { recursive: true });
+        await writeFile(tmpPath, data);
+
+        const tmpToken = randomUUID();
+        tempEntries.set(tmpToken, { tmpDir, tmpPath });
+        return tmpToken;
+    } catch {
+        return null;
+    }
+}
+
+export function getTempVideoFilePath(_: IpcMainInvokeEvent, token: string): string | null {
+    return tempEntries.get(token)?.tmpPath ?? null;
+}
+
 export async function readVideoFile(_: IpcMainInvokeEvent, token: string): Promise<Uint8Array | null> {
     const entry = tempEntries.get(token);
     if (!entry) return null;
