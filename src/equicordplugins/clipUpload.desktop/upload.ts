@@ -138,6 +138,8 @@ async function readStampedVideoFile(token: string, name: string, type: string) {
 }
 
 async function updateTempVideoMetadata(tmpToken: string) {
+    // We need the absolute path here because Discord's MediaEngineStore requires it
+    // and it is a renderer-only module, so this cannot be done in the main process.
     const tmpPath = await Native.getTempVideoFilePath(tmpToken);
     if (!tmpPath) throw new Error("Couldn't prepare the selected file.");
 

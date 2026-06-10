@@ -96,6 +96,9 @@ export async function createTempVideoFileFromBytes(_: IpcMainInvokeEvent, name: 
     }
 }
 
+// Note: Exposing the absolute path to the renderer is unavoidable here.
+// Discord's MediaEngineStore is a renderer-only module, and its
+// updateClipMetadata method requires an absolute filesystem path.
 export function getTempVideoFilePath(_: IpcMainInvokeEvent, token: string): string | null {
     return tempEntries.get(token)?.tmpPath ?? null;
 }
