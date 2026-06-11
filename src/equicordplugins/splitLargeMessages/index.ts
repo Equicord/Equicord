@@ -49,26 +49,96 @@ const listener: MessageSendListener = async (channelId, msg) => {
 
     // Not slowmode or splitInSlowmode is on and less than slowmodeMax
     if (!isSlowmode || (settings.store.splitInSlowmode && channel.rateLimitPerUser < settings.store.slowmodeMax)) {
-        const chunks: string[] = [];
-        const { hardSplit } = settings.store;
-        while (msg.content.length > maxLength) {
-            msg.content = msg.content.trim();
+        const { hardSplit, respectCodeBlocks } = settings.store;
+        let finalChunks: string[] = [];
 
-            // Get last space or newline
-            const splitIndex = Math.max(msg.content.lastIndexOf(" ", maxLength), msg.content.lastIndexOf("\n", maxLength));
+        if (respectCodeBlocks) {
+            // New Behavior: Parse and preserve triple backticks
+            const segments: string[] = [];
+            const parts = msg.content.split("```");
 
-            // If hard split is on or neither newline or space found, split at maxLength
-            if (hardSplit || splitIndex === -1) {
-                chunks.push(msg.content.slice(0, maxLength));
-                msg.content = msg.content.slice(maxLength);
-            } else {
-                chunks.push(msg.content.slice(0, splitIndex));
-                msg.content = msg.content.slice(splitIndex);
+            const splitNormalText = (text: string, maxLen: number, hard: boolean): string[] => {
+                if (!text) return [];
+                const res: string[] = [];
+                let remaining = text;
+                while (remaining.length > maxLen) {
+                    let splitIndex = Math.max(remaining.lastIndexOf(" ", maxLen), remaining.lastIndexOf("\n", maxLen));
+                    if (hard || splitIndex === -1) splitIndex = maxLen;
+                    res.push(remaining.slice(0, splitIndex));
+                    remaining = remaining.slice(splitIndex);
+                }
+                if (remaining.length > 0) res.push(remaining);
+                return res;
+            };
+
+            const splitCodeBlock = (innerContent: string, maxLen: number, hard: boolean): string[] => {
+                const match = innerContent.match(/^([a-zA-Z0-9+#-]+)?\n/);
+                const langTag = match ? match[0] : "";
+                const actualCode = innerContent.slice(langTag.length);
+
+                const startWrap = `\`\`\`${langTag}`;
+                const endWrap = `\n\`\`\``;
+                const innerMax = maxLen - startWrap.length - endWrap.length;
+
+                if (innerMax <= 0) return [`\`\`\`${innerContent}\`\`\``];
+
+                const codeChunks: string[] = [];
+                let remaining = actualCode;
+
+                while (remaining.length > innerMax) {
+                    let splitIndex = Math.max(remaining.lastIndexOf("\n", innerMax), remaining.lastIndexOf(" ", innerMax));
+                    if (hard || splitIndex === -1) splitIndex = innerMax;
+                    codeChunks.push(remaining.slice(0, splitIndex));
+                    remaining = remaining.slice(splitIndex);
+                }
+                if (remaining.length > 0 || codeChunks.length === 0) codeChunks.push(remaining);
+
+                return codeChunks.map(chunk => `${startWrap}${chunk}${endWrap}`);
+            };
+
+            for (let i = 0; i < parts.length; i++) {
+                const isCode = i % 2 === 1;
+                const part = parts[i];
+                if (!part && i !== parts.length - 1) continue;
+
+                if (!isCode) {
+                    segments.push(...splitNormalText(part, maxLength, hardSplit));
+                } else {
+                    segments.push(...splitCodeBlock(part, maxLength, hardSplit));
+                }
             }
+
+            let currentChunk = "";
+            for (const seg of segments) {
+                if ((currentChunk + seg).length > maxLength) {
+                    if (currentChunk) finalChunks.push(currentChunk);
+                    currentChunk = seg;
+                } else {
+                    currentChunk += seg;
+                }
+            }
+            if (currentChunk) finalChunks.push(currentChunk);
+
+        } else {
+            // Original Behavior: Blind splitting
+            let content = msg.content;
+            while (content.length > maxLength) {
+                content = content.trim();
+                const splitIndex = Math.max(content.lastIndexOf(" ", maxLength), content.lastIndexOf("\n", maxLength));
+
+                if (hardSplit || splitIndex === -1) {
+                    finalChunks.push(content.slice(0, maxLength));
+                    content = content.slice(maxLength);
+                } else {
+                    finalChunks.push(content.slice(0, splitIndex));
+                    content = content.slice(splitIndex);
+                }
+            }
+            if (content.length > 0) finalChunks.push(content);
         }
 
         ComponentDispatch.dispatchToLastSubscribed("CLEAR_TEXT");
-        await split(channelId, [...chunks, msg.content], settings.store.sendDelay * 1000);
+        await split(channelId, finalChunks, settings.store.sendDelay * 1000);
     }
     return { cancel: true };
 };
@@ -99,6 +169,11 @@ const settings = definePluginSettings({
         type: OptionType.BOOLEAN,
         description: "If true, splits on the last character instead of the last space/newline.",
         default: false,
+    },
+    respectCodeBlocks: {
+        type: OptionType.BOOLEAN,
+        description: "If true, intelligently slices triple-backtick code blocks to preserve formatting.",
+        default: true,
     },
     splitInSlowmode: {
         type: OptionType.BOOLEAN,
