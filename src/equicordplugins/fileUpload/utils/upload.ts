@@ -974,52 +974,157 @@ async function uploadToPixelDrain(fileBlob: Blob, filename: string): Promise<str
     return `https://pixeldrain.com/u/${data.id}`;
 }
 
-async function uploadToWebdav(fileBlob: Blob, filename: string): Promise<string> {
-    const { webdavUrl, webdavUsername, webdavPassword, webdavDirectory } = settings.store as {
-        webdavUrl?: string;
+function buildWebdavAuthHeader(): string | null {
+    const { webdavUsername, webdavPassword } = settings.store as {
         webdavUsername?: string;
         webdavPassword?: string;
+    };
+    if (webdavUsername?.trim() && webdavPassword?.trim()) {
+        return `Basic ${btoa(`${webdavUsername.trim()}:${webdavPassword.trim()}`)}`;
+    }
+    return null;
+}
+
+function buildWebdavUploadPath(filename: string): { uploadUrl: string; relativePath: string; } {
+    const { webdavUrl, webdavDirectory } = settings.store as {
+        webdavUrl?: string;
         webdavDirectory?: string;
+    };
+
+    const baseUrl = webdavUrl!.replace(/\/+$/, "");
+    const dir = (webdavDirectory || "").replace(/^\/+|\/+$/g, "");
+    const relativePath = dir ? `${dir}/${filename}` : filename;
+    const uploadUrl = `${baseUrl}/${relativePath}`;
+    return { uploadUrl, relativePath };
+}
+
+function extractServerOrigin(webdavUrl: string): string {
+    try {
+        return new URL(webdavUrl).origin;
+    } catch {
+        throw new Error("Invalid WebDAV server URL");
+    }
+}
+
+async function createWebdavShare(relativePath: string, serverOrigin: string): Promise<string> {
+    const { webdavUsername, webdavPassword, webdavServerType } = settings.store as {
+        webdavUsername?: string;
+        webdavPassword?: string;
+        webdavServerType?: string;
+    };
+
+    const ocsVersion = webdavServerType === "owncloud" ? "v1" : "v2";
+    const ocsUrl = `${serverOrigin}/ocs/${ocsVersion}.php/apps/files_sharing/api/v1/shares?format=json`;
+
+    const authHeader = buildWebdavAuthHeader();
+    const ocsHeaders: Record<string, string> = {
+        "OCS-APIRequest": "true",
+        "Content-Type": "application/x-www-form-urlencoded"
+    };
+    if (authHeader) {
+        ocsHeaders.Authorization = authHeader;
+    }
+
+    const body = new URLSearchParams({
+        path: `/${relativePath}`,
+        shareType: "3",
+        permissions: "1"
+    }).toString();
+
+    if (Native) {
+        const result = await Native.createWebdavShare(ocsUrl, ocsHeaders, body);
+        if (!result.success) {
+            throw new Error(result.error || "Failed to create public share");
+        }
+        const token = result.url;
+        if (!token) {
+            throw new Error("No share token returned from server");
+        }
+        const directUrl = webdavServerType === "owncloud"
+            ? `${serverOrigin}/remote.php/dav/public-files/${token}/${encodeURIComponent(relativePath.split("/").pop()!)}`
+            : `${serverOrigin}/public.php/dav/files/${token}/${encodeURIComponent(relativePath.split("/").pop()!)}`;
+        return directUrl;
+    }
+
+    const response = await uploadRequestWithTimeout(ocsUrl, {
+        method: "POST",
+        headers: ocsHeaders,
+        body
+    });
+
+    const responseText = await response.text();
+
+    if (!response.ok) {
+        throw new Error(`Failed to create public share: ${response.status} ${responseText}`);
+    }
+
+    let shareData: { ocs?: { data?: { url?: string; token?: string; }; meta?: Record<string, string>; }; };
+    try {
+        shareData = JSON.parse(responseText);
+    } catch {
+        throw new Error(`Failed to parse share response: ${responseText.slice(0, 200)}`);
+    }
+
+    const shareToken = shareData?.ocs?.data?.token;
+
+    if (!shareToken) {
+        const meta = shareData?.ocs?.meta;
+        const description = meta ? `${meta.status || "unknown"} (${meta.statuscode || "?"})` : "no token in response";
+        throw new Error(`Failed to create public share: ${description}`);
+    }
+
+    const directUrl = webdavServerType === "owncloud"
+        ? `${serverOrigin}/remote.php/dav/public-files/${shareToken}/${encodeURIComponent(relativePath.split("/").pop()!)}`
+        : `${serverOrigin}/public.php/dav/files/${shareToken}/${encodeURIComponent(relativePath.split("/").pop()!)}`;
+    return directUrl;
+}
+
+async function uploadToWebdav(fileBlob: Blob, filename: string): Promise<string> {
+    const { webdavUrl, webdavServerType } = settings.store as {
+        webdavUrl?: string;
+        webdavServerType?: string;
     };
 
     if (!webdavUrl) {
         throw new Error("WebDAV server URL is required");
     }
 
-    const baseUrl = webdavUrl.replace(/\/+$/, "");
-    const dir = (webdavDirectory || "").replace(/^\/+|\/+$/g, "");
-    const path = dir ? `/${dir}/${encodeURIComponent(filename)}` : `/${encodeURIComponent(filename)}`;
-    const uploadUrl = `${baseUrl}${path}`;
+    const authHeader = buildWebdavAuthHeader();
+    const { uploadUrl, relativePath } = buildWebdavUploadPath(filename);
+    const serverType = webdavServerType || "nextcloud";
 
-    const headers: Record<string, string> = {
+    const requestHeaders: Record<string, string> = {
         "Content-Type": fileBlob.type || "application/octet-stream"
     };
-
-    if (webdavUsername?.trim() && webdavPassword?.trim()) {
-        headers.Authorization = `Basic ${btoa(`${webdavUsername.trim()}:${webdavPassword.trim()}`)}`;
+    if (authHeader) {
+        requestHeaders.Authorization = authHeader;
     }
 
     if (Native) {
         const arrayBuffer = await fileBlob.arrayBuffer();
-        const result = await Native.uploadToWebdav(arrayBuffer, uploadUrl, headers);
+        const result = await Native.uploadToWebdav(arrayBuffer, uploadUrl, requestHeaders);
         if (!result.success) {
             throw new Error(result.error || "Upload failed");
         }
+    } else {
+        const response = await uploadRequestWithTimeout(uploadUrl, {
+            method: "PUT",
+            headers: requestHeaders,
+            body: fileBlob
+        });
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`Upload failed: ${response.status} ${errorText}`);
+        }
+    }
+
+    if (serverType === "generic") {
         return uploadUrl;
     }
 
-    const response = await uploadRequestWithTimeout(uploadUrl, {
-        method: "PUT",
-        headers,
-        body: fileBlob
-    });
-
-    if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`Upload failed: ${response.status} ${errorText}`);
-    }
-
-    return uploadUrl;
+    const serverOrigin = extractServerOrigin(webdavUrl);
+    return await createWebdavShare(relativePath, serverOrigin);
 }
 
 async function uploadToService(serviceType: ServiceType, fileBlob: Blob, filename: string): Promise<string> {

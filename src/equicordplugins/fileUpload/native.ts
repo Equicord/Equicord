@@ -495,6 +495,47 @@ export async function uploadToWebdav(
     }
 }
 
+export async function createWebdavShare(
+    _: IpcMainInvokeEvent,
+    ocsUrl: string,
+    headers: Record<string, string>,
+    body: string
+): Promise<NativeUploadResult> {
+    if (!isValidHttpsUrl(ocsUrl)) {
+        return { success: false, error: "Invalid or non-HTTPS share endpoint URL" };
+    }
+
+    try {
+        const response = await fetch(ocsUrl, {
+            method: "POST",
+            headers,
+            body
+        });
+
+        const text = await response.text();
+
+        if (!response.ok) {
+            return { success: false, error: `Share creation failed: ${response.status} ${text.slice(0, 200)}` };
+        }
+
+        let data: { ocs?: { data?: { token?: string; }; }; };
+        try {
+            data = JSON.parse(text);
+        } catch {
+            return { success: false, error: `Invalid share response: ${text.slice(0, 200)}` };
+        }
+
+        const token = data?.ocs?.data?.token;
+        if (!token) {
+            return { success: false, error: "No share token in server response" };
+        }
+
+        return { success: true, url: token };
+    } catch (e) {
+        return { success: false, error: e instanceof Error ? e.message : "Unknown error" };
+    }
+}
+
 export async function fetchFile(
 
     _: IpcMainInvokeEvent,
