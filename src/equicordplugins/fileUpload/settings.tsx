@@ -344,7 +344,7 @@ export const settings = definePluginSettings({
         options: [
             { label: "Nextcloud", value: "nextcloud", default: true },
             { label: "ownCloud", value: "owncloud" },
-            { label: "Generic WebDAV (no public share)", value: "generic" }
+            { label: "Generic WebDAV", value: "generic" }
         ],
         default: "nextcloud",
         hidden: true

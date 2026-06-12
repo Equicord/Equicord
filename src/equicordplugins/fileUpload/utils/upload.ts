@@ -985,31 +985,8 @@ function buildWebdavAuthHeader(): string | null {
     return null;
 }
 
-function buildWebdavUploadPath(filename: string): { uploadUrl: string; relativePath: string; } {
-    const { webdavUrl, webdavDirectory } = settings.store as {
-        webdavUrl?: string;
-        webdavDirectory?: string;
-    };
-
-    const baseUrl = webdavUrl!.replace(/\/+$/, "");
-    const dir = (webdavDirectory || "").replace(/^\/+|\/+$/g, "");
-    const relativePath = dir ? `${dir}/${filename}` : filename;
-    const uploadUrl = `${baseUrl}/${relativePath}`;
-    return { uploadUrl, relativePath };
-}
-
-function extractServerOrigin(webdavUrl: string): string {
-    try {
-        return new URL(webdavUrl).origin;
-    } catch {
-        throw new Error("Invalid WebDAV server URL");
-    }
-}
-
 async function createWebdavShare(relativePath: string, serverOrigin: string, filename: string): Promise<string> {
-    const { webdavUsername, webdavPassword, webdavServerType, webdavShareType } = settings.store as {
-        webdavUsername?: string;
-        webdavPassword?: string;
+    const { webdavServerType, webdavShareType } = settings.store as {
         webdavServerType?: string;
         webdavShareType?: string;
     };
@@ -1080,9 +1057,10 @@ async function createWebdavShare(relativePath: string, serverOrigin: string, fil
     const sharePageUrl = shareUrl || `${serverOrigin}/s/${shareToken}`;
 
     if (shareType === "direct-download") {
+        const fileName = relativePath.split("/").pop() ?? relativePath;
         return webdavServerType === "owncloud"
-            ? `${serverOrigin}/remote.php/dav/public-files/${shareToken}/${encodeURIComponent(relativePath.split("/").pop()!)}`
-            : `${serverOrigin}/public.php/dav/files/${shareToken}/${encodeURIComponent(relativePath.split("/").pop()!)}`;
+            ? `${serverOrigin}/remote.php/dav/public-files/${shareToken}/${encodeURIComponent(fileName)}`
+            : `${serverOrigin}/public.php/dav/files/${shareToken}/${encodeURIComponent(fileName)}`;
     }
 
     if (shareType === "markdown") {
@@ -1093,9 +1071,10 @@ async function createWebdavShare(relativePath: string, serverOrigin: string, fil
 }
 
 async function uploadToWebdav(fileBlob: Blob, filename: string): Promise<string> {
-    const { webdavUrl, webdavServerType } = settings.store as {
+    const { webdavUrl, webdavServerType, webdavDirectory } = settings.store as {
         webdavUrl?: string;
         webdavServerType?: string;
+        webdavDirectory?: string;
     };
 
     if (!webdavUrl) {
@@ -1103,7 +1082,11 @@ async function uploadToWebdav(fileBlob: Blob, filename: string): Promise<string>
     }
 
     const authHeader = buildWebdavAuthHeader();
-    const { uploadUrl, relativePath } = buildWebdavUploadPath(filename);
+    const baseUrl = webdavUrl.replace(/\/+$/, "");
+    const dir = (webdavDirectory || "").replace(/^\/+|\/+$/g, "");
+    const relativePath = dir ? `${dir}/${filename}` : filename;
+    const encodedDir = dir ? dir.split("/").map(encodeURIComponent).join("/") + "/" : "";
+    const uploadUrl = `${baseUrl}/${encodedDir}${encodeURIComponent(filename)}`;
     const serverType = webdavServerType || "nextcloud";
 
     const requestHeaders: Record<string, string> = {
@@ -1136,7 +1119,12 @@ async function uploadToWebdav(fileBlob: Blob, filename: string): Promise<string>
         return uploadUrl;
     }
 
-    const serverOrigin = extractServerOrigin(webdavUrl);
+    let serverOrigin: string;
+    try {
+        serverOrigin = new URL(webdavUrl).origin;
+    } catch {
+        throw new Error("Invalid WebDAV server URL");
+    }
     return await createWebdavShare(relativePath, serverOrigin, filename);
 }
 
