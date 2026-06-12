@@ -349,6 +349,17 @@ export const settings = definePluginSettings({
         default: "nextcloud",
         hidden: true
     },
+    webdavShareType: {
+        type: OptionType.SELECT,
+        description: "WebDAV share link format",
+        options: [
+            { label: "Share Page", value: "share-page", default: true },
+            { label: "Direct Download", value: "direct-download" },
+            { label: "Markdown Link", value: "markdown" }
+        ],
+        default: "share-page",
+        hidden: true
+    },
     uploadAllowedFileTypes: {
         type: OptionType.STRING,
         description: "Comma-separated list of allowed file extensions (e.g. png,jpg,gif,mp4). Leave empty to allow all files.",
@@ -874,6 +885,24 @@ export function SettingsComponent() {
                             placeholder="Select server type"
                         />
                     </SettingsSection>
+                    {store.webdavServerType !== "generic" && (
+                        <SettingsSection name="Share Link Format" description="How to return the public share link. Share Page links to a web page; Direct Download links straight to the file; Markdown Link wraps the share page in a clickable filename.">
+                            <Select
+                                options={[
+                                    { label: "Share Page", value: "share-page", default: true },
+                                    { label: "Direct Download", value: "direct-download" },
+                                    { label: "Markdown Link", value: "markdown" }
+                                ]}
+                                isSelected={v => v === store.webdavShareType}
+                                select={v => {
+                                    store.webdavShareType = v;
+                                    update();
+                                }}
+                                serialize={v => v}
+                                placeholder="Select share link format"
+                            />
+                        </SettingsSection>
+                    )}
                 </SettingGroup>
             )}
 

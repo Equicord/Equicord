@@ -1006,11 +1006,12 @@ function extractServerOrigin(webdavUrl: string): string {
     }
 }
 
-async function createWebdavShare(relativePath: string, serverOrigin: string): Promise<string> {
-    const { webdavUsername, webdavPassword, webdavServerType } = settings.store as {
+async function createWebdavShare(relativePath: string, serverOrigin: string, filename: string): Promise<string> {
+    const { webdavUsername, webdavPassword, webdavServerType, webdavShareType } = settings.store as {
         webdavUsername?: string;
         webdavPassword?: string;
         webdavServerType?: string;
+        webdavShareType?: string;
     };
 
     const ocsVersion = webdavServerType === "owncloud" ? "v1" : "v2";
@@ -1031,52 +1032,64 @@ async function createWebdavShare(relativePath: string, serverOrigin: string): Pr
         permissions: "1"
     }).toString();
 
+    let shareToken: string;
+    let shareUrl: string | undefined;
+
     if (Native) {
         const result = await Native.createWebdavShare(ocsUrl, ocsHeaders, body);
         if (!result.success) {
             throw new Error(result.error || "Failed to create public share");
         }
-        const token = result.url;
-        if (!token) {
+        shareToken = result.url || "";
+        if (!shareToken) {
             throw new Error("No share token returned from server");
         }
-        const directUrl = webdavServerType === "owncloud"
-            ? `${serverOrigin}/remote.php/dav/public-files/${token}/${encodeURIComponent(relativePath.split("/").pop()!)}`
-            : `${serverOrigin}/public.php/dav/files/${token}/${encodeURIComponent(relativePath.split("/").pop()!)}`;
-        return directUrl;
+    } else {
+        const response = await uploadRequestWithTimeout(ocsUrl, {
+            method: "POST",
+            headers: ocsHeaders,
+            body
+        });
+
+        const responseText = await response.text();
+
+        if (!response.ok) {
+            throw new Error(`Failed to create public share: ${response.status} ${responseText}`);
+        }
+
+        let shareData: { ocs?: { data?: { url?: string; token?: string; }; meta?: Record<string, string>; }; };
+        try {
+            shareData = JSON.parse(responseText);
+        } catch {
+            throw new Error(`Failed to parse share response: ${responseText.slice(0, 200)}`);
+        }
+
+        shareToken = shareData?.ocs?.data?.token ?? "";
+
+        if (!shareToken) {
+            const meta = shareData?.ocs?.meta;
+            const description = meta ? `${meta.status || "unknown"} (${meta.statuscode || "?"})` : "no token in response";
+            throw new Error(`Failed to create public share: ${description}`);
+        }
+
+        shareUrl = shareData.ocs?.data?.url;
     }
 
-    const response = await uploadRequestWithTimeout(ocsUrl, {
-        method: "POST",
-        headers: ocsHeaders,
-        body
-    });
+    const shareType = webdavShareType || "share-page";
 
-    const responseText = await response.text();
+    const sharePageUrl = shareUrl || `${serverOrigin}/s/${shareToken}`;
 
-    if (!response.ok) {
-        throw new Error(`Failed to create public share: ${response.status} ${responseText}`);
+    if (shareType === "direct-download") {
+        return webdavServerType === "owncloud"
+            ? `${serverOrigin}/remote.php/dav/public-files/${shareToken}/${encodeURIComponent(relativePath.split("/").pop()!)}`
+            : `${serverOrigin}/public.php/dav/files/${shareToken}/${encodeURIComponent(relativePath.split("/").pop()!)}`;
     }
 
-    let shareData: { ocs?: { data?: { url?: string; token?: string; }; meta?: Record<string, string>; }; };
-    try {
-        shareData = JSON.parse(responseText);
-    } catch {
-        throw new Error(`Failed to parse share response: ${responseText.slice(0, 200)}`);
+    if (shareType === "markdown") {
+        return `[${filename}](${sharePageUrl})`;
     }
 
-    const shareToken = shareData?.ocs?.data?.token;
-
-    if (!shareToken) {
-        const meta = shareData?.ocs?.meta;
-        const description = meta ? `${meta.status || "unknown"} (${meta.statuscode || "?"})` : "no token in response";
-        throw new Error(`Failed to create public share: ${description}`);
-    }
-
-    const directUrl = webdavServerType === "owncloud"
-        ? `${serverOrigin}/remote.php/dav/public-files/${shareToken}/${encodeURIComponent(relativePath.split("/").pop()!)}`
-        : `${serverOrigin}/public.php/dav/files/${shareToken}/${encodeURIComponent(relativePath.split("/").pop()!)}`;
-    return directUrl;
+    return sharePageUrl;
 }
 
 async function uploadToWebdav(fileBlob: Blob, filename: string): Promise<string> {
@@ -1124,7 +1137,7 @@ async function uploadToWebdav(fileBlob: Blob, filename: string): Promise<string>
     }
 
     const serverOrigin = extractServerOrigin(webdavUrl);
-    return await createWebdavShare(relativePath, serverOrigin);
+    return await createWebdavShare(relativePath, serverOrigin, filename);
 }
 
 async function uploadToService(serviceType: ServiceType, fileBlob: Blob, filename: string): Promise<string> {
