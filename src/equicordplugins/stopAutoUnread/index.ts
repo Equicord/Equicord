@@ -11,7 +11,6 @@ export default definePlugin({
     name: "StopAutoUnread",
     description: 'Stops Discord from automatically bumping a channels notification setting to "All Messages"',
     authors: [EquicordDevs.SobakinTech],
-
     patches: [
         {
             find: "}maybeAutoUpgradeChannel(",
