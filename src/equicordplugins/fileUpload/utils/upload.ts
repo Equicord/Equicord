@@ -1055,16 +1055,16 @@ async function createWebdavShare(relativePath: string, serverOrigin: string, fil
     const shareType = webdavShareType || "share-page";
 
     const sharePageUrl = shareUrl || `${serverOrigin}/s/${shareToken}`;
+    const directDownloadUrl = webdavServerType === "owncloud"
+        ? `${serverOrigin}/remote.php/dav/public-files/${shareToken}`
+        : `${serverOrigin}/public.php/dav/files/${shareToken}`;
 
     if (shareType === "direct-download") {
-        const fileName = relativePath.split("/").pop() ?? relativePath;
-        return webdavServerType === "owncloud"
-            ? `${serverOrigin}/remote.php/dav/public-files/${shareToken}/${encodeURIComponent(fileName)}`
-            : `${serverOrigin}/public.php/dav/files/${shareToken}/${encodeURIComponent(fileName)}`;
+        return directDownloadUrl;
     }
 
     if (shareType === "markdown") {
-        return `[${filename}](${sharePageUrl})`;
+        return `[${filename}](${directDownloadUrl})`;
     }
 
     return sharePageUrl;
