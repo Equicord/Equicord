@@ -387,16 +387,16 @@ function parseEncryptingHostDomains(raw: string): string[] {
 }
 
 function getEncryptingHostConfig() {
-    const s = settings.store as Record<string, string | undefined>;
-    const key = (s.encryptingHostKey || "").trim();
+    const s = settings.store as Record<string, unknown>;
+    const key = String(s.encryptingHostKey ?? "").trim();
     if (!key) throw new Error("Encrypting.host API key is required");
     return {
         key,
-        urlStyle: (s.encryptingHostUrlStyle || "query") as EncryptingHostUrlStyle,
-        domains: parseEncryptingHostDomains(s.encryptingHostDomains?.trim() || '["offensive"]'),
-        title: s.encryptingHostTitle?.trim() || "",
-        color: s.encryptingHostColor?.trim() || "",
-        fakelink: s.encryptingHostFakelink?.trim() || ""
+        urlStyle: (String(s.encryptingHostUrlStyle ?? "") || "query") as EncryptingHostUrlStyle,
+        domains: parseEncryptingHostDomains(String(s.encryptingHostDomains ?? "").trim() || '["offensive"]'),
+        title: String(s.encryptingHostTitle ?? "").trim() || "",
+        color: String(s.encryptingHostColor ?? "").trim() || "",
+        fakelink: String(s.encryptingHostFakelink ?? "").trim() || ""
     };
 }
 

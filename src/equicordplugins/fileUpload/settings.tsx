@@ -671,7 +671,7 @@ export function SettingsComponent() {
                     <SettingSwitch
                         name="Use Path-Style Endpoint"
                         description="Use endpoint/bucket/key format, recommended for R2."
-                        checked={store.s3ForcePathStyle}
+                        checked={store.s3ForcePathStyle ?? false}
                         onChange={v => store.s3ForcePathStyle = v}
                     />
                 </SettingGroup>
@@ -843,7 +843,7 @@ export function SettingsComponent() {
                 <SettingSwitch
                     name="Auto Copy URL"
                     description="Automatically copy the uploaded file URL to clipboard."
-                    checked={store.autoCopy}
+                    checked={store.autoCopy ?? false}
                     onChange={v => store.autoCopy = v}
                 />
 
@@ -880,7 +880,7 @@ export function SettingsComponent() {
                 <SettingSwitch
                     name="Respect Discord File Size Limit"
                     description="Use FileUpload only for files larger than your current Discord upload limit."
-                    checked={store.bypassDiscordUploadOnlyOverLimit}
+                    checked={store.bypassDiscordUploadOnlyOverLimit ?? false}
                     onChange={v => store.bypassDiscordUploadOnlyOverLimit = v}
                 />
 
