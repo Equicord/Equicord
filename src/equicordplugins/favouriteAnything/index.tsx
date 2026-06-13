@@ -15,8 +15,8 @@ import { ComponentType, ReactNode } from "react";
 import { AttachmentAccessory, EmbedAccessory, FilePicker } from "./components";
 import { SignedUrlsStore } from "./stores";
 import managedStyle from "./style.css?managed";
-import { AttachmentItem, EmbedComponent, ExpressionPickerTabProps, ExpressionPickerView, FavouriteItem, FavouriteItemFormat } from "./types";
-import { getThumbnailUrl } from "./utils";
+import { AttachmentItem, CV2AttachmentItem, EmbedComponent, ExpressionPickerTabProps, ExpressionPickerView, FavouriteItem, FavouriteItemFormat } from "./types";
+import { getThumbnailUrl, transformAttachment } from "./utils";
 
 export const EmbedContext = proxyLazyWebpack(() => React.createContext<null | Embed>(null));
 export const EmbedMosaicContext = proxyLazyWebpack(() => React.createContext<null | number>(null));
@@ -69,6 +69,15 @@ export default definePlugin({
                     replace: "=[$self.renderAttachmentAccessory()];"
                 }
             ]
+        },
+        // COMPONENTSv2
+        {
+            // FILE message component
+            find: "#{intl::ATTACHMENT_FILENAME_UNKNOWN}",
+            replacement: {
+                match: /(?<=case \i\.\i\.FILE:)return(\(0,\i\.jsx\)\(\i,\{\.\.\.(\i)\},(\i)\))/,
+                replace: "return $self.renderCV2Attachment($1,$3,$2)"
+            }
         },
         // EXPRESSION PICKER
         {
@@ -135,6 +144,15 @@ export default definePlugin({
     },
     renderAttachment(children: ReactNode, props: { item: AttachmentItem; }) {
         return <AttachmentContext.Provider value={props.item}>{children}</AttachmentContext.Provider>;
+    },
+    renderCV2Attachment(children: ReactNode, key: React.Key, props: { id: string; size: number; name: string; spoiler: boolean; file: CV2AttachmentItem; }) {
+        const { id, size, name, spoiler, file: { width, height, contentType, proxyUrl, ...rest } } = props;
+        const raw = { ...rest, size, filename: name, id, spoiler, content_type: contentType, proxy_url: proxyUrl };
+
+        // width and height properties are incorrectly added to non media cv2 attachments
+        if (width && height) Object.assign(raw, { width, height });
+
+        return <AttachmentContext.Provider value={transformAttachment(raw)} key={key}>{children}</AttachmentContext.Provider>;
     },
     renderEmbed(this: EmbedComponent) {
         return <EmbedContext.Provider value={this.props.embed}>{this.__render()}</EmbedContext.Provider>;

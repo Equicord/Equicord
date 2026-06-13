@@ -88,6 +88,16 @@ export interface AttachmentItem {
     originalItem: MessageAttachment;
 }
 
+export interface CV2AttachmentItem {
+    url: string;
+    proxyUrl: string;
+    width: number;
+    height: number;
+    placeholder?: string;
+    contentType: string;
+    flags: number;
+}
+
 export enum FavouriteItemFormat {
     NONE = 0,
     IMAGE = 1,
@@ -138,3 +148,5 @@ export type ResizeObserverHook = (
 export interface ImageUtils {
     isAnimated(image: { src: string; original?: string; animated: boolean; srcIsAnimated?: boolean; }): boolean;
 }
+
+export type AttachmentTransformer = (attachment: Partial<MessageAttachment>, inlineAttachmentMedia?: boolean) => AttachmentItem;
