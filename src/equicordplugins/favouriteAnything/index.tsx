@@ -7,7 +7,7 @@
 import { Devs, EquicordDevs } from "@utils/constants";
 import { getIntlMessage } from "@utils/discord";
 import definePlugin from "@utils/types";
-import { Embed } from "@vencord/discord-types";
+import { Embed, MessageAttachment } from "@vencord/discord-types";
 import { proxyLazyWebpack } from "@webpack";
 import { React } from "@webpack/common";
 import { ComponentType, ReactNode } from "react";
@@ -141,8 +141,24 @@ export default definePlugin({
     renderFilePicker(activeView: ExpressionPickerView, onSelectGIF: (item: { url: string; }) => void) {
         return activeView === ExpressionPickerView.FILES ? <FilePicker onSelectItem={onSelectGIF} /> : null;
     },
-    renderAttachment(children: ReactNode, props: { item: AttachmentItem; }) {
-        return <AttachmentContext.Provider value={props.item}>{children}</AttachmentContext.Provider>;
+    renderAttachment(children: ReactNode, props: { item: AttachmentItem<MessageAttachment | { media: CV2Attachment; }>; }) {
+        const { item: { originalItem, ...rest } } = props;
+
+        // Regular media attachments and cv2 media attachments are structured differently
+        const raw: MessageAttachment =
+            "media" in originalItem
+                ? {
+                    ...originalItem.media,
+                    id: rest.uniqueId,
+                    size: 0,
+                    spoiler: rest.spoiler,
+                    filename: (rest.spoiler ? "SPOILER_" : "") + rest.uniqueId,
+                    content_type: originalItem.media.contentType,
+                    proxy_url: originalItem.media.proxyUrl,
+                }
+                : originalItem;
+
+        return <AttachmentContext.Provider value={{ originalItem: raw, ...rest }}>{children}</AttachmentContext.Provider>;
     },
     renderCV2File(children: ReactNode, key: React.Key, props: { id: string; size: number; name: string; spoiler: boolean; file: CV2Attachment; }) {
         const { id, size, name, spoiler, file } = props;

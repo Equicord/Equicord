@@ -76,7 +76,7 @@ export interface EmbedComponent extends Component<{ embed: Embed; }> {
     __render: () => ReactNode;
 }
 
-export interface AttachmentItem {
+export interface AttachmentItem<TOriginal = MessageAttachment> {
     contentType: string;
     type: "IMAGE" | "VIDEO" | "CLIP" | "AUDIO" | "VISUAL_PLACEHOLDER" | "PLAINTEXT_PREVIEW" | "OTHER" | "INVALID";
     width?: number;
@@ -85,7 +85,7 @@ export interface AttachmentItem {
     spoiler: boolean;
     srcIsAnimated: boolean;
     uniqueId: string;
-    originalItem: MessageAttachment | { media: CV2Attachment; };
+    originalItem: TOriginal;
 }
 
 export interface CV2Attachment {
