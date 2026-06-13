@@ -85,10 +85,10 @@ export interface AttachmentItem {
     spoiler: boolean;
     srcIsAnimated: boolean;
     uniqueId: string;
-    originalItem: MessageAttachment;
+    originalItem: MessageAttachment | { media: CV2Attachment; };
 }
 
-export interface CV2AttachmentItem {
+export interface CV2Attachment {
     url: string;
     proxyUrl: string;
     width: number;
@@ -149,4 +149,4 @@ export interface ImageUtils {
     isAnimated(image: { src: string; original?: string; animated: boolean; srcIsAnimated?: boolean; }): boolean;
 }
 
-export type AttachmentTransformer = (attachment: Partial<MessageAttachment>, inlineAttachmentMedia?: boolean) => AttachmentItem;
+export type AttachmentTransformer = (attachment: MessageAttachment, inlineAttachmentMedia?: boolean) => AttachmentItem;

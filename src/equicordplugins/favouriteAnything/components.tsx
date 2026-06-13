@@ -279,25 +279,40 @@ export function AttachmentAccessory() {
 
     const props: FavoriteButtonProps | null = useMemo(() => {
         if (!attachment?.downloadUrl) return null;
-        const { originalItem, type, downloadUrl, width = 600, height = 400, srcIsAnimated } = attachment;
+        const { originalItem, uniqueId, type, downloadUrl, srcIsAnimated, spoiler } = attachment;
+        const width = attachment.width || 600, height = attachment.height || 400;
+
+        // Regular media attachments and cv2 media attachments are structured differently
+        const raw: MessageAttachment =
+            "media" in originalItem
+                ? {
+                    ...originalItem.media,
+                    id: uniqueId,
+                    size: 0,
+                    spoiler,
+                    filename: "UNKNOWN",
+                    content_type: originalItem.media.contentType,
+                    proxy_url: originalItem.media.proxyUrl,
+                }
+                : originalItem;
 
         // Do not render the custom accessory if the original attachment component already has a gif accessory
         const isAnimated = ImageUtils.isAnimated({
-            original: originalItem.url,
-            src: originalItem.proxy_url,
+            original: raw.url,
+            src: raw.proxy_url,
             animated: false,
             srcIsAnimated
         });
         if (isAnimated) return null;
 
         if (type in visualMediaFormats) {
-            return { format: visualMediaFormats[type]!, src: originalItem.proxy_url, url: downloadUrl, width, height };
+            return { format: visualMediaFormats[type]!, src: raw.proxy_url, url: downloadUrl, width, height };
         }
 
         // Non visual attachments have to be encoded to store metadata in the src property.
         // Note that this isn't a valid url yet, the full url (with a fallback image for vanilla client compat)
         // is generated via `getThumbnailUrl` once the user clicks the favourite button
-        const src = defs.encode(CustomItemFormat.ATTACHMENT, originalItem)?.toString();
+        const src = defs.encode(CustomItemFormat.ATTACHMENT, raw)?.toString();
         if (!src) return null;
 
         return { format: FavouriteItemFormat.NONE, src, url: downloadUrl, width, height };
