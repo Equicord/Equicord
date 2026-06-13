@@ -22,20 +22,11 @@ const cl = classNameFactory("vc-file-upload-settings-");
 
 const serviceOptions = [
     { label: "Zipline", value: ServiceType.ZIPLINE, default: true },
-    { label: "E-Z Host", value: ServiceType.EZHOST },
     { label: "Nest", value: ServiceType.NEST },
     { label: "Encrypting.host", value: ServiceType.ENCRYPTINGHOST },
     { label: "S3-Compatible", value: ServiceType.S3 },
     { label: "Catbox.moe", value: ServiceType.CATBOX },
-    ...(IS_DISCORD_DESKTOP ? [{ label: "0x0.st", value: ServiceType.ZEROX0 }] : []),
     { label: "Litterbox", value: ServiceType.LITTERBOX },
-    { label: "GoFile", value: ServiceType.GOFILE },
-    { label: "tmpfiles.org", value: ServiceType.TMPFILES },
-    { label: "buzzheavier.com", value: ServiceType.BUZZHEAVIER },
-    { label: "temp.sh", value: ServiceType.TEMPSH },
-    { label: "filebin.net", value: ServiceType.FILEBIN },
-    { label: "PixelVault", value: ServiceType.PIXELVAULT },
-    { label: "PixelDrain", value: ServiceType.PIXELDRAIN },
     { label: "ShareX Custom Uploader", value: ServiceType.SHAREX },
     { label: "WebDAV (Nextcloud/Owncloud)", value: ServiceType.WEBDAV }
 ];
@@ -81,12 +72,6 @@ export const settings = definePluginSettings({
     folderId: {
         type: OptionType.STRING,
         description: "Optional Zipline folder ID",
-        default: "",
-        hidden: true
-    },
-    ezHostKey: {
-        type: OptionType.STRING,
-        description: "E-Z Host API key",
         default: "",
         hidden: true
     },
@@ -184,7 +169,6 @@ export const settings = definePluginSettings({
     s3ForcePathStyle: {
         type: OptionType.BOOLEAN,
         description: "Use path-style S3 URLs",
-        default: true,
         hidden: true
     },
     litterboxExpiry: {
@@ -206,12 +190,6 @@ export const settings = definePluginSettings({
         default: "",
         hidden: true
     },
-    disableFallbacks: {
-        type: OptionType.BOOLEAN,
-        description: "Disable fallback upload services",
-        default: false,
-        hidden: true
-    },
     autoSend: {
         type: OptionType.BOOLEAN,
         description: "Insert uploaded URL in chat input",
@@ -227,43 +205,17 @@ export const settings = definePluginSettings({
     bypassDiscordUpload: {
         type: OptionType.BOOLEAN,
         description: "Bypass Discord uploads and use FileUpload instead.",
-        default: true,
         hidden: true
     },
     bypassDiscordUploadOnlyOverLimit: {
         type: OptionType.BOOLEAN,
         description: "Only use FileUpload if the file(s) exceed the file size limit.",
-        default: true,
-        hidden: true
-    },
-    gofileToken: {
-        type: OptionType.STRING,
-        description: "Optional GoFile API token",
-        default: "",
         hidden: true
     },
     fallbackOrder: {
         type: OptionType.STRING,
         description: "Fallback uploader order",
         default: defaultFallbackOrder,
-        hidden: true
-    },
-    pixelVaultKey: {
-        type: OptionType.STRING,
-        description: "PixelVault upload key",
-        default: "",
-        hidden: true
-    },
-    pixelDrainKey: {
-        type: OptionType.STRING,
-        description: "Optional PixelDrain API key",
-        default: "",
-        hidden: true
-    },
-    uploadTimeoutMs: {
-        type: OptionType.NUMBER,
-        description: "Upload timeout in milliseconds",
-        default: 300000,
         hidden: true
     },
     stripQueryParams: {
@@ -297,22 +249,16 @@ export const settings = definePluginSettings({
         default: false,
         hidden: true
     },
-    preserveOriginalFilename: {
-        type: OptionType.BOOLEAN,
-        description: "Preserve the original filename when uploading.",
-        default: true,
-        hidden: true
-    },
     autoCopy: {
         type: OptionType.BOOLEAN,
         description: "Auto copy upload URL",
-        default: true,
         hidden: true
     },
     autoUploadPastedFiles: {
         type: OptionType.BOOLEAN,
         description: "Automatically upload files from clipboard to image host when pasting in chat input.",
-        default: false
+        default: false,
+        hidden: true
     },
     webdavUrl: {
         type: OptionType.STRING,
@@ -518,15 +464,11 @@ export function SettingsComponent() {
     const { store } = settings;
     const sharexFileInputRef = React.useRef<HTMLInputElement>(null);
     const isNest = store.serviceType === ServiceType.NEST;
-    const isEzHost = store.serviceType === ServiceType.EZHOST;
     const isEncryptingHost = store.serviceType === ServiceType.ENCRYPTINGHOST;
     const isS3 = store.serviceType === ServiceType.S3;
     const isZipline = store.serviceType === ServiceType.ZIPLINE;
     const isCatbox = store.serviceType === ServiceType.CATBOX;
     const isLitterbox = store.serviceType === ServiceType.LITTERBOX;
-    const isGofile = store.serviceType === ServiceType.GOFILE;
-    const isPixelVault = store.serviceType === ServiceType.PIXELVAULT;
-    const isPixelDrain = store.serviceType === ServiceType.PIXELDRAIN;
     const isShareX = store.serviceType === ServiceType.SHAREX;
     const isWebdav = store.serviceType === ServiceType.WEBDAV;
 
@@ -599,18 +541,6 @@ export function SettingsComponent() {
                         value={store.folderId}
                         onChange={v => store.folderId = v}
                         placeholder="Leave empty for no folder"
-                    />
-                </SettingGroup>
-            )}
-
-            {isEzHost && (
-                <SettingGroup name="E-Z Host" description="Connection details for E-Z Host uploads.">
-                    <SettingTextInput
-                        name="E-Z Host API Key"
-                        description="Your E-Z Host API key"
-                        value={store.ezHostKey}
-                        onChange={v => store.ezHostKey = v}
-                        placeholder="Your E-Z Host API key"
                     />
                 </SettingGroup>
             )}
@@ -774,42 +704,6 @@ export function SettingsComponent() {
                 </SettingsSection>
             )}
 
-            {isGofile && (
-                <SettingGroup name="GoFile" description="Optional account binding for GoFile uploads.">
-                    <SettingTextInput
-                        name="GoFile Token"
-                        description="Optional GoFile token to upload into your account."
-                        value={store.gofileToken}
-                        onChange={v => store.gofileToken = v}
-                        placeholder="Optional GoFile token"
-                    />
-                </SettingGroup>
-            )}
-
-            {isPixelVault && (
-                <SettingGroup name="PixelVault" description="Connection details for PixelVault uploads.">
-                    <SettingTextInput
-                        name="PixelVault Upload Key"
-                        description="Your PixelVault authorization key."
-                        value={store.pixelVaultKey}
-                        onChange={v => store.pixelVaultKey = v}
-                        placeholder="Your PixelVault upload key"
-                    />
-                </SettingGroup>
-            )}
-
-            {isPixelDrain && (
-                <SettingGroup name="PixelDrain" description="Optional account binding for PixelDrain uploads.">
-                    <SettingTextInput
-                        name="PixelDrain API Key"
-                        description="Optional PixelDrain API key for authenticated uploads. Leave empty for anonymous uploads."
-                        value={store.pixelDrainKey}
-                        onChange={v => store.pixelDrainKey = v}
-                        placeholder="Your PixelDrain API key"
-                    />
-                </SettingGroup>
-            )}
-
             {isShareX && (
                 <SettingGroup name="ShareX Custom Uploader" description="Paste, import, or validate a ShareX custom uploader config.">
                     <SettingsSection
@@ -947,24 +841,10 @@ export function SettingsComponent() {
                 />
 
                 <SettingSwitch
-                    name="Preserve Original Filename"
-                    description="Use the original filename instead of naming uploads as upload.ext."
-                    checked={Boolean((store as { preserveOriginalFilename?: boolean; }).preserveOriginalFilename)}
-                    onChange={v => (store as { preserveOriginalFilename?: boolean; }).preserveOriginalFilename = v}
-                />
-
-                <SettingSwitch
                     name="Auto Copy URL"
                     description="Automatically copy the uploaded file URL to clipboard."
                     checked={store.autoCopy}
                     onChange={v => store.autoCopy = v}
-                />
-
-                <SettingSwitch
-                    name="Disable Fallback Uploaders"
-                    description="Only use the selected uploader without trying fallback hosts."
-                    checked={store.disableFallbacks}
-                    onChange={v => store.disableFallbacks = v}
                 />
 
                 <SettingSwitch
@@ -1024,25 +904,6 @@ export function SettingsComponent() {
 
                 <SettingsSection name="Default CORS Proxy Source" description="Source code for the default CORS proxy">
                     <a href="https://codeberg.org/key/corsproxy" target="_blank" rel="noreferrer">codeberg.org/key/corsproxy</a>
-                </SettingsSection>
-
-                <SettingsSection name="Upload Timeout" description="Maximum time to wait per upload attempt before switching to fallback">
-                    <Select
-                        options={[
-                            { label: "30 seconds", value: 30000 },
-                            { label: "1 minute", value: 60000 },
-                            { label: "2 minutes", value: 120000 },
-                            { label: "5 minutes", value: 300000, default: true },
-                            { label: "10 minutes", value: 600000 }
-                        ]}
-                        isSelected={v => v === (store.uploadTimeoutMs || 300000)}
-                        select={v => {
-                            store.uploadTimeoutMs = v;
-                            update();
-                        }}
-                        serialize={v => v}
-                        placeholder="Select timeout"
-                    />
                 </SettingsSection>
             </SettingGroup>
 

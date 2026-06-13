@@ -38,7 +38,6 @@ function toProxyUrl(url: string): string {
 let isUploading = false;
 
 type UploadPhase = "idle" | "preparing" | "uploading" | "retrying" | "success" | "failed" | "cancelled";
-type EmbedProxyService = "cors" | "nfp";
 
 export interface UploadProgressState {
     phase: UploadPhase;
@@ -70,7 +69,6 @@ const defaultUploadState: UploadProgressState = {
 
 let uploadState: UploadProgressState = { ...defaultUploadState };
 const uploadStateListeners = new Set<() => void>();
-let activeAbortController: AbortController | null = null;
 let activeXhr: XMLHttpRequest | null = null;
 let cancelRequested = false;
 
@@ -125,7 +123,6 @@ export function cancelCurrentUpload() {
     }
 
     cancelRequested = true;
-    activeAbortController?.abort();
     activeXhr?.abort();
     setUploadState({
         phase: "cancelled",
@@ -136,37 +133,7 @@ export function cancelCurrentUpload() {
 }
 
 function getUploadTimeoutMs(): number {
-    const value = (settings.store as { uploadTimeoutMs?: number; }).uploadTimeoutMs;
-    if (!Number.isFinite(value) || !value) {
-        return 300000;
-    }
-
-    return Math.max(5000, value);
-}
-
-async function fetchWithTimeout(url: string, options: RequestInit): Promise<Response> {
-    const controller = new AbortController();
-    activeAbortController = controller;
-    const timeout = setTimeout(() => controller.abort(), getUploadTimeoutMs());
-    const requestUrl = toProxyUrl(url);
-
-    try {
-        return await fetch(requestUrl, {
-            ...options,
-            signal: controller.signal
-        });
-    } catch (error) {
-        if (cancelRequested || controller.signal.aborted) {
-            throw new Error(cancelRequested ? "Upload cancelled by user" : "Upload timed out");
-        }
-
-        throw error;
-    } finally {
-        clearTimeout(timeout);
-        if (activeAbortController === controller) {
-            activeAbortController = null;
-        }
-    }
+    return 300000;
 }
 
 function getHeaderEntries(headers?: HeadersInit): [string, string][] {
@@ -358,68 +325,36 @@ async function uploadToShareX(fileBlob: Blob, filename: string): Promise<string>
 
 async function uploadToZipline(fileBlob: Blob, filename: string): Promise<string> {
     const { serviceUrl, ziplineToken, folderId } = settings.store;
-
-    if (!serviceUrl || !ziplineToken) {
-        throw new Error("Service URL and auth token are required");
-    }
+    if (!serviceUrl || !ziplineToken) throw new Error("Service URL and auth token are required");
 
     const baseUrl = serviceUrl.replace(/\/+$/, "");
     const formData = new FormData();
     formData.append("file", fileBlob, filename);
 
-    const headers: Record<string, string> = {
-        "Authorization": ziplineToken
-    };
-
-    if (folderId) {
-        headers["x-zipline-folder"] = folderId;
-    }
+    const headers: Record<string, string> = { "Authorization": ziplineToken };
+    if (folderId) headers["x-zipline-folder"] = folderId;
 
     const response = await uploadRequestWithTimeout(`${baseUrl}/api/upload`, {
-        method: "POST",
-        headers,
-        body: formData
+        method: "POST", headers, body: formData
     });
 
-    const responseContentType = response.headers.get("content-type") || "";
-
-    if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`Upload failed: ${response.status} ${errorText}`);
-    }
-
-    if (!responseContentType.includes("application/json")) {
+    if (!response.ok) throw new Error(`Upload failed: ${response.status} ${await response.text()}`);
+    if (!(response.headers.get("content-type") || "").includes("application/json")) {
         throw new Error("Server returned invalid response (not JSON)");
     }
 
     const data = await response.json() as UploadResponse;
-
-    if (data.files && data.files.length > 0 && data.files[0].url) {
-        return data.files[0].url;
-    }
-
+    if (data.files?.[0]?.url) return data.files[0].url;
     throw new Error("No URL returned from upload");
 }
 
 async function uploadToNest(fileBlob: Blob, filename: string): Promise<string> {
     const { nestToken } = settings.store;
-
-    if (!nestToken) {
-        throw new Error("Auth token is required");
-    }
+    if (!nestToken) throw new Error("Auth token is required");
 
     if (Native) {
-        const arrayBuffer = await fileBlob.arrayBuffer();
-        const result = await Native.uploadToNest(arrayBuffer, filename, nestToken);
-
-        if (!result.success) {
-            throw new Error(result.error || "Upload failed");
-        }
-
-        if (!result.url) {
-            throw new Error("No URL returned from upload");
-        }
-
+        const result = await Native.uploadToNest(await fileBlob.arrayBuffer(), filename, nestToken);
+        if (!result.success || !result.url) throw new Error(result.error || "Upload failed");
         return result.url;
     }
 
@@ -428,87 +363,40 @@ async function uploadToNest(fileBlob: Blob, filename: string): Promise<string> {
 
     const response = await uploadRequestWithTimeout("https://nest.rip/api/files/upload", {
         method: "POST",
-        headers: {
-            "Authorization": nestToken
-        },
+        headers: { "Authorization": nestToken },
         body: formData
     });
 
-    if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`Upload failed: ${response.status} ${errorText}`);
-    }
+    if (!response.ok) throw new Error(`Upload failed: ${response.status} ${await response.text()}`);
 
     const data = await response.json() as { fileURL?: string; };
-
-    if (data.fileURL) {
-        return data.fileURL;
-    }
-
+    if (data.fileURL) return data.fileURL;
     throw new Error("No URL returned from upload");
 }
 
 type EncryptingHostUrlStyle = "query" | "param" | "fakelink" | "embed";
 
 function parseEncryptingHostDomains(raw: string): string[] {
-    let parsed: unknown;
-
     try {
-        parsed = JSON.parse(raw);
-    } catch {
-        throw new Error("Encrypting.host domains must be a JSON array of non-empty strings");
-    }
-
-    if (!Array.isArray(parsed) || parsed.some(domain => typeof domain !== "string" || !domain.trim())) {
-        throw new Error("Encrypting.host domains must be a JSON array of non-empty strings");
-    }
-
-    return parsed.map(domain => domain.trim());
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed) && parsed.every(d => typeof d === "string" && d.trim())) {
+            return parsed.map(d => d.trim());
+        }
+    } catch {}
+    throw new Error("Encrypting.host domains must be a JSON array of non-empty strings");
 }
 
-function getEncryptingHostConfig(): {
-    key: string;
-    urlStyle: EncryptingHostUrlStyle;
-    domains: string[];
-    title: string;
-    color: string;
-    fakelink: string;
-} {
-    const {
-        encryptingHostKey,
-        encryptingHostUrlStyle,
-        encryptingHostDomains,
-        encryptingHostTitle,
-        encryptingHostColor,
-        encryptingHostFakelink
-    } = settings.store as {
-        encryptingHostKey?: string;
-        encryptingHostUrlStyle?: string;
-        encryptingHostDomains?: string;
-        encryptingHostTitle?: string;
-        encryptingHostColor?: string;
-        encryptingHostFakelink?: string;
-    };
-
-    const key = encryptingHostKey?.trim() || "";
-    if (!key) {
-        throw new Error("Encrypting.host API key is required");
-    }
-
-    const style = encryptingHostUrlStyle || "query";
-    if (style !== "query" && style !== "param" && style !== "fakelink" && style !== "embed") {
-        throw new Error("Invalid Encrypting.host URL style");
-    }
-
-    const domainsRaw = encryptingHostDomains?.trim() || "[\"offensive\"]";
-
+function getEncryptingHostConfig() {
+    const s = settings.store as Record<string, string | undefined>;
+    const key = (s.encryptingHostKey || "").trim();
+    if (!key) throw new Error("Encrypting.host API key is required");
     return {
         key,
-        urlStyle: style,
-        domains: parseEncryptingHostDomains(domainsRaw),
-        title: encryptingHostTitle?.trim() || "",
-        color: encryptingHostColor?.trim() || "",
-        fakelink: encryptingHostFakelink?.trim() || ""
+        urlStyle: (s.encryptingHostUrlStyle || "query") as EncryptingHostUrlStyle,
+        domains: parseEncryptingHostDomains(s.encryptingHostDomains?.trim() || '["offensive"]'),
+        title: s.encryptingHostTitle?.trim() || "",
+        color: s.encryptingHostColor?.trim() || "",
+        fakelink: s.encryptingHostFakelink?.trim() || ""
     };
 }
 
@@ -520,15 +408,9 @@ async function uploadToEncryptingHost(fileBlob: Blob, filename: string): Promise
     formData.append("userKey", config.key);
     formData.append("urlStyle", config.urlStyle);
     formData.append("domains", JSON.stringify(config.domains));
-    if (config.title) {
-        formData.append("title", config.title);
-    }
-    if (config.color) {
-        formData.append("color", config.color);
-    }
-    if (config.fakelink) {
-        formData.append("fakelink", config.fakelink);
-    }
+    if (config.title) formData.append("title", config.title);
+    if (config.color) formData.append("color", config.color);
+    if (config.fakelink) formData.append("fakelink", config.fakelink);
     formData.append("file", fileBlob, filename);
 
     const response = await uploadRequestWithTimeout("https://encrypting.host/upload", {
@@ -537,25 +419,11 @@ async function uploadToEncryptingHost(fileBlob: Blob, filename: string): Promise
     });
 
     const text = await response.text();
-    let data: { url?: string; error?: string; } | null = null;
-
-    try {
-        data = text ? JSON.parse(text) as { url?: string; error?: string; } : null;
-    } catch {
-        data = null;
-    }
-
-    if (!response.ok) {
-        throw new Error(`Upload failed: ${response.status} ${text}`);
-    }
-
-    const parsedUrl = data?.url?.trim() || "";
-    const fallbackUrl = text.trim().startsWith("http") ? text.trim() : "";
-    const url = parsedUrl || fallbackUrl;
-    if (!url) {
-        throw new Error("No URL returned from upload");
-    }
-
+    if (!response.ok) throw new Error(`Upload failed: ${response.status} ${text}`);
+    let data: { url?: string; } | null = null;
+    try { data = JSON.parse(text); } catch { data = null; }
+    const url = data?.url?.trim() || (text.trim().startsWith("http") ? text.trim() : "");
+    if (!url) throw new Error("No URL returned from upload");
     return url;
 }
 
@@ -574,26 +442,13 @@ export function isConfigured(): boolean {
     switch (serviceType) {
         case ServiceType.NEST:
             return Boolean(nestToken);
-        case ServiceType.EZHOST:
-            return Boolean((settings.store as { ezHostKey?: string; }).ezHostKey);
         case ServiceType.ENCRYPTINGHOST:
             return Boolean((settings.store as { encryptingHostKey?: string; }).encryptingHostKey);
         case ServiceType.S3:
             return isS3Configured();
         case ServiceType.CATBOX:
-            return true;
-        case ServiceType.ZEROX0:
-            return Boolean(Native);
         case ServiceType.LITTERBOX:
-        case ServiceType.GOFILE:
-        case ServiceType.TMPFILES:
-        case ServiceType.BUZZHEAVIER:
-        case ServiceType.TEMPSH:
-        case ServiceType.FILEBIN:
-        case ServiceType.PIXELDRAIN:
             return true;
-        case ServiceType.PIXELVAULT:
-            return Boolean((settings.store as { pixelVaultKey?: string; }).pixelVaultKey);
         case ServiceType.WEBDAV:
             return Boolean((settings.store as { webdavUrl?: string; }).webdavUrl);
         case ServiceType.SHAREX:
@@ -607,52 +462,6 @@ export function isConfigured(): boolean {
         default:
             return Boolean(serviceUrl && ziplineToken);
     }
-}
-
-async function uploadToEzHost(fileBlob: Blob, filename: string): Promise<string> {
-    const { ezHostKey } = (settings.store as { ezHostKey?: string; });
-
-    if (!ezHostKey) throw new Error("E-Z Host API key is required");
-
-    if (Native) {
-        const arrayBuffer = await fileBlob.arrayBuffer();
-        const result = await Native.uploadToEzHost(arrayBuffer, filename, ezHostKey);
-
-        if (!result.success) {
-            throw new Error(result.error || "Upload failed");
-        }
-
-        if (!result.url) {
-            throw new Error("No URL returned from upload");
-        }
-
-        return result.url;
-    }
-
-    const formData = new FormData();
-    formData.append("file", fileBlob, filename);
-
-    const headers: Record<string, string> = { key: ezHostKey };
-
-    const response = await uploadRequestWithTimeout("https://api.e-z.host/files", {
-        method: "POST",
-        headers,
-        body: formData
-    });
-
-    if (!response.ok) {
-        const text = await response.text();
-        throw new Error(`Upload failed: ${response.status} ${text}`);
-    }
-
-    const data = await response.json() as { success?: boolean; error?: string; imageUrl?: string; rawUrl?: string; };
-    if (!data || !data.success) {
-        throw new Error(data?.error || "Upload failed");
-    }
-
-    const url = data.imageUrl || data.rawUrl;
-    if (!url) throw new Error("No URL returned from upload");
-    return url;
 }
 
 async function uploadToCatbox(fileBlob: Blob, filename: string): Promise<string> {
@@ -680,25 +489,6 @@ async function uploadToCatbox(fileBlob: Blob, filename: string): Promise<string>
     return text;
 }
 
-async function uploadTo0x0(fileBlob: Blob, filename: string): Promise<string> {
-    if (!Native) {
-        throw new Error("0x0.st uploads are only supported on the desktop client");
-    }
-
-    const arrayBuffer = await fileBlob.arrayBuffer();
-    const result = await Native.uploadTo0x0(arrayBuffer, filename);
-
-    if (!result.success) {
-        throw new Error(result.error || "Upload failed");
-    }
-
-    if (!result.url) {
-        throw new Error("No URL returned from upload");
-    }
-
-    return result.url;
-}
-
 async function uploadToLitterbox(fileBlob: Blob, filename: string): Promise<string> {
     const expiry = settings.store.litterboxExpiry || "24h";
 
@@ -714,139 +504,10 @@ async function uploadToLitterbox(fileBlob: Blob, filename: string): Promise<stri
     formData.append("fileToUpload", fileBlob, filename);
 
     const response = await uploadRequestWithTimeout("https://litterbox.catbox.moe/resources/internals/api.php", {
-        method: "POST",
-        body: formData
+        method: "POST", body: formData
     });
 
     if (!response.ok) throw new Error(`Upload failed: ${response.status} ${await response.text()}`);
-    const text = (await response.text()).trim();
-    if (!text) throw new Error("No URL returned from upload");
-    return text;
-}
-
-async function uploadToGofile(fileBlob: Blob, filename: string): Promise<string> {
-    const { gofileToken } = settings.store as { gofileToken?: string; };
-
-    if (Native) {
-        const result = await Native.uploadToGofile(await fileBlob.arrayBuffer(), filename, gofileToken || undefined);
-        if (!result.success || !result.url) throw new Error(result.error || "No URL returned from upload");
-        return result.url;
-    }
-
-    const formData = new FormData();
-    if (gofileToken?.trim()) {
-        formData.append("token", gofileToken.trim());
-    }
-    formData.append("file", fileBlob, filename);
-
-    const uploadUrl = "https://upload.gofile.io/uploadfile";
-    const response = await uploadRequestWithTimeout(uploadUrl, {
-        method: "POST",
-        body: formData
-    });
-
-    if (!response.ok) {
-        throw new Error(`Upload failed: ${response.status} ${await response.text()}`);
-    }
-
-    const data = await response.json() as {
-        status?: string;
-        error?: string;
-        data?: { downloadPage?: string; code?: string; };
-    };
-
-    if (data.status !== "ok") {
-        throw new Error(data.error || "Upload failed");
-    }
-
-    const url = data.data?.downloadPage || (data.data?.code ? `https://gofile.io/d/${data.data.code}` : "");
-    if (!url) throw new Error("No URL returned from upload");
-    return url;
-}
-
-async function uploadToTmpfiles(fileBlob: Blob, filename: string): Promise<string> {
-    if (Native) {
-        const result = await Native.uploadToTmpfiles(await fileBlob.arrayBuffer(), filename);
-        if (!result.success || !result.url) throw new Error(result.error || "No URL returned from upload");
-        return result.url;
-    }
-
-    const formData = new FormData();
-    formData.append("file", fileBlob, filename);
-
-    const uploadUrl = "https://tmpfiles.org/api/v1/upload";
-    const response = await uploadRequestWithTimeout(uploadUrl, {
-        method: "POST",
-        body: formData
-    });
-
-    if (!response.ok) {
-        throw new Error(`Upload failed: ${response.status} ${await response.text()}`);
-    }
-
-    const data = await response.json() as { status?: string; data?: { url?: string; }; };
-    const url = data.data?.url;
-    if (!url || data.status !== "success") {
-        throw new Error("No URL returned from upload");
-    }
-
-    return url.includes("tmpfiles.org/") && !url.includes("/dl/")
-        ? url.replace(/tmpfiles\.org\/(\d+)/, "tmpfiles.org/dl/$1")
-        : url;
-}
-
-async function uploadToBuzzheavier(fileBlob: Blob, filename: string): Promise<string> {
-    if (Native) {
-        const result = await Native.uploadToBuzzheavier(await fileBlob.arrayBuffer(), filename);
-        if (!result.success || !result.url) throw new Error(result.error || "No URL returned from upload");
-        return result.url;
-    }
-
-    const uploadUrl = `https://w.buzzheavier.com/${encodeURIComponent(filename)}`;
-    const response = await uploadRequestWithTimeout(uploadUrl, {
-        method: "PUT",
-        body: fileBlob
-    });
-
-    const text = await response.text();
-    if (!response.ok) {
-        throw new Error(`Upload failed: ${response.status} ${text}`);
-    }
-
-    try {
-        const data = JSON.parse(text) as { code?: number; data?: { id?: string; }; };
-        const id = data.data?.id;
-        if (data.code === 201 && id) {
-            return `https://buzzheavier.com/${id}`;
-        }
-    } catch {
-    }
-
-    const fallback = text.trim();
-    if (!fallback) throw new Error("No URL returned from upload");
-    return fallback;
-}
-
-async function uploadToTempSh(fileBlob: Blob, filename: string): Promise<string> {
-    if (Native) {
-        const result = await Native.uploadToTempSh(await fileBlob.arrayBuffer(), filename);
-        if (!result.success || !result.url) throw new Error(result.error || "No URL returned from upload");
-        return result.url;
-    }
-
-    const formData = new FormData();
-    formData.append("file", fileBlob, filename);
-
-    const uploadUrl = "https://temp.sh/upload";
-    const response = await uploadRequestWithTimeout(uploadUrl, {
-        method: "POST",
-        body: formData
-    });
-
-    if (!response.ok) {
-        throw new Error(`Upload failed: ${response.status} ${await response.text()}`);
-    }
-
     const text = (await response.text()).trim();
     if (!text) throw new Error("No URL returned from upload");
     return text;
@@ -856,122 +517,6 @@ function makeRandomHex(length = 12): string {
     const bytes = new Uint8Array(length);
     crypto.getRandomValues(bytes);
     return Array.from(bytes, b => b.toString(16).padStart(2, "0")).join("");
-}
-
-async function uploadToFilebin(fileBlob: Blob, filename: string): Promise<string> {
-    if (Native) {
-        const result = await Native.uploadToFilebin(await fileBlob.arrayBuffer(), filename);
-        if (!result.success || !result.url) throw new Error(result.error || "No URL returned from upload");
-        return result.url;
-    }
-
-    const binId = makeRandomHex(6);
-    const uploadUrl = `https://filebin.net/${binId}/${encodeURIComponent(filename)}`;
-    const formData = new FormData();
-    formData.append("file", fileBlob, filename);
-
-    const response = await uploadRequestWithTimeout(uploadUrl, {
-        method: "POST",
-        body: formData
-    });
-
-    if (!response.ok) {
-        throw new Error(`Upload failed: ${response.status} ${await response.text()}`);
-    }
-
-    return `https://filebin.net/${binId}/${encodeURIComponent(filename)}`;
-}
-
-async function uploadToPixelVault(fileBlob: Blob, filename: string): Promise<string> {
-    const { pixelVaultKey } = settings.store as { pixelVaultKey?: string; };
-
-    if (!pixelVaultKey?.trim()) {
-        throw new Error("PixelVault upload key is required");
-    }
-
-    if (Native) {
-        const result = await Native.uploadToPixelVault(await fileBlob.arrayBuffer(), filename, pixelVaultKey.trim());
-
-        if (!result.success) {
-            throw new Error(result.error || "Upload failed");
-        }
-
-        if (!result.url) {
-            throw new Error("No URL returned from upload");
-        }
-
-        return result.url;
-    }
-
-    const formData = new FormData();
-    formData.append("file", fileBlob, filename);
-
-    const response = await uploadRequestWithTimeout("https://pixelvault.co/", {
-        method: "POST",
-        headers: {
-            Authorization: pixelVaultKey.trim()
-        },
-        body: formData
-    });
-
-    const text = await response.text();
-    let data: { resource?: string; url?: string; } | null = null;
-
-    try {
-        data = text ? JSON.parse(text) : null;
-    } catch {
-        data = null;
-    }
-
-    if (!response.ok) {
-        throw new Error(`Upload failed: ${response.status} ${text}`);
-    }
-
-    const url = data?.resource || data?.url || text.trim();
-    if (!url) {
-        throw new Error("No URL returned from upload");
-    }
-
-    return url;
-}
-
-async function uploadToPixelDrain(fileBlob: Blob, filename: string): Promise<string> {
-    const { pixelDrainKey } = settings.store as { pixelDrainKey?: string; };
-
-    if (Native) {
-        const result = await Native.uploadToPixelDrain(await fileBlob.arrayBuffer(), filename, pixelDrainKey?.trim() || undefined);
-        if (!result.success || !result.url) throw new Error(result.error || "No URL returned from upload");
-        return result.url;
-    }
-
-    const headers: Record<string, string> = {};
-    if (pixelDrainKey?.trim()) {
-        headers.Authorization = `Basic ${btoa(`:${pixelDrainKey.trim()}`)}`;
-    }
-
-    const response = await uploadRequestWithTimeout(`https://pixeldrain.com/api/file/${encodeURIComponent(filename)}`, {
-        method: "PUT",
-        headers,
-        body: fileBlob
-    });
-
-    const text = await response.text();
-    let data: { id?: string; success?: boolean; message?: string; } | null = null;
-    try {
-        data = text ? JSON.parse(text) : null;
-    } catch {
-        data = null;
-    }
-
-    if (!response.ok) {
-        throw new Error(data?.message || `Upload failed: ${response.status} ${text}`);
-    }
-
-    if (!data?.id) {
-        throw new Error(data?.message || "No URL returned from upload");
-    }
-
-    return `https://pixeldrain.com/u/${data.id}`;
 }
 
 function buildWebdavAuthHeader(): string | null {
@@ -1134,34 +679,16 @@ async function uploadToService(serviceType: ServiceType, fileBlob: Blob, filenam
             return uploadToZipline(fileBlob, filename);
         case ServiceType.NEST:
             return uploadToNest(fileBlob, filename);
-        case ServiceType.EZHOST:
-            return uploadToEzHost(fileBlob, filename);
         case ServiceType.ENCRYPTINGHOST:
             return uploadToEncryptingHost(fileBlob, filename);
         case ServiceType.S3:
             return uploadToS3(fileBlob, filename, Native, uploadRequestWithTimeout);
         case ServiceType.CATBOX:
             return uploadToCatbox(fileBlob, filename);
-        case ServiceType.ZEROX0:
-            return uploadTo0x0(fileBlob, filename);
         case ServiceType.LITTERBOX:
             return uploadToLitterbox(fileBlob, filename);
         case ServiceType.SHAREX:
             return uploadToShareX(fileBlob, filename);
-        case ServiceType.GOFILE:
-            return uploadToGofile(fileBlob, filename);
-        case ServiceType.TMPFILES:
-            return uploadToTmpfiles(fileBlob, filename);
-        case ServiceType.BUZZHEAVIER:
-            return uploadToBuzzheavier(fileBlob, filename);
-        case ServiceType.TEMPSH:
-            return uploadToTempSh(fileBlob, filename);
-        case ServiceType.FILEBIN:
-            return uploadToFilebin(fileBlob, filename);
-        case ServiceType.PIXELVAULT:
-            return uploadToPixelVault(fileBlob, filename);
-        case ServiceType.PIXELDRAIN:
-            return uploadToPixelDrain(fileBlob, filename);
         case ServiceType.WEBDAV:
             return uploadToWebdav(fileBlob, filename);
         default:
@@ -1171,88 +698,33 @@ async function uploadToService(serviceType: ServiceType, fileBlob: Blob, filenam
 
 const EXE_BLOCKED_SERVICES = new Set<ServiceType>([
     ServiceType.CATBOX,
-    ServiceType.LITTERBOX,
-    ServiceType.ZEROX0
+    ServiceType.LITTERBOX
 ]);
 
-function getEmbedProxyService(): EmbedProxyService {
-    const service = settings.store.embedProxyService;
-    return service === "nfp" ? service : "cors";
-
-}
-
-function shouldProxyEmbedUrl(url: string): boolean {
-    const ext = getUrlExtension(url)?.toLowerCase();
-    if (!ext) {
-        return false;
-    }
-
-    return getMimeFromExtension(ext).startsWith("video/");
-}
-
 function applyEmbedProxy(url: string): string {
-    if (!settings.store.embedProxyEnabled) {
-        return url;
-    }
-
-    const service = getEmbedProxyService();
-    if (!shouldProxyEmbedUrl(url)) {
-        return url;
-    }
-
-    switch (service) {
-        case "cors":
-            return toProxyUrl(url);
-        case "nfp":
-            return `https://discord.nfp.is/?v=${encodeURIComponent(url)}`;
-        default:
-            return toProxyUrl(url);
-    }
-}
-
-function isExeFileName(fileName: string): boolean {
-    return fileName.toLowerCase().endsWith(".exe");
-}
-
-function canServiceHandleFile(service: ServiceType, fileName: string): boolean {
-    if (service === ServiceType.ZEROX0 && !Native) {
-        return false;
-    }
-
-    if (isExeFileName(fileName) && EXE_BLOCKED_SERVICES.has(service)) {
-        return false;
-    }
-
-    return true;
+    if (!settings.store.embedProxyEnabled) return url;
+    const ext = getUrlExtension(url)?.toLowerCase();
+    if (!ext || !getMimeFromExtension(ext).startsWith("video/")) return url;
+    return settings.store.embedProxyService === "nfp"
+        ? `https://discord.nfp.is/?v=${encodeURIComponent(url)}`
+        : toProxyUrl(url);
 }
 
 function normalizePrimaryService(primary: ServiceType, fileName: string): ServiceType {
-    if (canServiceHandleFile(primary, fileName)) {
-        return primary;
+    const isExe = fileName.toLowerCase().endsWith(".exe");
+    if (isExe && EXE_BLOCKED_SERVICES.has(primary)) {
+        return ServiceType.ZIPLINE;
     }
-
-    if (isExeFileName(fileName)) {
-        return ServiceType.GOFILE;
-    }
-
-    if (!Native && primary === ServiceType.ZEROX0) {
-        return ServiceType.CATBOX;
-    }
-
     return primary;
 }
 
 function buildUploadOrder(primary: ServiceType, fileName: string): ServiceType[] {
-    const disableFallbacks = Boolean((settings.store as { disableFallbacks?: boolean; }).disableFallbacks);
     const effectivePrimary = normalizePrimaryService(primary, fileName);
+    const isExe = fileName.toLowerCase().endsWith(".exe");
 
     const order: ServiceType[] = [effectivePrimary];
-    if (disableFallbacks) {
-        return order;
-    }
-
     for (const fallback of getFallbackServices()) {
-        if (fallback !== effectivePrimary && canServiceHandleFile(fallback, fileName)) {
+        if (fallback !== effectivePrimary && (!isExe || !EXE_BLOCKED_SERVICES.has(fallback))) {
             order.push(fallback);
         }
     }
@@ -1438,9 +910,8 @@ async function normalizeUploadBlob(blob: Blob, sourceUrl?: string): Promise<{ bl
     }
 
     const mimeType = getMimeFromExtension(ext);
-    const { preserveOriginalFilename } = settings.store;
     let filename = `upload.${ext}`;
-    if (preserveOriginalFilename && sourceFileName) {
+    if (sourceFileName) {
         const dotIndex = sourceFileName.lastIndexOf(".");
         filename = `${sourceFileName.slice(0, dotIndex < 0 ? undefined : dotIndex)}.${ext}`;
     }
@@ -1495,23 +966,8 @@ export async function uploadFile(url: string): Promise<void> {
         let blob: Blob;
         let contentType = "";
 
-        if (Native) {
-            const res = await Native.fetchFile(fetchUrl);
-            if (res.success && res.data) {
-                contentType = res.contentType || "";
-                blob = new Blob([res.data], { type: contentType });
-            } else {
-                const response = await fetch(fetchUrl);
-                if (!response.ok) {
-                    throw new Error(`Failed to fetch file: ${response.status}`);
-                }
-                contentType = response.headers.get("content-type") || "";
-                blob = await response.blob();
-            }
-        } else {
-            const response = await fetchWithTimeout(fetchUrl, {
-                method: "GET"
-            });
+        {
+            const response = await fetch(toProxyUrl(fetchUrl));
             if (!response.ok) {
                 throw new Error(`Failed to fetch file: ${response.status}`);
             }
@@ -1536,7 +992,6 @@ export async function uploadFile(url: string): Promise<void> {
         }
     } finally {
         isUploading = false;
-        activeAbortController = null;
         activeXhr = null;
         setTimeout(() => resetUploadState(), 1800);
     }
@@ -1605,7 +1060,6 @@ export async function uploadProvidedFiles(files: readonly File[], forceSend?: bo
         }
     } finally {
         isUploading = false;
-        activeAbortController = null;
         activeXhr = null;
         setTimeout(() => resetUploadState(), 1800);
     }
