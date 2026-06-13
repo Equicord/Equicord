@@ -132,10 +132,6 @@ export function cancelCurrentUpload() {
     });
 }
 
-function getUploadTimeoutMs(): number {
-    return 300000;
-}
-
 function getHeaderEntries(headers?: HeadersInit): [string, string][] {
     if (!headers) return [];
     if (headers instanceof Headers) return Array.from(headers.entries());
@@ -208,7 +204,7 @@ async function uploadRequestWithTimeout(url: string, options: RequestInit): Prom
     return new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
         activeXhr = xhr;
-        const timeout = setTimeout(() => xhr.abort(), getUploadTimeoutMs());
+        const timeout = setTimeout(() => xhr.abort(), 300000);
 
         xhr.open(options.method || "GET", requestUrl);
 

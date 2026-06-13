@@ -205,11 +205,13 @@ export const settings = definePluginSettings({
     bypassDiscordUpload: {
         type: OptionType.BOOLEAN,
         description: "Bypass Discord uploads and use FileUpload instead.",
+        default: true,
         hidden: true
     },
     bypassDiscordUploadOnlyOverLimit: {
         type: OptionType.BOOLEAN,
         description: "Only use FileUpload if the file(s) exceed the file size limit.",
+        default: true,
         hidden: true
     },
     fallbackOrder: {
@@ -252,6 +254,7 @@ export const settings = definePluginSettings({
     autoCopy: {
         type: OptionType.BOOLEAN,
         description: "Auto copy upload URL",
+        default: true,
         hidden: true
     },
     autoUploadPastedFiles: {
