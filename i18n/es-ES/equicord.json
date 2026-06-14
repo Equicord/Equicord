@@ -554,6 +554,10 @@
             "reset": "Reiniciar"
         }
     },
+    "equicordDonor": {
+        "description": "Esta insignia es una ventaja especial para los donantes de Equicord (no de Vencord)",
+        "title": "Donante de Equicord"
+    },
     "equicordHelper": {
         "alerts": {
             "equicordSupport": "Soporte de Equicord",
@@ -1318,6 +1322,10 @@
             "enableAndRestart": "Habilite el complemento y reinicie su cliente para escanear un código QR de inicio de sesión",
             "scanQrCode": "Escanear código QR"
         }
+    },
+    "mainWindowFrameless": {
+        "description": "Elimina el marco nativo de la ventana para conseguir un aspecto más limpio. Podrás seguir moviendo la ventana arrastrando la barra de título.",
+        "title": "Ocultar el marco de la ventana principal"
     },
     "mediaPlaybackSpeed": {
         "description": "Controle la velocidad de reproducción multimedia de mensajes de voz, vídeos y archivos adjuntos de audio",
@@ -2096,7 +2104,8 @@
         "settings": {
             "apiKey": "API Tecla.",
             "autoReply": "Respuesta automática",
-            "autoRespond": "Responda automáticamente a los mensajes al recibir una respuesta.",
+            "autoRespond": "¿Cómo se deben gestionar las respuestas?",
+            "bot": "Clyde",
             "chatbar": "Cambiar el texto de la barra de chat",
             "endpoint": "Punto final de IA compatible con OpenAI.",
             "maxTokens": "Número máximo de tokens en la respuesta.",
