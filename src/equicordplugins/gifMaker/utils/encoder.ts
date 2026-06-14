@@ -164,8 +164,28 @@ async function encodeFrames(
     canvas.width = width;
     canvas.height = gifHeight;
 
-    const worker = createGifEncoderWorker();
     const delay = Math.round(1000 / INTERNAL_FPS);
+
+    const frameData: Uint8ClampedArray[] = [];
+    for (let i = 0; i < frameCount; i++) {
+        ctx.clearRect(0, 0, width, gifHeight);
+
+        ctx.save();
+        ctx.translate(0, captionHeight);
+        await drawFrame(ctx, i);
+        ctx.restore();
+
+        const caption = CAPTIONS.find(c => c.type === options.captionMode);
+        if (caption) {
+            ctx.save();
+            caption.render(ctx, width, captionHeight > 0 ? captionHeight : height, options);
+            ctx.restore();
+        }
+
+        frameData.push(ctx.getImageData(0, 0, width, gifHeight).data);
+    }
+
+    const worker = createGifEncoderWorker();
 
     try {
         const waitForOk = () => new Promise<void>((resolve, reject) => {
@@ -177,29 +197,23 @@ async function encodeFrames(
             worker.addEventListener("message", handler);
         });
 
+        const totalLength = frameData.reduce((sum, data) => sum + data.length, 0);
+        const combined = new Uint8ClampedArray(totalLength);
+        let offset = 0;
+        for (const data of frameData) {
+            combined.set(data, offset);
+            offset += data.length;
+        }
+
         worker.postMessage({
-            type: "init",
-            params: { width, height: gifHeight, delay, paletteColors: PALETTE_COLORS }
-        });
+            type: "init_with_palette",
+            params: { width, height: gifHeight, delay, paletteColors: PALETTE_COLORS },
+            buffer: combined.buffer,
+        }, [combined.buffer]);
         await waitForOk();
 
         for (let i = 0; i < frameCount; i++) {
-            ctx.clearRect(0, 0, width, gifHeight);
-
-            ctx.save();
-            ctx.translate(0, captionHeight);
-            await drawFrame(ctx, i);
-            ctx.restore();
-
-            const caption = CAPTIONS.find(c => c.type === options.captionMode);
-            if (caption) {
-                ctx.save();
-                caption.render(ctx, width, captionHeight > 0 ? captionHeight : height, options);
-                ctx.restore();
-            }
-
-            const imageData = ctx.getImageData(0, 0, width, gifHeight);
-            worker.postMessage({ type: "frame", buffer: imageData.data.buffer, index: i }, [imageData.data.buffer]);
+            worker.postMessage({ type: "frame", buffer: frameData[i].buffer, index: i }, [frameData[i].buffer]);
             await waitForOk();
         }
 

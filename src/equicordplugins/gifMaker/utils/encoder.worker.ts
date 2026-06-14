@@ -17,9 +17,21 @@ self.onmessage = function (e) {
             case "init": {
                 var params = msg.params;
                 var gif = GIFEncoder();
-                var palette = undefined;
                 self.__gif = gif;
-                self.__palette = palette;
+                self.__palette = undefined;
+                self.__w = params.width;
+                self.__h = params.height;
+                self.__delay = params.delay;
+                self.__colors = params.paletteColors;
+                self.postMessage({ type: "ok" });
+                break;
+            }
+            case "init_with_palette": {
+                var params = msg.params;
+                var pixels = new Uint8ClampedArray(msg.buffer);
+                self.__palette = quantize(pixels, params.paletteColors);
+                var gif = GIFEncoder();
+                self.__gif = gif;
                 self.__w = params.width;
                 self.__h = params.height;
                 self.__delay = params.delay;
@@ -31,7 +43,7 @@ self.onmessage = function (e) {
                 var pixels = new Uint8ClampedArray(msg.buffer);
                 var idx = msg.index;
                 var _gif = self.__gif;
-                if (idx === 0) {
+                if (idx === 0 && !self.__palette) {
                     self.__palette = quantize(pixels, self.__colors);
                 }
                 var pal = self.__palette || [];
