@@ -431,7 +431,7 @@ export const initPluginManager = onlyOnce(function init() {
         if (p.renderProfileCollection) neededApiPlugins.add("ProfileCollectionsAPI");
         if (p.chatBarButtonWrapper) neededApiPlugins.add("ChatInputButtonAPI");
         if (p.renderProfileSection) neededApiPlugins.add("ProfileSectionsAPI");
-        if (p.gifPickerContextMenu) neededApiPlugins.add("ExtraContextMenuAPI");
+        if (p.gifPickerContextMenu) neededApiPlugins.add("GifPickerContextMenuAPI");
 
         for (const key of pluginKeysToBind) {
             p[key] &&= (p[key] as Function).bind(p) as any;
