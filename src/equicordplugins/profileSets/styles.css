@@ -339,7 +339,7 @@
 }
 
 .vc-profile-presets-preview * {
-    pointer-events: none !important;
+    pointer-events: none !important; /* Discord profile preview sets pointer-events on children; block input to the preset list */
 }
 
 .vc-profile-presets-preview-error {
@@ -427,10 +427,10 @@
 }
 
 .vc-profile-presets-page-nav {
-    min-width: 26px !important;
+    min-width: 26px !important; /* Discord Button default min-width is wider than compact pagination arrows */
     width: 26px;
-    padding: 0 2px !important;
-    min-height: 26px !important;
+    padding: 0 2px !important; /* Discord Button horizontal padding overflows the 26px nav cell */
+    min-height: 26px !important; /* Discord Button min-height exceeds the compact pagination row */
     font-size: 18px;
     font-weight: 600;
     line-height: 1;

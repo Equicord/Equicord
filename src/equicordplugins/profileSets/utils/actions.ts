@@ -5,6 +5,7 @@
  */
 
 import { isNonNullish } from "@utils/guards";
+import { chooseFile, saveFile } from "@utils/web";
 import { ProfilePreset } from "@vencord/discord-types";
 import { findStoreLazy } from "@webpack";
 import { showToast, Toasts } from "@webpack/common";
@@ -106,13 +107,7 @@ export async function renamePreset(index: number, newName: string, section: Pres
 
 export function exportPresets(section: PresetSection) {
     const dataStr = JSON.stringify(presets, null, 2);
-    const dataBlob = new Blob([dataStr], { type: "application/json" });
-    const url = URL.createObjectURL(dataBlob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = `profile-presets-${section}-${Date.now()}.json`;
-    link.click();
-    URL.revokeObjectURL(url);
+    saveFile(new File([dataStr], `profile-presets-${section}-${Date.now()}.json`, { type: "application/json" }));
 }
 
 export type ImportDecision = "override" | "merge" | "cancel";
@@ -123,40 +118,33 @@ export async function importPresets(
     section: PresetSection,
     guildId?: string
 ) {
-    const input = document.createElement("input");
-    input.type = "file";
-    input.accept = "application/json";
-    input.onchange = async (event: Event) => {
-        try {
-            const target = event.currentTarget as HTMLInputElement | null;
-            const file = target?.files?.[0];
-            if (!file) return;
+    const file = await chooseFile("application/json");
+    if (!file) return;
 
-            const text = await file.text();
-            const importedPresets = JSON.parse(text);
+    try {
+        const text = await file.text();
+        const importedPresets = JSON.parse(text);
 
-            if (!Array.isArray(importedPresets)) {
-                return;
-            }
-
-            if (presets.length > 0) {
-                const decision = await onImportPrompt(presets.length);
-                if (decision === "cancel") return;
-                if (decision === "override") {
-                    replaceAllPresets(importedPresets);
-                } else {
-                    const combined = [...presets, ...importedPresets];
-                    replaceAllPresets(combined);
-                }
-            } else {
-                replaceAllPresets(importedPresets);
-            }
-
-            await savePresetsData(section);
-            forceUpdate();
-        } catch {
-            showToast("Failed to import presets. The file might be invalid.", Toasts.Type.FAILURE);
+        if (!Array.isArray(importedPresets)) {
+            return;
         }
-    };
-    input.click();
+
+        if (presets.length > 0) {
+            const decision = await onImportPrompt(presets.length);
+            if (decision === "cancel") return;
+            if (decision === "override") {
+                replaceAllPresets(importedPresets);
+            } else {
+                const combined = [...presets, ...importedPresets];
+                replaceAllPresets(combined);
+            }
+        } else {
+            replaceAllPresets(importedPresets);
+        }
+
+        await savePresetsData(section);
+        forceUpdate();
+    } catch {
+        showToast("Failed to import presets. The file might be invalid.", Toasts.Type.FAILURE);
+    }
 }

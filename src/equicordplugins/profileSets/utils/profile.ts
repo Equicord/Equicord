@@ -201,6 +201,7 @@ async function processImage(imageData: ImageInput, userId: string, type: "avatar
         }
 
         const isAnimated = imageData.startsWith("a_");
+        const size = type === "banner" ? 1024 : 512;
 
         if (type === "banner") {
             const bannerUrl = useGuildPath && guildId
@@ -209,30 +210,37 @@ async function processImage(imageData: ImageInput, userId: string, type: "avatar
                     guildId,
                     banner: imageData,
                     canAnimate: isAnimated,
-                    size: 1024
+                    size
                 })
                 : IconUtils.getUserBannerURL?.({
                     id: userId,
                     banner: imageData,
                     canAnimate: isAnimated,
-                    size: 1024
+                    size
                 });
-            if (bannerUrl) {
-                const fromUtils = await imageUrlToBase64(bannerUrl);
-                if (fromUtils) return fromUtils;
-            }
+            if (!bannerUrl) return null;
+            return await imageUrlToBase64(bannerUrl);
         }
 
-        const size = type === "banner" ? 1024 : 512;
-        const urlPath = type === "banner" ? "banners" : "avatars";
-        const guildPath = guildId ? `guilds/${guildId}/users/${userId}/${type === "banner" ? "banners" : "avatars"}` : urlPath;
-        const guildUrl = `https://cdn.discordapp.com/${guildPath}/${imageData}.${isAnimated ? "gif" : "png"}?size=${size}`;
-        const globalUrl = `https://cdn.discordapp.com/${urlPath}/${userId}/${imageData}.${isAnimated ? "gif" : "png"}?size=${size}`;
-        if (useGuildPath && guildId) {
-            const guildResult = await imageUrlToBase64(guildUrl);
-            if (guildResult) return guildResult;
-        }
-        return await imageUrlToBase64(globalUrl);
+        const avatarUrl = useGuildPath && guildId
+            ? IconUtils.getGuildMemberAvatarURLSimple?.({
+                guildId,
+                userId,
+                avatar: imageData,
+                canAnimate: isAnimated,
+                size
+            })
+            : (() => {
+                const user = UserStore.getUser(userId);
+                if (!user) return null;
+                return IconUtils.getUserAvatarURL(
+                    user.avatar === imageData ? user : { ...user, avatar: imageData },
+                    isAnimated,
+                    size
+                );
+            })();
+        if (!avatarUrl) return null;
+        return await imageUrlToBase64(avatarUrl);
     }
 
     return null;
@@ -407,14 +415,22 @@ function toNewAssetPayload(dataUrl: string, presetName?: string) {
     };
 }
 
+function isImageUriObject(value: unknown): value is { imageUri: string; } & Record<string, unknown> {
+    return typeof value === "object"
+        && value != null
+        && "imageUri" in value
+        && isNonEmptyString((value as { imageUri: unknown; }).imageUri);
+}
+
 function toBannerPending(value: unknown, presetName?: string): ImageInput {
     if (value == null) return null;
     if (typeof value === "string") return value;
-    if (typeof value === "object" && value != null && "imageUri" in value && isNonEmptyString((value as any).imageUri)) {
-        const { imageUri } = value as any;
+    if (isImageUriObject(value)) {
+        const { imageUri } = value;
         return imageUri.startsWith("data:") ? imageUri : toNewAssetPayload(imageUri, presetName);
     }
-    return value as any;
+    if (typeof value === "object") return value as ImageInput;
+    return null;
 }
 
 function buildPendingThemeColors(preset: ProfilePreset): number[] | null {
@@ -498,42 +514,36 @@ function applyPresetToPending(preset: ProfilePreset, isGuild: boolean, options: 
 }
 
 export async function loadPresetAsPending(preset: ProfilePreset, guildId?: string, options: LoadPresetOptions = {}) {
-    try {
-        const isGuild = options.isGuildProfile ?? Boolean(guildId);
-        if (isGuild && !guildId) return;
+    const isGuild = options.isGuildProfile ?? Boolean(guildId);
+    if (isGuild && !guildId) return;
 
-        const contextGuildId = isGuild ? guildId : undefined;
-        initProfileSettingsContext(contextGuildId);
+    const contextGuildId = isGuild ? guildId : undefined;
+    initProfileSettingsContext(contextGuildId);
 
-        const pending = applyPresetToPending(preset, isGuild, options);
-        if (Object.keys(pending).length) {
-            setPendingChanges(pending, contextGuildId);
-        }
+    const pending = applyPresetToPending(preset, isGuild, options);
+    if (Object.keys(pending).length) {
+        setPendingChanges(pending, contextGuildId);
+    }
 
     if ("bannerDataUrl" in preset) {
-            const bannerUri = normalizeImageValue(preset.bannerDataUrl);
-            if (bannerUri?.startsWith("data:")) {
-            const image = typeof preset.bannerDataUrl === "object"
-                && preset.bannerDataUrl != null
-                && "imageUri" in (preset.bannerDataUrl as any)
-                ? { ...(preset.bannerDataUrl as any), imageUri: bannerUri }
-                    : toNewAssetPayload(bannerUri, preset.name);
-                openProfileImagePreview("BANNER", image, contextGuildId);
-            }
+        const bannerUri = normalizeImageValue(preset.bannerDataUrl);
+        if (bannerUri?.startsWith("data:")) {
+            const image = isImageUriObject(preset.bannerDataUrl)
+                ? { ...preset.bannerDataUrl, imageUri: bannerUri }
+                : toNewAssetPayload(bannerUri, preset.name);
+            openProfileImagePreview("BANNER", image, contextGuildId);
         }
-
-        if (preset.customStatus && !isGuild) {
-            CustomStatusSettings.updateSetting({
-                text: preset.customStatus?.text ?? "",
-                expiresAtMs: preset.customStatus?.expiresAtMs ?? "0",
-                emojiId: preset.customStatus?.emojiId ?? "0",
-                emojiName: preset.customStatus?.emojiName ?? ""
-            });
-        }
-
-        notifyPreviewApply();
-        await applyThemeForLoadedPreset(preset, guildId, options);
-    } catch (err) {
-        throw err;
     }
+
+    if (preset.customStatus && !isGuild) {
+        CustomStatusSettings.updateSetting({
+            text: preset.customStatus?.text ?? "",
+            expiresAtMs: preset.customStatus?.expiresAtMs ?? "0",
+            emojiId: preset.customStatus?.emojiId ?? "0",
+            emojiName: preset.customStatus?.emojiName ?? ""
+        });
+    }
+
+    notifyPreviewApply();
+    await applyThemeForLoadedPreset(preset, guildId, options);
 }

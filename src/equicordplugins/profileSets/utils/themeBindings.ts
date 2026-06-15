@@ -25,22 +25,36 @@ export type BindingMap = Record<string, ThemeBinding>;
 let bindings: BindingMap = {};
 let pinnedThemes: ThemeBinding[] = [];
 let loaded = false;
-let saveQueued = false;
+let bindingsSaveInFlight = false;
+let bindingsSavePending = false;
 
 function bindingEquals(a: ThemeBinding, b: ThemeBinding) {
     return a.type === b.type && a.themeId === b.themeId;
 }
 
-async function persistBindings() {
-    if (saveQueued) return;
-    saveQueued = true;
+async function flushBindings() {
+    bindingsSaveInFlight = true;
     try {
-        await DataStore.set(BINDINGS_KEY, bindings);
+        do {
+            bindingsSavePending = false;
+            await DataStore.set(BINDINGS_KEY, bindings);
+        } while (bindingsSavePending);
     } catch (err) {
         logger.error("Failed to save theme bindings", err);
     } finally {
-        saveQueued = false;
+        bindingsSaveInFlight = false;
+        if (bindingsSavePending) {
+            void flushBindings();
+        }
     }
+}
+
+function persistBindings() {
+    if (bindingsSaveInFlight) {
+        bindingsSavePending = true;
+        return;
+    }
+    void flushBindings();
 }
 
 async function persistPinnedThemes() {

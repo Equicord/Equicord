@@ -26,7 +26,7 @@ const ProfileSetsTabWrapped = ErrorBoundary.wrap(ProfileSetsTab, { noop: true })
 
 export default definePlugin({
     name: "ProfileSets",
-    description: "Save and switch profile presets (avatar, banner, bio, effects). Optionally bind each preset to an Equicord theme.",
+    description: "Profile presets with optional per-preset Equicord themes.",
     tags: ["Appearance", "Customisation", "Utility"],
     authors: [EquicordDevs.omaw, EquicordDevs.justjxke, EquicordDevs.Jahbas],
     settings,
