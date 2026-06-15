@@ -4,16 +4,6 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-export interface GifPickerItemProps {
-    format?: number;
-    src?: string;
-    [key: string]: unknown;
-}
-
-export interface GifPickerItemInstance {
-    props?: GifPickerItemProps;
-}
-
 const URL_KEYWORDS = ["url", "src", "proxy"];
 const URL_CONTAINER_KEYS = ["gif", "media", "image", "video", "thumbnail", "preview", "result", "item"];
 

@@ -7,8 +7,6 @@
 import { NavContextMenuPatchCallback } from "@api/ContextMenu";
 import { definePluginSettings } from "@api/Settings";
 import { Button } from "@components/Button";
-import ErrorBoundary from "@components/ErrorBoundary";
-import { PencilIcon } from "@components/Icons";
 import { EquicordDevs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
 import { getCurrentChannel } from "@utils/discord";
@@ -25,7 +23,7 @@ import css from "./styles.css?managed";
 import { DEFAULT_OPTIONS, type GifMakerOptions, type GoogleFontMetadata } from "./types";
 import { clamp, getInitialSize, getMediaInfo } from "./utils/contextMenu";
 import { cleanupBlobUrl, createGif, loadImage, loadVideo } from "./utils/encoder";
-import { applyTenorMp4Fix, collectCandidateUrls, type GifPickerItemInstance, isLikelyVideoUrl, normalizeUrl, orderCandidateUrls } from "./utils/gifPicker";
+import { applyTenorMp4Fix, collectCandidateUrls, isLikelyVideoUrl, normalizeUrl, orderCandidateUrls } from "./utils/gifPicker";
 
 const cl = classNameFactory("vc-gifmaker-");
 const logger = new Logger("gifMaker");
@@ -123,8 +121,6 @@ const imageContextMenuPatch: NavContextMenuPatchCallback = (children, props) => 
     );
 };
 
-// ======== FontSelector ========
-
 interface SelectOption {
     key: string;
     label: string;
@@ -192,8 +188,6 @@ function FontSelector({ initialFont, onSelect }: { initialFont: string; onSelect
         />
     );
 }
-
-// ======== Modal Component ========
 
 function GifMakerModal({ url, isVideo, sourceWidth, sourceHeight, ...props }: RenderModalProps & { url: string; isVideo: boolean; sourceWidth?: number; sourceHeight?: number; }) {
 
@@ -396,10 +390,11 @@ function GifMakerModal({ url, isVideo, sourceWidth, sourceHeight, ...props }: Re
                                 <Slider
                                     initialValue={options.captionSize}
                                     onValueChange={v => patch({ captionSize: v })}
+                                    markers={[10, 15, 20, 30, 40, 50, 60, 70, 80, 90, 100]}
                                     minValue={10}
-                                    maxValue={120}
+                                    maxValue={100}
                                 />
-                                <span>{options.captionSize}px</span>
+                                <span>{(options.captionSize).toFixed(2)}px</span>
                             </div>
                         </div>
                     )}
@@ -434,6 +429,7 @@ function GifMakerModal({ url, isVideo, sourceWidth, sourceHeight, ...props }: Re
                                 onChange={e => patch({ width: Number(e.target.value) })}
                                 onBlur={e => patch({ width: clamp(Number(e.target.value), 32, 1024, 32) })}
                                 className={cl("input")}
+                                aria-label="Width"
                             />
                         </div>
                         <div className={cl("field")}>
@@ -446,6 +442,7 @@ function GifMakerModal({ url, isVideo, sourceWidth, sourceHeight, ...props }: Re
                                 onChange={e => patch({ height: Number(e.target.value) })}
                                 onBlur={e => patch({ height: clamp(Number(e.target.value), 32, 1024, 32) })}
                                 className={cl("input")}
+                                aria-label="Height"
                             />
                         </div>
                     </div>
@@ -455,75 +452,53 @@ function GifMakerModal({ url, isVideo, sourceWidth, sourceHeight, ...props }: Re
     );
 }
 
-const GifPickerButton = ErrorBoundary.wrap(({ instance }: { instance: GifPickerItemInstance; }) => {
-    const props = instance?.props;
-    if (!props) return null;
+function openGifMakerFromItem(item) {
+    const isGif = item.format === 1;
+    const directUrl = typeof item.src === "string" ? item.src : null;
 
-    const isGif = props.format === 1;
-    const directUrl = typeof props.src === "string" ? props.src : null;
+    const candidates = collectCandidateUrls(item);
+    const adjustedCandidates = new Set<string>();
+    if (directUrl) adjustedCandidates.add(applyTenorMp4Fix(normalizeUrl(directUrl), isGif));
+    for (const candidate of candidates) {
+        adjustedCandidates.add(applyTenorMp4Fix(candidate, isGif));
+    }
 
-    return (
-        <Button
-            size="min"
-            className={cl("trigger")}
-            onClick={async event => {
-                event.stopPropagation();
+    const preferredUrl = directUrl ? applyTenorMp4Fix(normalizeUrl(directUrl), isGif) : null;
+    const orderedUrls = orderCandidateUrls(preferredUrl, adjustedCandidates);
+    if (!orderedUrls.length) return;
 
-                const candidates = collectCandidateUrls(props);
-                const adjustedCandidates = new Set<string>();
-                if (directUrl) adjustedCandidates.add(applyTenorMp4Fix(normalizeUrl(directUrl), isGif));
+    const firstUrl = orderedUrls[0];
+    const isVideo = isLikelyVideoUrl(firstUrl);
 
-                for (const candidate of candidates) {
-                    adjustedCandidates.add(applyTenorMp4Fix(candidate, isGif));
-                }
-
-                const preferredUrl = directUrl ? applyTenorMp4Fix(normalizeUrl(directUrl), isGif) : null;
-                const orderedUrls = orderCandidateUrls(preferredUrl, adjustedCandidates);
-
-                if (!orderedUrls.length) return;
-
-                const firstUrl = orderedUrls[0];
-                const isVideo = isLikelyVideoUrl(firstUrl);
-
-                openModal(modalProps => (
-                    <GifMakerModal url={firstUrl} isVideo={isVideo} {...modalProps} />
-                ));
-            }}
-        >
-            <PencilIcon
-                className={cl("trigger-icon")}
-                width={16}
-                height={16}
-            />
-        </Button>
-    );
-}, { noop: true });
+    openModal(modalProps => (
+        <GifMakerModal url={firstUrl} isVideo={isVideo} {...modalProps} />
+    ));
+}
 
 export default definePlugin({
     name: "gifMaker",
     description: "Create and caption GIFs from any media in chat or the GIF picker.",
     authors: [EquicordDevs.Leon135, EquicordDevs.benjii],
     settings,
+    managedStyle: css,
     contextMenus: {
         "message": messageContextMenuPatch,
         "image-context": imageContextMenuPatch
     },
-    patches: [
-        {
-            find: "renderGIF",
-            replacement: {
-                match: /(children:\[)(\i\([^)]+\)\?null:this\.renderGIF\(\))/,
-                replace: "$1$self.renderGifPickerButton(this),$2"
-            }
-        }
-    ],
 
     start() {
         void fetchAllGoogleFonts();
     },
 
-    renderGifPickerButton(instance: GifPickerItemInstance) {
-        return <GifPickerButton instance={instance} />;
+    gifPickerContextMenu(instance, _e: React.MouseEvent) {
+        if (!instance?.props?.item?.src) return null;
+        return (
+            <Menu.MenuItem
+                id="gif-maker-edit"
+                key="gif-maker-edit"
+                label="Edit GIF"
+                action={() => openGifMakerFromItem(instance?.props?.item)}
+            />
+        );
     },
-    managedStyle: css,
 });

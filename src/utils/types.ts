@@ -20,6 +20,7 @@ import { AudioProcessor } from "@api/AudioPlayer";
 import type { ProfileBadge } from "@api/Badges";
 import type { ChatBarButtonData, ChatBarButtonWrapperData } from "@api/ChatButtons";
 import type { NavContextMenuPatchCallback } from "@api/ContextMenu";
+import type { GifPickerContextMenuItemFactory } from "@api/GifPickerContextMenu";
 import { HeaderBarButtonData } from "@api/HeaderBar";
 import type { MemberListDecoratorFactory } from "@api/MemberListDecorators";
 import type { MessageAccessoryFactory } from "@api/MessageAccessories";
@@ -236,6 +237,7 @@ export interface PluginDef {
     renderProfileCollection?: ProfileCollectionData;
     chatBarButtonWrapper?: ChatBarButtonWrapperData;
     renderProfileSection?: ProfileSectionData;
+    gifPickerContextMenu?: GifPickerContextMenuItemFactory;
 
     /**
      * A Vencord plugin that is modified for extra features in Equicord

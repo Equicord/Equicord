@@ -177,22 +177,6 @@
     flex-shrink: 0;
 }
 
-.vc-gifmaker-trigger {
-    position: absolute;
-    top: 4px;
-    left: 4px;
-    z-index: 10;
-    background-color: var(--background-base-low);
-    border-radius: 5px;
-    padding: 6px;
-    color: var(--icon-strong);
-    border: 0;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
 .vc-gifmaker-capture-wrapper {
     position: fixed;
     top: 0;
