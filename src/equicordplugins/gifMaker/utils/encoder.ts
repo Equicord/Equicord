@@ -6,11 +6,11 @@
 
 import { sleep } from "@utils/misc";
 import type { PluginNative } from "@utils/types";
+import { applyPalette, GIFEncoder, quantize } from "gifenc";
 
 import { CAPTIONS } from "../captions";
 import { measureTextLines } from "../captions/caption";
 import type { GifMakerOptions } from "../types";
-import { createGifEncoderWorker, terminateWorker } from "./encoder.worker";
 
 const MAX_FRAMES = 50;
 const INTERNAL_FPS = 10;
@@ -185,52 +185,28 @@ async function encodeFrames(
         frameData.push(ctx.getImageData(0, 0, width, gifHeight).data);
     }
 
-    const worker = createGifEncoderWorker();
-
-    try {
-        const waitForOk = () => new Promise<void>((resolve, reject) => {
-            const handler = (e: MessageEvent) => {
-                worker.removeEventListener("message", handler);
-                if (e.data.type === "ok") resolve();
-                else if (e.data.type === "error") reject(new Error(e.data.message));
-            };
-            worker.addEventListener("message", handler);
-        });
-
-        const totalLength = frameData.reduce((sum, data) => sum + data.length, 0);
-        const combined = new Uint8ClampedArray(totalLength);
-        let offset = 0;
-        for (const data of frameData) {
-            combined.set(data, offset);
-            offset += data.length;
-        }
-
-        worker.postMessage({
-            type: "init_with_palette",
-            params: { width, height: gifHeight, delay, paletteColors: PALETTE_COLORS },
-            buffer: combined.buffer,
-        }, [combined.buffer]);
-        await waitForOk();
-
-        for (let i = 0; i < frameCount; i++) {
-            worker.postMessage({ type: "frame", buffer: frameData[i].buffer, index: i }, [frameData[i].buffer]);
-            await waitForOk();
-        }
-
-        const result = await new Promise<ArrayBuffer>((resolve, reject) => {
-            const handler = (e: MessageEvent) => {
-                worker.removeEventListener("message", handler);
-                if (e.data.type === "result") resolve(e.data.buffer);
-                else if (e.data.type === "error") reject(new Error(e.data.message));
-            };
-            worker.addEventListener("message", handler);
-            worker.postMessage({ type: "finish" });
-        });
-
-        return new Blob([new Uint8Array(result)], { type: "image/gif" });
-    } finally {
-        terminateWorker(worker);
+    const totalLength = frameData.reduce((sum, data) => sum + data.length, 0);
+    const combined = new Uint8ClampedArray(totalLength);
+    let offset = 0;
+    for (const data of frameData) {
+        combined.set(data, offset);
+        offset += data.length;
     }
+
+    const palette = quantize(combined, PALETTE_COLORS);
+    const gif = GIFEncoder();
+
+    for (let i = 0; i < frameCount; i++) {
+        const index = applyPalette(frameData[i], palette);
+        gif.writeFrame(index, width, gifHeight, {
+            delay,
+            palette: i === 0 ? palette : undefined,
+        });
+    }
+
+    gif.finish();
+    const bytes = gif.bytesView();
+    return new Blob([new Uint8Array(bytes.buffer as ArrayBuffer, bytes.byteOffset, bytes.byteLength)], { type: "image/gif" });
 }
 
 async function createGifFromImage(url: string, options: GifMakerOptions): Promise<Blob> {
