@@ -9,7 +9,7 @@ import { Logger } from "@utils/Logger";
 import { ProfilePreset } from "@vencord/discord-types";
 import { UserStore } from "@webpack/common";
 
-const logger = new Logger("ProfilePresets");
+const logger = new Logger("ProfileSets");
 const LEGACY_PRESETS_KEY = "ProfileDataset";
 const MAIN_PRESETS_KEY = "ProfilePresets_v2_Main";
 const SERVER_PRESETS_KEY = "ProfilePresets_v2_Server";

@@ -11,6 +11,7 @@ import { showToast, Toasts } from "@webpack/common";
 
 import { getCurrentProfile } from "./profile";
 import { addPreset, movePresetInArray, presets, PresetSection, type ProfilePresetEx, removePreset, replaceAllPresets, savePresetsData, updatePreset } from "./storage";
+import { deleteBindingForPreset, renameBindingKey } from "./themeBindings";
 
 const UserProfileSettingsStore = findStoreLazy("UserProfileSettingsStore");
 
@@ -19,26 +20,41 @@ function isImageInput(value: unknown): value is string | { imageUri: string; } {
     return typeof value === "object" && isNonNullish(value) && "imageUri" in value && typeof (value as { imageUri: unknown }).imageUri === "string";
 }
 
-function getFreshPendingAvatar(section: PresetSection, guildId?: string): string | null {
+function getFreshPendingImage(
+    section: PresetSection,
+    guildId: string | undefined,
+    keys: string[]
+): string | null {
     const pending = (section === "server" && guildId
         ? UserProfileSettingsStore.getPendingChanges?.(guildId)
         : UserProfileSettingsStore.getPendingChanges?.()) ?? {};
     const pendingObj = pending as Record<string, unknown>;
-    const selected = [pendingObj.pendingAvatar].find(isImageInput);
+    const selected = keys.map(k => pendingObj[k]).find(isImageInput);
     if (!selected) return null;
     return typeof selected === "string" ? selected : selected.imageUri;
+}
+
+function getFreshPendingAvatar(section: PresetSection, guildId?: string): string | null {
+    return getFreshPendingImage(section, guildId, ["pendingAvatar"]);
+}
+
+function getFreshPendingBanner(section: PresetSection, guildId?: string): string | null {
+    return getFreshPendingImage(section, guildId, ["pendingBanner", "banner"]);
 }
 
 export async function savePreset(name: string, section: PresetSection, guildId?: string) {
     const profile = await getCurrentProfile(guildId, { isGuildProfile: section === "server" });
     const freshPendingAvatar = getFreshPendingAvatar(section, guildId);
+    const freshPendingBanner = getFreshPendingBanner(section, guildId);
     const effectiveAvatar = freshPendingAvatar ?? profile.avatarDataUrl ?? null;
+    const effectiveBanner = freshPendingBanner ?? profile.bannerDataUrl ?? null;
 
     const newPreset: ProfilePresetEx = {
         name,
         timestamp: Date.now(),
         ...profile,
         avatarDataUrl: effectiveAvatar,
+        bannerDataUrl: effectiveBanner,
     };
     addPreset(newPreset);
     await savePresetsData(section);
@@ -66,6 +82,7 @@ export async function updatePresetField<K extends keyof Omit<ProfilePreset, "nam
 export async function deletePreset(index: number, section: PresetSection, guildId?: string) {
     if (index < 0 || index >= presets.length) return;
 
+    deleteBindingForPreset(section, guildId, presets[index].name);
     removePreset(index);
     await savePresetsData(section);
 }
@@ -80,8 +97,10 @@ export async function movePreset(fromIndex: number, toIndex: number, section: Pr
 export async function renamePreset(index: number, newName: string, section: PresetSection, guildId?: string) {
     if (index < 0 || index >= presets.length || !newName.trim()) return;
 
+    const oldName = presets[index].name;
     const updatedPreset = { ...presets[index], name: newName.trim() };
     updatePreset(index, updatedPreset);
+    renameBindingKey(section, guildId, oldName, newName.trim());
     await savePresetsData(section);
 }
 
