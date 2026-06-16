@@ -125,7 +125,7 @@ export function ForwardPicker({ message, options, onChange }: { message: Message
         let id = 0;
         return message.embeds.map(({ rawTitle, rawDescription, image, images = image ? [image] : [], video }, i) => {
             const current = {
-                title: rawTitle?.trim() || rawDescription?.trim() || `Embed ${i}`,
+                title: rawTitle?.trim() || rawDescription?.trim() || `Embed ${i + 1}`,
                 subEmbeds: [] as { id: number; name: string; }[]
             };
 
