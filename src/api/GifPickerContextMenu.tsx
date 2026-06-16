@@ -37,7 +37,7 @@ export function removeGifPickerContextMenuPatch(id: string) {
     handlers.delete(id);
 }
 
-/** @internal Called by GifPickerContextMenuAPI to render the merged context menu. */
+/** @internal Called by ExtraContextMenusAPI to render the merged context menu. */
 export function _openGifPickerContextMenu(e: React.MouseEvent, instance) {
     if (!handlers.size) return;
 

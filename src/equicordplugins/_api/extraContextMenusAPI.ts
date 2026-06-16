@@ -9,8 +9,8 @@ import { EquicordDevs } from "@utils/constants";
 import definePlugin from "@utils/types";
 
 export default definePlugin({
-    name: "GifPickerContextMenuAPI",
-    description: "API that provides a shared right-click context menu for GIF picker items, avoiding conflicts between plugins.",
+    name: "ExtraContextMenusAPI",
+    description: "API that adds more context menus to patch.",
     authors: [EquicordDevs.thororen],
     required: true,
 
