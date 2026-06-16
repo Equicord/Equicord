@@ -6,18 +6,17 @@
 
 import { definePluginSettings, migratePluginSettings } from "@api/Settings";
 import { Devs, EquicordDevs } from "@utils/constants";
+import { classNameFactory } from "@utils/css";
 import { sendMessage } from "@utils/discord";
 import definePlugin, { OptionType } from "@utils/types";
 import { Message } from "@vencord/discord-types";
-import { Dispatch, MouseEvent, SetStateAction } from "react";
-
-export const cl = classNameFactory("vc-betterforwards-");
-
-import { classNameFactory } from "@utils/css";
 import { ChannelActionCreators, ChannelStore, useState } from "@webpack/common";
+import { Dispatch, MouseEvent, SetStateAction } from "react";
 
 import { ChannelName, ForwardPicker, GuildName, Timestamp } from "./components";
 import managedStyle from "./style.css?managed";
+
+export const cl = classNameFactory("vc-betterforwards-");
 
 export interface ForwardOptions {
     onlyEmbedIndices?: number[];
