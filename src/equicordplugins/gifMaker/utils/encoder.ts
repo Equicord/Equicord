@@ -6,7 +6,7 @@
 
 import type { PluginNative } from "@utils/types";
 import { applyPalette, GIFEncoder, quantize } from "gifenc";
-import { decompressFrames,parseGIF } from "gifuct-js";
+import { decompressFrames, parseGIF } from "gifuct-js";
 
 import { CAPTIONS } from "../captions";
 import { measureTextLines } from "../captions/caption";
@@ -285,9 +285,7 @@ export async function getSourceFrameInfo(url: string, isVideo: boolean): Promise
 export async function createGif(url: string, isVideo: boolean, options: GifMakerOptions): Promise<Blob> {
     if (isVideo) return createGifFromVideo(url, options);
     if (hasExt(url, ".gif")) {
-        try {
-            return await createGifFromAnimatedImage(url, options);
-        } catch { }
+        return await createGifFromAnimatedImage(url, options);
     }
     return createGifFromImage(url, options);
 }
@@ -477,7 +475,8 @@ async function createGifFromAnimatedImage(url: string, options: GifMakerOptions)
     const composite = document.createElement("canvas");
     composite.width = gifW;
     composite.height = gifH;
-    const ctx = composite.getContext("2d", { willReadFrequently: true })!;
+    const ctx = composite.getContext("2d", { willReadFrequently: true });
+    if (!ctx) throw new Error("Failed to get canvas context for GIF compositing.");
 
     const patchCanvas = document.createElement("canvas");
 
@@ -494,8 +493,11 @@ async function createGifFromAnimatedImage(url: string, options: GifMakerOptions)
             if (prev.disposalType === 2) {
                 ctx.clearRect(prev.dims.left, prev.dims.top, prev.dims.width, prev.dims.height);
             } else if (prev.disposalType === 3 && i > 1) {
-                const prevState = rendered[i - 2].getContext("2d")!.getImageData(0, 0, gifW, gifH);
-                ctx.putImageData(prevState, 0, 0);
+                const prevCtx = rendered[i - 2].getContext("2d");
+                if (prevCtx) {
+                    const prevState = prevCtx.getImageData(0, 0, gifW, gifH);
+                    ctx.putImageData(prevState, 0, 0);
+                }
             }
         }
 
@@ -506,13 +508,17 @@ async function createGifFromAnimatedImage(url: string, options: GifMakerOptions)
         );
         patchCanvas.width = frame.dims.width;
         patchCanvas.height = frame.dims.height;
-        patchCanvas.getContext("2d")!.putImageData(patchData, 0, 0);
+        const patchCtx = patchCanvas.getContext("2d");
+        if (!patchCtx) throw new Error("Failed to get canvas context for patch rendering.");
+        patchCtx.putImageData(patchData, 0, 0);
         ctx.drawImage(patchCanvas, frame.dims.left, frame.dims.top);
 
         const snap = document.createElement("canvas");
         snap.width = gifW;
         snap.height = gifH;
-        snap.getContext("2d")!.drawImage(composite, 0, 0);
+        const snapCtx = snap.getContext("2d");
+        if (!snapCtx) throw new Error("Failed to get canvas context for frame snapshot.");
+        snapCtx.drawImage(composite, 0, 0);
         rendered.push(snap);
     }
 
