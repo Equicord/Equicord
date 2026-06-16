@@ -132,8 +132,9 @@ export default definePlugin({
     async sendForward(channels: { id: string; type: string; }[], message: Message, options: ForwardOptions) {
         const contentMessage = message.messageSnapshots[0]?.message ?? message;
 
-        const attachments = options.onlyAttachmentIds
-            ? contentMessage.attachments.filter(a => options.onlyAttachmentIds!.includes(a.id))
+        const attIds = options.onlyAttachmentIds;
+        const attachments = attIds
+            ? contentMessage.attachments.filter(a => attIds.includes(a.id))
             : contentMessage.attachments;
 
         const ids = (await Promise.all(channels.map(getId))).filter(Boolean) as string[];
