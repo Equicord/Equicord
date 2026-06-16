@@ -12,41 +12,19 @@ import { iconsModule } from "@equicordplugins/_core/concatenatedModules";
 import { Message, MessageAttachment } from "@vencord/discord-types";
 import { ChannelType } from "@vencord/discord-types/enums";
 import { findByCodeLazy, findComponentByCodeLazy, findCssClassesLazy } from "@webpack";
-import {
-    ChannelStore,
-    DateUtils,
-    GuildStore,
-    IconUtils,
-    match,
-    NavigationRouter,
-    Popout,
-    SelectedGuildStore,
-    SnowflakeUtils,
-    Tooltip,
-    useMemo,
-    useRef,
-    UserStore,
-    useStateFromStores
-} from "@webpack/common";
+import { ChannelStore, DateUtils, GuildStore, IconUtils, match, NavigationRouter, Popout, SelectedGuildStore, SnowflakeUtils, Tooltip, useMemo, useRef, UserStore, useStateFromStores } from "@webpack/common";
 import { Dispatch, PropsWithChildren, SetStateAction } from "react";
 
 import { cl, ForwardOptions } from ".";
 
-type AttachmentType =
-    | "IMAGE"
-    | "VIDEO"
-    | "CLIP"
-    | "AUDIO"
-    | "VISUAL_PLACEHOLDER"
-    | "PLAINTEXT_PREVIEW"
-    | "OTHER"
-    | "INVALID";
+type AttachmentType = "IMAGE" | "VIDEO" | "CLIP" | "AUDIO" | "VISUAL_PLACEHOLDER" | "PLAINTEXT_PREVIEW" | "OTHER" | "INVALID";
+
 const tagClasses = findCssClassesLazy("tagList", "tagGroup", "tag");
 const ServerProfileComponent = findComponentByCodeLazy("{guildProfile:", "GUILD_PROFILE");
 const getAttachmentType: (attachment: MessageAttachment, inlineAttachmentMedia?: boolean) => AttachmentType =
     findByCodeLazy('"PLAINTEXT_PREVIEW":"OTHER"');
 
-export function GuildName({ guildId }: { guildId: string }) {
+export function GuildName({ guildId }: { guildId: string; }) {
     const guild = useStateFromStores(
         [GuildStore, SelectedGuildStore],
         () => {
@@ -83,15 +61,7 @@ export function GuildName({ guildId }: { guildId: string }) {
     );
 }
 
-export function ChannelName({
-    guildId,
-    channelId,
-    messageId
-}: {
-    guildId?: string;
-    channelId: string;
-    messageId: string;
-}) {
+export function ChannelName({ guildId, channelId, messageId }: { guildId?: string; channelId: string; messageId: string; }) {
     const name = useStateFromStores(
         [ChannelStore, UserStore],
         () => {
@@ -134,7 +104,7 @@ export function ChannelName({
     );
 }
 
-export function Timestamp({ snowflake }: { snowflake: string }) {
+export function Timestamp({ snowflake }: { snowflake: string; }) {
     const formatted = useMemo(
         () => DateUtils.calendarFormat(new Date(SnowflakeUtils.extractTimestamp(snowflake))),
         [snowflake]
@@ -149,22 +119,14 @@ export function Timestamp({ snowflake }: { snowflake: string }) {
     );
 }
 
-export function ForwardPicker({
-    message,
-    options,
-    onChange
-}: {
-    message: Message;
-    options: ForwardOptions;
-    onChange: Dispatch<SetStateAction<ForwardOptions>>;
-}) {
+export function ForwardPicker({ message, options, onChange }: { message: Message; options: ForwardOptions; onChange: Dispatch<SetStateAction<ForwardOptions>>; }) {
     const textEnabled = !options.onlyAttachmentIds && !options.onlyEmbedIndices;
     const embeds = useMemo(() => {
         let id = 0;
         return message.embeds.map(({ rawTitle, rawDescription, image, images = image ? [image] : [], video }, i) => {
             const current = {
                 title: rawTitle?.trim() || rawDescription?.trim() || `Embed ${i}`,
-                subEmbeds: [] as { id: number; name: string }[]
+                subEmbeds: [] as { id: number; name: string; }[]
             };
 
             if (images.length > 0) {
@@ -253,12 +215,7 @@ function TagContainer(props: FlexProps) {
     return <Flex gap={8} flexWrap="wrap" className={tagClasses.tagGroup} data-layout="inline" {...props} />;
 }
 
-function Tag<T>({
-    id,
-    children,
-    source,
-    onChange
-}: { id: T; source: T[]; onChange: (data: T[]) => void } & PropsWithChildren) {
+function Tag<T>({ id, children, source, onChange }: { id: T; source: T[]; onChange: (data: T[]) => void; } & PropsWithChildren) {
     const selected = useMemo(() => source.includes(id), [source, id]);
 
     return (
@@ -282,7 +239,7 @@ const icons: Partial<Record<AttachmentType, string>> = {
     PLAINTEXT_PREVIEW: "A"
 };
 
-function AttachmentIcon({ attachment }: { attachment: MessageAttachment }) {
+function AttachmentIcon({ attachment }: { attachment: MessageAttachment; }) {
     const Icon = useMemo(() => {
         const type = getAttachmentType(attachment, true);
         return iconsModule[(icons[type] ?? "ImageFile") + "Icon"];

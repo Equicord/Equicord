@@ -25,7 +25,7 @@ export interface ForwardOptions {
 }
 
 let ignore = false;
-const getId = ({ id, type }: { id: string; type: string }) => {
+const getId = ({ id, type }: { id: string; type: string; }) => {
     if (type !== "user") return id;
     return (
         ChannelStore.getDMFromUserId(id) ??
@@ -36,8 +36,7 @@ const getId = ({ id, type }: { id: string; type: string }) => {
 // Taken From Signature :)
 const settings = definePluginSettings({
     resendOnFail: {
-        description:
-            "This will attempt to resend a forwarded message if the forward fails. Could cause unintentional pings or text spam. Bypasses NSFW restrictions.",
+        description: "This will attempt to resend a forwarded message if the forward fails. Could cause unintentional pings or text spam. Bypasses NSFW restrictions.",
         type: OptionType.BOOLEAN,
         default: true,
         restartNeeded: true
@@ -109,8 +108,7 @@ export default definePlugin({
                     // there are two useCallbacks with clearDraft in this module
                     // we need to anchor to the one that is used as an onClick handler
                     match: /((\i)=\i\.useCallback\(\()(\)=>\{)(null!=\i&&\i\.\i\.clearDraft)(?=.{1500,2000}onClick:\2)/,
-                    replace: (_, beforeParen, _1, beforeBody, body) =>
-                        `${beforeParen}vencordArg1${beforeBody}$self.setShift(vencordArg1);${body}`,
+                    replace: (_, beforeParen, _1, beforeBody, body) => `${beforeParen}vencordArg1${beforeBody}$self.setShift(vencordArg1);${body}`,
                     predicate: () => settings.store.dontFollowForwards
                 }
             ]
@@ -132,7 +130,7 @@ export default definePlugin({
         }
     ],
 
-    async sendForward(channels: { id: string; type: string }[], message: Message, options: ForwardOptions) {
+    async sendForward(channels: { id: string; type: string; }[], message: Message, options: ForwardOptions) {
         const contentMessage = message.messageSnapshots[0]?.message ?? message;
 
         const attachments = options.onlyAttachmentIds
@@ -170,7 +168,7 @@ export default definePlugin({
         ignore = !!event?.shiftKey;
     },
 
-    renderForwardFooter({ message }: { message: Message }) {
+    renderForwardFooter({ message }: { message: Message; }) {
         const { guild_id, channel_id, message_id } = message.messageReference!;
         return (
             <div className={cl("footer")}>
@@ -181,7 +179,7 @@ export default definePlugin({
         );
     },
 
-    useProps(props: { message: Message; forwardOptions?: ForwardOptions }) {
+    useProps(props: { message: Message; forwardOptions?: ForwardOptions; }) {
         const [opts, setOpts] = useState(() => {
             if (!props.forwardOptions || !props.forwardOptions.onlyEmbedIndices)
                 return props.forwardOptions ?? ({} as ForwardOptions);
@@ -207,7 +205,7 @@ export default definePlugin({
         return { ...props, forwardOptions, __state: { opts, setOpts } };
     },
 
-    renderPicker(message: Message, state: { opts: ForwardOptions; setOpts: Dispatch<SetStateAction<ForwardOptions>> }) {
+    renderPicker(message: Message, state: { opts: ForwardOptions; setOpts: Dispatch<SetStateAction<ForwardOptions>>; }) {
         const contentMessage = message.messageSnapshots[0]?.message ?? message;
         if (contentMessage.embeds.length === 0 && contentMessage.attachments.length === 0) return null;
 
