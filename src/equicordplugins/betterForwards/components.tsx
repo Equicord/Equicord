@@ -183,8 +183,8 @@ export function ForwardPicker({ message, options, onChange }: { message: Message
                     </Tag>
                 ))}
             </TagContainer>
-            {embeds.map(({ title, subEmbeds }, i) => (
-                <Flex gap={4} flexDirection="column" key={i}>
+            {embeds.map(({ title, subEmbeds }) => (
+                <Flex gap={4} flexDirection="column" key={subEmbeds[0].id}>
                     <BaseText
                         size="sm"
                         color="text-muted"
