@@ -84,10 +84,10 @@ async function cloneRole(role: Role, targetGuild: Guild) {
             type: Toasts.Type.SUCCESS,
             id: Toasts.genId(),
         });
-    } catch (e: any) {
+    } catch (e: unknown) {
         let message = "Something went wrong (check console!)";
         try {
-            message = JSON.parse(e.text).message;
+            message = JSON.parse((e as { text: string; }).text).message;
         } catch { }
 
         logger.error("Failed to clone", role.name, "to", targetGuild.name, e);
