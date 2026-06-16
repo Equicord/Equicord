@@ -492,7 +492,7 @@ async function createGifFromAnimatedImage(url: string, options: GifMakerOptions)
 
     for (let i = 0; i < frameCount; i++) {
         const frame = frames[i];
-        delays.push(frame.delay);
+        delays.push(frame.delay * 10);
 
         if (i > 0) {
             const prev = frames[i - 1];
