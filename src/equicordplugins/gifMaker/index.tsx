@@ -453,17 +453,16 @@ function GifMakerModal({ url, isVideo, sourceWidth, sourceHeight, ...props }: Re
 }
 
 function openGifMakerFromItem(item) {
-    const isGif = item.format === 1;
     const directUrl = typeof item.src === "string" ? item.src : null;
 
     const candidates = collectCandidateUrls(item);
     const adjustedCandidates = new Set<string>();
-    if (directUrl) adjustedCandidates.add(applyTenorMp4Fix(normalizeUrl(directUrl), isGif));
+    if (directUrl) adjustedCandidates.add(applyTenorMp4Fix(normalizeUrl(directUrl)));
     for (const candidate of candidates) {
-        adjustedCandidates.add(applyTenorMp4Fix(candidate, isGif));
+        adjustedCandidates.add(applyTenorMp4Fix(candidate));
     }
 
-    const preferredUrl = directUrl ? applyTenorMp4Fix(normalizeUrl(directUrl), isGif) : null;
+    const preferredUrl = directUrl ? applyTenorMp4Fix(normalizeUrl(directUrl)) : null;
     const orderedUrls = orderCandidateUrls(preferredUrl, adjustedCandidates);
     if (!orderedUrls.length) return;
 

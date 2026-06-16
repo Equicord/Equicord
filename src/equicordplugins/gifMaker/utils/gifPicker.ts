@@ -15,9 +15,7 @@ export function looksLikeUrl(value: string) {
     return value.startsWith("http://") || value.startsWith("https://") || value.startsWith("//");
 }
 
-export function applyTenorMp4Fix(url: string, isGif: boolean) {
-    if (isGif) return url;
-
+export function applyTenorMp4Fix(url: string) {
     try {
         const { host } = new URL(url);
         if (!host.endsWith("tenor.com")) return url;
