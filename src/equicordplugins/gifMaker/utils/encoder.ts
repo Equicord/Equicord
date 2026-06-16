@@ -285,7 +285,13 @@ export async function getSourceFrameInfo(url: string, isVideo: boolean): Promise
 export async function createGif(url: string, isVideo: boolean, options: GifMakerOptions): Promise<Blob> {
     if (isVideo) return createGifFromVideo(url, options);
     if (hasExt(url, ".gif")) {
-        return await createGifFromAnimatedImage(url, options);
+        try {
+            return await createGifFromAnimatedImage(url, options);
+        } catch (err) {
+            if (!(err instanceof Error) || err.message !== "No animated frames found") {
+                throw err;
+            }
+        }
     }
     return createGifFromImage(url, options);
 }
