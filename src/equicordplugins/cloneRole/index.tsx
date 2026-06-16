@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { getUserSettingLazy } from "@api/UserSettings";
 import { EquicordDevs } from "@utils/constants";
 import { getCurrentGuild } from "@utils/discord";
 import { Logger } from "@utils/Logger";
@@ -13,7 +12,6 @@ import type { Guild, Role } from "@vencord/discord-types";
 import { GuildRoleStore, GuildStore, Menu, PermissionStore, RestAPI, Toasts } from "@webpack/common";
 
 const logger = new Logger("CloneRole");
-const DeveloperMode = getUserSettingLazy("appearance", "developerMode")!;
 
 interface CloneRoleBody {
     name: string;
@@ -30,11 +28,6 @@ export default definePlugin({
     description: "Adds role context menu options to clone roles into servers where you can manage roles.",
     tags: ["Roles", "Servers"],
     authors: [EquicordDevs.bitweave],
-    dependencies: ["UserSettingsAPI"],
-
-    start() {
-        DeveloperMode.updateSetting(true);
-    },
 
     contextMenus: {
         "guild-settings-role-context"(children, { role }: { role?: Role; }) {
