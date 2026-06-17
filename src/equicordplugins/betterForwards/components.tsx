@@ -11,10 +11,10 @@ import { iconsModule } from "@equicordplugins/_core/concatenatedModules";
 import { MessageAttachment } from "@vencord/discord-types";
 import { ChannelType } from "@vencord/discord-types/enums";
 import { findByCodeLazy, findComponentByCodeLazy, findCssClassesLazy } from "@webpack";
-import { ChannelStore, DateUtils, GuildStore, IconUtils, match, NavigationRouter, Popout, SelectedGuildStore, SnowflakeUtils, useMemo, useRef, UserStore, useStateFromStores } from "@webpack/common";
+import { ChannelStore, DateUtils, GuildStore, IconUtils, match, NavigationRouter, Popout, React, SelectedGuildStore, SnowflakeUtils, useMemo, useRef, UserStore, useStateFromStores } from "@webpack/common";
 import { PropsWithChildren } from "react";
 
-import { cl, ForwardOptionsState } from ".";
+import { cl, ForwardOptionsContext, ForwardOptionsState } from ".";
 
 type AttachmentType = "IMAGE" | "VIDEO" | "CLIP" | "AUDIO" | "VISUAL_PLACEHOLDER" | "PLAINTEXT_PREVIEW" | "OTHER" | "INVALID";
 
@@ -113,6 +113,19 @@ export function Timestamp({ snowflake }: { snowflake: string; }) {
                 {formatted}
             </BaseText>
         </div>
+    );
+}
+
+export function ForwardPicker() {
+    const state = React.useContext(ForwardOptionsContext);
+
+    if (state.message.embeds.length + state.message.attachments.length === 0) return null;
+
+    return (
+        <Flex gap={12} flexDirection="column">
+            {state.message.attachments.length > 0 && <AttachmentPicker {...state} />}
+            {state.message.embeds.length > 0 && <EmbedPicker {...state} />}
+        </Flex>
     );
 }
 

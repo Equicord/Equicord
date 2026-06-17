@@ -19,7 +19,7 @@ import { proxyLazyWebpack } from "@webpack";
 import { ChannelActionCreators, ChannelStore, Checkbox, React, Tooltip, useMemo, useState } from "@webpack/common";
 import { Dispatch, MouseEvent, ReactNode, SetStateAction } from "react";
 
-import { AttachmentPicker, ChannelName, EmbedPicker, GuildName, Timestamp } from "./components";
+import { ChannelName, ForwardPicker, GuildName, Timestamp } from "./components";
 import managedStyle from "./style.css?managed";
 
 export const cl = classNameFactory("vc-betterforwards-");
@@ -288,15 +288,10 @@ export default definePlugin({
     },
 
     renderForwardPicker() {
-        const state = React.useContext(ForwardOptionsContext);
-
-        if (state.message.embeds.length + state.message.attachments.length === 0) return null;
-
         return (
-            <Flex gap={12} flexDirection="column">
-                {state.message.attachments.length > 0 && <AttachmentPicker {...state} />}
-                {state.message.embeds.length > 0 && <EmbedPicker {...state} />}
-            </Flex>
+            <ErrorBoundary noop>
+                <ForwardPicker />
+            </ErrorBoundary>
         );
     }
 });
