@@ -415,16 +415,16 @@ export async function openGitPathModal(_: any) {
         const t = win.webContents.getTitle();
         if (t === "abort") win.close();
         if (t.startsWith("ok")) {
-            if (!NativeSettings.store.plugins.UserpluginInstaller) {
-                NativeSettings.store.plugins.UserpluginInstaller = {
+            if (!NativeSettings.store.plugins.UserpluginLibrary) {
+                NativeSettings.store.plugins.UserpluginLibrary = {
                     gitPath: undefined
                 };
             }
             if (t === "ok-") {
-                NativeSettings.store.plugins.UserpluginInstaller.gitPath = undefined;
+                NativeSettings.store.plugins.UserpluginLibrary.gitPath = undefined;
             } else {
                 const gitPath2 = t.split("-").toSpliced(0, 1).join("-");
-                NativeSettings.store.plugins.UserpluginInstaller.gitPath = gitPath2;
+                NativeSettings.store.plugins.UserpluginLibrary.gitPath = gitPath2;
             }
             win.close();
         }

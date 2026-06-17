@@ -22,7 +22,7 @@ import UserpluginInstallButton from "./components/UserpluginInstallButton";
 import { VariableWithCallbacks } from "./VariableWithCallbacks";
 
 // @ts-ignore
-export const Native = VencordNative.pluginHelpers.UserpluginInstaller as PluginNative<typeof import("./native")>;
+export const Native = VencordNative.pluginHelpers.UserpluginLibrary as PluginNative<typeof import("./native")>;
 export const OpenSettingsModule = findByPropsLazy("openUserSettings");
 const AppsIcon = findComponentByCodeLazy("2.95H20a2 2 0");
 
@@ -52,7 +52,7 @@ export const settings = definePluginSettings({
 });
 
 export default definePlugin({
-    name: "UserpluginInstaller",
+    name: "UserpluginLibrary",
     description: "Install userplugins with a simple button click",
     settingsAboutComponent: () => (
         <Notice.Warning>
@@ -85,8 +85,8 @@ export default definePlugin({
         Icon: AppsIcon
     },
     async start() {
-        if (!VencordNative.pluginHelpers.UserpluginInstaller) return void Alerts.show({
-            title: "UserpluginInstaller not fully loaded",
+        if (!VencordNative.pluginHelpers.UserpluginLibrary) return void Alerts.show({
+            title: "UserpluginLibrary not fully loaded",
             body: "You need to restart to allow the native to be loaded :)",
             confirmText: "Restart now",
             onConfirm() {
