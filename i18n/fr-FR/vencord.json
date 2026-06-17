@@ -341,16 +341,16 @@
     "crashHandler": {
         "description": "Plugin utilitaire pour la gestion et éventuellement la récupération après un crash sans redémarrage",
         "notifications": {
-            "crashedBody": "Awn :( Discord s'est écrasé deux fois rapidement, sans tenter de récupérer. Cliquez ici pour rejoindre notre serveur d'assistance !",
+            "crashedBody": "Awn :( Discord s'est arrêté deux fois rapidement, sans tenter de revenir Cliquez ici pour rejoindre notre serveur d'assistance !",
             "crashedTitle": "Discord a planté !",
             "invalidInvite": "Invitation invalide ou expirée",
             "recoveringBody": "Tentative de récupération... Cliquez ici pour rejoindre notre serveur d'assistance !"
         },
         "settings": {
-            "attemptToNavigateToHome": "S'il faut tenter de naviguer vers l'accueil pour éviter les plantages de Discord.",
-            "attemptToPreventCrashes": "S'il faut tenter d'empêcher les plantages de Discord."
+            "attemptToNavigateToHome": "Si il faut tenter de naviguer vers l'accueil pour éviter les plantages de Discord.",
+            "attemptToPreventCrashes": "Si il faut tenter d'empêcher les plantages de Discord."
         },
-        "updatePrompt": "Oh oh, Discord vient de planter... mais bonne nouvelle, une mise à jour de Equicord est disponible qui pourrait résoudre ce problème ! Souhaitez-vous mettre à jour maintenant ?"
+        "updatePrompt": "Oh oh, Discord vient de planter... mais bonne nouvelle, une mise à jour Equicord est disponible, ce qui pourrait résoudre ce problème ! Souhaitez-vous mettre à jour maintenant ?"
     },
     "ctrlEnterSend": {
         "description": "Utilisez Ctrl+Entrée pour envoyer des messages (personnalisable)",
@@ -380,7 +380,7 @@
         "activityTypes": {
             "competing": "En compétition",
             "listening": "Écoute",
-            "playing": "Jouant",
+            "playing": "En train de jouer à",
             "streaming": "En direct",
             "watching": "Regarde"
         },
