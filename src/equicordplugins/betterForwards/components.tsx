@@ -151,13 +151,9 @@ export function EmbedPicker({ message, opts, setOpts, hasOpts, defaultOpts }: Fo
         <Flex gap={4} flexDirection="column" key={subEmbeds[0].id}>
             <BaseText
                 size="sm"
-                color="text-muted"
-                style={{
-                    textWrap: "nowrap",
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                    opacity: !hasOpts ? 0.5 : undefined
-                }}
+                color="text-subtle"
+                className={cl("embed-name")}
+                style={{ opacity: !hasOpts ? 0.5 : undefined }}
             >
                 {title}
             </BaseText>

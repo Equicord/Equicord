@@ -41,3 +41,9 @@
         vertical-align: middle;
     }
 }
+
+.vc-betterforwards-embed-name {
+    overflow: hidden;
+    text-wrap: nowrap;
+    text-overflow: ellipsis;
+}
