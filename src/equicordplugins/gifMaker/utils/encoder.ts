@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { sleep } from "@utils/misc";
 import type { PluginNative } from "@utils/types";
 import { applyPalette, GIFEncoder, quantize } from "gifenc";
 import { decompressFrames, parseGIF } from "gifuct-js";
@@ -528,7 +529,7 @@ async function createGifFromAnimatedImage(url: string, options: GifMakerOptions)
         rendered.push(snap);
 
         if (i % 20 === 19) {
-            await new Promise(resolve => setTimeout(resolve));
+            await sleep(0);
         }
     }
 
