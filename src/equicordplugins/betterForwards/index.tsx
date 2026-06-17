@@ -269,19 +269,21 @@ export default definePlugin({
         const { message, hasOpts, setOpts, defaultOpts } = state;
 
         return (
-            <ForwardOptionsContext.Provider value={state}>
-                {children}
-                {message.embeds.length + message.attachments.length > 0 && (
-                    <Flex className={Margins.top16}>
-                        <Checkbox value={!hasOpts} onChange={() => setOpts(!hasOpts ? defaultOpts : {})} size={20}>
-                            <BaseText size="sm">Forward everything</BaseText>
-                        </Checkbox>
-                        <Tooltip text="Message text will not be forwarded when this option is disabled">
-                            {props => <InfoIcon {...props} color="var(--text-muted)" width={20} height={20} />}
-                        </Tooltip>
-                    </Flex>
-                )}
-            </ForwardOptionsContext.Provider>
+            <ErrorBoundary noop>
+                <ForwardOptionsContext.Provider value={state}>
+                    {children}
+                    {message.embeds.length + message.attachments.length > 0 && (
+                        <Flex className={Margins.top16}>
+                            <Checkbox value={!hasOpts} onChange={() => setOpts(!hasOpts ? defaultOpts : {})} size={20}>
+                                <BaseText size="sm">Forward everything</BaseText>
+                            </Checkbox>
+                            <Tooltip text="Message text will not be forwarded when this option is disabled">
+                                {props => <InfoIcon {...props} color="var(--text-muted)" width={20} height={20} />}
+                            </Tooltip>
+                        </Flex>
+                    )}
+                </ForwardOptionsContext.Provider>
+            </ErrorBoundary>
         );
     },
 
