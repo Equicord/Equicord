@@ -12,9 +12,8 @@ import { CAPTIONS } from "../captions";
 import { measureTextLines } from "../captions/caption";
 import type { GifMakerOptions } from "../types";
 
-const MAX_FRAMES = 50;
+const MAX_FRAMES = 200;
 const INTERNAL_FPS = 10;
-const INTERNAL_MAX_DURATION = 3;
 const PALETTE_COLORS = 255;
 const MAX_GIF_SCAN_BYTES = 524288; // 512KB
 
@@ -238,18 +237,19 @@ async function createGifFromVideo(url: string, options: GifMakerOptions): Promis
     try {
         const { duration } = video;
         const frameCount = Math.min(
-            INTERNAL_FPS * INTERNAL_MAX_DURATION,
             Math.floor(duration * INTERNAL_FPS),
             MAX_FRAMES
         );
 
         const interval = duration / frameCount;
+        const delay = Math.round(interval * 1000);
+        const delays = new Array(frameCount).fill(delay);
 
         return await encodeFrames(options.width, options.height, options, frameCount, async (ctx, i) => {
             video.currentTime = i * interval;
             await waitForSeek(video);
             ctx.drawImage(video, 0, 0, options.width, options.height);
-        });
+        }, delays);
     } finally {
         cleanupBlobUrl(video);
     }
@@ -486,13 +486,13 @@ async function createGifFromAnimatedImage(url: string, options: GifMakerOptions)
 
     const patchCanvas = document.createElement("canvas");
 
-    const frameCount = Math.min(frames.length, MAX_FRAMES);
-    const delays: number[] = [];
+    const totalFrames = frames.length;
     const rendered: HTMLCanvasElement[] = [];
+    const delays: number[] = [];
 
-    for (let i = 0; i < frameCount; i++) {
+    for (let i = 0; i < totalFrames; i++) {
         const frame = frames[i];
-        delays.push(frame.delay * 10);
+        delays.push(frame.delay);
 
         if (i > 0) {
             const prev = frames[i - 1];
@@ -526,10 +526,14 @@ async function createGifFromAnimatedImage(url: string, options: GifMakerOptions)
         if (!snapCtx) throw new Error("Failed to get canvas context for frame snapshot.");
         snapCtx.drawImage(composite, 0, 0);
         rendered.push(snap);
+
+        if (i % 20 === 19) {
+            await new Promise(resolve => setTimeout(resolve));
+        }
     }
 
     return await encodeFrames(
-        options.width, options.height, options, frameCount,
+        options.width, options.height, options, totalFrames,
         (encodeCtx, i) => {
             encodeCtx.drawImage(rendered[i], 0, 0, options.width, options.height);
         },

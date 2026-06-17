@@ -16,12 +16,8 @@ export function looksLikeUrl(value: string) {
 }
 
 export function applyTenorMp4Fix(url: string) {
-    try {
-        const { host } = new URL(url);
-        if (!host.endsWith("tenor.com")) return url;
-    } catch {
-        return url;
-    }
+    const { host } = new URL(url);
+    if (!host.endsWith("tenor.com")) return url;
 
     const typeIndex = url.lastIndexOf("/") - 1;
     if (typeIndex <= 0 || url[typeIndex] === "o") return url;
@@ -63,12 +59,7 @@ export function collectCandidateUrls(source: unknown, depth = 0, out = new Set<s
 }
 
 export function scoreUrl(url: string) {
-    let host = "";
-    try {
-        host = new URL(url).host;
-    } catch {
-        // invalid URL, host remains empty
-    }
+    const { host } = new URL(url);
 
     let score = 0;
     if (host.endsWith("discordapp.net") || host.endsWith("discordapp.com")) score += 100;
@@ -93,4 +84,22 @@ export function orderCandidateUrls(preferred: string | null, candidates: Set<str
 
 export function isLikelyVideoUrl(url: string) {
     return /\.(webm|mp4|m4v)(\?|$)/i.test(url);
+}
+
+export function ensureGifUrl(url: string): string {
+    if (/\.gif(\?|$)/i.test(url)) return url;
+    const host = new URL(url).hostname;
+    if (host.includes("tenor.com") || host.includes("giphy.com")) {
+        return url.replace(/\.(png|webp|jpg|jpeg)(\?.*)?(#.*)?$/i, ".gif");
+    }
+    return url;
+}
+
+export function stripDiscordFormatParam(url: string): string {
+    const parsed = new URL(url);
+    if (/discord(app)?\.(com|net|gg)/i.test(parsed.hostname)) {
+        parsed.searchParams.delete("format");
+        parsed.searchParams.delete("animated");
+    }
+    return parsed.href;
 }
