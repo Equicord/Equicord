@@ -14,7 +14,7 @@ import { measureTextLines } from "../captions/caption";
 import type { GifMakerOptions } from "../types";
 
 const MAX_FRAMES = 200;
-const INTERNAL_FPS = 10;
+const INTERNAL_FPS = 30;
 const PALETTE_COLORS = 255;
 const MAX_GIF_SCAN_BYTES = 524288; // 512KB
 

@@ -23,7 +23,7 @@ import css from "./styles.css?managed";
 import { DEFAULT_OPTIONS, type GifMakerOptions, type GoogleFontMetadata } from "./types";
 import { clamp, getInitialSize, getMediaInfo } from "./utils/contextMenu";
 import { cleanupBlobUrl, createGif, loadImage, loadVideo } from "./utils/encoder";
-import { applyTenorMp4Fix, collectCandidateUrls, ensureGifUrl, isLikelyVideoUrl, normalizeUrl, orderCandidateUrls, stripDiscordFormatParam } from "./utils/gifPicker";
+import { collectCandidateUrls, ensureGifUrl, isLikelyVideoUrl, normalizeUrl, orderCandidateUrls, stripDiscordFormatParam } from "./utils/gifPicker";
 
 const cl = classNameFactory("vc-gifmaker-");
 const logger = new Logger("gifMaker");
@@ -457,12 +457,12 @@ function openGifMakerFromItem(item) {
 
     const candidates = collectCandidateUrls(item);
     const adjustedCandidates = new Set<string>();
-    if (directUrl) adjustedCandidates.add(applyTenorMp4Fix(normalizeUrl(directUrl)));
+    if (directUrl) adjustedCandidates.add(normalizeUrl(directUrl));
     for (const candidate of candidates) {
-        adjustedCandidates.add(applyTenorMp4Fix(candidate));
+        adjustedCandidates.add(candidate);
     }
 
-    const preferredUrl = directUrl ? applyTenorMp4Fix(normalizeUrl(directUrl)) : null;
+    const preferredUrl = directUrl ? normalizeUrl(directUrl) : null;
     const orderedUrls = orderCandidateUrls(preferredUrl, adjustedCandidates);
     if (!orderedUrls.length) return;
 

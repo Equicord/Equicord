@@ -15,16 +15,6 @@ export function looksLikeUrl(value: string) {
     return value.startsWith("http://") || value.startsWith("https://") || value.startsWith("//");
 }
 
-export function applyTenorMp4Fix(url: string) {
-    const { host } = new URL(url);
-    if (!host.endsWith("tenor.com")) return url;
-
-    const typeIndex = url.lastIndexOf("/") - 1;
-    if (typeIndex <= 0 || url[typeIndex] === "o") return url;
-
-    return url.slice(0, typeIndex) + "o" + url.slice(typeIndex + 1);
-}
-
 export function collectCandidateUrls(source: unknown, depth = 0, out = new Set<string>()) {
     if (!source || depth > 2) return out;
 
@@ -88,10 +78,31 @@ export function isLikelyVideoUrl(url: string) {
 
 export function ensureGifUrl(url: string): string {
     if (/\.gif(\?|$)/i.test(url)) return url;
-    const host = new URL(url).hostname;
-    if (host.includes("tenor.com") || host.includes("giphy.com")) {
-        return url.replace(/\.(png|webp|jpg|jpeg)(\?.*)?(#.*)?$/i, ".gif");
+
+    const parsed = new URL(url);
+    const host = parsed.hostname;
+
+    if (host.includes("tenor.com")) {
+        const paths = parsed.pathname.split("/").filter(Boolean);
+        if (paths.length >= 2) {
+            const idSegment = paths[paths.length - 2];
+            paths[paths.length - 2] = idSegment.replace(/Po$/, "Ad");
+            paths[paths.length - 1] = "tenor.gif";
+            parsed.pathname = "/" + paths.join("/");
+        }
+        parsed.search = "";
+        return parsed.href;
     }
+
+    if (host.includes("giphy.com")) {
+        const paths = parsed.pathname.split("/").filter(Boolean);
+        if (paths.length >= 2) {
+            const gifId = paths[paths.length - 2];
+            return `https://i.giphy.com/${gifId}.gif`;
+        }
+        return url;
+    }
+
     return url;
 }
 
