@@ -276,7 +276,7 @@ export default definePlugin({
                             <BaseText size="sm">Forward everything</BaseText>
                         </Checkbox>
                         <Tooltip text="Message text will not be forwarded when this option is disabled">
-                            {props => <InfoIcon {...props} color="var(--text-muted)" width={18} height={18} />}
+                            {props => <InfoIcon {...props} color="var(--text-muted)" width={20} height={20} />}
                         </Tooltip>
                     </Flex>
                 )}
