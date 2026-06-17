@@ -124,25 +124,28 @@ export function EmbedPicker({ message, opts, setOpts, hasOpts, defaultOpts }: Fo
         return message.embeds.map(({ rawTitle, rawDescription, image, images = image ? [image] : [], video }, i) => {
             const current = {
                 title: rawTitle?.trim() || rawDescription?.trim() || `Embed ${i + 1}`,
-                subEmbeds: [] as { id: number; name: string }[]
+                subEmbeds: [] as { id: number; name: string; isMainEmbed: boolean; }[]
             };
 
             if (images.length > 0) {
-                current.subEmbeds = images.map((image, i) => ({
+                // The "main" embed is the first embed with the same url (in 99% cases), which is used for displaying embed metadata (title, description, etc).
+                // It's only possible to tell it apart in the raw API message source since the client groups all related embeds together.
+                current.subEmbeds = images.map((image, si) => ({
                     id: id++,
-                    name: `Image ${images.length > 1 ? `${i + 1} ` : ""}(${image!.width} x ${image!.height})`
+                    name: `${si === 0 ? "Embed + " : ""}Image ${images.length > 1 ? `${si + 1} ` : ""}(${image!.width} x ${image!.height})`,
+                    isMainEmbed: si === 0
                 }));
             } else if (video) {
-                current.subEmbeds = [{ id: id++, name: "Video" }];
+                current.subEmbeds = [{ id: id++, name: "Embed + Video", isMainEmbed: true }];
             } else {
-                current.subEmbeds = [{ id: id++, name: "Embed" }];
+                current.subEmbeds = [{ id: id++, name: "Embed", isMainEmbed: true }];
             }
 
             return current;
         });
     }, [message]);
 
-    const { EmbedIcon } = iconsModule;
+    const { EmbedIcon, ImageIcon } = iconsModule;
 
     return embeds.map(({ title, subEmbeds }) => (
         <Flex gap={4} flexDirection="column" key={subEmbeds[0].id}>
@@ -159,18 +162,21 @@ export function EmbedPicker({ message, opts, setOpts, hasOpts, defaultOpts }: Fo
                 {title}
             </BaseText>
             <TagContainer>
-                {subEmbeds.map(({ id, name }) => (
-                    <Tag
-                        key={id}
-                        id={id}
-                        source={opts.onlyEmbedIndices ?? defaultOpts.onlyEmbedIndices}
-                        onChange={data => setOpts(prev => ({ ...prev, onlyEmbedIndices: data }))}
-                        disabled={!hasOpts}
-                    >
-                        {EmbedIcon && <EmbedIcon size="xs" style={{ flexShrink: 0 }} />}
-                        <BaseText size="sm">{name}</BaseText>
-                    </Tag>
-                ))}
+                {subEmbeds.map(({ id, name, isMainEmbed }) => {
+                    const Icon = isMainEmbed ? EmbedIcon : ImageIcon;
+                    return (
+                        <Tag
+                            key={id}
+                            id={id}
+                            source={hasOpts ? (opts.onlyEmbedIndices ?? []) : defaultOpts.onlyEmbedIndices}
+                            onChange={data => setOpts(prev => ({ ...prev, onlyEmbedIndices: data }))}
+                            disabled={!hasOpts}
+                        >
+                            {Icon && <Icon size="xs" style={{ flexShrink: 0 }} />}
+                            <BaseText size="sm">{name}</BaseText>
+                        </Tag>
+                    );
+                })}
             </TagContainer>
         </Flex>
     ));
@@ -183,7 +189,7 @@ export function AttachmentPicker({ message, opts, setOpts, hasOpts, defaultOpts 
                 <Tag
                     key={attachment.id}
                     id={attachment.id}
-                    source={opts.onlyAttachmentIds ?? defaultOpts.onlyAttachmentIds}
+                    source={hasOpts ? opts.onlyAttachmentIds ?? [] : defaultOpts.onlyAttachmentIds}
                     onChange={data => setOpts(prev => ({ ...prev, onlyAttachmentIds: data }))}
                     disabled={!hasOpts}
                 >

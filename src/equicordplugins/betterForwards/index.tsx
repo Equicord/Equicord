@@ -8,6 +8,7 @@ import { definePluginSettings, migratePluginSettings } from "@api/Settings";
 import { BaseText } from "@components/BaseText";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Flex } from "@components/Flex";
+import { InfoIcon } from "@components/Icons";
 import { Margins } from "@components/margins";
 import { Devs, EquicordDevs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
@@ -15,7 +16,7 @@ import { sendMessage } from "@utils/discord";
 import definePlugin, { OptionType } from "@utils/types";
 import { Message } from "@vencord/discord-types";
 import { proxyLazyWebpack } from "@webpack";
-import { ChannelActionCreators, ChannelStore, Checkbox, React, useMemo, useState } from "@webpack/common";
+import { ChannelActionCreators, ChannelStore, Checkbox, React, Tooltip, useMemo, useState } from "@webpack/common";
 import { Dispatch, MouseEvent, ReactNode, SetStateAction } from "react";
 
 import { AttachmentPicker, ChannelName, EmbedPicker, GuildName, Timestamp } from "./components";
@@ -239,11 +240,22 @@ export default definePlugin({
             [message]
         );
 
-        const forwardOptions: ForwardOptions = { ...opts };
         const hasOpts = !!opts.onlyAttachmentIds || !!opts.onlyEmbedIndices;
 
-        // Server-side validation can be bypassed by specifying a fake attachment id
-        if (hasOpts && !forwardOptions.onlyAttachmentIds?.length) forwardOptions.onlyAttachmentIds = ["0"];
+        const forwardOptions = useMemo(() => {
+            if (!hasOpts) return opts;
+
+            const fixed = { onlyAttachmentIds: [], onlyEmbedIndices: [], ...opts };
+
+            // Server-side validation can be bypassed by specifying a fake attachment id
+            if ((fixed.onlyAttachmentIds.length) + (fixed.onlyEmbedIndices.length) === 0)
+                fixed.onlyAttachmentIds = ["0"];
+
+            // If the embed indices are in the incorrect order, embed metadata could get stripped out by the client
+            fixed.onlyEmbedIndices = fixed.onlyEmbedIndices.toSorted((a, b) => a - b);
+
+            return fixed;
+        }, [opts, hasOpts]);
 
         const state = useMemo(
             () => ({ message, opts, setOpts, defaultOpts, hasOpts }),
@@ -263,6 +275,9 @@ export default definePlugin({
                         <Checkbox value={!hasOpts} onChange={() => setOpts(!hasOpts ? defaultOpts : {})} size={20}>
                             <BaseText size="sm">Forward everything</BaseText>
                         </Checkbox>
+                        <Tooltip text="Message text will not be forwarded when this option is disabled">
+                            {props => <InfoIcon {...props} color="var(--text-muted)" width={18} height={18} />}
+                        </Tooltip>
                     </Flex>
                 )}
             </ForwardOptionsContext.Provider>
