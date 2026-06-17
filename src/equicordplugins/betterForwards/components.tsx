@@ -20,8 +20,7 @@ type AttachmentType = "IMAGE" | "VIDEO" | "CLIP" | "AUDIO" | "VISUAL_PLACEHOLDER
 
 const tagClasses = findCssClassesLazy("tagList", "tagGroup", "tag");
 const ServerProfileComponent = findComponentByCodeLazy("{guildProfile:", "GUILD_PROFILE");
-const getAttachmentType: (attachment: MessageAttachment, inlineAttachmentMedia?: boolean) => AttachmentType =
-    findByCodeLazy('"PLAINTEXT_PREVIEW":"OTHER"');
+const getAttachmentType: (attachment: MessageAttachment, inlineAttachmentMedia?: boolean) => AttachmentType = findByCodeLazy('"PLAINTEXT_PREVIEW":"OTHER"');
 
 export function GuildName({ guildId }: { guildId: string; }) {
     const guild = useStateFromStores(
@@ -36,7 +35,6 @@ export function GuildName({ guildId }: { guildId: string; }) {
         if (!guild?.icon) return null;
         return IconUtils.getGuildIconURL({ id: guildId, icon: guild.icon, canAnimate: true, size: 16 });
     }, [guildId, guild?.icon]);
-
     const guildDivRef = useRef(null);
 
     return (
