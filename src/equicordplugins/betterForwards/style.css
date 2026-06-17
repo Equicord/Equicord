@@ -47,3 +47,7 @@
     text-wrap: nowrap;
     text-overflow: ellipsis;
 }
+
+[class^="forwardPreview"] > [class^="contentWrapper"] {
+    overflow: hidden;
+}
