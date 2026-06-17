@@ -384,8 +384,8 @@
     "copyStatusUrls": {
         "description": "Copiez l'URL du statut de l'utilisateur lorsque vous cliquez dessus avec le bouton droit de la souris.",
         "toast": {
-            "copied": "URL copiée",
-            "error": "Erreur lors de la copie de URL, consultez la console pour plus d'informations"
+            "copied": "URL copié",
+            "error": "Erreur lors de la copie de l' URL, consultez la console pour plus d'informations"
         }
     },
     "copyUserMention": {
@@ -399,7 +399,7 @@
         "settings": {
             "buddy": "Choisis un compagnon de curseur",
             "buddyOptions": {
-                "fathorse": "Cheval gros",
+                "fathorse": "Cheval obèse",
                 "oneko": "Oneko"
             },
             "fade": "Si le cheval venait à s'éloigner lorsque le curseur est à proximité",
