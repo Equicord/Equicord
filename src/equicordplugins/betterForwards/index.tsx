@@ -65,7 +65,7 @@ const settings = definePluginSettings({
         restartNeeded: true
     },
     forwardPreface: {
-        description: "What should forwarded from be prefaced with",
+        description: "What should the forwarded message be prefaced with",
         type: OptionType.SELECT,
         hidden: () => !settings.store.resendOnFail,
         options: [
@@ -110,8 +110,9 @@ export default definePlugin({
             find: "#{intl::MESSAGE_ACTION_FORWARD_TO}",
             replacement: [
                 {
-                    match: /(?<=let (\i)=.{0,25}rejected.{0,25}\);)(?=.{0,25}message:(\i))/,
-                    replace: "if($1.length>0)return await $self.sendForward($1,$2,__state.opts);",
+                    match: /(?<=hasContextMessage:null!=(\i)&&.{100,150}?let (\i)=.{0,25}rejected.{0,25}\);)(?=.{0,25}message:(\i))/,
+                    replace: (_, additionalMessage, channels, message) =>
+                        `if(${channels}.length>0)return await $self.sendForward(${additionalMessage},${channels},${message},__state.opts);`,
                     predicate: () => settings.store.resendOnFail
                 },
                 {
@@ -158,8 +159,12 @@ export default definePlugin({
         }
     ],
 
-    async sendForward(channels: { id: string; type: string }[], message: Message, options: ForwardOptions) {
+    async sendForward(additionalMessage: string | null, channels: { id: string; type: string }[], message: Message, options: ForwardOptions) {
         const contentMessage = message.messageSnapshots[0]?.message ?? message;
+
+        const newLine = `\n${settings.store.forwardPreface} `;
+        const prefix = `${newLine}*Forwarded from <#${message.channel_id}>*${newLine}${contentMessage.content.trim().replaceAll("\n", newLine)}`;
+        const suffix = additionalMessage ? `\n${additionalMessage.trim()}` : "";
 
         const attIds = options.onlyAttachmentIds;
         const attachments = attIds
@@ -170,21 +175,18 @@ export default definePlugin({
 
         const chunkSize = 5;
         ids.forEach(id => {
-            if (attachments.length) {
+            if (attachments.length > 0) {
                 for (let i = 0; i < attachments.length; i += chunkSize) {
                     const group = attachments.slice(i, i + chunkSize);
 
-                    let text = i === 0 ? `${contentMessage.content}\nAttachments:\n` : "";
-                    text += `${group.map(a => a.url).join("\n")}\n`;
-                    if (i + chunkSize >= attachments.length)
-                        text += `${settings.store.forwardPreface} Forwarded from <#${message.channel_id}>`;
+                    let text = i === 0 ? `${prefix}${newLine}Attachments:${newLine}` : newLine;
+                    text += `${group.map(a => a.url).join(newLine)}`;
+                    if (i + chunkSize >= attachments.length) text += suffix;
 
                     sendMessage(id, { content: text });
                 }
             } else {
-                sendMessage(id, {
-                    content: `${contentMessage.content}\n${settings.store.forwardPreface} Forwarded from <#${message.channel_id}>`
-                });
+                sendMessage(id, { content: prefix + suffix });
             }
         });
     },
@@ -248,8 +250,7 @@ export default definePlugin({
             const fixed = { onlyAttachmentIds: [], onlyEmbedIndices: [], ...opts };
 
             // Server-side validation can be bypassed by specifying a fake attachment id
-            if ((fixed.onlyAttachmentIds.length) + (fixed.onlyEmbedIndices.length) === 0)
-                fixed.onlyAttachmentIds = ["0"];
+            if (fixed.onlyAttachmentIds.length + fixed.onlyEmbedIndices.length === 0) fixed.onlyAttachmentIds = ["0"];
 
             // If the embed indices are in the incorrect order, embed metadata could get stripped out by the client
             fixed.onlyEmbedIndices = fixed.onlyEmbedIndices.toSorted((a, b) => a - b);
