@@ -7,15 +7,14 @@
 import { BaseText } from "@components/BaseText";
 import { Flex, FlexProps } from "@components/Flex";
 import { RightArrow } from "@components/Icons";
-import { Margins } from "@components/margins";
 import { iconsModule } from "@equicordplugins/_core/concatenatedModules";
-import { Message, MessageAttachment } from "@vencord/discord-types";
+import { MessageAttachment } from "@vencord/discord-types";
 import { ChannelType } from "@vencord/discord-types/enums";
 import { findByCodeLazy, findComponentByCodeLazy, findCssClassesLazy } from "@webpack";
-import { ChannelStore, DateUtils, GuildStore, IconUtils, match, NavigationRouter, Popout, SelectedGuildStore, SnowflakeUtils, Tooltip, useMemo, useRef, UserStore, useStateFromStores } from "@webpack/common";
-import { Dispatch, PropsWithChildren, SetStateAction } from "react";
+import { ChannelStore, DateUtils, GuildStore, IconUtils, match, NavigationRouter, Popout, SelectedGuildStore, SnowflakeUtils, useMemo, useRef, UserStore, useStateFromStores } from "@webpack/common";
+import { PropsWithChildren } from "react";
 
-import { cl, ForwardOptions } from ".";
+import { cl, ForwardOptionsState } from ".";
 
 type AttachmentType = "IMAGE" | "VIDEO" | "CLIP" | "AUDIO" | "VISUAL_PLACEHOLDER" | "PLAINTEXT_PREVIEW" | "OTHER" | "INVALID";
 
@@ -119,14 +118,13 @@ export function Timestamp({ snowflake }: { snowflake: string; }) {
     );
 }
 
-export function ForwardPicker({ message, options, onChange }: { message: Message; options: ForwardOptions; onChange: Dispatch<SetStateAction<ForwardOptions>>; }) {
-    const textEnabled = !options.onlyAttachmentIds && !options.onlyEmbedIndices;
+export function EmbedPicker({ message, opts, setOpts, hasOpts, defaultOpts }: ForwardOptionsState) {
     const embeds = useMemo(() => {
         let id = 0;
         return message.embeds.map(({ rawTitle, rawDescription, image, images = image ? [image] : [], video }, i) => {
             const current = {
                 title: rawTitle?.trim() || rawDescription?.trim() || `Embed ${i + 1}`,
-                subEmbeds: [] as { id: number; name: string; }[]
+                subEmbeds: [] as { id: number; name: string }[]
             };
 
             if (images.length > 0) {
@@ -144,70 +142,56 @@ export function ForwardPicker({ message, options, onChange }: { message: Message
         });
     }, [message]);
 
-    const defaultOpts = useMemo(
-        () => ({
-            onlyAttachmentIds: message.attachments.map(a => a.id),
-            onlyEmbedIndices: embeds.flatMap(e => e.subEmbeds.map(se => se.id))
-        }),
-        [message, embeds]
-    );
+    const { EmbedIcon } = iconsModule;
 
-    const { EmbedIcon, ChatIcon } = iconsModule;
-
-    return (
-        <Flex className={Margins.top8} gap={12} flexDirection="column">
+    return embeds.map(({ title, subEmbeds }) => (
+        <Flex gap={4} flexDirection="column" key={subEmbeds[0].id}>
+            <BaseText
+                size="sm"
+                color="text-muted"
+                style={{
+                    textWrap: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    opacity: !hasOpts ? 0.5 : undefined
+                }}
+            >
+                {title}
+            </BaseText>
             <TagContainer>
-                <Tooltip text="Can be used when all embeds and attachments are enabled">
-                    {props => (
-                        <div
-                            className={tagClasses.tag}
-                            data-selection-mode="multiple"
-                            data-selected={textEnabled ? "true" : undefined}
-                            {...props}
-                            onClick={() => (onChange(textEnabled ? defaultOpts : {}), props.onClick())}
-                        >
-                            {ChatIcon && <ChatIcon size="xs" style={{ flexShrink: 0 }} />}
-                            <BaseText size="sm">Original message</BaseText>
-                        </div>
-                    )}
-                </Tooltip>
-                {message.attachments.map(attachment => (
+                {subEmbeds.map(({ id, name }) => (
                     <Tag
-                        key={attachment.id}
-                        id={attachment.id}
-                        source={options.onlyAttachmentIds ?? defaultOpts.onlyAttachmentIds}
-                        onChange={data => onChange(prev => ({ ...prev, onlyAttachmentIds: data }))}
+                        key={id}
+                        id={id}
+                        source={opts.onlyEmbedIndices ?? defaultOpts.onlyEmbedIndices}
+                        onChange={data => setOpts(prev => ({ ...prev, onlyEmbedIndices: data }))}
+                        disabled={!hasOpts}
                     >
-                        <AttachmentIcon attachment={attachment} />
-                        <BaseText size="sm">{attachment.filename}</BaseText>
+                        {EmbedIcon && <EmbedIcon size="xs" style={{ flexShrink: 0 }} />}
+                        <BaseText size="sm">{name}</BaseText>
                     </Tag>
                 ))}
             </TagContainer>
-            {embeds.map(({ title, subEmbeds }) => (
-                <Flex gap={4} flexDirection="column" key={subEmbeds[0].id}>
-                    <BaseText
-                        size="sm"
-                        color="text-muted"
-                        style={{ textWrap: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}
-                    >
-                        {title}
-                    </BaseText>
-                    <TagContainer>
-                        {subEmbeds.map(({ id, name }) => (
-                            <Tag
-                                key={id}
-                                id={id}
-                                source={options.onlyEmbedIndices ?? defaultOpts.onlyEmbedIndices}
-                                onChange={data => onChange(prev => ({ ...prev, onlyEmbedIndices: data }))}
-                            >
-                                {EmbedIcon && <EmbedIcon size="xs" style={{ flexShrink: 0 }} />}
-                                <BaseText size="sm">{name}</BaseText>
-                            </Tag>
-                        ))}
-                    </TagContainer>
-                </Flex>
-            ))}
         </Flex>
+    ));
+}
+
+export function AttachmentPicker({ message, opts, setOpts, hasOpts, defaultOpts }: ForwardOptionsState) {
+    return (
+        <TagContainer>
+            {message.attachments.map(attachment => (
+                <Tag
+                    key={attachment.id}
+                    id={attachment.id}
+                    source={opts.onlyAttachmentIds ?? defaultOpts.onlyAttachmentIds}
+                    onChange={data => setOpts(prev => ({ ...prev, onlyAttachmentIds: data }))}
+                    disabled={!hasOpts}
+                >
+                    <AttachmentIcon attachment={attachment} />
+                    <BaseText size="sm">{attachment.filename}</BaseText>
+                </Tag>
+            ))}
+        </TagContainer>
     );
 }
 
@@ -215,16 +199,17 @@ function TagContainer(props: FlexProps) {
     return <Flex gap={8} flexWrap="wrap" className={tagClasses.tagGroup} data-layout="inline" {...props} />;
 }
 
-function Tag<T>({ id, children, source, onChange }: { id: T; source: T[]; onChange: (data: T[]) => void; } & PropsWithChildren) {
+function Tag<T>({ id, children, source, onChange, disabled }: { id: T; source: T[]; onChange: (data: T[]) => void; disabled?: boolean; } & PropsWithChildren) {
     const selected = useMemo(() => source.includes(id), [source, id]);
 
     return (
         <div
             className={tagClasses.tag}
             data-selection-mode="multiple"
-            data-selected={selected ? "true" : undefined}
+            data-selected={!disabled &&selected ? "true" : undefined}
             onClick={() => onChange(selected ? source.filter(x => x !== id) : [...source, id])}
-            style={{ textWrap: "wrap" }}
+            style={{ textWrap: "wrap", opacity: disabled ? .5 : undefined }}
+            inert={disabled}
         >
             {children}
         </div>

@@ -5,16 +5,20 @@
  */
 
 import { definePluginSettings, migratePluginSettings } from "@api/Settings";
+import { BaseText } from "@components/BaseText";
 import ErrorBoundary from "@components/ErrorBoundary";
+import { Flex } from "@components/Flex";
+import { Margins } from "@components/margins";
 import { Devs, EquicordDevs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
 import { sendMessage } from "@utils/discord";
 import definePlugin, { OptionType } from "@utils/types";
 import { Message } from "@vencord/discord-types";
-import { ChannelActionCreators, ChannelStore, useState } from "@webpack/common";
-import { Dispatch, MouseEvent, SetStateAction } from "react";
+import { proxyLazyWebpack } from "@webpack";
+import { ChannelActionCreators, ChannelStore, Checkbox, React, useMemo, useState } from "@webpack/common";
+import { Dispatch, MouseEvent, ReactNode, SetStateAction } from "react";
 
-import { ChannelName, ForwardPicker, GuildName, Timestamp } from "./components";
+import { AttachmentPicker, ChannelName, EmbedPicker, GuildName, Timestamp } from "./components";
 import managedStyle from "./style.css?managed";
 
 export const cl = classNameFactory("vc-betterforwards-");
@@ -23,6 +27,24 @@ export interface ForwardOptions {
     onlyEmbedIndices?: number[];
     onlyAttachmentIds?: string[];
 }
+
+export interface ForwardOptionsState {
+    opts: ForwardOptions;
+    setOpts: Dispatch<SetStateAction<ForwardOptions>>;
+    defaultOpts: Required<ForwardOptions>;
+    hasOpts: boolean;
+    message: Message;
+}
+
+export const ForwardOptionsContext = proxyLazyWebpack(() =>
+    React.createContext<ForwardOptionsState & { message: Message }>({
+        opts: {},
+        setOpts: () => {},
+        defaultOpts: { onlyAttachmentIds: [], onlyEmbedIndices: [] },
+        hasOpts: false,
+        message: {} as Message
+    })
+);
 
 let ignore = false;
 const getId = ({ id, type }: { id: string; type: string; }) => {
@@ -96,8 +118,12 @@ export default definePlugin({
                     replace: "__state,...$1}=$self.useProps($2),"
                 },
                 {
-                    match: /\{message:(\i),forwardOptions:\i,channel:\i\}\),/,
-                    replace: "$&$self.renderPicker($1,__state),"
+                    match: /\(0,\i\.jsx\)\(\i,\{message:\i,forwardOptions:\i,channel:\i\}\)/,
+                    replace: "$self.renderWrapper(__state,$&)"
+                },
+                {
+                    match: /(?<=#{intl::CHECKPOINT_2025}.{50,100}?)\i>0&&\(.{200,250}?\}\)\]\}\)/,
+                    replace: "$self.renderForwardPicker()"
                 },
                 {
                     match: /(?<=transitionToDestination:)(1===\i\.length)(?=,|\})/,
@@ -187,6 +213,8 @@ export default definePlugin({
     },
 
     useProps(props: { message: Message; forwardOptions?: ForwardOptions }) {
+        const message = props.message.messageSnapshots[0]?.message ?? props.message;
+
         const [opts, setOpts] = useState(() => {
             if (!props.forwardOptions || !props.forwardOptions.onlyEmbedIndices)
                 return props.forwardOptions ?? ({} as ForwardOptions);
@@ -195,7 +223,7 @@ export default definePlugin({
             const embedsIds = new Set(props.forwardOptions.onlyEmbedIndices as number[]);
 
             // Discord incorrectly assumes that embed indices directly map to whole embeds, this is an attempt to fix that
-            const onlyEmbedIndices = props.message.embeds
+            const onlyEmbedIndices = message.embeds
                 .flatMap((e, i) => e.images?.map(() => ({ id: id++, eId: i })) ?? { id: id++, eId: i })
                 .filter(({ eId }) => embedsIds.has(eId))
                 .map(({ id }) => id);
@@ -203,19 +231,54 @@ export default definePlugin({
             return { ...props.forwardOptions, onlyEmbedIndices };
         });
 
+        const defaultOpts = useMemo(
+            () => ({
+                onlyAttachmentIds: message.attachments.map(a => a.id),
+                onlyEmbedIndices: message.embeds.flatMap(e => e.images ?? [{}]).map((_, i) => i)
+            }),
+            [message]
+        );
+
         const forwardOptions: ForwardOptions = { ...opts };
         const hasOpts = !!opts.onlyAttachmentIds || !!opts.onlyEmbedIndices;
 
         // Server-side validation can be bypassed by specifying a fake attachment id
         if (hasOpts && !forwardOptions.onlyAttachmentIds?.length) forwardOptions.onlyAttachmentIds = ["0"];
 
-        return { ...props, forwardOptions, __state: { opts, setOpts } };
+        const state = useMemo(
+            () => ({ message, opts, setOpts, defaultOpts, hasOpts }),
+            [message, opts, defaultOpts, hasOpts]
+        );
+        return { ...props, forwardOptions, __state: state };
     },
 
-    renderPicker(message: Message, state: { opts: ForwardOptions; setOpts: Dispatch<SetStateAction<ForwardOptions>> }) {
-        const contentMessage = message.messageSnapshots[0]?.message ?? message;
-        if (contentMessage.embeds.length === 0 && contentMessage.attachments.length === 0) return null;
+    renderWrapper(state: ForwardOptionsState, children: ReactNode) {
+        const { message, hasOpts, setOpts, defaultOpts } = state;
 
-        return <ForwardPicker message={contentMessage} options={state.opts} onChange={state.setOpts} />;
+        return (
+            <ForwardOptionsContext.Provider value={state}>
+                {children}
+                {message.embeds.length + message.attachments.length > 0 && (
+                    <Flex className={Margins.top16}>
+                        <Checkbox value={!hasOpts} onChange={() => setOpts(!hasOpts ? defaultOpts : {})} size={20}>
+                            <BaseText size="sm">Forward everything</BaseText>
+                        </Checkbox>
+                    </Flex>
+                )}
+            </ForwardOptionsContext.Provider>
+        );
+    },
+
+    renderForwardPicker() {
+        const state = React.useContext(ForwardOptionsContext);
+
+        if (state.message.embeds.length + state.message.attachments.length === 0) return null;
+
+        return (
+            <Flex gap={12} flexDirection="column">
+                {state.message.attachments.length > 0 && <AttachmentPicker {...state} />}
+                {state.message.embeds.length > 0 && <EmbedPicker {...state} />}
+            </Flex>
+        );
     }
 });
