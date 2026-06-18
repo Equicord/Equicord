@@ -8,9 +8,7 @@ import { definePluginSettings } from "@api/Settings";
 import { EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 import { Message } from "@vencord/discord-types";
-import { MessageActions, MessageStore, UserStore } from "@webpack/common";
-
-let currentReply: Message | null = null;
+import { MessageActions, MessageStore, PendingReplyStore, UserStore } from "@webpack/common";
 
 // This regex tries to match messages whose contents resemble sed substitutions:
 // `s/foo/bar/r`. However, it also allows escaping the separator: `s/abc\/def/ghi\/jkl/g`.
@@ -78,6 +76,7 @@ export default definePlugin({
     searchReplace(content, { isEdit, channel }) {
         if (isEdit) return;
         let toEdit: Message | null | undefined = null;
+        let currentReply = PendingReplyStore.getPendingReply(channel.id)?.message;
         if (currentReply) {
             toEdit = currentReply;
             if (currentReply.author.id !== UserStore.getCurrentUser()?.id) return { content: "" };
@@ -116,12 +115,4 @@ export default definePlugin({
             content: ""
         };
     },
-    flux: {
-        DELETE_PENDING_REPLY() {
-            currentReply = null;
-        },
-        CREATE_PENDING_REPLY({ message }: { message: Message; }) {
-            currentReply = message;
-        }
-    }
 });
