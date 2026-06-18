@@ -14,4 +14,4 @@ Enabling the "RegEx by default" setting will invert the `r` flag, so that specif
 SedEnhanced supports all RegEx flags natively supported by JS at the time of writing (**g**lobal, **m**ultiline, case-**i**nsensitive, **s**ingle-line, **u**nicode, in**d**ices, stick**y**, **v**nicode).
 
 ## Separators
-SedEnchanced supports the following separators: `/`, `|`, `$`, `#`, `@`, `!`.
+SedEnhanced supports the following separators: `/`, `|`, `$`, `#`, `@`, `!`.
