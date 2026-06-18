@@ -87,7 +87,7 @@ export default definePlugin({
             return { content: "" };
         }
         let contentMatch = content.match(sedRegex);
-        if (contentMatch == null) return;
+        if (contentMatch == null || contentMatch.groups == null) return;
         let { match, replace, modes } = contentMatch.groups;
         let flags = modes?.split("") ?? [];
         let regexMode = flags.includes("r") != settings.store.regexByDefault;
@@ -99,14 +99,15 @@ export default definePlugin({
             replace = replace.replace(thisIsntRegex, (_, x) => x);
         }
 
+        let find: string | RegExp = match;
         let replaced = toEdit.content;
         if (regexMode) {
-            match = new RegExp(match, "gmisudyv".split("").filter(f => flags.includes(f)).join(""));
+            find = new RegExp(match, "gmisudyv".split("").filter(f => flags.includes(f)).join(""));
         }
         if (flags.includes("g")) {
-            replaced = replaced.replaceAll(match, replace);
+            replaced = replaced.replaceAll(find, replace);
         } else {
-            replaced = replaced.replace(match, replace);
+            replaced = replaced.replace(find, replace);
         }
 
         return (replaced == null || replaced.trim() === "") && toEdit.attachments.length === 0 ? MessageActions.deleteMessage(channel.id, toEdit.id) : replaced !== toEdit.content && MessageActions.editMessage(channel.id, toEdit.id, {
