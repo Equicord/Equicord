@@ -74,7 +74,7 @@ export default definePlugin({
         let toEdit: Message | null | undefined = null;
         if (currentReply) {
             toEdit = currentReply;
-            if (currentReply.author.id != UserStore.getCurrentUser().id) return { content: "" };
+            if (currentReply.author.id !== UserStore.getCurrentUser()?.id) return { content: "" };
         } else {
             toEdit = MessageStore.getLastEditableMessage(channel.id);
         }
