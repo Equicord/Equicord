@@ -62,7 +62,7 @@ export default definePlugin({
         {
             find: "searchReplace:{",
             replacement: {
-                match: /searchReplace:\{match:(.*?)\.anyScopeRegex.*\}{3},/gs,
+                match: /searchReplace:\{match:(.*?)\.anyScopeRegex.*?action\(.*?\)\{.*?\}{3},/gs,
                 replace: "searchReplace:{match:$1.anyScopeRegex($self.sedRegex),action:$self.searchReplace},"
             }
         }
