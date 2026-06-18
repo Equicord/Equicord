@@ -7,7 +7,6 @@
 import { definePluginSettings } from "@api/Settings";
 import { EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
-import { Message } from "@vencord/discord-types";
 import { MessageActions, MessageStore, PendingReplyStore, UserStore } from "@webpack/common";
 
 const sedRegex = /^s(?<sep>[/|$#@!])(?<match>(?!\1)(?:(?![^\\]\1).)*.|)\1(?<replace>(?!\1)(?:(?![^\\]\1).)*.|)\1?(?<modes>[rgmisudyv]*)$/;
@@ -26,10 +25,10 @@ export default definePlugin({
     authors: [EquicordDevs.dawn, EquicordDevs.Willow, EquicordDevs.kat],
     patches: [
         {
-            find: "searchReplace:{",
+            find: ".SLASH_COMMAND_USED,{",
             replacement: {
-                match: /searchReplace:\{match:(\i\(\))\.anyScopeRegex.{0,256}?action\(.{0,8}?\)\{.{0,600}?\}{3},/g,
-                replace: "searchReplace:{match:$1.anyScopeRegex($self.sedRegex),action:$self.searchReplace},"
+                match: /searchReplace:\{match:(\i\(\)\.anyScopeRegex)/,
+                replace: "searchReplace:{match:$1($self.sedRegex),action:$self.searchReplace},_eq_$&"
             }
         }
     ],
@@ -37,50 +36,41 @@ export default definePlugin({
     sedRegex,
     searchReplace(content, { isEdit, channel }) {
         if (isEdit) return;
-        let toEdit: Message | null | undefined = null;
-        const currentReply = PendingReplyStore.getPendingReply(channel.id)?.message;
-        if (currentReply) {
-            toEdit = currentReply;
-            if (currentReply.author.id !== UserStore.getCurrentUser()?.id) return { content: "" };
-        } else {
-            toEdit = MessageStore.getLastEditableMessage(channel.id);
-        }
-        if (toEdit == null || toEdit.id == null) {
-            return { content: "" };
-        }
-        const contentMatch = content.match(sedRegex);
-        if (
-            contentMatch?.groups?.match == null || contentMatch?.groups?.match === undefined ||
-            contentMatch?.groups?.replace == null || contentMatch?.groups?.replace === undefined ||
-            contentMatch?.groups?.modes == null || contentMatch?.groups?.modes === undefined
-        ) return;
-        let { match, replace, modes } = contentMatch.groups;
-        const flags = modes?.split("") ?? [];
-        const regexMode = flags.includes("r") !== settings.store.regexByDefault;
-        if (!regexMode) {
-            const thisIsntRegex = /\\([*?+/])/g;
-            match = match.replace(thisIsntRegex, (_, x) => x);
-            replace = replace.replace(thisIsntRegex, (_, x) => x);
+
+        const pendingReply = PendingReplyStore.getPendingReply(channel.id)?.message;
+        const toEdit = pendingReply ?? MessageStore.getLastEditableMessage(channel.id);
+        if (pendingReply && pendingReply.author.id !== UserStore.getCurrentUser()?.id || toEdit?.id == null) return { content: "" };
+
+        const groups = content.match(sedRegex)?.groups;
+        if (groups?.match == null || groups?.replace == null || groups?.modes == null) return;
+
+        let { match: pattern, replace, modes } = groups;
+        const flags = modes.split("");
+        const isRegex = flags.includes("r") !== settings.store.regexByDefault;
+
+        if (!isRegex) {
+            const escapeChars = /\\([*?+/])/g;
+            pattern = pattern.replace(escapeChars, (_, x) => x);
+            replace = replace.replace(escapeChars, (_, x) => x);
         }
 
-        let find: string | RegExp = match;
-        let replaced = toEdit.content;
-        if (regexMode) {
+        let find: string | RegExp = pattern;
+        if (isRegex) {
             try {
-                find = new RegExp(match, "gmisudyv".split("").filter(f => flags.includes(f)).join(""));
-            } catch { return { content: "" }; }
-        }
-        if (flags.includes("g")) {
-            replaced = replaced.replaceAll(find, replace);
-        } else {
-            replaced = replaced.replace(find, replace);
+                const regexFlags = [...flags].filter(f => "gmisudyv".includes(f)).join("");
+                find = new RegExp(pattern, regexFlags);
+            } catch {
+                return { content: "" };
+            }
         }
 
-        if ((replaced == null || replaced.trim() === "") && toEdit.attachments.length === 0) {
+        const replaced = flags.includes("g") ? toEdit.content.replaceAll(find, replace) : toEdit.content.replace(find, replace);
+        if (!replaced.trim() && toEdit.attachments.length === 0) {
             MessageActions.deleteMessage(channel.id, toEdit.id);
         } else if (replaced !== toEdit.content) {
             MessageActions.editMessage(channel.id, toEdit.id, { content: replaced });
         }
+
         return { content: "" };
-    },
+    }
 });
