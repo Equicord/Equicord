@@ -66,7 +66,7 @@ export default definePlugin({
         {
             find: "searchReplace:{",
             replacement: {
-                match: /searchReplace:\{match:(\i\(\))\.anyScopeRegex.{0,256}?action\(.{0,8}?\)\{.{0,600}?\}{3},/g,
+                match: /searchReplace:\{match:(\i\(\))\.anyScopeRegex.{0,256}?action\(.{0,8}?\)\{.{0,600}?\}{3},/g, // {0,600} has to be large due to the original body being >500 characters itself, requiring enough leniency to not break on discord updates
                 replace: "searchReplace:{match:$1.anyScopeRegex($self.sedRegex),action:$self.searchReplace},"
             }
         }
