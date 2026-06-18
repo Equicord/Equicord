@@ -10,7 +10,6 @@ import definePlugin, { OptionType } from "@utils/types";
 import { MessageActions, MessageStore, PendingReplyStore, UserStore } from "@webpack/common";
 
 const sedRegex = /^s(?<sep>[/|$#@!])(?<match>(?!\1)(?:(?![^\\]\1).)*.|)\1(?<replace>(?!\1)(?:(?![^\\]\1).)*.|)\1?(?<modes>[rgmisudyv]*)$/;
-
 const settings = definePluginSettings({
     regexByDefault: {
         description: "Inverts the `r` flag, so using the `r` flag enables non-regex mode, and omitting it uses regex mode.",
