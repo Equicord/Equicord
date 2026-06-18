@@ -2,7 +2,9 @@
 Expands on Discord's rudimentary `sed` (`s/a/b`) imitation to allow RegEx, alternate separators, and editing the message you're replying to.
 
 ## Usage
-Format: `s/{match}/{replace}/{flags}`. The flags section is optional.
+Format: `s/{match}/{replace}/{flags}`. The flags section is optional. 
+
+Send this as a message and it will either edit the message you are replying to or, failing that, the last editable message in the channel. 
 
 By default, RegEx mode is not enabled. You either have to specify the `r` flag (e.g. `s/.*/b/r`) or enable the "RegEx by default" setting in the plugin config.
 
