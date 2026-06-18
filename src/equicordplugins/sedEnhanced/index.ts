@@ -44,7 +44,7 @@ export let currentReply: Message | null = null;
 // making the `replace` group essentially optional (n.b.: using `?` on the whole
 // group would make `replace` *undefined* instead of an empty string). The final
 // `/r` that hasn't yet been matched is then consumed by the rest of the regex.
-let sedRegex = /^s(?<sep>[/|$#@!])(?<match>(?!\1)(?:(?![^\\]\1).)*.|)\1(?<replace>(?!\1)(?:(?![^\\]\1).)*.|)\1?(?<modes>[rgmisudyv]*)$/;
+const sedRegex = /^s(?<sep>[/|$#@!])(?<match>(?!\1)(?:(?![^\\]\1).)*.|)\1(?<replace>(?!\1)(?:(?![^\\]\1).)*.|)\1?(?<modes>[rgmisudyv]*)$/;
 
 const settings = definePluginSettings({
     regexByDefault: {
