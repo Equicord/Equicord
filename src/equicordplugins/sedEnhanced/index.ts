@@ -1,8 +1,8 @@
 /*
-* Vencord, a Discord client mod
-* Copyright (c) 2026 Vendicated and contributors
-* SPDX-License-Identifier: GPL-3.0-or-later
-*/
+ * Vencord, a Discord client mod
+ * Copyright (c) 2026 Vendicated and contributors
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
 
 import { definePluginSettings } from "@api/Settings";
 import { EquicordDevs } from "@utils/constants";
@@ -52,7 +52,7 @@ const sedRegex = /^s(?<sep>[/|$#@!])(?<match>(?!\1)(?:(?![^\\]\1).)*.|)\1(?<repl
 
 const settings = definePluginSettings({
     regexByDefault: {
-        description: "Inverts the `r` flag, so using the `r` flag enables non-regex mode, and omitting it uses regex mode",
+        description: "Inverts the `r` flag, so using the `r` flag enables non-regex mode, and omitting it uses regex mode.",
         type: OptionType.BOOLEAN,
         default: false
     }
@@ -60,7 +60,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "SedEnhanced",
-    description: "Expands on Discord's rudimentary `sed` support",
+    description: "Expands on Discord's rudimentary `sed` support.",
     authors: [EquicordDevs.dawn, EquicordDevs.Willow, EquicordDevs.kat],
     patches: [
         {
@@ -87,10 +87,14 @@ export default definePlugin({
             return { content: "" };
         }
         let contentMatch = content.match(sedRegex);
-        if (contentMatch == null || contentMatch.groups == null) return;
+        if (
+            contentMatch?.groups?.match == null || contentMatch?.groups?.match == undefined ||
+            contentMatch?.groups?.replace == null || contentMatch?.groups?.replace == undefined ||
+            contentMatch?.groups?.modes == null || contentMatch?.groups?.modes == undefined
+        ) return;
         let { match, replace, modes } = contentMatch.groups;
         let flags = modes?.split("") ?? [];
-        let regexMode = flags.includes("r") != settings.store.regexByDefault;
+        let regexMode = flags.includes("r") !== settings.store.regexByDefault;
         if (!regexMode) {
             // Discord uses this to make their non-regex sed easier for regex users, but it breaks regex mode
             // We keep this only for non-regex mode to keep backwards compatibility
@@ -102,7 +106,9 @@ export default definePlugin({
         let find: string | RegExp = match;
         let replaced = toEdit.content;
         if (regexMode) {
-            find = new RegExp(match, "gmisudyv".split("").filter(f => flags.includes(f)).join(""));
+            try {
+                find = new RegExp(match, "gmisudyv".split("").filter(f => flags.includes(f)).join(""));
+            } catch { return { content: "" }; }
         }
         if (flags.includes("g")) {
             replaced = replaced.replaceAll(find, replace);
@@ -110,10 +116,11 @@ export default definePlugin({
             replaced = replaced.replace(find, replace);
         }
 
-        return (replaced == null || replaced.trim() === "") && toEdit.attachments.length === 0 ? MessageActions.deleteMessage(channel.id, toEdit.id) : replaced !== toEdit.content && MessageActions.editMessage(channel.id, toEdit.id, {
-            content: replaced
-        }), {
-            content: ""
-        };
+        if ((replaced == null || replaced.trim() === "") && toEdit.attachments.length === 0) {
+            MessageActions.deleteMessage(channel.id, toEdit.id);
+        } else if (replaced !== toEdit.content) {
+            MessageActions.editMessage(channel.id, toEdit.id, { content: replaced });
+        }
+        return { content: "" };
     },
 });
