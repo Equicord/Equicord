@@ -4,7 +4,7 @@ import definePlugin, { OptionType } from "@utils/types";
 import { Message } from "@vencord/discord-types";
 import { MessageActions, MessageStore, UserStore } from "@webpack/common";
 
-export let currentReply: Message | null = null;
+let currentReply: Message | null = null;
 
 // This regex tries to match messages whose contents resemble sed substitutions:
 // `s/foo/bar/r`. However, it also allows escaping the separator: `s/abc\/def/ghi\/jkl/g`.
