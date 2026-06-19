@@ -51,15 +51,17 @@ function isPinned(binding: ThemeBinding) {
 export async function getAvailableThemes(): Promise<ThemeItem[]> {
     const themes: ThemeItem[] = [];
 
-    const localThemes: ThemeFile[] = await VencordNative.themes.getThemesList();
-    localThemes.forEach(({ fileName }) => {
-        if (!fileName.endsWith(".css") || fileName === "source.theme.css") return;
-        themes.push({
-            name: Settings.themeNames?.[fileName] ?? fileName.replace(/\.css$/, ""),
-            id: fileName,
-            type: "local",
+    if (!IS_WEB) {
+        const localThemes: ThemeFile[] = await VencordNative.themes.getThemesList();
+        localThemes.forEach(({ fileName }) => {
+            if (!fileName.endsWith(".css") || fileName === "source.theme.css") return;
+            themes.push({
+                name: Settings.themeNames?.[fileName] ?? fileName.replace(/\.css$/, ""),
+                id: fileName,
+                type: "local",
+            });
         });
-    });
+    }
 
     if (Settings.themeLinks) {
         Settings.themeLinks.forEach((link: string) => {
