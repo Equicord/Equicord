@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { Button } from "@components/Button";
 import { HeadingSecondary } from "@components/Heading";
 import { Paragraph } from "@components/Paragraph";
 import { React } from "@webpack/common";
@@ -60,16 +61,16 @@ export function BindingSettings() {
                                 )
                             </div>
                         </div>
-                        <button
-                            type="button"
-                            className="vc-settings-button"
+                        <Button
+                            size="small"
+                            variant="secondary"
                             onClick={() => {
                                 setBinding(key, null);
                                 forceUpdate();
                             }}
                         >
                             Remove
-                        </button>
+                        </Button>
                     </div>
                 ))}
             </div>

@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { IconUtils } from "@webpack/common";
+import { IconUtils, UserStore } from "@webpack/common";
 
 export function normalizeImageValue(value: unknown): string | null {
     if (typeof value === "string") return value;
@@ -37,7 +37,13 @@ export function resolvePendingAvatarUrl(
                 size
             }) ?? null;
         }
-        return `https://cdn.discordapp.com/avatars/${userId}/${image}.${canAnimate ? "gif" : "png"}?size=${size}`;
+        const user = UserStore.getUser(userId);
+        if (!user) return null;
+        return IconUtils.getUserAvatarURL(
+            user.avatar === image ? user : { ...user, avatar: image },
+            canAnimate,
+            size
+        );
     }
 
     return uri;
