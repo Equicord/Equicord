@@ -56,7 +56,7 @@ export default definePlugin({
         let find: string | RegExp = pattern;
         if (isRegex) {
             try {
-                const regexFlags = [...flags].filter(f => "gmisudyv".includes(f)).join("");
+                const regexFlags = flags.filter(f => "gmisudyv".includes(f)).join("");
                 find = new RegExp(pattern, regexFlags);
             } catch {
                 return { content: "" };
