@@ -139,13 +139,18 @@ async function saveLastPresetContext(section: PresetSection, guildId: string | u
 }
 
 export async function restoreActivePresetTheme() {
+    const ctx = await DataStore.get(LAST_PRESET_CTX_KEY) as LastPresetContext | undefined;
+    const hasPresetContext = Boolean(ctx?.presetName);
+    const hasPinnedThemes = getPinnedThemes().length > 0;
+
+    if (!hasPresetContext && !hasPinnedThemes) return;
+
     if (!settings.store.switchThemeOnLoad) {
         applyPinnedThemesOnly();
         return;
     }
 
-    const ctx = await DataStore.get(LAST_PRESET_CTX_KEY) as LastPresetContext | undefined;
-    if (!ctx?.presetName) {
+    if (!hasPresetContext) {
         applyPinnedThemesOnly();
         return;
     }
