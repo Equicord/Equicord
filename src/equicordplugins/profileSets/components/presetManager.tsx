@@ -145,7 +145,7 @@ export function PresetManager({ section, guildId, hideHeading }: PresetManagerPr
         });
     };
 
-    const { avatarSize } = settings.store;
+    const { avatarSize } = settings.use(["avatarSize"]);
     const hasPresets = presets.length > 0;
     const shouldShowPagination = filteredPresets.length > PRESETS_PER_PAGE;
 

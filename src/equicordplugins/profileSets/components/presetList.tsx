@@ -72,7 +72,7 @@ export function PresetList({
     onPageChange
 }: PresetListProps) {
     type EditableProfile = Omit<ProfilePreset, "name" | "timestamp">;
-    const [renaming, setRenaming] = React.useState<number>(-1);
+    const [renamingTimestamp, setRenamingTimestamp] = React.useState<number | null>(null);
     const [renameText, setRenameText] = React.useState("");
     const isGuildProfile = section === "server";
 
@@ -80,7 +80,7 @@ export function PresetList({
         <div className={cl("list-container")}>
             {presets.map(preset => {
                 const actualIndex = allPresets.indexOf(preset);
-                const isRenaming = renaming === actualIndex;
+                const isRenaming = renamingTimestamp === preset.timestamp;
                 const isSelected = !isRenaming && selectedPreset === actualIndex;
                 const date = new Date(preset.timestamp);
                 const formattedDate = date.toLocaleDateString(undefined, {
@@ -104,7 +104,7 @@ export function PresetList({
 
                 return (
                     <div
-                        key={actualIndex}
+                        key={preset.timestamp}
                         tabIndex={isRenaming ? -1 : 0}
                         role="button"
                         onClick={() => {
@@ -147,14 +147,14 @@ export function PresetList({
                                             onChange={setRenameText}
                                             onBlur={() => {
                                                 commitRename();
-                                                setRenaming(-1);
+                                                setRenamingTimestamp(null);
                                             }}
                                             onKeyDown={e => {
                                                 if (e.key === "Enter") {
                                                     commitRename();
-                                                    setRenaming(-1);
+                                                    setRenamingTimestamp(null);
                                                 } else if (e.key === "Escape") {
-                                                    setRenaming(-1);
+                                                    setRenamingTimestamp(null);
                                                 }
                                                 e.stopPropagation();
                                             }}
@@ -198,7 +198,7 @@ export function PresetList({
                                                     id="rename"
                                                     label="Rename"
                                                     action={() => {
-                                                        setRenaming(actualIndex);
+                                                setRenamingTimestamp(preset.timestamp);
                                                         setRenameText(preset.name);
                                                     }}
                                                 />
