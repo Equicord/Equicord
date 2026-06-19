@@ -10,6 +10,7 @@ import { classes } from "@utils/misc";
 import { Nameplate, User } from "@vencord/discord-types";
 import { findComponentByCodeLazy, findStoreLazy } from "@webpack";
 import { GuildMemberStore, React, UserProfileStore, UserStore, useStateFromStores } from "@webpack/common";
+import virtualMerge from "virtual-merge";
 
 import { cl } from "../classNames";
 import { ProfileSetsNameplatePreview } from "./profileSetsNameplatePreview";
@@ -117,7 +118,9 @@ function previewRevisionKey(pending: PendingChanges | null | undefined): string 
 function resolvePreviewNameplate(
     user: User,
     pending: PendingChanges | null | undefined,
-    guildId?: string
+    guildId?: string,
+    profile?: { collectibles?: { nameplate?: unknown; } | null; } | null,
+    mainProfile?: { collectibles?: { nameplate?: unknown; } | null; } | null
 ): Nameplate | null {
     const primaryGuildId = pending?.pendingPrimaryGuildId ?? user.primaryGuild?.identityGuildId ?? null;
     const memberGuildId = guildId ?? primaryGuildId;
@@ -128,9 +131,20 @@ function resolvePreviewNameplate(
     return normalizeNameplateLike(
         pending?.pendingNameplate
         ?? memberNameplate
+        ?? profile?.collectibles?.nameplate
+        ?? mainProfile?.collectibles?.nameplate
         ?? user.collectibles?.nameplate
         ?? user.nameplate
     );
+}
+
+function withPreviewNameplate(user: User, nameplate: Nameplate | null): User {
+    if (!nameplate) return user;
+
+    return virtualMerge(user, {
+        nameplate,
+        collectibles: virtualMerge(user.collectibles ?? {}, { nameplate }) as User["collectibles"]
+    }) as User;
 }
 
 interface ProfileModalProps {
@@ -216,6 +230,8 @@ function ProfileSetsPreviewInner({ section, guildId }: ProfileSetsPreviewProps) 
             return {
                 user: previewUser,
                 pending,
+                profile,
+                mainProfile,
                 pendingThemeColors: resolvePreviewThemeColors(pending, profile, mainProfile),
                 pendingAvatarSrc,
                 pendingRevision: previewRevisionKey(pending)
@@ -223,7 +239,15 @@ function ProfileSetsPreviewInner({ section, guildId }: ProfileSetsPreviewProps) 
         }
     );
 
-    const { user, pending, pendingThemeColors, pendingAvatarSrc, pendingRevision } = previewState;
+    const {
+        user,
+        pending,
+        profile,
+        mainProfile,
+        pendingThemeColors,
+        pendingAvatarSrc,
+        pendingRevision
+    } = previewState;
 
     if (!user) return null;
 
@@ -231,10 +255,11 @@ function ProfileSetsPreviewInner({ section, guildId }: ProfileSetsPreviewProps) 
         ? (resolvePendingAvatarUrl(pending.pendingAvatar, user.id, effectiveGuildId) ?? pending.pendingAvatar)
         : undefined;
 
-    const nameplate = resolvePreviewNameplate(user, pending, effectiveGuildId);
-    const nameplateUser = nameplate
-        ? resolveNameplatePreviewUserValue(user, effectiveGuildId, pending)
-        : null;
+    const nameplate = resolvePreviewNameplate(user, pending, effectiveGuildId, profile, mainProfile);
+    const modalUser = withPreviewNameplate(
+        resolveNameplatePreviewUserValue(user, effectiveGuildId, pending),
+        nameplate
+    );
 
     return (
         <div className={cl("preview-wrap")}>
@@ -242,7 +267,7 @@ function ProfileSetsPreviewInner({ section, guildId }: ProfileSetsPreviewProps) 
             <div className={cl("preview")}>
                 <ProfileModal
                     key={`${section}:${effectiveGuildId ?? "main"}:${applyGeneration}:${pendingRevision}`}
-                    user={user}
+                    user={modalUser}
                     {...(pendingThemeColors ? { pendingThemeColors } : {})}
                     pendingAvatarSrc={pendingAvatarSrc}
                     pendingBio={pending?.pendingBio}
@@ -266,17 +291,16 @@ function ProfileSetsPreviewInner({ section, guildId }: ProfileSetsPreviewProps) 
                 />
             </div>
 
-            {nameplate && nameplateUser ? (
+            {nameplate ? (
                 <>
                     <HeadingSecondary className={classes(cl("preview-heading"), cl("nameplate-heading"))}>
                         Nameplate
                     </HeadingSecondary>
                     <div className={cl("nameplate")}>
                         <ProfileSetsNameplatePreview
-                            user={nameplateUser}
+                            user={modalUser}
                             nameplate={nameplate}
                             pending={pending}
-                            pendingAvatarSrc={pendingAvatarSrc}
                             {...(effectiveGuildId ? { guildId: effectiveGuildId } : {})}
                         />
                     </div>

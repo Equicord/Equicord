@@ -6,7 +6,7 @@
 
 import { User, UserProfile } from "@vencord/discord-types";
 import { findStoreLazy } from "@webpack";
-import { UserStore } from "@webpack/common";
+import { GuildMemberStore, UserProfileStore, UserStore } from "@webpack/common";
 import virtualMerge from "virtual-merge";
 
 import { getProfileSetsPreviewContext } from "./previewContext";
@@ -121,6 +121,28 @@ export function mergePendingUser(user: User, guildId?: string): User {
         patch.collectibles = virtualMerge(user.collectibles ?? {}, {
             nameplate: normalizeNameplateLike(pending.pendingNameplate)
         }) as User["collectibles"];
+    } else if (ctx.guildId === guildId) {
+        const profile = UserProfileStore.getUserProfile(user.id);
+        const guildProfile = guildId
+            ? UserProfileStore.getGuildMemberProfile(user.id, guildId)
+            : null;
+        const memberNameplate = guildId
+            ? GuildMemberStore.getMember(guildId, user.id)?.collectibles?.nameplate
+            : null;
+        const resolvedNameplate = normalizeNameplateLike(
+            memberNameplate
+            ?? guildProfile?.collectibles?.nameplate
+            ?? profile?.collectibles?.nameplate
+            ?? user.collectibles?.nameplate
+            ?? user.nameplate
+        );
+
+        if (resolvedNameplate) {
+            patch.nameplate = resolvedNameplate;
+            patch.collectibles = virtualMerge(user.collectibles ?? {}, {
+                nameplate: resolvedNameplate
+            }) as User["collectibles"];
+        }
     }
 
     return Object.keys(patch).length ? virtualMerge(user, patch) : user;

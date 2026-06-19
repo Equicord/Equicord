@@ -69,7 +69,6 @@ export async function updatePresetField<K extends keyof Omit<ProfilePreset, "nam
     guildId?: string
 ) {
     if (index < 0 || index >= presets.length) return;
-    void guildId;
 
     const updatedPreset = {
         ...presets[index],
@@ -126,6 +125,18 @@ export async function importPresets(
         const importedPresets = JSON.parse(text);
 
         if (!Array.isArray(importedPresets)) {
+            showToast("Invalid preset file: expected a JSON array.", Toasts.Type.FAILURE);
+            return;
+        }
+
+        const valid = importedPresets.every(
+            preset => preset
+                && typeof preset === "object"
+                && typeof preset.name === "string"
+                && typeof preset.timestamp === "number"
+        );
+        if (!valid) {
+            showToast("Invalid preset file: each entry needs a name and timestamp.", Toasts.Type.FAILURE);
             return;
         }
 

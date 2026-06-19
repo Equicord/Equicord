@@ -32,6 +32,10 @@ function bindingEquals(a: ThemeBinding, b: ThemeBinding) {
     return a.type === b.type && a.themeId === b.themeId;
 }
 
+export function pinnedThemeKey(binding: ThemeBinding): string {
+    return `${binding.type}:${binding.themeId}`;
+}
+
 async function flushBindings() {
     bindingsSaveInFlight = true;
     try {
@@ -92,7 +96,7 @@ export async function loadThemeBindings() {
 }
 
 export function getPinnedThemes(): ThemeBinding[] {
-    return pinnedThemes;
+    return [...pinnedThemes];
 }
 
 export function isThemePinned(binding: ThemeBinding): boolean {
