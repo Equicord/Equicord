@@ -47,7 +47,7 @@
     margin: 0 auto;
     min-width: 0;
     width: 100%;
-    overflow: hidden !important;
+    overflow: hidden;
     padding: 8px;
 }
 
@@ -385,7 +385,7 @@
     flex-direction: column;
     max-height: none;
     min-width: 0;
-    overflow: hidden !important;
+    overflow: hidden;
     padding: 6px;
 }
 
@@ -461,7 +461,7 @@
     color: var(--text-normal);
     font-size: 14px;
     font-weight: 700;
-    overflow: hidden !important;
+    overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
@@ -487,7 +487,7 @@
     .vc-friendship-leaderboard-container {
         width: 100%;
         max-width: 100%;
-        overflow-x: hidden !important;
+        overflow-x: hidden;
         box-sizing: border-box;
     }
 

@@ -14,7 +14,7 @@ import { classNameFactory } from "@utils/css";
 import { openUserProfile } from "@utils/discord";
 import definePlugin, { OptionType } from "@utils/types";
 import { RenderModalProps } from "@vencord/discord-types";
-import { Modal, openModal, React, RelationshipStore, Tooltip, UserStore } from "@webpack/common";
+import { Avatar, IconUtils, Modal, moment, openModal, React, RelationshipStore, Tooltip, UserStore } from "@webpack/common";
 
 interface LeaderboardEntry {
     id: string;
@@ -66,7 +66,7 @@ function formatExactDate(dateString?: string | null): string | null {
     const date = new Date(dateString);
     if (Number.isNaN(date.getTime())) return null;
 
-    return new Intl.DateTimeFormat(undefined, { dateStyle: "long" }).format(date);
+    return moment(date).format("LL");
 }
 
 function formatFriendshipTooltip(days: number, friendshipSince?: string | null): string {
@@ -90,7 +90,7 @@ function getFriendEntries(): LeaderboardEntry[] {
             return {
                 id: friendId,
                 name: RelationshipStore.getNickname(friendId) || user.globalName || user.username,
-                avatarUrl: user.getAvatarURL(undefined, 128, true) || "",
+                avatarUrl: IconUtils.getUserAvatarURL(user, true, 128) || "",
                 friendshipDays,
                 friendshipSince,
                 friendshipYears
@@ -125,28 +125,6 @@ function compareEntries(a: LeaderboardEntry, b: LeaderboardEntry, sortDescending
     return a.id.localeCompare(b.id);
 }
 
-function UserAvatar({
-    src,
-    className,
-    placeholderClassName,
-    alt
-}: Readonly<{ src: string; className: string; placeholderClassName: string; alt: string; }>) {
-    const [broken, setBroken] = React.useState(false);
-
-    if (!src || broken) {
-        return <div className={placeholderClassName} aria-hidden="true" />;
-    }
-
-    return (
-        <img
-            className={className}
-            src={src}
-            alt={alt}
-            onError={() => setBroken(true)}
-        />
-    );
-}
-
 function PodiumCard({ entry, place, rank, onClick }: PodiumCardWithActionProps) {
     if (!entry) {
         return (
@@ -167,12 +145,7 @@ function PodiumCard({ entry, place, rank, onClick }: PodiumCardWithActionProps) 
             aria-label={`Open profile of ${entry.name}. Rank ${rank}. Friendship ${formatYears(entry.friendshipYears)}.`}
         >
             {place === 1 && <div className={cl("podium-crown")} aria-hidden="true">👑</div>}
-            <UserAvatar
-                className={cl("podium-avatar")}
-                placeholderClassName={cl("avatar-placeholder")}
-                src={entry.avatarUrl}
-                alt=""
-            />
+            <Avatar className={cl("podium-avatar")} src={entry.avatarUrl} size="SIZE_56" aria-label={entry.name} />
             <div className={cl("podium-name")}>{entry.name}</div>
             <Tooltip text={formatFriendshipTooltip(entry.friendshipDays, entry.friendshipSince)}>
                 {tooltipProps => (
@@ -210,7 +183,7 @@ function OpenLeaderboardButton() {
 }
 
 function LeaderboardModal({ modalProps }: Readonly<{ modalProps: RenderModalProps; }>) {
-    const [sortDescending, setSortDescending] = React.useState(Boolean(settings.store.sortDescending));
+    const { sortDescending } = settings.use(["sortDescending"]);
     const closeModal = React.useCallback(() => modalProps.onClose(), [modalProps]);
 
     const leaderboard = React.useMemo(() => {
@@ -221,8 +194,7 @@ function LeaderboardModal({ modalProps }: Readonly<{ modalProps: RenderModalProp
     }, [sortDescending]);
     const totalEntries = leaderboard.length;
 
-    const setSortDescendingBoth = (value: boolean) => {
-        setSortDescending(value);
+    const setSortDescending = (value: boolean) => {
         settings.store.sortDescending = value;
     };
 
@@ -240,7 +212,7 @@ function LeaderboardModal({ modalProps }: Readonly<{ modalProps: RenderModalProp
                                 type="button"
                                 className={cl("sort-toggle-btn", { "sort-toggle-btn-active": sortDescending })}
                                 aria-pressed={sortDescending}
-                                onClick={() => setSortDescendingBoth(true)}
+                                onClick={() => setSortDescending(true)}
                             >
                                 <span className={cl("sort-toggle-icon")} aria-hidden="true">↑</span>
                                 <span>Most to least</span>
@@ -249,7 +221,7 @@ function LeaderboardModal({ modalProps }: Readonly<{ modalProps: RenderModalProp
                                 type="button"
                                 className={cl("sort-toggle-btn", { "sort-toggle-btn-active": !sortDescending })}
                                 aria-pressed={!sortDescending}
-                                onClick={() => setSortDescendingBoth(false)}
+                                onClick={() => setSortDescending(false)}
                             >
                                 <span className={cl("sort-toggle-icon")} aria-hidden="true">↓</span>
                                 <span>Least to most</span>
@@ -305,12 +277,7 @@ function LeaderboardModal({ modalProps }: Readonly<{ modalProps: RenderModalProp
                             aria-label={`Open profile of ${entry.name}. Rank ${getLeaderboardRank(index + 3, totalEntries, sortDescending)}. Friendship ${formatYears(entry.friendshipYears)}.`}
                         >
                             <span className={cl("rank")}>#{getLeaderboardRank(index + 3, totalEntries, sortDescending)}</span>
-                            <UserAvatar
-                                className={cl("avatar")}
-                                placeholderClassName={cl("avatar-fallback")}
-                                src={entry.avatarUrl}
-                                alt=""
-                            />
+                            <Avatar className={cl("avatar")} src={entry.avatarUrl} size="SIZE_32" aria-label={entry.name} />
                             <div className={cl("info")}>
                                 <div className={cl("name")}>{entry.name}</div>
                             </div>
@@ -365,7 +332,7 @@ export default definePlugin({
             <div className={cl("about-text")}>
                 Opens a custom leaderboard modal with a podium for your longest friends.
             </div>
-            <button className={cl("open-button")} onClick={handleOpenLeaderboard}>
+            <button type="button" className={cl("open-button")} onClick={handleOpenLeaderboard}>
                 Open Leaderboard
             </button>
         </div>
