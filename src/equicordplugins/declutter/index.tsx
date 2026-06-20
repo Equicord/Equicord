@@ -335,8 +335,8 @@ export default definePlugin({
             // Billing settings
             find: ".BILLING_SECTION,",
             replacement: {
-                match: /\(0,\i\.\i\)\(\i\.\i\.BILLING_SECTION/,
-                replace: "null??$&",
+                match: /(BILLING_SECTION[^}]{0,80}?buildLayout:\s*\(\)\s*=>\s*)\[[^\]]*\]/,
+                replace: "$1[]",
             },
             predicate: () => settings.store.removeBillingSettings,
         },
