@@ -21,7 +21,7 @@ interface LeaderboardEntry {
     name: string;
     avatarUrl: string;
     friendshipDays: number;
-    friendshipSince: string;
+    friendshipSince: string | null;
     friendshipYears: number;
 }
 
@@ -31,7 +31,7 @@ type PodiumCardWithActionProps = PodiumCardProps & Readonly<{ onClick?: () => vo
 type PodiumStandProps = Readonly<{ place: PodiumPlace; rank: number; }>;
 
 const cl = classNameFactory("vc-friendship-leaderboard-");
-const DAYS_PER_YEAR = 365.25; // idc if I am stupid or not but this is the most accurate way to convert days to years without getting into leap seconds and whatnot, and it's close enough for this use case anyway. Correct me if I am wrong :3
+const DAYS_PER_YEAR = 365.25;
 const MS_PER_DAY = 1000 * 60 * 60 * 24;
 
 const settings = definePluginSettings({
@@ -60,7 +60,7 @@ function getFriendshipYears(friendshipDays: number): number {
     return friendshipDays / DAYS_PER_YEAR;
 }
 
-function formatExactDate(dateString?: string): string | null {
+function formatExactDate(dateString?: string | null): string | null {
     if (!dateString) return null;
 
     const date = new Date(dateString);
@@ -69,7 +69,7 @@ function formatExactDate(dateString?: string): string | null {
     return new Intl.DateTimeFormat(undefined, { dateStyle: "long" }).format(date);
 }
 
-function formatFriendshipTooltip(days: number, friendshipSince?: string): string {
+function formatFriendshipTooltip(days: number, friendshipSince?: string | null): string {
     const normalizedDays = Math.max(1, days);
     const dayText = `${normalizedDays} day${normalizedDays === 1 ? "" : "s"}`;
     const exactDate = formatExactDate(friendshipSince);
@@ -79,11 +79,11 @@ function formatFriendshipTooltip(days: number, friendshipSince?: string): string
 
 function getFriendEntries(): LeaderboardEntry[] {
     return RelationshipStore.getFriendIDs()
-        .map(friendId => {
+        .map<LeaderboardEntry | null>(friendId => {
             const user = UserStore.getUser(friendId);
             if (!user) return null;
 
-            const friendshipSince = RelationshipStore.getSince(friendId);
+            const friendshipSince = RelationshipStore.getSince(friendId) ?? null;
             const friendshipDays = daysSince(friendshipSince);
             const friendshipYears = getFriendshipYears(friendshipDays);
 
@@ -109,7 +109,20 @@ function formatYears(years: number): string {
 }
 
 function getLeaderboardRank(index: number, total: number, sortDescending: boolean): number {
-    return sortDescending ? index + 1 : total - index; // If you reverse the sort order it just makes sense that your longest friend keeps the #1 spot, right?
+    return sortDescending ? index + 1 : total - index;
+}
+
+function compareEntries(a: LeaderboardEntry, b: LeaderboardEntry, sortDescending: boolean): number {
+    const diff = sortDescending
+        ? b.friendshipDays - a.friendshipDays
+        : a.friendshipDays - b.friendshipDays;
+
+    if (diff !== 0) return diff;
+
+    const nameDiff = a.name.localeCompare(b.name, undefined, { sensitivity: "base" });
+    if (nameDiff !== 0) return nameDiff;
+
+    return a.id.localeCompare(b.id);
 }
 
 function UserAvatar({
@@ -202,7 +215,7 @@ function LeaderboardModal({ modalProps }: Readonly<{ modalProps: RenderModalProp
 
     const leaderboard = React.useMemo(() => {
         const rows = getFriendEntries()
-            .sort((a, b) => sortDescending ? b.friendshipYears - a.friendshipYears : a.friendshipYears - b.friendshipYears);
+            .sort((a, b) => compareEntries(a, b, sortDescending));
 
         return rows;
     }, [sortDescending]);
