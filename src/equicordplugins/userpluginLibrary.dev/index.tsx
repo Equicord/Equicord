@@ -21,7 +21,6 @@ import { Alerts, Toasts, useEffect, useState } from "@webpack/common";
 
 import SettingsTab from "./components/SettingsTab";
 import UserpluginInstallButton from "./components/UserpluginInstallButton";
-import { apiBaseDomain } from "./misc/constants";
 import { authorize } from "./oauth";
 import { TypeOfVWC, VariableWithCallbacks } from "./VariableWithCallbacks";
 
@@ -107,6 +106,12 @@ export const settings = definePluginSettings({
         }} variant="secondary">
             Set Git path
         </Button>
+    },
+    apiBasePath: {
+        type: OptionType.STRING,
+        description: "for debug purposes",
+        hidden: true,
+        default: "https://upl.nin0.dev"
     }
 });
 
@@ -147,7 +152,7 @@ export default definePlugin({
         Icon: AppsIcon
     },
     async start() {
-        if (!VencordNative.pluginHelpers.UserpluginLibrary || !VencordNative.csp.isDomainAllowed(apiBaseDomain, ["connect-src"])) return void Alerts.show({
+        if (!VencordNative.pluginHelpers.UserpluginLibrary || !VencordNative.csp.isDomainAllowed(this.settings.store.apiBasePath, ["connect-src"])) return void Alerts.show({
             title: "UserpluginLibrary not fully loaded",
             body: "You need to restart to allow the native to be loaded :)",
             confirmText: "Restart now",

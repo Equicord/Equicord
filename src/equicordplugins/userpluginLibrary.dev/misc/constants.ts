@@ -16,7 +16,6 @@ export const CLONE_LINK_REGEX = /https:\/\/(?:((?:git(?:hub|lab)\.com|git\.(?:[a
 export const WHITELISTED_SHARE_CHANNELS = ["1256395889354997771", "1032200195582197831", "1301947896601509900", "1322935137591365683"];
 export const cl = classNameFactory("vc-userplugininstaller-");
 
-export const apiBaseDomain = "http://localhost:9182";
 export const applicationID = "1498661325327433799";
 
 export function showInstallFinishedAlert(pluginToEnable: string, native: boolean) {
@@ -34,7 +33,7 @@ export function showInstallFinishedAlert(pluginToEnable: string, native: boolean
 }
 
 export async function uplFetch(path: `/${string}`, opts?: RequestInit, body?: object): Promise<{ ok: boolean; body: object; res: Response; }> {
-    const req = await fetch(`${apiBaseDomain}${path}`, {
+    const req = await fetch(`${plugin.settings.store.apiBasePath}${path}`, {
         ...opts,
         headers: {
             ...opts?.headers,

@@ -8,7 +8,7 @@ import { Logger } from "@utils/Logger";
 import { OAuth2AuthorizeModal, openModal, showToast, Toasts } from "@webpack/common";
 
 import plugin from ".";
-import { apiBaseDomain, applicationID, uplFetch } from "./misc/constants";
+import { applicationID, uplFetch } from "./misc/constants";
 
 export function authorize() {
     openModal(props =>
@@ -16,7 +16,7 @@ export function authorize() {
             {...props}
             scopes={["identify"]}
             responseType="code"
-            redirectUri={`${apiBaseDomain}/oauth`}
+            redirectUri={`${plugin.settings.store.apiBasePath}/oauth`}
             permissions={0n}
             clientId={applicationID}
             cancelCompletesFlow={false}
