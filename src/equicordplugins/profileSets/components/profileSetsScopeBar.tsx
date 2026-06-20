@@ -5,7 +5,6 @@
  */
 
 import { Button } from "@components/Button";
-import { classes } from "@utils/misc";
 import { GuildStore, IconUtils, React, SearchableSelect, SelectedGuildStore, useStateFromStores } from "@webpack/common";
 
 import { cl } from "../classNames";
@@ -72,11 +71,13 @@ export function ProfileSetsScopeBar({
                         renderOptionPrefix={o => {
                             const guild = GuildStore.getGuild(o?.value);
                             if (!guild?.icon) return null;
+                            const iconUrl = IconUtils.getGuildIconURL({ id: guild.id, icon: guild.icon, size: 32 });
+                            if (!iconUrl) return null;
                             return (
                                 <img
                                     className={cl("scope-guild-icon")}
                                     alt=""
-                                    src={IconUtils.getGuildIconURL({ id: guild.id, icon: guild.icon, size: 32 })!}
+                                    src={iconUrl}
                                 />
                             );
                         }}

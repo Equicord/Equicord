@@ -5,7 +5,7 @@
  */
 
 import { Button } from "@components/Button";
-import { React, Tooltip, openModal } from "@webpack/common";
+import { openModal, React, Tooltip } from "@webpack/common";
 
 import { cl } from "../classNames";
 import { getPinnedThemes } from "../utils/themeBindings";

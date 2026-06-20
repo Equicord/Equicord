@@ -11,8 +11,7 @@ import { showToast, Toasts } from "@webpack/common";
 
 import { settings } from "../settings";
 import type { PresetSection } from "./storage";
-import type { ThemeBinding } from "./themeBindings";
-import { bindingKey, getBinding, getPinnedThemes } from "./themeBindings";
+import { bindingKey, getBinding, getPinnedThemes, type ThemeBinding } from "./themeBindings";
 
 const { VencordNative } = window;
 

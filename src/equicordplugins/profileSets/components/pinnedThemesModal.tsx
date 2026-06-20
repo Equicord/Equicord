@@ -12,18 +12,18 @@ import { Forms, Modal, React, ScrollerThin, showToast, Toasts } from "@webpack/c
 
 import { cl } from "../classNames";
 import {
-    applyPinnedThemesOnly,
-    applyThemesWithPreset,
-    getAvailableThemes,
-    getLastPresetTheme,
-    themeItemToBinding,
-    type ThemeItem,
-} from "../utils/themes";
-import {
     getPinnedThemes,
     pinnedThemeKey,
     togglePinnedTheme,
 } from "../utils/themeBindings";
+import {
+    applyPinnedThemesOnly,
+    applyThemesWithPreset,
+    getAvailableThemes,
+    getLastPresetTheme,
+    type ThemeItem,
+    themeItemToBinding,
+} from "../utils/themes";
 
 function PinnedThemeCheck({ checked }: { checked: boolean; }) {
     return (

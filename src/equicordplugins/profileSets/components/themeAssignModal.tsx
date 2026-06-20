@@ -11,17 +11,17 @@ import { Modal, openModal, React, ScrollerThin, showToast, Toasts } from "@webpa
 
 import type { PresetSection } from "../utils/storage";
 import {
-    applyThemesWithPreset,
-    getAvailableThemes,
-    getLastPresetTheme,
-    themeItemToBinding,
-    type ThemeItem,
-} from "../utils/themes";
-import {
     bindingKey,
     getBinding,
     setBinding,
 } from "../utils/themeBindings";
+import {
+    applyPinnedThemesOnly,
+    applyThemesWithPreset,
+    getAvailableThemes,
+    type ThemeItem,
+    themeItemToBinding,
+} from "../utils/themes";
 
 export type ThemeAssignTarget = {
     presetName: string;
@@ -75,17 +75,20 @@ export function ThemeAssignModal({
     const assign = (theme: ThemeItem | null, preview = false) => {
         if (theme == null) {
             setBinding(key, null);
-            applyThemesWithPreset(getLastPresetTheme());
+            applyPinnedThemesOnly();
             showToast("Theme binding removed", Toasts.Type.MESSAGE);
             onClose();
             return;
         }
 
         const binding = themeItemToBinding(theme);
-        setBinding(key, binding);
         if (preview) {
             applyThemesWithPreset(binding);
+            showToast(`Previewing "${binding.themeName}"`, Toasts.Type.MESSAGE);
+            return;
         }
+
+        setBinding(key, binding);
         showToast(`Assigned "${binding.themeName}" to ${presetName}`, Toasts.Type.SUCCESS);
         onClose();
     };

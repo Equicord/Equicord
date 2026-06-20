@@ -12,10 +12,10 @@ import { React, SelectedGuildStore, useStateFromStores } from "@webpack/common";
 
 import { cl } from "../classNames";
 import { loadPresets, PresetSection } from "../utils/storage";
+import { PinnedThemesControl } from "./pinnedThemesControl";
 import { PresetManager } from "./presetManager";
 import { ProfileSetsPreview } from "./profileSetsPreview";
 import { ProfileSetsScopeBar } from "./profileSetsScopeBar";
-import { PinnedThemesControl } from "./pinnedThemesControl";
 
 const requireProfileSettingsChunk = extractAndLoadChunksLazy(["#{intl::MAIN_PROFILE}"]);
 

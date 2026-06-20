@@ -10,7 +10,7 @@ import { findStoreLazy } from "@webpack";
 import { FluxDispatcher, GuildMemberStore, IconUtils, UserProfileStore, UserStore, UsernameUtils } from "@webpack/common";
 import virtualMerge from "virtual-merge";
 
-import { normalizeImageValue, resolvePendingAvatarUrl } from "./previewImage";
+import { normalizeImageValue } from "./previewImage";
 import { notifyPreviewApply } from "./previewSync";
 import { applyThemeForLoadedPreset } from "./themes";
 
@@ -429,7 +429,9 @@ function toBannerPending(value: unknown, presetName?: string): ImageInput {
         const { imageUri } = value;
         return imageUri.startsWith("data:") ? imageUri : toNewAssetPayload(imageUri, presetName);
     }
-    if (typeof value === "object") return value as ImageInput;
+    if (typeof value === "object" && value != null) {
+        return value as Extract<ImageInput, Record<string, unknown>>;
+    }
     return null;
 }
 

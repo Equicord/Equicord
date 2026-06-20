@@ -339,12 +339,12 @@
 }
 
 .vc-profile-presets-nameplate-card > div[role="img"] {
-    position: relative !important;
-    inset: auto !important;
-    top: auto !important;
-    right: auto !important;
-    left: auto !important;
-    width: 100% !important;
+    position: relative !important; /* Discord nameplate preview uses absolute positioning */
+    inset: auto !important; /* Reset Discord inset so the card stays in normal flow */
+    top: auto !important; /* Override Discord top offset inside the preview card */
+    right: auto !important; /* Override Discord right offset inside the preview card */
+    left: auto !important; /* Override Discord left offset inside the preview card */
+    width: 100% !important; /* Discord sets a fixed width on the nameplate layer */
     max-width: 100%;
 }
 

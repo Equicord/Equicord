@@ -10,15 +10,16 @@ import ErrorBoundary from "@components/ErrorBoundary";
 import { EquicordDevs } from "@utils/constants";
 import definePlugin from "@utils/types";
 import { TabBar } from "@webpack/common";
-import { ProfileSetsSettingsAbout } from "./components/settingsAbout";
-import { ProfileSetsTab } from "./components/profileSetsTab";
+
 import { cl } from "./classNames";
+import { ProfileSetsTab } from "./components/profileSetsTab";
+import { ProfileSetsSettingsAbout } from "./components/settingsAbout";
+import { settings } from "./settings";
 import { mergePendingUserProfile } from "./utils/previewMerge";
 import { loadPresets } from "./utils/storage";
 import { PROFILE_SETS_SECTION } from "./utils/subsectionStore";
 import { loadThemeBindings } from "./utils/themeBindings";
 import { restoreActivePresetTheme } from "./utils/themes";
-import { settings } from "./settings";
 
 export { cl, PROFILE_SETS_SECTION, settings };
 
@@ -36,11 +37,11 @@ export default definePlugin({
             find: "UserProfileStore",
             replacement: [
                 {
-                    match: /(?<=getUserProfile\(\i\){return )(.+?)(?=})/,
+                    match: /(?<=getUserProfile\(\i\){return )(.{1,150}?)(?=})/,
                     replace: "$self.mergePendingUserProfile($1, arguments[0])"
                 },
                 {
-                    match: /(?<=getGuildMemberProfile\(\i,\i\){return )(.+?)(?=})/,
+                    match: /(?<=getGuildMemberProfile\(\i,\i\){return )(.{1,150}?)(?=})/,
                     replace: "$self.mergePendingUserProfile($1, arguments[0], arguments[1])"
                 }
             ]

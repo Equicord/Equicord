@@ -13,12 +13,12 @@ import { GuildMemberStore, React, UserProfileStore, UserStore, useStateFromStore
 import virtualMerge from "virtual-merge";
 
 import { cl } from "../classNames";
-import { ProfileSetsNameplatePreview } from "./profileSetsNameplatePreview";
 import { clearProfileSetsPreviewContext, setProfileSetsPreviewContext } from "../utils/previewContext";
 import { resolvePendingAvatarUrl } from "../utils/previewImage";
 import { mergePendingUser } from "../utils/previewMerge";
-import { normalizeNameplateLike, resolveNameplatePreviewUserValue } from "../utils/profile";
 import { getPreviewApplyGeneration, subscribePreviewApply } from "../utils/previewSync";
+import { normalizeNameplateLike, resolveNameplatePreviewUserValue } from "../utils/profile";
+import { ProfileSetsNameplatePreview } from "./profileSetsNameplatePreview";
 
 type PendingChanges = {
     pendingThemeColors?: number[] | null;
@@ -42,15 +42,15 @@ function previewRevisionFingerprint(value: unknown): string {
         return `s:${value.length}:${value.slice(0, 48)}`;
     }
     if (typeof value === "object") {
-        const imageUri = (value as { imageUri?: unknown; }).imageUri;
+        const { imageUri } = (value as { imageUri?: unknown; });
         if (typeof imageUri === "string") {
             return `img:${imageUri.length}:${imageUri.slice(0, 48)}`;
         }
         const skuId = (value as { skuId?: unknown; sku_id?: unknown; }).skuId
             ?? (value as { sku_id?: unknown; }).sku_id;
         if (skuId != null) {
-            const asset = (value as { asset?: unknown; }).asset;
-            const type = (value as { type?: unknown; }).type;
+            const { asset } = (value as { asset?: unknown; });
+            const { type } = (value as { type?: unknown; });
 
             const assetPart = typeof asset === "string"
                 ? `a:${asset.length}:${asset.slice(0, 48)}`
