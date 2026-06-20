@@ -8,28 +8,79 @@ import "./misc/style.css";
 
 import { showNotification } from "@api/Notifications";
 import { definePluginSettings } from "@api/Settings";
+import { BaseText } from "@components/BaseText";
 import { Button } from "@components/Button";
+import { Flex } from "@components/Flex";
 import { Notice } from "@components/Notice";
 import plSettings from "@plugins/_core/settings";
 import { Devs } from "@utils/constants";
 import { relaunch } from "@utils/native";
 import definePlugin, { OptionType, PluginNative } from "@utils/types";
 import { findByPropsLazy, findComponentByCodeLazy } from "@webpack";
-import { Alerts } from "@webpack/common";
+import { Alerts, Toasts, useEffect, useState } from "@webpack/common";
 
 import SettingsTab from "./components/SettingsTab";
 import UserpluginInstallButton from "./components/UserpluginInstallButton";
-import { VariableWithCallbacks } from "./VariableWithCallbacks";
+import { apiBaseDomain } from "./misc/constants";
+import { authorize } from "./oauth";
+import { TypeOfVWC, VariableWithCallbacks } from "./VariableWithCallbacks";
 
 // @ts-ignore
 export const Native = VencordNative.pluginHelpers.UserpluginLibrary as PluginNative<typeof import("./native")>;
 export const OpenSettingsModule = findByPropsLazy("openUserSettings");
 const AppsIcon = findComponentByCodeLazy("2.95H20a2 2 0");
 
+const auth = new VariableWithCallbacks<{
+    token?: string;
+    username?: string;
+}>({
+    token: undefined,
+    username: undefined
+});
+
 export const settings = definePluginSettings({
-    allowlistedChannels: {
-        type: OptionType.STRING,
-        description: "Comma separated list of channels where the Install Plugin button should be displayed. It is always displayed in the Vencord Userplugin channels"
+    h: {
+        type: OptionType.COMPONENT,
+        component: () => <BaseText style={{ fontSize: "1.2rem", fontWeight: 600 }}>Cloud features</BaseText>
+    },
+    enableCloudFeatures: {
+        type: OptionType.BOOLEAN,
+        description: "Allow the plugin to use the UserpluginLibrary cloud, which includes the plugin library and safety status",
+        default: true,
+        restartNeeded: true
+    },
+    cf: {
+        type: OptionType.COMPONENT,
+        component: () => {
+            const [authInfo, setAuthInfo] = useState<TypeOfVWC<typeof auth>>();
+            useEffect(() => {
+                const id = auth.registerCallback(value => {
+                    setAuthInfo(value);
+                });
+                return () => auth.deregisterCallback(id);
+            }, []);
+            const rs = settings.use(["enableCloudFeatures"]);
+            if (!rs.enableCloudFeatures) return;
+            return authInfo?.token ? <>
+                <Notice.Info>
+                    You are currently logged in as <strong>{authInfo.username}</strong>
+                </Notice.Info>
+                <Button variant="secondary" onClick={() => {
+                }}>Manage my plugins</Button>
+                <Flex gap={5}>
+                    <Button style={{ flex: 1 } } variant="dangerSecondary" onClick={() => {
+                        auth.value(undefined);
+                        Toasts.show("Logged out", Toasts.Type.SUCCESS);
+                    }}>Log out</Button>
+                    <Button style={{ flex: 1 } } variant="dangerPrimary" onClick={() => {
+                    }}>Clear cloud data</Button>
+                </Flex>
+            </> : <Button onClick={() => authorize()}>Login to UserpluginLibrary</Button>;
+        }
+    },
+    h2: {
+        type: OptionType.COMPONENT,
+        component: () => <BaseText style={{ fontSize: "1.2rem", fontWeight: 600 }}>Notification settings</BaseText>
     },
     notifyIfUpdate: {
         type: OptionType.BOOLEAN,
@@ -40,6 +91,14 @@ export const settings = definePluginSettings({
         type: OptionType.STRING,
         description: "Never show update notifications for these plugins (you can still update them from the UserPlugins tab)",
         default: ""
+    },
+    h3: {
+        type: OptionType.COMPONENT,
+        component: () => <BaseText style={{ fontSize: "1.2rem", fontWeight: 600 }}>Advanced</BaseText>
+    },
+    allowlistedChannels: {
+        type: OptionType.STRING,
+        description: "Comma separated list of channels where the Install Plugin button should be displayed. It is always displayed in the Vencord Userplugin channels"
     },
     setGitPath: {
         type: OptionType.COMPONENT,
@@ -53,10 +112,13 @@ export const settings = definePluginSettings({
 
 export default definePlugin({
     name: "UserpluginLibrary",
-    description: "Install userplugins with a simple button click",
+    searchTerms: ["UserpluginInstaller"],
+    tags: ["Developers"],
+    auth,
+    description: "Browse and install userplugins directly from your client",
     settingsAboutComponent: () => (
         <Notice.Warning>
-            Equicord does not moderate userplugins and takes no responsibility for anything that may result from installing them.
+            While userplugins in the library are actively reviewed and moderated, Equicord does not take responsibility for anything that may result from installing them.
             Only install userplugins from developers you trust. Doing so is entirely at your own risk.
         </Notice.Warning>
     ),
@@ -85,7 +147,7 @@ export default definePlugin({
         Icon: AppsIcon
     },
     async start() {
-        if (!VencordNative.pluginHelpers.UserpluginLibrary) return void Alerts.show({
+        if (!VencordNative.pluginHelpers.UserpluginLibrary || !VencordNative.csp.isDomainAllowed(apiBaseDomain, ["connect-src"])) return void Alerts.show({
             title: "UserpluginLibrary not fully loaded",
             body: "You need to restart to allow the native to be loaded :)",
             confirmText: "Restart now",

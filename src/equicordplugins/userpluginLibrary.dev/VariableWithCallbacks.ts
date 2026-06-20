@@ -38,3 +38,5 @@ export class VariableWithCallbacks<T> {
         this.#callbacks.splice(this.#callbacks.indexOf(possibleFallback), 1);
     }
 }
+
+export type TypeOfVWC<V> = V extends VariableWithCallbacks<infer T> ? T : never;
