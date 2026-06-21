@@ -39,6 +39,7 @@ type PodiumStandProps = Readonly<{ place: PodiumPlace; rank: number; friendshipD
 const cl = classNameFactory("vc-friendship-leaderboard-");
 const DAYS_PER_YEAR = 365.25;
 const MS_PER_DAY = 1000 * 60 * 60 * 24;
+const LEADERBOARD_SETTINGS_KEYS: Array<"sortDescending"> = ["sortDescending"];
 const FRIENDSHIP_RANK_BADGES: FriendshipRankBadge[] = [
     {
         title: "Sprout",
@@ -175,11 +176,11 @@ function getFriendshipRankBadge(friendshipDays: number): FriendshipRankBadge | n
 
         if (!badge) return null;
 
-        if (!nextBadge && friendshipDays > badge.requirement) {
+        if (!nextBadge && friendshipDays >= badge.requirement) {
             return badge;
         }
 
-        if (nextBadge && friendshipDays > badge.requirement && friendshipDays < nextBadge.requirement) {
+        if (nextBadge && friendshipDays >= badge.requirement && friendshipDays < nextBadge.requirement) {
             return badge;
         }
     }
@@ -268,7 +269,7 @@ function OpenLeaderboardButton() {
 }
 
 function LeaderboardModal({ modalProps }: Readonly<{ modalProps: RenderModalProps; }>) {
-    const { sortDescending } = settings.use(["sortDescending"]);
+    const { sortDescending } = settings.use(LEADERBOARD_SETTINGS_KEYS);
     const closeModal = React.useCallback(() => modalProps.onClose(), [modalProps]);
 
     const leaderboard = React.useMemo(() => {
@@ -392,7 +393,7 @@ function LeaderboardModal({ modalProps }: Readonly<{ modalProps: RenderModalProp
                     ))}
 
                     {leaderboard.length === 0 ? (
-                        <div className={cl("empty")}>No friends match your filter.</div>
+                        <div className={cl("empty")}>You have no friends yet.</div>
                     ) : null}
                 </div>
             </div>
