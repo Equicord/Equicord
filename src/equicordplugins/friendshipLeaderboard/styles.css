@@ -241,9 +241,12 @@
 }
 
 .vc-friendship-leaderboard-podium-stand-rank {
+    align-items: center;
     color: var(--header-primary);
+    display: inline-flex;
     font-size: 18px;
     font-weight: 900;
+    gap: 6px;
     line-height: 1;
     text-shadow: 0 1px 0 rgb(0 0 0 / 22%);
 }
@@ -421,11 +424,29 @@
 }
 
 .vc-friendship-leaderboard-rank {
+    align-items: center;
+    display: inline-flex;
+    gap: 6px;
     grid-area: rank;
     color: var(--text-normal);
     font-size: 13px;
     font-weight: 800;
     text-align: center;
+    white-space: nowrap;
+    word-break: keep-all;
+    overflow-wrap: normal;
+}
+
+.vc-friendship-leaderboard-rank-badge {
+    border-radius: 50%;
+    flex: 0 0 auto;
+    height: 16px;
+    width: 16px;
+}
+
+.vc-friendship-leaderboard-podium-stand-rank .vc-friendship-leaderboard-rank-badge {
+    height: 20px;
+    width: 20px;
 }
 
 .vc-friendship-leaderboard-avatar {

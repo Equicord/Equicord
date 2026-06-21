@@ -25,14 +25,57 @@ interface LeaderboardEntry {
     friendshipYears: number;
 }
 
+interface FriendshipRankBadge {
+    title: string;
+    requirement: number;
+    iconSrc: string;
+}
+
 type PodiumPlace = 1 | 2 | 3;
 type PodiumCardProps = Readonly<{ entry: LeaderboardEntry | undefined; place: PodiumPlace; rank: number; }>;
 type PodiumCardWithActionProps = PodiumCardProps & Readonly<{ onClick?: () => void; }>;
-type PodiumStandProps = Readonly<{ place: PodiumPlace; rank: number; }>;
+type PodiumStandProps = Readonly<{ place: PodiumPlace; rank: number; friendshipDays?: number; }>;
 
 const cl = classNameFactory("vc-friendship-leaderboard-");
 const DAYS_PER_YEAR = 365.25;
 const MS_PER_DAY = 1000 * 60 * 60 * 24;
+const FRIENDSHIP_RANK_BADGES: FriendshipRankBadge[] = [
+    {
+        title: "Sprout",
+        requirement: 0,
+        iconSrc: "https://equicord.org/assets/plugins/friendshipRanks/sprout.png"
+    },
+    {
+        title: "Blooming",
+        requirement: 30,
+        iconSrc: "https://equicord.org/assets/plugins/friendshipRanks/blooming.png"
+    },
+    {
+        title: "Burning",
+        requirement: 90,
+        iconSrc: "https://equicord.org/assets/plugins/friendshipRanks/burning.png"
+    },
+    {
+        title: "Fighter",
+        requirement: 182.5,
+        iconSrc: "https://equicord.org/assets/plugins/friendshipRanks/fighter.png"
+    },
+    {
+        title: "Star",
+        requirement: 365,
+        iconSrc: "https://equicord.org/assets/plugins/friendshipRanks/star.png"
+    },
+    {
+        title: "Royal",
+        requirement: 730,
+        iconSrc: "https://equicord.org/assets/plugins/friendshipRanks/royal.png"
+    },
+    {
+        title: "Besties",
+        requirement: 1826.25,
+        iconSrc: "https://equicord.org/assets/plugins/friendshipRanks/besties.png"
+    }
+];
 
 const settings = definePluginSettings({
     sortDescending: {
@@ -125,6 +168,45 @@ function compareEntries(a: LeaderboardEntry, b: LeaderboardEntry, sortDescending
     return a.id.localeCompare(b.id);
 }
 
+function getFriendshipRankBadge(friendshipDays: number): FriendshipRankBadge | null {
+    for (let i = 0; i < FRIENDSHIP_RANK_BADGES.length; i++) {
+        const badge = FRIENDSHIP_RANK_BADGES[i];
+        const nextBadge = FRIENDSHIP_RANK_BADGES[i + 1];
+
+        if (!badge) return null;
+
+        if (!nextBadge && friendshipDays > badge.requirement) {
+            return badge;
+        }
+
+        if (nextBadge && friendshipDays > badge.requirement && friendshipDays < nextBadge.requirement) {
+            return badge;
+        }
+    }
+
+    return null;
+}
+
+function FriendshipRankBadgeIcon({ friendshipDays }: Readonly<{ friendshipDays?: number; }>) {
+    if (friendshipDays == null) return null;
+
+    const badge = getFriendshipRankBadge(friendshipDays);
+    if (!badge) return null;
+
+    return (
+        <Tooltip text={badge.title}>
+            {tooltipProps => (
+                <img
+                    {...tooltipProps}
+                    className={cl("rank-badge")}
+                    src={badge.iconSrc}
+                    alt={`${badge.title} friendship rank badge`}
+                />
+            )}
+        </Tooltip>
+    );
+}
+
 function PodiumCard({ entry, place, rank, onClick }: PodiumCardWithActionProps) {
     if (!entry) {
         return (
@@ -158,10 +240,13 @@ function PodiumCard({ entry, place, rank, onClick }: PodiumCardWithActionProps) 
     );
 }
 
-function PodiumStand({ place, rank }: PodiumStandProps) {
+function PodiumStand({ place, rank, friendshipDays }: PodiumStandProps) {
     return (
         <div className={cl("podium-stand", `podium-stand-${place}`)} aria-hidden="true">
-            <span className={cl("podium-stand-rank")}>#{rank}</span>
+            <span className={cl("podium-stand-rank")}>
+                <FriendshipRankBadgeIcon friendshipDays={friendshipDays} />
+                #{rank}
+            </span>
         </div>
     );
 }
@@ -239,7 +324,11 @@ function LeaderboardModal({ modalProps }: Readonly<{ modalProps: RenderModalProp
                             entry={leaderboard[1]}
                             onClick={() => leaderboard[1] && openFriendProfile(leaderboard[1].id, closeModal)}
                         />
-                        <PodiumStand place={2} rank={getLeaderboardRank(1, totalEntries, sortDescending)} />
+                        <PodiumStand
+                            place={2}
+                            rank={getLeaderboardRank(1, totalEntries, sortDescending)}
+                            friendshipDays={leaderboard[1]?.friendshipDays}
+                        />
                     </div>
                     <div className={cl("podium-slot", "podium-slot-1")}>
                         <PodiumCard
@@ -248,7 +337,11 @@ function LeaderboardModal({ modalProps }: Readonly<{ modalProps: RenderModalProp
                             entry={leaderboard[0]}
                             onClick={() => leaderboard[0] && openFriendProfile(leaderboard[0].id, closeModal)}
                         />
-                        <PodiumStand place={1} rank={getLeaderboardRank(0, totalEntries, sortDescending)} />
+                        <PodiumStand
+                            place={1}
+                            rank={getLeaderboardRank(0, totalEntries, sortDescending)}
+                            friendshipDays={leaderboard[0]?.friendshipDays}
+                        />
                     </div>
                     <div className={cl("podium-slot", "podium-slot-3")}>
                         <PodiumCard
@@ -257,7 +350,11 @@ function LeaderboardModal({ modalProps }: Readonly<{ modalProps: RenderModalProp
                             entry={leaderboard[2]}
                             onClick={() => leaderboard[2] && openFriendProfile(leaderboard[2].id, closeModal)}
                         />
-                        <PodiumStand place={3} rank={getLeaderboardRank(2, totalEntries, sortDescending)} />
+                        <PodiumStand
+                            place={3}
+                            rank={getLeaderboardRank(2, totalEntries, sortDescending)}
+                            friendshipDays={leaderboard[2]?.friendshipDays}
+                        />
                     </div>
                 </div>
 
@@ -276,7 +373,10 @@ function LeaderboardModal({ modalProps }: Readonly<{ modalProps: RenderModalProp
                             onClick={() => openFriendProfile(entry.id, closeModal)}
                             aria-label={`Open profile of ${entry.name}. Rank ${getLeaderboardRank(index + 3, totalEntries, sortDescending)}. Friendship ${formatYears(entry.friendshipYears)}.`}
                         >
-                            <span className={cl("rank")}>#{getLeaderboardRank(index + 3, totalEntries, sortDescending)}</span>
+                            <span className={cl("rank")}>
+                                <FriendshipRankBadgeIcon friendshipDays={entry.friendshipDays} />
+                                <span>#{getLeaderboardRank(index + 3, totalEntries, sortDescending)}</span>
+                            </span>
                             <Avatar className={cl("avatar")} src={entry.avatarUrl} size="SIZE_32" aria-label={entry.name} />
                             <div className={cl("info")}>
                                 <div className={cl("name")}>{entry.name}</div>
@@ -291,9 +391,9 @@ function LeaderboardModal({ modalProps }: Readonly<{ modalProps: RenderModalProp
                         </button>
                     ))}
 
-                    {!leaderboard.length && (
+                    {leaderboard.length === 0 ? (
                         <div className={cl("empty")}>No friends match your filter.</div>
-                    )}
+                    ) : null}
                 </div>
             </div>
         </Modal>
