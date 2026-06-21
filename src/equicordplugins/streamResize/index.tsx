@@ -30,7 +30,7 @@ export const settings = definePluginSettings({
 export default definePlugin({
     name: "StreamResize",
     description:
-        "Extend the min/max resize limits of the PIP stream window (keep 16:9)",
+        "Extend the min/max resize limits of the PIP stream window (keep 16:9).",
     authors: [EquicordDevs.Skaikru0518],
     settings,
 
