@@ -49,13 +49,11 @@ export default definePlugin({
             group: true,
             replacement: [
                 {
-                    // clamp on resize end (final width)
                     match: /(=40\*Math\.round\(\i\/40\);return\(0,\i\.clamp\)\(\i,)\i\.minWidth,\i\.maxWidth\)/,
                     replace:
                         "$1$self.getBounds().min.w,$self.getBounds().max.w)",
                 },
                 {
-                    // live drag constraint (hard limit while dragging)
                     match: /minDimension:\i\.minWidth,maxDimension:\i\.maxWidth\+20/,
                     replace:
                         "minDimension:$self.getBounds().min.w,maxDimension:$self.getBounds().max.w",

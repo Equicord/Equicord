@@ -6,19 +6,29 @@
 
 export const ASPECT_RATIO = 16 / 9;
 
-export interface Size { w: number; h: number; }
-export interface Bounds { min: Size; max: Size; }
+export interface Size {
+    w: number;
+    h: number;
+}
+export interface Bounds {
+    min: Size;
+    max: Size;
+}
 
 const FALLBACK: Bounds = {
     min: { w: 320, h: 180 },
     max: { w: 1280, h: 720 },
 };
 
-export function sizeForPct(screenW: number, screenH: number, pct: number): Size {
+export function sizeForPct(
+    screenW: number,
+    screenH: number,
+    pct: number,
+): Size {
     const p = pct / 100;
-    const wByWidth = screenW * p; // width-limited width
-    const wByHeight = screenH * p * ASPECT_RATIO; // height-limited -> width
-    const w = Math.min(wByWidth, wByHeight); // FIT: smaller axis wins
+    const wByWidth = screenW * p;
+    const wByHeight = screenH * p * ASPECT_RATIO;
+    const w = Math.min(wByWidth, wByHeight);
     return { w, h: w / ASPECT_RATIO };
 }
 
