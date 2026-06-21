@@ -1354,6 +1354,10 @@ export const EquicordDevs = Object.freeze({
         name: "sobakintech",
         id: 745203026335236178n
     },
+    Paid: {
+        name: "Paid",
+        id: 285413645687455744n
+    },
 } satisfies Record<string, Dev>);
 
 // iife so #__PURE__ works correctly
