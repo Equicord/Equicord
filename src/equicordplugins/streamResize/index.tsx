@@ -12,14 +12,14 @@ import { Bounds, computeBounds } from "./bounds";
 
 export const settings = definePluginSettings({
     minPct: {
-        description: "Minimum PIP size (% of screen)",
+        description: "Minimum PIP size (% of screen).",
         type: OptionType.SLIDER,
         markers: makeRange(10, 90, 5),
         default: 20,
         stickToMarkers: false,
     },
     maxPct: {
-        description: "Maximum PIP size (% of the screen)",
+        description: "Maximum PIP size (% of the screen).",
         type: OptionType.SLIDER,
         markers: makeRange(20, 100, 5),
         default: 90,
