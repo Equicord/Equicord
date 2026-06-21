@@ -46,6 +46,7 @@ export default definePlugin({
     patches: [
         {
             find: "40*Math.round(",
+            group: true,
             replacement: [
                 {
                     // clamp on resize end (final width)
