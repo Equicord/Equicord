@@ -14,7 +14,7 @@ import { classNameFactory } from "@utils/css";
 import { openUserProfile } from "@utils/discord";
 import definePlugin, { OptionType } from "@utils/types";
 import { RenderModalProps } from "@vencord/discord-types";
-import { Avatar, IconUtils, Modal, moment, openModal, React, RelationshipStore, Tooltip, UserStore } from "@webpack/common";
+import { Avatar, IconUtils, Modal, moment, openModal, React, RelationshipStore, Tooltip, UserStore, useStateFromStores } from "@webpack/common";
 
 interface LeaderboardEntry {
     id: string;
@@ -272,12 +272,11 @@ function LeaderboardModal({ modalProps }: Readonly<{ modalProps: RenderModalProp
     const { sortDescending } = settings.use(LEADERBOARD_SETTINGS_KEYS);
     const closeModal = React.useCallback(() => modalProps.onClose(), [modalProps]);
 
-    const leaderboard = React.useMemo(() => {
-        const rows = getFriendEntries()
-            .sort((a, b) => compareEntries(a, b, sortDescending));
-
-        return rows;
-    }, [sortDescending]);
+    const leaderboard = useStateFromStores(
+        [RelationshipStore, UserStore],
+        () => getFriendEntries().sort((a, b) => compareEntries(a, b, sortDescending)),
+        [sortDescending]
+    );
     const totalEntries = leaderboard.length;
 
     const setSortDescending = (value: boolean) => {
