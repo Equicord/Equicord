@@ -17,7 +17,7 @@ import { Devs } from "@utils/constants";
 import { relaunch } from "@utils/native";
 import definePlugin, { OptionType, PluginNative } from "@utils/types";
 import { findByPropsLazy, findComponentByCodeLazy } from "@webpack";
-import { Alerts, Toasts, useEffect, useState } from "@webpack/common";
+import { Alerts, showToast, Toasts, useEffect, useState } from "@webpack/common";
 
 import SettingsTab from "./components/SettingsTab";
 import UserpluginInstallButton from "./components/UserpluginInstallButton";
@@ -53,6 +53,7 @@ export const settings = definePluginSettings({
         component: () => {
             const [authInfo, setAuthInfo] = useState<TypeOfVWC<typeof auth>>();
             useEffect(() => {
+                setAuthInfo(auth.value());
                 const id = auth.registerCallback(value => {
                     setAuthInfo(value);
                 });
@@ -68,8 +69,11 @@ export const settings = definePluginSettings({
                 }}>Manage my plugins</Button>
                 <Flex gap={5}>
                     <Button style={{ flex: 1 } } variant="dangerSecondary" onClick={() => {
-                        auth.value(undefined);
-                        Toasts.show("Logged out", Toasts.Type.SUCCESS);
+                        auth.value({
+                            token: undefined,
+                            username: undefined
+                        });
+                        showToast("Logged out", Toasts.Type.SUCCESS);
                     }}>Log out</Button>
                     <Button style={{ flex: 1 } } variant="dangerPrimary" onClick={() => {
                     }}>Clear cloud data</Button>
