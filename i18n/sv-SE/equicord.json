@@ -146,7 +146,7 @@
                 "userOption": "specifika användare att försöka uppdatera"
             }
         },
-        "description": "Förbättrar kommandosystemet med diverse förbättringar.",
+        "description": "Uppdaterar de specificerade applikationskommandona lokalt.",
         "settings": {
             "allowNewlinesInCommands": "Tillåt nyrader i kommandoinmatningar (CTRL + Shift + Enter)",
             "autoFillArguments": "Fyll kommandot automatiskt med alla argument istället för bara nödvändiga"
@@ -321,6 +321,7 @@
             "clipsLink": "Ändra FPS och varaktighet alternativ i Clips inställningar!",
             "enableAdvancedSignals": "Aktivera avancerade klippsignaler (autoklipputlösare)",
             "enableScreenshotKeybind": "Aktivera tangentbindningsfunktionen för skärmdump",
+            "enableSpeakingIndicators": "Aktivera talindikatorer",
             "enableVoiceOnlyClips": "Aktivera klipp med endast röst (ljud utan video)",
             "ignorePlatformRestriction": "Tillåt plattformsbegränsad klippning (kan orsaka lagringsfel)",
             "richPresenceTagging": "När ska klipp taggas med den nuvarande Rich Presence?",
@@ -334,6 +335,8 @@
     "commandPalette": {
         "description": "Kör snabbt åtgärder genom en sökbar kommandopalett",
         "settings": {
+            "closeAfterExecute": "Stäng paletten efter att ha utfört ett kommando.",
+            "compactStartEnabled": "Öppna paletten i kompakt läge först.",
             "customCommands": "Hantera anpassade kommandopalettposter",
             "enableTagFilter": "Visa taggfilterfältet",
             "hotkey": "Snabbtangent används för att öppna kommandopaletten",
@@ -889,6 +892,7 @@
     },
     "githubRepos": {
         "description": "Visar en användares offentliga GitHub-arkiv i deras profil",
+        "githubRepos": "GitHub Arkiv",
         "settings": {
             "showInMiniProfile": "Visa hela användargränssnittet i miniprofilen istället för bara en knapp",
             "showLanguage": "Visa förvarsspråk",
@@ -976,7 +980,7 @@
         "description": "Ändrar hemknappen till en skrivindikator om någon i din dms skriver"
     },
     "hopOn": {
-        "description": "Hoppa på Fortnite eller Hoppa på bloons :3",
+        "description": "Hoppa på! Öppnar en konfigurerbar URL när ett meddelande matchar en anpassad regex i den aktuella kanalen.",
         "settings": {
             "regex": "Regex att trigga på",
             "url": "URL för att öppna"
@@ -1496,7 +1500,7 @@
         }
     },
     "moyai": {
-        "description": "Spela moyai-ljudeffekten när 🗿 emoji används",
+        "description": "Spelar upp en 🗿 ljudeffekt varje gång en moyai-emoji skickas, reageras eller används som rösteffekt i din nuvarande kanal.",
         "settings": {
             "ignoreBlocked": "Ignorera meddelanden från blockerade användare",
             "ignoreBots": "Ignorera meddelanden från bots",
