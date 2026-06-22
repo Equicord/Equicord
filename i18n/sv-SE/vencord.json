@@ -116,6 +116,7 @@
     "arRPC": {
         "connected": "Ansluten till arRPC",
         "connectionFailed": "Det gick inte att ansluta till arRPC, körs den?",
+        "description": "Klientplugin för arRPC för att aktivera RPC på Discord-webben (experimentellt)",
         "retry": "Försök igen",
         "settingsAbout": {
             "description": "Följ instruktionerna i GitHub-repo för att få servern att köra och aktivera sedan plugin-programmet.",
@@ -139,6 +140,7 @@
         "description": "API för att lägga till märken till användare"
     },
     "betterFolders": {
+        "description": "Visar servermappar i en dedikerad sidopanel och lägger till mapprelaterade förbättringar",
         "settings": {
             "closeAllFolders": "Stäng alla mappar när du väljer en server som inte finns i en mapp",
             "closeAllHomeButton": "Stäng alla mappar när du klickar på hemknappen",
@@ -188,6 +190,7 @@
         }
     },
     "betterSessions": {
+        "description": "Förbättrar menyn för sessioner (enheter). Låter dig se exakta tidsstämplar, ge varje session ett eget namn och få notiser om nya sessioner.",
         "newBadge": "NY",
         "newSession": "Ny session:",
         "rename": "Döpa om",
@@ -203,6 +206,7 @@
         }
     },
     "betterSettings": {
+        "description": "Förbättrar din upplevelse av att öppna menyer i inställningarna",
         "settings": {
             "disableFade": "Inaktivera crossfade-animeringen",
             "eagerLoad": "Tar bort laddningsfördröjningen när menyn öppnas för första gången",
@@ -272,13 +276,15 @@
             "failedToDelete": "Kunde inte radera inställningar ({e}).",
             "failedToSync": "Det gick inte att synkronisera inställningarna till molnet ({e}).",
             "header": "Molninställningar",
+            "manifest": "Misslyckades med att hämta manifestet för radering (API et returnerade {e}).",
             "newerThanCloud": "Dina lokala inställningar är nyare än molnet.",
             "noSettings": "Det finns inga inställningar i molnet.",
             "success": "Synkroniserade inställningar till molnet!",
             "syncFromCloud": "Det gick inte att synkronisera inställningar från molnet ({e}).",
+            "syncedCloud": "Molndata synkroniserade.",
             "upToDate": "Dina inställningar är uppdaterade.",
             "updated": "Dina inställningar har uppdaterats! Klicka här för att starta om för att tillämpa ändringarna helt!",
-            "updatedRemote": "Dina inställningar har uppdaterats! Klicka här för att starta om för att tillämpa ändringarna helt!"
+            "updatedRemote": "Inställningarna synkroniserade med molnet!"
         }
     },
     "colorSighted": {
@@ -384,6 +390,7 @@
         "button1Url": "Knapp1 URL",
         "button2Text": "Knapp 2 Text",
         "button2Url": "Knapp2 URL",
+        "description": "Lägg till en fullt anpassningsbar Rich Presence (spelstatus) på din Discord-profil",
         "detailLine1": "Detalj (rad 1)",
         "detailUrl": "Detalj URL",
         "endTimestamp": "Sluttidsstämpel (i millisekunder)",
@@ -449,12 +456,42 @@
     },
     "decor": {
         "accessFromProfiles": "Du kan också komma åt Dekordekorationer från sidan {link}.",
+        "agreedToGuidelines": "Överenskommet om riktlinjer",
+        "alreadyPending": "Du har redan en dekoration som väntar på granskning",
+        "apply": "Ansök",
+        "browse": "Bläddra",
         "changeDecoration": "Byt dekoration",
+        "chooseAFile": "Välj en fil",
+        "confirmLogOut": "Är du säker på att du vill logga ut från Decor?",
+        "continue": "Fortsätt",
+        "copyHash": "Kopiera dekorationshash",
+        "copyPresetId": "Kopiera förinställt ID",
+        "createDecoration": "Skapa dekoration",
+        "createdBy": "Skapad av",
+        "delete": "Radera",
+        "deleteConfirm": "Är du säker på att du vill ta bort {name}?",
+        "deleteDecoration": "Ta bort dekoration",
+        "deleteInstructions": "Du kan ta bort dina egna dekorationer genom att högerklicka på dem.",
         "description": "Skapa och använd dina egna avatardekorationer, eller välj din favorit bland förinställningarna.",
+        "discordServerNotice": "För att få uppdateringar om din dekorations recension, gå med i {link} och tillåt direktmeddelanden.",
+        "discordTooltip": "Gå med i Decors Discord-server för notiser om recensionen av din dekoration och när nya förinställningar släpps",
         "enableAndRestart": "Aktivera Decor och starta om din klient för att ändra din avatardekoration.",
+        "file": "Fil",
+        "fileNotice": "Filen ska vara APNG eller PNG.",
+        "guidelinesAgreementNotice": "Genom att skicka in en dekoration godkänner du {guidelines}. Om du inte läser dessa riktlinjer kan ditt konto stängas av från att skapa fler dekorationer i framtiden.",
+        "guidelinesNotice": "Se till att din dekoration inte bryter mot {guidelines} innan du skickar in den.",
+        "logOut": "Logga ut",
+        "name": "Namn",
+        "nameNotice": "Detta namn kommer att användas när man syftar på denna dekoration.",
+        "options": "Dekorationsalternativ",
+        "pendingReview": "Väntar på granskning",
+        "presetPart": "Del av {name}-förinställningen",
         "profilesLink": "Profiler",
         "removeDecoration": "Ta bort dekoration",
-        "title": "Dekor"
+        "submitForReview": "Skicka in för granskning",
+        "theGuidelines": "Riktlinjerna",
+        "title": "Dekor",
+        "yourDecorations": "Dina dekorationer"
     },
     "devCompanion": {
         "description": "Dev Companion Plugin. Vänligen rapportera allt som inte fungerar eller är konstigt (mest troligt är det en bugg) till sadan, antingen ping eller dm, tack!",
@@ -501,10 +538,12 @@
     },
     "expressionCloner": {
         "cloneEmoji": "Klona emoji",
+        "cloneName": "Klon {name}",
         "cloneSticker": "Klon klistermärke",
         "cloneTo": "Klona till {guild}",
         "clonedSuccess": "Klonad {name} till {guild}!",
         "customName": "Anpassat namn",
+        "description": "Låter dig klona emotes och klistermärken till din egen server (högerklicka på dem)",
         "failedToClone": "Det gick inte att klona: {error}",
         "nameValidation": "Namnet måste vara mellan 2 och 32 tecken",
         "somethingWentWrong": "Något gick fel (kolla konsolen!)"
@@ -527,6 +566,7 @@
             "body3": "Är du säker på att du vill skicka det här meddelandet? Dina FakeNitro-föremål visas endast som en länk.",
             "disableNotice": "Du kan inaktivera detta meddelande i plugininställningarna."
         },
+        "ok": "OKEJ",
         "sendAnyway": "Skicka ändå",
         "settings": {
             "disableEmbedPermissionCheck": "Om du ska inaktivera kontrollen av inbäddningstillstånd när du skickar falska emojis och klistermärken",
@@ -699,6 +739,7 @@
         "description": "Dölj inte meddelanden från \"sannolika spammare\""
     },
     "ignoreActivities": {
+        "description": "Ignorera aktiviteter som visas i din status ENDAST. Du kan konfigurera vilka som specifikt ignoreras från flikarna Registrerade spel och aktiviteter, eller använda de allmänna inställningarna nedan",
         "disableActivity": "Inaktivera aktivitet",
         "enableActivity": "Aktivera aktivitet",
         "filterList": {
@@ -732,6 +773,7 @@
         "description": "Göm aldrig bildlänkar i meddelanden, även om det är det enda innehållet"
     },
     "imageZoom": {
+        "description": "Låter dig zooma in på bilder och gifs. Använd scrollhjulet för att zooma in och shift + scrollhjulet för att öka linsradien/storleken",
         "lensSize": "Linsstorlek",
         "nearestNeighbour": "Närmaste granne",
         "settings": {
@@ -840,6 +882,7 @@
         "showLogs": "Visa loggar"
     },
     "memberCount": {
+        "description": "Visar antalet onlinemedlemmar, totala medlemmar och användare i röstkanaler på servern — i medlemslistan och verktygstipset.",
         "settings": {
             "memberList": "Visa medlemsantal i medlemslistan",
             "toolTip": "Visa medlemsantal på serververktygstipset",
@@ -930,6 +973,7 @@
     "messageLatency": {
         "clockAhead": "Den här användarens klocka är {delta} före.",
         "delayedMessage": "Försenat meddelande",
+        "description": "Visar en indikator för meddelanden som tog ≥n sekunder att skicka",
         "messageDelayed": "Detta meddelande skickades med en fördröjning på {delta}.",
         "oldAndroidClient": "Gammal Discord Android-klient",
         "oldDiscordAndroid": "Användaren misstänks vara på en gammal Discord Android-klient",
@@ -989,6 +1033,7 @@
         "deletedMessages_one": "{count} raderat meddelande",
         "deletedMessages_other": "{count} raderade meddelanden",
         "deletedMessages_zero": "Inga raderade meddelanden",
+        "description": "Lagrar tillfälligt raderade och redigerade meddelanden.",
         "disableDiffView": "Inaktivera Diff View",
         "editHistory": "Meddelande Redigera historik",
         "enableDiffView": "Aktivera Diff View",
@@ -1230,6 +1275,7 @@
         }
     },
     "permissionsViewer": {
+        "description": "Visa vilka behörigheter en användare eller kanal har, samt serverns roller",
         "noPermissions": "Inga behörigheter att visa!",
         "owner": "ägare",
         "permissions": "Behörigheter",
@@ -1280,6 +1326,7 @@
         "color": "Färg",
         "create": "Skapa",
         "deleteCategory": "Ta bort kategori",
+        "description": "Låter dig fästa privata kanaler högst upp på din DM-lista. För att fästa/lossa eller ordna om pins, högerklicka på DM",
         "editCategory": "Ändra kategori",
         "editCategoryTitle": "Ändra kategori",
         "moveDown": "Flytta ner",
@@ -1414,6 +1461,7 @@
         "confirmDelete": "Vill du verkligen ta bort den här recensionen?",
         "confirmReport": "Vill du verkligen rapportera den här recensionen?",
         "delete": "Ta bort",
+        "description": "Granska andra användare (Lägger till nya inställningar i profilerna)",
         "failedToFetchBlocks": "Det gick inte att hämta block: {error}",
         "mustBeLoggedInBlock": "Du måste vara inloggad för att blockera användare.",
         "mustBeLoggedInDelete": "Du måste vara inloggad för att ta bort recensioner.",
@@ -1446,6 +1494,8 @@
         },
         "system": "System",
         "unblockUser": "Avblockera användare",
+        "userOptedOut": "Användaren valde bort",
+        "userReviews": "Användarrecensioner",
         "viewReviews": "Visa recensioner"
     },
     "roleColorEverywhere": {
