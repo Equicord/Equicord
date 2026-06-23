@@ -76,3 +76,14 @@
         color: var(--red-new-46)
     }
 }
+
+.vc-userplugininstaller-unordered-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    li {
+        margin-left: 16px;
+        list-style: disc;
+    }
+}

@@ -19,6 +19,7 @@ import definePlugin, { OptionType, PluginNative } from "@utils/types";
 import { findByPropsLazy, findComponentByCodeLazy } from "@webpack";
 import { Alerts, showToast, Toasts, useEffect, useState } from "@webpack/common";
 
+import LibraryTab from "./components/LibraryTab";
 import SettingsTab from "./components/SettingsTab";
 import UserpluginInstallButton from "./components/UserpluginInstallButton";
 import { authorize } from "./oauth";
@@ -28,7 +29,7 @@ import { TypeOfVWC, VariableWithCallbacks } from "./VariableWithCallbacks";
 export const Native = VencordNative.pluginHelpers.UserpluginLibrary as PluginNative<typeof import("./native")>;
 export const OpenSettingsModule = findByPropsLazy("openUserSettings");
 const AppsIcon = findComponentByCodeLazy("2.95H20a2 2 0");
-
+const ShopSparkleIcon = findComponentByCodeLazy("M20.14.8a1.21 1.21 0 0 0-2.28 0l-.5 1.37a2 2 0 0 1-1.19 1.18l-1.38.51a1.21 1.21 0 0 0 0 2.28l1.38.5a2 2 0 0 1 1.18 1.19l.51 1.38a1.2 1.2 0 0 0 1.15.79l.17-.01c.4-.06.79-.32.96-.78l.5-1.38a2 2 0 0 1 1.19-1.18l1.38-.51a1.21 1.21 0 0 0 0-2.28l-1.38-.5a2 2 0 0 1-1.18-1.19L20.14.79ZM20.98 11.84c0-.2-.24-.33-.42-.22-1.79 1.01-3.6-.17-4.87-1.55a.28.28 0 0 0-.4 0 4.49 4.49 0 0 1-6.58 0 .28.28 0 0 0-.4 0 4.45 4.45 0 0 1-4.94 1.11c-.17-.07-.37.06-.37.24V19a3 3 0 0 0 3 3h2.75c.14 0 .25-.11.25-.25V16c0-1.1.9-2 2-2h2a2 2 0 0 1 2 2v5.75c0 .14.11.25.25.25H18a3 3 0 0 0 3-3l-.02-7.16Z");
 const auth = new VariableWithCallbacks<{
     token?: string;
     username?: string;
@@ -155,6 +156,13 @@ export default definePlugin({
         Component: SettingsTab,
         Icon: AppsIcon
     },
+    sectionLib: {
+        key: "vencord_userplugins_lib",
+        title: "Plugin Library",
+        panelTitle: "Plugin Library",
+        Component: LibraryTab,
+        Icon: ShopSparkleIcon
+    },
     async start() {
         if (!VencordNative.pluginHelpers.UserpluginLibrary || !VencordNative.csp.isDomainAllowed(this.settings.store.apiBasePath, ["connect-src"])) return void Alerts.show({
             title: "UserpluginLibrary not fully loaded",
@@ -169,6 +177,7 @@ export default definePlugin({
         await Native.ensurePluginsDirectory();
 
         plSettings.customEntries.push(this.section);
+        settings.plain.enableCloudFeatures && plSettings.customEntries.push(this.sectionLib);
 
         this.pluginsWithUpdates.registerCallback((value, id) => {
             if (value.plugins.length === 0) return;
