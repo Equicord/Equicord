@@ -88,7 +88,7 @@ const settings = definePluginSettings({
                         cmd: "MESSAGE_NOTIFICATION",
                         message: {
                             title: "Orbolay Test",
-                            body: "This is a test notification from the Equicord OrbolayBridgeFork plugin!",
+                            body: "This is a test notification from the Equicord OrbolayBridge plugin!",
                             icon: "https://raw.githubusercontent.com/Equicord/Equicord/refs/heads/main/browser/icon.png",
                             guildId: "0",
                             channelId: "0",
@@ -314,12 +314,12 @@ const connect = () => {
 
     cleanWebSocket();
 
-    console.log(`[OrbolayBridgeFork] Attempting to connect to Orbolay server (delay: ${reconnectDelay}ms)`);
+    console.log(`[OrbolayBridge] Attempting to connect to Orbolay server (delay: ${reconnectDelay}ms)`);
 
     ws = new WebSocket("ws://127.0.0.1:" + settings.store.port);
 
     ws.onopen = async () => {
-        console.log("[OrbolayBridgeFork] Connected to Orbolay server");
+        console.log("[OrbolayBridge] Connected to Orbolay server");
         wasConnected = true;
         isRetrying = false;
         reconnectDelay = (settings.store.minReconnectDelay ?? 1) * 1000;
@@ -383,19 +383,19 @@ const connect = () => {
         try {
             incoming(JSON.parse(e.data));
         } catch (err) {
-            console.error("[OrbolayBridgeFork] Error parsing message:", err);
+            console.error("[OrbolayBridge] Error parsing message:", err);
         }
     };
 
     ws.onerror = e => {
-        console.error("[OrbolayBridgeFork] WebSocket error:", e);
+        console.error("[OrbolayBridge] WebSocket error:", e);
     };
 
     ws.onclose = () => {
         cleanWebSocket();
 
         if (wasConnected) {
-            console.log("[OrbolayBridgeFork] Disconnected from Orbolay server.");
+            console.log("[OrbolayBridge] Disconnected from Orbolay server.");
             wasConnected = false;
             showToast({
                 message: "Disconnected from Orbolay server",
@@ -426,7 +426,7 @@ const connect = () => {
 };
 
 export default definePlugin({
-    name: "OrbolayBridgeFork",
+    name: "OrbolayBridge",
     description: "Bridge plugin to connect Discord to Orbolay via WebSocket",
     tags: ["Utility", "Voice"],
     authors: [EquicordDevs.SpikeHD],
