@@ -5,6 +5,7 @@
  */
 
 import { definePluginSettings } from "@api/Settings";
+import { Button } from "@components/Button";
 import { EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 import { ChannelStore, FluxDispatcher, GuildMemberStore, StreamerModeStore, Toasts, UserStore, VoiceStateStore } from "@webpack/common";
@@ -27,7 +28,92 @@ const settings = definePluginSettings({
         default: 6888,
         restartNeeded: true
     },
+    autoReconnect: {
+        type: OptionType.BOOLEAN,
+        description: "Auto-reconnect to Orbolay server when connection is lost",
+        default: true,
+        restartNeeded: false
+    },
+    maxReconnectDelay: {
+        type: OptionType.SLIDER,
+        description: "Maximum reconnect delay (in seconds)",
+        markers: [5, 10, 15, 30, 45, 60, 90, 120, 180, 240, 300],
+        stickToMarkers: false,
+        default: 60,
+        restartNeeded: false
+    },
+    minReconnectDelay: {
+        type: OptionType.SLIDER,
+        description: "Minimum reconnect delay (in seconds)",
+        markers: [1, 2, 5, 10, 15, 20, 25, 30],
+        stickToMarkers: false,
+        default: 1,
+        restartNeeded: false
+    },
+    reconnectMultiplier: {
+        type: OptionType.SLIDER,
+        description: "Reconnect backoff multiplier",
+        markers: [1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5],
+        stickToMarkers: false,
+        default: 2,
+        restartNeeded: false
+    },
+    sendConnectedNotification: {
+        type: OptionType.BOOLEAN,
+        description: "Send a connected notification to Orbolay when connected successfully",
+        default: true,
+        restartNeeded: false
+    },
+    showToasts: {
+        type: OptionType.BOOLEAN,
+        description: "Show toast notifications for connection events",
+        default: true,
+        restartNeeded: false
+    },
+    sendTest: {
+        type: OptionType.COMPONENT,
+        component: () => (
+            <Button onClick={() => {
+                if (ws?.readyState !== WebSocket.OPEN) {
+                    showToast({
+                        message: "Cannot send test notification: Not connected to Orbolay server",
+                        type: Toasts.Type.FAILURE,
+                        id: Toasts.genId()
+                    });
+                    return;
+                }
+
+                ws.send(
+                    JSON.stringify({
+                        cmd: "MESSAGE_NOTIFICATION",
+                        message: {
+                            title: "Orbolay Test",
+                            body: "This is a test notification from the Equicord OrbolayBridgeFork plugin!",
+                            icon: "https://raw.githubusercontent.com/Equicord/Equicord/refs/heads/main/browser/icon.png",
+                            guildId: "0",
+                            channelId: "0",
+                            messageId: "0",
+                        }
+                    })
+                );
+
+                showToast({
+                    message: "Test notification sent to Orbolay",
+                    type: Toasts.Type.SUCCESS,
+                    id: Toasts.genId()
+                });
+            }}>
+                Send Test Notification
+            </Button>
+        )
+    }
 });
+
+const showToast = (toast: Parameters<typeof Toasts.show>[0]) => {
+    if (settings.store.showToasts) {
+        Toasts.show(toast);
+    }
+};
 
 const sendConfig = () => {
     if (ws?.readyState !== WebSocket.OPEN) return;
@@ -40,6 +126,11 @@ const sendConfig = () => {
 
 let ws: WebSocket | null = null;
 let currentChannel: string | null = null;
+let reconnectTimeout: any = null;
+let reconnectDelay = 1000;
+let wasConnected = false;
+let isRetrying = false;
+let shouldConnect = false;
 
 const waitForPopulate = async fn => {
     while (true) {
@@ -205,46 +296,60 @@ const handleStreamerMode = dispatch => {
     );
 };
 
-const createWebsocket = () => {
-    console.log("Attempting to connect to Orbolay server");
-    if (ws?.close) ws.close();
+const cleanWebSocket = () => {
+    if (ws) {
+        ws.onopen = null;
+        ws.onclose = null;
+        ws.onerror = null;
+        ws.onmessage = null;
+        try {
+            ws.close();
+        } catch (e) { }
+        ws = null;
+    }
+};
 
-    setTimeout(() => {
-        if (ws?.readyState !== WebSocket.OPEN) {
-            Toasts.show({
-                message: "Orbolay websocket could not connect. Is it running?",
-                type: Toasts.Type.FAILURE,
-                id: Toasts.genId(),
-            });
-            ws = null;
-            return;
-        }
-    }, 1000);
+const connect = () => {
+    if (!shouldConnect) return;
 
-    // Use the configured port locally to open the websocket, but do not include it in REGISTER_CONFIG
+    cleanWebSocket();
+
+    console.log(`[OrbolayBridgeFork] Attempting to connect to Orbolay server (delay: ${reconnectDelay}ms)`);
+
     ws = new WebSocket("ws://127.0.0.1:" + settings.store.port);
-    ws.onerror = e => {
-        ws?.close?.();
-        ws = null;
-        throw e;
-    };
-    ws.onmessage = e => {
-        incoming(JSON.parse(e.data));
-    };
-    ws.onclose = () => {
-        ws = null;
-    };
+
     ws.onopen = async () => {
-        Toasts.show({
+        console.log("[OrbolayBridgeFork] Connected to Orbolay server");
+        wasConnected = true;
+        isRetrying = false;
+        reconnectDelay = (settings.store.minReconnectDelay ?? 1) * 1000;
+
+        showToast({
             message: "Connected to Orbolay server",
             type: Toasts.Type.SUCCESS,
             id: Toasts.genId(),
         });
 
-        const userId = await waitForPopulate(() => UserStore.getCurrentUser().id);
+        const userId = await waitForPopulate(() => UserStore.getCurrentUser()?.id);
         if (!userId) return;
 
         sendConfig();
+
+        if (settings.store.sendConnectedNotification) {
+            ws?.send(
+                JSON.stringify({
+                    cmd: "MESSAGE_NOTIFICATION",
+                    message: {
+                        title: "Connected ✅",
+                        body: "Equicord is now connected to Orbolay",
+                        icon: "https://raw.githubusercontent.com/Equicord/Equicord/refs/heads/main/browser/icon.png",
+                        guildId: "0",
+                        channelId: "0",
+                        messageId: "0",
+                    }
+                })
+            );
+        }
 
         // Let the client know whether we are in streamer mode
         ws?.send(
@@ -273,11 +378,56 @@ const createWebsocket = () => {
 
         currentChannel = userVoiceState.channelId;
     };
+
+    ws.onmessage = e => {
+        try {
+            incoming(JSON.parse(e.data));
+        } catch (err) {
+            console.error("[OrbolayBridgeFork] Error parsing message:", err);
+        }
+    };
+
+    ws.onerror = e => {
+        console.error("[OrbolayBridgeFork] WebSocket error:", e);
+    };
+
+    ws.onclose = () => {
+        cleanWebSocket();
+
+        if (wasConnected) {
+            console.log("[OrbolayBridgeFork] Disconnected from Orbolay server.");
+            wasConnected = false;
+            showToast({
+                message: "Disconnected from Orbolay server",
+                type: Toasts.Type.FAILURE,
+                id: Toasts.genId(),
+            });
+        } else if (!isRetrying) {
+            showToast({
+                message: "Orbolay websocket could not connect. Is it running?",
+                type: Toasts.Type.FAILURE,
+                id: Toasts.genId(),
+            });
+            isRetrying = true;
+        }
+
+        if (shouldConnect && settings.store.autoReconnect) {
+            const currentDelay = reconnectDelay;
+            const maxDelayMs = (settings.store.maxReconnectDelay ?? 60) * 1000;
+            const minDelayMs = (settings.store.minReconnectDelay ?? 1) * 1000;
+            const multiplier = settings.store.reconnectMultiplier ?? 2;
+            reconnectDelay = Math.max(minDelayMs, Math.min(reconnectDelay * multiplier, maxDelayMs));
+
+            reconnectTimeout = setTimeout(() => {
+                connect();
+            }, currentDelay);
+        }
+    };
 };
 
 export default definePlugin({
-    name: "OrbolayBridge",
-    description: "Bridge plugin to connect Orbolay to Discord",
+    name: "OrbolayBridgeFork",
+    description: "Bridge plugin to connect Discord to Orbolay via WebSocket",
     tags: ["Utility", "Voice"],
     authors: [EquicordDevs.SpikeHD],
     settings,
@@ -289,11 +439,19 @@ export default definePlugin({
     },
 
     start() {
-        createWebsocket();
+        shouldConnect = true;
+        wasConnected = false;
+        isRetrying = false;
+        reconnectDelay = (settings.store.minReconnectDelay ?? 1) * 1000;
+        connect();
     },
 
     stop() {
-        ws?.close?.();
-        ws = null;
+        shouldConnect = false;
+        if (reconnectTimeout) {
+            clearTimeout(reconnectTimeout);
+            reconnectTimeout = null;
+        }
+        cleanWebSocket();
     }
 });
