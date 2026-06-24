@@ -199,7 +199,7 @@ export default definePlugin({
         {
             find: "POPOUT)},children:",
             replacement: {
-                match: /(?<=getUser\(\i\.ownerId\).{0,100})className:\i\.\i,onClick:\i=>\{\(0,\i\.\i\)\(\i,/,
+                match: /(?<=getUser\(\i\.ownerId\).{0,100})className:\i\.\i,onClick:function\(\i\)\{\(0,\i\.\i\)\(\i,/,
                 replace: "draggable:!0,onDragStart:e=>$self.onChannelDragStart(e,{id:arguments[0]?.thread?.id,guild_id:arguments[0]?.thread?.guild_id}),$&"
             }
         },
