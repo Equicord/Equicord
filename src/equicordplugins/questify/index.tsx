@@ -415,7 +415,7 @@ export default definePlugin({
             ]
         },
         {
-            find: "EMBED_DESKTOP}),",
+            find: 'STEP_2_CLICKED_INTERNAL,"quest_embed_card_footer',
             group: true,
             predicate: () => !getQuestifySettings().disableQuestsEverything,
             replacement: [
