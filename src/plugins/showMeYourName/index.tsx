@@ -1152,8 +1152,8 @@ export default definePlugin({
             find: ".USER_MENTION)",
             replacement: [
                 {
-                    match: /(let \i=\i=>\(0,)/,
-                    replace: "const showMeYourNameMention=$self.getMentionNameElement(arguments[0]);$1"
+                    match: /(?=function \i\(\i\){return\(0)/,
+                    replace: "const showMeYourNameMention=$self.getMentionNameElement(arguments[0]);"
                 },
                 {
                     match: /(?<=onContextMenu:\i,\.\.\.\i,children:)/,
