@@ -6,9 +6,12 @@
 
 import { definePluginSettings } from "@api/Settings";
 import { Button } from "@components/Button";
+import { Logger } from "@utils/Logger";
 import { EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 import { ChannelStore, FluxDispatcher, GuildMemberStore, StreamerModeStore, Toasts, UserStore, VoiceStateStore } from "@webpack/common";
+
+const logger = new Logger("OrbolayBridge");
 
 interface ChannelState {
     userId: string;
@@ -21,61 +24,31 @@ interface ChannelState {
     selfStream: boolean;
 }
 
-const settings = definePluginSettings({
-    port: {
-        type: OptionType.NUMBER,
-        description: "Port to connect to",
-        default: 6888,
-        restartNeeded: true
-    },
-    autoReconnect: {
-        type: OptionType.BOOLEAN,
-        description: "Auto-reconnect to Orbolay server when connection is lost",
-        default: true,
-        restartNeeded: false
-    },
-    maxReconnectDelay: {
-        type: OptionType.SLIDER,
-        description: "Maximum reconnect delay (in seconds)",
-        markers: [5, 10, 15, 30, 45, 60, 90, 120, 180, 240, 300],
-        stickToMarkers: false,
-        default: 60,
-        restartNeeded: false
-    },
-    minReconnectDelay: {
-        type: OptionType.SLIDER,
-        description: "Minimum reconnect delay (in seconds)",
-        markers: [1, 2, 5, 10, 15, 20, 25, 30],
-        stickToMarkers: false,
-        default: 1,
-        restartNeeded: false
-    },
-    reconnectMultiplier: {
-        type: OptionType.SLIDER,
-        description: "Reconnect backoff multiplier",
-        markers: [1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5],
-        stickToMarkers: false,
-        default: 2,
-        restartNeeded: false
-    },
-    sendConnectedNotification: {
-        type: OptionType.BOOLEAN,
-        description: "Send a connected notification to Orbolay when connected successfully",
-        default: true,
-        restartNeeded: false
-    },
-    showToasts: {
-        type: OptionType.BOOLEAN,
-        description: "Show toast notifications for connection events",
-        default: true,
-        restartNeeded: false
-    },
-    sendTest: {
-        type: OptionType.COMPONENT,
-        component: () => (
+const OrbolaySettingsButtons = () => {
+    return (
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
+            <Button onClick={() => {
+                if (reconnectTimeout) {
+                    clearTimeout(reconnectTimeout);
+                    reconnectTimeout = null;
+                }
+                reconnectDelay = (settings.store.minReconnectDelay ?? 1) * 1000;
+                isRetrying = false;
+                wasConnected = false;
+                
+                Toasts.show({
+                    message: "Manually reconnecting to Orbolay server...",
+                    type: Toasts.Type.MESSAGE,
+                    id: Toasts.genId()
+                });
+                
+                connect();
+            }}>
+                Reconnect
+            </Button>
             <Button onClick={() => {
                 if (ws?.readyState !== WebSocket.OPEN) {
-                    showToast({
+                    Toasts.show({
                         message: "Cannot send test notification: Not connected to Orbolay server",
                         type: Toasts.Type.FAILURE,
                         id: Toasts.genId()
@@ -97,7 +70,7 @@ const settings = definePluginSettings({
                     })
                 );
 
-                showToast({
+                Toasts.show({
                     message: "Test notification sent to Orbolay",
                     type: Toasts.Type.SUCCESS,
                     id: Toasts.genId()
@@ -105,7 +78,62 @@ const settings = definePluginSettings({
             }}>
                 Send Test Notification
             </Button>
-        )
+        </div>
+    );
+};
+
+const settings = definePluginSettings({
+    port: {
+        type: OptionType.NUMBER,
+        description: "Port to connect to.",
+        default: 6888,
+        restartNeeded: true
+    },
+    autoReconnect: {
+        type: OptionType.BOOLEAN,
+        description: "Auto-reconnect to Orbolay server when connection is lost.",
+        default: true,
+        restartNeeded: false
+    },
+    maxReconnectDelay: {
+        type: OptionType.SLIDER,
+        description: "Maximum reconnect delay (in seconds).",
+        markers: [5, 10, 15, 30, 45, 60, 90, 120, 180, 240, 300],
+        stickToMarkers: false,
+        default: 60,
+        restartNeeded: false
+    },
+    minReconnectDelay: {
+        type: OptionType.SLIDER,
+        description: "Minimum reconnect delay (in seconds).",
+        markers: [1, 2, 5, 10, 15, 20, 25, 30],
+        stickToMarkers: false,
+        default: 1,
+        restartNeeded: false
+    },
+    reconnectMultiplier: {
+        type: OptionType.SLIDER,
+        description: "Reconnect backoff multiplier.",
+        markers: [1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5],
+        stickToMarkers: false,
+        default: 2,
+        restartNeeded: false
+    },
+    sendConnectedNotification: {
+        type: OptionType.BOOLEAN,
+        description: "Send a connected notification to Orbolay when connected successfully.",
+        default: true,
+        restartNeeded: false
+    },
+    showToasts: {
+        type: OptionType.BOOLEAN,
+        description: "Show toast notifications for connection events.",
+        default: true,
+        restartNeeded: false
+    },
+    buttons: {
+        type: OptionType.COMPONENT,
+        component: OrbolaySettingsButtons
     }
 });
 
@@ -126,13 +154,13 @@ const sendConfig = () => {
 
 let ws: WebSocket | null = null;
 let currentChannel: string | null = null;
-let reconnectTimeout: any = null;
+let reconnectTimeout: ReturnType<typeof setTimeout> | null = null;
 let reconnectDelay = 1000;
 let wasConnected = false;
 let isRetrying = false;
 let shouldConnect = false;
 
-const waitForPopulate = async fn => {
+const waitForPopulate = async <T,>(fn: () => T): Promise<T> => {
     while (true) {
         const result = await fn();
         if (result) return result;
@@ -304,7 +332,9 @@ const cleanWebSocket = () => {
         ws.onmessage = null;
         try {
             ws.close();
-        } catch (e) { }
+        } catch (e) {
+            logger.error("Failed to close WebSocket:", e);
+        }
         ws = null;
     }
 };
@@ -314,12 +344,12 @@ const connect = () => {
 
     cleanWebSocket();
 
-    console.log(`[OrbolayBridge] Attempting to connect to Orbolay server (delay: ${reconnectDelay}ms)`);
+    logger.info(`Attempting to connect to Orbolay server (delay: ${reconnectDelay}ms)`);
 
     ws = new WebSocket("ws://127.0.0.1:" + settings.store.port);
 
     ws.onopen = async () => {
-        console.log("[OrbolayBridge] Connected to Orbolay server");
+        logger.info("Connected to Orbolay server");
         wasConnected = true;
         isRetrying = false;
         reconnectDelay = (settings.store.minReconnectDelay ?? 1) * 1000;
@@ -383,19 +413,19 @@ const connect = () => {
         try {
             incoming(JSON.parse(e.data));
         } catch (err) {
-            console.error("[OrbolayBridge] Error parsing message:", err);
+            logger.error("Error parsing message:", err);
         }
     };
 
     ws.onerror = e => {
-        console.error("[OrbolayBridge] WebSocket error:", e);
+        logger.error("WebSocket error:", e);
     };
 
     ws.onclose = () => {
         cleanWebSocket();
 
         if (wasConnected) {
-            console.log("[OrbolayBridge] Disconnected from Orbolay server.");
+            logger.info("Disconnected from Orbolay server.");
             wasConnected = false;
             showToast({
                 message: "Disconnected from Orbolay server",
