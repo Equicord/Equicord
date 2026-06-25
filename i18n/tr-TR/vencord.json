@@ -116,6 +116,7 @@
     "arRPC": {
         "connected": "arRPC'ye bağlanıldı",
         "connectionFailed": "arRPC'ye bağlanılamadı, çalışıyor mu?",
+        "description": "Discord Web üzerinde RPC'yi etkinleştirmek için arRPC istemci eklentisi (deneysel)",
         "retry": "Yeniden Dene",
         "settingsAbout": {
             "description": "Sunucuyu çalıştırmak için GitHub deposundaki talimatları izleyin ve ardından eklentiyi etkinleştirin.",
@@ -275,13 +276,15 @@
             "failedToDelete": "Ayarlar silinemedi ({e}).",
             "failedToSync": "Ayarlar bulutla senkronize edilemedi ({e}).",
             "header": "Bulut Ayarları",
+            "manifest": "Silme işlemi için manifest alınamadı (API şu hatayı döndürdü: {e}).",
             "newerThanCloud": "Yerel ayarlarınız bulut ayarlarından daha yenidir.",
             "noSettings": "Bulutta herhangi bir ayar yok.",
             "success": "Ayarlar buluta senkronize edildi!",
             "syncFromCloud": "Buluttan ayarlar senkronize edilemedi ({e}).",
+            "syncedCloud": "Bulut verileri senkronize edildi.",
             "upToDate": "Ayarlarınız güncel.",
             "updated": "Ayarlarınız güncellendi! Değişiklikleri tam olarak uygulamak için yeniden başlatmak için burayı tıklayın!",
-            "updatedRemote": "Ayarlarınız güncellendi! Değişiklikleri tam olarak uygulamak için yeniden başlatmak için burayı tıklayın!"
+            "updatedRemote": "Ayarlarınız güncellendi! Değişiklikleri tam olarak uygulamak ve yeniden başlatmak için burayı tıklayın!"
         }
     },
     "colorSighted": {
@@ -454,13 +457,43 @@
     "decor": {
         "accessFromProfiles": "Dekor dekorasyonlarına {link} sayfasından da erişebilirsiniz.",
         "agreedToGuidelines": "Kullanım şartları kabul edildi",
+        "alreadyPending": "Zaten inceleme bekleyen bir dekorasyonunuz var.",
+        "apply": "Uygula",
         "baseUrl": "Decor api url",
+        "browse": "Göz at",
         "changeDecoration": "Dekorasyonu Değiştir",
+        "chooseAFile": "Dosya seç",
+        "confirmLogOut": "Decor'dan çıkış yapmak istediğinize emin misiniz?",
+        "continue": "Devam et",
+        "copyHash": "Dekorasyon Hash'ini Kopyala",
+        "copyPresetId": "Hazır ayar ID'sini kopyala",
+        "createDecoration": "Dekorasyon Oluştur",
+        "createdBy": "Tarafından",
+        "delete": "Sil",
+        "deleteConfirm": "{name} öğesini silmek istediğinizden emin misiniz?",
+        "deleteDecoration": "Dekorasyonu Sil",
+        "deleteInstructions": "Kendi dekorasyonlarınızı üzerlerine sağ tıklayarak silebilirsiniz.",
         "description": "Kendi özel avatar dekorasyonlarınızı yaratın ve kullanın veya ön ayarlardan favorinizi seçin.",
+        "discordServerNotice": "Dekorasyonunuzun inceleme süreciyle ilgili güncellemeleri almak için {link} sunucusuna katılın ve direkt mesajlara izin verin.",
+        "discordTooltip": "Dekorasyonunuzun inceleme durumu ve yeni hazır ayarlar (presetler) yayınlandığında bildirim almak için Decor'un Discord sunucusuna katılın.",
         "enableAndRestart": "Dekoru etkinleştirin ve avatar dekorasyonunuzu değiştirmek için istemcinizi yeniden başlatın.",
+        "file": "Dosya",
+        "fileNotice": "Dosya APNG veya PNG formatında olmalı.",
+        "guidelinesAgreementNotice": "Bir dekorasyon göndererek {guidelines} kurallarını kabul etmiş olursunuz. Bu kuralları okumamanız, gelecekte daha fazla dekorasyon oluşturma hakkınızın askıya alınmasına neden olabilir.",
+        "guidelinesNotice": "Göndermeden önce dekorasyonunuzun {guidelines} kurallarını ihlal etmediğinden emin olun.",
+        "holdOn": "Bekle",
+        "logOut": "Çıkış Yap",
+        "name": "İsim",
+        "nameNotice": "Bu ad, bu dekorasyona atıfta bulunulurken kullanılacaktır.",
+        "options": "Dekorasyon Seçenekleri",
+        "pendingReview": "Bekleyen inceleme",
+        "presetPart": "{name} hazır ayarının (presetinin) bir parçası",
         "profilesLink": "Profiller",
         "removeDecoration": "Dekorasyonu Kaldır",
-        "title": "Dekor"
+        "submitForReview": "İncelemeye Gönder",
+        "theGuidelines": "kurallar",
+        "title": "Dekor",
+        "yourDecorations": "Dekorasyonlarınız"
     },
     "devCompanion": {
         "description": "Dev Companion Eklentisi. Lütfen çalışmayan veya tuhaf olan (büyük olasılıkla bir hatadır) herhangi bir şeyi ping veya dm yoluyla Sadan'a bildirin, teşekkürler!",
@@ -507,6 +540,7 @@
     },
     "expressionCloner": {
         "cloneEmoji": "Emojiyi klonla",
+        "cloneName": "{name} Klonla",
         "cloneSticker": "Klon çıkartması",
         "cloneTo": "{guild}'a klonla",
         "clonedSuccess": "{name} başarıyla {guild}'e klonlandı!",
@@ -523,7 +557,7 @@
     "fakeNitro": {
         "description": "Sahte emojiler/çıkartmalar göndermenize, nitro temaları kullanmanıza ve nitro kalitesinde yayın yapmanıza olanak tanır",
         "doNotShowAgain": "Bir daha gösterme",
-        "emojiNotice": "Bu bir FakeNitro emojisidir ve yalnızca sizin için gerçek bir emoji gibi görünür. Eklenti olmayan kullanıcılara bağlantı olarak görünür.",
+        "emojiNotice": "Bu bir FakeNitro emojisidir ve yalnızca sizin için gerçek bir emoji gibi görünür. Eklenti olmayan kullanıcılara bir bağlantı olarak görünür.",
         "holdOn": "Devam etmek!",
         "noAttachmentPerms": {
             "body": "Animasyonlu bir FakeNitro çıkartması içerdiğinden ve mevcut kanala dosya ekleme izniniz olmadığından bu mesajı gönderemezsiniz. Devam etmek için lütfen etiketi çıkarın."
@@ -534,6 +568,7 @@
             "body3": "Bu mesajı göndermek istediğinizden emin misiniz? FakeNitro öğeleriniz yalnızca bir bağlantı olarak görünecektir.",
             "disableNotice": "Bu bildirimi eklenti ayarlarından devre dışı bırakabilirsiniz."
         },
+        "ok": "Tamam",
         "sendAnyway": "Yine de Gönder",
         "settings": {
             "disableEmbedPermissionCheck": "Sahte emojiler ve çıkartmalar gönderirken yerleştirme izni kontrolünün devre dışı bırakılıp bırakılmayacağı",
@@ -549,7 +584,7 @@
             "useEmojiHyperLinks": "Sahte emojiler gönderilirken köprülerin kullanılıp kullanılmayacağı",
             "useStickerHyperLinks": "Sahte çıkartmalar gönderirken köprülerin kullanılıp kullanılmayacağı"
         },
-        "stickerNotice": "Bu bir FakeNitro çıkartmasıdır ve yalnızca sizin için gerçek bir çıkartma gibi görünür. Eklenti olmayan kullanıcılara bağlantı olarak görünür."
+        "stickerNotice": "Bu bir FakeNitro çıkartmasıdır ve yalnızca sizin için gerçek bir çıkartma gibi görünür. Eklenti olmayan kullanıcılara bir bağlantı olarak görünür."
     },
     "fakeProfileThemes": {
         "accent": "Aksan",
@@ -585,7 +620,7 @@
             "failedToRemove": "Takma ad kaldırılamadı.",
             "failedToSave": "Takma ad kaydedilemedi.",
             "modal": {
-                "placeholder": "Takma ad, ör. \"hıçkırarak\"",
+                "placeholder": "Takma ad, ör. \"hıçkırma\"",
                 "save": "Kaydet",
                 "setDescription": "{emoji} için bir takma ad ayarlayın",
                 "setTitle": "Takma ad ayarla"
@@ -628,7 +663,7 @@
     "fixSpotifyEmbeds": {
         "description": "Sesi özelleştirmenize izin vererek Spotify yerleştirmelerinin inanılmaz derecede yüksek olmasını düzeltir",
         "settings": {
-            "volume": "Spotify yerleştirmeleri için ayarlanacak ses seviyesi %'si. %10'un üzerindeki herhangi bir şey çok gürültülüdür"
+            "volume": "Spotify yerleştirmeleri için ayarlanacak ses seviyesi yüzdesi. %10'un üzerindeki herhangi bir değer çok gürültülüdür"
         }
     },
     "fixYoutubeEmbeds": {
@@ -1169,6 +1204,12 @@
     "noSystemBadge": {
         "description": "Görev çubuğunu ve sistem tepsisindeki okunmamış sayım rozetini devre dışı bırakır."
     },
+    "noTrack": {
+        "description": "Discord'un izleme (analitik/\"science\"), metrik toplama ve Sentry çökme raporlama özelliklerini devre dışı bırak",
+        "settings": {
+            "disableAnalytics": "Discord'un analitik/\"bilimsel\" izlemesini devre dışı bırak"
+        }
+    },
     "noTypingAnimation": {
         "description": "CPU'yu yoğun olarak kullanan yazma noktaları animasyonunu devre dışı bırakır"
     },
@@ -1401,7 +1442,7 @@
         "settings": {
             "customEngine": "Özel Motor",
             "customEngineName": "Özel arama motorunun adı",
-            "customEngineURL": "Motorunuzun URL'u",
+            "customEngineURL": "Motorunuzun URL'si",
             "off": "Kapalı",
             "replacementEngine": "Menü eklemek yerine belirli bir arama motoruyla değiştirin"
         }
@@ -1436,6 +1477,7 @@
         "nevermind": "Boşver",
         "newReviews": "Profilinizde yeni incelemeler var!",
         "noBlockedUsers": "Engellenen kullanıcı yok.",
+        "noReviewsYet": "Henüz inceleme yok",
         "notLoggedIn": "ReviewDB'de oturum açmadınız!",
         "ok": "Tamam",
         "readMore": "Devamını oku",
@@ -1461,6 +1503,8 @@
         },
         "system": "Sistem",
         "unblockUser": "Kullanıcının engellemesini kaldır",
+        "userOptedOut": "Kullanıcı vazgeçti.",
+        "userReviews": "Kullanıcı Yorumları",
         "viewReviews": "Yorumları Görüntüle"
     },
     "roleColorEverywhere": {
@@ -1633,9 +1677,9 @@
         "plugins": {
             "contributorModal": {
                 "contributorInfo": {
-                    "noPlugins": "Bu kişi herhangi bir eklenti yapmadı. Muhtemelen Equicord'a başka şekillerde <0>katkıda bulunmuşlardır</0>!",
-                    "plugins_one": "Bu kişi {count} eklentisine <0>katkıda bulundu</0>!",
-                    "plugins_other": "Bu kişi {count} eklentilerine <0>katkıda bulundu</0>!"
+                    "noPlugins": "Bu kişi herhangi bir eklenti yapmadı. Muhtemelen Equicord'a başka şekillerde <0>katkıda bulunmuşlardır!</0>",
+                    "plugins_one": "Bu kişi {count} eklentisine <0>katkıda bulundu!</0>",
+                    "plugins_other": "Bu kişi {count} eklentilerine <0>katkıda bulundu!</0>"
                 }
             },
             "noDescription": "Açıklama mevcut değil",
@@ -1951,18 +1995,23 @@
     "textReplace": {
         "description": "Kendi mesajlarınızdaki veya başkalarının mesajlarındaki metinleri değiştirin. Hazır kuralları Vencord Sunucusu'ndaki #textreplace-rules kanalında bulabilirsiniz.",
         "find": "Bul",
+        "findDesc": "Değiştirilecek metin",
+        "findDescRegex": "Regex deseni",
         "messageWithRules": "Kuralların uygulandığı mesaj",
         "onlyIfIncludes": "Yalnızca şunları içeriyorsa",
-        "regexRules": "Düzenli ifadeler kullanarak metin değiştirmek için kurallar.",
+        "onlyIfIncludesDesc": "Bu kural yalnızca mesaj bu metni içeriyorsa uygulanacaktır. Bu alan isteğe bağlıdır.",
+        "regexRules": "Düzenli İfadeler (Regular Expressions) kullanarak daha güçlü değiştirme işlemleri yapabilirsiniz. Bu bölüm ileri düzey kullanıcılar içindir. Nasıl çalıştığını bilmiyorsanız, görmezden gelebilirsiniz",
         "replace": "Yer değiştirmek",
+        "replaceDesc": "Bulunan metnin yerine konulacak metin",
         "scope.allMessages": "Apply to all messages",
         "scope.myMessages": "Apply to your messages (visible to everyone)",
         "scope.othersMessages": "Apply to others' messages (only visible to you)",
-        "stringRules": "Dize eşleştirme kullanarak metin değiştirmek için kurallar.",
+        "stringRules": "Basit bul ve değiştir kuralları. Örneğin, \"brb\" ifadesini bulup yerine \"hemen döneceğim\" yazabilirsiniz",
+        "testMessage": "Kuralları test etmek için bir ileti yaz",
         "testRules": "Test Kuralları",
         "typeMessage": "Bir mesaj yazın",
-        "usingRegex": "Regex'i kullanma",
-        "usingString": "Dize Kullanma"
+        "usingRegex": "Regex Değişiklikleri",
+        "usingString": "Basit Düzeltmeler"
     },
     "themeAttributes": {
         "description": "Tema amaçları doğrultusunda çeşitli öğelere veri nitelikleri ekler"
@@ -1982,6 +2031,16 @@
         "openTranslateModal": "Çeviri Modunu Aç",
         "selectLanguage": "Bir dil seçin",
         "translate": "Çevir"
+    },
+    "translation": {
+        "description": "Equicord'un çevrilmesine yardımcı olur",
+        "settings": {
+            "forceLocale": {
+                "description": "Equicord'un kullanması için farklı bir dil/yerel ayar (locale) zorla",
+                "followDiscord": "Varasyılan (Discord'dan)"
+            },
+            "showMissingKeys": "Geçerli dilde çeviriler eksikse, İngilizceye geri dönmek yerine çeviri anahtarlarını göster"
+        }
     },
     "typingIndicator": {
         "description": "Birisi bir kanalda yazıyorsa bir gösterge ekler.",
@@ -2124,6 +2183,7 @@
         "settings": {
             "clickMethodDescription": "Herhangi bir mesajın ham içeriğini/verisini görüntülemek için düğmeyi değiştirin.",
             "leftClick": "Ham içeriği görüntülemek için Sol Tıklayın.",
+            "messageContextMenu": "Mesaj sağ tık menüsünde göster",
             "rightClick": "Ham içeriği görüntülemek için sağ tıklayın."
         },
         "viewRaw": "Raw'ı görüntüle",
@@ -2196,7 +2256,7 @@
         "serverNotifications": "Sunucu bildirimlerine izin ver",
         "soundPath": "Bildirim sesi (varsayılan/uyarı/hata)",
         "sticker": "etiket",
-        "testNotification": "Bu bir deneme bildirimidir! patlamak",
+        "testNotification": "Bu bir deneme bildirimidir! patlama",
         "timeout": "Bildirim süresi (saniye)",
         "volume": "Ses seviyesi",
         "webSocketPort": "Web soketi bağlantı noktası"
