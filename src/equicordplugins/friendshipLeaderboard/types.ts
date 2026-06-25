@@ -27,12 +27,20 @@ export const SortModes = {
     MESSAGES: "messages"
 } as const;
 
-export const SORT_MODE_LABELS = {
-    [SortModes.FRIENDSHIP]: "Friendship Duration",
-    [SortModes.MESSAGES]: "Messages Sent"
+export const MessageCountModes = {
+    SENT: "sent",
+    RECEIVED: "received",
+    ALL: "all"
 } as const;
 
-export const LEADERBOARD_SETTINGS_KEYS: ("sortDescending" | "sortMode")[] = ["sortDescending", "sortMode"];
+export type MessageCountMode = typeof MessageCountModes[keyof typeof MessageCountModes];
+
+export const SORT_MODE_LABELS = {
+    [SortModes.FRIENDSHIP]: "Friendship Duration",
+    [SortModes.MESSAGES]: "Messages"
+} as const;
+
+export const LEADERBOARD_SETTINGS_KEYS: ("sortDescending" | "sortMode" | "messageCountMode")[] = ["sortDescending", "sortMode", "messageCountMode"];
 
 export const FRIENDSHIP_RANK_BADGES: FriendshipRankBadge[] = [
     {

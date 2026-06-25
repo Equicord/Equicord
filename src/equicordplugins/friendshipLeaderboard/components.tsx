@@ -10,22 +10,24 @@ import { UserIcon } from "@components/Icons";
 import { classNameFactory } from "@utils/css";
 import { openPrivateChannel, openUserProfile } from "@utils/discord";
 import { RenderModalProps } from "@vencord/discord-types";
-import { Avatar, Modal, openModal, React, RelationshipStore, Tooltip, UserStore, useStateFromStores } from "@webpack/common";
+import { Avatar, Modal, openModal, React, RelationshipStore, Select, Tooltip, UserStore, useStateFromStores } from "@webpack/common";
 
 import {
     compareEntries,
     formatExactDate,
     formatLeaderboardValue,
     formatYears,
+    getCacheKey,
     getFriendEntries,
     getFriendshipRankBadge,
     getLeaderboardRank,
     getLeaderboardTooltip,
-    getSentMessageCount,
+    getMessageCount,
+    loadMessageCountsForEntries,
     messageCountCache
 } from "./data";
 import { settings } from "./settings";
-import { LEADERBOARD_SETTINGS_KEYS, LeaderboardEntry, SORT_MODE_LABELS, SortMode, SortModes } from "./types";
+import { LEADERBOARD_SETTINGS_KEYS, LeaderboardEntry, MessageCountMode, MessageCountModes, SORT_MODE_LABELS, SortMode, SortModes } from "./types";
 
 type PodiumPlace = 1 | 2 | 3;
 type PodiumCardProps = Readonly<{ entry: LeaderboardEntry | undefined; place: PodiumPlace; rank: number; sortMode: SortMode; }>;
@@ -33,6 +35,17 @@ type PodiumCardWithActionProps = PodiumCardProps & Readonly<{ onClick?: () => vo
 type PodiumStandProps = Readonly<{ place: PodiumPlace; rank: number; friendshipDays?: number; }>;
 
 const cl = classNameFactory("vc-friendship-leaderboard-");
+
+function areFriendEntriesEqual(prev: LeaderboardEntry[], next: LeaderboardEntry[]) {
+    if (prev.length !== next.length) return false;
+
+    return prev.every((entry, index) => {
+        const other = next[index];
+        return other?.id === entry.id
+            && other.name === entry.name
+            && other.friendshipDays === entry.friendshipDays;
+    });
+}
 
 function FriendshipRankBadgeIcon({ friendshipDays }: Readonly<{ friendshipDays?: number; }>) {
     if (friendshipDays == null) return null;
@@ -98,23 +111,36 @@ function PodiumStand({ place, rank, friendshipDays }: PodiumStandProps) {
 }
 
 function FriendStatsModal({ entry, modalProps }: Readonly<{ entry: LeaderboardEntry; modalProps: RenderModalProps; }>) {
-    const [messageCount, setMessageCount] = React.useState(messageCountCache[entry.id] ?? 0);
-    const [loading, setLoading] = React.useState(messageCountCache[entry.id] == null);
+    const { messageCountMode } = settings.use(["messageCountMode"]);
+    const cacheKey = getCacheKey(entry.id, messageCountMode);
+    const [messageCount, setMessageCount] = React.useState(messageCountCache[cacheKey] ?? 0);
+    const [loading, setLoading] = React.useState(messageCountCache[cacheKey] == null);
 
     React.useEffect(() => {
         let cancelled = false;
+        const currentCount = messageCountCache[cacheKey] ?? 0;
+        setMessageCount(currentCount);
+        setLoading(messageCountCache[cacheKey] == null);
 
-        getSentMessageCount(entry.id).then(count => {
-            if (cancelled) return;
-            setMessageCount(count);
-            setLoading(false);
-        });
+        if (messageCountCache[cacheKey] == null) {
+            getMessageCount(entry.id, messageCountMode).then(count => {
+                if (cancelled) return;
+                setMessageCount(count);
+                setLoading(false);
+            });
+        }
 
         return () => { cancelled = true; };
-    }, [entry.id]);
+    }, [cacheKey, entry.id, messageCountMode]);
 
     const closeModal = React.useCallback(() => modalProps.onClose(), [modalProps]);
     const badge = getFriendshipRankBadge(entry.friendshipDays);
+    let messageCountLabel = "All Messages";
+    if (messageCountMode === MessageCountModes.SENT) {
+        messageCountLabel = "Messages Sent";
+    } else if (messageCountMode === MessageCountModes.RECEIVED) {
+        messageCountLabel = "Messages Received";
+    }
 
     return (
         <Modal {...modalProps} size="md" title={`${entry.name}'s Stats`}>
@@ -131,7 +157,7 @@ function FriendStatsModal({ entry, modalProps }: Readonly<{ entry: LeaderboardEn
                         </div>
 
                         <div className={cl("stats-row")}>
-                            <span className={cl("stats-label")}>Messages Sent:</span>
+                            <span className={cl("stats-label")}>{messageCountLabel}:</span>
                             <span className={cl("stats-value")}>{loading ? "Loading..." : messageCount}</span>
                         </div>
 
@@ -171,6 +197,26 @@ function openFriendStatsModal(entry: LeaderboardEntry) {
     openModal(modalProps => <FriendStatsModal entry={entry} modalProps={modalProps} />);
 }
 
+function getMessageCountValue(entry: LeaderboardEntry, mode: MessageCountMode): number {
+    return messageCountCache[getCacheKey(entry.id, mode)] ?? 0;
+}
+
+function getMessageCountMap(entries: readonly LeaderboardEntry[], mode: MessageCountMode): Record<string, number> {
+    return Object.fromEntries(entries.map(entry => [entry.id, getMessageCountValue(entry, mode)]));
+}
+
+function mergeMessageCountState(prev: Record<string, number>, next: Record<string, number>): Record<string, number> {
+    return { ...prev, ...next };
+}
+
+function applyMessageCountProgress(
+    setMessageCounts: React.Dispatch<React.SetStateAction<Record<string, number>>>,
+    entry: LeaderboardEntry,
+    messageCountMode: MessageCountMode
+) {
+    setMessageCounts(prev => mergeMessageCountState(prev, { [entry.id]: getMessageCountValue(entry, messageCountMode) }));
+}
+
 export function OpenLeaderboardButton() {
     return (
         <HeaderBarButton
@@ -183,31 +229,35 @@ export function OpenLeaderboardButton() {
 }
 
 function LeaderboardModal({ modalProps }: Readonly<{ modalProps: RenderModalProps; }>) {
-    const { sortDescending, sortMode } = settings.use(LEADERBOARD_SETTINGS_KEYS);
+    const { sortDescending, sortMode, messageCountMode } = settings.use(LEADERBOARD_SETTINGS_KEYS);
 
     const friendEntries = useStateFromStores(
         [RelationshipStore, UserStore],
-        () => getFriendEntries(),
-        []
+        () => getFriendEntries(messageCountMode),
+        [messageCountMode],
+        areFriendEntriesEqual
     );
 
     const [messageCounts, setMessageCounts] = React.useState<Record<string, number>>({});
     const [isLoadingMessageCounts, setIsLoadingMessageCounts] = React.useState(false);
     const [pendingMessageCounts, setPendingMessageCounts] = React.useState(0);
+    const [currentCheckingFriend, setCurrentCheckingFriend] = React.useState<string | null>(null);
 
     React.useEffect(() => {
         if (sortMode !== SortModes.MESSAGES) return;
 
+        setMessageCounts({});
+
         let cancelled = false;
 
         const loadMissingCounts = async () => {
-            const missing = friendEntries.filter(entry => messageCountCache[entry.id] == null);
+            const missing = friendEntries.filter(entry => messageCountCache[getCacheKey(entry.id, messageCountMode)] == null);
 
             if (!missing.length) {
                 if (!cancelled) {
-                    setMessageCounts({ ...messageCountCache });
                     setIsLoadingMessageCounts(false);
                     setPendingMessageCounts(0);
+                    setCurrentCheckingFriend(null);
                 }
                 return;
             }
@@ -215,38 +265,32 @@ function LeaderboardModal({ modalProps }: Readonly<{ modalProps: RenderModalProp
             if (!cancelled) {
                 setIsLoadingMessageCounts(true);
                 setPendingMessageCounts(missing.length);
+                setCurrentCheckingFriend(null);
             }
 
-            const queue = [...missing];
-            const workerCount = Math.min(3, queue.length);
-
-            const loadWorker = async () => {
-                for (; ;) {
-                    const entry = queue.shift();
-                    if (!entry || cancelled) return;
-                    await getSentMessageCount(entry.id);
-                    if (cancelled) return;
-                    setPendingMessageCounts(prev => Math.max(0, prev - 1));
-                }
-            };
-
-            await Promise.all(Array.from({ length: workerCount }, () => loadWorker()));
+            await loadMessageCountsForEntries(missing, (entry, remaining) => {
+                if (cancelled) return;
+                setCurrentCheckingFriend(entry.name);
+                setPendingMessageCounts(remaining);
+                applyMessageCountProgress(setMessageCounts, entry, messageCountMode);
+            }, messageCountMode);
 
             if (cancelled) return;
-            setMessageCounts({ ...messageCountCache });
+            setCurrentCheckingFriend(null);
+            setMessageCounts(prev => mergeMessageCountState(prev, getMessageCountMap(friendEntries, messageCountMode)));
             setIsLoadingMessageCounts(false);
         };
 
         void loadMissingCounts();
 
         return () => { cancelled = true; };
-    }, [friendEntries, sortMode]);
+    }, [friendEntries, messageCountMode, sortMode]);
 
     const leaderboard = React.useMemo(() => {
         return friendEntries
-            .map(entry => ({ ...entry, messageCount: messageCounts[entry.id] ?? messageCountCache[entry.id] }))
+            .map(entry => ({ ...entry, messageCount: messageCounts[entry.id] ?? messageCountCache[getCacheKey(entry.id, messageCountMode)] }))
             .sort((a, b) => compareEntries(a, b, sortDescending, sortMode));
-    }, [friendEntries, messageCounts, sortDescending, sortMode]);
+    }, [friendEntries, messageCountMode, messageCounts, sortDescending, sortMode]);
 
     const totalEntries = leaderboard.length;
 
@@ -274,6 +318,21 @@ function LeaderboardModal({ modalProps }: Readonly<{ modalProps: RenderModalProp
             ]}
         >
             <div className={cl("container")}>
+                {sortMode === SortModes.MESSAGES && (
+                    <div style={{ marginBottom: 16 }}>
+                        <Select
+                            options={[
+                                { label: "Sent messages", value: MessageCountModes.SENT },
+                                { label: "Received messages", value: MessageCountModes.RECEIVED },
+                                { label: "All messages", value: MessageCountModes.ALL }
+                            ]}
+                            select={value => { settings.store.messageCountMode = value; }}
+                            isSelected={value => value === messageCountMode}
+                            serialize={String}
+                        />
+                    </div>
+                )}
+
                 <div className={cl("podium")}>
                     <div className={cl("podium-slot", "podium-slot-2")}>
                         <PodiumCard place={2} rank={getLeaderboardRank(1, totalEntries, sortDescending)} entry={leaderboard[1]} sortMode={sortMode} onClick={() => leaderboard[1] && openFriendStatsModal(leaderboard[1])} />
@@ -299,7 +358,9 @@ function LeaderboardModal({ modalProps }: Readonly<{ modalProps: RenderModalProp
 
                 <div className={cl("list")}>
                     {sortMode === SortModes.MESSAGES && isLoadingMessageCounts && (
-                        <div className={cl("loading")}>Loading message counts... {pendingMessageCounts} left.</div>
+                        <div className={cl("loading")}>
+                            Loading message counts{currentCheckingFriend ? ` for ${currentCheckingFriend}` : ""}... {pendingMessageCounts} left.
+                        </div>
                     )}
 
                     {leaderboard.slice(3).map((entry, index) => (

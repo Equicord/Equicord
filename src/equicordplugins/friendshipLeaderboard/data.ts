@@ -9,7 +9,7 @@ import { Logger } from "@utils/Logger";
 import { sleep } from "@utils/misc";
 import { ChannelStore, Constants, IconUtils, moment, RelationshipStore, RestAPI, UserStore } from "@webpack/common";
 
-import { FRIENDSHIP_RANK_BADGES, FriendshipRankBadge, LeaderboardEntry, SortMode, SortModes } from "./types";
+import { FRIENDSHIP_RANK_BADGES, FriendshipRankBadge, LeaderboardEntry, MessageCountMode, MessageCountModes, SortMode, SortModes } from "./types";
 
 const logger = new Logger("FriendshipLeaderboard");
 
@@ -17,8 +17,11 @@ const DAYS_PER_YEAR = 365.25;
 const MS_PER_DAY = 1000 * 60 * 60 * 24;
 const FALLBACK_PAGE_LIMIT = 8;
 const FALLBACK_PAGE_SIZE = 100;
+const MESSAGE_COUNT_REQUEST_DELAY_MS = 1200;
 
 export const messageCountCache: Record<string, number> = {};
+let messageCountRequestQueue = Promise.resolve();
+let activeMessageCountBatch: Promise<void> | null = null;
 
 export function daysSince(dateString?: string | null): number {
     if (!dateString) return 0;
@@ -58,10 +61,14 @@ export function formatLeaderboardValue(entry: LeaderboardEntry, sortMode: SortMo
 export function getLeaderboardTooltip(entry: LeaderboardEntry, sortMode: SortMode): string {
     if (sortMode === SortModes.FRIENDSHIP) return formatFriendshipTooltip(entry.friendshipDays, entry.friendshipSince);
     const messages = entry.messageCount ?? 0;
-    return `${messages} message${messages === 1 ? "" : "s"} sent.`;
+    return `${messages} message${messages === 1 ? "" : "s"} counted.`;
 }
 
-export function getFriendEntries(): LeaderboardEntry[] {
+export function getCacheKey(friendId: string, mode: MessageCountMode): string {
+    return `${friendId}_${mode}`;
+}
+
+export function getFriendEntries(messageCountMode: MessageCountMode): LeaderboardEntry[] {
     return RelationshipStore.getFriendIDs()
         .map<LeaderboardEntry | null>(friendId => {
             const user = UserStore.getUser(friendId);
@@ -77,7 +84,7 @@ export function getFriendEntries(): LeaderboardEntry[] {
                 friendshipDays,
                 friendshipSince,
                 friendshipYears: friendshipDays / DAYS_PER_YEAR,
-                messageCount: messageCountCache[friendId]
+                messageCount: messageCountCache[getCacheKey(friendId, messageCountMode)]
             } satisfies LeaderboardEntry;
         })
         .filter((entry): entry is LeaderboardEntry => entry !== null);
@@ -100,7 +107,7 @@ export function compareEntries(a: LeaderboardEntry, b: LeaderboardEntry, sortDes
 
     if (diff !== 0) return diff;
     const nameDiff = a.name.localeCompare(b.name, undefined, { sensitivity: "base" });
-    return nameDiff !== 0 ? nameDiff : a.id.localeCompare(b.id);
+    return nameDiff || a.id.localeCompare(b.id);
 }
 
 export function getFriendshipRankBadge(friendshipDays: number): FriendshipRankBadge | null {
@@ -126,24 +133,47 @@ async function resolveDmChannelId(friendId: string): Promise<string | null> {
     return null;
 }
 
-async function fallbackCountRecentSentMessages(channelId: string, currentUserId: string): Promise<number> {
+async function withMessageCountRateLimit<T>(fn: () => Promise<T>): Promise<T> {
+    const previous = messageCountRequestQueue;
+    let release!: () => void;
+    messageCountRequestQueue = new Promise<void>(resolve => {
+        release = resolve;
+    });
+
+    await previous.catch(() => { });
+
+    try {
+        return await fn();
+    } finally {
+        await sleep(MESSAGE_COUNT_REQUEST_DELAY_MS);
+        release();
+    }
+}
+
+function shouldCountMessage(msg: { author?: { id?: string; }; }, currentUserId: string, friendId: string, mode: MessageCountMode): boolean {
+    if (mode === MessageCountModes.SENT) return msg.author?.id === currentUserId;
+    if (mode === MessageCountModes.RECEIVED) return msg.author?.id === friendId;
+    return true;
+}
+
+async function fallbackCountRecentMessages(channelId: string, currentUserId: string, friendId: string, mode: MessageCountMode): Promise<number> {
     let before: string | undefined;
     let count = 0;
 
     for (let page = 0; page < FALLBACK_PAGE_LIMIT; page++) {
-        const result = await withRateLimit(() => RestAPI.get({
+        const result = await withMessageCountRateLimit(() => withRateLimit(() => RestAPI.get({
             url: Constants.Endpoints.MESSAGES(channelId),
             query: { limit: FALLBACK_PAGE_SIZE, ...(before ? { before } : {}) }
-        }));
+        })));
 
         const messages: Array<{ id: string; author?: { id?: string; }; }> = result?.body ?? [];
         if (!messages.length) break;
 
         for (const msg of messages) {
-            if (msg.author?.id === currentUserId) count++;
+            if (shouldCountMessage(msg, currentUserId, friendId, mode)) count++;
         }
 
-        const last = messages[messages.length - 1];
+        const last = messages.at(-1);
         if (!last || messages.length < FALLBACK_PAGE_SIZE) break;
         before = last.id;
 
@@ -172,8 +202,37 @@ async function withRateLimit<T>(fn: () => Promise<T>, maxRetries = 3): Promise<T
     throw new Error("unreachable");
 }
 
-export async function getSentMessageCount(friendId: string): Promise<number> {
-    if (messageCountCache[friendId] != null) return messageCountCache[friendId];
+export async function loadMessageCountsForEntries(
+    entries: readonly LeaderboardEntry[],
+    onProgress?: (entry: LeaderboardEntry, remaining: number) => void,
+    mode: MessageCountMode = MessageCountModes.SENT
+): Promise<void> {
+    if (activeMessageCountBatch) {
+        await activeMessageCountBatch;
+        return;
+    }
+
+    activeMessageCountBatch = (async () => {
+        const remainingEntries = entries.filter(entry => messageCountCache[getCacheKey(entry.id, mode)] == null);
+
+        for (let index = 0; index < remainingEntries.length; index++) {
+            const entry = remainingEntries[index];
+            if (messageCountCache[getCacheKey(entry.id, mode)] != null) continue;
+            await getMessageCount(entry.id, mode);
+            onProgress?.(entry, remainingEntries.length - index - 1);
+        }
+    })();
+
+    try {
+        await activeMessageCountBatch;
+    } finally {
+        activeMessageCountBatch = null;
+    }
+}
+
+export async function getMessageCount(friendId: string, mode: MessageCountMode): Promise<number> {
+    const cacheKey = getCacheKey(friendId, mode);
+    if (messageCountCache[cacheKey] != null) return messageCountCache[cacheKey];
 
     const currentUserId = UserStore.getCurrentUser()?.id;
     if (!currentUserId) return 0;
@@ -181,28 +240,65 @@ export async function getSentMessageCount(friendId: string): Promise<number> {
     const channelId = await resolveDmChannelId(friendId);
     if (!channelId) return 0;
 
+    const deriveFromExistingCounts = (): number | null => {
+        if (mode === MessageCountModes.ALL) {
+            const sent = messageCountCache[getCacheKey(friendId, MessageCountModes.SENT)];
+            const received = messageCountCache[getCacheKey(friendId, MessageCountModes.RECEIVED)];
+            if (sent != null && received != null) return sent + received;
+            return null;
+        }
+
+        if (mode === MessageCountModes.SENT) {
+            const all = messageCountCache[getCacheKey(friendId, MessageCountModes.ALL)];
+            const received = messageCountCache[getCacheKey(friendId, MessageCountModes.RECEIVED)];
+            if (all != null && received != null) return Math.max(0, all - received);
+        }
+
+        if (mode === MessageCountModes.RECEIVED) {
+            const all = messageCountCache[getCacheKey(friendId, MessageCountModes.ALL)];
+            const sent = messageCountCache[getCacheKey(friendId, MessageCountModes.SENT)];
+            if (all != null && sent != null) return Math.max(0, all - sent);
+        }
+
+        return null;
+    };
+
+    const derivedCount = deriveFromExistingCounts();
+    if (derivedCount != null) {
+        messageCountCache[cacheKey] = derivedCount;
+        return derivedCount;
+    }
+
     try {
-        const result = await withRateLimit(() => RestAPI.get({
+        const query: Record<string, string | number> = { offset: 0 };
+        if (mode === MessageCountModes.SENT) query.author_id = currentUserId;
+        if (mode === MessageCountModes.RECEIVED) query.author_id = friendId;
+
+        const result = await withMessageCountRateLimit(() => withRateLimit(() => RestAPI.get({
             url: Constants.Endpoints.SEARCH_CHANNEL(channelId),
-            query: { author_id: currentUserId, offset: 0 }
-        }));
+            query
+        })));
 
         let count = Number(result?.body?.total_results) || 0;
 
-        if (count <= 0) count = await fallbackCountRecentSentMessages(channelId, currentUserId);
+        if (count <= 0) count = await fallbackCountRecentMessages(channelId, currentUserId, friendId, mode);
 
-        messageCountCache[friendId] = count;
+        messageCountCache[cacheKey] = count;
         await sleep(300);
         return count;
     } catch (e) {
         logger.warn("Search endpoint failed for", friendId, "— falling back to manual count.", e);
         try {
-            const count = await fallbackCountRecentSentMessages(channelId, currentUserId);
-            messageCountCache[friendId] = count;
+            const count = await fallbackCountRecentMessages(channelId, currentUserId, friendId, mode);
+            messageCountCache[cacheKey] = count;
             return count;
-        } catch (e2) {
-            logger.error("Fallback message count also failed for", friendId, e2);
+        } catch (error_) {
+            logger.error("Fallback message count also failed for", friendId, error_);
             return 0;
         }
     }
+}
+
+export async function getSentMessageCount(friendId: string): Promise<number> {
+    return getMessageCount(friendId, MessageCountModes.SENT);
 }

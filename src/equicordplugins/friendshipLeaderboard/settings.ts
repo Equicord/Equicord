@@ -7,7 +7,7 @@
 import { definePluginSettings } from "@api/Settings";
 import { OptionType } from "@utils/types";
 
-import { SORT_MODE_LABELS, SortModes } from "./types";
+import { MessageCountModes, SORT_MODE_LABELS, SortModes } from "./types";
 
 export const settings = definePluginSettings({
     sortMode: {
@@ -22,5 +22,14 @@ export const settings = definePluginSettings({
         type: OptionType.BOOLEAN,
         description: "Show highest ranked friends first",
         default: true
+    },
+    messageCountMode: {
+        type: OptionType.SELECT,
+        description: "Which messages should be counted?",
+        options: [
+            { label: "Sent messages", value: MessageCountModes.SENT, default: true },
+            { label: "Received messages", value: MessageCountModes.RECEIVED },
+            { label: "All messages", value: MessageCountModes.ALL }
+        ]
     }
 });
