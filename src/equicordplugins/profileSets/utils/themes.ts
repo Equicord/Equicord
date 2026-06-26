@@ -120,6 +120,26 @@ export function applyPinnedThemesOnly() {
     applyThemesWithPreset(null);
 }
 
+/** Add pinned themes to the active list without removing other enabled themes. */
+function ensurePinnedThemesEnabled() {
+    const pinned = getPinnedThemes();
+    if (!pinned.length) return;
+
+    const local = [...(Settings.enabledThemes ?? [])];
+    const online = [...(Settings.enabledThemeLinks ?? [])];
+
+    for (const binding of pinned) {
+        if (binding.type === "local") {
+            if (!local.includes(binding.themeId)) local.push(binding.themeId);
+        } else if (!online.includes(binding.themeId)) {
+            online.push(binding.themeId);
+        }
+    }
+
+    Settings.enabledThemes = local;
+    Settings.enabledThemeLinks = online;
+}
+
 export function bindingMatchesActiveTheme(binding: ThemeBinding): boolean {
     if (binding.type === "local") {
         return Settings.enabledThemes?.includes(binding.themeId) ?? false;
@@ -146,7 +166,10 @@ export async function restoreActivePresetTheme() {
 
     if (!hasPresetContext && !hasPinnedThemes) return;
 
-    if (!settings.store.switchThemeOnLoad) return;
+    if (!settings.store.switchThemeOnLoad) {
+        ensurePinnedThemesEnabled();
+        return;
+    }
 
     if (!hasPresetContext) {
         applyPinnedThemesOnly();
