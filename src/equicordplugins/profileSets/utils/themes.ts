@@ -146,10 +146,7 @@ export async function restoreActivePresetTheme() {
 
     if (!hasPresetContext && !hasPinnedThemes) return;
 
-    if (!settings.store.switchThemeOnLoad) {
-        applyPinnedThemesOnly();
-        return;
-    }
+    if (!settings.store.switchThemeOnLoad) return;
 
     if (!hasPresetContext) {
         applyPinnedThemesOnly();
