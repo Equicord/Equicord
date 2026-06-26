@@ -174,11 +174,10 @@ export function PresetList({
                                 </div>
                             </div>
                             <div className={cl("updated")}>
-                                <svg
-                                    width="20"
-                                    height="20"
-                                    viewBox="0 0 20 20"
-                                    className={cl("menu-icon")}
+                                <button
+                                    type="button"
+                                    className={cl("menu-button")}
+                                    aria-label={`Options for ${preset.name}`}
                                     onClick={e => {
                                         e.stopPropagation();
                                         const themeTarget = {
@@ -187,7 +186,11 @@ export function PresetList({
                                             guildId,
                                         };
                                         ContextMenuApi.openContextMenu(e, () => (
-                                            <Menu.Menu navId="preset-options" onClose={ContextMenuApi.closeContextMenu}>
+                                            <Menu.Menu
+                                                navId="preset-options"
+                                                onClose={ContextMenuApi.closeContextMenu}
+                                                aria-label={`Options for ${preset.name}`}
+                                            >
                                                 <Menu.MenuItem
                                                     id="profile-sets-assign-theme"
                                                     label={getThemeMenuLabel(themeTarget)}
@@ -198,7 +201,7 @@ export function PresetList({
                                                     id="rename"
                                                     label="Rename"
                                                     action={() => {
-                                                setRenamingTimestamp(preset.timestamp);
+                                                        setRenamingTimestamp(preset.timestamp);
                                                         setRenameText(preset.name);
                                                     }}
                                                 />
@@ -261,11 +264,19 @@ export function PresetList({
                                         ));
                                     }}
                                 >
-                                    <path
-                                        fill="currentColor"
-                                        d="M10 3a1.5 1.5 0 110 3 1.5 1.5 0 010-3zm0 5a1.5 1.5 0 110 3 1.5 1.5 0 010-3zm0 5a1.5 1.5 0 110 3 1.5 1.5 0 010-3z"
-                                    />
-                                </svg>
+                                    <svg
+                                        width="20"
+                                        height="20"
+                                        viewBox="0 0 20 20"
+                                        className={cl("menu-icon")}
+                                        aria-hidden="true"
+                                    >
+                                        <path
+                                            fill="currentColor"
+                                            d="M10 3a1.5 1.5 0 110 3 1.5 1.5 0 010-3zm0 5a1.5 1.5 0 110 3 1.5 1.5 0 010-3zm0 5a1.5 1.5 0 110 3 1.5 1.5 0 010-3z"
+                                        />
+                                    </svg>
+                                </button>
                             </div>
                         </div>
                     </div>

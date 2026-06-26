@@ -62,7 +62,7 @@ export default definePlugin({
     ],
     start() {
         void loadThemeBindings().then(() => restoreActivePresetTheme());
-        loadPresets("main");
+        void loadPresets("main");
     },
     mergePendingUserProfile,
     profileSetsTabBar() {

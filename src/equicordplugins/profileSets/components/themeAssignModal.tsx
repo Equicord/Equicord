@@ -93,13 +93,18 @@ export function ThemeAssignModal({
         onClose();
     };
 
+    const dismiss = () => {
+        applyThemesWithPreset(assigned);
+        onClose();
+    };
+
     const localThemes = themes.filter(t => t.type === "local");
     const onlineThemes = themes.filter(t => t.type === "online");
 
     return (
         <Modal
             {...props}
-            onClose={onClose}
+            onClose={dismiss}
             size="md"
             title={`Equicord theme — ${presetName}`}
         >

@@ -193,6 +193,27 @@ function getPendingChanges(guildId?: string) {
         : UserProfileSettingsStore.getPendingChanges()) as PendingChanges | null | undefined;
 }
 
+type PreviewStoreState = {
+    user: User | null;
+    pending: PendingChanges | null | undefined;
+    profile: ReturnType<typeof UserProfileStore.getUserProfile>;
+    mainProfile: ReturnType<typeof UserProfileStore.getUserProfile>;
+    pendingThemeColors: [number, number] | null;
+    pendingAvatarSrc: string | null;
+    pendingRevision: string;
+};
+
+function previewStoreStatesEqual(a: PreviewStoreState, b: PreviewStoreState) {
+    return a.pendingRevision === b.pendingRevision
+        && a.pendingAvatarSrc === b.pendingAvatarSrc
+        && a.user === b.user
+        && a.pending === b.pending
+        && a.profile === b.profile
+        && a.mainProfile === b.mainProfile
+        && a.pendingThemeColors?.[0] === b.pendingThemeColors?.[0]
+        && a.pendingThemeColors?.[1] === b.pendingThemeColors?.[1];
+}
+
 function ProfileSetsPreviewInner({ section, guildId }: ProfileSetsPreviewProps) {
     const effectiveGuildId = section === "server" ? guildId : undefined;
     const [applyGeneration, setApplyGeneration] = React.useState(getPreviewApplyGeneration);
@@ -236,7 +257,9 @@ function ProfileSetsPreviewInner({ section, guildId }: ProfileSetsPreviewProps) 
                 pendingAvatarSrc,
                 pendingRevision: previewRevisionKey(pending)
             };
-        }
+        },
+        null,
+        previewStoreStatesEqual
     );
 
     const {
