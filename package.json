@@ -1,7 +1,7 @@
 {
     "name": "equicord",
     "private": "true",
-    "version": "1.14.13.3",
+    "version": "1.14.15.0",
     "description": "The other cutest Discord client mod",
     "homepage": "https://github.com/Equicord/Equicord#readme",
     "bugs": {
@@ -14,9 +14,9 @@
     "license": "GPL-3.0-or-later",
     "author": "Equicord",
     "scripts": {
-        "build": "pnpm depCheck && node --require=./scripts/suppressExperimentalWarnings.js scripts/build/build.mjs",
+        "build": "node --require=./scripts/suppressExperimentalWarnings.js scripts/build/build.mjs",
         "buildStandalone": "pnpm build --standalone",
-        "buildWeb": "pnpm depCheck && node --require=./scripts/suppressExperimentalWarnings.js scripts/build/buildWeb.mjs",
+        "buildWeb": "node --require=./scripts/suppressExperimentalWarnings.js scripts/build/buildWeb.mjs",
         "buildWebStandalone": "pnpm buildWeb --standalone",
         "buildReporter": "pnpm buildWebStandalone --reporter --skip-extension",
         "buildReporterDesktop": "pnpm build --reporter",
@@ -39,8 +39,7 @@
         "lint:patches": "node scripts/lintPatches.mjs",
         "test": "pnpm buildStandalone && pnpm testTsc && pnpm lint:fix && pnpm lint-styles && pnpm lint:intl && pnpm lint:patches && pnpm generatePluginJson",
         "testWeb": "pnpm lint:fix && pnpm buildWeb && pnpm testTsc",
-        "testTsc": "tsc --noEmit",
-        "depCheck": "node scripts/depCheck.mjs"
+        "testTsc": "tsc --noEmit"
     },
     "dependencies": {
         "@ffmpeg/ffmpeg": "^0.12.10",
@@ -101,7 +100,7 @@
         "typescript-transform-paths": "^3.5.6",
         "zip-local": "^0.3.5"
     },
-    "packageManager": "pnpm@11.0.9",
+    "packageManager": "pnpm@11.8.0",
     "engines": {
         "node": ">=18"
     }

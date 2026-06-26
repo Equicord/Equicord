@@ -21,3 +21,5 @@ allowedDeprecatedVersions:
     source-map-url: "*"
     urix: "*"
     q: "*"
+
+verifyDepsBeforeRun: prompt

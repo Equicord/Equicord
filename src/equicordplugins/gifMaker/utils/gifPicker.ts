@@ -86,7 +86,7 @@ export function ensureGifUrl(url: string): string {
         const paths = parsed.pathname.split("/").filter(Boolean);
         if (paths.length >= 2) {
             const idSegment = paths[paths.length - 2];
-            paths[paths.length - 2] = idSegment.replace(/Po$/, "Ad");
+            paths[paths.length - 2] = idSegment.replace(/[PA].$/, "Ad");
             paths[paths.length - 1] = "tenor.gif";
             parsed.pathname = "/" + paths.join("/");
         }

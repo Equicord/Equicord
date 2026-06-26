@@ -250,7 +250,7 @@ export default definePlugin({
         {
             find: "PrivateChannel.renderAvatar",
             replacement: {
-                match: /,subText:(\i)\.isSystemDM\(\).{0,500}:null,(?=name:)/,
+                match: /,subText:\i\.isSystemDM\(\).{0,500}:null,(?=name:)/,
                 replace: ",subText:$self.getSubText(arguments[0]),"
             }
         }
