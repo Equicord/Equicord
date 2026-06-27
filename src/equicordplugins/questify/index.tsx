@@ -230,7 +230,7 @@ export default definePlugin({
         },
         {
             // Overrides the account panel Quest popup and progress display.
-            find: "QUESTS_BAR,questId",
+            find: "collapsed-with-rewards\":\"collapsed-without-rewards",
             predicate: () => getQuestifySettings().disableAccountPanelPromo || !getQuestifySettings().disableAccountPanelQuestProgress,
             replacement: {
                 match: /(?<=function\(\){)(let (\i)=\(0,\i.\i\)\(\);)/,
@@ -350,7 +350,7 @@ export default definePlugin({
         },
         {
             // Overwrite button props for Quest bar.
-            find: "QUESTS_BAR,questId",
+            find: "collapsed-with-rewards\":\"collapsed-without-rewards",
             predicate: () => !getQuestifySettings().disableQuestsEverything && hasEnabledAutoCompleteQuestTypes(),
             replacement: {
                 match: /(?<=SELECT&&!\i&&!\i,(\i)=null;)(return )(\i\?\i=\(0,\i.\i\)\(\i,{quest:(\i))/,
