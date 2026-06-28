@@ -3,6 +3,8 @@
 A Vencord / Equicord plugin that brings back the much-missed "Frequently Contacted" list directly to your DM sidebar.
 
 ## Features
+<img width="593" height="669" alt="frequentfriendsscreenshot" src="https://github.com/user-attachments/assets/415e2c59-8d03-4b11-b6ec-8dad3d8a4015" />
+<img width="590" height="674" alt="frequentscreenshot" src="https://github.com/user-attachments/assets/ade97080-ce7a-46b0-b3d8-80eb9ec41a41" />
 
 - **Smart Ranking:** Tracks and ranks friends based on active DM interactions and voice chat duration.
 - **Original UX Aesthetics:** Displays your most active friend as **"Most Frequent"** with a fire badge, and less active ones as **"Cooling off"** with a snowflake badge.
