@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#frequentFriends-root {
+.vc-frequentfriends-root {
     padding: 0 8px 8px;
     display: flex;
     flex-direction: column;
@@ -12,7 +12,7 @@
     flex-shrink: 0;
 }
 
-#frequentFriends-root .ff-label {
+.vc-frequentfriends-root .vc-frequentfriends-label {
     font-size: 14px;
     font-weight: 600;
     color: var(--channels-default);
@@ -23,23 +23,22 @@
     line-height: 1;
 }
 
-#frequentFriends-root .ff-label-text {
+.vc-frequentfriends-root .vc-frequentfriends-label-text {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
     min-width: 0;
 }
 
-#frequentFriends-root .ff-info-wrapper {
+.vc-frequentfriends-root .vc-frequentfriends-info-wrapper {
     position: relative;
     display: inline-flex;
     align-items: center;
     cursor: default;
-    /* Prevent the info icon from being clipped by the parent's overflow:hidden */
     flex-shrink: 0;
 }
 
-#frequentFriends-root .ff-info-icon {
+.vc-frequentfriends-root .vc-frequentfriends-info-icon {
     width: 14px;
     height: 14px;
     border-radius: 999px;
@@ -52,7 +51,7 @@
     justify-content: center;
 }
 
-#frequentFriends-root .ff-avatars {
+.vc-frequentfriends-root .vc-frequentfriends-avatars {
     display: flex;
     flex-wrap: wrap;
     gap: 12px;
@@ -60,7 +59,7 @@
     padding-bottom: 8px;
 }
 
-#frequentFriends-root .ff-avatar-wrap {
+.vc-frequentfriends-root .vc-frequentfriends-avatar-wrap {
     position: relative;
     cursor: pointer;
     border-radius: 999px;
@@ -69,7 +68,7 @@
     flex-shrink: 0;
 }
 
-#frequentFriends-root .ff-avatar-inner-wrapper {
+.vc-frequentfriends-root .vc-frequentfriends-avatar-inner-wrapper {
     position: absolute;
     top: 0;
     left: 0;
@@ -77,13 +76,13 @@
     height: 32px;
 }
 
-#frequentFriends-root .ff-avatar-inner {
+.vc-frequentfriends-root .vc-frequentfriends-avatar-inner {
     width: 32px !important;
     height: 32px !important;
     display: block;
 }
 
-#frequentFriends-root .ff-badge {
+.vc-frequentfriends-root .vc-frequentfriends-badge {
     position: absolute;
     top: -5px;
     width: 16px;
@@ -96,10 +95,10 @@
     z-index: 3;
 }
 
-#frequentFriends-root .ff-badge-fire { left: -5px; }
-#frequentFriends-root .ff-badge-snow { right: -5px; }
+.vc-frequentfriends-root .vc-frequentfriends-badge-fire { left: -5px; }
+.vc-frequentfriends-root .vc-frequentfriends-badge-snow { right: -5px; }
 
-#frequentFriends-root .ff-empty {
+.vc-frequentfriends-root .vc-frequentfriends-empty {
     padding: 0 8px 4px;
     font-size: 11px;
     color: var(--text-muted);

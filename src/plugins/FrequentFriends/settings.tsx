@@ -4,22 +4,24 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import * as DataStore from "@api/DataStore";
+import { Logger } from "@utils/Logger";
 import { definePluginSettings } from "@api/Settings";
-import { DataStore } from "@api/index";
 import { OptionType } from "@utils/types";
 import { Button, UserStore, useEffect, useState } from "@webpack/common";
+import { lodash } from "@webpack/common";
 import { STORE_KEY_PREFIX } from "./constants";
+import {
+    frequencyCache,
+    lastBackup,
+    setFrequencyCache,
+    setLastBackup,
+    subscribeToBackupChanges,
+    syncWithAffinities
+} from "./scoring";
 import type { FrequencyData } from "./types";
 
-export const pluginCallbacks = {
-    syncWithAffinities: async () => {},
-    getFrequencyCache: (): Record<string, FrequencyData> => ({}),
-    setFrequencyCache: (_cache: Record<string, FrequencyData>) => {},
-    getLastBackup: (): Record<string, FrequencyData> | null => null,
-    setLastBackup: (_backup: Record<string, FrequencyData> | null) => {},
-    subscribeToBackupChanges: (_fn: () => void): (() => void) => () => {},
-    subscribeToScoreChanges: (_fn: () => void): (() => void) => () => {},
-};
+const logger = new Logger("FrequentFriends");
 
 function getCurrentStoreKey(): string {
     const user = UserStore.getCurrentUser();
@@ -32,10 +34,10 @@ function ResetButton() {
             color={Button.Colors.RED}
             size={Button.Sizes.SMALL}
             onClick={async () => {
-                pluginCallbacks.setLastBackup(JSON.parse(JSON.stringify(pluginCallbacks.getFrequencyCache())));
-                pluginCallbacks.setFrequencyCache({});
-                await DataStore.set(getCurrentStoreKey(), {}).catch(e => console.warn(e));
-                await pluginCallbacks.syncWithAffinities();
+                setLastBackup(lodash.cloneDeep(frequencyCache) as Record<string, FrequencyData>);
+                setFrequencyCache({});
+                await DataStore.set(getCurrentStoreKey(), {}).catch(e => logger.warn("Failed to reset", e));
+                await syncWithAffinities();
             }}
         >
             Reset All Data
@@ -44,11 +46,11 @@ function ResetButton() {
 }
 
 function UndoButton() {
-    const [hasBackup, setHasBackup] = useState(() => !!pluginCallbacks.getLastBackup());
+    const [hasBackup, setHasBackup] = useState(() => !!lastBackup);
 
-    useEffect(() => pluginCallbacks.subscribeToBackupChanges(() => {
-        setHasBackup(!!pluginCallbacks.getLastBackup());
-    }), []);
+    useEffect(() => {
+        return subscribeToBackupChanges(() => setHasBackup(!!lastBackup));
+    }, []);
 
     return (
         <Button
@@ -56,11 +58,11 @@ function UndoButton() {
             size={Button.Sizes.SMALL}
             disabled={!hasBackup}
             onClick={async () => {
-                const backup = pluginCallbacks.getLastBackup();
+                const backup = lastBackup;
                 if (!backup) return;
-                pluginCallbacks.setFrequencyCache(JSON.parse(JSON.stringify(backup)));
-                pluginCallbacks.setLastBackup(null);
-                await DataStore.set(getCurrentStoreKey(), pluginCallbacks.getFrequencyCache()).catch(e => console.warn(e));
+                setFrequencyCache(lodash.cloneDeep(backup) as Record<string, FrequencyData>);
+                setLastBackup(null);
+                await DataStore.set(getCurrentStoreKey(), frequencyCache).catch(e => logger.warn("Failed to undo", e));
             }}
         >
             Undo Reset

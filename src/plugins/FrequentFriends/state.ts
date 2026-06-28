@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-// Shared runtime state to avoid circular imports between index.tsx and ui.tsx
+
 
 let _isEnabled = false;
 export function isPluginEnabled() { return _isEnabled; }

@@ -4,7 +4,8 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { DataStore } from "@api/index";
+import * as DataStore from "@api/DataStore";
+import { Logger } from "@utils/Logger";
 import { findByPropsLazy } from "@webpack";
 import {
     RelationshipStore,
@@ -26,31 +27,33 @@ import {
 import settings from "./settings";
 import type { FrequencyData } from "./types";
 
+const logger = new Logger("FrequentFriends");
 const UserAffinitiesStore = findByPropsLazy("getUserAffinities");
 
 export let frequencyCache: Record<string, FrequencyData> = Object.create(null);
 export let lastBackup: Record<string, FrequencyData> | null = null;
 let voiceScoreInterval: ReturnType<typeof setInterval> | null = null;
-// Global lock to prevent a race between _initVoiceState and onVoiceStateUpdate
-// both calling startVoiceScoring() before the first interval is fully registered.
 let voiceScoringActive = false;
 export let currentVoiceChannelId: string | null = null;
 let saveDebounce: ReturnType<typeof setTimeout> | null = null;
 let currentStoreKey: string = STORE_KEY_PREFIX + "default";
+
+export let onScoreUpdate: (() => void) | null = null;
+export let onBackupChange: (() => void) | null = null;
 
 const scoreListeners = new Set<() => void>();
 export function subscribeToScoreChanges(fn: () => void): () => void {
     scoreListeners.add(fn);
     return () => scoreListeners.delete(fn);
 }
-function notifyScoreListeners() { for (const fn of scoreListeners) fn(); }
+function notifyScoreListeners() { onScoreUpdate?.(); for (const fn of scoreListeners) fn(); }
 
 const backupListeners = new Set<() => void>();
 export function subscribeToBackupChanges(fn: () => void): () => void {
     backupListeners.add(fn);
     return () => backupListeners.delete(fn);
 }
-function notifyBackupListeners() { for (const fn of backupListeners) fn(); }
+function notifyBackupListeners() { onBackupChange?.(); for (const fn of backupListeners) fn(); }
 
 export function setFrequencyCache(cache: Record<string, FrequencyData>) {
     frequencyCache = cache;
@@ -62,13 +65,7 @@ export function setLastBackup(backup: Record<string, FrequencyData> | null) {
 }
 export function setCurrentVoiceChannelId(id: string | null) { currentVoiceChannelId = id; }
 
-function isSafeUserId(userId: unknown): userId is string {
-    if (!userId || typeof userId !== "string") return false;
-    if (userId === "__proto__" || userId === "constructor" || userId === "prototype") return false;
-    return true;
-}
-
-export function expDecay(elapsedMs: number): number {
+export function getDecay(elapsedMs: number): number {
     if (elapsedMs <= 0) return 1;
     return Math.pow(0.5, elapsedMs / HALF_LIFE_MS);
 }
@@ -79,9 +76,10 @@ export async function loadData() {
         ? STORE_KEY_PREFIX + currentUser.id
         : STORE_KEY_PREFIX + "default";
     try {
-        const source = await DataStore.get(currentStoreKey).catch(() => ({}));
+        const source = await DataStore.get(currentStoreKey);
         frequencyCache = (source && typeof source === "object") ? source : Object.create(null);
-    } catch {
+    } catch (e) {
+        logger.warn("Failed to load data", e);
         frequencyCache = Object.create(null);
     }
     notifyScoreListeners();
@@ -91,13 +89,13 @@ export function queueSave() {
     if (saveDebounce) clearTimeout(saveDebounce);
     saveDebounce = setTimeout(() => {
         saveDebounce = null;
-        DataStore.set(currentStoreKey, frequencyCache).catch(e => console.warn(e));
+        DataStore.set(currentStoreKey, frequencyCache).catch(e => logger.warn("Failed to save", e));
     }, 400);
 }
 
 export function getCurrentStoreKey(): string { return currentStoreKey; }
 
-function pruneCache() {
+function trimCache() {
     const entries = Object.entries(frequencyCache);
     if (entries.length <= KEEP_TOP_ENTRIES) return;
     const sorted = entries
@@ -108,7 +106,14 @@ function pruneCache() {
     }
 }
 
-function getSafeAffinities(): any[] {
+interface UserAffinity {
+    otherUserId?: string;
+    user_id?: string;
+    dmProbability?: number;
+    vcProbability?: number;
+}
+
+function getSafeAffinities(): UserAffinity[] {
     if (settings.store.ignoreAffinities) return [];
     try {
         if (!UserAffinitiesStore || typeof UserAffinitiesStore.getUserAffinities !== "function") return [];
@@ -127,10 +132,10 @@ export async function syncWithAffinities() {
     let changed = false;
     for (const affinity of affinities) {
         const userId = affinity.otherUserId ?? affinity.user_id;
-        if (!isSafeUserId(userId)) continue;
+        if (!userId || typeof userId !== "string") continue;
         if (!RelationshipStore.isFriend(userId)) continue;
-        const dmP: number = affinity.dmProbability ?? 0;
-        const vcP: number = affinity.vcProbability ?? 0;
+        const dmP = affinity.dmProbability ?? 0;
+        const vcP = affinity.vcProbability ?? 0;
         if (!frequencyCache[userId]) {
             frequencyCache[userId] = {
                 ds: dmP * 20,
@@ -150,14 +155,14 @@ export async function syncWithAffinities() {
 
 export function getCompositeScore(data: FrequencyData): number {
     const now = Date.now();
-    const dmDecayed = data.dl > 0 ? data.ds * expDecay(now - data.dl) : 0;
-    const vcDecayed = data.vl > 0 ? data.vs * expDecay(now - data.vl) : 0;
+    const dmDecayed = data.dl > 0 ? data.ds * getDecay(now - data.dl) : 0;
+    const vcDecayed = data.vl > 0 ? data.vs * getDecay(now - data.vl) : 0;
     const affinityPart = settings.store.ignoreAffinities ? 0 : data.af * AFFINITY_WEIGHT;
     return dmDecayed * DM_WEIGHT + vcDecayed * VC_WEIGHT + affinityPart;
 }
 
-export function recordInteraction(userId: string, type: "dm" | "voice", weight: number = 1) {
-    if (!isSafeUserId(userId)) return;
+export function recordInteraction(userId: string, type: "dm" | "voice", weight = 1) {
+    if (!userId || typeof userId !== "string") return;
     if (!RelationshipStore.isFriend(userId)) return;
     const now = Date.now();
     if (!frequencyCache[userId]) frequencyCache[userId] = { ds: 0, vs: 0, dl: 0, vl: 0, af: 0 };
@@ -165,14 +170,14 @@ export function recordInteraction(userId: string, type: "dm" | "voice", weight: 
     if (type === "dm") {
         const elapsed = entry.dl > 0 ? now - entry.dl : 0;
         const cooldown = elapsed >= DM_COOLDOWN_MS ? 1 : elapsed / DM_COOLDOWN_MS;
-        entry.ds = entry.ds * expDecay(elapsed) + DM_POINTS * weight * cooldown;
+        entry.ds = entry.ds * getDecay(elapsed) + DM_POINTS * weight * cooldown;
         entry.dl = now;
     } else {
         const elapsed = entry.vl > 0 ? now - entry.vl : 0;
-        entry.vs = entry.vs * expDecay(elapsed) + VC_POINTS * weight;
+        entry.vs = entry.vs * getDecay(elapsed) + VC_POINTS * weight;
         entry.vl = now;
     }
-    pruneCache();
+    trimCache();
     queueSave();
     notifyScoreListeners();
 }
@@ -186,9 +191,6 @@ export function getRankedFriendIds(): string[] {
 }
 
 export function startVoiceScoring() {
-    // Prevent double-interval: if a race between _initVoiceState and
-    // onVoiceStateUpdate causes two startVoiceScoring() calls before the
-    // first setInterval is registered, the lock blocks the second one.
     if (voiceScoringActive) {
         stopVoiceScoring();
     }
