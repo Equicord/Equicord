@@ -123,7 +123,7 @@ export function migrateLegacySettings(): void {
         s.videoSizeMode = DEFAULT_UI_SETTINGS.videoSizeMode;
     }
     if (!s.sidebarChannelNameColor) {
-        s.sidebarChannelNameColor = s.channelTextColor || DEFAULT_UI_SETTINGS.sidebarChannelNameColor;
+        s.sidebarChannelNameColor = s.channelTextColor ?? DEFAULT_UI_SETTINGS.sidebarChannelNameColor;
     }
     delete s.usernameColor;
     snapSliderSettings();
