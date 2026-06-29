@@ -5,10 +5,10 @@
  */
 
 .vc-videothemeengine-container {
-    position: fixed !important;
-    inset: 0 !important;
-    z-index: 0 !important;
-    pointer-events: none !important;
+    position: fixed !important; /* override Discord layer positioning */
+    inset: 0 !important; /* fill viewport behind app UI */
+    z-index: 0 !important; /* sit below #app-mount content */
+    pointer-events: none !important; /* do not block Discord clicks */
     overflow: hidden !important;
 }
 

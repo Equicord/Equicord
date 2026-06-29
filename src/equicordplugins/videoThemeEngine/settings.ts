@@ -34,6 +34,7 @@ import {
 
 export const settings = definePluginSettings({
     localVideoPath: { type: OptionType.STRING, default: "", hidden: true, description: "" },
+    videoReloadToken: { type: OptionType.NUMBER, default: 0, hidden: true, description: "" },
     videoPicker: { type: OptionType.COMPONENT, component: VideoPickerPanel },
     videoSizePanel: { type: OptionType.COMPONENT, component: VideoSizePanel },
     videoSizeSlidersPanel: { type: OptionType.COMPONENT, component: VideoSizeSlidersPanel },

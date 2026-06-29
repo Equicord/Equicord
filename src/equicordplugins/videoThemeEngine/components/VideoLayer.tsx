@@ -4,14 +4,17 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { Logger } from "@utils/Logger";
 import { React, useEffect, useState } from "@webpack/common";
 
 import { settings } from "../settings";
 import { CONTAINER_ID, VIDEO_ID } from "../utils/constants";
 import { getVideoSource } from "../utils/video";
 
+const logger = new Logger("VideoThemeEngine");
+
 export function VideoLayer() {
-    const { localVideoPath } = settings.use(["localVideoPath"]);
+    const { localVideoPath, videoReloadToken } = settings.use(["localVideoPath", "videoReloadToken"]);
     const [src, setSrc] = useState<string | null>(null);
 
     useEffect(() => {
@@ -20,7 +23,7 @@ export function VideoLayer() {
             if (!cancelled) setSrc(source);
         });
         return () => { cancelled = true; };
-    }, [localVideoPath]);
+    }, [localVideoPath, videoReloadToken]);
 
     if (!src) return null;
 
@@ -37,7 +40,7 @@ export function VideoLayer() {
                 preload="auto"
                 onLoadedData={e => {
                     void (e.currentTarget as HTMLVideoElement).play()
-                        .catch(err => console.error("[VideoThemeEngine] play() failed:", err));
+                        .catch(err => logger.warn("Video autoplay failed.", err));
                 }}
             />
         </div>

@@ -27,7 +27,7 @@ import {
     snapSliderValue,
     type UiSettings,
 } from "../utils/constants";
-import { basename, getVideoSource, loadStoredVideo, pickLocalVideo } from "../utils/video";
+import { basename, bumpVideoReloadToken, getVideoSource, pickLocalVideo, revokeActiveObjectUrl } from "../utils/video";
 
 export function applyThemePreset(presetId: string): void {
     const meta = PRESET_LABELS[presetId as keyof typeof PRESET_LABELS];
@@ -348,15 +348,15 @@ export function VideoSizePanel() {
 }
 
 export function VideoPickerPanel() {
-    const { localVideoPath } = settings.use(["localVideoPath"]);
+    const { localVideoPath, videoReloadToken } = settings.use(["localVideoPath", "videoReloadToken"]);
     const [previewError, setPreviewError] = useState(false);
     const [previewSrc, setPreviewSrc] = useState("");
 
     useEffect(() => {
         let cancelled = false;
-        void loadStoredVideo().then(s => { if (!cancelled) setPreviewSrc(s ?? ""); });
+        void getVideoSource().then(s => { if (!cancelled) setPreviewSrc(s ?? ""); });
         return () => { cancelled = true; };
-    }, [localVideoPath]);
+    }, [localVideoPath, videoReloadToken]);
 
     const reloadVideo = async () => {
         const source = await getVideoSource();
@@ -366,7 +366,15 @@ export function VideoPickerPanel() {
                 type: Toasts.Type.FAILURE,
                 id: Toasts.genId(),
             });
+            return;
         }
+        revokeActiveObjectUrl();
+        bumpVideoReloadToken();
+        Toasts.show({
+            message: "Video reloaded.",
+            type: Toasts.Type.SUCCESS,
+            id: Toasts.genId(),
+        });
     };
 
     return (

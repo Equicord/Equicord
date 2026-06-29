@@ -5,11 +5,14 @@
  */
 
 import { DataStore } from "@api/index";
+import { Logger } from "@utils/Logger";
 import { chooseFile } from "@utils/web";
 import { Toasts } from "@webpack/common";
 
 import { settings } from "../settings";
 import { VIDEO_STORE_KEY } from "./constants";
+
+const logger = new Logger("VideoThemeEngine");
 
 interface StoredVideo {
     data: Uint8Array | number[];
@@ -18,6 +21,15 @@ interface StoredVideo {
 }
 
 let activeObjectUrl: string | null = null;
+let activeBlobKey: string | null = null;
+
+function storedVideoKey(stored: StoredVideo, byteLength: number): string {
+    return `${stored.name}:${byteLength}:${stored.mime}`;
+}
+
+export function bumpVideoReloadToken(): void {
+    settings.store.videoReloadToken = (settings.store.videoReloadToken ?? 0) + 1;
+}
 
 export function basename(path: string): string {
     return path.split(/[/\\]/).pop() || path;
@@ -31,7 +43,9 @@ function getEquicordDataDir(): string {
             const parts = userData.split(/[/\\]/);
             parts.pop();
             return parts.join(sep) + sep + "Equicord";
-        } catch { /* empty */ }
+        } catch (e) {
+            logger.warn("Could not resolve Equicord data directory.", e);
+        }
     }
     return "";
 }
@@ -84,6 +98,7 @@ export function revokeActiveObjectUrl(): void {
     if (activeObjectUrl) {
         URL.revokeObjectURL(activeObjectUrl);
         activeObjectUrl = null;
+        activeBlobKey = null;
     }
 }
 
@@ -92,14 +107,21 @@ export async function loadStoredVideo(): Promise<string | null> {
     if (!stored?.data) return null;
     const bytes = stored.data instanceof Uint8Array ? stored.data : new Uint8Array(stored.data as number[]);
     if (!bytes.length) return null;
+
+    const key = storedVideoKey(stored, bytes.length);
+    if (activeObjectUrl && activeBlobKey === key) return activeObjectUrl;
+
     revokeActiveObjectUrl();
+    activeBlobKey = key;
     activeObjectUrl = URL.createObjectURL(new Blob([new Uint8Array(bytes)], { type: stored.mime || "video/mp4" }));
     return activeObjectUrl;
 }
 
 async function saveVideoData(data: Uint8Array, name: string): Promise<void> {
+    revokeActiveObjectUrl();
     await DataStore.set(VIDEO_STORE_KEY, { data: Array.from(data), name, mime: getMimeType(name) });
     settings.store.localVideoPath = name;
+    bumpVideoReloadToken();
 }
 
 async function readFileArrayBuffer(path: string): Promise<Uint8Array | null> {
@@ -110,7 +132,9 @@ async function readFileArrayBuffer(path: string): Promise<Uint8Array | null> {
                 const buffer = new Uint8Array(await response.arrayBuffer());
                 if (buffer.length) return buffer;
             }
-        } catch { /* continue */ }
+        } catch {
+            continue;
+        }
     }
     return new Promise(resolve => {
         const xhr = new XMLHttpRequest();
@@ -167,7 +191,9 @@ export async function pickLocalVideo(): Promise<void> {
                 });
                 return;
             }
-        } catch (e) { console.error("[VideoThemeEngine]", e); }
+        } catch (e) {
+            logger.error("Desktop file picker failed.", e);
+        }
     }
     const file = await chooseFile("video/mp4,video/webm,.mp4,.webm,.mov");
     if (!file) return;

@@ -154,7 +154,7 @@ export function buildUiCss(s: UiSettings): string {
     const primaryBg = s.stripDiscordOverlays ? "transparent" : globalOverlay;
 
     return `
-        :root, #app-mount, .theme-dark, .theme-light {
+        html, #app-mount, .theme-dark, .theme-light {
             --var-opacity-option: 0 !important;
             --var-opacity-inner-messages: ${s.chatBgOpacity / 100} !important;
             --var-opacity-left-sidebar: ${s.sidebarBgOpacity / 100} !important;
