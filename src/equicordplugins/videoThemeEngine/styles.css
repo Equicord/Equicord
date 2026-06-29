@@ -1,0 +1,37 @@
+/*
+ * Vencord, a Discord client mod
+ * Copyright (c) 2025 Vendicated and contributors
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+.vc-videothemeengine-container {
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 0 !important;
+    pointer-events: none !important;
+    overflow: hidden !important;
+}
+
+.vc-videothemeengine-video {
+    display: block;
+}
+
+.vc-videothemeengine-preview {
+    width: 100%;
+    max-height: 160px;
+    border-radius: 8px;
+    object-fit: cover;
+    background: #000;
+}
+
+.vc-videothemeengine-preset-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 0.5em;
+}
+
+.vc-videothemeengine-size-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(148px, 1fr));
+    gap: 0.5em;
+}

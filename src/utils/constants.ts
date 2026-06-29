@@ -613,6 +613,10 @@ export const Devs = /* #__PURE__*/ Object.freeze({
         name: "RamziAH",
         id: 1279957227612147747n
     },
+    remyvn: {
+        name: "remyvn",
+        id: 1110386112477806654n
+    },
     SomeAspy: {
         name: "SomeAspy",
         id: 516750892372852754n
@@ -720,6 +724,10 @@ export const EquicordDevs = Object.freeze({
     Wolfie: {
         name: "wolfieeeeeeee",
         id: 347096063569559553n
+    },
+    remyvn: {
+        name: "remyvn",
+        id: 1110386112477806654n
     },
     ryan: {
         name: "ryan",
