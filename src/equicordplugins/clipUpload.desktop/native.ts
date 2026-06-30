@@ -28,6 +28,7 @@ const pendingTokens = new Map<string, string>();
 const tempEntries = new Map<string, TempEntry>();
 const CLIP_UPLOAD_DIR = join(DATA_DIR, "clipUpload");
 const ALLOWED_EXTENSIONS = new Set([".mp4", ".m4v"]);
+const MAX_CLIP_SIZE = 500 * 1024 * 1024; // 500MB
 const MIME_TYPES: Record<string, string> = {
     ".mp4": "video/mp4",
     ".m4v": "video/mp4",
@@ -107,6 +108,36 @@ export async function createTempVideoFile(_: IpcMainInvokeEvent, token: string):
     } catch {
         return null;
     }
+}
+
+export async function createTempVideoFileFromBytes(_: IpcMainInvokeEvent, name: string, data: Uint8Array): Promise<string | null> {
+    if (typeof name !== "string" || !(data instanceof Uint8Array) || data.byteLength === 0 || data.byteLength > MAX_CLIP_SIZE) return null;
+
+    const fileName = basename(name);
+    if (fileName !== name || !ALLOWED_EXTENSIONS.has(extname(fileName).toLowerCase())) return null;
+
+    try {
+        const tmpDir = join(CLIP_UPLOAD_DIR, randomUUID());
+        const tmpPath = join(tmpDir, fileName);
+
+        if (!ensureSafePath(tmpDir, fileName)) return null;
+
+        await mkdir(tmpDir, { recursive: true });
+        await writeFile(tmpPath, data);
+
+        const tmpToken = randomUUID();
+        tempEntries.set(tmpToken, { tmpDir, tmpPath });
+        return tmpToken;
+    } catch {
+        return null;
+    }
+}
+
+// Note: Exposing the absolute path to the renderer is unavoidable here.
+// Discord's MediaEngineStore is a renderer-only module, and its
+// updateClipMetadata method requires an absolute filesystem path.
+export function getTempVideoFilePath(_: IpcMainInvokeEvent, token: string): string | null {
+    return tempEntries.get(token)?.tmpPath ?? null;
 }
 
 export async function readVideoFile(_: IpcMainInvokeEvent, token: string): Promise<Uint8Array | null> {

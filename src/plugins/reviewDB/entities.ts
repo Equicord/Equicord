@@ -70,7 +70,7 @@ export interface ReviewDBUser {
     username: string;
     type: UserType;
     profilePhoto: string;
-    badges: any[];
+    badges: Badge[];
 }
 
 export interface ReviewDBCurrentUser extends ReviewDBUser {
@@ -93,9 +93,11 @@ export interface ReviewAuthor {
 export interface Review {
     comment: string,
     id: number,
+    score?: number,
     star: number,
     sender: ReviewAuthor,
     timestamp: number;
     type?: ReviewType;
     replies?: Review[];
+    userVote?: boolean | null;
 }

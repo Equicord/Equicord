@@ -85,7 +85,7 @@ export default definePlugin({
                     replace: "src:$self.parseLink(this.props.src,[this.props.coords.width,this.props.coords.height]),",
                 },
                 {
-                    match: /(this\.handleCanPlay,\i)\.src=(\i)/,
+                    match: /(this\.handleCanPlay,\i)\.src=\i/,
                     replace: "$1.src=$self.parseLink(this.props.src,[this.props.coords.width,this.props.coords.height])",
                 },
             ],

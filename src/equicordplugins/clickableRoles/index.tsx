@@ -153,7 +153,7 @@ export default definePlugin({
         {
             find: "#{intl::zr0Y5R::raw}",
             replacement: {
-                match: /(\.colorString\?\?\i;)return(.*?enableTooltip:!1\}\):null,\i\]\}\))/,
+                match: /(\.colorString\?\?\i;)return(.*?enableTooltip:!1\}\)\}\):null,\i\]\}\))/,
                 replace: "$1return $self.wrapRolePill(arguments[0],()=>$2)",
             },
         },

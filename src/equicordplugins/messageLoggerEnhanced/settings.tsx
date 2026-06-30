@@ -189,7 +189,7 @@ export const settings = definePluginSettings({
     attachmentFileExtensions: {
         default: "png,jpg,jpeg,gif,webp,mp4,webm,mp3,ogg,wav",
         type: OptionType.STRING,
-        description: "Comma separated list of file extensions to save. Attachments with file extensions not in this list will not be saved. Leave empty to save all attachments.",
+        description: "Comma separated list of file extensions to save. Attachments with file extensions not in this list will not be saved.",
         onChange: (value: string) => {
             let processedValue = "";
 

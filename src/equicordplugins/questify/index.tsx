@@ -170,7 +170,7 @@ export default definePlugin({
             find: '("ActivityStatus"),',
             predicate: () => getQuestifySettings().disableQuestsEverything || getQuestifySettings().disableMembersListPromo,
             replacement: {
-                match: /(,hasQuest:)(?=\i=!1)/,
+                match: /,hasQuest:(?=\i=!1)/,
                 replace: ",questifyInvalid1:"
             }
         },
@@ -283,7 +283,7 @@ export default definePlugin({
                     replace: "$1+($2>=1e6?0.8:$2>=1e3?0.4:0)"
                 },
                 {
-                    match: /(?<=children:\i.to\(\i=>`\${\i)(.toFixed\(0\))/,
+                    match: /(?<=children:\i.to\(\i=>`\${\i).toFixed\(0\)/,
                     replace: ".toLocaleString(undefined,{maximumFractionDigits:0})"
                 }
             ]
@@ -338,7 +338,7 @@ export default definePlugin({
             replacement: [
                 {
                     // Overwrite button props for UNENROLLED Quests.
-                    match: /(?<=onClick:(\(\)=>{.[^}]+}),text:(\i),icon:\i,fullWidth:!0)/,
+                    match: /(?<=onClick:\(\)=>{.[^}]+},text:\i,icon:\i,fullWidth:!0)/,
                     replace: ",...($self.getQuestButtonProps(arguments[0])??{})"
                 },
                 {
@@ -367,7 +367,7 @@ export default definePlugin({
             }
         },
         {
-            find: "return`quest-tile-",
+            find: "QUEST_HOME_TILE_HEADER_WATCH_VIDEO})},",
             group: true,
             predicate: () => !getQuestifySettings().disableQuestsEverything,
             replacement: [
@@ -415,7 +415,7 @@ export default definePlugin({
             ]
         },
         {
-            find: "EMBED_DESKTOP}),",
+            find: 'STEP_2_CLICKED_INTERNAL,"quest_embed_card_footer',
             group: true,
             predicate: () => !getQuestifySettings().disableQuestsEverything,
             replacement: [
@@ -437,7 +437,7 @@ export default definePlugin({
             ]
         },
         {
-            find: "return`quest-tile-",
+            find: "QUEST_HOME_TILE_HEADER_WATCH_VIDEO})},",
             group: true,
             predicate: () => !getQuestifySettings().disableQuestsEverything,
             replacement: [

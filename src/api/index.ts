@@ -22,6 +22,7 @@ import * as $ChatButtons from "./ChatButtons";
 import * as $Commands from "./Commands";
 import * as $ContextMenu from "./ContextMenu";
 import * as $DataStore from "./DataStore";
+import * as $GifPickerContextMenu from "./GifPickerContextMenu";
 import * as $HeaderBar from "./HeaderBar";
 import * as $MemberListDecorators from "./MemberListDecorators";
 import * as $MessageAccessories from "./MessageAccessories";
@@ -182,3 +183,9 @@ export const ProfileCollections = $ProfileCollections;
  * An API allowing you to add sections near the 'Member Since' area of user profile panels.
  */
 export const ProfileSections = $ProfileSections;
+
+/**
+ * An API allowing plugins to add items to the GIF picker right-click context menu
+ * without conflicting with each other.
+ */
+export const GifPickerContextMenu = $GifPickerContextMenu;
