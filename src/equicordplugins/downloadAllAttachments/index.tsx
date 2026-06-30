@@ -15,15 +15,6 @@ import { ChannelStore, showToast, Toasts } from "@webpack/common";
 const logger = new Logger("DownloadAllAttachments");
 
 async function downloadAll(attachments: MessageAttachment[]) {
-    let dir: FileSystemDirectoryHandle;
-    try {
-        dir = await window.showDirectoryPicker({ mode: "readwrite" });
-    } catch (e) {
-        if (e instanceof DOMException && e.name === "AbortError") return;
-        logger.error("Failed to open directory picker:", e);
-        return;
-    }
-
     const usedNames = new Map<string, number>();
 
     function uniqueName(original: string): string {
@@ -36,31 +27,21 @@ async function downloadAll(attachments: MessageAttachment[]) {
             : `${original.slice(0, dot)}_${count}${original.slice(dot)}`;
     }
 
-    const tasks = attachments.map(a => ({ attachment: a, filename: uniqueName(a.filename) }));
-
-    const results = await Promise.allSettled(tasks.map(async ({ attachment, filename }) => {
+    const results = await Promise.allSettled(attachments.map(async attachment => {
+        const filename = uniqueName(attachment.filename);
         if (!attachment.proxy_url) throw new Error("Missing Proxy URL");
 
         const res = await fetch(attachment.proxy_url);
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        if (!res.body) throw new Error("Response body is empty");
 
-        let fileHandle: FileSystemFileHandle | undefined;
-        try {
-            fileHandle = await dir.getFileHandle(filename, { create: true });
-            const writable = await fileHandle.createWritable();
-            try {
-                await res.body.pipeTo(writable);
-            } catch (e) {
-                await writable.abort();
-                throw e;
-            }
-        } catch (e) {
-            if (fileHandle) {
-                try { await dir.removeEntry(filename); } catch { }
-            }
-            throw e;
-        }
+        const blob = await res.blob();
+        const url = URL.createObjectURL(blob);
+
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = filename;
+        a.click();
+        URL.revokeObjectURL(url);
     }));
 
     const failed = results.filter(r => {
