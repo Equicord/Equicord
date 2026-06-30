@@ -136,8 +136,8 @@ export default definePlugin({
             ...CustomPresetList(isResolution ? {
                 onChange: (value: number) => changeStream(p1, value, getFPS(), p2),
                 initialValue: getResolution(),
-                group: "resolution",
-                id: "stream-option-resolution",
+                group: "stream-settings-resolution",
+                id: "stream-settings-resolution",
                 list: resolutions
             } : {
                 onChange: (value: number) => changeStream(p1, getResolution(), value, p2),
