@@ -41,7 +41,7 @@ async function triggerVoiceUpdate() {
 export const settings = definePluginSettings({
     autoMute: {
         type: OptionType.BOOLEAN,
-        description: "Silenciar automaticamente ao ativar Fake Deaf.",
+        description: "Automatically mute when Fake Deaf is enabled.",
         default: true,
     },
 });
@@ -137,3 +137,4 @@ export default definePlugin({
         return e;
     },
 });
+
