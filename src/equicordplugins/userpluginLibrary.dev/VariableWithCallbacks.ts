@@ -23,6 +23,12 @@ export class VariableWithCallbacks<T> {
         return this.#value;
     }
 
+    clear() {
+        // @ts-ignore
+        this.#value = undefined;
+        this.#callbacks.forEach(c => c.callback(this.#value, c.id));
+    }
+
     registerCallback(callback: (value: T, id: number) => void): number {
         const id = Date.now();
         this.#callbacks.push({
@@ -38,3 +44,5 @@ export class VariableWithCallbacks<T> {
         this.#callbacks.splice(this.#callbacks.indexOf(possibleFallback), 1);
     }
 }
+
+export type TypeOfVWC<V> = V extends VariableWithCallbacks<infer T> ? T : never;
