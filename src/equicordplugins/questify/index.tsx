@@ -531,8 +531,19 @@ export default definePlugin({
             ]
         },
         {
+            // Allow non-shareable Quests to embed in chat and to have
+            // their share URLs copyable from the embed context menu.
+            find: "NOT_SHAREABLE}function",
+            group: true,
+            predicate: () => !getQuestifySettings().disableQuestsEverything,
+            replacement: {
+                match: /(?<=return )(?=\i.sharePolicy)/,
+                replace: "true||"
+            }
+        },
+        {
             // Adds a maxDigits prop to the LowerBadge component which allows for not truncating, or for truncating at a specific threshold.
-            find: ".INTERACTIVE_TEXT_ACTIVE.css,shape",
+            find: ".BADGE_NOTIFICATION_BACKGROUND.css,disableColor",
             group: true,
             replacement: [
                 {
