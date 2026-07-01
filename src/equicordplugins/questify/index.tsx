@@ -537,7 +537,7 @@ export default definePlugin({
             group: true,
             predicate: () => !getQuestifySettings().disableQuestsEverything,
             replacement: {
-                match: /(?<=return )(?=\i.sharePolicy)/,
+                match: /(?<=return )(?=\i.sharePolicy!==\i.\i.NOT_SHAREABLE)/,
                 replace: "true||"
             }
         },
