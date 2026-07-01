@@ -6,52 +6,73 @@
 
 import "./styles.css";
 
-import { definePluginSettings } from "@api/Settings";
+import ErrorBoundary from "@components/ErrorBoundary";
 import { EquicordDevs } from "@utils/constants";
-import { classNameFactory } from "@utils/css";
-import definePlugin, { OptionType } from "@utils/types";
-import { React } from "@webpack/common";
+import definePlugin from "@utils/types";
+import { TabBar } from "@webpack/common";
 
-import { PresetManager } from "./components/presetManager";
-import { loadPresets, PresetSection } from "./utils/storage";
+import { cl } from "./classNames";
+import { ProfileSetsTab } from "./components/profileSetsTab";
+import { ProfileSetsSettingsAbout } from "./components/settingsAbout";
+import { settings } from "./settings";
+import { mergePendingUserProfile } from "./utils/previewMerge";
+import { loadPresets } from "./utils/storage";
+import { PROFILE_SETS_SECTION } from "./utils/subsectionStore";
+import { loadThemeBindings } from "./utils/themeBindings";
+import { restoreActivePresetTheme } from "./utils/themes";
 
-export const cl = classNameFactory("vc-profile-presets-");
-export const settings = definePluginSettings({
-    avatarSize: {
-        type: OptionType.SLIDER,
-        description: "Avatar size in preset list.",
-        markers: [56, 64, 72, 80, 88, 96],
-        default: 56,
-        stickToMarkers: true
-    },
-});
+export { cl, PROFILE_SETS_SECTION, settings };
+
+const ProfileSetsTabWrapped = ErrorBoundary.wrap(ProfileSetsTab, { noop: true });
 
 export default definePlugin({
     name: "ProfileSets",
-    description: "Allows you to save and load different profile presets, via the Profile Section in Settings.",
+    description: "Profile presets with optional per-preset Equicord themes.",
     tags: ["Appearance", "Customisation", "Utility"],
-    authors: [EquicordDevs.omaw, EquicordDevs.justjxke],
+    authors: [EquicordDevs.omaw, EquicordDevs.justjxke, EquicordDevs.Jahbas],
     settings,
+    settingsAboutComponent: ProfileSetsSettingsAbout,
     patches: [
         {
-            find: "DefaultCustomizationSections: user cannot be undefined",
-            replacement: {
-                match: /return.{0,50}children:\[(?=.{0,50},\{placeholder:)/,
-                replace: "$&$self.renderPresetSection(\"main\"),"
-            }
+            find: "UserProfileStore",
+            replacement: [
+                {
+                    match: /(?<=getUserProfile\(\i\){return )(.{1,150}?)(?=})/,
+                    replace: "$self.mergePendingUserProfile($1, arguments[0])"
+                },
+                {
+                    match: /(?<=getGuildMemberProfile\(\i,\i\){return )(.{1,150}?)(?=})/,
+                    replace: "$self.mergePendingUserProfile($1, arguments[0], arguments[1])"
+                }
+            ]
         },
         {
-            find: "USER_SETTINGS_GUILD_PROFILE)",
-            replacement: {
-                match: /guildId:(\i\.id),onChange:(\i)\}\)(?=.{0,25}profilePreviewTitle:)/,
-                replace: 'guildId:$1,onChange:$2}),$self.renderPresetSection("server",$1)'
-            }
-        }
+            find: "#{intl::MAIN_PROFILE}",
+            replacement: [
+                {
+                    match: /#{intl::EDIT_PROFILE_CATEGORY_GUILD_IDENTITY}\)\},(\i)\.(\i)\.GUILD\)/,
+                    replace: "$&,$self.profileSetsTabBar()"
+                },
+                {
+                    match: /(\i)===\i\.(\i)\.GUILD\?/,
+                    replace: "$1===\"profile_sets\"?$self.profileSetsTabPanel():$1===$2.GUILD?"
+                },
+            ]
+        },
     ],
     start() {
-        loadPresets("main");
+        void loadThemeBindings().then(() => restoreActivePresetTheme());
+        void loadPresets("main");
     },
-    renderPresetSection(section: PresetSection, guildId?: string) {
-        return <PresetManager section={section} guildId={guildId} />;
+    mergePendingUserProfile,
+    profileSetsTabBar() {
+        return (
+            <TabBar.Item id={PROFILE_SETS_SECTION}>
+                Profile Sets
+            </TabBar.Item>
+        );
+    },
+    profileSetsTabPanel() {
+        return <ProfileSetsTabWrapped />;
     }
 });

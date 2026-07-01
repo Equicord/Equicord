@@ -9,21 +9,23 @@ import { Heading } from "@components/Heading";
 import { classes } from "@utils/misc";
 import { openModal, React, SelectedGuildStore, TextInput, useStateFromStores } from "@webpack/common";
 
-import { cl, settings } from "../index";
+import { cl } from "../classNames";
+import { settings } from "../settings";
 import { exportPresets, ImportDecision, importPresets, savePreset } from "../utils/actions";
 import { loadPresetAsPending } from "../utils/profile";
 import { loadPresets, presets, PresetSection, setCurrentPresetIndex } from "../utils/storage";
 import { ImportProfilesModal } from "./confirmModal";
 import { PresetList } from "./presetList";
 
-const PRESETS_PER_PAGE = 5;
+const PRESETS_PER_PAGE = 7;
 
 type PresetManagerProps = {
-    section?: PresetSection;
+    section: PresetSection;
     guildId?: string;
+    hideHeading?: boolean;
 };
 
-export function PresetManager({ section, guildId }: PresetManagerProps) {
+export function PresetManager({ section, guildId, hideHeading }: PresetManagerProps) {
     const [presetName, setPresetName] = React.useState("");
     const [, forceUpdate] = React.useReducer(x => x + 1, 0);
     const [isSaving, setIsSaving] = React.useState(false);
@@ -32,8 +34,7 @@ export function PresetManager({ section, guildId }: PresetManagerProps) {
     const [selectedPreset, setSelectedPreset] = React.useState<number>(-1);
     const [searchMode, setSearchMode] = React.useState(false);
     const lastRandomIndexRef = React.useRef<number>(-1);
-    const resolvedSection: PresetSection = section ?? "main";
-    const isServerSection = resolvedSection === "server";
+    const isServerSection = section === "server";
     const lastSelectedGuildId = useStateFromStores(
         [SelectedGuildStore],
         () => SelectedGuildStore.getLastSelectedGuildId() ?? SelectedGuildStore.getGuildId()
@@ -44,7 +45,7 @@ export function PresetManager({ section, guildId }: PresetManagerProps) {
     React.useEffect(() => {
         let isActive = true;
         (async () => {
-            await loadPresets(resolvedSection);
+            await loadPresets(section);
             if (!isActive) return;
             setSelectedPreset(-1);
             setCurrentPage(1);
@@ -54,7 +55,7 @@ export function PresetManager({ section, guildId }: PresetManagerProps) {
         return () => {
             isActive = false;
         };
-    }, [resolvedGuildId, resolvedSection]);
+    }, [resolvedGuildId, section]);
 
     const filteredPresets = !searchMode
         ? presets
@@ -76,7 +77,7 @@ export function PresetManager({ section, guildId }: PresetManagerProps) {
         const trimmedName = presetName.trim();
         if (!trimmedName) return;
         setIsSaving(true);
-        await savePreset(trimmedName, resolvedSection, resolvedGuildId);
+        await savePreset(trimmedName, section, resolvedGuildId);
         setPresetName("");
         setIsSaving(false);
         const newTotalPages = Math.ceil(presets.length / PRESETS_PER_PAGE);
@@ -84,13 +85,21 @@ export function PresetManager({ section, guildId }: PresetManagerProps) {
         forceUpdate();
     };
 
-    const applyPreset = (index: number) => {
-        setSelectedPreset(index);
-        setCurrentPresetIndex(index);
-        loadPresetAsPending(presets[index], resolvedGuildId, {
-            isGuildProfile: resolvedSection === "server"
-        });
-        forceUpdate();
+    const applyInFlightRef = React.useRef(false);
+
+    const applyPreset = async (index: number) => {
+        if (applyInFlightRef.current) return;
+        applyInFlightRef.current = true;
+        try {
+            setSelectedPreset(index);
+            setCurrentPresetIndex(index);
+            await loadPresetAsPending(presets[index], resolvedGuildId, {
+                isGuildProfile: section === "server"
+            });
+            forceUpdate();
+        } finally {
+            applyInFlightRef.current = false;
+        }
     };
 
     const handleLoadPreset = (index: number) => {
@@ -107,7 +116,7 @@ export function PresetManager({ section, guildId }: PresetManagerProps) {
 
     const handleRandomPreset = () => {
         if (!canUseGuild) return;
-        const selection = selectRandomPreset(resolvedSection);
+        const selection = selectRandomPreset(section);
         if (!selection) return;
         let nextIndex = selection.index;
         if (presets.length > 1 && nextIndex === lastRandomIndexRef.current) {
@@ -136,15 +145,17 @@ export function PresetManager({ section, guildId }: PresetManagerProps) {
         });
     };
 
-    const { avatarSize } = settings.store;
+    const { avatarSize } = settings.use(["avatarSize"]);
     const hasPresets = presets.length > 0;
     const shouldShowPagination = filteredPresets.length > PRESETS_PER_PAGE;
 
     return (
         <div className={classes(cl("section"), isServerSection ? cl("section-server") : "")} >
-            <Heading tag="h3" className={cl("heading")}>
-                Saved Profiles
-            </Heading>
+            {!hideHeading && (
+                <Heading tag="h3" className={cl("heading")}>
+                    Saved Profiles
+                </Heading>
+            )}
 
             <div className={cl("text")}>
                 <TextInput
@@ -178,31 +189,50 @@ export function PresetManager({ section, guildId }: PresetManagerProps) {
                         {searchMode ? "Cancel Search" : "Search"}
                     </Button>
                 )}
-                <Button
-                    size="small"
-                    variant="secondary"
-                    onClick={handleRandomPreset}
-                    disabled={!presets.length || !canUseGuild}
-                >
-                    Random
-                </Button>
-            </div>
-            <div className={cl("import")}>
-                <Button
-                    size="small"
-                    variant="secondary"
-                    onClick={() => importPresets(forceUpdate, showImportPrompt, resolvedSection, resolvedGuildId)}
-                    disabled={!canUseGuild}
-                >
-                    Import
-                </Button>
-                <Button
-                    size="small"
-                    variant="secondary"
-                    onClick={() => exportPresets(resolvedSection)}
-                >
-                    Export All
-                </Button>
+                {hasPresets && shouldShowPagination && (
+                    <div className={cl("pagination")}>
+                        <Button
+                            size="min"
+                            variant="secondary"
+                            disabled={currentPage === 1}
+                            onClick={() => handlePageChange(currentPage - 1)}
+                            aria-label="Previous page"
+                            className={cl("page-nav")}
+                        >
+                            ←
+                        </Button>
+                        <div className={cl("page")}>
+                            <input
+                                type="text"
+                                inputMode="numeric"
+                                size={Math.max(1, String(totalPages).length)}
+                                value={pageInput}
+                                onChange={e => {
+                                    const { value } = e.target;
+                                    setPageInput(value);
+                                    const num = parseInt(value);
+                                    if (!isNaN(num) && num >= 1 && num <= totalPages) {
+                                        setCurrentPage(num);
+                                    }
+                                }}
+                                className={cl("page-input")}
+                            />
+                            <span className={cl("page-of")}>
+                                /{totalPages}
+                            </span>
+                        </div>
+                        <Button
+                            size="min"
+                            variant="secondary"
+                            disabled={currentPage === totalPages}
+                            onClick={() => handlePageChange(currentPage + 1)}
+                            aria-label="Next page"
+                            className={cl("page-nav")}
+                        >
+                            →
+                        </Button>
+                    </div>
+                )}
             </div>
 
             {hasPresets && (
@@ -223,57 +253,50 @@ export function PresetManager({ section, guildId }: PresetManagerProps) {
                             forceUpdate();
                         }}
                         guildId={resolvedGuildId}
-                        section={resolvedSection}
+                        section={section}
                         currentPage={currentPage}
                         onPageChange={handlePageChange}
                     />
 
-                    {shouldShowPagination && (
-                        <div className={cl("pagination")}>
-                            <Button
-                                size="small"
-                                variant="secondary"
-                                disabled={currentPage === 1}
-                                onClick={() => handlePageChange(currentPage - 1)}
-                            >
-                                ←
-                            </Button>
-                            <div className={cl("page")}>
-                                <input
-                                    type="text"
-                                    value={pageInput}
-                                    onChange={e => {
-                                        const { value } = e.target;
-                                        setPageInput(value);
-                                        const num = parseInt(value);
-                                        if (!isNaN(num) && num >= 1 && num <= totalPages) {
-                                            setCurrentPage(num);
-                                        }
-                                    }}
-                                    className={cl("page-input")}
-                                />
-                                <span className={cl("page-of")}>
-                                    / {totalPages}
-                                </span>
-                            </div>
-                            <Button
-                                size="small"
-                                variant="secondary"
-                                disabled={currentPage === totalPages}
-                                onClick={() => handlePageChange(currentPage + 1)}
-                            >
-                                →
-                            </Button>
-                        </div>
-                    )}
-
                     <hr className={cl("block")} />
                 </>
             )}
+
+            <div className={cl("import")}>
+                <Button
+                    size="small"
+                    variant="secondary"
+                    onClick={handleRandomPreset}
+                    className={cl("random")}
+                    disabled={!presets.length || !canUseGuild}
+                >
+                    <span className={cl("random-content")}>
+                        <svg className={cl("random-icon")} viewBox="0 0 24 24" aria-hidden="true">
+                            <path
+                                fill="currentColor"
+                                d="M20.5 4h-5a1 1 0 0 0 0 2h2.586l-4.293 4.293a1 1 0 0 0 1.414 1.414L19.5 7.414V10a1 1 0 1 0 2 0V5a1 1 0 0 0-1-1Zm-16 1a1 1 0 0 0 0 2h2.586l4.293 4.293a1 1 0 1 0 1.414-1.414L8.414 5H4.5ZM5 15a1 1 0 0 0-1 1v5a1 1 0 1 0 2 0v-2.586l4.293 4.293a1 1 0 0 0 1.414-1.414L7.414 17H10a1 1 0 1 0 0-2H5Zm14.5 0a1 1 0 0 0 0 2h-2.586l-4.293 4.293a1 1 0 1 0 1.414 1.414L18.586 17H21a1 1 0 1 0 0-2h-1.5Z"
+                            />
+                        </svg>
+                        Random
+                    </span>
+                </Button>
+                <Button
+                    size="small"
+                    variant="secondary"
+                    onClick={() => importPresets(forceUpdate, showImportPrompt, section, resolvedGuildId)}
+                    disabled={!canUseGuild}
+                >
+                    Import
+                </Button>
+                <Button
+                    size="small"
+                    variant="secondary"
+                    onClick={() => exportPresets(section)}
+                >
+                    Export All
+                </Button>
+            </div>
             <hr className={cl("block")} />
-            {resolvedSection === "server" && (
-                <hr className={cl("block")} />
-            )}
         </div>
     );
 }
