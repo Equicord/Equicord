@@ -5,9 +5,10 @@
  */
 
 import { openPrivateChannel } from "@utils/discord";
+import { proxyLazy } from "@utils/lazy";
 import { Logger } from "@utils/Logger";
-import { sleep } from "@utils/misc";
-import { ChannelStore, Constants, IconUtils, moment, RelationshipStore, RestAPI, UserStore } from "@webpack/common";
+import { pluralise, sleep } from "@utils/misc";
+import { ChannelStore, Constants, IconUtils, moment, RelationshipStore, RestAPI, UserStore, zustandCreate } from "@webpack/common";
 
 import { FRIENDSHIP_RANK_BADGES, FriendshipRankBadge, LeaderboardEntry, MessageCountMode, MessageCountModes, SortMode, SortModes } from "./types";
 
@@ -19,7 +20,35 @@ const FALLBACK_PAGE_LIMIT = 8;
 const FALLBACK_PAGE_SIZE = 100;
 const MESSAGE_COUNT_REQUEST_DELAY_MS = 1200;
 
-export const messageCountCache: Record<string, number> = {};
+export interface MessageCountState {
+    counts: Record<string, number>;
+    isLoadingCounts: boolean;
+    pendingCount: number;
+    currentChecking: string | null;
+    get(key: string): number | undefined;
+    set(key: string, value: number): void;
+    increment(key: string): void;
+    setProgress(progress: { isLoadingCounts: boolean; pendingCount: number; currentChecking: string | null; }): void;
+}
+
+export const useMessageCountStore = proxyLazy(() => zustandCreate((
+    set: (state: Partial<MessageCountState>) => void,
+    get: () => MessageCountState
+) => ({
+    counts: {},
+    isLoadingCounts: false,
+    pendingCount: 0,
+    currentChecking: null,
+    get(key) { return get().counts[key]; },
+    set(key, value) { set({ counts: { ...get().counts, [key]: value } }); },
+    increment(key) {
+        const { counts } = get();
+        if (counts[key] == null) return;
+        set({ counts: { ...counts, [key]: counts[key] + 1 } });
+    },
+    setProgress(progress) { set(progress); }
+} satisfies MessageCountState)));
+
 let messageCountRequestQueue = Promise.resolve();
 let activeMessageCountBatch: Promise<void> | null = null;
 
@@ -39,7 +68,7 @@ export function formatExactDate(dateString?: string | null): string | null {
 
 export function formatFriendshipTooltip(days: number, friendshipSince?: string | null): string {
     const n = Math.max(1, days);
-    const dayText = `${n} day${n === 1 ? "" : "s"}`;
+    const dayText = pluralise(n, "day");
     const exactDate = formatExactDate(friendshipSince);
     return exactDate ? `${dayText} • Since ${exactDate}` : dayText;
 }
@@ -47,7 +76,7 @@ export function formatFriendshipTooltip(days: number, friendshipSince?: string |
 export function formatYears(years: number): string {
     if (years < 1) {
         const days = Math.max(1, Math.floor(years * DAYS_PER_YEAR));
-        return `${days} day${days === 1 ? "" : "s"}`;
+        return pluralise(days, "day");
     }
     return `${years.toFixed(1)} years`;
 }
@@ -61,11 +90,15 @@ export function formatLeaderboardValue(entry: LeaderboardEntry, sortMode: SortMo
 export function getLeaderboardTooltip(entry: LeaderboardEntry, sortMode: SortMode): string {
     if (sortMode === SortModes.FRIENDSHIP) return formatFriendshipTooltip(entry.friendshipDays, entry.friendshipSince);
     const messages = entry.messageCount ?? 0;
-    return `${messages} message${messages === 1 ? "" : "s"} counted.`;
+    return `${pluralise(messages, "message")} counted.`;
 }
 
 export function getCacheKey(friendId: string, mode: MessageCountMode): string {
     return `${friendId}_${mode}`;
+}
+
+export function getCachedMessageCount(friendId: string, mode: MessageCountMode): number | undefined {
+    return useMessageCountStore.getState().get(getCacheKey(friendId, mode));
 }
 
 export function getFriendEntries(messageCountMode: MessageCountMode): LeaderboardEntry[] {
@@ -84,7 +117,7 @@ export function getFriendEntries(messageCountMode: MessageCountMode): Leaderboar
                 friendshipDays,
                 friendshipSince,
                 friendshipYears: friendshipDays / DAYS_PER_YEAR,
-                messageCount: messageCountCache[getCacheKey(friendId, messageCountMode)]
+                messageCount: getCachedMessageCount(friendId, messageCountMode)
             } satisfies LeaderboardEntry;
         })
         .filter((entry): entry is LeaderboardEntry => entry !== null);
@@ -135,7 +168,7 @@ async function resolveDmChannelId(friendId: string): Promise<string | null> {
 
 async function withMessageCountRateLimit<T>(fn: () => Promise<T>): Promise<T> {
     const previous = messageCountRequestQueue;
-    let release!: () => void;
+    let release: (() => void) | undefined;
     messageCountRequestQueue = new Promise<void>(resolve => {
         release = resolve;
     });
@@ -146,7 +179,7 @@ async function withMessageCountRateLimit<T>(fn: () => Promise<T>): Promise<T> {
         return await fn();
     } finally {
         await sleep(MESSAGE_COUNT_REQUEST_DELAY_MS);
-        release();
+        release?.();
     }
 }
 
@@ -188,14 +221,17 @@ async function withRateLimit<T>(fn: () => Promise<T>, maxRetries = 3): Promise<T
         try {
             return await fn();
         } catch (e: any) {
-            const isRateLimit = e?.status === 429;
+            const status: number | undefined = e?.status;
+            const rawRetryAfter: number | undefined = e?.body?.retry_after ?? e?.retryAfter;
+            const retryAfterMs = rawRetryAfter != null ? (rawRetryAfter || 2) * 1000 : undefined;
             const isLastAttempt = attempt === maxRetries;
 
-            if (!isRateLimit || isLastAttempt) throw e;
-
-            const retryAfterMs = ((e?.body?.retry_after ?? e?.retryAfter) || 2) * 1000;
-            logger.warn(`Rate limited — waiting ${retryAfterMs}ms before retry ${attempt + 1}/${maxRetries}.`);
-            await sleep(retryAfterMs);
+            if (status === 429 && !isLastAttempt) {
+                logger.warn(`Rate limited — waiting ${retryAfterMs}ms before retry ${attempt + 1}/${maxRetries}.`);
+                await sleep(retryAfterMs ?? 2000);
+            } else {
+                throw e;
+            }
         }
     }
 
@@ -204,22 +240,22 @@ async function withRateLimit<T>(fn: () => Promise<T>, maxRetries = 3): Promise<T
 
 export async function loadMessageCountsForEntries(
     entries: readonly LeaderboardEntry[],
-    onProgress?: (entry: LeaderboardEntry, remaining: number) => void,
     mode: MessageCountMode = MessageCountModes.SENT
 ): Promise<void> {
-    if (activeMessageCountBatch) {
-        await activeMessageCountBatch;
-        return;
-    }
+    if (activeMessageCountBatch) await activeMessageCountBatch;
+
+    const remainingEntries = entries.filter(entry => getCachedMessageCount(entry.id, mode) == null);
+    if (!remainingEntries.length) return;
+
+    const { setProgress } = useMessageCountStore.getState();
+    setProgress({ isLoadingCounts: true, pendingCount: remainingEntries.length, currentChecking: null });
 
     activeMessageCountBatch = (async () => {
-        const remainingEntries = entries.filter(entry => messageCountCache[getCacheKey(entry.id, mode)] == null);
-
         for (let index = 0; index < remainingEntries.length; index++) {
             const entry = remainingEntries[index];
-            if (messageCountCache[getCacheKey(entry.id, mode)] != null) continue;
+            if (getCachedMessageCount(entry.id, mode) != null) continue;
             await getMessageCount(entry.id, mode);
-            onProgress?.(entry, remainingEntries.length - index - 1);
+            setProgress({ isLoadingCounts: true, pendingCount: remainingEntries.length - index - 1, currentChecking: entry.name });
         }
     })();
 
@@ -227,12 +263,14 @@ export async function loadMessageCountsForEntries(
         await activeMessageCountBatch;
     } finally {
         activeMessageCountBatch = null;
+        setProgress({ isLoadingCounts: false, pendingCount: 0, currentChecking: null });
     }
 }
 
 export async function getMessageCount(friendId: string, mode: MessageCountMode): Promise<number> {
     const cacheKey = getCacheKey(friendId, mode);
-    if (messageCountCache[cacheKey] != null) return messageCountCache[cacheKey];
+    const cached = useMessageCountStore.getState().get(cacheKey);
+    if (cached != null) return cached;
 
     const currentUserId = UserStore.getCurrentUser()?.id;
     if (!currentUserId) return 0;
@@ -242,21 +280,21 @@ export async function getMessageCount(friendId: string, mode: MessageCountMode):
 
     const deriveFromExistingCounts = (): number | null => {
         if (mode === MessageCountModes.ALL) {
-            const sent = messageCountCache[getCacheKey(friendId, MessageCountModes.SENT)];
-            const received = messageCountCache[getCacheKey(friendId, MessageCountModes.RECEIVED)];
+            const sent = getCachedMessageCount(friendId, MessageCountModes.SENT);
+            const received = getCachedMessageCount(friendId, MessageCountModes.RECEIVED);
             if (sent != null && received != null) return sent + received;
             return null;
         }
 
         if (mode === MessageCountModes.SENT) {
-            const all = messageCountCache[getCacheKey(friendId, MessageCountModes.ALL)];
-            const received = messageCountCache[getCacheKey(friendId, MessageCountModes.RECEIVED)];
+            const all = getCachedMessageCount(friendId, MessageCountModes.ALL);
+            const received = getCachedMessageCount(friendId, MessageCountModes.RECEIVED);
             if (all != null && received != null) return Math.max(0, all - received);
         }
 
         if (mode === MessageCountModes.RECEIVED) {
-            const all = messageCountCache[getCacheKey(friendId, MessageCountModes.ALL)];
-            const sent = messageCountCache[getCacheKey(friendId, MessageCountModes.SENT)];
+            const all = getCachedMessageCount(friendId, MessageCountModes.ALL);
+            const sent = getCachedMessageCount(friendId, MessageCountModes.SENT);
             if (all != null && sent != null) return Math.max(0, all - sent);
         }
 
@@ -265,7 +303,7 @@ export async function getMessageCount(friendId: string, mode: MessageCountMode):
 
     const derivedCount = deriveFromExistingCounts();
     if (derivedCount != null) {
-        messageCountCache[cacheKey] = derivedCount;
+        useMessageCountStore.getState().set(cacheKey, derivedCount);
         return derivedCount;
     }
 
@@ -283,22 +321,18 @@ export async function getMessageCount(friendId: string, mode: MessageCountMode):
 
         if (count <= 0) count = await fallbackCountRecentMessages(channelId, currentUserId, friendId, mode);
 
-        messageCountCache[cacheKey] = count;
+        useMessageCountStore.getState().set(cacheKey, count);
         await sleep(300);
         return count;
     } catch (e) {
         logger.warn("Search endpoint failed for", friendId, "— falling back to manual count.", e);
         try {
             const count = await fallbackCountRecentMessages(channelId, currentUserId, friendId, mode);
-            messageCountCache[cacheKey] = count;
+            useMessageCountStore.getState().set(cacheKey, count);
             return count;
         } catch (error_) {
             logger.error("Fallback message count also failed for", friendId, error_);
             return 0;
         }
     }
-}
-
-export async function getSentMessageCount(friendId: string): Promise<number> {
-    return getMessageCount(friendId, MessageCountModes.SENT);
 }

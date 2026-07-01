@@ -35,6 +35,12 @@
     padding: 40px 8px 8px;
 }
 
+.vc-friendship-leaderboard-select-wrapper {
+    position: relative;
+    transform: translateY(-4px);
+    z-index: 2;
+}
+
 .vc-friendship-leaderboard-podium {
     align-items: end;
     display: grid;
@@ -76,7 +82,7 @@
     line-height: 1;
     pointer-events: none;
     position: absolute;
-    top: -18px;
+    top: -12px;
     transform: translateX(-50%);
 }
 
