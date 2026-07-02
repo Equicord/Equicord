@@ -455,7 +455,7 @@
         "titles": "Titres"
     },
     "decor": {
-        "accessFromProfiles": "Vous pouvez également accéder aux décorations Décor depuis la page {link}.",
+        "accessFromProfiles": "Vous pouvez également accéder aux décorations Decor depuis la page {link}.",
         "agreedToGuidelines": "Accepté les directives",
         "alreadyPending": "Vous avez une décoration en attente d'approbation.",
         "apply": "Appliquer",
@@ -463,12 +463,12 @@
         "browse": "Naviguer",
         "changeDecoration": "Changer la décoration",
         "chooseAFile": "Choisissez un fichier",
-        "confirmLogOut": "Es-tu sûr de vouloir te déconnecter de Décor ?",
+        "confirmLogOut": "Es-tu sûr de vouloir te déconnecter de Decor ?",
         "continue": "Continuez",
         "copyHash": "Copier le hash des décorations.",
         "copyPresetId": "Copier l'identifiant du préréglage",
         "createDecoration": "Créer une décoration",
-        "createdBy": "Créer  par",
+        "createdBy": "Créer par",
         "decorDiscordServer": "Serveur Discord de Decor.",
         "delete": "Supprimer",
         "deleteConfirm": "Es-tu sur de vouloir supprimer {name}?",
@@ -478,7 +478,7 @@
         "discordServer": "Serveur Discord",
         "discordServerNotice": "Pour recevoir des mises à jour sur l'approbation de votre décoration, rejoignez {link} et autorisez les messages privés.",
         "discordTooltip": "Rejoignez le serveur Discord de Decor pour recevoir des notifications sur l'examen de vos décorations et lorsque de nouveaux préréglages sont publiés.",
-        "enableAndRestart": "Activez Décor et redémarrez votre client pour modifier la décoration de votre avatar.",
+        "enableAndRestart": "Activez Decor et redémarrez votre client pour modifier la décoration de votre avatar.",
         "file": "Fichier",
         "fileNotice": "Le fichier doit être APNG ou PNG.",
         "guidelinesAgreementNotice": "En soumettant une décoration, vous acceptez de {guidelines}. Le non-respect de ces rêgles peut entraîner la suspension de votre compte et vous empêcher de créer d'autres décorations à l'avenir.",
@@ -494,11 +494,11 @@
         "removeDecoration": "Supprimer la décoration",
         "submitForReview": "Envoyer pour être approuvé.",
         "theGuidelines": "les rêgles",
-        "title": "Décor",
+        "title": "Decor",
         "yourDecorations": "Vos décorations"
     },
     "devCompanion": {
-        "description": "Plugin Dev Companion. Veuillez signaler tout dysfonctionnement ou comportement étrange (probablement un bug) à sadan, soit par ping, soit par message privé, merci !",
+        "description": "Plugin Dev Companion. Veuillez signaler tout dysfonctionnement ou comportement étrange (probablement un bug) à sadan, soit par ping, soit par message privé, merci !",
         "settings": {
             "notifyOnAutoConnect": "Notifier lorsque le Dev Companion s'est connecté automatiquement.",
             "reloadAfterToggle": "Recharger après réception d'une commande de désactivation/activation du plugin.",
@@ -512,13 +512,13 @@
     "donorCard": {
         "donated": {
             "description": "Tous les utilisateurs Vencord peuvent voir votre badge de donateur Vencord, et les utilisateurs Equicord peuvent voir votre badge de donateur Equicord. Pour changer votre badge de donateur Vencord, contactez @vending.machine. Pour votre badge de donateur Equicord, créez un ticket sur le serveur de Equicord.",
-            "equicordDescription": "Tous les utilisateurs Equicord peuvent voir votre badge ! Vous pouvez gérer vos avantages en créant un ticket sur le serveur de Equicord.",
-            "subtitle": "Merci pour votre don !",
+            "equicordDescription": "Tous les utilisateurs Equicord peuvent voir votre badge ! Vous pouvez gérer vos avantages en créant un ticket sur le serveur de Equicord.",
+            "subtitle": "Merci pour votre don !",
             "title": "Dons",
-            "vencordDescription": "Tous les utilisateurs Vencord peuvent voir votre badge ! Vous pouvez gérer vos avantages en envoyant un message à @{v}."
+            "vencordDescription": "Tous les utilisateurs Vencord peuvent voir votre badge ! Vous pouvez gérer vos avantages en envoyant un message à @{v}."
         },
         "notDonated": {
-            "description": "Veuillez envisager de soutenir le développement de Equicord en faisant un don !",
+            "description": "Veuillez envisager de soutenir le développement de Equicord en faisant un don !",
             "title": "Soutenez le projet"
         }
     },
@@ -529,7 +529,7 @@
         "description": "Permet d'omettre la largeur ou la hauteur lors de l'ouverture d'une fenêtre modale d'image"
     },
     "experiments": {
-        "description": "Activez l'accès aux expériences et à d'autres fonctionnalités réservées aux développeurs dans Discord !",
+        "description": "Activez l'accès aux expériences et à d'autres fonctionnalités réservées aux développeurs dans Discord !",
         "devToolsInfo": "Vous pouvez ouvrir les DevTools de Discord via {keyboardCombo}",
         "holdOn": "Attendez!!",
         "moreInfo": "Plus d'informations",
@@ -545,29 +545,29 @@
         "cloneName": "Clonez {name}",
         "cloneSticker": "Cloner l’autocollant",
         "cloneTo": "Cloner vers {guild}",
-        "clonedSuccess": "Clonage réussi de {name} vers {guild} !",
+        "clonedSuccess": "Clonage réussi de {name} vers {guild} !",
         "customName": "Nom personnalisé",
         "description": "Permet de cloner les émojis et autocollants sur ton propre serveur (clic droit dessus).",
         "failedToClone": "Échec du clonage : {error}",
-        "nameValidation": "Le nom doit comporter entre 2 et 32 caractères",
-        "somethingWentWrong": "Quelque chose s'est mal passé (vérifiez la console !)"
+        "nameValidation": "Le nom doit comporter entre 2 et 32 caractères",
+        "somethingWentWrong": "Quelque chose s'est mal passé (vérifiez la console !)"
     },
     "f8break": {
         "description": "Mettre le client en pause lorsque vous appuyez sur F8 avec DevTools (+ points d'arrêt) ouvert."
     },
-    "failedToRender": "Échec du rendu de l'onglet {tab}. Si ce problème persiste, essayez d'utiliser le programme d'installation pour réinstaller !",
+    "failedToRender": "Échec du rendu de l'onglet {tab}. Si ce problème persiste, essayez d'utiliser le programme d'installation pour réinstaller !",
     "fakeNitro": {
         "description": "Vous permet d'envoyer de faux emojis/autocollants, d'utiliser des thèmes nitro et de diffuser en qualité nitro",
         "doNotShowAgain": "Ne plus montrer",
-        "emojiNotice": "Il s'agit d'un emoji FakeNitro et s'affiche comme un vrai emoji uniquement pour vous. Apparaît sous forme de lien vers les utilisateurs non-plugin.",
-        "holdOn": "Attendez!",
+        "emojiNotice": "Il s'agit d'un emoji FakeNitro et s'affiche comme un vrai emoji uniquement pour vous. Apparaît sous forme de lien vers les utilisateurs sans plugin.",
+        "holdOn": "Attendez !",
         "noAttachmentPerms": {
             "body": "Vous ne pouvez pas envoyer ce message car il contient un autocollant FakeNitro animé et vous n'êtes pas autorisé à joindre des fichiers dans la chaîne actuelle. Veuillez retirer l'autocollant pour continuer."
         },
         "noEmbedPerms": {
             "body1": "Vous essayez d'envoyer/modifier un message contenant un emoji ou un autocollant FakeNitro,",
             "body2": "cependant, vous n'êtes pas autorisé à intégrer des liens dans la chaîne actuelle.",
-            "body3": "Êtes-vous sûr de vouloir envoyer ce message ? Vos articles FakeNitro apparaîtront uniquement sous forme de lien.",
+            "body3": "Êtes-vous sûr de vouloir envoyer ce message ? Vos articles FakeNitro apparaîtront uniquement sous forme de lien.",
             "disableNotice": "Vous pouvez désactiver cet avis dans les paramètres du plugin."
         },
         "ok": "OK",
@@ -586,7 +586,7 @@
             "useEmojiHyperLinks": "S'il faut utiliser des hyperliens lors de l'envoi de faux emojis",
             "useStickerHyperLinks": "S'il faut utiliser des hyperliens lors de l'envoi de faux autocollants"
         },
-        "stickerNotice": "Il s'agit d'un autocollant FakeNitro et s'affiche comme un véritable autocollant uniquement pour vous. Apparaît sous forme de lien vers les utilisateurs non-plugin."
+        "stickerNotice": "Il s'agit d'un autocollant FakeNitro et s'affiche comme un véritable autocollant uniquement pour vous. Apparaît sous forme de lien vers les utilisateurs sans plugin."
     },
     "fakeProfileThemes": {
         "accent": "Accent",
@@ -629,16 +629,16 @@
             },
             "noAliasesYet": "Aucun alias défini pour l'instant.",
             "remove": "Supprimer",
-            "removedAlias": "Alias supprimé :{alias} :",
+            "removedAlias": "Alias supprimé :{alias}:",
             "setAlias": "Définir un alias"
         }
     },
     "favGifSearch": {
         "description": "Ajoute une barre de recherche aux gifs favoris.",
-        "name": "FavorisGifRecherche",
+        "name": "FavoriteGifSearch",
         "searchOptions": {
             "entireUrl": "URL entière",
-            "hostAndPath": "Hôte et chemin (tenor.com somgif.gif)",
+            "hostAndPath": "Hôte et chemin (klipy.com somgif.gif)",
             "pathOnly": "Chemin uniquement (/somegif.gif)"
         },
         "searchPlaceholder": "Rechercher des gifs préférés",
@@ -692,10 +692,10 @@
         "description": "Créez et gérez des liens d'invitation d'amis via des commandes slash (/create friend invite, /view friend invites, /revoke friend invites).",
         "ui": {
             "allRevoked": "Toutes les invitations d'amis ont été révoquées.",
-            "expires": "Expire :",
-            "maxUses": "Utilisations maximales :",
-            "noActiveInvites": "Vous n'avez aucune invitation d'ami active !",
-            "timesUsed": "Nombre d'utilisations :"
+            "expires": "Expire :",
+            "maxUses": "Utilisations maximales :",
+            "noActiveInvites": "Vous n'avez aucune invitation d'ami active !",
+            "timesUsed": "Nombre d'utilisations :"
         }
     },
     "friendsSince": {
@@ -724,7 +724,7 @@
     },
     "greetStickerPicker": {
         "ariaLabel": "Sélecteur d'autocollants de bienvenue",
-        "description": "Vous permet d'utiliser n'importe quel autocollant de bienvenue au lieu d'un autocollant aléatoire en cliquant avec le bouton droit sur « Wave to say salut ! » bouton",
+        "description": "Vous permet d'utiliser n'importe quel autocollant de bienvenue au lieu d'un autocollant aléatoire en cliquant avec le bouton droit sur « Wave to say salut ! » bouton",
         "greetMode": "Mode d'accueil",
         "greetModeDescription": "Choisissez le mode d'accueil",
         "greetModeLabel": "Saluer (vous ne pouvez saluer que 3 fois)",
@@ -807,7 +807,7 @@
     "ircColors": {
         "description": "Rend les couleurs du nom d'utilisateur dans le chat uniques, comme dans les clients IRC",
         "settings": {
-            "applyColorOnlyInDms": "Appliquez des couleurs uniquement dans les messages directs ; n'appliquez pas de couleurs sur les serveurs.",
+            "applyColorOnlyInDms": "Appliquez des couleurs uniquement dans les messages directs, n'appliquez pas de couleurs sur les serveurs.",
             "applyColorOnlyToUsersWithoutColor": "Appliquer des couleurs uniquement aux utilisateurs qui n'ont pas de couleur prédéfinie",
             "lightness": "Légèreté, en %. Changez si les couleurs sont trop claires ou trop foncées",
             "memberListColors": "Remplacer les couleurs des rôles dans la liste des membres"
@@ -863,23 +863,23 @@
             "additionalQuotesDelimiter": "Délimiteur pour les guillemets supplémentaires",
             "enableDiscordPresetQuotes": "Activer les citations prédéfinies de Discord (y compris les citations d'événements, pendant les événements)",
             "enablePluginPresetQuotes": "Activer les guillemets prédéfinis par ce plugin",
-            "replaceEvents": "Ce plugin devrait-il également s'appliquer lors d'événements avec des citations sur le thème d'événements spéciaux ? (par exemple Halloween)"
+            "replaceEvents": "Ce plugin devrait-il également s'appliquer lors d'événements avec des citations sur le thème d'événements spéciaux ? (par exemple Halloween)"
         },
         "ui": {
-            "noQuotesQuote": "Avez-vous vraiment désactivé tous les guillemets de chargement ? Quel bouffon tu es..."
+            "noQuotesQuote": "Avez-vous vraiment désactivé tous les guillemets de chargement ? Quel bouffon tu es..."
         }
     },
     "logs": {
         "allLogsCleared": "Tous les journaux ont été effacés",
         "clearAll": "Tout effacer",
         "clearAllLogs": "Effacer tous les journaux",
-        "clearAllLogsConfirmation": "Êtes-vous sûr de vouloir effacer tous les journaux ? Cela ne peut pas être annulé.",
+        "clearAllLogsConfirmation": "Êtes-vous sûr de vouloir effacer tous les journaux ? Cela ne peut pas être annulé.",
         "clearLog": "Effacer le journal",
-        "clearLogConfirmation": "Êtes-vous sûr de vouloir effacer ce journal ? Cela ne peut pas être annulé.",
+        "clearLogConfirmation": "Êtes-vous sûr de vouloir effacer ce journal ? Cela ne peut pas être annulé.",
         "clearLogs": "Effacer les journaux",
-        "clearLogsConfirmation": "Êtes-vous sûr de vouloir effacer ces journaux ? Cela ne peut pas être annulé.",
-        "clearLogsConfirmationNum_one": "Êtes-vous sûr de vouloir effacer le journal {count} ?",
-        "clearLogsConfirmationNum_other": "Êtes-vous sûr de vouloir effacer les journaux {count} ?",
+        "clearLogsConfirmation": "Êtes-vous sûr de vouloir effacer ces journaux ? Cela ne peut pas être annulé.",
+        "clearLogsConfirmationNum_one": "Êtes-vous sûr de vouloir effacer le journal {count} ?",
+        "clearLogsConfirmationNum_other": "Êtes-vous sûr de vouloir effacer les journaux {count} ?",
         "hideLogs": "Masquer les journaux",
         "logCleared": "Le journal a été effacé",
         "logsCleared": "Les journaux sélectionnés ont été effacés",
@@ -959,10 +959,10 @@
             "cannotReact": "Impossible de réagir : autorisations manquantes"
         },
         "ui": {
-            "linkCopied": "Lien copié !",
+            "linkCopied": "Lien copié !",
             "maxAdditionalEmojis": "virgule/nouvelle ligne séparées, max {count}",
-            "messageContentCopied": "Contenu du message copié !",
-            "messageIdCopied": "ID du message copié !",
+            "messageContentCopied": "Contenu du message copié !",
+            "messageIdCopied": "ID du message copié !",
             "selectAdditionalEmojis": "Sélectionnez des émojis supplémentaires",
             "selectEmojiForReactions": "Sélectionnez Emoji pour les réactions",
             "userIdCopied": "ID utilisateur copié!"
@@ -1084,13 +1084,13 @@
         "ui": {
             "allTags": "Toutes les balises :",
             "invalidSubCommand": "Sous-commande invalide",
-            "noTagsYet": "Oups ! Il n'y a pas encore de tags, utilisez `/tags create` pour en créer un !",
-            "tagAlreadyExists": "Un tag portant le nom **{name}** existe déjà !",
-            "tagCreated": "La balise **{name}** a été créée avec succès !",
-            "tagDeleted": "La balise **{name}** a été supprimée avec succès !",
-            "tagDoesNotExist": "Le tag **{name}** n'existe plus ! Veuillez recharger votre Discord pour corriger :)",
-            "tagDoesNotExist2": "Un Tag portant le nom **{name}** n'existe pas !",
-            "tagSent": "Le tag **{name}** a été envoyé !"
+            "noTagsYet": "Oups ! Il n'y a pas encore de tags, utilisez `/tags create` pour en créer un !",
+            "tagAlreadyExists": "Un tag portant le nom **{name}** existe déjà !",
+            "tagCreated": "La balise **{name}** a été créée avec succès !",
+            "tagDeleted": "La balise **{name}** a été supprimée avec succès !",
+            "tagDoesNotExist": "Le tag **{name}** n'existe plus ! Veuillez recharger votre Discord pour corriger :)",
+            "tagDoesNotExist2": "Un Tag portant le nom **{name}** n'existe pas !",
+            "tagSent": "Le tag **{name}** a été envoyé !"
         }
     },
     "messageUpdaterAPI": {
@@ -1287,7 +1287,7 @@
     },
     "permissionsViewer": {
         "description": "Affiche les permissions d'un utilisateur ou d'un salon, ainsi que les rôles d'un serveur",
-        "noPermissions": "Aucune autorisation d'affichage !",
+        "noPermissions": "Aucune autorisation d'affichage !",
         "owner": "propriétaire",
         "permissions": "Autorisations",
         "permissionsTitle": "{header} Autorisations",
@@ -1321,7 +1321,7 @@
         "errors": {
             "delayMinimum": "Le délai doit être d'au moins 20.",
             "failedToFetchUser": "Échec de la récupération de l'utilisateur. Consultez la console pour plus d'informations.",
-            "noImage": "Aucune image spécifiée !",
+            "noImage": "Aucune image spécifiée !",
             "uploadNotImage": "Le téléchargement n'est pas une image"
         }
     },
@@ -1352,7 +1352,7 @@
             "customOrder": "Personnalisé (cliquez avec le bouton droit sur les chaînes pour les réorganiser)",
             "dmSectionCollapsed": "Réduire la section MP",
             "mostRecentMessage": "Message le plus récent",
-            "pinOrder": "Dans quel ordre les MP épinglés doivent-ils être affichés ?"
+            "pinOrder": "Dans quel ordre les MP épinglés doivent-ils être affichés ?"
         },
         "unpinDm": "Désépingler MP"
     },
@@ -1414,7 +1414,7 @@
         "description": "Remplace \"Minefed React Error\" par l'erreur réelle."
     },
     "readAllNotificationsButton": {
-        "description": "Lisez toutes les notifications du serveur en un seul clic !",
+        "description": "Lisez toutes les notifications du serveur en un seul clic !",
         "name": "Bouton LireToutesNotifications",
         "readAll": "Lire tout"
     },
