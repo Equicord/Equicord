@@ -430,7 +430,7 @@
             "searchSounds": "Rechercher des sons"
         },
         "toast": {
-            "exportSuccess": "Paramètres {count} exportés (fichiers audio non inclus)",
+            "exportSuccess": "{count} paramètres exportés (fichiers audio non inclus)",
             "importError": "Erreur lors de l'importation des paramètres. Consultez la console pour plus de détails.",
             "importSuccess": "Paramètres importés avec succès !",
             "loadError": "Erreur lors du chargement du fichier son personnalisé",
@@ -552,7 +552,7 @@
             "showPosition": "Afficher le type de position CSS et le z-index de l'élément"
         },
         "ui": {
-            "copiedColor": "Couleur copiée dans le presse-papier !",
+            "copiedColor": "Couleur copiée dans le presse-papier !",
             "recording": "Enregistrement...",
             "reset": "Réinitialiser"
         }
@@ -566,7 +566,7 @@
         "alerts": {
             "equicordSupport": "Equicord Assistance",
             "okayContinue": "Ok continue",
-            "supportWarningBody": "Avant de demander de l'aide. Vérifiez les mises à jour et si ce problème est réellement causé par Equicord !",
+            "supportWarningBody": "Avant de demander de l'aide. Vérifiez les mises à jour et si ce problème est réellement causé par Equicord !",
             "supportWarningTitle": "Vencord Avertissement du salon de support"
         },
         "commands": {
@@ -586,7 +586,7 @@
             "showYourOwnActivityButtons": "Discord masque vos propres boutons d'activité pour une raison quelconque"
         },
         "standing": {
-            "allGood": "Tout va bien !",
+            "allGood": "Tout va bien !",
             "atRisk": "À risque",
             "limited": "Limité",
             "suspended": "Suspendu",
@@ -615,7 +615,7 @@
         "title": "Traducteur Equicord"
     },
     "equissant": {
-        "description": "Croissant à chaque nombre de clics spécifié :trolley:",
+        "description": "Croissant à chaque nombre de clics spécifié :trolley:",
         "settings": {
             "amount": "Nombre de clics pour déclencher le croissant"
         }
@@ -627,7 +627,7 @@
             "soundId": "Entrez l'ID du son que vous souhaitez jouer."
         },
         "toasts": {
-            "somethingWentWrong": "Oups ! Quelque chose s'est mal passé."
+            "somethingWentWrong": "Oups ! Quelque chose s'est mal passé."
         },
         "ui": {
             "enterSoundId": "Entrez l'identifiant du son...",
@@ -733,8 +733,8 @@
         },
         "description": "Ajoute une commande /friendcloud pour visualiser les utilisateurs avec lesquels vous interagissez le plus",
         "errors": {
-            "couldntGenerate": "Impossible de générer l'image :c",
-            "countMustBeHigher": "Le compte doit être de 1 ou plus !",
+            "couldntGenerate": "Impossible de générer l'image :c",
+            "countMustBeHigher": "Le compte doit être de 1 ou plus !",
             "noAffinities": "Aucune affinité trouvée. Vérifiez vos paramètres de confidentialité.",
             "noValidUsers": "Aucun utilisateur valide trouvé dans les affinités. Vérifiez vos paramètres de confidentialité."
         }
@@ -773,11 +773,11 @@
         "description": "Ajoute des badges indiquant depuis combien de temps vous êtes ami avec un utilisateur",
         "ranks": {
             "besties": {
-                "description": "Comment fais-tu pour gérer ça ??? (5 ans)",
+                "description": "Comment fais-tu pour gérer ça ??? (5 ans)",
                 "title": "Meilleurs amis"
             },
             "blooming": {
-                "description": "Votre amitié y arrive ! (1 mois)",
+                "description": "Votre amitié y arrive ! (1 mois)",
                 "title": "Épanouissement"
             },
             "burning": {
@@ -789,7 +789,7 @@
                 "title": "Combattant"
             },
             "royal": {
-                "description": "Votre amitié a traversé des moments difficiles – 2 années entières !",
+                "description": "Votre amitié a traversé des moments difficiles – 2 années entières !",
                 "title": "Royal"
             },
             "sprout": {
@@ -806,8 +806,8 @@
         "description": "Fait en sorte que les avatars occupent toute la tuile vc"
     },
     "gensokyoRadioRPC": {
-        "description": "Discord riche présence pour Gensokyo Radio !",
-        "info": "Discord riche présence pour Gensokyo Radio !",
+        "description": "Discord riche présence pour Gensokyo Radio !",
+        "info": "Discord riche présence pour Gensokyo Radio !",
         "settings": {
             "refreshInterval": "L'intervalle entre les actualisations d'activité (secondes)"
         }
@@ -859,7 +859,7 @@
             "creationDate": "Date de création",
             "deleteAction": "supprimer cette collection",
             "deleteCollection": "Supprimer la collection",
-            "deleteConfirm": "Voulez-vous vraiment {action} ?",
+            "deleteConfirm": "Voulez-vous vraiment {action} ?",
             "descending": "Descendant",
             "exportCollections": "Exporter des collections",
             "gifs": "GIF",
@@ -919,7 +919,7 @@
         "description": "Ajoute des badges globaux d'autres mods clients",
         "ui": {
             "joinServer": "Rejoignez le serveur GlobalBadges",
-            "refetchSuccess": "Badges globaux récupérés avec succès !"
+            "refetchSuccess": "Badges globaux récupérés avec succès !"
         }
     },
     "googleThat": {
@@ -940,7 +940,7 @@
         "ui": {
             "downloadEmojis": "Télécharger des émojis",
             "downloadStickers": "Télécharger les autocollants",
-            "serverNotFound": "Serveur introuvable !"
+            "serverNotFound": "Serveur introuvable !"
         }
     },
     "guildTagSettings": {
@@ -995,7 +995,7 @@
         "description": "Transforme le bouton d'accueil en indicateur de saisie si quelqu'un dans votre SMS est en train de taper"
     },
     "hopOn": {
-        "description": "Monte dessus ! Ouvre une URL configurable quand un message correspond à une expressions régulières personnalisée dans le salon actuel.",
+        "description": "Monte dessus ! Ouvre une URL configurable quand un message correspond à une expressions régulières personnalisée dans le salon actuel.",
         "settings": {
             "regex": "Regex à déclencher",
             "url": "URL pour ouvrir"
@@ -1004,8 +1004,8 @@
     "husk": {
         "description": "Ajoute un bouton Husk (vérifiez les paramètres pour modifier les emoji utilisés)",
         "settings": {
-            "emojiID": "ID Emoji (par défaut (à partir du serveur Vencord) : 1026532993923293184)",
-            "emojiName": "Nom de l'emoji (par défaut (à partir du serveur Vencord) : husk)",
+            "emojiID": "ID Emoji (par défaut (à partir du serveur Vencord) : 1026532993923293184)",
+            "emojiName": "Nom de l'emoji (par défaut (à partir du serveur Vencord) : husk)",
             "findInServer": "Essayez de trouver des emoji du même nom sur le serveur avant d'utiliser l'ID dans les paramètres (utile s'il n'y a pas de nitro)"
         },
         "ui": {
@@ -1056,7 +1056,7 @@
         },
         "description": "Ajoute une commande slash /imgtogif pour créer un gif à partir de n'importe quelle image",
         "errors": {
-            "noImage": "Aucune image spécifiée !",
+            "noImage": "Aucune image spécifiée !",
             "notAnImage": "Le téléchargement n'est pas une image"
         }
     },
@@ -1065,7 +1065,7 @@
             "inrole": "Sachez qui joue un rôle",
             "role": "Le rôle"
         },
-        "description": "Sachez qui occupe un rôle grâce au menu contextuel du rôle ou à la commande /inrole (lisez les informations sur le plugin !)",
+        "description": "Sachez qui occupe un rôle grâce au menu contextuel du rôle ou à la commande /inrole (lisez les informations sur le plugin !)",
         "errors": {
             "makeSureServer": "Assurez-vous que vous êtes sur un serveur."
         },
@@ -1100,7 +1100,7 @@
             "videoDevices": "Appareils vidéo",
             "videoDevicesInfo": "Prend en charge les caméras et les cartes de capture (comme Elgato HD60X) lorsqu'elles sont activées dans les paramètres",
             "wayland": "Pour Wayland, la sélection de partage d'écran apparaît uniquement.",
-            "x11": "Pour X11, cela peut fonctionner ou non :shrug:"
+            "x11": "Pour X11, cela peut fonctionner ou non :shrug:"
         },
         "ui": {
             "instantScreenshare": "Partage d'écran instantané",
@@ -1109,14 +1109,14 @@
         }
     },
     "invisibleChat": {
-        "description": "Cryptez vos messages de manière non suspecte !",
+        "description": "Cryptez vos messages de manière non suspecte !",
         "settings": {
             "savedPasswords": "Mots de passe enregistrés (séparés par un , )"
         },
         "ui": {
             "decryptMessage": "Décrypter le message",
             "encryptMessage": "Chiffrer le message",
-            "hiddenMessageIndicator": "Ce message a un message caché ! (Chat invisible)"
+            "hiddenMessageIndicator": "Ce message a un message caché ! (Chat invisible)"
         }
     },
     "inviteDefaults": {
@@ -1149,7 +1149,7 @@
         },
         "nameFormatOptions": {
             "custom": "Personnalisés",
-            "seriesEpisodeName": "Série – Nom de l'épisode/piste/film",
+            "seriesEpisodeName": "Série - Nom de l'épisode/piste/film",
             "seriesMovieName": "Nom de la série/du film"
         },
         "overrideTypeOptions": {
@@ -1213,7 +1213,7 @@
         "description": "Ajoute une chance configurable de vous effrayer chaque fois que vous ouvrez une chaîne. Inspiré par Geometry Dash Mega Hack",
         "settings": {
             "audioSource": "Définit l'URL audio du jumpscare",
-            "chance": "La probabilité qu'une peur de saut se produise (1 sur X donc : 100 = 1/100 ou 1 %, 50 = 1/50 ou 2 %, etc.)",
+            "chance": "La probabilité qu'une peur de saut se produise (1 sur X donc : 100 = 1/100 ou 1 %, 50 = 1/50 ou 2 %, etc.)",
             "imageSource": "Définit l'URL de l'image du jumpscare"
         }
     },
@@ -1325,7 +1325,7 @@
         }
     },
     "loginWithQR": {
-        "description": "Vous permet de vous connecter à un autre appareil en scannant un code QR de connexion, comme sur mobile !",
+        "description": "Vous permet de vous connecter à un autre appareil en scannant un code QR de connexion, comme sur mobile !",
         "settings": {
             "scanQr": "Scannez un code QR"
         },
@@ -1549,7 +1549,7 @@
             "showSpotifyLyrics": "Afficher les paroles de Spotify",
             "showTidalControls": "Afficher les commandes de marée",
             "showTidalLyrics": "Afficher les paroles de Tidal",
-            "showYoutubeMusicControls": "Afficher les commandes YouTube Music",
+            "showYoutubeMusicControls": "Afficher les commandes YouTube Music",
             "useSpotifyUris": "Ouvrez les URI Spotify au lieu des URL"
         }
     },
@@ -1651,7 +1651,7 @@
             "fixApostrophes": "Corrigez les apostrophes manquantes dans les contractions (par exemple, « ne pas » → « ne pas »)",
             "fixCapitalization": "Correction de la majuscule des phrases",
             "fixPunctuation": "Ajouter des points à la fin des phrases",
-            "fixPunctuationFrequency": "Fréquence des périodes d'ajout automatique (0-100 %)",
+            "fixPunctuationFrequency": "Fréquence des périodes d'ajout automatique (0-100%)",
             "quickDisable": "Désactivation rapide - désactivez temporairement toutes les corrections"
         }
     },
