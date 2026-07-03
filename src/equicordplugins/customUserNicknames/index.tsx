@@ -93,7 +93,7 @@ function CustomNicknameModal({ modalProps, user }: { modalProps: RenderModalProp
             ]}
         >
             <Heading tag="h3" style={{ marginBottom: 8, fontSize: "16px", fontWeight: "400", lineHeight: "1.25", color: "var(--text-subtle)" }}>
-                {"Add a custom nickname for this user. It will only be visible to you in your direct messages."}
+                {"Add a custom nickname for this user."}
             </Heading>
             <div style={{ paddingTop: "10px", flexGrow: 0 }}></div>
             <Heading tag="h3" style={{ marginBottom: 8, fontSize: "14px", fontWeight: 600 }}>
