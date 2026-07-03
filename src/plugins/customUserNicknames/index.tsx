@@ -22,17 +22,17 @@ import { TextButton } from "@components/Button";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Heading } from "@components/Heading";
 import definePlugin from "@utils/types";
-import { RenderModalProps, User } from "@vencord/discord-types";
+import { GuildMember, RenderModalProps, User } from "@vencord/discord-types";
 import { findByProps } from "@webpack";
 import { FluxDispatcher, GuildMemberStore, Menu, Modal, openModal, RelationshipStore, SelectedGuildStore, TextInput, UserStore, useState } from "@webpack/common";
 
 const CUSTOM_USER_NICKNAMES_KEY = "CustomUserNicknames";
 
 let customNicknames: Record<string, string> = {};
-let originalGetNickname: any = null;
-let guildGetNickname: any = null;
-let guildGetMember: any = null;
-let guildGetMembers: any = null;
+let originalGetNickname: typeof RelationshipStore.getNickname | null = null;
+let guildGetNickname: typeof GuildMemberStore.getNick | null = null;
+let guildGetMember: typeof GuildMemberStore.getMember | null = null;
+let guildGetMembers: typeof GuildMemberStore.getMembers | null = null;
 let originalGetName: any = null;
 let originalGetNicknameOfModule: any = null;
 let originalUseName: any = null;
@@ -60,6 +60,10 @@ async function triggerNickUpdate(user: User, newNick: string | null) {
             FluxDispatcher.dispatch({ type: "GUILD_MEMBER_UPDATE", guildId, user, roles, nick, avatar });
         }
     }
+}
+
+function getUserObj(...args: any[]) {
+    return args.find((arg): arg is User => arg && typeof arg === "object" && typeof arg.id === "string");
 }
 
 function CustomNicknameModal({ modalProps, user }: { modalProps: RenderModalProps; user: User; }) {
@@ -156,8 +160,8 @@ export default definePlugin({
 
         if (store) {
             originalGetNickname = store.getNickname;
-            store.getNickname = function (this: any, userId: string) {
-                return customNicknames[userId] ?? originalGetNickname.call(this, userId);
+            store.getNickname = function (this: typeof store, userId: string) {
+                return customNicknames[userId] ?? originalGetNickname!.call(this, userId);
             };
 
             store.emitChange();
@@ -167,13 +171,13 @@ export default definePlugin({
 
         if (guildStore) {
             guildGetNickname = guildStore.getNick;
-            guildStore.getNick = function (this: any, guildId: string, userId: string) {
-                return customNicknames[userId] ?? guildGetNickname.call(this, guildId, userId);
+            guildStore.getNick = function (this: typeof guildStore, guildId: string, userId: string) {
+                return customNicknames[userId] ?? guildGetNickname!.call(this, guildId, userId);
             };
 
             guildGetMember = guildStore.getMember;
-            guildStore.getMember = function (this: any, guildId: string, userId: string) {
-                const member = guildGetMember.call(this, guildId, userId);
+            guildStore.getMember = function (this: typeof guildStore, guildId: string, userId: string) {
+                const member = guildGetMember!.call(this, guildId, userId);
                 if (member && customNicknames[userId]) {
                     return {
                         ...member,
@@ -184,10 +188,10 @@ export default definePlugin({
             };
 
             guildGetMembers = guildStore.getMembers;
-            guildStore.getMembers = function (this: any, guildId: string) {
-                const members = guildGetMembers.call(this, guildId);
+            guildStore.getMembers = function (this: typeof guildStore, guildId: string) {
+                const members = guildGetMembers!.call(this, guildId);
                 if (members && members.length) {
-                    return members.map((member: any) => {
+                    return members.map((member: GuildMember) => {
                         if (member && customNicknames[member.userId]) {
                             return {
                                 ...member,
@@ -205,35 +209,33 @@ export default definePlugin({
 
         if (NicknameUtils) {
             originalGetName = NicknameUtils.getName;
-            const args = Array.from(arguments) as any[];
-            const userObject = args.find((arg): arg is User => { return arg && typeof arg === "object" && typeof arg.id === "string"; });
-
-            NicknameUtils.getName = function (this: any) {
-                if (userObject && customNicknames[userObject.id]) {
-                    return customNicknames[userObject.id];
+            NicknameUtils.getName = function (this: unknown, ...args: any[]) {
+                const userObj = getUserObj(args);
+                if (userObj && customNicknames[userObj.id]) {
+                    return customNicknames[userObj.id];
                 }
 
-                return originalGetName.apply(this, arguments);
+                return originalGetName.apply(this, args);
             };
 
             originalGetNicknameOfModule = NicknameUtils.getNickname;
-            NicknameUtils.getNickname = function (this: any) {
-                if (userObject && customNicknames[userObject.id]) {
-                    return customNicknames[userObject.id];
+            NicknameUtils.getNickname = function (this: unknown, ...args: any[]) {
+                const userObj = getUserObj(args);
+                if (userObj && customNicknames[userObj.id]) {
+                    return customNicknames[userObj.id];
                 }
 
-                return originalGetNicknameOfModule.apply(this, arguments);
+                return originalGetNicknameOfModule.apply(this, args);
             };
 
             originalUseName = NicknameUtils.useName;
-            NicknameUtils.useName = function (this: any) {
-                const name = originalUseName.apply(this, arguments);
-
-                if (userObject && customNicknames[userObject.id]) {
-                    return customNicknames[userObject.id];
+            NicknameUtils.useName = function (this: unknown, ...args: any[]) {
+                const userObj = getUserObj(args);
+                if (userObj && customNicknames[userObj.id]) {
+                    return customNicknames[userObj.id];
                 }
 
-                return name;
+                return originalUseName.apply(this, args);
             };
         }
     },
