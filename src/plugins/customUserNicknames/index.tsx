@@ -21,6 +21,7 @@ import * as DataStore from "@api/DataStore";
 import { TextButton } from "@components/Button";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Heading } from "@components/Heading";
+import { EquicordDevs } from "@utils/constants";
 import definePlugin from "@utils/types";
 import { GuildMember, RenderModalProps, User } from "@vencord/discord-types";
 import { findByProps } from "@webpack";
@@ -147,7 +148,7 @@ export default definePlugin({
     name: "CustomUserNicknames",
     description: "Allows setting custom nicknames for users, whether you are friends or not.",
     tags: ["Utility", "Friends"],
-    authors: [{ name: "Choko", id: 826467976484094023n }],
+    authors: [EquicordDevs.choko],
     contextMenus: {
         "user-context": userContextPatch
     },
