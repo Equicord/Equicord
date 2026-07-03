@@ -18,16 +18,30 @@
 
 import { findGroupChildrenByChildId } from "@api/ContextMenu";
 import * as DataStore from "@api/DataStore";
+import { definePluginSettings } from "@api/Settings";
 import { TextButton } from "@components/Button";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Heading } from "@components/Heading";
 import { EquicordDevs } from "@utils/constants";
-import definePlugin from "@utils/types";
+import definePlugin, { OptionType } from "@utils/types";
 import { GuildMember, RenderModalProps, User } from "@vencord/discord-types";
 import { findByProps } from "@webpack";
 import { FluxDispatcher, GuildMemberStore, Menu, Modal, openModal, RelationshipStore, SelectedGuildStore, TextInput, UserStore, useState } from "@webpack/common";
 
 const CUSTOM_USER_NICKNAMES_KEY = "CustomUserNicknames";
+
+const settings = definePluginSettings({
+    showInGuilds: {
+        description: "Show custom nicknames in Servers (Guilds)",
+        type: OptionType.BOOLEAN,
+        default: true,
+        onChange() {
+            if (GuildMemberStore) {
+                GuildMemberStore.emitChange();
+            }
+        }
+    }
+});
 
 let customNicknames: Record<string, string> = {};
 let originalGetNickname: typeof RelationshipStore.getNickname | null = null;
@@ -93,7 +107,7 @@ function CustomNicknameModal({ modalProps, user }: { modalProps: RenderModalProp
             ]}
         >
             <Heading tag="h3" style={{ marginBottom: 8, fontSize: "16px", fontWeight: "400", lineHeight: "1.25", color: "var(--text-subtle)" }}>
-                {"Add a custom nickname for this user."}
+                {"Add a custom nickname for this user. It will be visible according to your plugin settings."}
             </Heading>
             <div style={{ paddingTop: "10px", flexGrow: 0 }}></div>
             <Heading tag="h3" style={{ marginBottom: 8, fontSize: "14px", fontWeight: 600 }}>
@@ -149,6 +163,7 @@ export default definePlugin({
     description: "Allows setting custom nicknames for users, whether you are friends or not.",
     tags: ["Utility", "Friends"],
     authors: [EquicordDevs.choko],
+    settings,
     contextMenus: {
         "user-context": userContextPatch
     },
@@ -173,13 +188,14 @@ export default definePlugin({
         if (guildStore) {
             guildGetNickname = guildStore.getNick;
             guildStore.getNick = function (this: typeof guildStore, guildId: string, userId: string) {
+                if (!settings.store.showInGuilds) return guildGetNickname!.call(this, guildId, userId);
                 return customNicknames[userId] ?? guildGetNickname!.call(this, guildId, userId);
             };
 
             guildGetMember = guildStore.getMember;
             guildStore.getMember = function (this: typeof guildStore, guildId: string, userId: string) {
                 const member = guildGetMember!.call(this, guildId, userId);
-                if (member && customNicknames[userId]) {
+                if (member && customNicknames[userId] && settings.store.showInGuilds) {
                     return {
                         ...member,
                         nick: customNicknames[userId]
@@ -193,7 +209,7 @@ export default definePlugin({
                 const members = guildGetMembers!.call(this, guildId);
                 if (members && members.length) {
                     return members.map((member: GuildMember) => {
-                        if (member && customNicknames[member.userId]) {
+                        if (member && customNicknames[member.userId] && settings.store.showInGuilds) {
                             return {
                                 ...member,
                                 nick: customNicknames[member.userId]
@@ -212,7 +228,7 @@ export default definePlugin({
             originalGetName = NicknameUtils.getName;
             NicknameUtils.getName = function (this: unknown, ...args: any[]) {
                 const userObj = getUserObj(args);
-                if (userObj && customNicknames[userObj.id]) {
+                if (userObj && customNicknames[userObj.id] && settings.store.showInGuilds) {
                     return customNicknames[userObj.id];
                 }
 
@@ -222,7 +238,7 @@ export default definePlugin({
             originalGetNicknameOfModule = NicknameUtils.getNickname;
             NicknameUtils.getNickname = function (this: unknown, ...args: any[]) {
                 const userObj = getUserObj(args);
-                if (userObj && customNicknames[userObj.id]) {
+                if (userObj && customNicknames[userObj.id] && settings.store.showInGuilds) {
                     return customNicknames[userObj.id];
                 }
 
@@ -232,7 +248,7 @@ export default definePlugin({
             originalUseName = NicknameUtils.useName;
             NicknameUtils.useName = function (this: unknown, ...args: any[]) {
                 const userObj = getUserObj(args);
-                if (userObj && customNicknames[userObj.id]) {
+                if (userObj && customNicknames[userObj.id] && settings.store.showInGuilds) {
                     return customNicknames[userObj.id];
                 }
 
