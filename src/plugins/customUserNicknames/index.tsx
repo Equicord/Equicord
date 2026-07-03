@@ -23,7 +23,8 @@ import ErrorBoundary from "@components/ErrorBoundary";
 import { Heading } from "@components/Heading";
 import definePlugin from "@utils/types";
 import { RenderModalProps, User } from "@vencord/discord-types";
-import { GuildMemberStore, Menu, Modal, openModal, RelationshipStore, TextInput, UserStore, useState } from "@webpack/common";
+import { findByProps } from "@webpack";
+import { FluxDispatcher, GuildMemberStore, Menu, Modal, openModal, RelationshipStore, SelectedGuildStore, TextInput, UserStore, useState } from "@webpack/common";
 
 const CUSTOM_USER_NICKNAMES_KEY = "CustomUserNicknames";
 
@@ -32,6 +33,38 @@ let originalGetNickname: any = null;
 let guildGetNickname: any = null;
 let guildGetMember: any = null;
 let guildGetMembers: any = null;
+let originalGetName: any = null;
+let originalGetNicknameOfModule: any = null;
+let originalUseName: any = null;
+
+async function triggerNickUpdate(user: User, newNick: string | null) {
+    if (newNick) {
+        customNicknames[user.id] = newNick;
+    } else {
+        delete customNicknames[user.id];
+    }
+
+    await DataStore.set(CUSTOM_USER_NICKNAMES_KEY, customNicknames);
+    RelationshipStore.emitChange();
+
+    if (GuildMemberStore) {
+        GuildMemberStore.emitChange();
+
+        // Dispatch GUILD_MEMBER_UPDATE for the active guild to force immediate UI updates (member list, voice)
+        const activeGuildId = SelectedGuildStore?.getGuildId();
+        if (activeGuildId) {
+            const member = GuildMemberStore.getMember(activeGuildId, user.id);
+            FluxDispatcher.dispatch({
+                type: "GUILD_MEMBER_UPDATE",
+                guildId: activeGuildId,
+                user: user,
+                roles: member?.roles ?? [],
+                nick: newNick ?? member?.nick ?? null,
+                avatar: member?.avatar ?? null
+            });
+        }
+    }
+}
 
 function CustomNicknameModal({ modalProps, user }: { modalProps: RenderModalProps; user: User; }) {
     const [value, setValue] = useState(customNicknames[user.id] ?? "");
@@ -47,16 +80,7 @@ function CustomNicknameModal({ modalProps, user }: { modalProps: RenderModalProp
                     variant: "primary",
                     onClick: async () => {
                         const trimmed = value.trim().slice(0, 32).trim();
-
-                        if (trimmed) {
-                            customNicknames[user.id] = trimmed;
-                        } else {
-                            delete customNicknames[user.id];
-                        }
-
-                        await DataStore.set(CUSTOM_USER_NICKNAMES_KEY, customNicknames);
-                        RelationshipStore.emitChange();
-                        if (GuildMemberStore) GuildMemberStore.emitChange();
+                        await triggerNickUpdate(user, trimmed || null);
                         modalProps.onClose();
                     }
                 },
@@ -85,10 +109,7 @@ function CustomNicknameModal({ modalProps, user }: { modalProps: RenderModalProp
                 className="custom-nicknames-reset-button"
                 onClick={async () => {
                     setValue("");
-                    delete customNicknames[user.id];
-                    await DataStore.set(CUSTOM_USER_NICKNAMES_KEY, customNicknames);
-                    RelationshipStore.emitChange();
-                    if (GuildMemberStore) GuildMemberStore.emitChange();
+                    await triggerNickUpdate(user, null);
                     modalProps.onClose();
                 }}
                 style={{ marginTop: 8 }}
@@ -183,6 +204,38 @@ export default definePlugin({
                 return members;
             };
         }
+
+        const NicknameUtils = findByProps("getName", "useName", "getNickname");
+
+        if (NicknameUtils) {
+            originalGetName = NicknameUtils.getName;
+            NicknameUtils.getName = function (this: any) {
+                const userObj = Array.from(arguments).find(arg => arg && typeof arg === "object" && typeof arg.id === "string");
+                if (userObj && customNicknames[userObj.id]) {
+                    return customNicknames[userObj.id];
+                }
+                return originalGetName.apply(this, arguments);
+            };
+
+            originalGetNicknameOfModule = NicknameUtils.getNickname;
+            NicknameUtils.getNickname = function (this: any) {
+                const userObj = Array.from(arguments).find(arg => arg && typeof arg === "object" && typeof arg.id === "string");
+                if (userObj && customNicknames[userObj.id]) {
+                    return customNicknames[userObj.id];
+                }
+                return originalGetNicknameOfModule.apply(this, arguments);
+            };
+
+            originalUseName = NicknameUtils.useName;
+            NicknameUtils.useName = function (this: any) {
+                const name = originalUseName.apply(this, arguments);
+                const userObj = Array.from(arguments).find(arg => arg && typeof arg === "object" && typeof arg.id === "string");
+                if (userObj && customNicknames[userObj.id]) {
+                    return customNicknames[userObj.id];
+                }
+                return name;
+            };
+        }
     },
 
     stop() {
@@ -210,6 +263,23 @@ export default definePlugin({
                 guildGetMembers = null;
             }
             guildStore.emitChange();
+        }
+
+        const NicknameUtils = findByProps("getName", "useName", "getNickname");
+
+        if (NicknameUtils) {
+            if (originalGetName) {
+                NicknameUtils.getName = originalGetName;
+                originalGetName = null;
+            }
+            if (originalGetNicknameOfModule) {
+                NicknameUtils.getNickname = originalGetNicknameOfModule;
+                originalGetNicknameOfModule = null;
+            }
+            if (originalUseName) {
+                NicknameUtils.useName = originalUseName;
+                originalUseName = null;
+            }
         }
     }
 });
