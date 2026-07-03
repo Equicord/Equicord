@@ -23,12 +23,15 @@ import ErrorBoundary from "@components/ErrorBoundary";
 import { Heading } from "@components/Heading";
 import definePlugin from "@utils/types";
 import { RenderModalProps, User } from "@vencord/discord-types";
-import { Menu, Modal, openModal, RelationshipStore, TextInput, UserStore, useState } from "@webpack/common";
+import { GuildMemberStore, Menu, Modal, openModal, RelationshipStore, TextInput, UserStore, useState } from "@webpack/common";
 
 const CUSTOM_USER_NICKNAMES_KEY = "CustomUserNicknames";
 
 let customNicknames: Record<string, string> = {};
 let originalGetNickname: any = null;
+let guildGetNickname: any = null;
+let guildGetMember: any = null;
+let guildGetMembers: any = null;
 
 function CustomNicknameModal({ modalProps, user }: { modalProps: RenderModalProps; user: User; }) {
     const [value, setValue] = useState(customNicknames[user.id] ?? "");
@@ -53,6 +56,7 @@ function CustomNicknameModal({ modalProps, user }: { modalProps: RenderModalProp
 
                         await DataStore.set(CUSTOM_USER_NICKNAMES_KEY, customNicknames);
                         RelationshipStore.emitChange();
+                        if (GuildMemberStore) GuildMemberStore.emitChange();
                         modalProps.onClose();
                     }
                 },
@@ -84,6 +88,7 @@ function CustomNicknameModal({ modalProps, user }: { modalProps: RenderModalProp
                     delete customNicknames[user.id];
                     await DataStore.set(CUSTOM_USER_NICKNAMES_KEY, customNicknames);
                     RelationshipStore.emitChange();
+                    if (GuildMemberStore) GuildMemberStore.emitChange();
                     modalProps.onClose();
                 }}
                 style={{ marginTop: 8 }}
@@ -140,6 +145,44 @@ export default definePlugin({
 
             store.emitChange();
         }
+
+        const guildStore = GuildMemberStore;
+
+        if (guildStore) {
+            guildGetNickname = guildStore.getNick;
+            guildStore.getNick = function (this: any, guildId: string, userId: string) {
+                return customNicknames[userId] ?? guildGetNickname.call(this, guildId, userId);
+            };
+
+            guildGetMember = guildStore.getMember;
+            guildStore.getMember = function (this: any, guildId: string, userId: string) {
+                const member = guildGetMember.call(this, guildId, userId);
+                if (member && customNicknames[userId]) {
+                    return {
+                        ...member,
+                        nick: customNicknames[userId]
+                    };
+                }
+                return member;
+            };
+
+            guildGetMembers = guildStore.getMembers;
+            guildStore.getMembers = function (this: any, guildId: string) {
+                const members = guildGetMembers.call(this, guildId);
+                if (members && members.length) {
+                    return members.map((member: any) => {
+                        if (member && customNicknames[member.userId]) {
+                            return {
+                                ...member,
+                                nick: customNicknames[member.userId]
+                            };
+                        }
+                        return member;
+                    });
+                }
+                return members;
+            };
+        }
     },
 
     stop() {
@@ -149,6 +192,24 @@ export default definePlugin({
             store.getNickname = originalGetNickname;
             originalGetNickname = null;
             store.emitChange();
+        }
+
+        const guildStore = GuildMemberStore;
+
+        if (guildStore) {
+            if (guildGetNickname) {
+                guildStore.getNick = guildGetNickname;
+                guildGetNickname = null;
+            }
+            if (guildGetMember) {
+                guildStore.getMember = guildGetMember;
+                guildGetMember = null;
+            }
+            if (guildGetMembers) {
+                guildStore.getMembers = guildGetMembers;
+                guildGetMembers = null;
+            }
+            guildStore.emitChange();
         }
     }
 });
