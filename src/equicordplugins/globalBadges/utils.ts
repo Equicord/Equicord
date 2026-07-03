@@ -23,6 +23,13 @@ export const serviceMap: Record<string, string> = {
     velocity: "Velocity",
     enmity: "Enmity",
     paicord: "Paicord",
+    bunny: "Bunny",
+    goosemod: "GooseMod",
+    replugged: "Replugged",
+    betterdiscord: "BetterDiscord",
+    vendroidenhanced: "VendroidEnhanced",
+    revenge: "Revenge",
+    record: "ReCord",
 };
 
 const blockedMods = ["vencord", "equicord"];
@@ -45,7 +52,15 @@ export async function loadBadges() {
                 reviewdb: settings.store.showReviewDB,
                 aliucord: settings.store.showAliucord,
                 raincord: settings.store.showRaincord,
-                enmity: settings.store.showEnmity
+                enmity: settings.store.showEnmity,
+                paicord: settings.store.showPaicord,
+                bunny: settings.store.showBunny,
+                goosemod: settings.store.showGooseMod,
+                replugged: settings.store.showReplugged,
+                betterdiscord: settings.store.showBetterDiscord,
+                vendroidenhanced: settings.store.showVendroidEnhanced,
+                revenge: settings.store.showRevenge,
+                record: settings.store.showReCord
             };
 
             if (mod in conditionalMods && !conditionalMods[mod]) return false;

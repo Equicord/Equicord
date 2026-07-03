@@ -84,6 +84,48 @@ export const settings = definePluginSettings({
         default: true,
         restartNeeded: false
     },
+    showBunny: {
+        type: OptionType.BOOLEAN,
+        description: "Show Bunny Badges",
+        default: true,
+        restartNeeded: false
+    },
+    showGooseMod: {
+        type: OptionType.BOOLEAN,
+        description: "Show GooseMod Badges",
+        default: true,
+        restartNeeded: false
+    },
+    showReplugged: {
+        type: OptionType.BOOLEAN,
+        description: "Show Replugged Badges",
+        default: true,
+        restartNeeded: false
+    },
+    showBetterDiscord: {
+        type: OptionType.BOOLEAN,
+        description: "Show BetterDiscord Badges",
+        default: true,
+        restartNeeded: false
+    },
+    showVendroidEnhanced: {
+        type: OptionType.BOOLEAN,
+        description: "Show Vendroid Enhanced Badges",
+        default: true,
+        restartNeeded: false
+    },
+    showRevenge: {
+        type: OptionType.BOOLEAN,
+        description: "Show Revenge Badges",
+        default: true,
+        restartNeeded: false
+    },
+    showReCord: {
+        type: OptionType.BOOLEAN,
+        description: "Show ReCord Badges",
+        default: true,
+        restartNeeded: false
+    },
     apiUrl: {
         type: OptionType.STRING,
         description: "API to use",
