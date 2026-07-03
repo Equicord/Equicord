@@ -9,7 +9,7 @@ import definePlugin from "@utils/types";
 
 export default definePlugin({
     name: "SurfaceClassesAPI",
-    description: "API to add plugin-owned state classes and limited props to stable Discord layout surfaces.",
+    description: "API to add plugin-owned semantic data attributes and limited props to stable Discord layout surfaces.",
     authors: [EquicordDevs.benjii],
 
     patches: [
@@ -33,8 +33,8 @@ export default definePlugin({
         {
             find: "--custom-app-panels-height",
             replacement: {
-                match: /("AppPanels"\}\);return\(0,\i\.jsx\)\("section",\{)/,
-                replace: '$1...Vencord.Api.SurfaceClasses._useSurfaceProps("userArea"),'
+                match: /(document\.body\.style\.setProperty\("--custom-app-panels-height",.{0,32}\)\},\[\]\);.{0,160}?return\s*(?:\(0,)?\i\.jsx(?:s)?\)?\("section",\{)/,
+                replace: "$1...Vencord.Api.SurfaceClasses._useSurfaceProps('userArea'),"
             }
         },
         {

@@ -26,11 +26,6 @@
     grid-template-columns: [start] min-content [guildsEnd] min-content [sidebarEnd] var(--vc-cui-peek-size) [channelsEnd] 1fr [end] !important;
 }
 
-[data-vc-collapsible-ui-base-channel-list-expanded] {
-    /* stylelint-disable-next-line value-keyword-case */
-    grid-template-columns: [start] min-content [guildsEnd] min-content [sidebarEnd] var(--custom-guild-sidebar-width, 312px) [channelsEnd] 1fr [end] !important;
-}
-
 [data-vc-collapsible-ui-base-channel-list-collapsed][data-vc-collapsible-ui-base-channel-list-interaction-expanded] {
     /* stylelint-disable-next-line value-keyword-case */
     grid-template-columns: [start] min-content [guildsEnd] min-content [sidebarEnd] var(--custom-guild-sidebar-width, 312px) [channelsEnd] 1fr [end] !important;
@@ -48,6 +43,10 @@
 
 [data-vc-collapsible-ui-sidebar] {
     position: relative;
+}
+
+[data-vc-collapsible-ui-sidebar-user-area-detached] {
+    --custom-app-panels-height: 0px !important;
 }
 
 [data-vc-collapsible-ui-sidebar-channel-list-collapsed] {
@@ -87,16 +86,13 @@
     transition-delay: 0ms;
 }
 
-[data-vc-collapsible-ui-sidebar-channel-list-expanded],
-[data-vc-collapsible-ui-sidebar-channel-list-collapsed]:is(:hover, :focus-within) {
+[data-vc-collapsible-ui-sidebar-channel-list-expanded] {
     width: var(--custom-guild-sidebar-width, 312px) !important;
     min-width: var(--custom-guild-sidebar-width, 312px) !important;
     max-width: var(--custom-guild-sidebar-width, 312px) !important;
 }
 
-[data-vc-collapsible-ui-sidebar-channel-list-expanded] [data-vc-collapsible-ui-channel-list-collapsed],
-[data-vc-collapsible-ui-sidebar][data-vc-collapsible-ui-channel-list-collapsed]:is(:hover, :focus-within),
-[data-vc-collapsible-ui-sidebar]:is(:hover, :focus-within) [data-vc-collapsible-ui-channel-list-collapsed] {
+[data-vc-collapsible-ui-sidebar-channel-list-expanded] [data-vc-collapsible-ui-channel-list-collapsed] {
     width: var(--custom-guild-sidebar-width, 312px) !important;
     min-width: var(--vc-cui-channel-list-min-width) !important;
     max-width: var(--vc-cui-channel-list-max-width) !important;
@@ -215,23 +211,72 @@
     pointer-events: auto;
 }
 
-[data-vc-collapsible-ui-sidebar-channel-list-collapsed] [data-vc-collapsible-ui-user-area] {
+[data-vc-collapsible-ui-sidebar-channel-list-collapsed]:not([data-vc-collapsible-ui-sidebar-user-area-detached]) [data-vc-collapsible-ui-user-area] {
     width: var(--vc-cui-user-area-collapsed-width) !important;
     min-width: var(--vc-cui-user-area-collapsed-width) !important;
     max-width: var(--vc-cui-user-area-collapsed-width) !important;
     z-index: 4;
 }
 
-[data-vc-collapsible-ui-sidebar-channel-list-collapsed] [data-vc-collapsible-ui-user-area-guild-bar-collapsed] {
+[data-vc-collapsible-ui-sidebar-channel-list-collapsed]:not([data-vc-collapsible-ui-sidebar-user-area-detached]) [data-vc-collapsible-ui-user-area-expanded] {
+    position: absolute !important;
+    right: auto !important;
+    bottom: 6px !important;
+    left: 6px !important;
+    height: var(--vc-cui-user-area-collapsed-width) !important;
+    min-height: var(--vc-cui-user-area-collapsed-width) !important;
+    max-height: var(--vc-cui-user-area-collapsed-width) !important;
+    flex: 0 0 auto !important;
+    align-self: flex-start;
+    overflow: hidden !important;
+}
+
+[data-vc-collapsible-ui-sidebar-channel-list-collapsed]:not([data-vc-collapsible-ui-sidebar-user-area-detached]) [data-vc-collapsible-ui-user-area-expanded] > * {
+    width: var(--custom-guild-sidebar-width, 312px);
+    min-width: var(--vc-cui-channel-list-min-width);
+    max-width: var(--vc-cui-channel-list-max-width);
+    opacity: 1;
+    pointer-events: auto;
+}
+
+[data-vc-collapsible-ui-sidebar-channel-list-collapsed]:not([data-vc-collapsible-ui-sidebar-user-area-detached]) [data-vc-collapsible-ui-user-area-expanded]:is(:hover, :focus-within) {
+    width: var(--custom-guild-sidebar-width, 312px) !important;
+    min-width: var(--vc-cui-channel-list-min-width) !important;
+    max-width: var(--vc-cui-channel-list-max-width) !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    overflow: visible !important;
+}
+
+[data-vc-collapsible-ui-sidebar-channel-list-collapsed]:not([data-vc-collapsible-ui-sidebar-user-area-detached]) [data-vc-collapsible-ui-user-area-guild-bar-collapsed][data-vc-collapsible-ui-user-area-collapsed] {
     width: var(--vc-cui-peek-size) !important;
     min-width: var(--vc-cui-peek-size) !important;
     max-width: var(--vc-cui-peek-size) !important;
 }
 
-[data-vc-collapsible-ui-sidebar-channel-list-collapsed]:is(:hover, :focus-within) [data-vc-collapsible-ui-user-area] {
+[data-vc-collapsible-ui-sidebar-channel-list-expanded]:not([data-vc-collapsible-ui-sidebar-user-area-detached]) [data-vc-collapsible-ui-user-area] {
     width: var(--custom-guild-sidebar-width, 312px) !important;
     min-width: var(--vc-cui-channel-list-min-width) !important;
     max-width: var(--vc-cui-channel-list-max-width) !important;
+}
+
+[data-vc-collapsible-ui-user-area-detached] {
+    position: fixed !important;
+    right: auto !important;
+    bottom: auto !important;
+    width: var(--custom-guild-sidebar-width, 312px) !important;
+    min-width: var(--custom-guild-sidebar-width, 312px) !important;
+    max-width: var(--custom-guild-sidebar-width, 312px) !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    cursor: grab;
+    z-index: 2 !important;
+}
+
+[data-vc-collapsible-ui-user-area-detached]:active {
+    cursor: grabbing;
 }
 
 .vc-collapsible-ui-chat-buttons {

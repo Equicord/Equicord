@@ -56,12 +56,20 @@ export type PanelId = keyof typeof panelRegistry;
 
 export const toolbarPanelOrder = ["guildBar", "channelList", "membersList", "chatButtons", "titleBar", "headerBar", "userArea"] as const satisfies readonly PanelId[];
 
+export const collapseSettingKeys = toolbarPanelOrder.map(panelId => panelRegistry[panelId].collapsedKey);
+
 type CollapseSettingChangeHandler = (panelId: PanelId, collapsed: boolean) => void;
+type UserAreaDetachSettingChangeHandler = () => void;
 
 let collapseSettingChangeHandler: CollapseSettingChangeHandler | undefined;
+let userAreaDetachSettingChangeHandler: UserAreaDetachSettingChangeHandler | undefined;
 
 export function setCollapseSettingChangeHandler(handler: CollapseSettingChangeHandler | undefined) {
     collapseSettingChangeHandler = handler;
+}
+
+export function setUserAreaDetachSettingChangeHandler(handler: UserAreaDetachSettingChangeHandler | undefined) {
+    userAreaDetachSettingChangeHandler = handler;
 }
 
 function onCollapseSettingChanged(panelId: PanelId) {
@@ -69,6 +77,26 @@ function onCollapseSettingChanged(panelId: PanelId) {
 }
 
 export const settings = definePluginSettings({
+    detachUserArea: {
+        type: OptionType.BOOLEAN,
+        description: "Detach the user area so it can be moved freely when it is not collapsed.",
+        default: false,
+        onChange: () => userAreaDetachSettingChangeHandler?.(),
+    },
+    detachedUserAreaX: {
+        type: OptionType.NUMBER,
+        description: "Persist the detached user area x position.",
+        default: -1,
+        hidden: true,
+        onChange: () => userAreaDetachSettingChangeHandler?.(),
+    },
+    detachedUserAreaY: {
+        type: OptionType.NUMBER,
+        description: "Persist the detached user area y position.",
+        default: -1,
+        hidden: true,
+        onChange: () => userAreaDetachSettingChangeHandler?.(),
+    },
     guildBarCollapsed: {
         type: OptionType.BOOLEAN,
         description: "Persist the guild bar as collapsed.",

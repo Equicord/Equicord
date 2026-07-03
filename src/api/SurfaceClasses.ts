@@ -4,10 +4,21 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { classes } from "@utils/misc";
+import { Logger } from "@utils/Logger";
 import { useForceUpdater } from "@utils/react";
 import { useEffect } from "@webpack/common";
-import type { FocusEventHandler, MouseEventHandler } from "react";
+import type { CSSProperties, FocusEventHandler, MouseEventHandler, RefCallback } from "react";
+
+/**
+ * Adds plugin-owned semantic data attributes and a limited set of props to
+ * stable Discord-owned layout surfaces, so plugins can style/track layout
+ * state without patching compiled Discord JSX directly.
+ *
+ * This is not a generic prop bus and not for plugin-local components. It
+ * intentionally does not expose className: injected props land before or
+ * after Discord's own props depending on the surface, so class merging
+ * cannot be guaranteed. Use data attributes as CSS hooks instead.
+ */
 
 export type SurfaceId =
     | "base"
@@ -20,47 +31,27 @@ export type SurfaceId =
     | "userArea";
 
 export interface SurfaceProvidedProps {
-    className?: string;
-    "data-vc-surface-classes"?: string;
+    ref?: RefCallback<HTMLElement>;
+    style?: CSSProperties;
     [dataAttribute: `data-${string}`]: string | undefined;
     onFocusCapture?: FocusEventHandler<HTMLElement>;
     onBlurCapture?: FocusEventHandler<HTMLElement>;
+    onMouseDownCapture?: MouseEventHandler<HTMLElement>;
     onMouseOverCapture?: MouseEventHandler<HTMLElement>;
     onMouseOutCapture?: MouseEventHandler<HTMLElement>;
 }
 
-export type SurfaceClassProvider = () => string | undefined;
 export type SurfacePropsProvider = () => SurfaceProvidedProps | undefined;
 
 interface SurfaceInstance {
     forceUpdate(callback?: () => void): void;
 }
 
-const providers = new Map<SurfaceId, Set<SurfaceClassProvider>>();
 const propsProviders = new Map<SurfaceId, Set<SurfacePropsProvider>>();
 const listeners = new Map<SurfaceId, Set<() => void>>();
 const surfaceInstances = new Map<SurfaceId, WeakRef<SurfaceInstance>>();
-
-/**
- * Adds semantic class/state props to stable Discord-owned layout surfaces.
- *
- * This is not for plugin-local components or a generic prop bus. It exists so
- * plugins do not patch compiled Discord JSX layout directly.
- *
- * Prop providers are intentionally limited to small hover/focus state handoff
- * props needed to support semantic surface classes.
- */
-
-function getProviderSet(surfaceId: SurfaceId) {
-    let set = providers.get(surfaceId);
-
-    if (set == null) {
-        set = new Set();
-        providers.set(surfaceId, set);
-    }
-
-    return set;
-}
+const failedPropsProviders = new WeakSet<SurfacePropsProvider>();
+const logger = new Logger("SurfaceClasses");
 
 function getPropsProviderSet(surfaceId: SurfaceId) {
     let set = propsProviders.get(surfaceId);
@@ -84,10 +75,6 @@ function getListenerSet(surfaceId: SurfaceId) {
     return set;
 }
 
-function composeClassNames(...values: Array<string | undefined>) {
-    return classes(...values.flatMap(value => value?.split(/\s+/).filter(Boolean) ?? []));
-}
-
 function chainHandlers<E>(
     first?: (event: E) => void,
     second?: (event: E) => void
@@ -101,22 +88,36 @@ function chainHandlers<E>(
     };
 }
 
-export function getSurfaceClasses(surfaceId: SurfaceId) {
-    return composeClassNames(...Array.from(providers.get(surfaceId) ?? [], provider => provider()));
+function chainRefs<T>(first?: RefCallback<T>, second?: RefCallback<T>) {
+    if (!first) return second;
+    if (!second) return first;
+
+    return (instance: T | null) => {
+        first(instance);
+        second(instance);
+    };
 }
 
 function mergeSurfaceProvidedProps(target: SurfaceProvidedProps, source: SurfaceProvidedProps) {
-    const mergedClass = composeClassNames(target.className, source.className);
-    if (mergedClass) target.className = mergedClass;
+    const ref = chainRefs(target.ref, source.ref);
+    if (ref) target.ref = ref;
     const onFocusCapture = chainHandlers(target.onFocusCapture, source.onFocusCapture);
     if (onFocusCapture) target.onFocusCapture = onFocusCapture;
     const onBlurCapture = chainHandlers(target.onBlurCapture, source.onBlurCapture);
     if (onBlurCapture) target.onBlurCapture = onBlurCapture;
+    const onMouseDownCapture = chainHandlers(target.onMouseDownCapture, source.onMouseDownCapture);
+    if (onMouseDownCapture) target.onMouseDownCapture = onMouseDownCapture;
     const onMouseOverCapture = chainHandlers(target.onMouseOverCapture, source.onMouseOverCapture);
     if (onMouseOverCapture) target.onMouseOverCapture = onMouseOverCapture;
     const onMouseOutCapture = chainHandlers(target.onMouseOutCapture, source.onMouseOutCapture);
     if (onMouseOutCapture) target.onMouseOutCapture = onMouseOutCapture;
 
+    if (source.style) {
+        target.style = { ...target.style, ...source.style };
+    }
+
+    // Copy only string data-* attributes so providers cannot smuggle in
+    // arbitrary props (className in particular is deliberately unsupported).
     for (const [key, value] of Object.entries(source)) {
         if (key.startsWith("data-") && typeof value === "string") {
             target[key as `data-${string}`] = value;
@@ -126,22 +127,21 @@ function mergeSurfaceProvidedProps(target: SurfaceProvidedProps, source: Surface
     return target;
 }
 
-export function getSurfaceProps(surfaceId: SurfaceId) {
-    const className = getSurfaceClasses(surfaceId);
+function getSurfaceProps(surfaceId: SurfaceId) {
     const props: SurfaceProvidedProps = {};
 
-    if (className) {
-        props["data-vc-surface-classes"] = className;
-
-        for (const token of className.split(/\s+/)) {
-            if (token) {
-                props[`data-${token}` as `data-${string}`] = "";
-            }
-        }
-    }
-
     for (const provider of propsProviders.get(surfaceId) ?? []) {
-        const providedProps = provider();
+        let providedProps: SurfaceProvidedProps | undefined;
+
+        try {
+            providedProps = provider();
+        } catch (error) {
+            if (!failedPropsProviders.has(provider)) {
+                failedPropsProviders.add(provider);
+                logger.error(`Surface props provider failed for ${surfaceId}`, error);
+            }
+            continue;
+        }
 
         if (providedProps) {
             mergeSurfaceProvidedProps(props, providedProps);
@@ -164,16 +164,6 @@ function notifyOneSurface(surfaceId: SurfaceId) {
     }
 }
 
-export function addSurfaceClassProvider(surfaceId: SurfaceId, provider: SurfaceClassProvider) {
-    getProviderSet(surfaceId).add(provider);
-    notifyOneSurface(surfaceId);
-
-    return () => {
-        providers.get(surfaceId)?.delete(provider);
-        notifyOneSurface(surfaceId);
-    };
-}
-
 export function addSurfacePropsProvider(surfaceId: SurfaceId, provider: SurfacePropsProvider) {
     getPropsProviderSet(surfaceId).add(provider);
     notifyOneSurface(surfaceId);
@@ -184,6 +174,7 @@ export function addSurfacePropsProvider(surfaceId: SurfaceId, provider: SurfaceP
     };
 }
 
+/** Re-renders a surface after the state backing one of its providers changed. */
 export function notifySurfaceClassesChanged(surfaceId: SurfaceId) {
     notifyOneSurface(surfaceId);
 }
@@ -213,5 +204,7 @@ export function _useSurfaceProps(surfaceId: SurfaceId) {
  * Function component surfaces use _useSurfaceProps instead.
  */
 export function _trackSurfaceInstance(surfaceId: SurfaceId, instance: SurfaceInstance) {
-    surfaceInstances.set(surfaceId, new WeakRef(instance));
+    if (surfaceInstances.get(surfaceId)?.deref() !== instance) {
+        surfaceInstances.set(surfaceId, new WeakRef(instance));
+    }
 }
