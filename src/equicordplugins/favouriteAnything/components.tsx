@@ -279,7 +279,8 @@ export function AttachmentAccessory() {
 
     const props: FavoriteButtonProps | null = useMemo(() => {
         if (!attachment?.downloadUrl) return null;
-        const { originalItem, type, downloadUrl, width = 600, height = 400, srcIsAnimated } = attachment;
+        const { originalItem, type, downloadUrl, srcIsAnimated } = attachment;
+        const width = attachment.width || 600, height = attachment.height || 400;
 
         // Do not render the custom accessory if the original attachment component already has a gif accessory
         const isAnimated = ImageUtils.isAnimated({

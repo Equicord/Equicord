@@ -21,7 +21,7 @@ export default definePlugin({
             find,
             replacement: [
                 {
-                    match: /(\i\.\i\.(unpin|pin)Message\(\i,\i\.id\)):\i\.\i\.confirm(Unpin|Pin)\(\i,\i\)/g,
+                    match: /(\i\.\i\.(?:unpin|pin)Message\(\i,\i\.id\)):\i\.\i\.confirm(?:Unpin|Pin)\(\i,\i\)/g,
                     replace: "$1:$1"
                 }
             ]

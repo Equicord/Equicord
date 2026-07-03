@@ -173,7 +173,7 @@ export default definePlugin({
         },
         // User Area
         {
-            find: ".DISPLAY_NAME_STYLES_COACHMARK)",
+            find: "#{intl::USER_PROFILE_ACCOUNT_POPOUT_BUTTON_A11Y_LABEL}",
             replacement: [
                 {
                     match: /((\i)=\i\?\.avatarDecoration,\i=)\(0,\i\.\i\)\(\2\)/,
@@ -205,7 +205,7 @@ export default definePlugin({
             // Profile banner animation effect
             find: "bannerAdjustment,isHovering",
             replacement: {
-                match: /\i=(\i)=>\{(?=.{0,50}\.useReducedMotion\))/,
+                match: /\i=function\((\i)\)\{(?=.{0,50}\.useReducedMotion\))/,
                 replace: "$&if(!$1.shopPreview)return null;"
             },
             predicate: () => settings.store.removeProfileEffect,
@@ -221,7 +221,7 @@ export default definePlugin({
         },
         {
             // Always show username
-            find: ".DISPLAY_NAME_STYLES_COACHMARK)",
+            find: "#{intl::USER_PROFILE_ACCOUNT_POPOUT_BUTTON_A11Y_LABEL}",
             replacement: {
                 match: /hoverText:(\i),forceHover:\i,children:/g,
                 replace: "hoverText:$1,forceHover:!0,children:"
@@ -326,7 +326,7 @@ export default definePlugin({
             // Channel list server boost progress bar
             find: "useGuildActionRow",
             replacement: {
-                match: /(GUILD_NEW_MEMBER_ACTIONS_PROGRESS_BAR\)):(\i(?:\.premiumProgressBarEnabled)?)/,
+                match: /(GUILD_NEW_MEMBER_ACTIONS_PROGRESS_BAR\)):\i(?:\.premiumProgressBarEnabled)?/,
                 replace: "$1:null"
             },
             predicate: () => settings.store.removeServerBoostInfo,
@@ -335,8 +335,8 @@ export default definePlugin({
             // Billing settings
             find: ".BILLING_SECTION,",
             replacement: {
-                match: /\(0,\i\.\i\)\(\i\.\i\.BILLING_SECTION/,
-                replace: "null??$&",
+                match: /(\.BILLING_SECTION.{0,50}buildLayout:\(\)=>\[).{0,15}?\]/,
+                replace: "$1]",
             },
             predicate: () => settings.store.removeBillingSettings,
         },

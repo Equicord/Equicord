@@ -20,7 +20,8 @@ export enum ServiceType {
     TEMPSH = "tempsh",
     FILEBIN = "filebin",
     PIXELVAULT = "pixelvault",
-    PIXELDRAIN = "pixeldrain"
+    PIXELDRAIN = "pixeldrain",
+    WEBDAV = "webdav"
 }
 
 export const serviceLabels: Record<ServiceType, string> = {
@@ -39,7 +40,8 @@ export const serviceLabels: Record<ServiceType, string> = {
     [ServiceType.TEMPSH]: "temp.sh",
     [ServiceType.FILEBIN]: "filebin.net",
     [ServiceType.PIXELVAULT]: "PixelVault",
-    [ServiceType.PIXELDRAIN]: "PixelDrain"
+    [ServiceType.PIXELDRAIN]: "PixelDrain",
+    [ServiceType.WEBDAV]: "WebDAV"
 };
 
 export const fallbackServiceOrder: ServiceType[] = [
@@ -58,6 +60,7 @@ export const fallbackServiceOrder: ServiceType[] = [
     ServiceType.FILEBIN,
     ServiceType.PIXELVAULT,
     ServiceType.PIXELDRAIN,
+    ServiceType.WEBDAV,
     ServiceType.SHAREX
 ];
 

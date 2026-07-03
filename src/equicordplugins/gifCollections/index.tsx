@@ -8,9 +8,9 @@ import "./style.css";
 
 import { EquicordDevs } from "@utils/constants";
 import definePlugin from "@utils/types";
-import { FluxDispatcher } from "@webpack/common";
+import { FluxDispatcher, React } from "@webpack/common";
 
-import { addCollectionContextMenuPatch, buildGifPickerContextMenu } from "./components/contextMenus";
+import { addCollectionContextMenuPatch, getGifPickerContextMenuItems, RemoveItemContextMenuItems } from "./components/contextMenus";
 import { settings, SortingOptions } from "./settings";
 import { Category, Collection, Gif, GifPickerInstance } from "./types";
 import { cache_collections, refreshCacheCollection, updateGif } from "./utils/collectionManager";
@@ -46,13 +46,6 @@ export default definePlugin({
                     replace: "$1$self.hidePrefix($2),",
                 },
             ],
-        },
-        {
-            find: "renderEmptyFavorite",
-            replacement: {
-                match: /render\(\){.{1,500}onClick:this\.handleClick,/,
-                replace: "$&onContextMenu: (e) => $self.collectionContextMenu(e, this),",
-            },
         },
         {
             find: "renderHeaderContent()",
@@ -171,7 +164,23 @@ export default definePlugin({
         return query.startsWith(GIF_COLLECTION_PREFIX) && cache_collections.some(c => c.name === query);
     },
 
-    collectionContextMenu(e: React.MouseEvent, instance: GifPickerInstance) {
-        return buildGifPickerContextMenu(e, instance.props.item, GIF_COLLECTION_PREFIX, GIF_ITEM_PREFIX, instance);
-    },
+    gifPickerContextMenu(instance, e: React.MouseEvent) {
+        const item = instance?.props?.item;
+        if (!item) return;
+
+        const { name, id } = item;
+
+        if (name?.startsWith(GIF_COLLECTION_PREFIX)) {
+            return RemoveItemContextMenuItems({ type: "collection", nameOrId: name, instance });
+        }
+
+        if (id?.startsWith(GIF_ITEM_PREFIX)) {
+            return RemoveItemContextMenuItems({ type: "gif", nameOrId: id, instance });
+        }
+
+        const { src, url, height, width } = item;
+        if (!src || !url || !height || !width) return;
+
+        return getGifPickerContextMenuItems(src, url, height, width);
+    }
 });

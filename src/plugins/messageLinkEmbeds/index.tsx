@@ -16,12 +16,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+import "./styles.css";
+
 import { addMessageAccessory, removeMessageAccessory } from "@api/MessageAccessories";
 import { updateMessage } from "@api/MessageUpdater";
 import { definePluginSettings } from "@api/Settings";
 import { getUserSettingLazy } from "@api/UserSettings";
 import { BaseText } from "@components/BaseText";
 import { Devs } from "@utils/constants.js";
+import { classNameFactory } from "@utils/css";
 import { classes } from "@utils/misc";
 import { Queue } from "@utils/Queue";
 import definePlugin, { OptionType } from "@utils/types";
@@ -42,6 +45,7 @@ import {
 } from "@webpack/common";
 import { ComponentType, JSX } from "react";
 
+const cl = classNameFactory("vc-message-link-embeds-");
 const messageCache = new Map<string, {
     message?: Message;
     fetched: boolean;
@@ -51,7 +55,6 @@ const Embed = findComponentLazy(m => m.prototype?.renderSuppressButton);
 const ChannelMessage = findComponentByCodeLazy("childrenExecutedCommand:", ".hideAccessories");
 let AutoModEmbed: ComponentType<any> = () => null;
 
-const SearchResultClasses = findCssClassesLazy("message", "searchResult");
 const EmbedClasses = findCssClassesLazy("embedAuthorIcon", "embedAuthor", "embedAuthor", "embedMargin");
 
 const MessageDisplayCompact = getUserSettingLazy("textAndImages", "messageDisplayCompact")!;
@@ -113,6 +116,7 @@ const settings = definePluginSettings({
         ]
     },
     idList: {
+        displayName: "ID List",
         description: "Guild/channel/user IDs to blacklist or whitelist (separate with comma)",
         type: OptionType.STRING,
         default: "",
@@ -302,7 +306,7 @@ function ChannelMessageEmbedAccessory({ message, channel }: MessageEmbedProps): 
                 }
             }}
             renderDescription={() => (
-                <div key={message.id} className={classes(SearchResultClasses.message, settings.store.messageBackgroundColor && SearchResultClasses.searchResult)}>
+                <div key={message.id} className={classes(cl("message"), settings.store.messageBackgroundColor && cl("search-result"))}>
                     <ChannelMessage
                         id={`message-link-embeds-${message.id}`}
                         message={message}

@@ -51,7 +51,7 @@ export default definePlugin({
                     replace: "default:$2=$self.getTagText($self.localTags[$1]);",
                 },
                 {
-                    match: /(?<=type:(\i).*?)\.BOT:(?=default:)/,
+                    match: /(?<=type:\i.*?)\.BOT:(?=default:)/,
                     replace: "$&return null;",
                     predicate: () => settings.store.dontShowBotTag
                 },

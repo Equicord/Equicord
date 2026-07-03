@@ -1235,7 +1235,7 @@ export default definePlugin({
                             Note from example-git
                         </Forms.FormText>
                         <Forms.FormText className={cl("author-text")}>
-                            Old TikTok-TTS API died, so I set up a new cloudflare worker. It's rate-limited and stricter than the old one by design — please don't abuse it so it can stay available for plugins like this.
+                            Old TikTok-TTS API died, so I set up a new cloudflare worker. It's rate-limited and stricter than the old one by design - please don't abuse it so it can stay available for plugins like this.
                         </Forms.FormText>
                     </div>
                 </div>

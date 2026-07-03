@@ -18,7 +18,7 @@ import { Key } from "react";
 import { JsonValue } from "type-fest";
 
 import { base64ToUint8Array, uint8ArrayToBase64 } from "./polyfills";
-import { CustomItemDef, CustomItemFormat, FavouriteItem, FavouriteItemFormat, ImageUtils as ImageUtils_, ItemsDef, ResizeObserverHook, UnfurledEmbedsResponse } from "./types";
+import { AttachmentTransformer, CustomItemDef, CustomItemFormat, FavouriteItem, FavouriteItemFormat, ImageUtils as ImageUtils_, ItemsDef, ResizeObserverHook, UnfurledEmbedsResponse } from "./types";
 
 const Native = VencordNative.pluginHelpers.FavouriteAnything as PluginNative<typeof import("./native")>;
 
@@ -26,6 +26,7 @@ export const cl = classNameFactory("vc-favouriteAnything-");
 
 export const useResizeObserver: ResizeObserverHook = findByCodeLazy("borderBoxSize", "blockSize", "inlineSize");
 export const ImageUtils: ImageUtils_ = findByPropsLazy("isAnimated", "getFormatQuality");
+export const transformAttachment: AttachmentTransformer = findByCodeLazy("return{uniqueId", ".IS_ANIMATED");
 
 const defineItem = <const A, const B extends JsonValue>(item: CustomItemDef<A, B>) => item;
 function defineItems<T extends Record<CustomItemFormat, CustomItemDef>>(def: ItemsDef<T>) {

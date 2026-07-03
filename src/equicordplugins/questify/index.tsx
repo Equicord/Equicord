@@ -170,7 +170,7 @@ export default definePlugin({
             find: '("ActivityStatus"),',
             predicate: () => getQuestifySettings().disableQuestsEverything || getQuestifySettings().disableMembersListPromo,
             replacement: {
-                match: /(,hasQuest:)(?=\i=!1)/,
+                match: /,hasQuest:(?=\i=!1)/,
                 replace: ",questifyInvalid1:"
             }
         },
@@ -230,7 +230,7 @@ export default definePlugin({
         },
         {
             // Overrides the account panel Quest popup and progress display.
-            find: "QUESTS_BAR,questId",
+            find: "collapsed-with-rewards\":\"collapsed-without-rewards",
             predicate: () => getQuestifySettings().disableAccountPanelPromo || !getQuestifySettings().disableAccountPanelQuestProgress,
             replacement: {
                 match: /(?<=function\(\){)(let (\i)=\(0,\i.\i\)\(\);)/,
@@ -283,7 +283,7 @@ export default definePlugin({
                     replace: "$1+($2>=1e6?0.8:$2>=1e3?0.4:0)"
                 },
                 {
-                    match: /(?<=children:\i.to\(\i=>`\${\i)(.toFixed\(0\))/,
+                    match: /(?<=children:\i.to\(\i=>`\${\i).toFixed\(0\)/,
                     replace: ".toLocaleString(undefined,{maximumFractionDigits:0})"
                 }
             ]
@@ -338,7 +338,7 @@ export default definePlugin({
             replacement: [
                 {
                     // Overwrite button props for UNENROLLED Quests.
-                    match: /(?<=onClick:(\(\)=>{.[^}]+}),text:(\i),icon:\i,fullWidth:!0)/,
+                    match: /(?<=onClick:\(\)=>{.[^}]+},text:\i,icon:\i,fullWidth:!0)/,
                     replace: ",...($self.getQuestButtonProps(arguments[0])??{})"
                 },
                 {
@@ -350,7 +350,7 @@ export default definePlugin({
         },
         {
             // Overwrite button props for Quest bar.
-            find: "QUESTS_BAR,questId",
+            find: "collapsed-with-rewards\":\"collapsed-without-rewards",
             predicate: () => !getQuestifySettings().disableQuestsEverything && hasEnabledAutoCompleteQuestTypes(),
             replacement: {
                 match: /(?<=SELECT&&!\i&&!\i,(\i)=null;)(return )(\i\?\i=\(0,\i.\i\)\(\i,{quest:(\i))/,
@@ -367,7 +367,7 @@ export default definePlugin({
             }
         },
         {
-            find: "return`quest-tile-",
+            find: "QUEST_HOME_TILE_HEADER_WATCH_VIDEO})},",
             group: true,
             predicate: () => !getQuestifySettings().disableQuestsEverything,
             replacement: [
@@ -415,7 +415,7 @@ export default definePlugin({
             ]
         },
         {
-            find: "EMBED_DESKTOP}),",
+            find: 'STEP_2_CLICKED_INTERNAL,"quest_embed_card_footer',
             group: true,
             predicate: () => !getQuestifySettings().disableQuestsEverything,
             replacement: [
@@ -437,7 +437,7 @@ export default definePlugin({
             ]
         },
         {
-            find: "return`quest-tile-",
+            find: "QUEST_HOME_TILE_HEADER_WATCH_VIDEO})},",
             group: true,
             predicate: () => !getQuestifySettings().disableQuestsEverything,
             replacement: [
@@ -531,8 +531,19 @@ export default definePlugin({
             ]
         },
         {
+            // Allow non-shareable Quests to embed in chat and to have
+            // their share URLs copyable from the embed context menu.
+            find: "NOT_SHAREABLE}function",
+            group: true,
+            predicate: () => !getQuestifySettings().disableQuestsEverything,
+            replacement: {
+                match: /(?<=return )(?=\i.sharePolicy!==\i.\i.NOT_SHAREABLE)/,
+                replace: "true||"
+            }
+        },
+        {
             // Adds a maxDigits prop to the LowerBadge component which allows for not truncating, or for truncating at a specific threshold.
-            find: ".INTERACTIVE_TEXT_ACTIVE.css,shape",
+            find: ".BADGE_NOTIFICATION_BACKGROUND.css,disableColor",
             group: true,
             replacement: [
                 {

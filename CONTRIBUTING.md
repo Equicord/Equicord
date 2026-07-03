@@ -50,7 +50,7 @@ To keep Equicord stable, secure and maintainable, all plugins must follow these 
 
 1. No simple slash-command plugins (e.g. `/cat`). If applicable, create a [user-installable Discord app](https://discord.com/developers/docs/change-log#userinstallable-apps-preview) instead.
 2. No simple text replacement plugins (the built-in TextReplace plugin already covers this).
-3. No raw DOM manipulation — always use proper patches and React.
+3. No raw DOM manipulation - always use proper patches and React.
 4. No FakeDeafen or FakeMute functionality.
 5. No StereoMic-related plugins.
 6. No plugins that only hide or redesign UI elements (use CSS for that). This rule may be negotiable.

@@ -4,10 +4,14 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { Logger } from "@utils/Logger";
 import { isObject } from "@utils/misc";
 import type { PluginNative } from "@utils/types";
-import { User } from "@vencord/discord-types";
-import { Constants, RestAPI, showToast, SnowflakeUtils, Toasts } from "@webpack/common";
+import type { User } from "@vencord/discord-types";
+import { Constants, MediaEngineStore, RestAPI, showToast, SnowflakeUtils, Toasts } from "@webpack/common";
+
+import { convertClipToMp4 } from "./ffmpeg";
+const logger = new Logger("ClipUpload");
 
 const Native = VencordNative.pluginHelpers.ClipUpload as PluginNative<typeof import("./native")>;
 
@@ -21,7 +25,7 @@ export interface ClipMetadata {
     createdAt?: number | string | Date;
     users?: User[];
     remoteClipId?: string | number;
-    eventsTimeline?: any;
+    eventsTimeline?: unknown;
 }
 
 export interface ClipUploadOptions {
@@ -50,6 +54,10 @@ interface RestResponse {
     ok?: boolean;
     body?: unknown;
     text?: string;
+}
+
+interface ClipMetadataUpdater {
+    updateClipMetadata(clipId: string, metadata: string): Promise<void>;
 }
 
 export function getString(value: unknown) {
@@ -107,11 +115,19 @@ function getFileExtension(fileName: string) {
     return fileName.match(/\.[a-z0-9]+$/i)?.[0].toLowerCase() ?? ".mp4";
 }
 
+function getTempVideoFileName(fileName: string) {
+    if (compatibleExtensions.includes(getFileExtension(fileName))) return fileName;
+
+    return `${getClipTitleFromName(fileName) || defaultFileName}.mp4`;
+}
+
 async function readStampedVideoFile(token: string, name: string, type: string) {
     const tmpToken = await Native.createTempVideoFile(token);
     if (!tmpToken) throw new Error("Couldn't prepare the selected file.");
 
     try {
+        await updateTempVideoMetadata(tmpToken);
+
         const data = await Native.readVideoFile(tmpToken);
         if (!data) throw new Error("Couldn't read the selected file.");
 
@@ -119,6 +135,38 @@ async function readStampedVideoFile(token: string, name: string, type: string) {
     } finally {
         await Native.deleteTempVideoFile(tmpToken);
     }
+}
+
+async function updateTempVideoMetadata(tmpToken: string) {
+    // We need the absolute path here because Discord's MediaEngineStore requires it
+    // and it is a renderer-only module, so this cannot be done in the main process.
+    const tmpPath = await Native.getTempVideoFilePath(tmpToken);
+    if (!tmpPath) throw new Error("Couldn't prepare the selected file.");
+
+    const mediaEngine = MediaEngineStore.getMediaEngine();
+    if (!isClipMetadataUpdater(mediaEngine)) throw new Error("Couldn't update clip metadata.");
+
+    await mediaEngine.updateClipMetadata(tmpPath, "{}");
+}
+
+async function stampVideoFile(file: File, fileName: string) {
+    const tmpToken = await Native.createTempVideoFileFromBytes(getTempVideoFileName(fileName), new Uint8Array(await file.arrayBuffer()));
+    if (!tmpToken) throw new Error("Couldn't prepare the selected file.");
+
+    try {
+        await updateTempVideoMetadata(tmpToken);
+
+        const data = await Native.readVideoFile(tmpToken);
+        if (!data) throw new Error("Couldn't read the selected file.");
+
+        return new File([new Uint8Array(data)], fileName, { type: "video/mp4" });
+    } finally {
+        await Native.deleteTempVideoFile(tmpToken);
+    }
+}
+
+function isClipMetadataUpdater(value: unknown): value is ClipMetadataUpdater {
+    return isObject(value) && typeof (value as { updateClipMetadata?: unknown; }).updateClipMetadata === "function";
 }
 
 export interface ParsedClipMetadata {
@@ -187,19 +235,11 @@ async function reserveClipUpload(options: ClipUploadOptions, file: File) {
     return parseAttachmentUploadResponse(response).attachments?.[0];
 }
 
-export async function uploadClipFile(file: File, options: ClipUploadOptions) {
-    let uploadAbortController: AbortController | undefined;
+async function uploadReservedClip(attachment: NonNullable<Awaited<ReturnType<typeof reserveClipUpload>>>, uploadFile: File) {
+    const uploadAbortController = new AbortController();
+    uploadAbortControllers.add(uploadAbortController);
 
     try {
-        showToast("Checking clip file.", Toasts.Type.MESSAGE);
-
-        const uploadFile = await prepareClipFile(file, options.fileName);
-        const attachment = await reserveClipUpload(options, uploadFile);
-        if (!attachment) throw new Error("Discord did not return an upload slot.");
-
-        uploadAbortController = new AbortController();
-        uploadAbortControllers.add(uploadAbortController);
-
         const uploadResponse = await fetch(attachment.upload_url, {
             method: "PUT",
             body: uploadFile,
@@ -211,48 +251,101 @@ export async function uploadClipFile(file: File, options: ClipUploadOptions) {
         });
 
         if (!uploadResponse.ok) throw new Error("Upload failed.");
+    } finally {
+        uploadAbortControllers.delete(uploadAbortController);
+    }
+}
 
-        const messageResponse = await RestAPI.post({
-            url: Constants.Endpoints.MESSAGES(options.channelId),
-            body: {
-                content: options.message,
-                nonce: SnowflakeUtils.fromTimestamp(Date.now()),
-                channel_id: options.channelId,
-                sticker_ids: [],
-                type: 0,
-                attachments: [{
-                    id: "0",
-                    filesize: uploadFile.size,
-                    filename: options.fileName,
-                    uploaded_filename: attachment.upload_filename,
-                    is_clip: true,
-                    is_spoiler: options.spoiler,
-                    is_remix: options.remix,
-                    is_thumbnail: options.thumbnail,
-                    title: options.title,
-                    application_id: options.applicationId,
-                    clip_created_at: options.createdAt,
-                    clip_participant_ids: options.participants,
-                    clip_remote_id: options.remoteClipId,
-                    clip_events_timeline: options.eventsTimeline
-                }]
-            }
-        }) as RestResponse;
+async function sendClipUpload(uploadFile: File, options: ClipUploadOptions) {
+    const attachment = await reserveClipUpload(options, uploadFile);
+    if (!attachment) throw new Error("Discord did not return an upload slot.");
 
-        if (messageResponse.ok === false) throw messageResponse;
+    await uploadReservedClip(attachment, uploadFile);
+
+    const messageResponse = await RestAPI.post({
+        url: Constants.Endpoints.MESSAGES(options.channelId),
+        body: {
+            content: options.message,
+            nonce: SnowflakeUtils.fromTimestamp(Date.now()),
+            channel_id: options.channelId,
+            sticker_ids: [],
+            type: 0,
+            attachments: [{
+                id: "0",
+                filesize: uploadFile.size,
+                filename: options.fileName,
+                uploaded_filename: attachment.upload_filename,
+                is_clip: true,
+                is_spoiler: options.spoiler,
+                is_remix: options.remix,
+                is_thumbnail: options.thumbnail,
+                title: options.title,
+                application_id: options.applicationId,
+                clip_created_at: options.createdAt,
+                clip_participant_ids: options.participants,
+                clip_remote_id: options.remoteClipId,
+                clip_events_timeline: options.eventsTimeline
+            }]
+        }
+    }) as RestResponse;
+
+    if (messageResponse.ok === false) throw messageResponse;
+}
+
+function getSearchableErrorText(error: unknown): string {
+    if (error instanceof Error) return error.message;
+    if (typeof error === "string") return error;
+    if (!isObject(error)) return "";
+
+    const { body, message, text } = error as { body?: unknown; message?: unknown; text?: unknown; };
+    return [
+        typeof message === "string" ? message : "",
+        typeof text === "string" ? text : "",
+        typeof body === "string" ? body : "",
+        isObject(body) ? JSON.stringify(body) : ""
+    ].join("\n");
+}
+
+function getRestErrorCode(error: unknown) {
+    if (!isObject(error)) return undefined;
+
+    const { body } = error as { body?: unknown; };
+    if (!isObject(body)) return undefined;
+
+    const { code } = body as Record<string, unknown>;
+    return typeof code === "number" ? code : undefined;
+}
+
+function shouldRetryWithFFmpeg(error: unknown) {
+    const errorText = getSearchableErrorText(error).toLowerCase();
+    return getRestErrorCode(error) === 50174 || errorText.includes("not a valid clip");
+}
+
+export async function uploadClipFile(file: File, options: ClipUploadOptions) {
+    try {
+        showToast("Checking clip file.", Toasts.Type.MESSAGE);
+
+        const uploadFile = await prepareClipFile(file, options.fileName);
+
+        try {
+            await sendClipUpload(uploadFile, options);
+        } catch (error) {
+            if (!shouldRetryWithFFmpeg(error)) throw error;
+
+            showToast("Converting clip file.", Toasts.Type.MESSAGE);
+            await sendClipUpload(await stampVideoFile(await convertClipToMp4(file, options.fileName), options.fileName), options);
+        }
 
         showToast("Clip uploaded.", Toasts.Type.SUCCESS);
         return true;
     } catch (error) {
+        logger.error(error);
         showToast(getErrorMessage(error), Toasts.Type.FAILURE);
         return false;
-    } finally {
-        if (uploadAbortController) uploadAbortControllers.delete(uploadAbortController);
     }
 }
 
 export function getErrorMessage(error: unknown): string {
-    console.error(error);
     if (error instanceof DOMException && error.name === "AbortError") return "Upload canceled.";
     if (error instanceof Error) return error.message;
     return "Failed to upload clip.";
