@@ -57,6 +57,21 @@ function setPendingChanges(payload: Record<string, unknown>, guildId?: string) {
     dispatch("USER_PROFILE_SETTINGS_SET_PENDING_CHANGES", guildId ? { guildId, ...payload } : payload);
 }
 
+function openProfileImagePreview(
+    uploadType: "AVATAR" | "BANNER",
+    image: Extract<ImageInput, { imageUri: string; }>,
+    guildId?: string
+) {
+    dispatch("PROFILE_CUSTOMIZATION_OPEN_PREVIEW_MODAL", {
+        image,
+        file: {},
+        uploadType,
+        guildId,
+        analyticsSource: guildId ? "user settings guild profile" : "user settings user profile",
+        isTryItOut: false
+    });
+}
+
 function isNonEmptyString(value: unknown): value is string {
     return typeof value === "string" && value.length > 0;
 }
@@ -339,7 +354,14 @@ export async function loadPresetAsPending(preset: ProfilePreset, guildId?: strin
                             description: `profilesets-${preset.name ?? "preset"}`
                         }
                         : avatarValue;
-                setPending({ pendingAvatar: avatarPayload });
+                const avatarImageUri = avatarPayload != null && "imageUri" in Object(avatarPayload)
+                    ? (avatarPayload as { imageUri?: unknown; }).imageUri
+                    : null;
+                if (isNonEmptyString(avatarImageUri)) {
+                    openProfileImagePreview("AVATAR", { ...Object(avatarPayload), imageUri: avatarImageUri }, guildId);
+                } else {
+                    setPending({ pendingAvatar: avatarPayload });
+                }
             }
         }
 
@@ -351,7 +373,15 @@ export async function loadPresetAsPending(preset: ProfilePreset, guildId?: strin
                     description: `profilesets-${preset.name ?? "preset"}`
                 }
                 : preset.bannerDataUrl;
-            setPending({ pendingBanner: bannerPayload });
+
+            const bannerImageUri = bannerPayload != null && "imageUri" in Object(bannerPayload)
+                ? (bannerPayload as { imageUri?: unknown; }).imageUri
+                : null;
+            if (isNonEmptyString(bannerImageUri)) {
+                openProfileImagePreview("BANNER", { ...Object(bannerPayload), imageUri: bannerImageUri }, guildId);
+            } else {
+                setPending({ pendingBanner: bannerPayload });
+            }
         }
 
         if (!options.skipBio && preset?.bio !== current?.bio) {

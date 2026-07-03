@@ -28,7 +28,6 @@
 - Never boxed primitives (`Number`, `String`, `Boolean`, `Object`, `Function`, `{}`).
 - Never `namespace`. Modules only.
 - Never `../../` when `@alias` exists.
-- `import type` for type-only imports, including from `"react"`. Plain `import { ReactNode }` is violation.
 - `satisfies T` over `as T` when value already conforms. `as` only for genuine narrowing.
 
 ## Plugin Policy
@@ -45,15 +44,15 @@ Does NOT get merged:
 ## Plugin Structure
 
 - Every NEW source file starts with SPDX header:
-  ```
-  /*
-   * Vencord, a Discord client mod
-   * Copyright (c) <year> Vendicated and contributors
-   * SPDX-License-Identifier: GPL-3.0-or-later
-   */
-  ```
-  Header says `Vencord, a Discord client mod` even on new Equicord-only files. Equicord is a Vencord fork, upstream attribution is kept across the whole tree. Don't change it to "Equicord".
-  Older files carry the full GPL preamble. Leave existing headers alone, don't rewrite them.
+    ```
+    /*
+     * Vencord, a Discord client mod
+     * Copyright (c) <year> Vendicated and contributors
+     * SPDX-License-Identifier: GPL-3.0-or-later
+     */
+    ```
+    Header says `Vencord, a Discord client mod` even on new Equicord-only files. Equicord is a Vencord fork, upstream attribution is kept across the whole tree. Don't change it to "Equicord".
+    Older files carry the full GPL preamble. Leave existing headers alone, don't rewrite them.
 - Folder per plugin. `src/plugins/<name>/index.tsx` or `src/equicordplugins/<name>/index.tsx`. Single-file plugins still get a folder.
 - Folder suffixes the build filters on: `.desktop`, `.web`, `.dev`, `.discordDesktop`, `.vesktop`, `.equibop`.
 - `export default definePlugin({ ... })`. Never named.
@@ -79,22 +78,22 @@ Imperative `add*`/`remove*` only when: multiple items of same kind, conditional,
 
 Imperative usage MUST list the API in `dependencies`:
 
-| API | Dependency |
-|---|---|
-| ContextMenu | `ContextMenuAPI` |
-| MessageEvents | `MessageEventsAPI` |
-| ChatButtons | `ChatInputButtonAPI` |
-| Badges | `BadgeAPI` |
+| API                  | Dependency                |
+| -------------------- | ------------------------- |
+| ContextMenu          | `ContextMenuAPI`          |
+| MessageEvents        | `MessageEventsAPI`        |
+| ChatButtons          | `ChatInputButtonAPI`      |
+| Badges               | `BadgeAPI`                |
 | MemberListDecorators | `MemberListDecoratorsAPI` |
-| MessageAccessories | `MessageAccessoriesAPI` |
-| MessageDecorations | `MessageDecorationsAPI` |
-| MessagePopover | `MessagePopoverAPI` |
-| NicknameIcons | `NicknameIconsAPI` |
-| HeaderBar | `HeaderBarAPI` |
-| UserArea | `UserAreaAPI` |
-| ProfileCollections | `ProfileCollectionsAPI` |
-| ProfileSections | `ProfileSectionsAPI` |
-| AudioPlayer | `AudioPlayerAPI` |
+| MessageAccessories   | `MessageAccessoriesAPI`   |
+| MessageDecorations   | `MessageDecorationsAPI`   |
+| MessagePopover       | `MessagePopoverAPI`       |
+| NicknameIcons        | `NicknameIconsAPI`        |
+| HeaderBar            | `HeaderBarAPI`            |
+| UserArea             | `UserAreaAPI`             |
+| ProfileCollections   | `ProfileCollectionsAPI`   |
+| ProfileSections      | `ProfileSectionsAPI`      |
+| AudioPlayer          | `AudioPlayerAPI`          |
 
 Declarative fields auto-enable these. Imperative doesn't.
 
@@ -161,49 +160,49 @@ Declarative fields auto-enable these. Imperative doesn't.
 - `group: true` for atomic multi-step rewrites. On any failure (no effect or throw), whole group rolls back.
 - `predicate: () => boolean` gates on runtime values. `fromBuild`/`toBuild` gate on Discord build numbers. Both apply per patch and per replacement. Never branch inside `replace`.
 - `noWarn: true` suppresses "had no effect" warning. Use only for intentionally optional replacements.
-- `all: true` only when one anchor legitimately occurs across multiple modules. Intl keys resolve to one module — do NOT set `all` on intl-anchored patches.
+- `all: true` only when one anchor legitimately occurs across multiple modules. Intl keys resolve to one module - do NOT set `all` on intl-anchored patches.
 - Never `try/catch` to silence a failing replacement. Fix the match.
-- Never depend on argument names or object-key order. Use `arguments[i]` — minifiers rename params and reorder destructured keys.
+- Never depend on argument names or object-key order. Use `arguments[i]` - minifiers rename params and reorder destructured keys.
 - Prefer multiple small patches over one with broad find and many replacements.
 - In DEV, failing replacements auto-diff 200 chars around the match site. Read it before retrying.
 - Never reference build flags literally inside `replace`. They only exist in Equicord's bundle. Interpolate outside:
-  ```js
-  // BAD
-  replace: "IS_WEB?foo:bar"
-  // GOOD
-  replace: IS_WEB ? "foo" : "bar"
-  // OK
-  replace: `${IS_WEB}?foo:bar`
-  ```
+    ```js
+    // BAD
+    replace: "IS_WEB?foo:bar";
+    // GOOD
+    replace: IS_WEB ? "foo" : "bar";
+    // OK
+    replace: `${IS_WEB}?foo:bar`;
+    ```
 - Keep `replace` small: wrap a single function via patch + `$self`, push logic to plugin TS. A 3-line `$self.handleClick(arguments[0])` beats a 30-line render rebuild.
 
 ### Examples
 
 ```js
 // clean replacement
-find: "#{intl::EXAMPLE_KEY_A}),icon:"
-match: /#{intl::EXAMPLE_KEY_A}\)/
-replace: "$self.exampleFn(arguments[0]))"
+find: "#{intl::EXAMPLE_KEY_A}),icon:";
+match: /#{intl::EXAMPLE_KEY_A}\)/;
+replace: "$self.exampleFn(arguments[0]))";
 
 // appending
-find: "#{intl::EXAMPLE_KEY_B}"
-match: /#{intl::EXAMPLE_KEY_B}.{0,100}(?=])/
-replace: "$&,$self.exampleRender(arguments[0].guild)"
+find: "#{intl::EXAMPLE_KEY_B}";
+match: /#{intl::EXAMPLE_KEY_B}.{0,100}(?=])/;
+replace: "$&,$self.exampleRender(arguments[0].guild)";
 
 // wrapping with lookbehind
-find: "#{intl::EXAMPLE_KEY_C}"
-match: /(?<="aria-atomic":!0,children:)\i/
-replace: "$self.exampleWrap({ children: $& })"
+find: "#{intl::EXAMPLE_KEY_C}";
+match: /(?<="aria-atomic":!0,children:)\i/;
+replace: "$self.exampleWrap({ children: $& })";
 ```
 
 ## Webpack access
 
 - Top level: lazy finders only. `findByPropsLazy`, `findByCodeLazy`, `findComponentByCodeLazy`, `findStoreLazy`, `findCssClassesLazy`, `getUserSettingLazy`, `proxyLazyWebpack`.
 - Direct `find(...)` only inside `start()` or runtime callbacks.
-- Components: `findComponentByCodeLazy` (top level) or `findComponentByCode` (runtime). Never `findByProps*` for React components — `displayName` is mangled, prop shapes shift. `findByPropsLazy` stays correct for stores, utility modules, action-creator objects. `waitForComponent` is `@webpack/common` internal.
+- Components: `findComponentByCodeLazy` (top level) or `findComponentByCode` (runtime). Never `findByProps*` for React components - `displayName` is mangled, prop shapes shift. `findByPropsLazy` stays correct for stores, utility modules, action-creator objects. `waitForComponent` is `@webpack/common` internal.
 - `proxyLazy` for same-tick destructuring. `proxyLazyWebpack(() => ...)` when the value depends on webpack. `makeLazy` for plain deferred values.
 - `mapMangledModuleLazy(code, mapping)` to extract multiple exports from one mangled module. `extractAndLoadChunksLazy([codes], matcher?)` to force-load a lazy chunk before a `find*`.
-- Before `findStoreLazy("X")`, check `src/webpack/common/stores.ts` — many are already exported.
+- Before `findStoreLazy("X")`, check `src/webpack/common/stores.ts` - many are already exported.
 - `@webpack/common` exports backed by `waitFor` (stores, `FluxDispatcher`, `Parser`, `Alerts`, hooks) are `undefined` until webpack ready. Reference inside functions, not at module top.
 - No `eagerPatches`, no `wreq(id)` brute forcing.
 
@@ -229,7 +228,7 @@ replace: "$self.exampleWrap({ children: $& })"
 - Static stylesheet: `import "./style.css"`. Runtime-toggleable: `import name from "./style.css?managed"` plus `enableStyle`, `disableStyle`, `toggleStyle`, `setStyleClassNames` from `@api/Styles`.
 - Managed CSS variable selectors use `[--varName]`. Runtime rewrites these via `setStyleClassNames` at enable/recompile time (NOT build time). Call `setStyleClassNames(style, classNames)` before `enableStyle(style)`.
 - Top-level selectors start with `.vc-<plugin>-`. Descendant element selectors like `.vc-foo button` allowed.
-- No `:root` in plugin CSS — use a `.vc-<plugin>-root` wrapper or `documentElement.style.setProperty`.
+- No `:root` in plugin CSS - use a `.vc-<plugin>-root` wrapper or `documentElement.style.setProperty`.
 - No `@import`.
 - Prefer Discord CSS vars like `var(--background-primary)` over literal colors.
 - Inline `style={{}}` only for dynamic per-render values. Use `Margins.top8` etc. for spacing, not inline `style`.
@@ -239,15 +238,17 @@ replace: "$self.exampleWrap({ children: $& })"
 
 - Desktop-only: folder suffix `.desktop`. Mixed-target with `native.ts` doesn't use the suffix.
 - `native.ts` next to `index.tsx`, OR `native/index.ts` for multi-file natives. Exports auto-register as IPC handlers via `~pluginNatives`.
-- Handler first arg is `IpcMainInvokeEvent`. All other args are renderer-controlled and untrusted — validate type, length, content. Never throw raw `Error` (leaks main-process paths) — return `{ success: false, error: "..." }` or scrubbed message.
+- Handler first arg is `IpcMainInvokeEvent`. All other args are renderer-controlled and untrusted - validate type, length, content. Never throw raw `Error` (leaks main-process paths) - return `{ success: false, error: "..." }` or scrubbed message.
 - Filesystem paths: `normalize` and assert `startsWith(<allowed root>)`. Never `rm`/`readFile`/`writeFile` a renderer-supplied path without this guard.
 - Network: URL allowlist (regex or `url.origin`), streaming size cap, redirect-depth cap.
 - Subprocess: `spawn` with argv arrays. Never `exec` a renderer-derived string. Never `shell: true` with untrusted input.
 - `shell.openExternal`: only with https allowlist.
 - Renderer side:
-  ```ts
-  const Native = VencordNative.pluginHelpers.MyPlugin as PluginNative<typeof import("./native")>;
-  ```
+    ```ts
+    const Native = VencordNative.pluginHelpers.MyPlugin as PluginNative<
+        typeof import("./native")
+    >;
+    ```
 - `pluginHelpers` key matches `definePlugin.name` exactly (case-sensitive).
 - Renderer must never import `fs`, `path`, `net`, `http`, `https`, `child_process`, `electron`. Go through `native.ts`.
 - File pickers: `saveFile`/`chooseFile` from `@utils/web`. Don't re-implement via `dialog.show*` over IPC.
@@ -260,18 +261,18 @@ replace: "$self.exampleWrap({ children: $& })"
 - Long-lived component timers use `useFixedTimer`/`useTimer` from `@utils/react`.
 - Every `add*` in `start()` pairs with `remove*` in `stop()`.
 - Idle timer pattern:
-  ```ts
-  let intervalId: number | undefined;
-  start() { intervalId = setInterval(tick, 30_000); }
-  stop()  { if (intervalId !== undefined) { clearInterval(intervalId); intervalId = undefined; } }
-  ```
+    ```ts
+    let intervalId: number | undefined;
+    start() { intervalId = setInterval(tick, 30_000); }
+    stop()  { if (intervalId !== undefined) { clearInterval(intervalId); intervalId = undefined; } }
+    ```
 
 ## Storage
 
 - Persistent state: `DataStore` from `@api/DataStore` (idb-backed). Never `localStorage`/`sessionStorage`/`indexedDB`.
 - Plain settings: `definePluginSettings`. Internal hidden state: `withPrivateSettings<T>()`.
 - DataStore API: `get`, `set`, `setMany`, `getMany`, `update`, `del`, `delMany`, `clear`, `keys`, `values`, `entries`, `createStore` (custom namespace).
-- Namespace keys with plugin name: `` await DataStore.get(`MyPlugin_key`) `` or `createStore("MyPlugin", "store")`.
+- Namespace keys with plugin name: ``await DataStore.get(`MyPlugin_key`)`` or `createStore("MyPlugin", "store")`.
 - Never store tokens, message content, or other user data in keys readable by other plugins.
 
 ## Network
@@ -315,57 +316,57 @@ replace: "$self.exampleWrap({ children: $& })"
 
 Pick one per event. Never two for the same thing.
 
-| Need | Use |
-|---|---|
-| Transient feedback (<2s) | `showToast(msg, Toasts.Type.SUCCESS)` from `@webpack/common` |
-| Background happened, user may act later | `showNotification({ title, body })` from `@api/Notifications` |
-| Urgent inline top-bar | `Notices.showNotice(msg, btnText, cb)` from `@api/Notices` (sparingly — blocks UI) |
-| Modal confirm | `Alerts.show({ title, body, onConfirm })` from `@webpack/common` |
+| Need                                    | Use                                                                                |
+| --------------------------------------- | ---------------------------------------------------------------------------------- |
+| Transient feedback (<2s)                | `showToast(msg, Toasts.Type.SUCCESS)` from `@webpack/common`                       |
+| Background happened, user may act later | `showNotification({ title, body })` from `@api/Notifications`                      |
+| Urgent inline top-bar                   | `Notices.showNotice(msg, btnText, cb)` from `@api/Notices` (sparingly - blocks UI) |
+| Modal confirm                           | `Alerts.show({ title, body, onConfirm })` from `@webpack/common`                   |
 
 ## Use what exists
 
 Search before writing. Common needs:
 
-| Need | Use |
-|---|---|
-| Sleep | `sleep(ms)` from `@utils/misc` |
-| Debounce / throttle | `lodash.debounce` / `lodash.throttle` |
-| Date format | `moment` or `formatDuration`/`formatDurationMs` from `@utils/text` |
-| Markdown parse | `Parser.parse(text)` |
-| Snowflake → date | `SnowflakeUtils.extractTimestamp(id)` |
-| URL parse | `parseUrl` from `@utils/misc` |
-| Regex escape | `escapeRegExp` from `@utils/text` |
-| Join lists | `humanFriendlyJoin([...])` from `@utils/text` |
-| Class concat | `classes(a, b, ...)` from `@utils/misc` |
-| Margins | `Margins.top8` etc, not inline `style` |
-| Deep clone | `lodash.cloneDeep` |
-| Clamp / range | `lodash.clamp`, `makeRange` from `@utils/types` |
-| Open URL | `VencordNative.native.openExternal(url)` or `MaskedLink` |
-| Copy clipboard | `copyWithToast` from `@utils/discord` |
-| Fetch uncached user | `fetchUserProfile(id)` from `@utils/discord` |
-| Open user profile | `openUserProfile(id)` |
-| Send chat msg | `sendMessage(channelId, { content })` from `@utils/discord` |
+| Need                | Use                                                                |
+| ------------------- | ------------------------------------------------------------------ |
+| Sleep               | `sleep(ms)` from `@utils/misc`                                     |
+| Debounce / throttle | `lodash.debounce` / `lodash.throttle`                              |
+| Date format         | `moment` or `formatDuration`/`formatDurationMs` from `@utils/text` |
+| Markdown parse      | `Parser.parse(text)`                                               |
+| Snowflake → date    | `SnowflakeUtils.extractTimestamp(id)`                              |
+| URL parse           | `parseUrl` from `@utils/misc`                                      |
+| Regex escape        | `escapeRegExp` from `@utils/text`                                  |
+| Join lists          | `humanFriendlyJoin([...])` from `@utils/text`                      |
+| Class concat        | `classes(a, b, ...)` from `@utils/misc`                            |
+| Margins             | `Margins.top8` etc, not inline `style`                             |
+| Deep clone          | `lodash.cloneDeep`                                                 |
+| Clamp / range       | `lodash.clamp`, `makeRange` from `@utils/types`                    |
+| Open URL            | `VencordNative.native.openExternal(url)` or `MaskedLink`           |
+| Copy clipboard      | `copyWithToast` from `@utils/discord`                              |
+| Fetch uncached user | `fetchUserProfile(id)` from `@utils/discord`                       |
+| Open user profile   | `openUserProfile(id)`                                              |
+| Send chat msg       | `sendMessage(channelId, { content })` from `@utils/discord`        |
 
 ## Discord components
 
 Reuse from `@webpack/common`. Don't recreate.
 
-| Need | Component |
-|---|---|
-| Button | `Button` |
-| Text input | `TextInput` |
-| Multiline | `TextArea` |
-| Dropdown | `Select` / `SearchableSelect` |
-| Checkbox | `Checkbox` |
-| Slider | `Slider` |
-| Tooltip | `Tooltip` (function-child API) |
-| Context menu items | `Menu.*` |
-| Modal | `openModal(p => <ModalRoot {...p}>...</ModalRoot>)` |
-| Scroller | `ScrollerThin` / `ScrollerAuto` |
-| User pill | `UserSummaryItem` |
-| Avatar | `Avatar` |
-| Timestamp | `Timestamp` |
-| External link | `MaskedLink` |
+| Need               | Component                                           |
+| ------------------ | --------------------------------------------------- |
+| Button             | `Button`                                            |
+| Text input         | `TextInput`                                         |
+| Multiline          | `TextArea`                                          |
+| Dropdown           | `Select` / `SearchableSelect`                       |
+| Checkbox           | `Checkbox`                                          |
+| Slider             | `Slider`                                            |
+| Tooltip            | `Tooltip` (function-child API)                      |
+| Context menu items | `Menu.*`                                            |
+| Modal              | `openModal(p => <ModalRoot {...p}>...</ModalRoot>)` |
+| Scroller           | `ScrollerThin` / `ScrollerAuto`                     |
+| User pill          | `UserSummaryItem`                                   |
+| Avatar             | `Avatar`                                            |
+| Timestamp          | `Timestamp`                                         |
+| External link      | `MaskedLink`                                        |
 
 ## Never hardcode
 
@@ -398,29 +399,31 @@ Reuse from `@webpack/common`. Don't recreate.
 
 Replaced at build time. Reference only in plugin TS, never literally inside `replace`.
 
-| Constant | Meaning |
-|---|---|
-| `IS_WEB` | Web build (extension/userscript/standalone web) |
-| `IS_EXTENSION` | Browser extension |
-| `IS_USERSCRIPT` | Userscript |
-| `IS_STANDALONE` | Standalone (no updater) |
-| `IS_UPDATER_DISABLED` | Updater off |
-| `IS_DEV` | Dev build (auto-diff, extra logs) |
-| `IS_REPORTER` | Auto-reporter |
-| `IS_COMPANION_TEST` | Companion test |
-| `IS_ANTI_CRASH_TEST` | Anti-crash test |
-| `IS_DISCORD_DESKTOP` | Discord desktop injection |
-| `IS_VESKTOP` | Vesktop |
-| `IS_EQUIBOP` | Equibop |
-| `VERSION` | Equicord version string |
-| `BUILD_TIMESTAMP` | Build epoch ms |
+| Constant              | Meaning                                         |
+| --------------------- | ----------------------------------------------- |
+| `IS_WEB`              | Web build (extension/userscript/standalone web) |
+| `IS_EXTENSION`        | Browser extension                               |
+| `IS_USERSCRIPT`       | Userscript                                      |
+| `IS_STANDALONE`       | Standalone (no updater)                         |
+| `IS_UPDATER_DISABLED` | Updater off                                     |
+| `IS_DEV`              | Dev build (auto-diff, extra logs)               |
+| `IS_REPORTER`         | Auto-reporter                                   |
+| `IS_COMPANION_TEST`   | Companion test                                  |
+| `IS_ANTI_CRASH_TEST`  | Anti-crash test                                 |
+| `IS_DISCORD_DESKTOP`  | Discord desktop injection                       |
+| `IS_VESKTOP`          | Vesktop                                         |
+| `IS_EQUIBOP`          | Equibop                                         |
+| `VERSION`             | Equicord version string                         |
+| `BUILD_TIMESTAMP`     | Build epoch ms                                  |
 
 ## Reference
 
 ### `@vencord/discord-types`
+
 `Channel`, `Guild`, `GuildMember`, `User`, `Role`, `Message`, `Command`, `FluxEvents`, store types.
 
 ### `@api/*`
+
 `Settings`, `Commands`, `DataStore`, `ContextMenu`, `Badges`, `Notices`, `Notifications`, `MessageEvents`, `MessageUpdater`, `MessageAccessories`, `MessageDecorations`, `MessagePopover`, `MemberListDecorators`, `ServerList`, `ChatButtons`, `HeaderBar`, `UserArea`, `NicknameIcons`, `ProfileCollections`, `ProfileSections`, `AudioPlayer`, `UserSettings`, `UserSettingDefinitions`, `Styles`, `PluginManager`, `SettingsSync`.
 
 `@api/Commands` re-exports `sendBotMessage`, `findOption`, `ApplicationCommandInputType`, `ApplicationCommandOptionType`, `ApplicationCommandType`.
@@ -430,6 +433,7 @@ Replaced at build time. Reference only in plugin TS, never literally inside `rep
 Deprecated: `@api/Themes`. `classNameFactory` re-export from `@api/Styles`.
 
 ### `@utils/*`
+
 - `Logger`. `new Logger(name)`.
 - `css`. `classNameFactory`, `classNameToSelector`.
 - `misc`. `classes`, `sleep`, `isObject`, `isObjectEmpty`, `pluralise`, `parseUrl`, `identity`, `interpolateIfDefined`, `tryOrElse`, `isPluginDev`, `removeFromArray`.
@@ -447,6 +451,7 @@ Deprecated: `@api/Themes`. `classNameFactory` re-export from `@api/Styles`.
 - `types`. `OptionType`, `StartAt`, `ReporterTestable`, `definePlugin`.
 
 ### `@components/*`
+
 `Badge`, `BaseText`, `Button`, `Card`, `CheckedTextInput`, `CodeBlock`, `Divider`, `ErrorBoundary`, `ErrorCard`, `Flex`, `FormSwitch`, `Grid`, `Heading`, `Heart`, `Icons`, `Link`, `Notice`, `Paragraph`, `Span`, `Switch`, `margins` (`Margins`), `settings` subtree.
 
 `ErrorBoundary.wrap(Component, { noop?, fallback?, onError?, message? })`.
@@ -470,9 +475,11 @@ Actions. `MessageActions`, `ChannelActionCreators`, `UserProfileActions`, `Invit
 Menu. `Menu`, `ContextMenuApi` (`openContextMenu`, `closeContextMenu`, `openContextMenuLazy`).
 
 ### Lazy webpack imports
+
 From `@webpack`. `findByPropsLazy`, `findByCodeLazy`, `findComponentLazy`, `findComponentByCodeLazy`, `findExportedComponentLazy`, `findStoreLazy`, `findCssClassesLazy`, `findLazy`, `proxyLazyWebpack`, `LazyComponentWebpack`, `mapMangledModuleLazy`, `extractAndLoadChunksLazy`, `waitFor`.
 
 `waitForStore` / `waitForComponent` live in `@webpack/common/internal.tsx`. Plugins don't call them directly.
 
 ### `IconUtils`
+
 `getUserAvatarURL(user, canAnimate?, size?, format?)`, `getUserBannerURL({ id, banner, canAnimate?, size })`, `getGuildIconURL({ id, icon, size?, canAnimate? })`, `getGuildBannerURL(guild, canAnimate?)`, `getGuildSplashURL`, `getGuildDiscoverySplashURL`, `getGuildHomeHeaderURL`, `getChannelIconURL({ id, icon })`, `getResourceChannelIconURL`, `getEmojiURL({ id, animated, size })`, `getApplicationIconURL`, `getGameAssetURL`, `getVideoFilterAssetURL`, `getAvatarDecorationURL`, `getGuildMemberAvatarURL`, `getGuildMemberAvatarURLSimple`, `getGuildMemberBannerURL`, `getDefaultAvatarURL(id)`, `hasAnimatedGuildIcon`, `isAnimatedIconHash`.

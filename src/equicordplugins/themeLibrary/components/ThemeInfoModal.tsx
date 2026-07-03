@@ -22,9 +22,9 @@ import { logger } from "./ThemeTab";
 const Native = VencordNative.pluginHelpers.ThemeLibrary as PluginNative<typeof import("../native")>;
 const UserSummaryItem = findComponentByCodeLazy("defaultRenderUser", "showDefaultAvatarsForNullUsers");
 
-async function downloadTheme(themesDir: string, theme: Theme) {
+async function downloadTheme(theme: Theme) {
     try {
-        await Native.downloadTheme(themesDir, theme);
+        await Native.downloadTheme(theme);
         showToast(`Downloaded ${theme.name}!`, Toasts.Type.SUCCESS);
     } catch (err: unknown) {
         logger.error(err);
@@ -33,7 +33,7 @@ async function downloadTheme(themesDir: string, theme: Theme) {
 }
 
 export const ThemeInfoModal: React.FC<ThemeInfoModalProps> = ({ author, theme, ...props }) => {
-    const { type, content, likes, guild, tags, last_updated, requiresThemeAttributes } = theme;
+    const { name, type, content, likes, guild, tags, last_updated, requiresThemeAttributes } = theme;
 
     const themeContent = window.atob(content);
     const metadata = themeContent.match(/\/\*\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*\*+\//g)?.[0] || "";
@@ -49,21 +49,25 @@ export const ThemeInfoModal: React.FC<ThemeInfoModalProps> = ({ author, theme, .
         <Modal
             {...props}
             size="md"
-            title={`${type} Details`}
+            title={`${name} details`}
             actions={[
                 {
                     text: "Close",
-                    variant: "dangerPrimary",
+                    variant: "secondary",
                     onClick: () => props.onClose()
                 },
                 {
                     text: "Download",
-                    variant: "positive",
+                    variant: "primary",
                     disabled: !theme.content || theme.id === "preview",
                     onClick: async () => {
-                        const themesDir = await VencordNative.themes.getThemesDir();
-                        const exists = await Native.themeExists(themesDir, theme);
-                        const validThemesDir = await Native.getThemesDir(themesDir, theme);
+                        const validThemesDir = await VencordNative.themes.getThemesDir() + `/${theme?.name}.theme.css`;
+                        if (!validThemesDir) {
+                            showToast(`Failed to download ${theme.name}!`, Toasts.Type.FAILURE);
+                            return;
+                        }
+
+                        const exists = await Native.themeExists(theme);
                         if (exists) {
                             openModal(modalProps => (
                                 <Modal
@@ -75,7 +79,7 @@ export const ThemeInfoModal: React.FC<ThemeInfoModalProps> = ({ author, theme, .
                                             text: "Overwrite",
                                             variant: "dangerPrimary",
                                             onClick: async () => {
-                                                await downloadTheme(themesDir, theme);
+                                                await downloadTheme(theme);
                                                 modalProps.onClose();
                                             }
                                         },
@@ -99,7 +103,7 @@ export const ThemeInfoModal: React.FC<ThemeInfoModalProps> = ({ author, theme, .
                                 </Modal>
                             ));
                         } else {
-                            await downloadTheme(themesDir, theme);
+                            await downloadTheme(theme);
                         }
                     }
                 }

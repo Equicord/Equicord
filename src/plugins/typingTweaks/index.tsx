@@ -20,6 +20,7 @@ import { definePluginSettings, migratePluginToSettings, Settings } from "@api/Se
 import ErrorBoundary from "@components/ErrorBoundary";
 import { getCustomColorString } from "@equicordplugins/customUserColors";
 import { Devs, EquicordDevs } from "@utils/constants";
+import { classNameFactory } from "@utils/css";
 import { openUserProfile } from "@utils/discord";
 import { isNonNullish } from "@utils/guards";
 import { Logger } from "@utils/Logger";
@@ -30,6 +31,7 @@ import { PropsWithChildren } from "react";
 
 import managedStyle from "./style.css?managed";
 
+const cl = classNameFactory("vc-typing-tweaks-");
 const settings = definePluginSettings({
     showAvatars: {
         type: OptionType.BOOLEAN,
@@ -87,7 +89,7 @@ function typingUserColor(guildId: string, userId: string): string | undefined {
 const TypingUser = ErrorBoundary.wrap(function TypingUser({ user, guildId }: TypingUserProps) {
     return (
         <strong
-            className="vc-typing-user"
+            className={cl("user")}
             role="button"
             onClick={() => {
                 openUserProfile(user.id);
@@ -98,6 +100,7 @@ const TypingUser = ErrorBoundary.wrap(function TypingUser({ user, guildId }: Typ
         >
             {settings.store.showAvatars && (
                 <Avatar
+                    className={cl("avatar")}
                     size="SIZE_16"
                     src={user.getAvatarURL(guildId, 128)} />
             )}
@@ -128,7 +131,7 @@ export default definePlugin({
             replacement: [
                 {
                     // Style the indicator and add function call to modify the children before rendering
-                    match: /(?<="aria-atomic":!0,children:)\i/,
+                    match: /(?<="aria-hidden":!0,children:)\i/,
                     replace: "$self.renderTypingUsers({ users: arguments[0]?.typingUserObjects, guildId: arguments[0]?.channel?.guild_id, children: $& })"
                 },
                 {
@@ -194,8 +197,7 @@ export default definePlugin({
             let element = 0;
 
             return children.map(c => {
-                if (c.type !== "strong" && !(typeof c !== "string" && !React.isValidElement(c)))
-                    return c;
+                if (c.type !== "strong" && !(typeof c !== "string" && !React.isValidElement(c))) return c;
 
                 const user = users[element++];
                 return <TypingUser key={user.id} guildId={guildId} user={user} />;

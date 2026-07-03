@@ -128,8 +128,6 @@ export const PluginCards = ErrorBoundary.wrap(function PluginCards({ message }: 
         if (!pluginName || seenPlugins.has(pluginName)) return;
         seenPlugins.add(pluginName);
 
-        if (embed.rawDescription.startsWith("A fork that has")) embed.rawDescription = "";
-
         pluginCards.push(
             <ChatPluginCard
                 key={embed.url}

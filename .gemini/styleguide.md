@@ -10,7 +10,7 @@ If a plugin breaks ANY of these, reject the entire PR. These are non-negotiable:
 
 1. **No simple slash-command plugins** (e.g. `/cat`). Should be a [user-installable Discord app](https://discord.com/developers/docs/change-log#userinstallable-apps-preview) instead.
 2. **No simple text replacement plugins.** The built-in TextReplace plugin already covers this.
-3. **No raw DOM manipulation.** Always use patches and React.
+3. **No raw DOM manipulation / MutationObserver.** Always use patches and React.
 4. **No FakeDeafen or FakeMute.**
 5. **No StereoMic-related plugins.**
 6. **No UI-only hide/redesign plugins.** Use CSS for that. (Negotiable in rare cases.)
@@ -37,26 +37,13 @@ export default definePlugin({
 });
 ```
 
-**Settings** must use `definePluginSettings` from `@api/Settings`. Reject inline `options` objects.
-
-```typescript
-// GOOD
-const settings = definePluginSettings({
-    myOption: { type: OptionType.BOOLEAN, description: "Enables the feature.", default: true }
-});
-export default definePlugin({ settings, /* ... */ });
-
-// BAD
-export default definePlugin({ options: { myOption: { /* ... */ } } });
-```
-
 **Prefer declarative APIs** over manual registration:
 
 - `flux: { EVENT_NAME(data) {} }` not manual FluxDispatcher subscribe
 - `contextMenus: { "nav-id": fn }` not manual addContextMenuPatch
 - `chatBarButton: { render, icon }` not addChatBarButton
 - `messagePopoverButton: { render, icon }` not addMessagePopoverButton
-- `managedStyle` for CSS not manual enableStyle/disableStyle
+- `managedStyle` for CSS not manual enableStyle/disableStyle in start/stop
 
 **Reject deprecated fields:** `renderChatBarButton`, `renderMessagePopoverButton`, `options`
 
@@ -68,34 +55,33 @@ export default definePlugin({ options: { myOption: { /* ... */ } } });
 
 Flag these and suggest the fix:
 
-| Bad | Good | Reason |
-|-----|------|--------|
-| `value !== null && value !== undefined` | `value` or `isNonNullish(value)` | Verbose |
-| `array && array.length > 0` | `array.length` | Redundant check |
-| `settings?.store?.value` | `settings.store.value` | Store is always defined |
-| `value \|\| defaultValue` | `value ?? defaultValue` | `\|\|` falsifies `0`, `""`, `false` |
-| `` `${classA} ${classB}` `` | `classes(classA, classB)` | Handles null/false gracefully |
-| `"vc-plugin-class"` hardcoded | `cl("class")` via `classNameFactory` | Consistent, typo-proof |
-| `console.log/warn` | Remove it | No logging in plugin code |
-| `cdn.discordapp.com/avatars/...` | `IconUtils.getUserAvatarURL(user)` | Handles animated, sizing, CDN |
-| `cdn.discordapp.com/icons/...` | `IconUtils.getGuildIconURL(...)` | Same |
-| `cdn.discordapp.com/banners/...` | `IconUtils.getUserBannerURL(...)` | Same |
-| `cdn.discordapp.com/emojis/...` | `IconUtils.getEmojiURL(...)` | Same |
-| `/api/v9/...` or `/users/@me` | `Constants.Endpoints.*` or `RestAPI` | Endpoints change |
-| `@api/Styles` for classNameFactory | `@utils/css` | `@api/Styles` is deprecated |
-| `any` for Discord objects | Import from `@vencord/discord-types` | Type safety |
-| `as unknown as` casting | Find the correct type | Unsafe |
-| `React.memo()` | Remove it | Not needed |
-| `React.cloneElement` / `React.isValidElement` / `React.Children` | Find another approach | Forbidden |
-| `React.lazy(() => import(...))` | `LazyComponent` from `@utils/lazyReact` | Framework-integrated |
-| Empty `catch {}` | Handle the error (toast, fallback, rethrow) | Silent failures |
-| CSS-only plugins | Must have actual logic/patches | Not allowed |
-| Commented-out dead code | Delete it | Git has history |
-| `document.querySelector(...)` | Use webpack patches | DOM manipulation forbidden |
-| `Vencord.Plugins.plugins["X"]` | `isPluginEnabled` + direct import | Proper interop |
-| `plugin.started` check | `isPluginEnabled(plugin.name)` | Proper interop |
-| Unexplained magic numbers | Named constants | Readability |
-| Unused imports | Remove them | Cleanliness |
+| Bad                                                              | Good                                        | Reason                              |
+| ---------------------------------------------------------------- | ------------------------------------------- | ----------------------------------- |
+| `value !== null && value !== undefined`                          | `value` or `value != null`                  | Verbose                             |
+| `array && array.length > 0`                                      | `array?.length`                             | Redundant check                     |
+| `settings?.store?.value`                                         | `settings.store.value`                      | Store is always defined             |
+| `value \|\| defaultValue`                                        | `value ?? defaultValue`                     | `\|\|` falsifies `0`, `""`, `false` |
+| `` `${classA} ${classB}` ``                                      | `classes(classA, classB)`                   | Handles null/false gracefully       |
+| `"vc-plugin-class"` hardcoded                                    | `cl("class")` via `classNameFactory`        | Consistent, typo-proof              |
+| `console.log/warn`                                               | Remove it                                   | No logging in plugin code           |
+| `cdn.discordapp.com/avatars/...`                                 | `IconUtils.getUserAvatarURL(user)`          | Handles animated, sizing, CDN       |
+| `cdn.discordapp.com/icons/...`                                   | `IconUtils.getGuildIconURL(...)`            | Same                                |
+| `cdn.discordapp.com/banners/...`                                 | `IconUtils.getUserBannerURL(...)`           | Same                                |
+| `cdn.discordapp.com/emojis/...`                                  | `IconUtils.getEmojiURL(...)`                | Same                                |
+| `/api/v9/...` or `/users/@me`                                    | `Constants.Endpoints.*` or `RestAPI`        | Endpoints change                    |
+| `@api/Styles` for classNameFactory                               | `@utils/css`                                | `@api/Styles` is deprecated         |
+| `any` for Discord objects                                        | Import from `@vencord/discord-types`        | Type safety                         |
+| `as unknown as` casting                                          | Find the correct type                       | Unsafe                              |
+| `React.memo()`                                                   | Remove it                                   | Not needed                          |
+| `React.cloneElement` / `React.isValidElement` / `React.Children` | Find another approach                       | Forbidden                           |
+| `React.lazy(() => import(...))`                                  | `LazyComponent` from `@utils/lazyReact`     | Framework-integrated                |
+| Empty `catch {}`                                                 | Handle the error (toast, fallback, rethrow) | Silent failures                     |
+| CSS-only plugins                                                 | Must have actual logic/patches              | Not allowed                         |
+| Commented-out dead code                                          | Delete it                                   | Git has history                     |
+| `document.querySelector(...)`                                    | Use webpack patches                         | DOM manipulation forbidden          |
+| `Vencord.Plugins.plugins["X"]`                                   | `isPluginEnabled` + direct import           | Proper interop                      |
+| `plugin.started` check                                           | `isPluginEnabled(plugin.name)`              | Proper interop                      |
+| Unexplained magic numbers                                        | Named constants                             | Readability                         |
 
 ---
 
@@ -110,7 +96,7 @@ Flag these and suggest the fix:
 **No comments.** Never add comments unless explicitly asked. However, preserve existing comments as they contain important context.
 
 ```typescript
-// GOOD — early return, destructuring, inference, no comments
+// GOOD - early return, destructuring, inference, no comments
 const getUser = (id: string) => {
     const user = UserStore.getUser(id);
     if (!user) return null;
@@ -118,7 +104,7 @@ const getUser = (id: string) => {
     return `${username}#${discriminator}`;
 };
 
-// BAD — nested, verbose, unnecessary annotations
+// BAD - nested, verbose, unnecessary annotations
 function getUser(id: string): string | null {
     // Get the user from the store
     const user = UserStore.getUser(id);
@@ -140,7 +126,7 @@ Note: ESLint already enforces `prefer-const`, `prefer-destructuring`, `eqeqeq`, 
 
 **Conditional rendering:** return `null`, never `undefined` or bare `return;`
 
-**ErrorBoundary:** wrap complex components: `ErrorBoundary.wrap(MyComponent, { noop: true })`
+**ErrorBoundary:** wrap any component that is used in patches (`$self.renderThing()`): `renderThing: ErrorBoundary.wrap((props) => { ... }, { noop: true })`
 
 **useEffect cleanup:** always return cleanup when subscribing to events, timers, or resources:
 
@@ -186,9 +172,8 @@ className={classes(cl("wrapper"), someDiscordClass, isActive && cl("active"))}
 
 ## Settings
 
-- `settings.store.key` — reactive, auto-persists (React components)
-- `settings.plain.key` — non-reactive raw value (performance-critical code)
-- **Never** `settings.use()` with arrays in variables. Mutate then reassign instead.
+- `settings.store.key` - reactive, auto-persists (React components)
+- `settings.plain.key` - non-reactive raw value (basically never use this, only for special cases)
 
 ---
 
@@ -199,10 +184,10 @@ Patches modify Discord's minified webpack modules. Stability is paramount.
 - **One patch per concern.** Each replacement does one thing.
 - **Surgical.** Match only what needs replacing, let `find` target the module.
 - **No hardcoded minified vars.** Never `e`, `t`, `n`, `r`, `i`, `eD`, `eH` etc. Use `\i`.
-- **Bounded gaps.** `.{0,50}` not `.+?` or `.*?` (unbounded = cross-match bugs).
+- **Bounded gaps.** `.{0,50}?` not `.+?` or `.*?` (unbounded = cross-match bugs).
 - **No generic patterns.** `/className:\i/` alone is too broad. Add stable anchors.
-- **No raw intl hashes.** Use `#{intl::KEY_NAME}` not `.aA4Vce`.
-- **Capture groups only when reused** in replace via `$1`, `$2`.
+- **No raw intl hashes.** Use `#{intl::KEY_NAME}` not `.aA4Vce`. If key is unknown, use `#{intl::aA4Vce::raw}`.
+- **Capture groups only when reused** in replace via `$1`, `$2` (or as replace function parameter).
 - **`$&`** for append/prepend, **`$self`** for plugin method calls.
 
 ```typescript
@@ -264,8 +249,8 @@ showToast("Module - not found");
 
 - `Map`/`Set` for frequent lookups, not arrays
 - `.find()` / `.some()` not `.filter()[0]`
-- No spread `...` in loops
 - `Promise.all()` for parallel async
+- no local scope webpack `find*` functions (including start or stop methods), always find*Lazy on top level
 
 ---
 
@@ -277,7 +262,6 @@ Plugins that don't use patches don't require a Discord restart to apply. Their `
 
 - Event listeners added but never removed (FluxDispatcher, DOM events, MessageEvents)
 - Intervals/timeouts set but never cleared
-- MutationObservers created but never disconnected
 - Context menu patches added but never removed (use declarative `contextMenus` instead)
 - Chat bar buttons added but never removed (use declarative `chatBarButton` instead)
 - Styles enabled but never disabled (use `managedStyle` instead)
@@ -290,7 +274,7 @@ Plugins that don't use patches don't require a Discord restart to apply. Their `
 **Watch for stale closures and references.** If a plugin stores references to DOM nodes, channels, or users in module scope, check that they're nulled out in `stop()`.
 
 ```typescript
-// GOOD — clean start/stop, no leaks
+// GOOD - clean start/stop, no leaks
 start() {
     this.interval = setInterval(this.update, 5000);
     document.addEventListener("visibilitychange", this.onVisibilityChange);
@@ -300,7 +284,7 @@ stop() {
     document.removeEventListener("visibilitychange", this.onVisibilityChange);
 }
 
-// BAD — leaks interval and listener forever
+// BAD - leaks interval and listener forever
 start() {
     setInterval(this.update, 5000);
     document.addEventListener("visibilitychange", this.onVisibilityChange);
@@ -375,7 +359,7 @@ If a PR reimplements any of these, flag it. They already exist:
 
 ## Review Severity
 
-1. **CRITICAL** — `any` types, hardcoded CDN/API URLs, direct DOM manipulation, security issues, massive overengineering/bloat, suspected AI slop (note it, but still review everything)
-2. **HIGH** — Missing useEffect cleanup, forbidden React APIs, hardcoded class names, console logging statements, missing definePluginSettings, unnecessary abstractions
-3. **MEDIUM** — Anti-patterns (`||` instead of `??`), utility reimplementations, commented-out code, bad description format, excessive comments
-4. **LOW** — Style preferences, minor performance wins, organization
+1. **CRITICAL** - `any` types, hardcoded CDN/API URLs, direct DOM manipulation, security issues, massive overengineering/bloat, suspected AI slop (note it, but still review everything)
+2. **HIGH** - Missing useEffect cleanup, forbidden React APIs, hardcoded class names, console logging statements, missing definePluginSettings, unnecessary abstractions
+3. **MEDIUM** - Anti-patterns (`||` instead of `??`), utility reimplementations, commented-out code, bad description format, excessive comments
+4. **LOW** - Style preferences, minor performance wins, organization

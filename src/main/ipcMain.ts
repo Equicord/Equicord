@@ -52,8 +52,10 @@ function readCss() {
 
 async function listThemes(): Promise<{ fileName: string; content: string; }[]> {
     try {
-        const files = await readdir(THEMES_DIR);
-        return await Promise.all(files.map(async fileName => ({ fileName, content: await getThemeData(fileName) })));
+        const entries = await readdir(THEMES_DIR, { withFileTypes: true });
+        const fileNames = entries.filter(entry => entry.isFile() && entry.name.endsWith(".css")).map(entry => entry.name);
+        const results = await Promise.allSettled(fileNames.map(async fileName => ({ fileName, content: await getThemeData(fileName) })));
+        return results.flatMap(result => result.status === "fulfilled" ? [result.value] : []);
     } catch {
         return [];
     }

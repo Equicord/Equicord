@@ -204,11 +204,9 @@ export function uwuifyArray(arr) {
     return newArr;
 }
 
-export function getMessage(opts, other) {
+export function getFavoriteGif(opts: CommandArgument[], other: CommandContext) {
     const frecencyStore = UserSettingsActionCreators.FrecencyUserSettingsActionCreators.getCurrentValue();
-
     const gifsArray = Object.keys(frecencyStore.favoriteGifs.gifs);
-
     const chosenGifUrl = gifsArray[Math.floor(Math.random() * gifsArray.length)];
 
     return `${chosenGifUrl}`;

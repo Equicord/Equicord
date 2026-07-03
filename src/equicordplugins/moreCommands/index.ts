@@ -19,7 +19,7 @@
 import { ApplicationCommandInputType, ApplicationCommandOptionType, findOption, OptionalMessageOption, RequiredMessageOption, sendBotMessage } from "@api/Commands";
 import { addMessagePreEditListener, addMessagePreSendListener, MessageObject, removeMessagePreEditListener, removeMessagePreSendListener } from "@api/MessageEvents";
 import { migratePluginSettings } from "@api/Settings";
-import { Devs, EquicordDevs } from "@utils/constants";
+import { Devs, EquicordDevs, GUILD_IDS } from "@utils/constants";
 import { sendMessage } from "@utils/discord";
 import definePlugin from "@utils/types";
 import { DraftType, UploadHandler, UploadManager, UserAffinitiesStore, UserStore } from "@webpack/common";
@@ -33,7 +33,7 @@ import {
     generatePoissonDiskPosition,
     getCuteAnimeBoys,
     getCuteNeko,
-    getMessage,
+    getFavoriteGif,
     isMorse,
     loadFriendImage,
     loadImage,
@@ -470,9 +470,15 @@ export default definePlugin({
         {
             name: "gifroulette",
             description: "Tempt fate and send a gif",
-            execute: (opts, other) => ({
-                content: getMessage(opts, other)
-            }),
+            execute: (opts, other) => {
+                if (GUILD_IDS.includes(other?.guild?.id ?? "")) return sendBotMessage(other.channel.id, {
+                    content: "This command is restricted in this server."
+                });
+
+                return {
+                    content: getFavoriteGif(opts, other)
+                };
+            }
         },
         {
             inputType: ApplicationCommandInputType.BUILT_IN,

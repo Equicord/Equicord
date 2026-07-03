@@ -60,7 +60,7 @@ export default definePlugin({
             find: '.CUSTOM_GIFT?""',
             replacement: [
                 {
-                    match: /message:(\i),message:\{id:\i\}.{0,200}renderContentOnly:\i\}=\i;/,
+                    match: /message:(\i),message:\{id:\i\}.{0,200}renderContentOnly:\i.{0,30}\}=\i;/,
                     replace: "$&$1=$self.transformMessage($1);",
                 },
                 {

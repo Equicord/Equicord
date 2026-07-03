@@ -54,6 +54,12 @@
     gap: 16px;
 }
 
-.vc-custom-sounds-preview-controls {
+.vc-custom-sounds-override-controls {
     display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.vc-custom-sounds-file-input {
+    display: none;
 }

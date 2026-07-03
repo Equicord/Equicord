@@ -12,13 +12,14 @@ import { OpenExternalIcon } from "@components/Icons";
 import { Devs, EquicordDevs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
 import definePlugin from "@utils/types";
+import { CloudUpload } from "@vencord/discord-types";
 import { findByPropsLazy } from "@webpack";
-import { DraftType, FluxDispatcher, Menu, PermissionsBits, PermissionStore, React, useEffect, UserStore, useState } from "@webpack/common";
+import { DraftType, FluxDispatcher, Menu, PermissionsBits, PermissionStore, React, showToast, Toasts, UploadAttachmentStore, useEffect, UserStore, useState } from "@webpack/common";
 
 import { settings } from "./settings";
 import { serviceLabels, ServiceType } from "./types";
 import { getMediaUrl } from "./utils/getMediaUrl";
-import { cancelCurrentUpload, getUploadState, isConfigured, subscribeUploadState, uploadFile, uploadPickedFile, uploadProvidedFiles } from "./utils/upload";
+import { cancelCurrentUpload, getUploadState, isConfigured, isFileTypeAllowed, logger, subscribeUploadState, uploadFile, uploadPickedFile, uploadProvidedFiles } from "./utils/upload";
 const cl = classNameFactory("vc-file-upload-");
 const { getUserMaxFileSize } = findByPropsLazy("getUserMaxFileSize");
 let uploadAddFilesInterceptor: ((event: unknown) => void) | null = null;
@@ -81,7 +82,7 @@ function interceptUploadAddFiles(event: unknown): void {
         ...extractFilesFromValue(payload.uploads),
         ...extractFilesFromValue(payload.items)
     ];
-    const uniqueFiles = Array.from(new Set(files));
+    const uniqueFiles = Array.from(new Set(files)).filter(f => isFileTypeAllowed(f));
 
     if (!uniqueFiles.length) return;
     if (!shouldInterceptUploadFiles(uniqueFiles, payload)) return;
@@ -98,10 +99,13 @@ function handlePaste(event: ClipboardEvent) {
 
     if (!settings.store.autoUploadPastedFiles || !isConfigured()) return;
 
+    const allowed = files.filter(f => isFileTypeAllowed(f));
+    if (allowed.length === 0) return;
+
     event.preventDefault();
     event.stopPropagation();
 
-    void uploadProvidedFiles(files);
+    void uploadProvidedFiles(allowed);
 }
 
 function formatBytes(bytes: number): string {
@@ -224,32 +228,88 @@ const imageContextMenuPatch: NavContextMenuPatchCallback = (children, props) => 
     );
 };
 
+async function handleUploadFileFromDraft(upload: CloudUpload) {
+    const file = upload.item?.file;
+    if (!file) return;
+
+    if (!isFileTypeAllowed(file)) {
+        showToast("File type not allowed by current filter", Toasts.Type.FAILURE);
+        return;
+    }
+
+    if (!isConfigured()) {
+        showToast("Please configure FileUpload settings first", Toasts.Type.FAILURE);
+        return;
+    }
+
+    try {
+        await uploadProvidedFiles([file], true);
+        upload.removeFromMsgDraft();
+    } catch (e) {
+        logger.warn("Draft upload encountered an unexpected error", e);
+    }
+}
+
 const ExternalIcon = () => <OpenExternalIcon height={24} width={24} />;
 
 const channelAttachMenuPatch: NavContextMenuPatchCallback = (children, props) => {
     const channel = props?.channel;
     if (!channel) return;
     if (channel.guild_id && !PermissionStore.can(PermissionsBits.SEND_MESSAGES, channel)) return;
-    if (children.some(child => child?.props?.id === "file-upload-manual")) return;
+    if (children.some(child => child?.props?.id === "file-upload-manual" || child?.props?.id === "file-upload-uploads")) return;
 
-    children.splice(1, 0,
-        <Menu.MenuItem
-            id="file-upload-manual"
-            key="file-upload-manual"
-            label="Upload to Host"
-            iconLeft={ExternalIcon}
-            leadingAccessory={{
-                type: "icon",
-                icon: ExternalIcon
-            }}
-            action={() => uploadPickedFile()}
-        />
-    );
+    const uploads = UploadAttachmentStore.getUploads(channel.id, DraftType.ChannelMessage);
+    const draftUploads = Array.isArray(uploads) ? uploads.filter((u: CloudUpload) => u.item?.file && isFileTypeAllowed(u.item.file)) : [];
+
+    if (draftUploads.length > 0) {
+        children.splice(1, 0,
+            <Menu.MenuItem
+                id="file-upload-uploads"
+                key="file-upload-uploads"
+                label="Upload to Host"
+                iconLeft={ExternalIcon}
+                leadingAccessory={{
+                    type: "icon",
+                    icon: ExternalIcon
+                }}
+            >
+                {draftUploads.map((upload: CloudUpload) => (
+                    <Menu.MenuItem
+                        id={`file-upload-draft-${upload.id}`}
+                        key={upload.id}
+                        label={upload.filename}
+                        action={() => handleUploadFileFromDraft(upload)}
+                    />
+                ))}
+                <Menu.MenuSeparator />
+                <Menu.MenuItem
+                    id="file-upload-manual"
+                    key="file-upload-manual"
+                    label="Choose File..."
+                    action={() => uploadPickedFile()}
+                />
+            </Menu.MenuItem>
+        );
+    } else {
+        children.splice(1, 0,
+            <Menu.MenuItem
+                id="file-upload-manual"
+                key="file-upload-manual"
+                label="Upload to Host"
+                iconLeft={ExternalIcon}
+                leadingAccessory={{
+                    type: "icon",
+                    icon: ExternalIcon
+                }}
+                action={() => uploadPickedFile()}
+            />
+        );
+    }
 };
 
 export default definePlugin({
     name: "FileUpload",
-    description: "Upload images and videos to file hosting services like Zipline and Nest",
+    description: "Upload files to hosting services like Zipline, Nest, S3, and WebDAV",
     tags: ["Media"],
     authors: [EquicordDevs.creations, EquicordDevs.keircn, Devs.ScattrdBlade],
     settings,
