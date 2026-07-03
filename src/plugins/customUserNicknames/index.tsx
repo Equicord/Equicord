@@ -50,18 +50,14 @@ async function triggerNickUpdate(user: User, newNick: string | null) {
     if (GuildMemberStore) {
         GuildMemberStore.emitChange();
 
-        // Dispatch GUILD_MEMBER_UPDATE for the active guild to force immediate UI updates (member list, voice)
-        const activeGuildId = SelectedGuildStore?.getGuildId();
-        if (activeGuildId) {
-            const member = GuildMemberStore.getMember(activeGuildId, user.id);
-            FluxDispatcher.dispatch({
-                type: "GUILD_MEMBER_UPDATE",
-                guildId: activeGuildId,
-                user: user,
-                roles: member?.roles ?? [],
-                nick: newNick ?? member?.nick ?? null,
-                avatar: member?.avatar ?? null
-            });
+        const guildId = SelectedGuildStore?.getGuildId();
+        if (guildId) {
+            const member = GuildMemberStore.getMember(guildId, user.id);
+            const roles = member?.roles ?? [];
+            const nick = newNick ?? member?.nick ?? null;
+            const avatar = member?.avatar ?? null;
+
+            FluxDispatcher.dispatch({ type: "GUILD_MEMBER_UPDATE", guildId, user, roles, nick, avatar });
         }
     }
 }
@@ -209,30 +205,34 @@ export default definePlugin({
 
         if (NicknameUtils) {
             originalGetName = NicknameUtils.getName;
+            const args = Array.from(arguments) as any[];
+            const userObject = args.find((arg): arg is User => { return arg && typeof arg === "object" && typeof arg.id === "string"; });
+
             NicknameUtils.getName = function (this: any) {
-                const userObj = Array.from(arguments).find(arg => arg && typeof arg === "object" && typeof arg.id === "string");
-                if (userObj && customNicknames[userObj.id]) {
-                    return customNicknames[userObj.id];
+                if (userObject && customNicknames[userObject.id]) {
+                    return customNicknames[userObject.id];
                 }
+
                 return originalGetName.apply(this, arguments);
             };
 
             originalGetNicknameOfModule = NicknameUtils.getNickname;
             NicknameUtils.getNickname = function (this: any) {
-                const userObj = Array.from(arguments).find(arg => arg && typeof arg === "object" && typeof arg.id === "string");
-                if (userObj && customNicknames[userObj.id]) {
-                    return customNicknames[userObj.id];
+                if (userObject && customNicknames[userObject.id]) {
+                    return customNicknames[userObject.id];
                 }
+
                 return originalGetNicknameOfModule.apply(this, arguments);
             };
 
             originalUseName = NicknameUtils.useName;
             NicknameUtils.useName = function (this: any) {
                 const name = originalUseName.apply(this, arguments);
-                const userObj = Array.from(arguments).find(arg => arg && typeof arg === "object" && typeof arg.id === "string");
-                if (userObj && customNicknames[userObj.id]) {
-                    return customNicknames[userObj.id];
+
+                if (userObject && customNicknames[userObject.id]) {
+                    return customNicknames[userObject.id];
                 }
+
                 return name;
             };
         }
