@@ -172,7 +172,7 @@ async function getActivity(signal?: AbortSignal): Promise<Activity | null> {
         const salt = Math.random().toString(36).substring(2, 15);
         const hash = md5(nd_password + salt);
         const localCoverArtUrl = `${externalBaseUrl}/rest/getCoverArt?id=${track.coverArt}&u=${encodeURIComponent(nd_username as string)}&t=${hash}&s=${salt}&v=1.12.0&c=equicord-rpc`;
-        assets.large_image = await getAsset(appId, localCoverArtUrl).catch(() => localCoverArtUrl);
+        assets.large_image = await getAsset(appId, localCoverArtUrl).catch(() => "navidrome");
     } else {
         assets.large_image = await getAsset(appId, "navidrome").catch(() => "navidrome");
     }

@@ -190,16 +190,18 @@ function NavidromeSettings() {
             <TextSetting name="Password" description="Navidrome password." settingsKey="nd_password" />
             <TextSetting name="Client ID" description="Optional Discord Application Client ID." settingsKey="nd_clientId" placeholder="1470554657506984069" />
             <SwitchSetting name="Show Small Image" description="Show Navidrome logo in bottom right of album art." settingsKey="nd_showSmallImage" />
-            <SelectSetting name="Listening Format" description="What to show after 'Listening to'." settingsKey="nd_listeningFormat" options={[
+            <SelectSetting name="Listening Format" description="What to show as 'Listening to ...'" settingsKey="nd_listeningFormat" options={[
+                { label: "Navidrome", value: "navidrome" },
                 { label: "Artist", value: "artist" },
                 { label: "Song", value: "song" },
                 { label: "Album", value: "album" },
             ]} />
             <SelectSetting name="State Format" description="What to show on the bottom line." settingsKey="nd_stateFormat" options={[
-                { label: "Navidrome", value: "navidrome" },
+                { label: "Artist", value: "artist" },
+                { label: "Navidrome Logo", value: "navidrome" },
                 { label: "Year", value: "year" },
-                { label: "Audio Quality (e.g. MP3 320)", value: "quality" },
-                { label: "Year & Quality", value: "both" },
+                { label: "Quality", value: "quality" },
+                { label: "Both", value: "both" },
             ]} />
             <SettingsSection id="nd-refresh-interval" name="Refresh Interval" description="Refresh interval in seconds.">
                 <Slider
