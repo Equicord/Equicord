@@ -82,12 +82,22 @@ export default definePlugin({
                 />
             );
 
-            children.push(buttonElement);
+            const customButtonElement = (
+                <Menu.MenuItem
+                    id="vc-custom-quote"
+                    label="Custom Quote"
+                    icon={QuoteIcon}
+                    action={() => openModal(props => <QuoteModal message={message} custom {...props} />)}
+                />
+            );
+
+            children.push(buttonElement, customButtonElement);
         }
     }
 });
 
-function QuoteModal({ message, ...props }: RenderModalProps & { message: Message; }) {
+function QuoteModal({ message, custom, ...props }: RenderModalProps & { message: Message; custom?: boolean; }) {
+    const [quoteText, setQuoteText] = useState(message.content);
     const [gray, setGray] = useState(settings.store.grayscale);
     const [showWatermark, setShowWatermark] = useState(settings.store.showWatermark);
     const [saveAsGif, setSaveAsGif] = useState(settings.store.saveAsGif);
@@ -105,7 +115,7 @@ function QuoteModal({ message, ...props }: RenderModalProps & { message: Message
     const generateImage = async () => {
         const image = await createQuoteImage({
             avatarUrl: IconUtils.getUserAvatarURL(message.author, true, 512),
-            quote: message.content,
+            quote: quoteText,
             grayScale: gray,
             author: message.author,
             watermark: watermarkText,
@@ -122,7 +132,7 @@ function QuoteModal({ message, ...props }: RenderModalProps & { message: Message
         document.getElementById("quoterPreview")?.setAttribute("src", newUrl);
     };
 
-    useEffect(() => { generateImage(); }, [gray, showWatermark, saveAsGif, watermarkText, quoteFont]);
+    useEffect(() => { generateImage(); }, [gray, showWatermark, saveAsGif, watermarkText, quoteFont, quoteText]);
 
     useEffect(() => {
         return () => {
@@ -135,7 +145,7 @@ function QuoteModal({ message, ...props }: RenderModalProps & { message: Message
     const handleExport = () => {
         if (!quoteImage) return;
 
-        const preview = generateFileNamePreview(message.content);
+        const preview = generateFileNamePreview(quoteText);
         const extension = getFileExtension(saveAsGif);
         const url = URL.createObjectURL(quoteImage);
 
@@ -154,7 +164,7 @@ function QuoteModal({ message, ...props }: RenderModalProps & { message: Message
         const channel = getCurrentChannel();
         if (!channel) return;
 
-        const preview = generateFileNamePreview(message.content);
+        const preview = generateFileNamePreview(quoteText);
         const extension = getFileExtension(saveAsGif);
         const mimeType = getMimeType(saveAsGif);
         const file = new File([quoteImage], `${preview} - ${message.author.username}.${extension}`, { type: mimeType });
@@ -182,6 +192,16 @@ function QuoteModal({ message, ...props }: RenderModalProps & { message: Message
             ]}
         >
             <img alt="Quote preview" src="" id="quoterPreview" style={{ borderRadius: "20px", width: "100%", marginBottom: "20px" }} />
+
+            {custom && (
+                <div style={{ marginBottom: "20px" }}>
+                    <TextInput
+                        value={quoteText}
+                        onChange={setQuoteText}
+                        placeholder="Custom quote text"
+                    />
+                </div>
+            )}
 
             <FormSwitch title="Grayscale" value={gray} onChange={setGray} />
             <FormSwitch
