@@ -199,8 +199,9 @@ async function getActivity(): Promise<Activity | null> {
     };
 
     if (track.coverArt && externalBaseUrl) {
-        const localCoverArtUrl = `${externalBaseUrl}/rest/getCoverArt?id=${track.coverArt}&u=${encodeURIComponent(nd_username as string)}&p=${encodeURIComponent(nd_password as string)}&v=1.12.0&c=equicord-rpc`;
-        
+        const salt = Math.random().toString(36).substring(2, 15);
+        const hash = md5(nd_password + salt);
+        const localCoverArtUrl = `${externalBaseUrl}/rest/getCoverArt?id=${track.coverArt}&u=${encodeURIComponent(nd_username as string)}&t=${hash}&s=${salt}&v=1.12.0&c=equicord-rpc`;
         if (nd_uploadArt) {
             if (uploadedArtCache.has(track.coverArt)) {
                 const uguuUrl = uploadedArtCache.get(track.coverArt)!;
