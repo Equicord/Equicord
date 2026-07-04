@@ -1380,7 +1380,7 @@ export const EquicordDevs = Object.freeze({
     },
     Star123451: {
         name: "Star123451",
-        id: 0n
+        id: 1037526188039618560n
     },
 } satisfies Record<string, Dev>);
 
