@@ -394,7 +394,7 @@ export const settings = definePluginSettings({
     nd_refreshInterval: {
         description: "Refresh interval in seconds.",
         type: OptionType.SLIDER,
-        markers: [0.5, 1, 2, 5, 10, 15],
+        markers: [1, 2, 5, 10, 15],
         default: 10,
         hidden: true,
     },
@@ -406,12 +406,6 @@ export const settings = definePluginSettings({
             { label: "Song", value: "song" },
             { label: "Album", value: "album" },
         ],
-        hidden: true,
-    },
-    nd_uploadArt: {
-        description: "Upload art to uguu.se if you don't have a public URL.",
-        type: OptionType.BOOLEAN,
-        default: false,
         hidden: true,
     },
     nd_stateFormat: {

@@ -6,7 +6,8 @@
 
 import { Logger } from "@utils/Logger";
 import { Activity } from "@vencord/discord-types";
-import { ApplicationAssetUtils, FluxDispatcher, showToast } from "@webpack/common";
+import { ActivityType, ActivityFlags } from "@vencord/discord-types/enums";
+import { ApplicationAssetUtils, FluxDispatcher } from "@webpack/common";
 
 import { settings } from "../settings";
 
@@ -17,33 +18,6 @@ let updateInterval: NodeJS.Timeout | undefined;
 let currentTrackId: string | undefined;
 let cachedStartTimestamp: number | undefined;
 let cachedActivity: Activity | undefined;
-const uploadedArtCache = new Map<string, string>();
-
-async function uploadToUguu(coverArtId: string, localUrl: string): Promise<string | null> {
-    try {
-        const res = await fetch(localUrl);
-        if (!res.ok) return null;
-        const blob = await res.blob();
-        
-        const formData = new FormData();
-        formData.append("files[]", blob, "cover.jpg");
-        
-        const uploadRes = await fetch("https://uguu.se/upload.php", {
-            method: "POST",
-            body: formData
-        });
-        
-        const data = await uploadRes.json();
-        if (data.success && data.files?.[0]?.url) {
-            const uguuUrl = data.files[0].url;
-            uploadedArtCache.set(coverArtId, uguuUrl);
-            return uguuUrl;
-        }
-    } catch (e) {
-        logger.error("Failed to upload art to Uguu.se", e);
-    }
-    return null;
-}
 
 function md5(string: string): string {
     function md5cycle(x: number[], k: number[]) {
@@ -109,7 +83,6 @@ async function fetchNowPlaying() {
 
     if (!nd_serverUrl || !nd_username || !nd_password) {
         logger.warn("Navidrome server URL, username, or password is not set.");
-        showToast("Navidrome RPC is not configured.", "failure", { duration: 15000 });
         return null;
     }
 
@@ -147,24 +120,23 @@ async function getActivity(): Promise<Activity | null> {
         return cachedActivity;
     }
 
-    const { nd_clientId, nd_publicUrl, nd_showSmallImage, nd_username, nd_uploadArt, nd_password, nd_serverUrl } = settings.store;
+    const { nd_clientId, nd_publicUrl, nd_showSmallImage, nd_username, nd_password, nd_serverUrl } = settings.store;
 
-    const appId = (nd_clientId as string)?.trim() || "1470554657506984069";
-    const externalBaseUrl = (nd_publicUrl as string)?.replace(/\/$/, "") || (nd_serverUrl as string)?.replace(/\/$/, "");
+    const appId = (nd_clientId as string)?.trim() ?? "1470554657506984069";
+    const externalBaseUrl = (nd_publicUrl as string)?.replace(/\/$/, "") ?? (nd_serverUrl as string)?.replace(/\/$/, "");
 
-    const durationMs = (track.duration || 0) * 1000;
+    const durationMs = (track.duration ?? 0) * 1000;
     
-    // Fix timestamp reset issue: only calculate start time if the track has changed
     if (track.id !== currentTrackId || !cachedStartTimestamp) {
         currentTrackId = track.id;
-        const minutesAgo = track.minutesAgo || 0;
+        const minutesAgo = track.minutesAgo ?? 0;
         const elapsedMs = minutesAgo * 60 * 1000;
         cachedStartTimestamp = Date.now() - elapsedMs;
     }
 
     const endTimestamp = cachedStartTimestamp + durationMs;
 
-    const stateFormat = settings.store.nd_stateFormat || "navidrome";
+    const stateFormat = settings.store.nd_stateFormat ?? "navidrome";
     let stateString = "Navidrome";
     
     if (stateFormat === "year" && track.year) {
@@ -174,59 +146,45 @@ async function getActivity(): Promise<Activity | null> {
     } else if (stateFormat === "both") {
         const yearStr = track.year ? `${track.year}` : "";
         const qualStr = track.suffix ? `${track.suffix.toUpperCase()}${track.bitRate ? ' ' + track.bitRate + 'kbps' : ''}` : "";
-        stateString = [yearStr, qualStr].filter(Boolean).join(" • ") || "Navidrome";
+        stateString = [yearStr, qualStr].filter(Boolean).join(" • ") ?? "Navidrome";
     }
 
-    const listeningFormat = settings.store.nd_listeningFormat || "artist";
-    let nameString = track.artist || "Unknown Artist";
-    if (listeningFormat === "song") nameString = track.title || "Unknown Song";
-    if (listeningFormat === "album") nameString = track.album || "Unknown Album";
+    const listeningFormat = settings.store.nd_listeningFormat ?? "artist";
+    let nameString = track.artist ?? "Unknown Artist";
+    if (listeningFormat === "song") nameString = track.title ?? "Unknown Song";
+    if (listeningFormat === "album") nameString = track.album ?? "Unknown Album";
 
-    const activity: Activity = {
-        application_id: appId,
-        name: nameString,
-        details: track.title,
-        state: stateString,
-        type: 2,
-        flags: 1,
-        timestamps: {
-            start: cachedStartTimestamp,
-            end: endTimestamp,
-        },
-        assets: {
-            large_text: track.album || track.title,
-        }
+    const assets: Activity["assets"] = {
+        large_text: track.album ?? track.title,
     };
 
     if (track.coverArt && externalBaseUrl) {
         const salt = Math.random().toString(36).substring(2, 15);
         const hash = md5(nd_password + salt);
         const localCoverArtUrl = `${externalBaseUrl}/rest/getCoverArt?id=${track.coverArt}&u=${encodeURIComponent(nd_username as string)}&t=${hash}&s=${salt}&v=1.12.0&c=equicord-rpc`;
-        if (nd_uploadArt) {
-            if (uploadedArtCache.has(track.coverArt)) {
-                const uguuUrl = uploadedArtCache.get(track.coverArt)!;
-                activity.assets!.large_image = await getAsset(appId, uguuUrl).catch(() => uguuUrl);
-            } else {
-                activity.assets!.large_image = await getAsset(appId, "navidrome").catch(() => "https://raw.githubusercontent.com/Star123451/NavidromeRPC/refs/heads/main/logo.png");
-                
-                uploadToUguu(track.coverArt, localCoverArtUrl).then(async (uguuUrl) => {
-                    if (uguuUrl && currentTrackId === track.id && cachedActivity) {
-                        cachedActivity.assets!.large_image = await getAsset(appId, uguuUrl).catch(() => uguuUrl);
-                        setActivity(cachedActivity);
-                    }
-                });
-            }
-        } else {
-            activity.assets!.large_image = await getAsset(appId, localCoverArtUrl).catch(() => localCoverArtUrl);
-        }
+        assets.large_image = await getAsset(appId, localCoverArtUrl).catch(() => localCoverArtUrl);
     } else {
-        activity.assets!.large_image = await getAsset(appId, "navidrome").catch(() => "https://raw.githubusercontent.com/Star123451/NavidromeRPC/refs/heads/main/logo.png");
+        assets.large_image = await getAsset(appId, "navidrome").catch(() => "navidrome");
     }
 
     if (nd_showSmallImage) {
-        activity.assets!.small_image = await getAsset(appId, "navidrome").catch(() => "https://raw.githubusercontent.com/Star123451/NavidromeRPC/refs/heads/main/logo.png");
-        activity.assets!.small_text = "Navidrome";
+        assets.small_image = await getAsset(appId, "navidrome").catch(() => "navidrome");
+        assets.small_text = "Navidrome";
     }
+
+    const activity: Activity = {
+        application_id: appId,
+        name: nameString,
+        details: track.title,
+        state: stateString,
+        type: ActivityType.LISTENING,
+        flags: ActivityFlags.INSTANCE,
+        timestamps: {
+            start: cachedStartTimestamp,
+            end: endTimestamp,
+        },
+        assets,
+    };
 
     cachedActivity = activity;
     return activity;
@@ -243,7 +201,7 @@ async function updatePresence() {
 
 export function start() {
     updatePresence();
-    const interval = (settings.store.nd_refreshInterval as number) || 10;
+    const interval = (settings.store.nd_refreshInterval as number) ?? 10;
     updateInterval = setInterval(updatePresence, interval * 1000);
 }
 

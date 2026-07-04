@@ -190,7 +190,6 @@ function NavidromeSettings() {
             <TextSetting name="Password" description="Navidrome password." settingsKey="nd_password" />
             <TextSetting name="Client ID" description="Optional Discord Application Client ID." settingsKey="nd_clientId" placeholder="1470554657506984069" />
             <SwitchSetting name="Show Small Image" description="Show Navidrome logo in bottom right of album art." settingsKey="nd_showSmallImage" />
-            <SwitchSetting name="Upload Art to Uguu.se" description="Upload art to uguu.se if you don't have a public URL." settingsKey="nd_uploadArt" />
             <SelectSetting name="Listening Format" description="What to show after 'Listening to'." settingsKey="nd_listeningFormat" options={[
                 { label: "Artist", value: "artist" },
                 { label: "Song", value: "song" },
@@ -204,7 +203,7 @@ function NavidromeSettings() {
             ]} />
             <SettingsSection id="nd-refresh-interval" name="Refresh Interval" description="Refresh interval in seconds.">
                 <Slider
-                    markers={[0.5, 1, 2, 5, 10, 15]}
+                    markers={[1, 2, 5, 10, 15]}
                     initialValue={refreshInterval}
                     onValueChange={v => { setRefreshInterval(v); settings.store.nd_refreshInterval = v; }}
                     onValueRender={v => `${v}s`}
