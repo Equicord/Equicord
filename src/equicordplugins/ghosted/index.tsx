@@ -14,7 +14,7 @@ import { Devs, EquicordDevs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
 import definePlugin, { OptionType } from "@utils/types";
 import { Channel } from "@vencord/discord-types";
-import { Menu, openModal,Tooltip, useEffect, useState } from "@webpack/common";
+import { Menu, openModal, Tooltip, useEffect, useState } from "@webpack/common";
 
 import { Boo, clearChannelFromGhost, getBooCount, getGhostedChannels, onBooCountChange } from "./Boo";
 import { getChannelDisplayName, GhostedUsersModal } from "./GhostedUsersModal";
@@ -68,7 +68,6 @@ export const settings = definePluginSettings({
 
 function BooIndicator() {
     const [count, setCount] = useState(getBooCount());
-    const [showJumpscare, setShowJumpscare] = useState(false);
 
     useEffect(() => {
         const unsubscribe = onBooCountChange(newCount => {
@@ -80,7 +79,7 @@ function BooIndicator() {
         };
     }, []);
 
-    if (!settings.store.showIndicator && !showJumpscare) return null;
+    if (!settings.store.showIndicator) return null;
 
     const handleClick = () => {
         const ghostedChannels = getGhostedChannels();
