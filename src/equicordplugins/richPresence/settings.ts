@@ -70,6 +70,13 @@ export const settings = definePluginSettings({
         hidden: true,
         onChange: () => onServiceChange?.(),
     },
+    nd_enabled: {
+        description: "Enable Navidrome presence.",
+        type: OptionType.BOOLEAN,
+        default: false,
+        hidden: true,
+        onChange: () => onServiceChange?.(),
+    },
 
     // AudioBookShelf
     abs_serverUrl: {
@@ -344,6 +351,78 @@ export const settings = definePluginSettings({
         type: OptionType.SLIDER,
         markers: [1, 2, 2.5, 3, 5, 10, 15],
         default: 15,
+        hidden: true,
+    },
+
+    // Navidrome
+    nd_serverUrl: {
+        description: "Navidrome Server URL (e.g. http://192.168.1.100:4533)",
+        type: OptionType.STRING,
+        default: "",
+        hidden: true,
+    },
+    nd_publicUrl: {
+        description: "Navidrome Public URL (for Album Art)",
+        type: OptionType.STRING,
+        default: "",
+        hidden: true,
+    },
+    nd_username: {
+        description: "Navidrome Username",
+        type: OptionType.STRING,
+        default: "",
+        hidden: true,
+    },
+    nd_password: {
+        description: "Navidrome Password",
+        type: OptionType.STRING,
+        default: "",
+        hidden: true,
+    },
+    nd_clientId: {
+        description: "Optional Discord Application Client ID",
+        type: OptionType.STRING,
+        default: "",
+        hidden: true,
+    },
+    nd_showSmallImage: {
+        description: "Show Navidrome logo in bottom right of album art",
+        type: OptionType.BOOLEAN,
+        default: false,
+        hidden: true,
+    },
+    nd_refreshInterval: {
+        description: "Refresh interval in seconds.",
+        type: OptionType.SLIDER,
+        markers: [0.5, 1, 2, 5, 10, 15],
+        default: 10,
+        hidden: true,
+    },
+    nd_listeningFormat: {
+        description: "What to show after 'Listening to'.",
+        type: OptionType.SELECT,
+        options: [
+            { label: "Artist", value: "artist", default: true },
+            { label: "Song", value: "song" },
+            { label: "Album", value: "album" },
+        ],
+        hidden: true,
+    },
+    nd_uploadArt: {
+        description: "Upload art to uguu.se if you don't have a public URL.",
+        type: OptionType.BOOLEAN,
+        default: false,
+        hidden: true,
+    },
+    nd_stateFormat: {
+        description: "What to show on the bottom line.",
+        type: OptionType.SELECT,
+        options: [
+            { label: "Navidrome", value: "navidrome", default: true },
+            { label: "Year", value: "year" },
+            { label: "Audio Quality (e.g. MP3 320)", value: "quality" },
+            { label: "Year & Quality", value: "both" },
+        ],
         hidden: true,
     },
 });

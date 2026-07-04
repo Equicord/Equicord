@@ -179,6 +179,42 @@ function GensokyoRadioSettings() {
     );
 }
 
+function NavidromeSettings() {
+    const [refreshInterval, setRefreshInterval] = useState(settings.store.nd_refreshInterval ?? 10);
+    return (
+        <>
+            <SettingsSection id="navidrome-settings" name="" description="Show what you're currently listening to via Navidrome." />
+            <TextSetting name="Server URL" description="Navidrome Server URL (e.g. http://192.168.1.100:4533)." settingsKey="nd_serverUrl" placeholder="http://192.168.1.100:4533" />
+            <TextSetting name="Public URL" description="Navidrome Public URL (for Album Art)." settingsKey="nd_publicUrl" placeholder="https://navidrome.example.com" />
+            <TextSetting name="Username" description="Navidrome username." settingsKey="nd_username" />
+            <TextSetting name="Password" description="Navidrome password." settingsKey="nd_password" />
+            <TextSetting name="Client ID" description="Optional Discord Application Client ID." settingsKey="nd_clientId" placeholder="1470554657506984069" />
+            <SwitchSetting name="Show Small Image" description="Show Navidrome logo in bottom right of album art." settingsKey="nd_showSmallImage" />
+            <SwitchSetting name="Upload Art to Uguu.se" description="Upload art to uguu.se if you don't have a public URL." settingsKey="nd_uploadArt" />
+            <SelectSetting name="Listening Format" description="What to show after 'Listening to'." settingsKey="nd_listeningFormat" options={[
+                { label: "Artist", value: "artist" },
+                { label: "Song", value: "song" },
+                { label: "Album", value: "album" },
+            ]} />
+            <SelectSetting name="State Format" description="What to show on the bottom line." settingsKey="nd_stateFormat" options={[
+                { label: "Navidrome", value: "navidrome" },
+                { label: "Year", value: "year" },
+                { label: "Audio Quality (e.g. MP3 320)", value: "quality" },
+                { label: "Year & Quality", value: "both" },
+            ]} />
+            <SettingsSection id="nd-refresh-interval" name="Refresh Interval" description="Refresh interval in seconds.">
+                <Slider
+                    markers={[0.5, 1, 2, 5, 10, 15]}
+                    initialValue={refreshInterval}
+                    onValueChange={v => { setRefreshInterval(v); settings.store.nd_refreshInterval = v; }}
+                    onValueRender={v => `${v}s`}
+                    stickToMarkers
+                />
+            </SettingsSection>
+        </>
+    );
+}
+
 const TAB_COMPONENTS: Record<ServiceTab, React.ComponentType> = {
     [ServiceTab.AudioBookShelf]: AudioBookShelfSettings,
     [ServiceTab.Tosu]: TosuSettings,
@@ -186,6 +222,7 @@ const TAB_COMPONENTS: Record<ServiceTab, React.ComponentType> = {
     [ServiceTab.Jellyfin]: JellyfinSettings,
     [ServiceTab.ListenBrainz]: ListenBrainzSettings,
     [ServiceTab.GensokyoRadio]: GensokyoRadioSettings,
+    [ServiceTab.Navidrome]: NavidromeSettings,
 };
 
 const TAB_LABELS: Record<ServiceTab, string> = {
@@ -195,6 +232,7 @@ const TAB_LABELS: Record<ServiceTab, string> = {
     [ServiceTab.Jellyfin]: "Jellyfin",
     [ServiceTab.ListenBrainz]: "ListenBrainz",
     [ServiceTab.GensokyoRadio]: "Gensokyo Radio",
+    [ServiceTab.Navidrome]: "Navidrome",
 };
 
 const ENABLE_KEYS: Record<ServiceTab, SettingsKey> = {
@@ -204,6 +242,7 @@ const ENABLE_KEYS: Record<ServiceTab, SettingsKey> = {
     [ServiceTab.Jellyfin]: "jf_enabled",
     [ServiceTab.ListenBrainz]: "lb_enabled",
     [ServiceTab.GensokyoRadio]: "gr_enabled",
+    [ServiceTab.Navidrome]: "nd_enabled",
 };
 
 const TABS = Object.values(ServiceTab);
