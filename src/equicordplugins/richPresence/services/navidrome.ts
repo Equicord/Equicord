@@ -15,6 +15,7 @@ const SOCKET_ID = "RichPresence_Navidrome";
 const logger = new Logger("RichPresence:Navidrome");
 
 let updateInterval: NodeJS.Timeout | undefined;
+let abortController: AbortController | undefined;
 let currentTrackId: string | undefined;
 let cachedStartTimestamp: number | undefined;
 let cachedActivity: Activity | undefined;
@@ -78,7 +79,7 @@ function setActivity(activity: Activity | null) {
     FluxDispatcher.dispatch({ type: "LOCAL_ACTIVITY_UPDATE", activity, socketId: SOCKET_ID });
 }
 
-async function fetchNowPlaying() {
+async function fetchNowPlaying(signal?: AbortSignal) {
     const { nd_serverUrl, nd_username, nd_password } = settings.store;
 
     if (!nd_serverUrl || !nd_username || !nd_password) {
@@ -92,7 +93,7 @@ async function fetchNowPlaying() {
         const baseUrl = nd_serverUrl.replace(/\/$/, "");
         const queryParams = `u=${encodeURIComponent(nd_username as string)}&t=${hash}&s=${salt}&v=1.12.0&c=equicord-rpc&f=json`;
 
-        const res = await fetch(`${baseUrl}/rest/getNowPlaying?${queryParams}`);
+        const res = await fetch(`${baseUrl}/rest/getNowPlaying?${queryParams}`, { signal });
         if (!res.ok) throw `${res.status} ${res.statusText}`;
 
         const data = await res.json();
@@ -106,14 +107,15 @@ async function fetchNowPlaying() {
         if (!entries || entries.length === 0) return null;
 
         return entries[0];
-    } catch (e) {
+    } catch (e: any) {
+        if (e.name === 'AbortError') throw e;
         logger.error("Failed to fetch from Navidrome API", e);
         return null;
     }
 }
 
-async function getActivity(): Promise<Activity | null> {
-    const track = await fetchNowPlaying();
+async function getActivity(signal?: AbortSignal): Promise<Activity | null> {
+    const track = await fetchNowPlaying(signal);
     if (!track) return null;
 
     if (track.id === currentTrackId && cachedActivity) {
@@ -122,8 +124,12 @@ async function getActivity(): Promise<Activity | null> {
 
     const { nd_clientId, nd_publicUrl, nd_showSmallImage, nd_username, nd_password, nd_serverUrl } = settings.store;
 
-    const appId = (nd_clientId as string)?.trim() ?? "1470554657506984069";
-    const externalBaseUrl = (nd_publicUrl as string)?.replace(/\/$/, "") ?? (nd_serverUrl as string)?.replace(/\/$/, "");
+    const _clientId = (nd_clientId as string)?.trim();
+    const appId = _clientId === "" ? "1470554657506984069" : (_clientId ?? "1470554657506984069");
+
+    const _publicUrl = (nd_publicUrl as string)?.replace(/\/$/, "");
+    const _serverUrl = (nd_serverUrl as string)?.replace(/\/$/, "");
+    const externalBaseUrl = _publicUrl === "" ? _serverUrl : (_publicUrl ?? _serverUrl);
 
     const durationMs = (track.duration ?? 0) * 1000;
     
@@ -136,21 +142,25 @@ async function getActivity(): Promise<Activity | null> {
 
     const endTimestamp = cachedStartTimestamp + durationMs;
 
-    const stateFormat = settings.store.nd_stateFormat ?? "navidrome";
+    const stateFormat = settings.store.nd_stateFormat ?? "artist";
     let stateString = "Navidrome";
     
-    if (stateFormat === "year" && track.year) {
+    if (stateFormat === "artist" && track.artist) {
+        stateString = track.artist;
+    } else if (stateFormat === "year" && track.year) {
         stateString = `${track.year}`;
     } else if (stateFormat === "quality" && track.suffix) {
         stateString = `${track.suffix.toUpperCase()}${track.bitRate ? ' ' + track.bitRate + 'kbps' : ''}`;
     } else if (stateFormat === "both") {
         const yearStr = track.year ? `${track.year}` : "";
         const qualStr = track.suffix ? `${track.suffix.toUpperCase()}${track.bitRate ? ' ' + track.bitRate + 'kbps' : ''}` : "";
-        stateString = [yearStr, qualStr].filter(Boolean).join(" • ") ?? "Navidrome";
+        const joined = [yearStr, qualStr].filter(Boolean).join(" • ");
+        stateString = joined === "" ? "Navidrome" : joined;
     }
 
-    const listeningFormat = settings.store.nd_listeningFormat ?? "artist";
-    let nameString = track.artist ?? "Unknown Artist";
+    const listeningFormat = settings.store.nd_listeningFormat ?? "navidrome";
+    let nameString = "Navidrome";
+    if (listeningFormat === "artist") nameString = track.artist ?? "Unknown Artist";
     if (listeningFormat === "song") nameString = track.title ?? "Unknown Song";
     if (listeningFormat === "album") nameString = track.album ?? "Unknown Album";
 
@@ -192,20 +202,24 @@ async function getActivity(): Promise<Activity | null> {
 
 async function updatePresence() {
     try {
-        setActivity(await getActivity());
-    } catch (e) {
+        setActivity(await getActivity(abortController?.signal));
+    } catch (e: any) {
+        if (e.name === 'AbortError') return;
         logger.error("Failed to update presence", e);
         setActivity(null);
     }
 }
 
 export function start() {
+    abortController = new AbortController();
     updatePresence();
     const interval = (settings.store.nd_refreshInterval as number) ?? 10;
     updateInterval = setInterval(updatePresence, interval * 1000);
 }
 
 export function stop() {
+    abortController?.abort();
+    abortController = undefined;
     clearInterval(updateInterval);
     updateInterval = undefined;
     currentTrackId = undefined;
