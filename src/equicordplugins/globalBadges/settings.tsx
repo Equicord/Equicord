@@ -60,27 +60,15 @@ function ShowXSettings() {
 }
 
 export const settings = definePluginSettings({
-    showPrefix: {
-        type: OptionType.BOOLEAN,
-        description: "Shows the Mod as Prefix",
-        default: true,
-        restartNeeded: false,
-        onChange: (e => {
-            if (e && settings.store.showSuffix) {
-                settings.store.showSuffix = false;
-            }
-        })
-    },
-    showSuffix: {
-        type: OptionType.BOOLEAN,
-        description: "Shows the Mod as Suffix",
-        default: false,
-        restartNeeded: false,
-        onChange: (e => {
-            if (e && settings.store.showPrefix) {
-                settings.store.showPrefix = false;
-            }
-        })
+    showModStyle: {
+        type: OptionType.SELECT,
+        description: "Mod Style",
+        default: "none",
+        options: [
+            { label: "Don't Show Mod", value: "none" },
+            { label: "Show Mod as Prefix", value: "prefix" },
+            { label: "Show Mod as Suffix", value: "suffix" },
+        ]
     },
     apiUrl: {
         type: OptionType.STRING,

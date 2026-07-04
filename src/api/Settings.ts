@@ -335,7 +335,7 @@ export function migrateSettingsFromPlugin(newPlugin: string, oldPlugin: string, 
     SettingsStore.markAsChanged();
 }
 
-export function migrateOldSettingToNewPlugin(newPlugin: string, newSetting: string, oldPlugin: string, oldSetting: string,) {
+export function migrateOldSettingToNewPlugin(newPlugin: string, newSetting: string, oldPlugin: string, oldSetting: string) {
     const { plugins } = SettingsStore.plain;
     const oldSettings = plugins[oldPlugin];
     const newSettings = plugins[newPlugin];
