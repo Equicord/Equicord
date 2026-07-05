@@ -7,7 +7,7 @@
 import { openPrivateChannel } from "@utils/discord";
 import { proxyLazy } from "@utils/lazy";
 import { Logger } from "@utils/Logger";
-import { pluralise, sleep } from "@utils/misc";
+import { isObject, pluralise, sleep } from "@utils/misc";
 import { ChannelStore, Constants, IconUtils, moment, RelationshipStore, RestAPI, UserStore, zustandCreate } from "@webpack/common";
 
 import { FRIENDSHIP_RANK_BADGES, FriendshipRankBadge, LeaderboardEntry, MessageCountMode, MessageCountModes, SortMode, SortModes } from "./types";
@@ -101,6 +101,10 @@ export function getCachedMessageCount(friendId: string, mode: MessageCountMode):
     return useMessageCountStore.getState().get(getCacheKey(friendId, mode));
 }
 
+export function isFriendTracked(friendId: string, trackedFriendIds: readonly string[]): boolean {
+    return trackedFriendIds.length === 0 || trackedFriendIds.includes(friendId);
+}
+
 export function getFriendEntries(messageCountMode: MessageCountMode): LeaderboardEntry[] {
     return RelationshipStore.getFriendIDs()
         .map<LeaderboardEntry | null>(friendId => {
@@ -151,6 +155,16 @@ export function getFriendshipRankBadge(friendshipDays: number): FriendshipRankBa
     return result;
 }
 
+export function shouldShowProfileBadge(userId: string, requirement: number, index: number): boolean {
+    if (!RelationshipStore.isFriend(userId)) return false;
+
+    const days = daysSince(RelationshipStore.getSince(userId));
+    const nextRequirement = FRIENDSHIP_RANK_BADGES[index + 1]?.requirement;
+
+    if (nextRequirement == null) return days >= requirement;
+    return days >= requirement && days < nextRequirement;
+}
+
 async function resolveDmChannelId(friendId: string): Promise<string | null> {
     const existing = ChannelStore.getDMFromUserId(friendId);
     if (existing) return existing;
@@ -181,6 +195,15 @@ async function withMessageCountRateLimit<T>(fn: () => Promise<T>): Promise<T> {
         await sleep(MESSAGE_COUNT_REQUEST_DELAY_MS);
         release?.();
     }
+}
+
+function getRetryInfo(e: unknown): { status?: number; retryAfter?: number; } {
+    if (!isObject(e)) return {};
+    const status = "status" in e && typeof e.status === "number" ? e.status : undefined;
+    const body = "body" in e && isObject(e.body) ? e.body : undefined;
+    const bodyRetryAfter = body && "retry_after" in body && typeof body.retry_after === "number" ? body.retry_after : undefined;
+    const retryAfter = "retryAfter" in e && typeof e.retryAfter === "number" ? e.retryAfter : bodyRetryAfter;
+    return { status, retryAfter };
 }
 
 function shouldCountMessage(msg: { author?: { id?: string; }; }, currentUserId: string, friendId: string, mode: MessageCountMode): boolean {
@@ -220,9 +243,8 @@ async function withRateLimit<T>(fn: () => Promise<T>, maxRetries = 3): Promise<T
     for (let attempt = 0; attempt <= maxRetries; attempt++) {
         try {
             return await fn();
-        } catch (e: any) {
-            const status: number | undefined = e?.status;
-            const rawRetryAfter: number | undefined = e?.body?.retry_after ?? e?.retryAfter;
+        } catch (e: unknown) {
+            const { status, retryAfter: rawRetryAfter } = getRetryInfo(e);
             const retryAfterMs = rawRetryAfter != null ? (rawRetryAfter || 2) * 1000 : undefined;
             const isLastAttempt = attempt === maxRetries;
 
@@ -242,7 +264,10 @@ export async function loadMessageCountsForEntries(
     entries: readonly LeaderboardEntry[],
     mode: MessageCountMode = MessageCountModes.SENT
 ): Promise<void> {
-    if (activeMessageCountBatch) await activeMessageCountBatch;
+    if (activeMessageCountBatch) {
+        await activeMessageCountBatch;
+        return loadMessageCountsForEntries(entries, mode);
+    }
 
     const remainingEntries = entries.filter(entry => getCachedMessageCount(entry.id, mode) == null);
     if (!remainingEntries.length) return;

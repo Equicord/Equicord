@@ -6,17 +6,22 @@
 
 import { HeaderBarButton } from "@api/HeaderBar";
 import { Button } from "@components/Button";
+import ErrorBoundary from "@components/ErrorBoundary";
+import { Flex } from "@components/Flex";
+import { Heading } from "@components/Heading";
 import { UserIcon } from "@components/Icons";
 import { Margins } from "@components/margins";
+import { Paragraph } from "@components/Paragraph";
 import { classNameFactory } from "@utils/css";
 import { openPrivateChannel, openUserProfile } from "@utils/discord";
 import { classes } from "@utils/misc";
+import { PluginSettingComponentProps } from "@utils/types";
 import { RenderModalProps } from "@vencord/discord-types";
-import { Avatar, Modal, openModal, React, RelationshipStore, Select, Tooltip, UserStore, useStateFromStores } from "@webpack/common";
+import { Avatar, Forms, IconUtils, Modal, openModal, React, RelationshipStore, SearchableSelect, Select, Tooltip, UserStore, useStateFromStores } from "@webpack/common";
 
-import { compareEntries, formatExactDate, formatLeaderboardValue, formatYears, getCacheKey, getFriendEntries, getFriendshipRankBadge, getLeaderboardRank, getLeaderboardTooltip, getMessageCount, loadMessageCountsForEntries, MessageCountState, useMessageCountStore } from "./data";
+import { compareEntries, formatExactDate, formatLeaderboardValue, formatYears, getCacheKey, getFriendEntries, getFriendshipRankBadge, getLeaderboardRank, getLeaderboardTooltip, getMessageCount, isFriendTracked, loadMessageCountsForEntries, MessageCountState, useMessageCountStore } from "./data";
 import { settings } from "./settings";
-import { LEADERBOARD_SETTINGS_KEYS, LeaderboardEntry, MessageCountModes, SORT_MODE_LABELS, SortMode, SortModes } from "./types";
+import { FriendshipRankBadge, LEADERBOARD_SETTINGS_KEYS, LeaderboardEntry, MessageCountModes, SORT_MODE_LABELS, SortMode, SortModes } from "./types";
 
 type PodiumPlace = 1 | 2 | 3;
 type PodiumCardProps = Readonly<{ entry: LeaderboardEntry | undefined; place: PodiumPlace; rank: number; sortMode: SortMode; }>;
@@ -25,6 +30,7 @@ type PodiumStandProps = Readonly<{ place: PodiumPlace; rank: number; friendshipD
 
 const cl = classNameFactory("vc-friendship-leaderboard-");
 const EMPTY_MESSAGE_COUNTS: Record<string, number> = {};
+const MESSAGE_COUNT_MODE_KEYS: ["messageCountMode"] = ["messageCountMode"];
 
 function areFriendEntriesEqual(prev: LeaderboardEntry[], next: LeaderboardEntry[]) {
     if (prev.length !== next.length) return false;
@@ -35,6 +41,34 @@ function areFriendEntriesEqual(prev: LeaderboardEntry[], next: LeaderboardEntry[
             && other.name === entry.name
             && other.friendshipDays === entry.friendshipDays;
     });
+}
+
+function areFriendOptionsEqual(prev: { label: string; value: string; }[], next: { label: string; value: string; }[]) {
+    if (prev.length !== next.length) return false;
+    return prev.every((option, index) => option.value === next[index]?.value && option.label === next[index]?.label);
+}
+
+export function openRankModal(rank: FriendshipRankBadge) {
+    openModal((props: RenderModalProps) => (
+        <ErrorBoundary>
+            <Modal
+                {...props}
+                size="sm"
+                title={
+                    <Flex className={cl("rank-modal-flex")}>
+                        <Forms.FormTitle className={cl("rank-modal-img")} tag="h2">
+                            <img src={rank.iconSrc} alt="rank icon" />
+                            {rank.title}
+                        </Forms.FormTitle>
+                    </Flex>
+                }
+            >
+                <div className={cl("rank-modal-text")}>
+                    <Paragraph>{rank.description}</Paragraph>
+                </div>
+            </Modal>
+        </ErrorBoundary>
+    ));
 }
 
 function FriendshipRankBadgeIcon({ friendshipDays }: Readonly<{ friendshipDays?: number; }>) {
@@ -101,7 +135,7 @@ function PodiumStand({ place, rank, friendshipDays }: PodiumStandProps) {
 }
 
 function FriendStatsModal({ entry, modalProps }: Readonly<{ entry: LeaderboardEntry; modalProps: RenderModalProps; }>) {
-    const { messageCountMode } = settings.use(["messageCountMode"]);
+    const { messageCountMode } = settings.use(MESSAGE_COUNT_MODE_KEYS);
     const cacheKey = getCacheKey(entry.id, messageCountMode);
     const messageCount = useMessageCountStore((state: MessageCountState) => state.counts[cacheKey]);
     const loading = messageCount == null;
@@ -187,7 +221,7 @@ export function OpenLeaderboardButton() {
 }
 
 function LeaderboardModal({ modalProps }: Readonly<{ modalProps: RenderModalProps; }>) {
-    const { sortDescending, sortMode, messageCountMode } = settings.use(LEADERBOARD_SETTINGS_KEYS);
+    const { sortDescending, sortMode, messageCountMode, trackedFriendIds } = settings.use(LEADERBOARD_SETTINGS_KEYS);
 
     const friendEntries = useStateFromStores(
         [RelationshipStore, UserStore],
@@ -195,6 +229,11 @@ function LeaderboardModal({ modalProps }: Readonly<{ modalProps: RenderModalProp
         [messageCountMode],
         areFriendEntriesEqual
     );
+
+    const messageSearchEntries = React.useMemo(() => {
+        if (sortMode !== SortModes.MESSAGES) return friendEntries;
+        return friendEntries.filter(entry => isFriendTracked(entry.id, trackedFriendIds));
+    }, [friendEntries, sortMode, trackedFriendIds]);
 
     const messageCounts = useMessageCountStore((state: MessageCountState) =>
         sortMode === SortModes.MESSAGES ? state.counts : EMPTY_MESSAGE_COUNTS
@@ -205,14 +244,14 @@ function LeaderboardModal({ modalProps }: Readonly<{ modalProps: RenderModalProp
 
     React.useEffect(() => {
         if (sortMode !== SortModes.MESSAGES) return;
-        void loadMessageCountsForEntries(friendEntries, messageCountMode);
-    }, [friendEntries, messageCountMode, sortMode]);
+        void loadMessageCountsForEntries(messageSearchEntries, messageCountMode);
+    }, [messageSearchEntries, messageCountMode, sortMode]);
 
     const leaderboard = React.useMemo(() => {
-        return friendEntries
+        return messageSearchEntries
             .map(entry => ({ ...entry, messageCount: messageCounts[getCacheKey(entry.id, messageCountMode)] }))
             .sort((a, b) => compareEntries(a, b, sortDescending, sortMode));
-    }, [friendEntries, messageCountMode, messageCounts, sortDescending, sortMode]);
+    }, [messageSearchEntries, messageCountMode, messageCounts, sortDescending, sortMode]);
 
     const totalEntries = leaderboard.length;
 
@@ -322,6 +361,53 @@ function LeaderboardModal({ modalProps }: Readonly<{ modalProps: RenderModalProp
 
 export function openLeaderboardModal() {
     openModal(modalProps => <LeaderboardModal modalProps={modalProps} />);
+}
+
+export function FriendTrackingSetting({ setValue }: PluginSettingComponentProps) {
+    const [trackedFriendIds, setTrackedFriendIds] = React.useState<string[]>(settings.store.trackedFriendIds ?? []);
+
+    const options = useStateFromStores([RelationshipStore, UserStore], () =>
+        RelationshipStore.getFriendIDs().map(id => {
+            const user = UserStore.getUser(id);
+            return { label: user ? (user.globalName || user.username) : id, value: id };
+        }),
+        undefined,
+        areFriendOptionsEqual
+    );
+
+    return (
+        <div>
+            <Heading tag="h5">Friends included in message search</Heading>
+            <Paragraph className={Margins.bottom8}>
+                Leave empty to include all friends.
+            </Paragraph>
+            <SearchableSelect
+                options={options}
+                value={trackedFriendIds}
+                onChange={(value: unknown) => {
+                    const ids = Array.isArray(value) ? value.filter((id): id is string => typeof id === "string") : [];
+                    setTrackedFriendIds(ids);
+                    setValue(ids);
+                }}
+                closeOnSelect={false}
+                placeholder="All friends included"
+                multi
+                renderOptionPrefix={option => {
+                    const user = UserStore.getUser(String(option.value));
+                    if (!user) return null;
+
+                    return (
+                        <img
+                            className={cl("option-avatar")}
+                            src={IconUtils.getUserAvatarURL(user, false, 24)}
+                            width={24}
+                            height={24}
+                        />
+                    );
+                }}
+            />
+        </div>
+    );
 }
 
 export function SettingsAboutComponent() {

@@ -7,6 +7,7 @@
 import { definePluginSettings } from "@api/Settings";
 import { OptionType } from "@utils/types";
 
+import { FriendTrackingSetting } from "./components";
 import { MessageCountModes, SORT_MODE_LABELS, SortModes } from "./types";
 
 export const settings = definePluginSettings({
@@ -31,5 +32,10 @@ export const settings = definePluginSettings({
             { label: "Received messages", value: MessageCountModes.RECEIVED },
             { label: "All messages", value: MessageCountModes.ALL }
         ]
+    },
+    trackedFriendIds: {
+        type: OptionType.COMPONENT,
+        default: [] satisfies string[],
+        component: FriendTrackingSetting
     }
 });

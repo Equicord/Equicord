@@ -1,10 +1,513 @@
-.vc-friendship-ranks-flex {
+.vc-friendship-leaderboard-about {
+    background: var(--background-secondary-alt);
+    border: 1px solid var(--background-modifier-accent);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 12px;
+}
+
+.vc-friendship-leaderboard-about-title {
+    color: var(--header-primary);
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.vc-friendship-leaderboard-about-text {
+    color: var(--header-secondary);
+    font-size: 12px;
+    line-height: 1.3;
+}
+
+
+.vc-friendship-leaderboard-container {
+    background: var(--background-primary);
+    border-radius: 8px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin: 0 auto;
+    min-width: 0;
+    width: 100%;
+    overflow: hidden;
+    padding: 40px 8px 8px;
+}
+
+.vc-friendship-leaderboard-select-wrapper {
+    position: relative;
+    transform: translateY(-4px);
+    z-index: 2;
+}
+
+.vc-friendship-leaderboard-podium {
+    align-items: end;
+    display: grid;
+    gap: 8px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.vc-friendship-leaderboard-podium-slot {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.vc-friendship-leaderboard-podium-slot-1 {
+    transform: translateY(-18px);
+}
+
+.vc-friendship-leaderboard-podium-card {
+    align-items: center;
+    background: var(--background-secondary);
+    border: 1px solid var(--background-modifier-accent);
+    border-radius: 8px;
+    color: var(--header-primary);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: -1px;
+    min-height: 126px;
+    position: relative;
+    padding: 12px;
+    transition: background-color 140ms ease, border-color 140ms ease, box-shadow 180ms ease, transform 180ms ease;
+    z-index: 1;
+}
+
+.vc-friendship-leaderboard-podium-crown {
+    font-size: 22px;
+    left: 50%;
+    line-height: 1;
+    pointer-events: none;
+    position: absolute;
+    top: -12px;
+    transform: translateX(-50%);
+}
+
+.vc-friendship-leaderboard-podium-clickable {
+    cursor: pointer;
+    width: 100%;
+}
+
+.vc-friendship-leaderboard-podium-clickable:hover {
+    background: color-mix(in srgb, var(--background-modifier-hover) 86%, white 14%);
+    border-color: color-mix(in srgb, var(--brand-experiment) 34%, var(--background-modifier-accent));
+    box-shadow: 0 8px 16px rgb(0 0 0 / 18%);
+    transform: translateY(-3px);
+}
+
+.vc-friendship-leaderboard-podium-clickable:focus-visible {
+    outline: 2px solid var(--focus-primary);
+    outline-offset: 2px;
+}
+
+.vc-friendship-leaderboard-podium-1 {
+    min-height: 154px;
+    padding: 14px;
+}
+
+.vc-friendship-leaderboard-podium-2,
+.vc-friendship-leaderboard-podium-3 {
+    min-height: 138px;
+}
+
+.vc-friendship-leaderboard-podium-stand {
+    align-items: center;
+    background: var(--background-secondary-alt);
+    border: 1px solid color-mix(in srgb, var(--background-modifier-accent) 82%, transparent);
+    border-radius: 10px 10px 0 0;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    min-width: 0;
+    padding: 10px 12px 8px;
+    position: relative;
+    transition: border-color 140ms ease, box-shadow 180ms ease;
+    width: calc(100% - 12px);
+}
+
+.vc-friendship-leaderboard-podium-stand::before {
+    background: linear-gradient(90deg, transparent, color-mix(in srgb, white 14%, transparent), transparent);
+    content: "";
+    height: 1px;
+    left: 10px;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+}
+
+.vc-friendship-leaderboard-podium-slot:hover .vc-friendship-leaderboard-podium-stand,
+.vc-friendship-leaderboard-podium-slot:focus-within .vc-friendship-leaderboard-podium-stand {
+    border-color: color-mix(in srgb, var(--brand-experiment) 28%, var(--background-modifier-accent));
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 8%);
+}
+
+.vc-friendship-leaderboard-podium-stand-rank {
+    align-items: center;
+    color: var(--header-primary);
+    display: inline-flex;
+    font-size: 18px;
+    font-weight: 900;
+    gap: 6px;
+    line-height: 1;
+    text-shadow: 0 1px 0 rgb(0 0 0 / 22%);
+}
+
+.vc-friendship-leaderboard-podium-stand-1 {
+    background: rgb(246 201 69 / 14%);
+    border-color: rgb(246 201 69 / 26%);
+    height: 92px;
+}
+
+.vc-friendship-leaderboard-podium-stand-2 {
+    background: rgb(212 218 226 / 12%);
+    border-color: rgb(212 218 226 / 22%);
+    height: 72px;
+}
+
+.vc-friendship-leaderboard-podium-stand-3 {
+    background: rgb(218 146 88 / 12%);
+    border-color: rgb(218 146 88 / 22%);
+    height: 58px;
+}
+
+.vc-friendship-leaderboard-podium-stand-1 .vc-friendship-leaderboard-podium-stand-rank {
+    color: #ffe08a;
+}
+
+.vc-friendship-leaderboard-podium-stand-2 .vc-friendship-leaderboard-podium-stand-rank {
+    color: #e7ecf3;
+}
+
+.vc-friendship-leaderboard-podium-stand-3 .vc-friendship-leaderboard-podium-stand-rank {
+    color: #e8b088;
+}
+
+.vc-friendship-leaderboard-podium-avatar,
+.vc-friendship-leaderboard-avatar-placeholder {
+    border-radius: 50%;
+    height: 46px;
+    transition: transform 180ms ease, box-shadow 180ms ease;
+    width: 46px;
+}
+
+.vc-friendship-leaderboard-avatar-placeholder {
+    background: var(--background-modifier-accent);
+}
+
+.vc-friendship-leaderboard-podium-1 .vc-friendship-leaderboard-podium-avatar,
+.vc-friendship-leaderboard-podium-1 .vc-friendship-leaderboard-avatar-placeholder {
+    height: 56px;
+    width: 56px;
+}
+
+.vc-friendship-leaderboard-podium-name {
+    color: var(--header-primary);
+    font-size: 16px;
+    font-weight: 800;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-shadow: 0 1px 1px rgb(0 0 0 / 25%);
+    transition: filter 180ms ease, transform 180ms ease;
+    white-space: nowrap;
+}
+
+.vc-friendship-leaderboard-podium-slot:hover .vc-friendship-leaderboard-podium-avatar,
+.vc-friendship-leaderboard-podium-slot:focus-within .vc-friendship-leaderboard-podium-avatar {
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--brand-experiment) 40%, transparent);
+    transform: scale(1.06);
+}
+
+.vc-friendship-leaderboard-podium-1 .vc-friendship-leaderboard-podium-name {
+    color: #f6c945;
+}
+
+.vc-friendship-leaderboard-podium-2 .vc-friendship-leaderboard-podium-name {
+    color: #d4dae2;
+}
+
+.vc-friendship-leaderboard-podium-3 .vc-friendship-leaderboard-podium-name {
+    color: #da9258;
+}
+
+.vc-friendship-leaderboard-podium-slot:hover .vc-friendship-leaderboard-podium-name,
+.vc-friendship-leaderboard-podium-slot:focus-within .vc-friendship-leaderboard-podium-name {
+    filter: brightness(1.15);
+    transform: translateY(-1px);
+}
+
+.vc-friendship-leaderboard-podium-value {
+    color: var(--text-muted);
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.vc-friendship-leaderboard-summary {
+    align-items: end;
+    display: grid;
+    gap: 10px;
+    grid-template-columns: 40px 32px minmax(0, 1fr) max-content;
+    padding: 0 10px 4px;
+}
+
+.vc-friendship-leaderboard-summary-place,
+.vc-friendship-leaderboard-summary-name,
+.vc-friendship-leaderboard-summary-side {
+    color: var(--header-secondary);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    line-height: 1.2;
+    min-width: 0;
+    text-transform: uppercase;
+}
+
+.vc-friendship-leaderboard-summary-place {
+    grid-column: 1;
+    justify-self: start;
+    padding-left: 4px;
+}
+
+.vc-friendship-leaderboard-summary-name {
+    grid-column: 2 / 4;
+    justify-self: start;
+    padding-left: 4px;
+}
+
+.vc-friendship-leaderboard-summary-side {
+    grid-column: 4;
+    justify-self: end;
+}
+
+.vc-friendship-leaderboard-list {
+    background: var(--background-secondary);
+    border: 1px solid var(--background-modifier-accent);
+    border-radius: 8px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    max-height: none;
+    min-width: 0;
+    overflow: hidden;
+    padding: 6px;
+}
+
+.vc-friendship-leaderboard-row {
+    align-items: center;
+    background: transparent;
+    border: 0;
+    border-radius: 6px;
+    box-sizing: border-box;
+    color: var(--text-normal);
+    cursor: pointer;
+    display: grid;
+    gap: 10px;
+    grid-template-areas: "rank avatar info score";
+    grid-template-columns: 40px 32px minmax(0, 1fr) max-content;
+    min-width: 0;
+    padding: 8px 10px;
+    text-align: left;
+    transition: background-color 140ms ease, box-shadow 180ms ease, transform 180ms ease;
+    width: 100%;
+    max-width: 100%;
+}
+
+.vc-friendship-leaderboard-row:hover {
+    background: color-mix(in srgb, var(--background-modifier-hover) 88%, white 12%);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--brand-experiment) 24%, transparent);
+    transform: translateX(2px);
+}
+
+.vc-friendship-leaderboard-row:focus-visible {
+    outline: 2px solid var(--focus-primary);
+    outline-offset: 1px;
+}
+
+.vc-friendship-leaderboard-rank {
+    align-items: center;
+    display: inline-flex;
+    gap: 6px;
+    grid-area: rank;
+    color: var(--text-normal);
+    font-size: 13px;
+    font-weight: 800;
+    text-align: center;
+    white-space: nowrap;
+    word-break: keep-all;
+    overflow-wrap: normal;
+}
+
+.vc-friendship-leaderboard-rank-badge {
+    border-radius: 50%;
+    flex: 0 0 auto;
+    height: 16px;
+    width: 16px;
+}
+
+.vc-friendship-leaderboard-podium-stand-rank .vc-friendship-leaderboard-rank-badge {
+    height: 20px;
+    width: 20px;
+}
+
+.vc-friendship-leaderboard-avatar {
+    grid-area: avatar;
+    border-radius: 50%;
+    border: 1px solid var(--background-modifier-accent);
+    height: 32px;
+    transition: transform 160ms ease, border-color 140ms ease;
+    width: 32px;
+}
+
+.vc-friendship-leaderboard-row:hover .vc-friendship-leaderboard-avatar {
+    border-color: color-mix(in srgb, var(--brand-experiment) 40%, var(--background-modifier-accent));
+    transform: scale(1.08);
+}
+
+.vc-friendship-leaderboard-info {
+    grid-area: info;
+    min-width: 0;
+    padding-right: 10px;
+}
+
+.vc-friendship-leaderboard-name {
+    color: var(--text-normal);
+    font-size: 14px;
+    font-weight: 700;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.vc-friendship-leaderboard-score {
+    grid-area: score;
+    color: var(--text-normal);
+    font-size: 12px;
+    font-weight: 800;
+    min-width: 0;
+    white-space: nowrap;
+    text-align: right;
+}
+
+.vc-friendship-leaderboard-empty {
+    color: var(--text-muted);
+    font-size: 13px;
+    padding: 14px;
+    text-align: center;
+}
+
+.vc-friendship-leaderboard-loading {
+    align-items: center;
+    background: color-mix(in srgb, var(--brand-experiment) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--brand-experiment) 30%, var(--background-modifier-accent));
+    border-radius: 6px;
+    color: var(--text-normal);
+    display: flex;
+    font-size: 12px;
+    font-weight: 700;
+    justify-content: center;
+    margin: 4px 6px 8px;
+    min-height: 34px;
+    padding: 0 10px;
+}
+
+@media (width <=900px) {
+    .vc-friendship-leaderboard-container {
+        width: 100%;
+        max-width: 100%;
+        overflow-x: hidden;
+        box-sizing: border-box;
+    }
+
+    .vc-friendship-leaderboard-row {
+        grid-template-areas: "rank avatar info score";
+        grid-template-columns: 36px 28px minmax(0, 1fr) max-content;
+        padding: 10px 8px;
+    }
+
+    .vc-friendship-leaderboard-summary {
+        grid-template-columns: 36px 28px minmax(0, 1fr) max-content;
+        padding: 0 8px 4px;
+    }
+}
+
+
+
+.vc-friendship-leaderboard-stats-container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 8px;
+}
+
+.vc-friendship-leaderboard-stats-content {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    align-items: center;
+}
+
+.vc-friendship-leaderboard-stats-avatar {
+    display: flex;
+    justify-content: center;
+}
+
+.vc-friendship-leaderboard-stats-info {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.vc-friendship-leaderboard-stats-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--background-modifier-accent);
+}
+
+.vc-friendship-leaderboard-stats-row:last-child {
+    border-bottom: none;
+}
+
+.vc-friendship-leaderboard-stats-label {
+    color: var(--header-secondary);
+    font-size: 12px;
+    font-weight: 600;
+    min-width: 0;
+}
+
+.vc-friendship-leaderboard-stats-value {
+    color: var(--header-primary);
+    font-size: 14px;
+    font-weight: 700;
+    text-align: right;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.vc-friendship-leaderboard-stats-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+}
+
+.vc-friendship-leaderboard-option-avatar {
+    border-radius: 50%;
+}
+
+.vc-friendship-leaderboard-rank-modal-flex {
     width: 100%;
     justify-content: center;
     height: 18px;
 }
 
-.vc-friendship-ranks-img {
+.vc-friendship-leaderboard-rank-modal-img {
     display: flex;
     width: 100%;
     text-align: center;
@@ -13,7 +516,7 @@
     gap: 4px;
 }
 
-.vc-friendship-ranks-text {
+.vc-friendship-leaderboard-rank-modal-text {
     padding: 1em;
     text-align: center;
 }

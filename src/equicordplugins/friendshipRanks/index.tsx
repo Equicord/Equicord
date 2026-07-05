@@ -1,6 +1,6 @@
 /*
  * Vencord, a Discord client mod
- * Copyright (c) 2024 Vendicated and contributors
+ * Copyright (c) 2026 Vendicated and contributors
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
@@ -8,148 +8,88 @@ import "./styles.css";
 
 import { BadgePosition, BadgeUserArgs } from "@api/Badges";
 import { Badges } from "@api/index";
-import ErrorBoundary from "@components/ErrorBoundary";
-import { Flex } from "@components/Flex";
-import { Paragraph } from "@components/Paragraph";
-import { Devs } from "@utils/constants";
-import { classNameFactory } from "@utils/css";
+import { UserIcon } from "@components/Icons";
+import { Devs, EquicordDevs } from "@utils/constants";
 import definePlugin from "@utils/types";
-import { RenderModalProps } from "@vencord/discord-types";
-import { Forms, Modal,openModal, RelationshipStore } from "@webpack/common";
+import { Message } from "@vencord/discord-types";
+import { ChannelStore, UserStore } from "@webpack/common";
 
-interface rankInfo {
-    title: string;
-    description: string;
-    requirement: number;
-    iconSrc: string;
-}
+import { OpenLeaderboardButton, openLeaderboardModal, openRankModal, SettingsAboutComponent } from "./components";
+import { getCacheKey, shouldShowProfileBadge, useMessageCountStore } from "./data";
+import { settings } from "./settings";
+import { FRIENDSHIP_RANK_BADGES, MessageCountModes } from "./types";
 
-const cl = classNameFactory("vc-friendship-ranks-");
-
-function daysSince(dateString: string): number {
-    const date = new Date(dateString);
-    const currentDate = new Date();
-
-    const differenceInMs = currentDate.getTime() - date.getTime();
-
-    const days = differenceInMs / (1000 * 60 * 60 * 24);
-
-    return Math.floor(days);
-}
-
-const ranks: rankInfo[] =
-    [
-        {
-            title: "Sprout",
-            description: "Your friendship is just starting",
-            requirement: 0,
-            iconSrc: "https://equicord.org/assets/plugins/friendshipRanks/sprout.png"
+function getProfileBadges() {
+    return FRIENDSHIP_RANK_BADGES.map((rank, index) => ({
+        id: `friendship_ranks_badge_${index}`,
+        description: rank.title,
+        iconSrc: rank.iconSrc,
+        position: BadgePosition.END,
+        onClick: () => openRankModal(rank),
+        shouldShow: (info: BadgeUserArgs) => shouldShowProfileBadge(info.userId, rank.requirement, index),
+        props: {
+            style: {
+                borderRadius: "50%",
+                transform: "scale(0.9)"
+            }
         },
-        {
-            title: "Blooming",
-            description: "Your friendship is getting there! (1 Month)",
-            requirement: 30,
-            iconSrc: "https://equicord.org/assets/plugins/friendshipRanks/blooming.png"
-        },
-        {
-            title: "Burning",
-            description: "Your friendship has reached terminal velocity (3 Months)",
-            requirement: 90,
-            iconSrc: "https://equicord.org/assets/plugins/friendshipRanks/burning.png"
-        },
-        {
-            title: "Fighter",
-            description: "Your friendship is strong (6 Months)",
-            requirement: 182.5,
-            iconSrc: "https://equicord.org/assets/plugins/friendshipRanks/fighter.png"
-        },
-        {
-            title: "Star",
-            description: "Your friendship has been going on for a WHILE (1 Year)",
-            requirement: 365,
-            iconSrc: "https://equicord.org/assets/plugins/friendshipRanks/star.png"
-        },
-        {
-            title: "Royal",
-            description: "Your friendship has gone through thick and thin- a whole 2 years!",
-            requirement: 730,
-            iconSrc: "https://equicord.org/assets/plugins/friendshipRanks/royal.png"
-        },
-        {
-            title: "Besties",
-            description: "How do you even manage this??? (5 Years)",
-            requirement: 1826.25,
-            iconSrc: "https://equicord.org/assets/plugins/friendshipRanks/besties.png"
-        }
-    ];
-
-function openRankModal(rank: rankInfo) {
-    openModal((props: RenderModalProps) => (
-        <ErrorBoundary>
-            <Modal
-                {...props}
-                size="sm"
-                title={
-                    <Flex className={cl("flex")}>
-                        <Forms.FormTitle
-                            className={cl("img")}
-                            tag="h2"
-                        >
-                            <img src={rank.iconSrc} alt="rank icon" />
-                            {rank.title}
-                        </Forms.FormTitle>
-                    </Flex>
-                }
-            >
-                <div className={cl("text")}>
-                    <Paragraph>
-                        {rank.description}
-                    </Paragraph>
-                </div>
-            </Modal>
-        </ErrorBoundary >
-    ));
-}
-
-function shouldShowBadge(userId: string, requirement: number, index: number) {
-    if (!RelationshipStore.isFriend(userId)) return false;
-
-    const days = daysSince(RelationshipStore.getSince(userId));
-
-    if (ranks[index + 1] == null) return days > requirement;
-
-    return (days > requirement && days < ranks[index + 1].requirement);
-}
-
-function getBadgesToApply() {
-    return ranks.map((rank, index) => {
-        return ({
-            id: `friendship_ranks_badge_${index}`,
-            description: rank.title,
-            iconSrc: rank.iconSrc,
-            position: BadgePosition.END,
-            onClick: () => openRankModal(rank),
-            shouldShow: (info: BadgeUserArgs) => shouldShowBadge(info.userId, rank.requirement, index),
-            props: {
-                style: {
-                    borderRadius: "50%",
-                    transform: "scale(0.9)"
-                }
-            },
-        });
-    });
+    }));
 }
 
 export default definePlugin({
     name: "FriendshipRanks",
-    description: "Adds badges showcasing how long you have been friends with a user for",
-    tags: ["Friends"],
-    authors: [Devs.Samwich],
-    start() {
-        getBadgesToApply().forEach(b => Badges.addProfileBadge(b));
+    description: "Adds badges showcasing how long you have been friends with a user for, and a leaderboard of your friends based on how long you've been friends with them.",
+    tags: ["Friends", "Organisation"],
+    authors: [Devs.Samwich, EquicordDevs.Paid],
+    settings,
 
+    toolboxActions: {
+        "Friendship Leaderboard"() {
+            openLeaderboardModal();
+        }
     },
+
+    dependencies: ["HeaderBarAPI"],
+
+    headerBarButton: {
+        icon: UserIcon,
+        render: OpenLeaderboardButton
+    },
+
+    settingsAboutComponent: SettingsAboutComponent,
+
+    start() {
+        getProfileBadges().forEach(b => Badges.addProfileBadge(b));
+    },
+
     stop() {
-        getBadgesToApply().forEach(b => Badges.removeProfileBadge(b));
+        getProfileBadges().forEach(b => Badges.removeProfileBadge(b));
     },
+
+    flux: {
+        MESSAGE_CREATE({ optimistic, type, message }: { optimistic: boolean; type: string; message: Message; channelId: string; }) {
+            if (optimistic || type !== "MESSAGE_CREATE" || message.state === "SENDING") return;
+
+            const channel = ChannelStore.getChannel(message.channel_id);
+            if (!channel?.isDM?.() || channel.isMultiUserDM?.()) return;
+
+            const currentUserId = UserStore.getCurrentUser()?.id;
+            if (!currentUserId || !message.author?.id) return;
+
+            const friendId = message.author.id === currentUserId
+                ? channel.recipients?.[0]
+                : message.author.id;
+
+            if (!friendId) return;
+
+            const mode = message.author.id === currentUserId
+                ? MessageCountModes.SENT
+                : MessageCountModes.RECEIVED;
+
+            const specificCacheKey = getCacheKey(friendId, mode);
+            const allCacheKey = getCacheKey(friendId, MessageCountModes.ALL);
+            useMessageCountStore.getState().increment(specificCacheKey);
+            useMessageCountStore.getState().increment(allCacheKey);
+        }
+    }
 });
