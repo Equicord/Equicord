@@ -162,45 +162,43 @@ export function PinnedThemesModal({ onClose, ...props }: RenderModalProps) {
             size="sm"
             title="Pinned themes"
         >
-            <div className={cl("pinned-theme-modal")}>
-                <Paragraph className={cl("pinned-theme-intro")}>
-                    Pinned themes always stay enabled. Loading a preset adds its assigned theme on top.
-                </Paragraph>
-                {loading ? (
-                    <Paragraph>Loading themes…</Paragraph>
-                ) : loadError ? (
-                    <Paragraph>{loadError}</Paragraph>
-                ) : themes.length === 0 ? (
-                    <Paragraph>No themes found. Add themes in Equicord Settings → Themes.</Paragraph>
-                ) : (
-                    <ScrollerThin className={cl("pinned-theme-scroller")}>
-                        <div className={cl("pinned-theme-scroll-inner")}>
-                            <ThemeGroup
-                                title="Local themes"
-                                themes={localThemes}
-                                pinnedKeys={pinnedKeys}
-                                onToggle={toggle}
-                            />
-                            <ThemeGroup
-                                title="Online themes"
-                                themes={onlineThemes}
-                                pinnedKeys={pinnedKeys}
-                                onToggle={toggle}
-                            />
-                        </div>
-                    </ScrollerThin>
-                )}
-                <div className={cl("pinned-theme-actions")}>
-                    <Button
-                        variant="secondary"
-                        onClick={() => {
-                            applyPinnedThemesOnly();
-                            onClose();
-                        }}
-                    >
-                        Apply pinned only
-                    </Button>
-                </div>
+            <Paragraph className={cl("pinned-theme-intro")}>
+                Pinned themes always stay enabled. Loading a preset adds its assigned theme on top.
+            </Paragraph>
+            {loading ? (
+                <Paragraph>Loading themes…</Paragraph>
+            ) : loadError ? (
+                <Paragraph>{loadError}</Paragraph>
+            ) : themes.length === 0 ? (
+                <Paragraph>No themes found. Add themes in Equicord Settings → Themes.</Paragraph>
+            ) : (
+                <ScrollerThin className={cl("pinned-theme-scroller")}>
+                    <div className={cl("pinned-theme-scroll-inner")}>
+                        <ThemeGroup
+                            title="Local themes"
+                            themes={localThemes}
+                            pinnedKeys={pinnedKeys}
+                            onToggle={toggle}
+                        />
+                        <ThemeGroup
+                            title="Online themes"
+                            themes={onlineThemes}
+                            pinnedKeys={pinnedKeys}
+                            onToggle={toggle}
+                        />
+                    </div>
+                </ScrollerThin>
+            )}
+            <div className={cl("pinned-theme-actions")}>
+                <Button
+                    variant="secondary"
+                    onClick={() => {
+                        applyPinnedThemesOnly();
+                        onClose();
+                    }}
+                >
+                    Apply pinned only
+                </Button>
             </div>
         </Modal>
     );

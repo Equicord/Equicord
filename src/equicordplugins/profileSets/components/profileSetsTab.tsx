@@ -4,17 +4,16 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { Flex } from "@components/Flex";
 import { Margins } from "@utils/margins";
 import { classes } from "@utils/misc";
 import { extractAndLoadChunksLazy } from "@webpack";
 import { React, SelectedGuildStore, useStateFromStores } from "@webpack/common";
 
 import { cl } from "../classNames";
-import { loadPresets, PresetSection } from "../utils/storage";
+import type { PresetSection } from "../utils/storage";
+import { openCreateFolderModal } from "./createFolderModal";
 import { PinnedThemesControl } from "./pinnedThemesControl";
 import { PresetManager } from "./presetManager";
-import { ProfileSetsPreview } from "./profileSetsPreview";
 import { ProfileSetsScopeBar } from "./profileSetsScopeBar";
 
 const requireProfileSettingsChunk = extractAndLoadChunksLazy(["#{intl::MAIN_PROFILE}"]);
@@ -27,21 +26,20 @@ export function ProfileSetsTab() {
 
     const [section, setSection] = React.useState<PresetSection>("main");
     const [guildId, setGuildId] = React.useState<string | undefined>(undefined);
+    const [activeFolderId, setActiveFolderId] = React.useState<string | null>(null);
+    const [searchMode, setSearchMode] = React.useState(false);
+    const [, forceFolderUpdate] = React.useReducer(x => x + 1, 0);
     const resolvedGuildId = section === "server" ? (guildId ?? defaultGuildId ?? undefined) : undefined;
+    const canUseGuild = section !== "server" || Boolean(resolvedGuildId);
+    const showNewFolder = activeFolderId == null && !searchMode;
 
     React.useEffect(() => {
         requireProfileSettingsChunk();
     }, []);
 
     React.useEffect(() => {
-        let isActive = true;
-        (async () => {
-            await loadPresets(section);
-            if (!isActive) return;
-        })();
-        return () => {
-            isActive = false;
-        };
+        setActiveFolderId(null);
+        setSearchMode(false);
     }, [section]);
 
     return (
@@ -52,21 +50,22 @@ export function ProfileSetsTab() {
                     guildId={resolvedGuildId}
                     onSectionChange={setSection}
                     onGuildIdChange={setGuildId}
+                    showNewFolder={showNewFolder}
+                    canUseGuild={canUseGuild}
+                    onNewFolder={() => openCreateFolderModal(section, forceFolderUpdate)}
                 />
                 <PinnedThemesControl />
             </div>
-            <Flex className={cl("layout")} alignItems="flex-start" gap="24px">
-                <div className={cl("column-main")}>
-                    <PresetManager
-                        section={section}
-                        guildId={resolvedGuildId}
-                        hideHeading
-                    />
-                </div>
-                <div className={cl("column-preview")}>
-                    <ProfileSetsPreview section={section} guildId={resolvedGuildId} />
-                </div>
-            </Flex>
+            <PresetManager
+                section={section}
+                guildId={resolvedGuildId}
+                hideHeading
+                activeFolderId={activeFolderId}
+                setActiveFolderId={setActiveFolderId}
+                searchMode={searchMode}
+                setSearchMode={setSearchMode}
+                onStoreChange={forceFolderUpdate}
+            />
         </div>
     );
 }

@@ -5,23 +5,47 @@
  */
 
 import { Button } from "@components/Button";
-import { GuildStore, IconUtils, React, SearchableSelect, SelectedGuildStore, useStateFromStores } from "@webpack/common";
+import { GuildStore, IconUtils, React, SearchableSelect, SelectedGuildStore, Tooltip, useStateFromStores } from "@webpack/common";
 
 import { cl } from "../classNames";
-import { PresetSection } from "../utils/storage";
 
 type ProfileSetsScopeBarProps = {
-    section: PresetSection;
+    section: "main" | "server";
     guildId: string | undefined;
-    onSectionChange: (section: PresetSection) => void;
+    onSectionChange: (section: "main" | "server") => void;
     onGuildIdChange: (guildId: string | undefined) => void;
+    showNewFolder: boolean;
+    onNewFolder: () => void;
+    canUseGuild: boolean;
 };
+
+function ScopeFolderIcon() {
+    return (
+        <svg
+            className={cl("scope-folder-icon")}
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+        >
+            <path d="M12 10v6" />
+            <path d="M9 13h6" />
+            <path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z" />
+        </svg>
+    );
+}
 
 export function ProfileSetsScopeBar({
     section,
     guildId,
     onSectionChange,
-    onGuildIdChange
+    onGuildIdChange,
+    showNewFolder,
+    onNewFolder,
+    canUseGuild,
 }: ProfileSetsScopeBarProps) {
     const guildOptions = useStateFromStores([GuildStore], () =>
         Object.values(GuildStore.getGuilds())
@@ -59,6 +83,23 @@ export function ProfileSetsScopeBar({
                     Server profile
                 </Button>
             </div>
+            {showNewFolder && (
+                <Tooltip text={canUseGuild ? "New folder" : "Select a server first"}>
+                    {({ onMouseEnter, onMouseLeave }) => (
+                        <button
+                            type="button"
+                            className={cl("scope-folder-btn")}
+                            aria-label="New folder"
+                            disabled={!canUseGuild}
+                            onClick={onNewFolder}
+                            onMouseEnter={onMouseEnter}
+                            onMouseLeave={onMouseLeave}
+                        >
+                            <ScopeFolderIcon />
+                        </button>
+                    )}
+                </Tooltip>
+            )}
             {section === "server" && (
                 <div className={cl("scope-guild")}>
                     <SearchableSelect

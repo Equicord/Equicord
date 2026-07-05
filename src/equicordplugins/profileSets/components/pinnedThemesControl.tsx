@@ -37,11 +37,9 @@ export function PinnedThemesControl() {
         <Tooltip text="Choose themes that always stay enabled, even when switching profile presets.">
             {({ onMouseEnter, onMouseLeave }) => (
                 <div className={cl("pinned-themes")} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
-                    <Button size="small" variant="secondary" onClick={open}>
-                        <div className={cl("pinned-themes-inner")}>
-                            <span className={cl("pinned-themes-title")}>Pinned themes</span>
-                            <span className={cl("pinned-themes-subtitle")}>{subtitle}</span>
-                        </div>
+                    <Button size="small" variant="secondary" onClick={open} className={cl("pinned-themes-btn")}>
+                        <span>Pinned themes</span>
+                        {count > 0 ? <span className={cl("pinned-themes-badge")}>{count}</span> : null}
                     </Button>
                 </div>
             )}

@@ -48,6 +48,7 @@ export default definePlugin({
         },
         {
             find: "#{intl::MAIN_PROFILE}",
+            group: true,
             replacement: [
                 {
                     match: /#{intl::EDIT_PROFILE_CATEGORY_GUILD_IDENTITY}\)\},(\i)\.(\i)\.GUILD\)/,
@@ -64,6 +65,7 @@ export default definePlugin({
         void loadThemeBindings().then(() => restoreActivePresetTheme());
         void loadPresets("main");
     },
+    stop() {},
     mergePendingUserProfile,
     profileSetsTabBar() {
         return (

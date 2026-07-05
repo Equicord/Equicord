@@ -7,17 +7,18 @@
 import { getUserSettingLazy } from "@api/UserSettings";
 import { AvatarDecorationData, CustomStatus, DisplayNameStyles, Nameplate, ProfileEffect, ProfilePreset, User } from "@vencord/discord-types";
 import { findStoreLazy } from "@webpack";
-import { FluxDispatcher, GuildMemberStore, IconUtils, UserProfileStore, UserStore, UsernameUtils } from "@webpack/common";
+import { FluxDispatcher, GuildMemberStore, IconUtils, UsernameUtils,UserProfileStore, UserStore } from "@webpack/common";
 import virtualMerge from "virtual-merge";
 
 import { normalizeImageValue } from "./previewImage";
 import { notifyPreviewApply } from "./previewSync";
+import { isSafeImageUrl, sanitizeImageUrl } from "./sanitize";
 import { applyThemeForLoadedPreset } from "./themes";
 
 export { normalizeImageValue, resolvePendingAvatarUrl } from "./previewImage";
 
 const UserProfileSettingsStore = findStoreLazy("UserProfileSettingsStore");
-const CustomStatusSettings = getUserSettingLazy("status", "customStatus")!;
+const CustomStatusSettings = getUserSettingLazy("status", "customStatus");
 
 type PendingChanges = Record<string, unknown> & {
     pendingAvatar?: ImageInput;
@@ -452,14 +453,15 @@ function applyPresetToPending(preset: ProfilePreset, isGuild: boolean, options: 
     const pending: Record<string, unknown> = {};
 
     if ("avatarDataUrl" in preset) {
-        const avatar = preset.avatarDataUrl;
+        const avatar = sanitizeImageUrl(preset.avatarDataUrl);
         pending.pendingAvatar = avatar?.startsWith?.("data:")
             ? toNewAssetPayload(avatar, preset.name)
             : avatar ?? null;
     }
 
     if ("bannerDataUrl" in preset) {
-        pending.pendingBanner = toBannerPending(preset.bannerDataUrl, preset.name);
+        const banner = sanitizeImageUrl(preset.bannerDataUrl);
+        pending.pendingBanner = banner != null ? toBannerPending(banner, preset.name) : null;
     }
 
     if (!options.skipBio && "bio" in preset) {
@@ -529,7 +531,7 @@ export async function loadPresetAsPending(preset: ProfilePreset, guildId?: strin
 
     if ("bannerDataUrl" in preset) {
         const bannerUri = normalizeImageValue(preset.bannerDataUrl);
-        if (bannerUri?.startsWith("data:")) {
+        if (bannerUri && isSafeImageUrl(bannerUri) && bannerUri.startsWith("data:")) {
             const image = isImageUriObject(preset.bannerDataUrl)
                 ? { ...preset.bannerDataUrl, imageUri: bannerUri }
                 : toNewAssetPayload(bannerUri, preset.name);
@@ -537,7 +539,7 @@ export async function loadPresetAsPending(preset: ProfilePreset, guildId?: strin
         }
     }
 
-    if (preset.customStatus && !isGuild) {
+    if (preset.customStatus && !isGuild && CustomStatusSettings) {
         CustomStatusSettings.updateSetting({
             text: preset.customStatus?.text ?? "",
             expiresAtMs: preset.customStatus?.expiresAtMs ?? "0",

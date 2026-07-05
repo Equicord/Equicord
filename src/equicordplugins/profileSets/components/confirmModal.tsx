@@ -54,6 +54,59 @@ export function ConfirmModal({ title, message, confirmText, cancelText, onConfir
     );
 }
 
+interface DeleteFolderModalProps extends RenderModalProps {
+    folderName: string;
+    presetCount: number;
+    onMoveToRoot: () => void | Promise<void>;
+    onDeleteAll: () => void | Promise<void>;
+    onCancel: () => void;
+}
+
+export function DeleteFolderModal({
+    folderName,
+    presetCount,
+    onMoveToRoot,
+    onDeleteAll,
+    onCancel,
+    ...props
+}: DeleteFolderModalProps) {
+    const closeAfter = (action: () => void | Promise<void>) => async () => {
+        await action();
+        props.onClose();
+    };
+
+    const profileLabel = presetCount === 1 ? "profile" : "profiles";
+
+    return (
+        <Modal
+            {...props}
+            size="sm"
+            title="Delete folder"
+            actions={[
+                {
+                    text: "Move profiles to root",
+                    variant: "primary",
+                    onClick: closeAfter(onMoveToRoot)
+                },
+                {
+                    text: "Delete folder and profiles",
+                    variant: "dangerPrimary",
+                    onClick: closeAfter(onDeleteAll)
+                },
+                {
+                    text: "Cancel",
+                    variant: "secondary",
+                    onClick: closeAfter(onCancel)
+                }
+            ]}
+        >
+            <Paragraph>
+                Delete &quot;{folderName}&quot;? It contains {presetCount} {profileLabel}.
+            </Paragraph>
+        </Modal>
+    );
+}
+
 export function ImportProfilesModal({ title, message, onOverride, onMerge, onCancel, ...props }: ImportProfilesModalProps) {
     const closeAfter = (action: () => void) => () => {
         action();
