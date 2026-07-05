@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { definePluginSettings, migratePluginSetting } from "@api/Settings";
+import { definePluginSettings } from "@api/Settings";
 import { OptionType } from "@utils/types";
 
 import { SettingsPanel } from "./SettingsPanel";
@@ -391,12 +391,6 @@ export const settings = definePluginSettings({
         default: false,
         hidden: true,
     },
-    nd_fetchAlbumArt: {
-        description: "Deprecated album art toggle.",
-        type: OptionType.BOOLEAN,
-        default: false,
-        hidden: true,
-    },
     nd_showAlbum: {
         description: "Show album name in presence.",
         type: OptionType.BOOLEAN,
@@ -409,7 +403,7 @@ export const settings = definePluginSettings({
         options: [
             { label: "None", value: "none", default: true },
             { label: "Navidrome Instance (Exposes Server URL to Discord)", value: "instance" },
-            { label: "Last.fm API", value: "lastfm" },
+            { label: "Last.fm API (Sends track metadata to Last.fm)", value: "lastfm" },
         ],
         hidden: true,
     },
@@ -418,29 +412,6 @@ export const settings = definePluginSettings({
         type: OptionType.SLIDER,
         markers: [1, 2, 5, 10, 15],
         default: 10,
-        hidden: true,
-    },
-    nd_stateFormat: {
-        description: "Deprecated state format",
-        type: OptionType.SELECT,
-        options: [
-            { label: "Artist", value: "artist", default: true },
-            { label: "Navidrome Logo", value: "navidrome" },
-            { label: "Year", value: "year" },
-            { label: "Quality", value: "quality" },
-            { label: "Both Year and Quality", value: "both" },
-        ],
-        hidden: true,
-    },
-    nd_listeningFormat: {
-        description: "What to show as 'Listening to ...'",
-        type: OptionType.SELECT,
-        options: [
-            { label: "Navidrome", value: "navidrome", default: true },
-            { label: "Artist", value: "artist" },
-            { label: "Song", value: "song" },
-            { label: "Album", value: "album" },
-        ],
         hidden: true,
     },
     nd_activityType: {

@@ -307,6 +307,7 @@ export function stop() {
     abortController?.abort();
     abortController = undefined;
     clearTimeout(updateTimer);
+    lastFmCache.clear();
     updateTimer = undefined;
     currentTrackId = undefined;
     cachedStartTimestamp = undefined;

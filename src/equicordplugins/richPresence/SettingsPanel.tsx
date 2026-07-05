@@ -211,7 +211,7 @@ function NavidromeSettings() {
             <SelectSetting name="Album Art Mode" description="How to fetch album art." settingsKey="nd_albumArtMode" options={[
                 { label: "None", value: "none" },
                 { label: "Navidrome Instance (Exposes Server URL to Discord)", value: "instance" },
-                { label: "Last.fm API", value: "lastfm" },
+                { label: "Last.fm API (Sends Music Metadata to Last.fm)", value: "lastfm" },
             ]} />
             <SwitchSetting name="Show Small Image" description="Show Navidrome logo in bottom right of album art." settingsKey="nd_showSmallImage" />
             <SwitchSetting name="Show Album" description="Show album name in presence." settingsKey="nd_showAlbum" />
