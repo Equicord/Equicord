@@ -402,8 +402,8 @@ export const settings = definePluginSettings({
         type: OptionType.SELECT,
         options: [
             { label: "None", value: "none", default: true },
-            { label: "Navidrome Instance (Exposes Server URL to Discord)", value: "instance" },
-            { label: "Last.fm API (Sends Music Metadata to Last.fm)", value: "lastfm" },
+            { label: "Navidrome Instance (Exposes Server URL to Discord, no auth sent)", value: "instance" },
+            { label: "Last.fm API (Sends track metadata to Last.fm)", value: "lastfm" },
         ],
         hidden: true,
     },

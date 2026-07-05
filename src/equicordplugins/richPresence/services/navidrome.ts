@@ -24,6 +24,7 @@ let cachedSettingsJSON: string | undefined;
 const lastFmCache = new Map<string, string | null>();
 
 function md5(string: string): string {
+    string = unescape(encodeURIComponent(string));
     function md5cycle(x: number[], k: number[]) {
         let a = x[0], b = x[1], c = x[2], d = x[3];
         a = ff(a, b, c, d, k[0], 7, -680876936); d = ff(d, a, b, c, k[1], 12, -389564586); c = ff(c, d, a, b, k[2], 17, 606105819); b = ff(b, c, d, a, k[3], 22, -1044525330);
@@ -309,7 +310,9 @@ export function start() {
 
 export function forceUpdate() {
     if (abortController && !abortController.signal.aborted) {
+        abortController.abort();
         clearTimeout(updateTimer);
+        abortController = new AbortController();
         updatePresence();
     }
 }
