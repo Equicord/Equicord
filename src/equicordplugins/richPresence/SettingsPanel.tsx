@@ -15,13 +15,7 @@ import { NameFormat, ServiceTab } from "./types";
 
 type SettingsKey = keyof SettingsStore;
 
-let debouncedCallback: (() => void) | undefined;
-function triggerChange() {
-    if (!debouncedCallback) {
-        debouncedCallback = lodash.debounce(() => onServiceChange?.(), 500);
-    }
-    debouncedCallback();
-}
+
 
 function SwitchSetting({ name, description, settingsKey }: { name: string; description: string; settingsKey: SettingsKey; }) {
     const [value, setValue] = useState(settings.store[settingsKey] ?? false);
@@ -29,7 +23,7 @@ function SwitchSetting({ name, description, settingsKey }: { name: string; descr
         <SettingsSection tag="label" inlineSetting id={name} name={name} description={description}>
             <Switch
                 checked={Boolean(value)}
-                onChange={v => { setValue(v); (settings.store[settingsKey] as boolean) = v; triggerChange(); }}
+                onChange={v => { setValue(v); (settings.store[settingsKey] as boolean) = v; }}
             />
         </SettingsSection>
     );
@@ -42,7 +36,7 @@ function TextSetting({ name, description, settingsKey, placeholder }: { name: st
             <TextInput
                 type="text"
                 value={String(value)}
-                onChange={v => { setValue(v); (settings.store[settingsKey] as string) = v; triggerChange(); }}
+                onChange={v => { setValue(v); (settings.store[settingsKey] as string) = v; }}
                 placeholder={placeholder ?? "Enter a value"}
             />
         </SettingsSection>
@@ -60,7 +54,6 @@ function SelectSetting({ name, description, settingsKey, options }: { name: stri
                     setValue(v);
                     // @ts-expect-error TS cannot narrow dynamic store assignment
                     settings.store[settingsKey] = v;
-                    triggerChange();
                 }}
                 serialize={String}
                 closeOnSelect
@@ -195,11 +188,11 @@ function GensokyoRadioSettings() {
     );
 }
 
-const ND_ACTIVITY_TYPE_KEY: SettingsKey[] = ["nd_activityType"];
+const ND_DYNAMIC_KEYS: SettingsKey[] = ["nd_activityType", "nd_albumArtMode"];
 
 function NavidromeSettings() {
     const [refreshInterval, setRefreshInterval] = useState(settings.store.nd_refreshInterval ?? 10);
-    const { nd_activityType } = settings.use(ND_ACTIVITY_TYPE_KEY);
+    const { nd_activityType, nd_albumArtMode } = settings.use(ND_DYNAMIC_KEYS);
     return (
         <>
             <SettingsSection id="navidrome-settings" name="" description="Show what you're currently listening to via Navidrome." />
@@ -213,6 +206,9 @@ function NavidromeSettings() {
                 { label: "Navidrome Instance (Exposes Server URL to Discord, No Auth Sent)", value: "instance" },
                 { label: "Last.fm API (Sends Music Metadata to Last.fm)", value: "lastfm" },
             ]} />
+            {nd_albumArtMode === "lastfm" && (
+                <TextSetting name="Last.fm API Key" description="Optional: Provide your own Last.fm API Key (leaves default if empty)." settingsKey="nd_lastfmApiKey" placeholder="feff915bf5987580c9dc354d523dc6b9" />
+            )}
             <SwitchSetting name="Show Small Image" description="Show Navidrome logo in bottom right of album art." settingsKey="nd_showSmallImage" />
             <SwitchSetting name="Show Album" description="Show album name in presence." settingsKey="nd_showAlbum" />
             <SelectSetting name="Activity Type" description="Which type of activity to display." settingsKey="nd_activityType" options={[
