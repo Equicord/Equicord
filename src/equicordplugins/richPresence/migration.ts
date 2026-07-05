@@ -121,5 +121,13 @@ export function migrateOldSettings() {
         setStoreValue("tosu_enabled", true);
     }
 
+    const currentSettings = Settings.plugins.RichPresence;
+    if (currentSettings && typeof currentSettings.nd_fetchAlbumArt === "boolean") {
+        if (currentSettings.nd_fetchAlbumArt) {
+            setStoreValue("nd_albumArtMode", "instance");
+        }
+        delete currentSettings.nd_fetchAlbumArt;
+    }
+
     Settings.plugins.RichPresence._migrated = true;
 }

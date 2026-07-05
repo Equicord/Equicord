@@ -8,18 +8,29 @@ import { SettingsSection } from "@components/settings/tabs/plugins/components/Co
 import { Switch } from "@components/Switch";
 import { Margins } from "@utils/margins";
 import { classes } from "@utils/misc";
-import { Select, Slider, TabBar, TextInput, useState } from "@webpack/common";
+import { lodash, Select, Slider, TabBar, TextInput, useState } from "@webpack/common";
 
 import { onServiceChange, settings, SettingsStore } from "./settings";
 import { NameFormat, ServiceTab } from "./types";
 
 type SettingsKey = keyof SettingsStore;
 
+let debouncedCallback: (() => void) | undefined;
+function triggerChange() {
+    if (!debouncedCallback) {
+        debouncedCallback = lodash.debounce(() => onServiceChange?.(), 500);
+    }
+    debouncedCallback();
+}
+
 function SwitchSetting({ name, description, settingsKey }: { name: string; description: string; settingsKey: SettingsKey; }) {
     const [value, setValue] = useState(settings.store[settingsKey] ?? false);
     return (
-        <SettingsSection id={name} tag="label" name={name} description={description} inlineSetting>
-            <Switch checked={!!value} onChange={v => { setValue(v); (settings.store[settingsKey] as boolean) = v; onServiceChange?.(); }} />
+        <SettingsSection id={name} name={name} description={description}>
+            <Switch
+                checked={Boolean(value)}
+                onChange={v => { setValue(v); (settings.store[settingsKey] as boolean) = v; triggerChange(); }}
+            />
         </SettingsSection>
     );
 }
@@ -31,21 +42,26 @@ function TextSetting({ name, description, settingsKey, placeholder }: { name: st
             <TextInput
                 type="text"
                 value={String(value)}
-                onChange={v => { setValue(v); (settings.store[settingsKey] as string) = v; }}
+                onChange={v => { setValue(v); (settings.store[settingsKey] as string) = v; triggerChange(); }}
                 placeholder={placeholder ?? "Enter a value"}
             />
         </SettingsSection>
     );
 }
 
-function SelectSetting({ name, description, settingsKey, options }: { name: string; description: string; settingsKey: SettingsKey; options: { label: string; value: string; }[]; }) {
+function SelectSetting({ name, description, settingsKey, options }: { name: string; description: string; settingsKey: SettingsKey; options: { label: string; value: string | number; }[]; }) {
     const [value, setValue] = useState(settings.store[settingsKey] ?? options[0]?.value);
     return (
         <SettingsSection id={name} name={name} description={description}>
             <Select
                 options={options}
                 isSelected={v => v === value}
-                select={v => { setValue(v); (settings.store[settingsKey] as string) = v; }}
+                select={v => {
+                    setValue(v);
+                    // @ts-expect-error TS cannot narrow dynamic store assignment
+                    settings.store[settingsKey] = v;
+                    triggerChange();
+                }}
                 serialize={String}
                 closeOnSelect
                 maxVisibleItems={5}
@@ -179,8 +195,11 @@ function GensokyoRadioSettings() {
     );
 }
 
+const ND_ACTIVITY_TYPE_KEY: SettingsKey[] = ["nd_activityType"];
+
 function NavidromeSettings() {
     const [refreshInterval, setRefreshInterval] = useState(settings.store.nd_refreshInterval ?? 10);
+    const { nd_activityType } = settings.use(ND_ACTIVITY_TYPE_KEY);
     return (
         <>
             <SettingsSection id="navidrome-settings" name="" description="Show what you're currently listening to via Navidrome." />
@@ -189,21 +208,24 @@ function NavidromeSettings() {
             <TextSetting name="Username" description="Navidrome username." settingsKey="nd_username" />
             <TextSetting name="Password" description="Navidrome password." settingsKey="nd_password" />
             <TextSetting name="Client ID" description="Optional Discord Application Client ID." settingsKey="nd_clientId" placeholder="1470554657506984069" />
-            <SwitchSetting name="Fetch Album Art" description="Fetch and display album art. Note: This will send your server URL and username to Discord's image proxy." settingsKey="nd_fetchAlbumArt" />
+            <SelectSetting name="Album Art Mode" description="How to fetch album art." settingsKey="nd_albumArtMode" options={[
+                { label: "None", value: "none" },
+                { label: "Navidrome Instance (Exposes Server URL to Discord)", value: "instance" },
+                { label: "Last.fm API", value: "lastfm" },
+            ]} />
             <SwitchSetting name="Show Small Image" description="Show Navidrome logo in bottom right of album art." settingsKey="nd_showSmallImage" />
-            <SelectSetting name="Listening Format" description="What to show as 'Listening to ...'" settingsKey="nd_listeningFormat" options={[
-                { label: "Navidrome", value: "navidrome" },
-                { label: "Artist", value: "artist" },
-                { label: "Song", value: "song" },
-                { label: "Album", value: "album" },
+            <SwitchSetting name="Show Album" description="Show album name in presence." settingsKey="nd_showAlbum" />
+            <SelectSetting name="Activity Type" description="Which type of activity to display." settingsKey="nd_activityType" options={[
+                { label: "Listening", value: 2 },
+                { label: "Playing", value: 0 },
+                { label: "Watching", value: 3 }
             ]} />
-            <SelectSetting name="State Format" description="What to show on the bottom line." settingsKey="nd_stateFormat" options={[
-                { label: "Artist", value: "artist" },
-                { label: "Navidrome Logo", value: "navidrome" },
-                { label: "Year", value: "year" },
-                { label: "Quality", value: "quality" },
-                { label: "Both", value: "both" },
-            ]} />
+            {Number(nd_activityType ?? 2) !== 0 && (
+                <TextSetting name="Activity Name Format" description="The 'Listening to' text (e.g. {artist})" settingsKey="nd_nameString" placeholder="Navidrome" />
+            )}
+            <TextSetting name="Details Format" description="The main line showing what song is playing (e.g. {song})" settingsKey="nd_detailsString" placeholder="{song}" />
+            <TextSetting name="State Format" description="The line below the song name (e.g. {artist})" settingsKey="nd_stateString" placeholder="{artist}" />
+            <TextSetting name="Large Text Format" description="The album line (e.g. {album})" settingsKey="nd_largeTextString" placeholder="{album}" />
             <SettingsSection id="nd-refresh-interval" name="Refresh Interval" description="Refresh interval in seconds.">
                 <Slider
                     markers={[1, 2, 5, 10, 15]}

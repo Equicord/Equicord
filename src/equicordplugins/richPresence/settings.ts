@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { definePluginSettings } from "@api/Settings";
+import { definePluginSettings, migratePluginSetting } from "@api/Settings";
 import { OptionType } from "@utils/types";
 
 import { SettingsPanel } from "./SettingsPanel";
@@ -392,9 +392,25 @@ export const settings = definePluginSettings({
         hidden: true,
     },
     nd_fetchAlbumArt: {
-        description: "Fetch and display album art. Note: This will send your server URL and username to Discord's image proxy.",
+        description: "Deprecated album art toggle.",
         type: OptionType.BOOLEAN,
         default: false,
+        hidden: true,
+    },
+    nd_showAlbum: {
+        description: "Show album name in presence.",
+        type: OptionType.BOOLEAN,
+        default: true,
+        hidden: true,
+    },
+    nd_albumArtMode: {
+        description: "How to fetch album art.",
+        type: OptionType.SELECT,
+        options: [
+            { label: "None", value: "none", default: true },
+            { label: "Navidrome Instance (Exposes Server URL to Discord)", value: "instance" },
+            { label: "Last.fm API", value: "lastfm" },
+        ],
         hidden: true,
     },
     nd_refreshInterval: {
@@ -405,14 +421,14 @@ export const settings = definePluginSettings({
         hidden: true,
     },
     nd_stateFormat: {
-        description: "What to show on the bottom line.",
+        description: "Deprecated state format",
         type: OptionType.SELECT,
         options: [
             { label: "Artist", value: "artist", default: true },
             { label: "Navidrome Logo", value: "navidrome" },
             { label: "Year", value: "year" },
             { label: "Quality", value: "quality" },
-            { label: "Both", value: "both" },
+            { label: "Both Year and Quality", value: "both" },
         ],
         hidden: true,
     },
@@ -425,6 +441,40 @@ export const settings = definePluginSettings({
             { label: "Song", value: "song" },
             { label: "Album", value: "album" },
         ],
+        hidden: true,
+    },
+    nd_activityType: {
+        type: OptionType.SELECT,
+        description: "Which type of activity",
+        options: [
+            { label: "Listening", value: 2, default: true },
+            { label: "Playing (Fixes hidden lines)", value: 0 },
+            { label: "Watching", value: 3 }
+        ],
+        hidden: true,
+    },
+    nd_nameString: {
+        type: OptionType.STRING,
+        description: "Activity name format string",
+        default: "Navidrome",
+        hidden: true,
+    },
+    nd_detailsString: {
+        type: OptionType.STRING,
+        description: "Activity details format string",
+        default: "{song}",
+        hidden: true,
+    },
+    nd_stateString: {
+        type: OptionType.STRING,
+        description: "Activity state format string",
+        default: "{artist}",
+        hidden: true,
+    },
+    nd_largeTextString: {
+        type: OptionType.STRING,
+        description: "Activity large text format string",
+        default: "{album}",
         hidden: true,
     },
 });

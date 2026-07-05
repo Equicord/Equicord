@@ -20,6 +20,7 @@ let currentTrackId: string | undefined;
 let cachedStartTimestamp: number | undefined;
 let cachedActivity: Activity | undefined;
 let cachedSettingsJSON: string | undefined;
+const lastFmCache = new Map<string, string | null>();
 
 function md5(string: string): string {
     function md5cycle(x: number[], k: number[]) {
@@ -72,6 +73,29 @@ function md5(string: string): string {
     function hex_chr(n: number) { return "0123456789abcdef".charAt(n); }
 }
 
+interface NdTrack {
+    id: string;
+    title?: string;
+    artist?: string;
+    album?: string;
+    year?: number;
+    suffix?: string;
+    bitRate?: number;
+    duration?: number;
+    minutesAgo?: number;
+    coverArt?: string;
+}
+
+function customFormat(formatStr: string | undefined, track: NdTrack): string {
+    if (!formatStr) return "";
+    return formatStr
+        .replaceAll("{song}", track.title ?? "")
+        .replaceAll("{artist}", track.artist ?? "")
+        .replaceAll("{album}", track.album ?? "")
+        .replaceAll("{year}", track.year ? `${track.year}` : "")
+        .replaceAll("{quality}", track.suffix ? `${track.suffix.toUpperCase()}${track.bitRate ? ' ' + track.bitRate + 'kbps' : ''}` : "");
+}
+
 async function getAsset(applicationId: string, key: string): Promise<string> {
     return (await ApplicationAssetUtils.fetchAssetIds(applicationId, [key]))[0];
 }
@@ -80,7 +104,7 @@ function setActivity(activity: Activity | null) {
     FluxDispatcher.dispatch({ type: "LOCAL_ACTIVITY_UPDATE", activity, socketId: SOCKET_ID });
 }
 
-async function fetchNowPlaying(signal?: AbortSignal) {
+async function fetchNowPlaying(signal?: AbortSignal): Promise<NdTrack | null> {
     const { nd_serverUrl, nd_username, nd_password } = settings.store;
 
     if (!nd_serverUrl || !nd_username || !nd_password) {
@@ -92,7 +116,7 @@ async function fetchNowPlaying(signal?: AbortSignal) {
         const salt = Math.random().toString(36).substring(2, 15);
         const hash = md5(nd_password + salt);
         const baseUrl = nd_serverUrl.replace(/\/$/, "");
-        const queryParams = `u=${encodeURIComponent(nd_username as string)}&t=${hash}&s=${salt}&v=1.12.0&c=equicord-rpc&f=json`;
+        const queryParams = `u=${encodeURIComponent(nd_username)}&t=${hash}&s=${salt}&v=1.12.0&c=equicord-rpc&f=json`;
 
         const res = await fetch(`${baseUrl}/rest/getNowPlaying?${queryParams}`, { signal });
         if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
@@ -117,6 +141,11 @@ async function fetchNowPlaying(signal?: AbortSignal) {
 
 async function getActivity(signal?: AbortSignal): Promise<Activity | null> {
     const track = await fetchNowPlaying(signal);
+    if (signal?.aborted) {
+        const e = new Error("Aborted");
+        e.name = "AbortError";
+        throw e;
+    }
     if (!track) return null;
 
     const currentSettingsJSON = JSON.stringify({
@@ -126,21 +155,25 @@ async function getActivity(signal?: AbortSignal): Promise<Activity | null> {
         nd_username: settings.store.nd_username,
         nd_password: settings.store.nd_password,
         nd_serverUrl: settings.store.nd_serverUrl,
-        nd_stateFormat: settings.store.nd_stateFormat,
-        nd_listeningFormat: settings.store.nd_listeningFormat,
-        nd_fetchAlbumArt: settings.store.nd_fetchAlbumArt
+        nd_nameString: settings.store.nd_nameString,
+        nd_detailsString: settings.store.nd_detailsString,
+        nd_stateString: settings.store.nd_stateString,
+        nd_largeTextString: settings.store.nd_largeTextString,
+        nd_activityType: settings.store.nd_activityType,
+        nd_albumArtMode: settings.store.nd_albumArtMode,
+        nd_showAlbum: settings.store.nd_showAlbum
     });
     if (track.id === currentTrackId && cachedActivity && cachedSettingsJSON === currentSettingsJSON) {
         return cachedActivity;
     }
 
-    const { nd_clientId, nd_publicUrl, nd_showSmallImage, nd_username, nd_password, nd_serverUrl } = settings.store;
+    const { nd_clientId, nd_publicUrl, nd_showSmallImage, nd_username, nd_password, nd_serverUrl, nd_showAlbum, nd_nameString, nd_detailsString, nd_stateString, nd_largeTextString, nd_activityType } = settings.store;
 
-    const _clientId = (nd_clientId as string)?.trim();
+    const _clientId = nd_clientId?.trim();
     const appId = _clientId === "" ? "1470554657506984069" : (_clientId ?? "1470554657506984069");
 
-    const _publicUrl = (nd_publicUrl as string)?.replace(/\/$/, "");
-    const _serverUrl = (nd_serverUrl as string)?.replace(/\/$/, "");
+    const _publicUrl = nd_publicUrl?.replace(/\/$/, "");
+    const _serverUrl = nd_serverUrl?.replace(/\/$/, "");
     const externalBaseUrl = _publicUrl === "" ? _serverUrl : (_publicUrl ?? _serverUrl);
 
     const durationMs = (track.duration ?? 0) * 1000;
@@ -154,37 +187,67 @@ async function getActivity(signal?: AbortSignal): Promise<Activity | null> {
 
     const endTimestamp = cachedStartTimestamp + durationMs;
 
-    const stateFormat = settings.store.nd_stateFormat ?? "artist";
-    let stateString = "Navidrome";
-    
-    if (stateFormat === "artist" && track.artist) {
-        stateString = track.artist;
-    } else if (stateFormat === "year" && track.year) {
-        stateString = `${track.year}`;
-    } else if (stateFormat === "quality" && track.suffix) {
-        stateString = `${track.suffix.toUpperCase()}${track.bitRate ? ' ' + track.bitRate + 'kbps' : ''}`;
-    } else if (stateFormat === "both") {
-        const yearStr = track.year ? `${track.year}` : "";
-        const qualStr = track.suffix ? `${track.suffix.toUpperCase()}${track.bitRate ? ' ' + track.bitRate + 'kbps' : ''}` : "";
-        const joined = [yearStr, qualStr].filter(Boolean).join(" • ");
-        stateString = joined === "" ? "Navidrome" : joined;
+    const isPlaying = Number(nd_activityType ?? 2) === 0;
+    const nameString = !isPlaying ? customFormat(nd_nameString || "Navidrome", track) : "Navidrome";
+
+    const detailsString = customFormat(nd_detailsString, track);
+    let stateString = customFormat(nd_stateString, track);
+
+    const assets: Activity["assets"] = {};
+    if (nd_showAlbum && nd_largeTextString) {
+        const largeText = customFormat(nd_largeTextString, track);
+        if (largeText) {
+            // In Playing mode (0), Discord only shows 2 text lines (details and state).
+            // large_text is just a tooltip. To show the album line, append it to state.
+            if (Number(nd_activityType ?? 0) === 0) {
+                stateString = stateString ? `${stateString} • ${largeText}` : largeText;
+            } else {
+                assets.large_text = largeText;
+            }
+        }
     }
 
-    const listeningFormat = settings.store.nd_listeningFormat ?? "navidrome";
-    let nameString = "Navidrome";
-    if (listeningFormat === "artist") nameString = track.artist ?? "Unknown Artist";
-    if (listeningFormat === "song") nameString = track.title ?? "Unknown Song";
-    if (listeningFormat === "album") nameString = track.album ?? "Unknown Album";
+    const albumArtMode = settings.store.nd_albumArtMode ?? "none";
+    let resolvedCoverArtUrl: string | null = null;
 
-    const assets: Activity["assets"] = {
-        large_text: track.album ?? track.title,
-    };
-
-    if (track.coverArt && externalBaseUrl && settings.store.nd_fetchAlbumArt) {
+    if (albumArtMode === "instance" && track.coverArt && externalBaseUrl) {
         const salt = Math.random().toString(36).substring(2, 15);
         const hash = md5(nd_password + salt);
-        const localCoverArtUrl = `${externalBaseUrl}/rest/getCoverArt?id=${track.coverArt}&u=${encodeURIComponent(nd_username as string)}&t=${hash}&s=${salt}&v=1.12.0&c=equicord-rpc`;
-        assets.large_image = await getAsset(appId, localCoverArtUrl).catch(() => "navidrome");
+        resolvedCoverArtUrl = `${externalBaseUrl}/rest/getCoverArt?id=${track.coverArt}&u=${encodeURIComponent(nd_username)}&t=${hash}&s=${salt}&v=1.12.0&c=equicord-rpc`;
+    } else if (albumArtMode === "lastfm" && track.artist) {
+        if (lastFmCache.has(track.id)) {
+            resolvedCoverArtUrl = lastFmCache.get(track.id) ?? null;
+        } else {
+            try {
+                const artist = encodeURIComponent(track.artist);
+                let image: string | undefined;
+
+                if (track.album) {
+                    const album = encodeURIComponent(track.album);
+                    const res = await fetch(`https://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=feff915bf5987580c9dc354d523dc6b9&artist=${artist}&album=${album}&format=json`, { signal });
+                    const json = await res.json();
+                    image = json?.album?.image?.at(-1)?.["#text"];
+                }
+
+                if (!image && track.title) {
+                    const title = encodeURIComponent(track.title);
+                    const res = await fetch(`https://ws.audioscrobbler.com/2.0/?method=track.getinfo&api_key=feff915bf5987580c9dc354d523dc6b9&artist=${artist}&track=${title}&format=json`, { signal });
+                    const json = await res.json();
+                    image = json?.track?.album?.image?.at(-1)?.["#text"];
+                }
+
+                resolvedCoverArtUrl = image || null;
+                lastFmCache.set(track.id, resolvedCoverArtUrl);
+            } catch (e: unknown) {
+                if (e instanceof Error && e.name === "AbortError") throw e;
+                resolvedCoverArtUrl = null;
+                lastFmCache.set(track.id, null);
+            }
+        }
+    }
+
+    if (resolvedCoverArtUrl) {
+        assets.large_image = await getAsset(appId, resolvedCoverArtUrl).catch(() => "navidrome");
     } else {
         assets.large_image = await getAsset(appId, "navidrome").catch(() => "navidrome");
     }
@@ -196,10 +259,10 @@ async function getActivity(signal?: AbortSignal): Promise<Activity | null> {
 
     const activity: Activity = {
         application_id: appId,
-        name: nameString,
-        details: track.title,
-        state: stateString,
-        type: ActivityType.LISTENING,
+        name: nameString || "Navidrome",
+        details: detailsString || undefined,
+        state: stateString || undefined,
+        type: Number(nd_activityType ?? 0),
         flags: ActivityFlags.INSTANCE,
         timestamps: {
             start: cachedStartTimestamp,
@@ -231,6 +294,13 @@ async function updatePresence() {
 export function start() {
     abortController = new AbortController();
     updatePresence();
+}
+
+export function forceUpdate() {
+    if (abortController && !abortController.signal.aborted) {
+        clearTimeout(updateTimer);
+        updatePresence();
+    }
 }
 
 export function stop() {

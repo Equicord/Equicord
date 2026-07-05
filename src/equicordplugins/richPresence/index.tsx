@@ -23,7 +23,7 @@ type SettingsKey = keyof SettingsStore;
 
 const logger = new Logger("RichPresence");
 
-const services: Record<string, { start(): void; stop(): void; }> = {
+const services: Record<string, { start(): void; stop(): void; forceUpdate?(): void; }> = {
     [ServiceTab.AudioBookShelf]: abs,
     [ServiceTab.Tosu]: tosu,
     [ServiceTab.StatsFm]: statsfm,
@@ -61,6 +61,8 @@ function syncServices() {
             logger.info(`Stopping ${id} service`);
             service.stop();
             activeServices.delete(id);
+        } else if (shouldRun && isRunning && service.forceUpdate) {
+            service.forceUpdate();
         }
     }
 }
