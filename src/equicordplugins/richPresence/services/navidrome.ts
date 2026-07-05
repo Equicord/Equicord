@@ -6,7 +6,7 @@
 
 import { Logger } from "@utils/Logger";
 import { Activity } from "@vencord/discord-types";
-import { ActivityType, ActivityFlags } from "@vencord/discord-types/enums";
+import { ActivityFlags } from "@vencord/discord-types/enums";
 import { ApplicationAssetUtils, FluxDispatcher } from "@webpack/common";
 
 import { settings } from "../settings";
@@ -199,7 +199,7 @@ async function getActivity(signal?: AbortSignal): Promise<Activity | null> {
         if (largeText) {
             // In Playing mode (0), Discord only shows 2 text lines (details and state).
             // large_text is just a tooltip. To show the album line, append it to state.
-            if (Number(nd_activityType ?? 0) === 0) {
+            if (Number(nd_activityType ?? 2) === 0) {
                 stateString = stateString ? `${stateString} • ${largeText}` : largeText;
             } else {
                 assets.large_text = largeText;
@@ -262,7 +262,7 @@ async function getActivity(signal?: AbortSignal): Promise<Activity | null> {
         name: nameString || "Navidrome",
         details: detailsString || undefined,
         state: stateString || undefined,
-        type: Number(nd_activityType ?? 0),
+        type: Number(nd_activityType ?? 2),
         flags: ActivityFlags.INSTANCE,
         timestamps: {
             start: cachedStartTimestamp,
