@@ -14,7 +14,7 @@ import { settings } from "../settings";
 const SOCKET_ID = "RichPresence_Navidrome";
 const logger = new Logger("RichPresence:Navidrome");
 
-let updateInterval: NodeJS.Timeout | undefined;
+let updateTimer: NodeJS.Timeout | undefined;
 let abortController: AbortController | undefined;
 let currentTrackId: string | undefined;
 let cachedStartTimestamp: number | undefined;
@@ -119,7 +119,17 @@ async function getActivity(signal?: AbortSignal): Promise<Activity | null> {
     const track = await fetchNowPlaying(signal);
     if (!track) return null;
 
-    const currentSettingsJSON = JSON.stringify(settings.store);
+    const currentSettingsJSON = JSON.stringify({
+        nd_clientId: settings.store.nd_clientId,
+        nd_publicUrl: settings.store.nd_publicUrl,
+        nd_showSmallImage: settings.store.nd_showSmallImage,
+        nd_username: settings.store.nd_username,
+        nd_password: settings.store.nd_password,
+        nd_serverUrl: settings.store.nd_serverUrl,
+        nd_stateFormat: settings.store.nd_stateFormat,
+        nd_listeningFormat: settings.store.nd_listeningFormat,
+        nd_fetchAlbumArt: settings.store.nd_fetchAlbumArt
+    });
     if (track.id === currentTrackId && cachedActivity && cachedSettingsJSON === currentSettingsJSON) {
         return cachedActivity;
     }
@@ -211,20 +221,23 @@ async function updatePresence() {
         logger.error("Failed to update presence", e);
         setActivity(null);
     }
+
+    if (abortController && !abortController.signal.aborted) {
+        const interval = (settings.store.nd_refreshInterval as number) ?? 10;
+        updateTimer = setTimeout(updatePresence, interval * 1000);
+    }
 }
 
 export function start() {
     abortController = new AbortController();
     updatePresence();
-    const interval = (settings.store.nd_refreshInterval as number) ?? 10;
-    updateInterval = setInterval(updatePresence, interval * 1000);
 }
 
 export function stop() {
     abortController?.abort();
     abortController = undefined;
-    clearInterval(updateInterval);
-    updateInterval = undefined;
+    clearTimeout(updateTimer);
+    updateTimer = undefined;
     currentTrackId = undefined;
     cachedStartTimestamp = undefined;
     cachedActivity = undefined;
