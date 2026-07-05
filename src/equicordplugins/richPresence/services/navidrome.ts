@@ -174,12 +174,14 @@ async function getActivity(signal?: AbortSignal): Promise<Activity | null> {
     if (albumArtMode === "instance" && track.coverArt && externalBaseUrl) {
         resolvedCoverArtUrl = `${externalBaseUrl}/rest/getCoverArt?id=${track.coverArt}`;
     } else if (albumArtMode === "lastfm" && track.artist) {
-        if (lastFmCache.has(track.id)) {
-            resolvedCoverArtUrl = lastFmCache.get(track.id) ?? null;
+        const apiKey = nd_lastfmApiKey?.trim() || "feff915bf5987580c9dc354d523dc6b9";
+        const cacheKey = `${track.id}:${apiKey}`;
+        
+        if (lastFmCache.has(cacheKey)) {
+            resolvedCoverArtUrl = lastFmCache.get(cacheKey) ?? null;
         } else {
             try {
                 const artist = encodeURIComponent(track.artist);
-                const apiKey = nd_lastfmApiKey?.trim() || "feff915bf5987580c9dc354d523dc6b9";
                 let image: string | undefined;
 
                 if (track.album) {
@@ -197,11 +199,11 @@ async function getActivity(signal?: AbortSignal): Promise<Activity | null> {
                 }
 
                 resolvedCoverArtUrl = image || null;
-                lastFmCache.set(track.id, resolvedCoverArtUrl);
+                lastFmCache.set(cacheKey, resolvedCoverArtUrl);
             } catch (e: unknown) {
                 if (e instanceof Error && e.name === "AbortError") throw e;
                 resolvedCoverArtUrl = null;
-                lastFmCache.set(track.id, null);
+                lastFmCache.set(cacheKey, null);
             }
         }
     }
