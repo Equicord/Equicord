@@ -8,7 +8,7 @@ import { SettingsSection } from "@components/settings/tabs/plugins/components/Co
 import { Switch } from "@components/Switch";
 import { Margins } from "@utils/margins";
 import { classes } from "@utils/misc";
-import { lodash, Select, Slider, TabBar, TextInput, useState } from "@webpack/common";
+import { Select, Slider, TabBar, TextInput, useState } from "@webpack/common";
 
 import { onServiceChange, settings, SettingsStore } from "./settings";
 import { NameFormat, ServiceTab } from "./types";
