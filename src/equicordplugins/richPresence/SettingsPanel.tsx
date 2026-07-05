@@ -189,6 +189,7 @@ function NavidromeSettings() {
             <TextSetting name="Username" description="Navidrome username." settingsKey="nd_username" />
             <TextSetting name="Password" description="Navidrome password." settingsKey="nd_password" />
             <TextSetting name="Client ID" description="Optional Discord Application Client ID." settingsKey="nd_clientId" placeholder="1470554657506984069" />
+            <SwitchSetting name="Fetch Album Art" description="Fetch and display album art. Note: This will send your server URL and username to Discord's image proxy." settingsKey="nd_fetchAlbumArt" />
             <SwitchSetting name="Show Small Image" description="Show Navidrome logo in bottom right of album art." settingsKey="nd_showSmallImage" />
             <SelectSetting name="Listening Format" description="What to show as 'Listening to ...'" settingsKey="nd_listeningFormat" options={[
                 { label: "Navidrome", value: "navidrome" },

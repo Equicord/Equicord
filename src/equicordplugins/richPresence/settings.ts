@@ -386,7 +386,13 @@ export const settings = definePluginSettings({
         hidden: true,
     },
     nd_showSmallImage: {
-        description: "Show Navidrome logo in bottom right of album art",
+        description: "Show Navidrome logo in bottom right of album art.",
+        type: OptionType.BOOLEAN,
+        default: false,
+        hidden: true,
+    },
+    nd_fetchAlbumArt: {
+        description: "Fetch and display album art. Note: This will send your server URL and username to Discord's image proxy.",
         type: OptionType.BOOLEAN,
         default: false,
         hidden: true,

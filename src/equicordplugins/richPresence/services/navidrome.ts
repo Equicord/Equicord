@@ -19,6 +19,7 @@ let abortController: AbortController | undefined;
 let currentTrackId: string | undefined;
 let cachedStartTimestamp: number | undefined;
 let cachedActivity: Activity | undefined;
+let cachedSettingsJSON: string | undefined;
 
 function md5(string: string): string {
     function md5cycle(x: number[], k: number[]) {
@@ -94,7 +95,7 @@ async function fetchNowPlaying(signal?: AbortSignal) {
         const queryParams = `u=${encodeURIComponent(nd_username as string)}&t=${hash}&s=${salt}&v=1.12.0&c=equicord-rpc&f=json`;
 
         const res = await fetch(`${baseUrl}/rest/getNowPlaying?${queryParams}`, { signal });
-        if (!res.ok) throw `${res.status} ${res.statusText}`;
+        if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
 
         const data = await res.json();
 
@@ -107,8 +108,8 @@ async function fetchNowPlaying(signal?: AbortSignal) {
         if (!entries || entries.length === 0) return null;
 
         return entries[0];
-    } catch (e: any) {
-        if (e.name === 'AbortError') throw e;
+    } catch (e: unknown) {
+        if (e instanceof Error && e.name === 'AbortError') throw e;
         logger.error("Failed to fetch from Navidrome API", e);
         return null;
     }
@@ -118,7 +119,8 @@ async function getActivity(signal?: AbortSignal): Promise<Activity | null> {
     const track = await fetchNowPlaying(signal);
     if (!track) return null;
 
-    if (track.id === currentTrackId && cachedActivity) {
+    const currentSettingsJSON = JSON.stringify(settings.store);
+    if (track.id === currentTrackId && cachedActivity && cachedSettingsJSON === currentSettingsJSON) {
         return cachedActivity;
     }
 
@@ -168,7 +170,7 @@ async function getActivity(signal?: AbortSignal): Promise<Activity | null> {
         large_text: track.album ?? track.title,
     };
 
-    if (track.coverArt && externalBaseUrl) {
+    if (track.coverArt && externalBaseUrl && settings.store.nd_fetchAlbumArt) {
         const salt = Math.random().toString(36).substring(2, 15);
         const hash = md5(nd_password + salt);
         const localCoverArtUrl = `${externalBaseUrl}/rest/getCoverArt?id=${track.coverArt}&u=${encodeURIComponent(nd_username as string)}&t=${hash}&s=${salt}&v=1.12.0&c=equicord-rpc`;
@@ -196,6 +198,7 @@ async function getActivity(signal?: AbortSignal): Promise<Activity | null> {
         assets,
     };
 
+    cachedSettingsJSON = currentSettingsJSON;
     cachedActivity = activity;
     return activity;
 }
@@ -203,8 +206,8 @@ async function getActivity(signal?: AbortSignal): Promise<Activity | null> {
 async function updatePresence() {
     try {
         setActivity(await getActivity(abortController?.signal));
-    } catch (e: any) {
-        if (e.name === 'AbortError') return;
+    } catch (e: unknown) {
+        if (e instanceof Error && e.name === 'AbortError') return;
         logger.error("Failed to update presence", e);
         setActivity(null);
     }
@@ -225,5 +228,6 @@ export function stop() {
     currentTrackId = undefined;
     cachedStartTimestamp = undefined;
     cachedActivity = undefined;
+    cachedSettingsJSON = undefined;
     setActivity(null);
 }
