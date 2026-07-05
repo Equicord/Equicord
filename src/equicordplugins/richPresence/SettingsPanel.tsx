@@ -26,7 +26,7 @@ function triggerChange() {
 function SwitchSetting({ name, description, settingsKey }: { name: string; description: string; settingsKey: SettingsKey; }) {
     const [value, setValue] = useState(settings.store[settingsKey] ?? false);
     return (
-        <SettingsSection id={name} name={name} description={description}>
+        <SettingsSection tag="label" inlineSetting id={name} name={name} description={description}>
             <Switch
                 checked={Boolean(value)}
                 onChange={v => { setValue(v); (settings.store[settingsKey] as boolean) = v; triggerChange(); }}
@@ -210,7 +210,7 @@ function NavidromeSettings() {
             <TextSetting name="Client ID" description="Optional Discord Application Client ID." settingsKey="nd_clientId" placeholder="1470554657506984069" />
             <SelectSetting name="Album Art Mode" description="How to fetch album art." settingsKey="nd_albumArtMode" options={[
                 { label: "None", value: "none" },
-                { label: "Navidrome Instance (Exposes Server URL to Discord)", value: "instance" },
+                { label: "Navidrome Instance (Exposes Server URL to Discord, No Auth Sent)", value: "instance" },
                 { label: "Last.fm API (Sends Music Metadata to Last.fm)", value: "lastfm" },
             ]} />
             <SwitchSetting name="Show Small Image" description="Show Navidrome logo in bottom right of album art." settingsKey="nd_showSmallImage" />

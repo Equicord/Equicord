@@ -5,6 +5,7 @@
  */
 
 import { Logger } from "@utils/Logger";
+import { parseUrl } from "@utils/misc";
 import { Activity } from "@vencord/discord-types";
 import { ActivityFlags } from "@vencord/discord-types/enums";
 import { ApplicationAssetUtils, FluxDispatcher } from "@webpack/common";
@@ -115,7 +116,12 @@ async function fetchNowPlaying(signal?: AbortSignal): Promise<NdTrack | null> {
     try {
         const salt = Math.random().toString(36).substring(2, 15);
         const hash = md5(nd_password + salt);
-        const baseUrl = nd_serverUrl.replace(/\/$/, "");
+        const parsedUrl = parseUrl(nd_serverUrl);
+        if (!parsedUrl) {
+            logger.warn("Navidrome server URL is invalid.");
+            return null;
+        }
+        const baseUrl = parsedUrl.href.replace(/\/$/, "");
         const queryParams = `u=${encodeURIComponent(nd_username)}&t=${hash}&s=${salt}&v=1.12.0&c=equicord-rpc&f=json`;
 
         const res = await fetch(`${baseUrl}/rest/getNowPlaying?${queryParams}`, { signal });
@@ -172,9 +178,10 @@ async function getActivity(signal?: AbortSignal): Promise<Activity | null> {
     const _clientId = nd_clientId?.trim();
     const appId = _clientId === "" ? "1470554657506984069" : (_clientId ?? "1470554657506984069");
 
-    const _publicUrl = nd_publicUrl?.replace(/\/$/, "");
-    const _serverUrl = nd_serverUrl?.replace(/\/$/, "");
-    const externalBaseUrl = _publicUrl === "" ? _serverUrl : (_publicUrl ?? _serverUrl);
+    const _publicUrl = nd_publicUrl?.trim();
+    const _serverUrl = nd_serverUrl?.trim();
+    const parsedExternalUrl = parseUrl(_publicUrl || _serverUrl || "");
+    const externalBaseUrl = parsedExternalUrl ? parsedExternalUrl.href.replace(/\/$/, "") : null;
 
     const durationMs = (track.duration ?? 0) * 1000;
     
@@ -211,9 +218,7 @@ async function getActivity(signal?: AbortSignal): Promise<Activity | null> {
     let resolvedCoverArtUrl: string | null = null;
 
     if (albumArtMode === "instance" && track.coverArt && externalBaseUrl) {
-        const salt = Math.random().toString(36).substring(2, 15);
-        const hash = md5(nd_password + salt);
-        resolvedCoverArtUrl = `${externalBaseUrl}/rest/getCoverArt?id=${track.coverArt}&u=${encodeURIComponent(nd_username)}&t=${hash}&s=${salt}&v=1.12.0&c=equicord-rpc`;
+        resolvedCoverArtUrl = `${externalBaseUrl}/rest/getCoverArt?id=${track.coverArt}`;
     } else if (albumArtMode === "lastfm" && track.artist) {
         if (lastFmCache.has(track.id)) {
             resolvedCoverArtUrl = lastFmCache.get(track.id) ?? null;
@@ -255,6 +260,12 @@ async function getActivity(signal?: AbortSignal): Promise<Activity | null> {
     if (nd_showSmallImage) {
         assets.small_image = await getAsset(appId, "navidrome").catch(() => "navidrome");
         assets.small_text = "Navidrome";
+    }
+
+    if (signal?.aborted) {
+        const e = new Error("Aborted");
+        e.name = "AbortError";
+        throw e;
     }
 
     const activity: Activity = {
