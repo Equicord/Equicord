@@ -8,6 +8,7 @@ import { definePluginSettings } from "@api/Settings";
 import { FormSwitch } from "@components/FormSwitch";
 import { Devs, EquicordDevs } from "@utils/constants";
 import { getCurrentChannel } from "@utils/discord";
+import { Margins } from "@utils/margins";
 import definePlugin, { OptionType } from "@utils/types";
 import { Message, RenderModalProps } from "@vencord/discord-types";
 import { IconUtils, Menu, Modal, openModal, TextInput, UploadHandler, useEffect, useState } from "@webpack/common";
@@ -72,22 +73,26 @@ export default definePlugin({
 
     contextMenus: {
         "message": (children, { message }) => {
-            if (!message.content) return;
-            const buttonElement = (
-                <Menu.MenuItem
-                    id="vc-quote"
-                    label="Quote"
-                    icon={QuoteIcon}
-                    action={() => openModal(props => <QuoteModal message={message} {...props} />)}
-                />
-            );
-
             const customButtonElement = (
                 <Menu.MenuItem
                     id="vc-custom-quote"
                     label="Custom Quote"
                     icon={QuoteIcon}
                     action={() => openModal(props => <QuoteModal message={message} custom {...props} />)}
+                />
+            );
+
+            if (!message.content) {
+                children.push(customButtonElement);
+                return;
+            }
+
+            const buttonElement = (
+                <Menu.MenuItem
+                    id="vc-quote"
+                    label="Quote"
+                    icon={QuoteIcon}
+                    action={() => openModal(props => <QuoteModal message={message} {...props} />)}
                 />
             );
 
@@ -194,7 +199,7 @@ function QuoteModal({ message, custom, ...props }: RenderModalProps & { message:
             <img alt="Quote preview" src="" id="quoterPreview" style={{ borderRadius: "20px", width: "100%", marginBottom: "20px" }} />
 
             {custom && (
-                <div style={{ marginBottom: "20px" }}>
+                <div className={Margins.bottom20}>
                     <TextInput
                         value={quoteText}
                         onChange={setQuoteText}
