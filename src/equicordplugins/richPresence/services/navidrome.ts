@@ -70,8 +70,6 @@ async function fetchNowPlaying(signal?: AbortSignal): Promise<NdTrack | null> {
             return null;
         }
         
-        // Use Subsonic's alternative hex-encoded password auth to avoid needing an MD5 implementation
-        // encodeURIComponent handles UTF-8 correctly before hex conversion
         const hexPassword = Array.from(new TextEncoder().encode(nd_password)).map(b => b.toString(16).padStart(2, '0')).join('');
         
         const baseUrl = parsedUrl.href.replace(/\/$/, "");
