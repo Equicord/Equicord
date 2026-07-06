@@ -257,7 +257,7 @@ async function withRateLimit<T>(fn: () => Promise<T>, maxRetries = 3): Promise<T
         }
     }
 
-    throw new Error("unreachable");
+    throw new Error("Request failed after max retries");
 }
 
 export async function loadMessageCountsForEntries(
