@@ -156,8 +156,6 @@ async function getActivity(signal?: AbortSignal): Promise<Activity | null> {
     if (nd_showAlbum && nd_largeTextString) {
         const largeText = customFormat(nd_largeTextString, track);
         if (largeText) {
-            // In Playing mode (0), Discord only shows 2 text lines (details and state).
-            // large_text is just a tooltip. To show the album line, append it to state.
             if (Number(nd_activityType ?? 2) === 0) {
                 stateString = stateString ? `${stateString} • ${largeText}` : largeText;
             } else {
