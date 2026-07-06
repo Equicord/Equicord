@@ -18,6 +18,7 @@ import { OpenLeaderboardButton, openLeaderboardModal, openRankModal, SettingsAbo
 import { getCacheKey, shouldShowProfileBadge, useMessageCountStore } from "./data";
 import { settings } from "./settings";
 import { FRIENDSHIP_RANK_BADGES, MessageCountModes } from "./types";
+import { activeMessageCountBatch } from "./data";
 
 function getProfileBadges() {
     return FRIENDSHIP_RANK_BADGES.map((rank, index) => ({
@@ -49,7 +50,7 @@ export default definePlugin({
         }
     },
 
-    dependencies: ["HeaderBarAPI"],
+    dependencies: ["HeaderBarAPI", "BadgeAPI"],
 
     headerBarButton: {
         icon: UserIcon,
@@ -64,6 +65,7 @@ export default definePlugin({
 
     stop() {
         getProfileBadges().forEach(b => Badges.removeProfileBadge(b));
+        activeMessageCountBatch = null;
     },
 
     flux: {
