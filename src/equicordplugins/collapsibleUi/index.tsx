@@ -106,7 +106,9 @@ function syncAllPanelCollapsedStates() {
 }
 
 // Reads a plugin CSS length variable from a mounted surface so the managed
-// stylesheet stays the single source of truth. Cached after the first hit.
+// stylesheet stays the single source of truth. Cached while the pointer
+// tracker runs; cleared each time tracking starts so theme overrides of the
+// variables are picked up without querying computed style per mouse move.
 function readSurfacePx(property: string, fallback: number) {
     const cached = surfaceCssPxCache.get(property);
     if (cached != null) return cached;
@@ -141,6 +143,7 @@ function setHeaderBarPointerTrackerEnabled(enabled: boolean) {
     headerBarPointerTrackerEnabled = enabled;
 
     if (enabled) {
+        surfaceCssPxCache.clear();
         document.addEventListener("mousemove", handleHeaderBarPointerMove, true);
     } else {
         document.removeEventListener("mousemove", handleHeaderBarPointerMove, true);
