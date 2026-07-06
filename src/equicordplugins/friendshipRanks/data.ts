@@ -50,7 +50,8 @@ export const useMessageCountStore = proxyLazy(() => zustandCreate((
 } satisfies MessageCountState)));
 
 let messageCountRequestQueue = Promise.resolve();
-export let activeMessageCountBatch: Promise<void> | null = null;
+let activeMessageCountBatch: Promise<void> | null = null;
+let batchCancelled = false;
 
 export function daysSince(dateString?: string | null): number {
     if (!dateString) return 0;
@@ -271,12 +272,14 @@ export async function loadMessageCountsForEntries(
 
     const remainingEntries = entries.filter(entry => getCachedMessageCount(entry.id, mode) == null);
     if (!remainingEntries.length) return;
+    batchCancelled = false;
 
     const { setProgress } = useMessageCountStore.getState();
     setProgress({ isLoadingCounts: true, pendingCount: remainingEntries.length, currentChecking: null });
 
     activeMessageCountBatch = (async () => {
         for (let index = 0; index < remainingEntries.length; index++) {
+            if (batchCancelled) break;
             const entry = remainingEntries[index];
             if (getCachedMessageCount(entry.id, mode) != null) continue;
             setProgress({ isLoadingCounts: true, pendingCount: remainingEntries.length - index - 1, currentChecking: entry.name });
@@ -290,6 +293,10 @@ export async function loadMessageCountsForEntries(
         activeMessageCountBatch = null;
         setProgress({ isLoadingCounts: false, pendingCount: 0, currentChecking: null });
     }
+}
+
+export function cancelMessageCountBatch() {
+    batchCancelled = true;
 }
 
 export async function getMessageCount(friendId: string, mode: MessageCountMode): Promise<number> {
@@ -357,6 +364,7 @@ export async function getMessageCount(friendId: string, mode: MessageCountMode):
             return count;
         } catch (error_) {
             logger.error("Fallback message count also failed for", friendId, error_);
+            useMessageCountStore.getState().set(cacheKey, 0);
             return 0;
         }
     }

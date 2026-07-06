@@ -15,10 +15,9 @@ import { Message } from "@vencord/discord-types";
 import { ChannelStore, UserStore } from "@webpack/common";
 
 import { OpenLeaderboardButton, openLeaderboardModal, openRankModal, SettingsAboutComponent } from "./components";
-import { getCacheKey, shouldShowProfileBadge, useMessageCountStore } from "./data";
+import { cancelMessageCountBatch, getCacheKey, shouldShowProfileBadge, useMessageCountStore } from "./data";
 import { settings } from "./settings";
 import { FRIENDSHIP_RANK_BADGES, MessageCountModes } from "./types";
-import { activeMessageCountBatch } from "./data";
 
 function getProfileBadges() {
     return FRIENDSHIP_RANK_BADGES.map((rank, index) => ({
@@ -65,7 +64,7 @@ export default definePlugin({
 
     stop() {
         getProfileBadges().forEach(b => Badges.removeProfileBadge(b));
-        activeMessageCountBatch = null;
+        cancelMessageCountBatch();
     },
 
     flux: {
