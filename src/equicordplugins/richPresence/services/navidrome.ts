@@ -56,7 +56,7 @@ function setActivity(activity: Activity | null) {
 }
 
 async function fetchNowPlaying(signal?: AbortSignal): Promise<NdTrack | null> {
-    const { nd_serverUrl, nd_username, nd_password } = settings.store;
+    const { nd_serverUrl, nd_username, nd_password } = settings.plain;
 
     if (!nd_serverUrl || !nd_username || !nd_password) {
         logger.warn("Navidrome server URL, username, or password is not set.");
@@ -106,33 +106,33 @@ async function getActivity(signal?: AbortSignal): Promise<Activity | null> {
     if (!track) return null;
 
     const currentSettingsJSON = JSON.stringify({
-        nd_clientId: settings.store.nd_clientId,
-        nd_publicUrl: settings.store.nd_publicUrl,
-        nd_showSmallImage: settings.store.nd_showSmallImage,
-        nd_username: settings.store.nd_username,
-        nd_password: settings.store.nd_password,
-        nd_serverUrl: settings.store.nd_serverUrl,
-        nd_nameString: settings.store.nd_nameString,
-        nd_detailsString: settings.store.nd_detailsString,
-        nd_stateString: settings.store.nd_stateString,
-        nd_largeTextString: settings.store.nd_largeTextString,
-        nd_activityType: settings.store.nd_activityType,
-        nd_albumArtMode: settings.store.nd_albumArtMode,
-        nd_lastfmApiKey: settings.store.nd_lastfmApiKey,
-        nd_showAlbum: settings.store.nd_showAlbum
+        nd_clientId: settings.plain.nd_clientId,
+        nd_publicUrl: settings.plain.nd_publicUrl,
+        nd_showSmallImage: settings.plain.nd_showSmallImage,
+        nd_username: settings.plain.nd_username,
+        nd_password: settings.plain.nd_password,
+        nd_serverUrl: settings.plain.nd_serverUrl,
+        nd_nameString: settings.plain.nd_nameString,
+        nd_detailsString: settings.plain.nd_detailsString,
+        nd_stateString: settings.plain.nd_stateString,
+        nd_largeTextString: settings.plain.nd_largeTextString,
+        nd_activityType: settings.plain.nd_activityType,
+        nd_albumArtMode: settings.plain.nd_albumArtMode,
+        nd_lastfmApiKey: settings.plain.nd_lastfmApiKey,
+        nd_showAlbum: settings.plain.nd_showAlbum
     });
     if (track.id === currentTrackId && cachedActivity && cachedSettingsJSON === currentSettingsJSON) {
         return cachedActivity;
     }
 
-    const { nd_clientId, nd_publicUrl, nd_showSmallImage, nd_username, nd_password, nd_serverUrl, nd_showAlbum, nd_nameString, nd_detailsString, nd_stateString, nd_largeTextString, nd_activityType, nd_lastfmApiKey } = settings.store;
+    const { nd_clientId, nd_publicUrl, nd_showSmallImage, nd_username, nd_password, nd_serverUrl, nd_showAlbum, nd_nameString, nd_detailsString, nd_stateString, nd_largeTextString, nd_activityType, nd_lastfmApiKey } = settings.plain;
 
     const _clientId = nd_clientId?.trim();
     const appId = _clientId === "" ? "1470554657506984069" : (_clientId ?? "1470554657506984069");
 
     const _publicUrl = nd_publicUrl?.trim();
     const _serverUrl = nd_serverUrl?.trim();
-    const parsedExternalUrl = parseUrl(_publicUrl || _serverUrl || "");
+    const parsedExternalUrl = parseUrl(_publicUrl ? _publicUrl : (_serverUrl ? _serverUrl : ""));
     const externalBaseUrl = parsedExternalUrl ? parsedExternalUrl.href.replace(/\/$/, "") : null;
 
     const durationMs = (track.duration ?? 0) * 1000;
@@ -147,7 +147,7 @@ async function getActivity(signal?: AbortSignal): Promise<Activity | null> {
     const endTimestamp = cachedStartTimestamp + durationMs;
 
     const isPlaying = Number(nd_activityType ?? 2) === 0;
-    const nameString = !isPlaying ? customFormat(nd_nameString || "Navidrome", track) : "Navidrome";
+    const nameString = !isPlaying ? customFormat(nd_nameString ? nd_nameString : "Navidrome", track) : "Navidrome";
 
     const detailsString = customFormat(nd_detailsString, track);
     let stateString = customFormat(nd_stateString, track);
@@ -164,13 +164,14 @@ async function getActivity(signal?: AbortSignal): Promise<Activity | null> {
         }
     }
 
-    const albumArtMode = settings.store.nd_albumArtMode ?? "none";
+    const albumArtMode = settings.plain.nd_albumArtMode ?? "none";
     let resolvedCoverArtUrl: string | null = null;
 
     if (albumArtMode === "instance" && track.coverArt && externalBaseUrl) {
         resolvedCoverArtUrl = `${externalBaseUrl}/rest/getCoverArt?id=${track.coverArt}`;
     } else if (albumArtMode === "lastfm" && track.artist) {
-        const apiKey = nd_lastfmApiKey?.trim() || "feff915bf5987580c9dc354d523dc6b9";
+        const trimmedKey = nd_lastfmApiKey?.trim();
+        const apiKey = trimmedKey ? trimmedKey : "feff915bf5987580c9dc354d523dc6b9";
         const cacheKey = `${track.id}:${apiKey}`;
         
         if (lastFmCache.has(cacheKey)) {
@@ -194,7 +195,7 @@ async function getActivity(signal?: AbortSignal): Promise<Activity | null> {
                     image = json?.track?.album?.image?.at(-1)?.["#text"];
                 }
 
-                resolvedCoverArtUrl = image || null;
+                resolvedCoverArtUrl = image ?? null;
                 lastFmCache.set(cacheKey, resolvedCoverArtUrl);
             } catch (e: unknown) {
                 if (e instanceof Error && e.name === "AbortError") throw e;
@@ -204,15 +205,27 @@ async function getActivity(signal?: AbortSignal): Promise<Activity | null> {
         }
     }
 
+    let largeImagePromise: Promise<string>;
     if (resolvedCoverArtUrl) {
-        assets.large_image = await getAsset(appId, resolvedCoverArtUrl).catch(() => "navidrome");
+        largeImagePromise = getAsset(appId, resolvedCoverArtUrl).catch(() => "navidrome");
     } else {
-        assets.large_image = await getAsset(appId, "navidrome").catch(() => "navidrome");
+        largeImagePromise = getAsset(appId, "navidrome").catch(() => "navidrome");
     }
 
+    let smallImagePromise: Promise<string> | undefined;
     if (nd_showSmallImage) {
-        assets.small_image = await getAsset(appId, "navidrome").catch(() => "navidrome");
+        smallImagePromise = getAsset(appId, "navidrome").catch(() => "navidrome");
         assets.small_text = "Navidrome";
+    }
+
+    const [largeImage, smallImage] = await Promise.all([
+        largeImagePromise,
+        smallImagePromise ?? Promise.resolve("")
+    ]);
+
+    assets.large_image = largeImage;
+    if (nd_showSmallImage && smallImage) {
+        assets.small_image = smallImage;
     }
 
     if (signal?.aborted) {
@@ -223,9 +236,9 @@ async function getActivity(signal?: AbortSignal): Promise<Activity | null> {
 
     const activity: Activity = {
         application_id: appId,
-        name: nameString || "Navidrome",
-        details: detailsString || undefined,
-        state: stateString || undefined,
+        name: nameString ? nameString : "Navidrome",
+        details: detailsString ? detailsString : undefined,
+        state: stateString ? stateString : undefined,
         type: Number(nd_activityType ?? 2),
         flags: ActivityFlags.INSTANCE,
         timestamps: {
@@ -250,7 +263,7 @@ async function updatePresence() {
     }
 
     if (abortController && !abortController.signal.aborted) {
-        const interval = (settings.store.nd_refreshInterval as number) ?? 10;
+        const interval = (settings.plain.nd_refreshInterval as number) ?? 10;
         updateTimer = setTimeout(updatePresence, interval * 1000);
     }
 }
@@ -261,6 +274,27 @@ export function start() {
 }
 
 export function forceUpdate() {
+    const currentSettingsJSON = JSON.stringify({
+        nd_clientId: settings.plain.nd_clientId,
+        nd_publicUrl: settings.plain.nd_publicUrl,
+        nd_showSmallImage: settings.plain.nd_showSmallImage,
+        nd_username: settings.plain.nd_username,
+        nd_password: settings.plain.nd_password,
+        nd_serverUrl: settings.plain.nd_serverUrl,
+        nd_nameString: settings.plain.nd_nameString,
+        nd_detailsString: settings.plain.nd_detailsString,
+        nd_stateString: settings.plain.nd_stateString,
+        nd_largeTextString: settings.plain.nd_largeTextString,
+        nd_activityType: settings.plain.nd_activityType,
+        nd_albumArtMode: settings.plain.nd_albumArtMode,
+        nd_lastfmApiKey: settings.plain.nd_lastfmApiKey,
+        nd_showAlbum: settings.plain.nd_showAlbum
+    });
+
+    if (cachedSettingsJSON === currentSettingsJSON) {
+        return;
+    }
+
     if (abortController && !abortController.signal.aborted) {
         abortController.abort();
         clearTimeout(updateTimer);
