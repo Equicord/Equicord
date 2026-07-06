@@ -279,8 +279,8 @@ export async function loadMessageCountsForEntries(
         for (let index = 0; index < remainingEntries.length; index++) {
             const entry = remainingEntries[index];
             if (getCachedMessageCount(entry.id, mode) != null) continue;
-            await getMessageCount(entry.id, mode);
             setProgress({ isLoadingCounts: true, pendingCount: remainingEntries.length - index - 1, currentChecking: entry.name });
+            await getMessageCount(entry.id, mode);
         }
     })();
 
