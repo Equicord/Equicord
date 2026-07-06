@@ -50,7 +50,7 @@ export const useMessageCountStore = proxyLazy(() => zustandCreate((
 } satisfies MessageCountState)));
 
 let messageCountRequestQueue = Promise.resolve();
-let activeMessageCountBatch: Promise<void> | null = null;
+export let activeMessageCountBatch: Promise<void> | null = null;
 
 export function daysSince(dateString?: string | null): number {
     if (!dateString) return 0;
