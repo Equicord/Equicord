@@ -7,7 +7,6 @@
 import { ApplicationCommandInputType, ApplicationCommandOptionType, sendBotMessage } from "@api/Commands";
 import { DataStore } from "@api/index";
 import { addMessagePreSendListener, removeMessagePreSendListener } from "@api/MessageEvents";
-import { popNotice, showNotice } from "@api/Notices";
 import { definePluginSettings } from "@api/Settings";
 import { EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType, PluginNative } from "@utils/types";
@@ -28,82 +27,6 @@ async function fetchJson(url: string, opts?: { method?: string; body?: any; head
     });
     if (!res.ok) throw new Error(`HTTP ${res.status} for ${url}`);
     return await res.json();
-}
-
-// ─── vsi-share cloud (cross-plugin trade URL / Steam sharing) ────────────────
-const DEFAULT_SHARE_WORKER = "https://vsi-share.reap-dev.workers.dev";
-const shareBase = () => (settings.store.shareWorkerUrl?.trim() || DEFAULT_SHARE_WORKER).replace(/\/+$/, "");
-const cloudProfileCache = new Map<string, { data: any | null; ts: number }>();
-
-async function getCloudSharedProfile(discordId: string): Promise<{ trade_url?: string; steam_id?: string } | null> {
-    const ttl = 5 * 60_000;
-    const hit = cloudProfileCache.get(discordId);
-    if (hit && Date.now() - hit.ts < ttl) return hit.data;
-    try {
-        const data = await fetchJson(`${shareBase()}/profile/${discordId}`);
-        const result = data?.found ? data : null;
-        cloudProfileCache.set(discordId, { data: result, ts: Date.now() });
-        return result;
-    } catch {
-        // 404 is expected for unpublished users — cache null to avoid re-hitting
-        cloudProfileCache.set(discordId, { data: null, ts: Date.now() });
-        return null;
-    }
-}
-
-async function maybePromptForTradeUrl(): Promise<void> {
-    // Only prompt if cloud share is on AND user hasn't set a trade URL yet AND we haven't shown it before.
-    if (!settings.store.shareViaCloud) return;
-    if (settings.store.tradeUrl?.trim()) return;
-    const shown = await DataStore.get("vsi.tradePromptShown");
-    if (shown) return;
-
-    // Delay so the notice appears after Vencord finishes booting.
-    setTimeout(() => {
-        try {
-            showNotice(
-                "💼 Steam Inventory Value: paste your Steam trade URL into the plugin settings to publish it and see friends' trade offers.",
-                "Open Settings",
-                () => {
-                    popNotice();
-                    DataStore.set("vsi.tradePromptShown", true).catch(() => { });
-                },
-            );
-        } catch (e) { console.warn("[VSI] notice failed", e); }
-    }, 8000);
-}
-
-let lastPublishHash = "";
-async function publishSharedProfile(): Promise<void> {
-    if (!settings.store.shareViaCloud) return;
-    const me = UserStore.getCurrentUser();
-    if (!me?.id) return;
-
-    const tradeUrl = settings.store.tradeUrl?.trim();
-    const body: any = {
-        discord_id: me.id,
-        share_trade: !!settings.store.shareTradeUrl,
-        share_steam: !!settings.store.shareSteamProfile,
-    };
-    if (tradeUrl) {
-        body.trade_url = tradeUrl;
-        try {
-            const u = new URL(tradeUrl);
-            const partner = u.searchParams.get("partner");
-            if (partner && /^\d+$/.test(partner)) {
-                body.steam_id = (76561197960265728n + BigInt(partner)).toString();
-            }
-        } catch { /* ignore malformed URL */ }
-    }
-
-    const hash = JSON.stringify(body);
-    if (hash === lastPublishHash) return; // dedupe
-    try {
-        await fetchJson(`${shareBase()}/profile`, { method: "POST", body });
-        lastPublishHash = hash;
-    } catch (e) {
-        console.error("[VSI] publish failed", e);
-    }
 }
 
 async function fetchText(url: string): Promise<string> {
@@ -193,29 +116,6 @@ const settings = definePluginSettings({
         type: OptionType.BOOLEAN,
         description: "Show the CS2 Inventory card (value, delta, top 5 items) on profile popouts — yours and friends'.",
         default: true,
-    },
-
-    // ── Sharing ─────────────────────────────────────────────────────────────
-    shareViaCloud: {
-        type: OptionType.BOOLEAN,
-        description: "Publish your data to the vsi-share cloud. Requires a Trade URL set above.",
-        default: true,
-    },
-    shareTradeUrl: {
-        type: OptionType.BOOLEAN,
-        description: "Include your Trade URL in what you publish. Turn off if you want to publish Steam profile only.",
-        default: true,
-    },
-    shareSteamProfile: {
-        type: OptionType.BOOLEAN,
-        description: "Include a link to your Steam profile in what you publish.",
-        default: true,
-    },
-    shareWorkerUrl: {
-        type: OptionType.STRING,
-        description: "Advanced: point at a self-hosted vsi-share Worker instead of the default. Leave blank for the hosted instance.",
-        default: "",
-        placeholder: "https://vsi-share.reap-dev.workers.dev",
     },
 
     // ── Prices ──────────────────────────────────────────────────────────────
@@ -1104,8 +1004,6 @@ let observer: MutationObserver | null = null;
 // Set by the commands closure at module load — allows the preSend listener to invoke the same pipeline.
 let csInvExec: ((ref: string, channelId: string) => Promise<void>) | null = null;
 let preSendListener: ((channelId: string, message: any) => Promise<void | { cancel: boolean }>) | null = null;
-let publishTimeout: ReturnType<typeof setTimeout> | null = null;
-let publishInterval: ReturnType<typeof setInterval> | null = null;
 
 function ensureStyle() {
     if (styleEl) return;
@@ -1407,33 +1305,29 @@ function tryInject(panel: HTMLElement) {
     const btn = buildButton(shownId, isOwn, wantTradeRow, wantCard);
     target.parent.insertBefore(btn, target.before);
 
-    // For foreign users, resolve trade URL + Steam ID from three sources:
-    // 1. Cloud share (vsi-share worker) — HIGHEST priority
-    // 2. Bio scrape (steamcommunity.com/tradeoffer/new/ URL in About Me)
-    // 3. Discord's own Steam connection (Steam profile URL fallback)
-    // Priority 1 > 2 > 3. Check caches synchronously first for an instant no-flash render,
-    // fall back to async fetch (with fade-in) only on cache miss.
+    // For foreign users, resolve trade URL + Steam ID from two sources:
+    // 1. Bio scrape (steamcommunity.com/tradeoffer/new/ URL in About Me)
+    // 2. Discord's own Steam connection (Steam profile URL fallback)
+    // Resolve synchronously from the in-memory profile first for an instant no-flash render,
+    // fall back to an async fetch (with fade-in) only when the profile isn't loaded yet.
     if (!isOwn) {
         const sync = resolveForeignSync(shownId);
         if (sync) {
             const row = buildForeignRow(sync.tradeUrl, sync.steamId);
             if (row) {
-                row.classList.add("instant"); // skip fade — this was cache-hit, no delay to soften
+                row.classList.add("instant"); // skip fade — resolved from cache, no delay to soften
                 btn.insertBefore(row, btn.firstChild);
             }
         } else {
             (async () => {
-                const [bioTradeUrl, discordSteamId, cloud] = await Promise.all([
+                const [bioTradeUrl, discordSteamId] = await Promise.all([
                     getTradeUrlForUser(shownId).catch(e => { console.warn("[VSI] getTradeUrlForUser threw", e); return null as string | null; }),
                     getSteamId(shownId).catch(e => { console.warn("[VSI] getSteamId threw", e); return null as string | null; }),
-                    getCloudSharedProfile(shownId).catch(e => { console.warn("[VSI] cloud fetch threw", e); return null; }),
                 ]);
-                const tradeUrl = cloud?.trade_url ?? bioTradeUrl;
-                const steamId = cloud?.steam_id ?? discordSteamId;
-                if (!tradeUrl && !steamId) return;
+                if (!bioTradeUrl && !discordSteamId) return;
                 if (!btn.isConnected) return;
                 if (btn.querySelector(".vsi-trade-row")) return;
-                const row = buildForeignRow(tradeUrl, steamId);
+                const row = buildForeignRow(bioTradeUrl, discordSteamId);
                 if (!row) return;
                 btn.insertBefore(row, btn.firstChild); // no .instant class → animation runs
             })().catch(e => console.error("[VSI] foreign row outer", e));
@@ -1442,25 +1336,17 @@ function tryInject(panel: HTMLElement) {
 }
 
 /**
- * Fully synchronous resolution: only returns something when the cloud fetch AND (bio or Steam)
- * are already cached in memory. Anything requiring a network round-trip returns null so the
- * caller falls back to the async path (which fades in when data arrives).
+ * Synchronous resolution from the already-loaded profile. Returns null (→ async path) when the
+ * profile isn't in memory yet, so anything needing a network round-trip fades in when it arrives.
  */
 function resolveForeignSync(shownId: string): { tradeUrl: string | null; steamId: string | null } | null {
-    const cloudTtl = 5 * 60_000;
-    const cacheHit = cloudProfileCache.get(shownId);
-    const cloudFresh = cacheHit && Date.now() - cacheHit.ts < cloudTtl;
-    if (!cloudFresh) return null; // cloud never checked or stale → async
-
-    const cloud = cacheHit!.data;
     const profile: any = UserProfileStore.getUserProfile(shownId);
-    const accounts = profile?.connectedAccounts || profile?.connected_accounts || [];
-    const discordSteamId = accounts.find((c: any) => c?.type === "steam" || c?.type === "STEAM")?.id ?? null;
-    const bioText = profile?.bio ?? profile?.userProfile?.bio ?? profile?.user_profile?.bio;
-    const bioTradeUrl = extractTradeUrl(bioText ?? null);
+    if (!profile) return null; // not loaded yet → async
 
-    const tradeUrl = cloud?.trade_url ?? bioTradeUrl;
-    const steamId = cloud?.steam_id ?? discordSteamId;
+    const accounts = profile?.connectedAccounts || profile?.connected_accounts || [];
+    const steamId = accounts.find((c: any) => c?.type === "steam" || c?.type === "STEAM")?.id ?? null;
+    const bioText = profile?.bio ?? profile?.userProfile?.bio ?? profile?.user_profile?.bio;
+    const tradeUrl = extractTradeUrl(bioText ?? null);
     if (!tradeUrl && !steamId) return null; // nothing to show — skip render entirely
 
     return { tradeUrl, steamId };
@@ -1547,15 +1433,7 @@ const linkStyle: React.CSSProperties = {
     userSelect: "none",
 };
 
-const AboutComponent: React.FC = () => {
-    // Reactive — re-renders when any of these settings change so the CTA card, publish state, etc
-    // update the instant the user pastes their trade URL (no waiting for the 15-second poll).
-    const s = settings.use(["tradeUrl", "shareViaCloud", "shareTradeUrl", "shareSteamProfile"]);
-    const tradeUrlSet = !!s.tradeUrl?.trim();
-    React.useEffect(() => {
-        publishSharedProfile().catch(() => { });
-    }, [s.tradeUrl, s.shareViaCloud, s.shareTradeUrl, s.shareSteamProfile]);
-    return (<>
+const AboutComponent = () => (
     <div style={{
         position: "relative",
         display: "flex",
@@ -1563,7 +1441,7 @@ const AboutComponent: React.FC = () => {
         justifyContent: "space-between",
         gap: 16,
         padding: "12px 14px",
-        marginBottom: tradeUrlSet ? 16 : 10,
+        marginBottom: 16,
         borderRadius: 10,
         background: "linear-gradient(180deg, rgba(88,101,242,.10) 0%, rgba(255,255,255,.02) 100%)",
         border: "1px solid rgba(88,101,242,.28)",
@@ -1627,34 +1505,7 @@ const AboutComponent: React.FC = () => {
             />
         </div>
     </div>
-    {!tradeUrlSet && (
-        <div style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 12,
-            padding: "10px 14px",
-            marginBottom: 16,
-            borderRadius: 10,
-            background: "linear-gradient(180deg, rgba(240,178,42,.10) 0%, rgba(240,178,42,.03) 100%)",
-            border: "1px solid rgba(240,178,42,.30)",
-        }}>
-            <span style={{ fontSize: 18, lineHeight: 1 }}>🎯</span>
-            <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ fontSize: 13, fontWeight: 700, color: "#f0b22a", marginBottom: 2 }}>
-                    Set your trade URL to publish it
-                </div>
-                <Forms.FormText style={{ fontSize: 11.5, lineHeight: 1.4, color: "var(--text-muted)" }}>
-                    Cloud share is on — but without a trade URL there's nothing to publish. Grab your URL from{" "}
-                    <a href="https://steamcommunity.com/my/tradeoffers/privacy" target="_blank" rel="noopener noreferrer" style={{ color: "#f0b22a", textDecoration: "underline" }}>
-                        steamcommunity.com/my/tradeoffers/privacy
-                    </a>{" "}
-                    and paste it into the <b>Trade URL</b> field below.
-                </Forms.FormText>
-            </div>
-        </div>
-    )}
-    </>);
-};
+);
 
 // ─── Plugin definition ────────────────────────────────────────────────────────
 
@@ -1668,17 +1519,6 @@ export default definePlugin({
     start() {
         ensureStyle();
         startObserver();
-
-        // Publish shared profile to the vsi-share worker (if user has cloud share on).
-        // Non-blocking — fire-and-forget with a short delay so it doesn't race Vencord's boot.
-        publishTimeout = setTimeout(() => { publishSharedProfile().catch(e => console.warn("[VSI] initial publish", e)); }, 5000);
-        // Poll every 15 seconds; publishSharedProfile dedupes via lastPublishHash so identical
-        // state is a cheap no-op. This means pasting a trade URL in settings publishes within 15s
-        // even without a plugin reload.
-        publishInterval = setInterval(() => { publishSharedProfile().catch(() => {}); }, 15 * 1000);
-
-        // Prompt for trade URL on first run (once) so users know cloud share needs it.
-        maybePromptForTradeUrl().catch(() => {});
 
         // Intercept "/csinv <ref>" typed in any channel — resolves + prices before Discord sends.
         preSendListener = async (channelId: string, message: any) => {
@@ -1697,8 +1537,6 @@ export default definePlugin({
         observer = null;
         styleEl?.remove();
         styleEl = null;
-        if (publishTimeout) { clearTimeout(publishTimeout); publishTimeout = null; }
-        if (publishInterval) { clearInterval(publishInterval); publishInterval = null; }
         if (preSendListener) { removeMessagePreSendListener(preSendListener); preSendListener = null; }
         document.querySelectorAll('[data-vsi="1"]').forEach(n => n.remove());
     },
