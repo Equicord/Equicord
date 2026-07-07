@@ -282,10 +282,7 @@ export async function loadMessageCountsForEntries(
 ): Promise<void> {
     if (activeMessageCountBatch) {
         await activeMessageCountBatch;
-        if (batchCancelled) {
-            batchCancelled = false;
-            return;
-        }
+        if (batchCancelled) batchCancelled = false;
         return loadMessageCountsForEntries(entries, mode);
     }
 
