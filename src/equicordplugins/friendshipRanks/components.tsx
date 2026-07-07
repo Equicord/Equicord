@@ -245,6 +245,7 @@ function LeaderboardModal({ modalProps }: Readonly<{ modalProps: RenderModalProp
     React.useEffect(() => {
         if (sortMode !== SortModes.MESSAGES) return;
         void loadMessageCountsForEntries(messageSearchEntries, messageCountMode);
+        return () => cancelMessageCountBatch();
     }, [messageSearchEntries, messageCountMode, sortMode]);
 
     const leaderboard = React.useMemo(() => {
