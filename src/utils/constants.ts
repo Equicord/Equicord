@@ -1361,6 +1361,7 @@ export const EquicordDevs = Object.freeze({
     Paid: {
         name: "Paid",
         id: 285413645687455744n
+    },
     Nyro: {
         name: "zeyno36",
         id: 1325431712406179962n
