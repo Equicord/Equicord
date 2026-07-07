@@ -19,7 +19,7 @@ import { PluginSettingComponentProps } from "@utils/types";
 import { RenderModalProps } from "@vencord/discord-types";
 import { Avatar, Forms, IconUtils, Modal, openModal, React, RelationshipStore, SearchableSelect, Select, Tooltip, UserStore, useStateFromStores } from "@webpack/common";
 
-import { compareEntries, formatExactDate, formatLeaderboardValue, formatYears, getCacheKey, getFriendEntries, getFriendshipRankBadge, getLeaderboardRank, getLeaderboardTooltip, getMessageCount, isFriendTracked, loadMessageCountsForEntries, cancelMessageCountBatch, MessageCountState, useMessageCountStore } from "./data";
+import { cancelMessageCountBatch, compareEntries, formatExactDate, formatLeaderboardValue, formatYears, getCacheKey, getFriendEntries, getFriendshipRankBadge, getLeaderboardRank, getLeaderboardTooltip, getMessageCount, isFriendTracked, loadMessageCountsForEntries, MessageCountState, useMessageCountStore } from "./data";
 import { settings } from "./settings";
 import { FriendshipRankBadge, LEADERBOARD_SETTINGS_KEYS, LeaderboardEntry, MessageCountModes, SORT_MODE_LABELS, SortMode, SortModes } from "./types";
 
@@ -270,7 +270,7 @@ function LeaderboardModal({ modalProps }: Readonly<{ modalProps: RenderModalProp
                 },
                 {
                     text: SORT_MODE_LABELS[SortModes.MESSAGES],
-                    variant: sortMode ? "primary" : "secondary",
+                    variant: sortMode === SortModes.MESSAGES ? "primary" : "secondary",
                     onClick: () => { settings.store.sortMode = true; }
                 },
                 {
@@ -281,7 +281,7 @@ function LeaderboardModal({ modalProps }: Readonly<{ modalProps: RenderModalProp
             ]}
         >
             <div className={cl("container")}>
-                {sortMode && (
+                {sortMode === SortModes.MESSAGES && (
                     <div className={classes(cl("select-wrapper"), Margins.bottom16)}>
                         <Select
                             options={[
@@ -320,7 +320,7 @@ function LeaderboardModal({ modalProps }: Readonly<{ modalProps: RenderModalProp
                 </div>
 
                 <div className={cl("list")}>
-                    {sortMode && isLoadingMessageCounts && (
+                    {sortMode === SortModes.MESSAGES && isLoadingMessageCounts && (
                         <div className={cl("loading")}>
                             Loading message counts{currentCheckingFriend ? ` for ${currentCheckingFriend}` : ""}... {pendingMessageCounts} left.
                         </div>
