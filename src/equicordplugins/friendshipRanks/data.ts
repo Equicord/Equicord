@@ -267,12 +267,15 @@ export async function loadMessageCountsForEntries(
 ): Promise<void> {
     if (activeMessageCountBatch) {
         await activeMessageCountBatch;
-        if (batchCancelled) return;
+        if (batchCancelled) {
+            batchCancelled = false;
+            return;
+        }
         return loadMessageCountsForEntries(entries, mode);
     }
 
     const remainingEntries = entries.filter(entry => getCachedMessageCount(entry.id, mode) == null);
-    if (!remainingEntries.length || batchCancelled) return;
+    if (!remainingEntries.length) return;
     batchCancelled = false;
 
     const { setProgress } = useMessageCountStore.getState();
