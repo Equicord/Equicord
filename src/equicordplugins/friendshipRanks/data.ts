@@ -11,7 +11,6 @@ import { isObject, pluralise, sleep } from "@utils/misc";
 import { ChannelStore, Constants, IconUtils, moment, RelationshipStore, RestAPI, UserStore, zustandCreate } from "@webpack/common";
 
 import { FRIENDSHIP_RANK_BADGES, FriendshipRankBadge, LeaderboardEntry, MessageCountMode, MessageCountModes, SortMode, SortModes } from "./types";
-
 type RestRequestData = Parameters<typeof RestAPI.get>[0];
 
 const logger = new Logger("FriendshipLeaderboard");
