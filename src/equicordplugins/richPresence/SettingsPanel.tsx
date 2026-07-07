@@ -216,6 +216,11 @@ function NavidromeSettings() {
                 { label: "Playing", value: 0 },
                 { label: "Watching", value: 3 }
             ]} />
+            <SelectSetting name="Status Display Type" description="Show the state / details line contents in the member list" settingsKey="nd_statusDisplayType" options={[
+                { label: "Don't show (shows generic listening message)", value: "off" },
+                { label: "Show state line content", value: "artist" },
+                { label: "Show details line content", value: "track" }
+            ]} />
             {Number(nd_activityType ?? 2) !== 0 && (
                 <TextSetting name="Activity Name Format" description="The 'Listening to' text (e.g. {artist})" settingsKey="nd_nameString" placeholder="Navidrome" />
             )}

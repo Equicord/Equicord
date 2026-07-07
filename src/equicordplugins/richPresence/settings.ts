@@ -478,6 +478,27 @@ export const settings = definePluginSettings({
         hidden: true,
         onChange: triggerDebouncedServiceChange,
     },
+    nd_statusDisplayType: {
+        description: "Show the track / artist name in the member list",
+        type: OptionType.SELECT,
+        options: [
+            {
+                label: "Don't show (shows generic listening message)",
+                value: "off"
+            },
+            {
+                label: "Show artist name",
+                value: "artist",
+                default: true
+            },
+            {
+                label: "Show track name",
+                value: "track"
+            }
+        ],
+        hidden: true,
+        onChange: triggerDebouncedServiceChange,
+    },
 });
 
 export type SettingsStore = typeof settings["store"];

@@ -7,7 +7,7 @@
 import { Logger } from "@utils/Logger";
 import { parseUrl } from "@utils/misc";
 import { Activity } from "@vencord/discord-types";
-import { ActivityFlags } from "@vencord/discord-types/enums";
+import { ActivityFlags, ActivityStatusDisplayType } from "@vencord/discord-types/enums";
 import { ApplicationAssetUtils, FluxDispatcher } from "@webpack/common";
 
 import { settings } from "../settings";
@@ -69,9 +69,9 @@ async function fetchNowPlaying(signal?: AbortSignal): Promise<NdTrack | null> {
             logger.warn("Navidrome server URL is invalid.");
             return null;
         }
-        
+
         const hexPassword = Array.from(new TextEncoder().encode(nd_password)).map(b => b.toString(16).padStart(2, '0')).join('');
-        
+
         const baseUrl = parsedUrl.href.replace(/\/$/, "");
         const queryParams = `u=${encodeURIComponent(nd_username)}&p=enc:${hexPassword}&v=1.12.0&c=equicord-rpc&f=json`;
 
@@ -117,6 +117,7 @@ async function getActivity(signal?: AbortSignal): Promise<Activity | null> {
         nd_stateString: settings.plain.nd_stateString,
         nd_largeTextString: settings.plain.nd_largeTextString,
         nd_activityType: settings.plain.nd_activityType,
+        nd_statusDisplayType: settings.plain.nd_statusDisplayType,
         nd_albumArtMode: settings.plain.nd_albumArtMode,
         nd_lastfmApiKey: settings.plain.nd_lastfmApiKey,
         nd_showAlbum: settings.plain.nd_showAlbum
@@ -125,7 +126,7 @@ async function getActivity(signal?: AbortSignal): Promise<Activity | null> {
         return cachedActivity;
     }
 
-    const { nd_clientId, nd_publicUrl, nd_showSmallImage, nd_username, nd_password, nd_serverUrl, nd_showAlbum, nd_nameString, nd_detailsString, nd_stateString, nd_largeTextString, nd_activityType, nd_lastfmApiKey } = settings.plain;
+    const { nd_clientId, nd_publicUrl, nd_showSmallImage, nd_username, nd_password, nd_serverUrl, nd_showAlbum, nd_nameString, nd_detailsString, nd_stateString, nd_largeTextString, nd_activityType, nd_statusDisplayType, nd_lastfmApiKey } = settings.plain;
 
     const _clientId = nd_clientId?.trim();
     const appId = _clientId === "" ? "1470554657506984069" : (_clientId ?? "1470554657506984069");
@@ -136,7 +137,7 @@ async function getActivity(signal?: AbortSignal): Promise<Activity | null> {
     const externalBaseUrl = parsedExternalUrl ? parsedExternalUrl.href.replace(/\/$/, "") : null;
 
     const durationMs = (track.duration ?? 0) * 1000;
-    
+
     if (track.id !== currentTrackId || !cachedStartTimestamp) {
         currentTrackId = track.id;
         const minutesAgo = track.minutesAgo ?? 0;
@@ -173,7 +174,7 @@ async function getActivity(signal?: AbortSignal): Promise<Activity | null> {
         const trimmedKey = nd_lastfmApiKey?.trim();
         const apiKey = trimmedKey ? trimmedKey : "feff915bf5987580c9dc354d523dc6b9";
         const cacheKey = `${track.id}:${apiKey}`;
-        
+
         if (lastFmCache.has(cacheKey)) {
             resolvedCoverArtUrl = lastFmCache.get(cacheKey) ?? null;
         } else {
@@ -239,6 +240,11 @@ async function getActivity(signal?: AbortSignal): Promise<Activity | null> {
         name: nameString ? nameString : "Navidrome",
         details: detailsString ? detailsString : undefined,
         state: stateString ? stateString : undefined,
+        status_display_type: nd_statusDisplayType ? {
+            "off": ActivityStatusDisplayType.NAME,
+            "artist": ActivityStatusDisplayType.STATE,
+            "track": ActivityStatusDisplayType.DETAILS
+        }[nd_statusDisplayType as "off" | "artist" | "track"] : undefined,
         type: Number(nd_activityType ?? 2),
         flags: ActivityFlags.INSTANCE,
         timestamps: {
@@ -286,6 +292,7 @@ export function forceUpdate() {
         nd_stateString: settings.plain.nd_stateString,
         nd_largeTextString: settings.plain.nd_largeTextString,
         nd_activityType: settings.plain.nd_activityType,
+        nd_statusDisplayType: settings.plain.nd_statusDisplayType,
         nd_albumArtMode: settings.plain.nd_albumArtMode,
         nd_lastfmApiKey: settings.plain.nd_lastfmApiKey,
         nd_showAlbum: settings.plain.nd_showAlbum
