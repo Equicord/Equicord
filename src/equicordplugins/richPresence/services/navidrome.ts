@@ -36,6 +36,7 @@ interface NdTrack {
     duration?: number;
     minutesAgo?: number;
     coverArt?: string;
+    username?: string;
 }
 
 function customFormat(formatStr: string | undefined, track: NdTrack): string {
@@ -87,9 +88,10 @@ async function fetchNowPlaying(signal?: AbortSignal): Promise<NdTrack | null> {
         }
 
         const entries = data["subsonic-response"]?.nowPlaying?.entry;
-        if (!entries || entries.length === 0) return null;
+        if (!entries || !Array.isArray(entries) || entries.length === 0) return null;
 
-        return entries[0];
+        const myEntry = entries.find((e: NdTrack) => e.username?.toLowerCase() === nd_username.toLowerCase());
+        return myEntry ?? null;
     } catch (e: unknown) {
         if (e instanceof Error && e.name === 'AbortError') throw e;
         logger.error("Failed to fetch from Navidrome API", e);
