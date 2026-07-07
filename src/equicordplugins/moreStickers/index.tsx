@@ -53,7 +53,7 @@ export default definePlugin({
             }]
         },
         {
-            find: ".GIFT_PROMOTION]).",
+            find: '("ChannelTextAreaButtons")',
             replacement: [
                 {
                     match: /(?<=(,\i\.stickers\?\.button.{0,50}\i\.push\(\(.{0,100})\},"sticker"\)\))/,

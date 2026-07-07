@@ -15,7 +15,7 @@ jobs:
         runs-on: ubuntu-latest
 
         steps:
-            - uses: actions/checkout@v6
+            - uses: actions/checkout@v7
               with:
                   fetch-depth: 0
 
@@ -79,7 +79,8 @@ jobs:
 
             - name: Create sources zip
               if: steps.check.outputs.release == 'true'
-              run: zip -r dist/extension-sources.zip . -x "node_modules/*" -x "dist/*" -x
+              run:
+                  zip -r dist/extension-sources.zip . -x "node_modules/*" -x "dist/*" -x
                   ".git/*"
 
             - name: Publish extension

@@ -96,7 +96,7 @@ Flag these and suggest the fix:
 **No comments.** Never add comments unless explicitly asked. However, preserve existing comments as they contain important context.
 
 ```typescript
-// GOOD — early return, destructuring, inference, no comments
+// GOOD - early return, destructuring, inference, no comments
 const getUser = (id: string) => {
     const user = UserStore.getUser(id);
     if (!user) return null;
@@ -104,7 +104,7 @@ const getUser = (id: string) => {
     return `${username}#${discriminator}`;
 };
 
-// BAD — nested, verbose, unnecessary annotations
+// BAD - nested, verbose, unnecessary annotations
 function getUser(id: string): string | null {
     // Get the user from the store
     const user = UserStore.getUser(id);
@@ -172,8 +172,8 @@ className={classes(cl("wrapper"), someDiscordClass, isActive && cl("active"))}
 
 ## Settings
 
-- `settings.store.key` — reactive, auto-persists (React components)
-- `settings.plain.key` — non-reactive raw value (basically never use this, only for special cases)
+- `settings.store.key` - reactive, auto-persists (React components)
+- `settings.plain.key` - non-reactive raw value (basically never use this, only for special cases)
 
 ---
 
@@ -274,7 +274,7 @@ Plugins that don't use patches don't require a Discord restart to apply. Their `
 **Watch for stale closures and references.** If a plugin stores references to DOM nodes, channels, or users in module scope, check that they're nulled out in `stop()`.
 
 ```typescript
-// GOOD — clean start/stop, no leaks
+// GOOD - clean start/stop, no leaks
 start() {
     this.interval = setInterval(this.update, 5000);
     document.addEventListener("visibilitychange", this.onVisibilityChange);
@@ -284,7 +284,7 @@ stop() {
     document.removeEventListener("visibilitychange", this.onVisibilityChange);
 }
 
-// BAD — leaks interval and listener forever
+// BAD - leaks interval and listener forever
 start() {
     setInterval(this.update, 5000);
     document.addEventListener("visibilitychange", this.onVisibilityChange);
@@ -359,7 +359,7 @@ If a PR reimplements any of these, flag it. They already exist:
 
 ## Review Severity
 
-1. **CRITICAL** — `any` types, hardcoded CDN/API URLs, direct DOM manipulation, security issues, massive overengineering/bloat, suspected AI slop (note it, but still review everything)
-2. **HIGH** — Missing useEffect cleanup, forbidden React APIs, hardcoded class names, console logging statements, missing definePluginSettings, unnecessary abstractions
-3. **MEDIUM** — Anti-patterns (`||` instead of `??`), utility reimplementations, commented-out code, bad description format, excessive comments
-4. **LOW** — Style preferences, minor performance wins, organization
+1. **CRITICAL** - `any` types, hardcoded CDN/API URLs, direct DOM manipulation, security issues, massive overengineering/bloat, suspected AI slop (note it, but still review everything)
+2. **HIGH** - Missing useEffect cleanup, forbidden React APIs, hardcoded class names, console logging statements, missing definePluginSettings, unnecessary abstractions
+3. **MEDIUM** - Anti-patterns (`||` instead of `??`), utility reimplementations, commented-out code, bad description format, excessive comments
+4. **LOW** - Style preferences, minor performance wins, organization

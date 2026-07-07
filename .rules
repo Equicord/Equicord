@@ -160,9 +160,9 @@ Declarative fields auto-enable these. Imperative doesn't.
 - `group: true` for atomic multi-step rewrites. On any failure (no effect or throw), whole group rolls back.
 - `predicate: () => boolean` gates on runtime values. `fromBuild`/`toBuild` gate on Discord build numbers. Both apply per patch and per replacement. Never branch inside `replace`.
 - `noWarn: true` suppresses "had no effect" warning. Use only for intentionally optional replacements.
-- `all: true` only when one anchor legitimately occurs across multiple modules. Intl keys resolve to one module — do NOT set `all` on intl-anchored patches.
+- `all: true` only when one anchor legitimately occurs across multiple modules. Intl keys resolve to one module - do NOT set `all` on intl-anchored patches.
 - Never `try/catch` to silence a failing replacement. Fix the match.
-- Never depend on argument names or object-key order. Use `arguments[i]` — minifiers rename params and reorder destructured keys.
+- Never depend on argument names or object-key order. Use `arguments[i]` - minifiers rename params and reorder destructured keys.
 - Prefer multiple small patches over one with broad find and many replacements.
 - In DEV, failing replacements auto-diff 200 chars around the match site. Read it before retrying.
 - Never reference build flags literally inside `replace`. They only exist in Equicord's bundle. Interpolate outside:
@@ -199,10 +199,10 @@ replace: "$self.exampleWrap({ children: $& })";
 
 - Top level: lazy finders only. `findByPropsLazy`, `findByCodeLazy`, `findComponentByCodeLazy`, `findStoreLazy`, `findCssClassesLazy`, `getUserSettingLazy`, `proxyLazyWebpack`.
 - Direct `find(...)` only inside `start()` or runtime callbacks.
-- Components: `findComponentByCodeLazy` (top level) or `findComponentByCode` (runtime). Never `findByProps*` for React components — `displayName` is mangled, prop shapes shift. `findByPropsLazy` stays correct for stores, utility modules, action-creator objects. `waitForComponent` is `@webpack/common` internal.
+- Components: `findComponentByCodeLazy` (top level) or `findComponentByCode` (runtime). Never `findByProps*` for React components - `displayName` is mangled, prop shapes shift. `findByPropsLazy` stays correct for stores, utility modules, action-creator objects. `waitForComponent` is `@webpack/common` internal.
 - `proxyLazy` for same-tick destructuring. `proxyLazyWebpack(() => ...)` when the value depends on webpack. `makeLazy` for plain deferred values.
 - `mapMangledModuleLazy(code, mapping)` to extract multiple exports from one mangled module. `extractAndLoadChunksLazy([codes], matcher?)` to force-load a lazy chunk before a `find*`.
-- Before `findStoreLazy("X")`, check `src/webpack/common/stores.ts` — many are already exported.
+- Before `findStoreLazy("X")`, check `src/webpack/common/stores.ts` - many are already exported.
 - `@webpack/common` exports backed by `waitFor` (stores, `FluxDispatcher`, `Parser`, `Alerts`, hooks) are `undefined` until webpack ready. Reference inside functions, not at module top.
 - No `eagerPatches`, no `wreq(id)` brute forcing.
 
@@ -228,7 +228,7 @@ replace: "$self.exampleWrap({ children: $& })";
 - Static stylesheet: `import "./style.css"`. Runtime-toggleable: `import name from "./style.css?managed"` plus `enableStyle`, `disableStyle`, `toggleStyle`, `setStyleClassNames` from `@api/Styles`.
 - Managed CSS variable selectors use `[--varName]`. Runtime rewrites these via `setStyleClassNames` at enable/recompile time (NOT build time). Call `setStyleClassNames(style, classNames)` before `enableStyle(style)`.
 - Top-level selectors start with `.vc-<plugin>-`. Descendant element selectors like `.vc-foo button` allowed.
-- No `:root` in plugin CSS — use a `.vc-<plugin>-root` wrapper or `documentElement.style.setProperty`.
+- No `:root` in plugin CSS - use a `.vc-<plugin>-root` wrapper or `documentElement.style.setProperty`.
 - No `@import`.
 - Prefer Discord CSS vars like `var(--background-primary)` over literal colors.
 - Inline `style={{}}` only for dynamic per-render values. Use `Margins.top8` etc. for spacing, not inline `style`.
@@ -238,7 +238,7 @@ replace: "$self.exampleWrap({ children: $& })";
 
 - Desktop-only: folder suffix `.desktop`. Mixed-target with `native.ts` doesn't use the suffix.
 - `native.ts` next to `index.tsx`, OR `native/index.ts` for multi-file natives. Exports auto-register as IPC handlers via `~pluginNatives`.
-- Handler first arg is `IpcMainInvokeEvent`. All other args are renderer-controlled and untrusted — validate type, length, content. Never throw raw `Error` (leaks main-process paths) — return `{ success: false, error: "..." }` or scrubbed message.
+- Handler first arg is `IpcMainInvokeEvent`. All other args are renderer-controlled and untrusted - validate type, length, content. Never throw raw `Error` (leaks main-process paths) - return `{ success: false, error: "..." }` or scrubbed message.
 - Filesystem paths: `normalize` and assert `startsWith(<allowed root>)`. Never `rm`/`readFile`/`writeFile` a renderer-supplied path without this guard.
 - Network: URL allowlist (regex or `url.origin`), streaming size cap, redirect-depth cap.
 - Subprocess: `spawn` with argv arrays. Never `exec` a renderer-derived string. Never `shell: true` with untrusted input.
@@ -320,7 +320,7 @@ Pick one per event. Never two for the same thing.
 | --------------------------------------- | ---------------------------------------------------------------------------------- |
 | Transient feedback (<2s)                | `showToast(msg, Toasts.Type.SUCCESS)` from `@webpack/common`                       |
 | Background happened, user may act later | `showNotification({ title, body })` from `@api/Notifications`                      |
-| Urgent inline top-bar                   | `Notices.showNotice(msg, btnText, cb)` from `@api/Notices` (sparingly — blocks UI) |
+| Urgent inline top-bar                   | `Notices.showNotice(msg, btnText, cb)` from `@api/Notices` (sparingly - blocks UI) |
 | Modal confirm                           | `Alerts.show({ title, body, onConfirm })` from `@webpack/common`                   |
 
 ## Use what exists

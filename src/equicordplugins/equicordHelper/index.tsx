@@ -178,16 +178,7 @@ export default definePlugin({
                 }
             ]
         },
-        // Fixes crashing with unknown gift styles
-        // ty dziurwa for crashing me
-        {
-            find: "Unexpected giftStyle",
-            replacement: {
-                match: /throw Error\(`Unexpected giftStyle \$\{(\i)\}`\);/,
-                replace: "console.warn(`Unexpected giftStyle $${$1}`);"
-            }
-        },
-        // Fix a race condition?
+        // Fix a race condition
         {
             find: ".completeOperation(",
             replacement: {
@@ -195,11 +186,11 @@ export default definePlugin({
                 replace: "$2,$1"
             }
         },
-        // catch if it cant open
+        // Catch IndexedDB if it fails to open
         {
             find: "discarding speculative database",
             replacement: {
-                match: /await (\i)\((\i)\)(?=;.{0,15}this\.databases)/,
+                match: /await \i\(\i\)(?=;.{0,15}this\.databases)/,
                 replace: "$&.catch(()=>null)"
             }
         },

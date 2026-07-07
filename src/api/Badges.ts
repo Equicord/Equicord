@@ -19,7 +19,7 @@
 import ErrorBoundary from "@components/ErrorBoundary";
 import globalBadges from "@equicordplugins/globalBadges";
 import BadgeAPIPlugin from "@plugins/_api/badges";
-import { ComponentType, HTMLProps } from "react";
+import { ComponentType, HTMLProps, ReactNode } from "react";
 
 import { isPluginEnabled } from "./PluginManager";
 
@@ -34,7 +34,7 @@ export interface ProfileBadge {
      */
     id: string,
     /** The tooltip to show on hover. Required for image badges */
-    description?: string;
+    description?: string | ReactNode;
     /** Custom component for the badge (tooltip not included) */
     component?: ComponentType<ProfileBadge & BadgeUserArgs>;
     /** The custom image to use */

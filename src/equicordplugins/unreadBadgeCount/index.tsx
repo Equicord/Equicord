@@ -42,7 +42,7 @@ export default definePlugin({
             find: "UNREAD_IMPORTANT:",
             replacement: [
                 {
-                    match: /\.Children\.count.+?:null(?<=,channel:(\i).+?)/,
+                    match: /\.Children\.count.+?:null(?<=,channel:\i.+?)/,
                     replace: "$&,$self.CountBadge({channel: arguments[0].channel})",
                 },
             ]

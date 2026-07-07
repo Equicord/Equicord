@@ -50,7 +50,7 @@ export default definePlugin({
             // Override the default renderAdjacentContent prop value for all types of embed components (renderImageComponent, renderVideoComponent...)
             find: "#{intl::MEDIA_MOSAIC_ALT_TEXT_POPOUT_TITLE}",
             replacement: {
-                match: /renderAdjacentContent:(\i)/g,
+                match: /renderAdjacentContent:\i/g,
                 replace: "$&=$self.renderEmbedAccessory"
             }
         },

@@ -78,8 +78,8 @@ export default definePlugin({
             find: '"2025-01-virtual-currency-rollout"',
             replacement: [
                 {
-                    match: /(?<=\}\),)(\i)/g,
-                    replace: "$1=e=>({enabled:true}),_equicord_$1"
+                    match: /enabled:\i\.(?:get|use)Config\(\i\)\.enabled/g,
+                    replace: "enabled:false"
                 }
             ]
         },
