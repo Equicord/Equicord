@@ -53,7 +53,7 @@ export const useMessageCountStore = proxyLazy(() => zustandCreate((
 let messageCountRequestQueue = Promise.resolve();
 let activeMessageCountBatch: Promise<void> | null = null;
 let batchCancelled = false;
-const activeMessageCountAbortControllers = new Set<AbortController>();
+const batchAbortControllers = new Set<AbortController>();
 
 export function daysSince(dateString?: string | null): number {
     if (!dateString) return 0;
@@ -299,7 +299,7 @@ export async function loadMessageCountsForEntries(
             const entry = remainingEntries[index];
             if (getCachedMessageCount(entry.id, mode) != null) continue;
             setProgress({ isLoadingCounts: true, pendingCount: remainingEntries.length - index - 1, currentChecking: entry.name });
-            await getMessageCount(entry.id, mode);
+            await getMessageCount(entry.id, mode, true);
         }
     })();
 
@@ -313,13 +313,13 @@ export async function loadMessageCountsForEntries(
 
 export function cancelMessageCountBatch() {
     batchCancelled = true;
-    for (const controller of activeMessageCountAbortControllers) {
+    for (const controller of batchAbortControllers) {
         controller.abort();
     }
-    activeMessageCountAbortControllers.clear();
+    batchAbortControllers.clear();
 }
 
-export async function getMessageCount(friendId: string, mode: MessageCountMode): Promise<number> {
+export async function getMessageCount(friendId: string, mode: MessageCountMode, isBatchCall = false): Promise<number> {
     const cacheKey = getCacheKey(friendId, mode);
     const cached = useMessageCountStore.getState().get(cacheKey);
     if (cached != null) return cached;
@@ -328,12 +328,12 @@ export async function getMessageCount(friendId: string, mode: MessageCountMode):
     if (!currentUserId) return 0;
 
     const controller = new AbortController();
-    activeMessageCountAbortControllers.add(controller);
+    if (isBatchCall) batchAbortControllers.add(controller);
     const signal = controller.signal;
 
     const channelId = await resolveDmChannelId(friendId);
     if (!channelId) {
-        activeMessageCountAbortControllers.delete(controller);
+        if (isBatchCall) batchAbortControllers.delete(controller);
         return 0;
     }
 
@@ -363,7 +363,7 @@ export async function getMessageCount(friendId: string, mode: MessageCountMode):
     const derivedCount = deriveFromExistingCounts();
     if (derivedCount != null) {
         useMessageCountStore.getState().set(cacheKey, derivedCount);
-        activeMessageCountAbortControllers.delete(controller);
+        if (isBatchCall) batchAbortControllers.delete(controller);
         return derivedCount;
     }
 
@@ -416,6 +416,6 @@ export async function getMessageCount(friendId: string, mode: MessageCountMode):
             return 0;
         }
     } finally {
-        activeMessageCountAbortControllers.delete(controller);
+        if (isBatchCall) batchAbortControllers.delete(controller);
     }
 }
