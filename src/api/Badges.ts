@@ -34,7 +34,7 @@ export interface ProfileBadge {
      */
     id: string,
     /** The tooltip to show on hover. Required for image badges */
-    description?: string | ReactNode;
+    description?: string;
     /** Custom component for the badge (tooltip not included) */
     component?: ComponentType<ProfileBadge & BadgeUserArgs>;
     /** The custom image to use */
