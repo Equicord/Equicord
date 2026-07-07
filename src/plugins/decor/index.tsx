@@ -17,12 +17,14 @@ import { useCurrentUserDecorationsStore } from "./lib/stores/CurrentUserDecorati
 import { useUserDecorAvatarDecoration, useUsersDecorationsStore } from "./lib/stores/UsersDecorationsStore";
 import { settings } from "./settings";
 import { setAvatarDecorationModalPreview, setDecorationGridDecoration, setDecorationGridItem } from "./ui/components";
-import DecorSection from "./ui/components/DecorSection";
+import DecorSection, { DecorSectionProps } from "./ui/components/DecorSection";
 
 export interface AvatarDecoration {
     asset: string;
     skuId: string;
 }
+
+export let NewCustomizationSection;
 
 export default definePlugin({
     name: "Decor",
@@ -117,6 +119,20 @@ export default definePlugin({
                     replace: "$self.AvatarDecorationModalPreview=$&"
                 }
             ]
+        },
+        // 2026-03-wysiwyg-user-profile-editing
+        {
+            find: '("UserProfileModalV2EditingPanel")',
+            replacement: [
+                {
+                    match: /function (\i).{0,50}showNitroIcon:.{0,450}\}\),\i\]\}\)\}/,
+                    replace: "$&$self.setNewCustomizationSection($1);"
+                },
+                {
+                    match: /"inline"===.{0,100}#{intl::Zenogr::raw}\)/,
+                    replace: "$self.ExperimentDecorSection(),$&"
+                }
+            ]
         }
     ],
     settings,
@@ -166,5 +182,12 @@ export default definePlugin({
         }
     },
 
-    DecorSection: ErrorBoundary.wrap(DecorSection, { noop: true })
+    DecorSection: ErrorBoundary.wrap(DecorSection, { noop: true }),
+    ExperimentDecorSection: ErrorBoundary.wrap(
+        (props: DecorSectionProps) => <DecorSection {...props} useNewSection />,
+        { noop: true }
+    ),
+    setNewCustomizationSection(component) {
+        NewCustomizationSection = component;
+    }
 });
