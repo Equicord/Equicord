@@ -12,6 +12,8 @@ import { ChannelStore, Constants, IconUtils, moment, RelationshipStore, RestAPI,
 
 import { FRIENDSHIP_RANK_BADGES, FriendshipRankBadge, LeaderboardEntry, MessageCountMode, MessageCountModes, SortMode, SortModes } from "./types";
 
+type RestRequestData = Parameters<typeof RestAPI.get>[0];
+
 const logger = new Logger("FriendshipLeaderboard");
 
 const DAYS_PER_YEAR = 365.25;
@@ -52,6 +54,7 @@ export const useMessageCountStore = proxyLazy(() => zustandCreate((
 let messageCountRequestQueue = Promise.resolve();
 let activeMessageCountBatch: Promise<void> | null = null;
 let batchCancelled = false;
+const activeMessageCountAbortControllers = new Set<AbortController>();
 
 export function daysSince(dateString?: string | null): number {
     if (!dateString) return 0;
@@ -213,15 +216,20 @@ function shouldCountMessage(msg: { author?: { id?: string; }; }, currentUserId: 
     return true;
 }
 
-async function fallbackCountRecentMessages(channelId: string, currentUserId: string, friendId: string, mode: MessageCountMode): Promise<number> {
+async function fallbackCountRecentMessages(channelId: string, currentUserId: string, friendId: string, mode: MessageCountMode, signal: AbortSignal): Promise<number> {
     let before: string | undefined;
     let count = 0;
 
     for (let page = 0; page < FALLBACK_PAGE_LIMIT; page++) {
+        if (signal.aborted) return 0;
+
         const result = await withMessageCountRateLimit(() => withRateLimit(() => RestAPI.get({
             url: Constants.Endpoints.MESSAGES(channelId),
-            query: { limit: FALLBACK_PAGE_SIZE, ...(before ? { before } : {}) }
-        })));
+            query: { limit: FALLBACK_PAGE_SIZE, ...(before ? { before } : {}) },
+            signal
+        } satisfies RestRequestData)));
+
+        if (signal.aborted) return 0;
 
         const messages: Array<{ id: string; author?: { id?: string; }; }> = result?.body ?? [];
         if (!messages.length) break;
@@ -240,11 +248,19 @@ async function fallbackCountRecentMessages(channelId: string, currentUserId: str
     return count;
 }
 
+function isAbortError(error: unknown): boolean {
+    return error instanceof Error && error.name === "AbortError";
+}
+
 async function withRateLimit<T>(fn: () => Promise<T>, maxRetries = 3): Promise<T> {
     for (let attempt = 0; attempt <= maxRetries; attempt++) {
         try {
             return await fn();
         } catch (e: unknown) {
+            if (isAbortError(e)) {
+                throw e;
+            }
+
             const { status, retryAfter: rawRetryAfter } = getRetryInfo(e);
             const retryAfterMs = rawRetryAfter != null ? (rawRetryAfter || 2) * 1000 : undefined;
             const isLastAttempt = attempt === maxRetries;
@@ -301,6 +317,10 @@ export async function loadMessageCountsForEntries(
 
 export function cancelMessageCountBatch() {
     batchCancelled = true;
+    for (const controller of activeMessageCountAbortControllers) {
+        controller.abort();
+    }
+    activeMessageCountAbortControllers.clear();
 }
 
 export async function getMessageCount(friendId: string, mode: MessageCountMode): Promise<number> {
@@ -311,8 +331,15 @@ export async function getMessageCount(friendId: string, mode: MessageCountMode):
     const currentUserId = UserStore.getCurrentUser()?.id;
     if (!currentUserId) return 0;
 
+    const controller = new AbortController();
+    activeMessageCountAbortControllers.add(controller);
+    const signal = controller.signal;
+
     const channelId = await resolveDmChannelId(friendId);
-    if (!channelId) return 0;
+    if (!channelId) {
+        activeMessageCountAbortControllers.delete(controller);
+        return 0;
+    }
 
     const deriveFromExistingCounts = (): number | null => {
         if (mode === MessageCountModes.ALL) {
@@ -340,6 +367,7 @@ export async function getMessageCount(friendId: string, mode: MessageCountMode):
     const derivedCount = deriveFromExistingCounts();
     if (derivedCount != null) {
         useMessageCountStore.getState().set(cacheKey, derivedCount);
+        activeMessageCountAbortControllers.delete(controller);
         return derivedCount;
     }
 
@@ -350,26 +378,48 @@ export async function getMessageCount(friendId: string, mode: MessageCountMode):
 
         const result = await withMessageCountRateLimit(() => withRateLimit(() => RestAPI.get({
             url: Constants.Endpoints.SEARCH_CHANNEL(channelId),
-            query
-        })));
+            query,
+            signal
+        } satisfies RestRequestData)));
+
+        if (signal.aborted) {
+            return 0;
+        }
 
         let count = Number(result?.body?.total_results) || 0;
 
-        if (count <= 0) count = await fallbackCountRecentMessages(channelId, currentUserId, friendId, mode);
+        if (count <= 0) count = await fallbackCountRecentMessages(channelId, currentUserId, friendId, mode, signal);
+        if (signal.aborted) {
+            return 0;
+        }
 
         useMessageCountStore.getState().set(cacheKey, count);
         await sleep(300);
         return count;
     } catch (e) {
+        if (isAbortError(e) || signal.aborted) {
+            return 0;
+        }
+
         logger.warn("Search endpoint failed for", friendId, "— falling back to manual count.", e);
         try {
-            const count = await fallbackCountRecentMessages(channelId, currentUserId, friendId, mode);
+            const count = await fallbackCountRecentMessages(channelId, currentUserId, friendId, mode, signal);
+            if (signal.aborted) {
+                return 0;
+            }
+
             useMessageCountStore.getState().set(cacheKey, count);
             return count;
         } catch (error_) {
+            if (isAbortError(error_) || signal.aborted) {
+                return 0;
+            }
+
             logger.error("Fallback message count also failed for", friendId, error_);
             useMessageCountStore.getState().set(cacheKey, 0);
             return 0;
         }
+    } finally {
+        activeMessageCountAbortControllers.delete(controller);
     }
 }
