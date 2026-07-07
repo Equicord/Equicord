@@ -8,16 +8,13 @@ import { definePluginSettings } from "@api/Settings";
 import { OptionType } from "@utils/types";
 
 import { FriendTrackingSetting } from "./components";
-import { MessageCountModes, SORT_MODE_LABELS, SortModes } from "./types";
+import { MessageCountModes } from "./types";
 
 export const settings = definePluginSettings({
     sortMode: {
-        type: OptionType.SELECT,
-        description: "What to sort by",
-        options: [
-            { label: SORT_MODE_LABELS[SortModes.FRIENDSHIP], value: SortModes.FRIENDSHIP, default: true },
-            { label: SORT_MODE_LABELS[SortModes.MESSAGES], value: SortModes.MESSAGES }
-        ]
+        type: OptionType.BOOLEAN,
+        description: "Sort by messages instead of friendship duration",
+        default: false
     },
     sortDescending: {
         type: OptionType.BOOLEAN,

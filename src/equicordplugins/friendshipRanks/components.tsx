@@ -221,7 +221,8 @@ export function OpenLeaderboardButton() {
 }
 
 function LeaderboardModal({ modalProps }: Readonly<{ modalProps: RenderModalProps; }>) {
-    const { sortDescending, sortMode, messageCountMode, trackedFriendIds } = settings.use(LEADERBOARD_SETTINGS_KEYS);
+    const { sortDescending, sortMode: sortByMessages, messageCountMode, trackedFriendIds } = settings.use(LEADERBOARD_SETTINGS_KEYS);
+    const sortMode = sortByMessages ? SortModes.MESSAGES : SortModes.FRIENDSHIP;
 
     const friendEntries = useStateFromStores(
         [RelationshipStore, UserStore],
@@ -231,22 +232,22 @@ function LeaderboardModal({ modalProps }: Readonly<{ modalProps: RenderModalProp
     );
 
     const messageSearchEntries = React.useMemo(() => {
-        if (sortMode !== SortModes.MESSAGES) return friendEntries;
+        if (!sortByMessages) return friendEntries;
         return friendEntries.filter(entry => isFriendTracked(entry.id, trackedFriendIds));
-    }, [friendEntries, sortMode, trackedFriendIds]);
+    }, [friendEntries, sortByMessages, trackedFriendIds]);
 
     const messageCounts = useMessageCountStore((state: MessageCountState) =>
-        sortMode === SortModes.MESSAGES ? state.counts : EMPTY_MESSAGE_COUNTS
+        sortByMessages ? state.counts : EMPTY_MESSAGE_COUNTS
     );
     const isLoadingMessageCounts = useMessageCountStore((state: MessageCountState) => state.isLoadingCounts);
     const pendingMessageCounts = useMessageCountStore((state: MessageCountState) => state.pendingCount);
     const currentCheckingFriend = useMessageCountStore((state: MessageCountState) => state.currentChecking);
 
     React.useEffect(() => {
-        if (sortMode !== SortModes.MESSAGES) return;
+        if (!sortByMessages) return;
         void loadMessageCountsForEntries(messageSearchEntries, messageCountMode);
         return () => cancelMessageCountBatch();
-    }, [messageSearchEntries, messageCountMode, sortMode]);
+    }, [messageSearchEntries, messageCountMode, sortByMessages]);
 
     const leaderboard = React.useMemo(() => {
         return messageSearchEntries
@@ -265,12 +266,12 @@ function LeaderboardModal({ modalProps }: Readonly<{ modalProps: RenderModalProp
                 {
                     text: SORT_MODE_LABELS[SortModes.FRIENDSHIP],
                     variant: sortMode === SortModes.FRIENDSHIP ? "primary" : "secondary",
-                    onClick: () => { settings.store.sortMode = SortModes.FRIENDSHIP; }
+                    onClick: () => { settings.store.sortMode = false; }
                 },
                 {
                     text: SORT_MODE_LABELS[SortModes.MESSAGES],
-                    variant: sortMode === SortModes.MESSAGES ? "primary" : "secondary",
-                    onClick: () => { settings.store.sortMode = SortModes.MESSAGES; }
+                    variant: sortMode ? "primary" : "secondary",
+                    onClick: () => { settings.store.sortMode = true; }
                 },
                 {
                     text: sortDescending ? "↑ Most to least" : "↓ Least to most",
@@ -280,7 +281,7 @@ function LeaderboardModal({ modalProps }: Readonly<{ modalProps: RenderModalProp
             ]}
         >
             <div className={cl("container")}>
-                {sortMode === SortModes.MESSAGES && (
+                {sortMode && (
                     <div className={classes(cl("select-wrapper"), Margins.bottom16)}>
                         <Select
                             options={[
@@ -319,7 +320,7 @@ function LeaderboardModal({ modalProps }: Readonly<{ modalProps: RenderModalProp
                 </div>
 
                 <div className={cl("list")}>
-                    {sortMode === SortModes.MESSAGES && isLoadingMessageCounts && (
+                    {sortMode && isLoadingMessageCounts && (
                         <div className={cl("loading")}>
                             Loading message counts{currentCheckingFriend ? ` for ${currentCheckingFriend}` : ""}... {pendingMessageCounts} left.
                         </div>
