@@ -19,6 +19,7 @@ let updateTimer: NodeJS.Timeout | undefined;
 let abortController: AbortController | undefined;
 let currentTrackId: string | undefined;
 let cachedStartTimestamp: number | undefined;
+let lastMinutesAgo: number | undefined;
 let cachedActivity: Activity | undefined;
 let cachedSettingsJSON: string | undefined;
 const lastFmCache = new Map<string, string | null>();
@@ -138,11 +139,19 @@ async function getActivity(signal?: AbortSignal): Promise<Activity | null> {
 
     const durationMs = (track.duration ?? 0) * 1000;
 
+    const trackMinutesAgo = track.minutesAgo ?? 0;
+
     if (track.id !== currentTrackId || !cachedStartTimestamp) {
         currentTrackId = track.id;
-        const minutesAgo = track.minutesAgo ?? 0;
-        const elapsedMs = minutesAgo * 60 * 1000;
+        const elapsedMs = trackMinutesAgo * 60 * 1000;
         cachedStartTimestamp = Date.now() - elapsedMs;
+        lastMinutesAgo = trackMinutesAgo;
+    } else {
+        if (trackMinutesAgo < (lastMinutesAgo ?? 0) || trackMinutesAgo > (lastMinutesAgo ?? 0) + 1) {
+            const elapsedMs = trackMinutesAgo * 60 * 1000;
+            cachedStartTimestamp = Date.now() - elapsedMs;
+        }
+        lastMinutesAgo = trackMinutesAgo;
     }
 
     const endTimestamp = cachedStartTimestamp + durationMs;
@@ -318,6 +327,7 @@ export function stop() {
     updateTimer = undefined;
     currentTrackId = undefined;
     cachedStartTimestamp = undefined;
+    lastMinutesAgo = undefined;
     cachedActivity = undefined;
     cachedSettingsJSON = undefined;
     setActivity(null);
