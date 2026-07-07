@@ -172,7 +172,6 @@ export function parseMessageContent(message: Message): ContentPayload | null {
     return payload;
 }
 
-
 async function toBase64Image(part: ImagePart): Promise<ImagePart | null> {
     try {
         const req = await fetch(part.image_url.url);
