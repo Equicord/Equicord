@@ -24,8 +24,6 @@ export interface AvatarDecoration {
     skuId: string;
 }
 
-export let NewCustomizationSection;
-
 export default definePlugin({
     name: "Decor",
     description: "Create and use your own custom avatar decorations, or pick your favorite from the presets.",
@@ -125,10 +123,6 @@ export default definePlugin({
             find: '("UserProfileModalV2EditingPanel")',
             replacement: [
                 {
-                    match: /function (\i).{0,50}showNitroIcon:.{0,450}\}\),\i\]\}\)\}/,
-                    replace: "$&$self.setNewCustomizationSection($1);"
-                },
-                {
                     match: /"inline"===.{0,100}#{intl::Zenogr::raw}\)/,
                     replace: "$self.ExperimentDecorSection(),$&"
                 }
@@ -187,7 +181,4 @@ export default definePlugin({
         (props: DecorSectionProps) => <DecorSection {...props} useNewSection />,
         { noop: true }
     ),
-    setNewCustomizationSection(component) {
-        NewCustomizationSection = component;
-    }
 });

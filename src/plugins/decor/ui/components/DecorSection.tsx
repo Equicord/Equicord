@@ -6,13 +6,12 @@
 
 import { Button } from "@components/Button";
 import { Flex } from "@components/Flex";
-import { NewCustomizationSection } from "@plugins/decor";
 import { useAuthorizationStore } from "@plugins/decor/lib/stores/AuthorizationStore";
 import { useCurrentUserDecorationsStore } from "@plugins/decor/lib/stores/CurrentUserDecorationsStore";
 import { cl } from "@plugins/decor/ui";
 import { openChangeDecorationModal } from "@plugins/decor/ui/modals/ChangeDecorationModal";
 import { findComponentByCodeLazy } from "@webpack";
-import { useEffect } from "@webpack/common";
+import { NewCustomizationSection, useEffect } from "@webpack/common";
 
 const CustomizationSection = findComponentByCodeLazy(".DESCRIPTION", "hasBackground:");
 
@@ -35,14 +34,14 @@ export default function DecorSection({ hideTitle = false, hideDivider = false, n
 
     if (useNewSection && !NewSection) return null;
 
-    const Section = useNewSection ? NewSection : CustomizationSection;
+    const Section = (useNewSection ? NewCustomizationSection : CustomizationSection);
     const sectionProps = useNewSection
-        ? { heading: !hideTitle && "Decor" }
+        ? { heading: hideTitle ? undefined : "Decor" }
         : {
-            title: !hideTitle && "Decor",
+            title: hideTitle ? undefined : "Decor",
             hasBackground: true,
             hideDivider,
-            className: noMargin && cl("section-remove-margin")
+            className: noMargin ? cl("section-remove-margin") : undefined
         };
 
     const changeLabel = useNewSection ? "Change" : "Change Decoration";
