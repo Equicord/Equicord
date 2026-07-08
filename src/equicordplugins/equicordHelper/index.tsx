@@ -21,7 +21,6 @@ import { ComponentType } from "react";
 
 import { PluginButtons } from "./pluginButtons";
 import { PluginCards } from "./pluginCards";
-import { ConnectionLink } from "./utils";
 
 migratePluginToSettings(true, "EquicordHelper", "NoBulletPoints", "noBulletPoints");
 migratePluginToSettings(true, "EquicordHelper", "NoModalAnimation", "noModalAnimation");
@@ -141,18 +140,6 @@ const settings = definePluginSettings({
         default: false,
     }
 });
-
-
-const connectionLinks: ConnectionLink[] = [
-    {
-        name: "Xbox",
-        uri: "https://www.xbox.com/play/user/${name}",
-    },
-    {
-        name: "Epic Games",
-        uri: "https://store.epicgames.com/u/${id}",
-    },
-];
 
 export default definePlugin({
     name: "EquicordHelper",
@@ -366,13 +353,12 @@ export default definePlugin({
         // Add opening profile functionality to some connections
         {
             find: "getPlatformUserUrl:",
-            replacement: connectionLinks.map(link => {
-                return {
-                    match: new RegExp(`(?<=${link.name}",.*},.+)(?=},)`),
-                    replace:
-                        `, getPlatformUserUrl:e=>{let {name, id} = e; return \`${link.uri}\`;}`,
-                };
-            }),
+            replacement: [
+                {
+                    match: /name:("(?:Xbox|Epic Games)").{0,180}enabled:!0/g,
+                    replace: "$&,getPlatformUserUrl:e=>$self.getPlatformUrl($1, e)"
+                }
+            ]
         },
     ],
     renderMessageAccessory(props) {
@@ -447,6 +433,16 @@ export default definePlugin({
             voiceState?.channelId === currentUserVoiceState?.channelId ||
             !UserGuildSettingsStore.isChannelMuted(guildId, voiceState?.channelId!)
         );
+    },
+    getPlatformUrl(platform, args) {
+        switch (platform) {
+            case "Xbox":
+                return `https://www.xbox.com/play/user/${encodeURIComponent(args.name)}`;
+            case "Epic Games":
+                return `https://store.epicgames.com/u/${encodeURIComponent(args.id)}`;
+            default:
+                return null;
+        }
     }
 });
 
