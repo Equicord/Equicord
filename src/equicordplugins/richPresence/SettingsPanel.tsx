@@ -201,10 +201,10 @@ function NavidromeSettings() {
             <TextSetting name="Username" description="Navidrome username." settingsKey="nd_username" />
             <TextSetting name="Password" description="Navidrome password." settingsKey="nd_password" />
             <TextSetting name="Client ID" description="Optional Discord Application Client ID." settingsKey="nd_clientId" placeholder="1470554657506984069" />
-            <SelectSetting name="Album Art Mode" description="How to fetch album art." settingsKey="nd_albumArtMode" options={[
+            <SelectSetting name="Album Art Mode" description="How to fetch album art. (NOTE: Instance-based fetching only works if you have a domain.)" settingsKey="nd_albumArtMode" options={[
                 { label: "None", value: "none" },
                 { label: "Navidrome Instance (Exposes Server URL to Discord, No Auth Sent)", value: "instance" },
-                { label: "Last.fm API (Sends Music Metadata to Last.fm)", value: "lastfm" },
+                { label: "Last.fm API (Sends Metadata to last.fm)", value: "lastfm" },
             ]} />
             {nd_albumArtMode === "lastfm" && (
                 <TextSetting name="Last.fm API Key" description="Optional: Provide your own Last.fm API Key (leaves default if empty)." settingsKey="nd_lastfmApiKey" placeholder="feff915bf5987580c9dc354d523dc6b9" />
