@@ -10,7 +10,7 @@ import { Margins } from "@utils/margins";
 import { classes } from "@utils/misc";
 import { Select, Slider, TabBar, TextInput, useState } from "@webpack/common";
 
-import { onServiceChange, settings, SettingsStore } from "./settings";
+import { settings, SettingsStore } from "./settings";
 import { NameFormat, ServiceTab } from "./types";
 
 type SettingsKey = keyof SettingsStore;
