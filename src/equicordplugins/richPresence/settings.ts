@@ -371,13 +371,7 @@ export const settings = definePluginSettings({
         hidden: true,
         onChange: triggerDebouncedServiceChange,
     },
-    nd_publicUrl: {
-        description: "Navidrome Public URL (for Album Art)",
-        type: OptionType.STRING,
-        default: "",
-        hidden: true,
-        onChange: triggerDebouncedServiceChange,
-    },
+
     nd_username: {
         description: "Navidrome Username",
         type: OptionType.STRING,

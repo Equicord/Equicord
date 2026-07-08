@@ -58,7 +58,7 @@ function setActivity(activity: Activity | null) {
 }
 
 async function fetchNowPlaying(signal?: AbortSignal): Promise<NdTrack | null> {
-    const { nd_serverUrl, nd_username, nd_password } = settings.plain;
+    const { nd_serverUrl, nd_username, nd_password } = settings.store;
 
     if (!nd_serverUrl || !nd_username || !nd_password) {
         logger.warn("Navidrome server URL, username, or password is not set.");
@@ -69,6 +69,16 @@ async function fetchNowPlaying(signal?: AbortSignal): Promise<NdTrack | null> {
         const parsedUrl = parseUrl(nd_serverUrl);
         if (!parsedUrl) {
             logger.warn("Navidrome server URL is invalid.");
+            return null;
+        }
+
+        const hostname = parsedUrl.hostname;
+        const isIpV4 = /^(\d{1,3}\.){3}\d{1,3}$/.test(hostname);
+        const isIpV6 = hostname.includes(":");
+        const isLocalHost = hostname === "localhost" || hostname.endsWith(".local") || hostname.endsWith(".lan") || !hostname.includes(".");
+
+        if (isIpV4 || isIpV6 || isLocalHost) {
+            logger.warn("Navidrome server URL must use a public domain. Local IPs and hostnames are not supported.");
             return null;
         }
 
@@ -101,21 +111,20 @@ async function fetchNowPlaying(signal?: AbortSignal): Promise<NdTrack | null> {
 
 function getSettingsJSON() {
     return JSON.stringify({
-        nd_clientId: settings.plain.nd_clientId,
-        nd_publicUrl: settings.plain.nd_publicUrl,
-        nd_showSmallImage: settings.plain.nd_showSmallImage,
-        nd_username: settings.plain.nd_username,
-        nd_password: settings.plain.nd_password,
-        nd_serverUrl: settings.plain.nd_serverUrl,
-        nd_nameString: settings.plain.nd_nameString,
-        nd_detailsString: settings.plain.nd_detailsString,
-        nd_stateString: settings.plain.nd_stateString,
-        nd_largeTextString: settings.plain.nd_largeTextString,
-        nd_activityType: settings.plain.nd_activityType,
-        nd_statusDisplayType: settings.plain.nd_statusDisplayType,
-        nd_albumArtMode: settings.plain.nd_albumArtMode,
-        nd_lastfmApiKey: settings.plain.nd_lastfmApiKey,
-        nd_showAlbum: settings.plain.nd_showAlbum
+        nd_clientId: settings.store.nd_clientId,
+        nd_showSmallImage: settings.store.nd_showSmallImage,
+        nd_username: settings.store.nd_username,
+        nd_password: settings.store.nd_password,
+        nd_serverUrl: settings.store.nd_serverUrl,
+        nd_nameString: settings.store.nd_nameString,
+        nd_detailsString: settings.store.nd_detailsString,
+        nd_stateString: settings.store.nd_stateString,
+        nd_largeTextString: settings.store.nd_largeTextString,
+        nd_activityType: settings.store.nd_activityType,
+        nd_statusDisplayType: settings.store.nd_statusDisplayType,
+        nd_albumArtMode: settings.store.nd_albumArtMode,
+        nd_lastfmApiKey: settings.store.nd_lastfmApiKey,
+        nd_showAlbum: settings.store.nd_showAlbum
     });
 }
 
@@ -133,14 +142,13 @@ async function getActivity(signal?: AbortSignal): Promise<Activity | null> {
         return cachedActivity;
     }
 
-    const { nd_clientId, nd_publicUrl, nd_showSmallImage, nd_username, nd_password, nd_serverUrl, nd_showAlbum, nd_nameString, nd_detailsString, nd_stateString, nd_largeTextString, nd_activityType, nd_statusDisplayType, nd_lastfmApiKey } = settings.plain;
+    const { nd_clientId, nd_showSmallImage, nd_username, nd_password, nd_serverUrl, nd_showAlbum, nd_nameString, nd_detailsString, nd_stateString, nd_largeTextString, nd_activityType, nd_statusDisplayType, nd_lastfmApiKey } = settings.store;
 
     const _clientId = nd_clientId?.trim();
     const appId = _clientId === "" ? "1470554657506984069" : (_clientId ?? "1470554657506984069");
 
-    const _publicUrl = nd_publicUrl?.trim();
     const _serverUrl = nd_serverUrl?.trim();
-    const parsedExternalUrl = parseUrl(_publicUrl ? _publicUrl : (_serverUrl ? _serverUrl : ""));
+    const parsedExternalUrl = parseUrl(_serverUrl ?? "");
     const externalBaseUrl = parsedExternalUrl ? parsedExternalUrl.href.replace(/\/$/, "") : null;
 
     const durationMs = (track.duration ?? 0) * 1000;
@@ -180,7 +188,7 @@ async function getActivity(signal?: AbortSignal): Promise<Activity | null> {
         }
     }
 
-    const albumArtMode = settings.plain.nd_albumArtMode ?? "none";
+    const albumArtMode = settings.store.nd_albumArtMode ?? "none";
     let resolvedCoverArtUrl: string | null = null;
 
     if (albumArtMode === "instance" && track.coverArt && externalBaseUrl) {
@@ -297,7 +305,7 @@ async function updatePresence() {
     }
 
     if (abortController && !abortController.signal.aborted) {
-        const interval = (settings.plain.nd_refreshInterval as number) ?? 10;
+        const interval = (settings.store.nd_refreshInterval as number) ?? 10;
         updateTimer = setTimeout(updatePresence, interval * 1000);
     }
 }

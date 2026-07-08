@@ -15,8 +15,6 @@ import { NameFormat, ServiceTab } from "./types";
 
 type SettingsKey = keyof SettingsStore;
 
-
-
 function SwitchSetting({ name, description, settingsKey }: { name: string; description: string; settingsKey: SettingsKey; }) {
     const [value, setValue] = useState(settings.store[settingsKey] ?? false);
     return (
@@ -196,12 +194,11 @@ function NavidromeSettings() {
     return (
         <>
             <SettingsSection id="navidrome-settings" name="" description="Show what you're currently listening to via Navidrome." />
-            <TextSetting name="Server URL" description="Navidrome Server URL (e.g. http://192.168.1.100:4533)." settingsKey="nd_serverUrl" placeholder="http://192.168.1.100:4533" />
-            <TextSetting name="Public URL" description="Navidrome Public URL (for Album Art)." settingsKey="nd_publicUrl" placeholder="https://navidrome.example.com" />
+            <TextSetting name="Server URL" description="Navidrome Server URL (must be a public domain, e.g. https://navidrome.example.com)." settingsKey="nd_serverUrl" placeholder="https://navidrome.example.com" />
             <TextSetting name="Username" description="Navidrome username." settingsKey="nd_username" />
             <TextSetting name="Password" description="Navidrome password." settingsKey="nd_password" />
             <TextSetting name="Client ID" description="Optional Discord Application Client ID." settingsKey="nd_clientId" placeholder="1470554657506984069" />
-            <SelectSetting name="Album Art Mode" description="How to fetch album art. (NOTE: Instance-based fetching only works if you have a domain.)" settingsKey="nd_albumArtMode" options={[
+            <SelectSetting name="Album Art Mode" description="How to fetch album art." settingsKey="nd_albumArtMode" options={[
                 { label: "None", value: "none" },
                 { label: "Navidrome Instance (Exposes Server URL to Discord, No Auth Sent)", value: "instance" },
                 { label: "Last.fm API (Sends Metadata to last.fm)", value: "lastfm" },

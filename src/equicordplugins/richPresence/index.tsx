@@ -46,11 +46,11 @@ const enableKeys: Record<string, SettingsKey> = {
 const activeServices = new Set<string>();
 
 function syncServices() {
-    const globalEnabled = settings.plain.enabled;
+    const globalEnabled = settings.store.enabled;
 
     for (const [id, service] of Object.entries(services)) {
         const shouldRun =
-            globalEnabled && !!settings.plain[enableKeys[id]];
+            globalEnabled && !!settings.store[enableKeys[id]];
         const isRunning = activeServices.has(id);
 
         if (shouldRun && !isRunning) {
