@@ -272,11 +272,24 @@ async function getActivity(signal?: AbortSignal): Promise<Activity | null> {
 
 async function updatePresence() {
     try {
-        setActivity(await getActivity(abortController?.signal));
+        const activity = await getActivity(abortController?.signal);
+        setActivity(activity);
+        if (!activity) {
+            currentTrackId = undefined;
+            cachedStartTimestamp = undefined;
+            lastMinutesAgo = undefined;
+            cachedActivity = undefined;
+            cachedSettingsJSON = undefined;
+        }
     } catch (e: unknown) {
         if (e instanceof Error && e.name === 'AbortError') return;
         logger.error("Failed to update presence", e);
         setActivity(null);
+        currentTrackId = undefined;
+        cachedStartTimestamp = undefined;
+        lastMinutesAgo = undefined;
+        cachedActivity = undefined;
+        cachedSettingsJSON = undefined;
     }
 
     if (abortController && !abortController.signal.aborted) {
