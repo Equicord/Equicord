@@ -69,5 +69,10 @@ export const settings = definePluginSettings({
         type: OptionType.BOOLEAN,
         description: "Pass images to the AI for context (if any). This is not supported by all models.",
         default: true
+    },
+    sendImagesAsBase64: {
+        type: OptionType.BOOLEAN,
+        description: "Send images to the AI as base64.",
+        default: false
     }
 });
