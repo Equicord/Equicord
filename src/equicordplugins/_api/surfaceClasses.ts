@@ -14,57 +14,54 @@ export default definePlugin({
 
     patches: [
         {
-            find: "CHANNEL_SIDEBAR_RESIZED,{width:",
+            find: "AnnouncementsSpoilerIcon:",
             replacement: [
                 {
-                    match: /(?="data-fullscreen":\i)/,
-                    replace: '...Vencord.Api.SurfaceClasses._useSurfaceProps("base"),'
+                    match: /"data-fullscreen":\i.{0,150},\{isSidebarOpen:/,
+                    replace: '...Vencord.Api.SurfaceClasses._useSurfaceProps("base"),$&'
                 },
                 {
-                    match: /"data-collapsed":\i,/,
-                    replace: '$&...Vencord.Api.SurfaceClasses._useSurfaceProps("sidebar"),'
+                    match: /"data-collapsed":\i,.{0,130}themeOverride/,
+                    replace: '...Vencord.Api.SurfaceClasses._useSurfaceProps("sidebar"),$&'
                 },
                 {
-                    match: /(let \i=\{)(?=className:)/,
-                    replace: '$1...Vencord.Api.SurfaceClasses._useSurfaceProps("channelList"),'
+                    match: /\.CHANNEL_SIDEBAR_RESIZED,\{.{0,100}\i=\{/,
+                    replace: '$&...Vencord.Api.SurfaceClasses._useSurfaceProps("channelList"),'
+                },
+                {
+                    match: /ref:\i.{0,70}#{intl::vTl6Lk::raw}\),/,
+                    replace: "...Vencord.Api.SurfaceClasses._useSurfaceProps('userArea'),$&"
                 }
             ]
         },
         {
-            find: "--custom-app-panels-height",
-            replacement: {
-                match: /(document\.body\.style\.setProperty\("--custom-app-panels-height",.{0,32}\)\},\[\]\);.{0,160}?return\s*(?:\(0,)?\i\.jsx(?:s)?\)?\("section",\{)/,
-                replace: "$1...Vencord.Api.SurfaceClasses._useSurfaceProps('userArea'),"
-            }
-        },
-        {
             find: "#{intl::GUILDS_BAR_A11Y_LABEL}",
-            replacement: {
-                match: /(?="aria-label":\i\.intl\.string\(\i\.t#{intl::GUILDS_BAR_A11Y_LABEL}\))/,
-                replace: '...Vencord.Api.SurfaceClasses._useSurfaceProps("guildBar"),'
-            }
+            replacement: [
+                {
+                    match: /"aria-label":.{0,50}#{intl::GUILDS_BAR_A11Y_LABEL}\),children:/,
+                    replace: '...Vencord.Api.SurfaceClasses._useSurfaceProps("guildBar"),$&'
+                },
+            ]
         },
         {
             find: "#{intl::MEMBERS_LIST_LANDMARK_LABEL}",
             replacement: {
-                match: /(?="aria-labelledby":)/,
-                replace: '...(Vencord.Api.SurfaceClasses._trackSurfaceInstance("membersList",this),Vencord.Api.SurfaceClasses._getSurfaceProps("membersList")),'
+                match: /"aria-labelledby":.{0,130}#{intl::MEMBERS_LIST_LANDMARK_LABEL}/,
+                replace: '...(Vencord.Api.SurfaceClasses._trackSurfaceInstance("membersList",this),Vencord.Api.SurfaceClasses._getSurfaceProps("membersList")),$&'
             }
         },
         {
-            find: '"data-window-chrome":"true"',
+            find: '?"refresh-title-bar-small":',
             replacement: {
-                match: /(?="data-window-chrome":"true")/,
-                replace: '...Vencord.Api.SurfaceClasses._useSurfaceProps("headerBar"),'
+                match: /"data-window-chrome":"true"/,
+                replace: '...Vencord.Api.SurfaceClasses._useSurfaceProps("headerBar"),$&'
             }
         },
         {
-            // Cant find a better one for channel title toolbar button.
-            // matches against one module.
-            find: /badgePosition:\i="bottom",color:\i,foreground:\i,background:\i,icon:\i,iconSize:\i=24/,
+            find: ".Masks.HEADER_BAR_BADGE_TOP:",
             replacement: {
-                match: /return\(0,(\i)\.jsx\)\("section",\{/,
-                replace: 'return(0,$1.jsx)("section",{...Vencord.Api.SurfaceClasses._useSurfaceProps("titleBar"),'
+                match: /"aria-label":\i.{0,25}role:\i,ref:\i/,
+                replace: '...Vencord.Api.SurfaceClasses._useSurfaceProps("titleBar"),$&'
             }
         }
     ]
