@@ -4,69 +4,41 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { definePluginSettings } from "@api/Settings";
+import "./style.css";
+
 import { EquicordDevs } from "@utils/constants";
-import definePlugin, { OptionType } from "@utils/types";
-import { lodash, MediaEngineStore, Menu, useEffect, useMemo, useState } from "@webpack/common";
+import { classNameFactory } from "@utils/css";
+import definePlugin from "@utils/types";
+import { MediaEngineStore, Menu } from "@webpack/common";
 
-import { denormalize, normalize } from "./utils";
+import { CustomRange } from "./CustomRange";
+import { MIN_FPS, MIN_RESOLUTION, settings } from "./settings";
 
-// 0 FPS freezes (obviously) and anything less than 22p doesn't work
-const COOLDOWN_MS = 1000;
-const MIN_FPS = 1;
-const MIN_RESOLUTION = 22;
+export const cl = classNameFactory("vc-limitlessScreenshare-");
 
-type CustomRangeProps = {
+type CustomPresetListProps = {
     onChange: (value: number) => void,
     initialValue: number,
-    minMax: [number, number],
     group: string,
     id: string,
-    suffix: string;
+    list: {
+        label: string;
+        value: number;
+    }[];
 };
 
-const CustomRange = ({ onChange, initialValue, minMax, group, id, suffix }: CustomRangeProps) => {
-    const [value, setValue] = useState(initialValue);
-    const [minValue, maxValue] = minMax;
-
-    const changeStreamSettings = useMemo(() => lodash.throttle((value: number) => onChange(value), COOLDOWN_MS), []);
-    useEffect(() => () => changeStreamSettings.cancel(), [changeStreamSettings]);
-
-    const onChangeHandler = (newValue: number) => {
-        const roundedValue = Math.round(denormalize(newValue, minValue, maxValue));
-        setValue(roundedValue);
-        changeStreamSettings(roundedValue);
-    };
-    return (
-        <Menu.MenuControlItem group={`${group}`} id={`${id}`} label={value + suffix} control={
-            (props, ref) =>
-                <Menu.MenuSliderControl
-                    {...props}
-                    ref={ref}
-                    onChange={onChangeHandler}
-                    renderValue={() => value + suffix}
-                    value={normalize(value, minValue, maxValue) || 0}
-                    minValue={0}
-                    maxValue={100}>
-                </Menu.MenuSliderControl>}
-        />
+const CustomPresetList = ({ onChange, initialValue, group, id, list }: CustomPresetListProps) => {
+    return list.map(({ label, value }, index) =>
+        <Menu.MenuRadioItem
+            key={index}
+            group={`${group}`}
+            id={`${id}-${value}`}
+            action={() => onChange(value)}
+            checked={initialValue === value}
+            label={label}>
+        </Menu.MenuRadioItem>
     );
 };
-
-const settings = definePluginSettings({
-    maxFPS: {
-        description: "Max FPS for the range slider",
-        default: 120,
-        type: OptionType.NUMBER,
-        isValid: (value: number) => value >= MIN_FPS
-    },
-    maxResolution: {
-        description: "Max Resolution for the range slider",
-        default: 1080,
-        type: OptionType.NUMBER,
-        isValid: (value: number) => value >= MIN_RESOLUTION
-    }
-});
 
 export default definePlugin({
     name: "LimitlessScreenshare",
@@ -87,11 +59,11 @@ export default definePlugin({
             replacement: [
                 {
                     match: /(?<=#{intl::IG5n0X::raw}\),children:).{0,150}checked:(\i)===.{0,80}action:\(\)=>(\(function.{0,150}resolution:\i\}\)\}\)).{0,5}\i\)\}\)/,
-                    replace: "[$self.OptionsRange($2,$1,true),...$&]"
+                    replace: "[...$self.OptionsRange($2,$1,true)]"
                 },
                 {
                     match: /(?<=#{intl::SkkeIt::raw}\),children:).{0,90}checked:(\i)===.{0,200}action:\(\)=>(\(function.{0,500}fps:\i\}\)\}\)).{0,5}\i\)\)/,
-                    replace: "[$self.OptionsRange($2,$1,false),...$&]"
+                    replace: "[...$self.OptionsRange($2,$1,false)]"
                 },
             ]
         },
@@ -100,50 +72,80 @@ export default definePlugin({
             replacement: [
                 {
                     match: /(?<=action:\(\)=>(\i)\((\i),\i,\i,(\i\.\i\.RESOLUTION)\)\},.{0,200}#{intl::SCREENSHARE_FRAME_RATE}\),children:)(\i)/,
-                    replace: "[$self.SettingsRange($1,[$2,$3],false),...$4]"
+                    replace: "[...$self.SettingsRange($1,[$2,$3],false)]"
                 },
                 {
                     match: /(?<=action:\(\)=>(\i)\((\i),\i,\i,(\i\.\i\.RESOLUTION)\)\},.{0,300}#{intl::STREAM_RESOLUTION}\),children:)(\i)/,
-                    replace: "[$self.SettingsRange($1,[$2,$3],true),...$4]"
+                    replace: "[...$self.SettingsRange($1,[$2,$3],true)]"
                 },
             ]
         }
     ],
-    OptionsRange(changeStream: (value: number) => void, initialValue, isResolution: boolean) {
-        const { maxFPS, maxResolution } = settings.store;
-        const minValue = isResolution ? MIN_RESOLUTION : MIN_FPS,
-            maxValue = isResolution ? maxResolution : maxFPS;
+    OptionsRange(changeStream: (value: number) => void, initialValue: number, isResolution: boolean) {
+        const { maxFPS, maxResolution, roundResolution, resolutions, fpss } = settings.store;
+        const rounder = roundResolution ? 10 : 1;
 
-        return CustomRange({
-            onChange: (value: number) => changeStream(value),
-            initialValue,
-            minMax: [minValue, maxValue],
-            group: isResolution ? "resolution" : "frame-rate",
-            id: isResolution ? "stream-option-resolution-custom" : "stream-option-frame-rate-custom",
-            suffix: (isResolution ? "p" : " FPS")
-        });
+        return [
+            CustomRange(isResolution ? {
+                onChange: (value: number) => changeStream(value * rounder),
+                initialValue: initialValue / rounder,
+                minMax: [MIN_RESOLUTION / rounder, maxResolution / rounder],
+                group: "resolution",
+                id: "stream-option-resolution",
+                suffix: roundResolution ? "0p" : "p"
+            } : {
+                onChange: (value: number) => changeStream(value),
+                initialValue,
+                minMax: [MIN_FPS, maxFPS],
+                group: "frame-rate",
+                id: "stream-option-frame-rate",
+                suffix: "fps"
+            }),
+            ...CustomPresetList({
+                onChange: (value: number) => changeStream(value),
+                initialValue,
+                group: isResolution ? "resolution" : "frame-rate",
+                id: isResolution ? "stream-option-resolution" : "stream-option-frame-rate",
+                list: isResolution ? resolutions : fpss
+            })
+        ];
     },
     SettingsRange(changeStream: (boolean: boolean, resolution: number, fps: number, analyticsType: string) => void, params: [boolean, string], isResolution: boolean) {
-        const { maxFPS, maxResolution } = settings.store;
+        const { maxFPS, maxResolution, roundResolution, resolutions, fpss } = settings.store;
+        const rounder = roundResolution ? 10 : 1;
         const [p1, p2] = params;
-        const minValue = isResolution ? MIN_RESOLUTION : MIN_FPS,
-            maxValue = isResolution ? maxResolution : maxFPS;
-        const initialValue = isResolution ? MediaEngineStore.getState().goLiveSource?.quality.resolution || 720 : MediaEngineStore.getState().goLiveSource?.quality.frameRate || 30;
+        const getResolution = () => MediaEngineStore.getState().goLiveSource?.quality.resolution || 720;
+        const getFPS = () => MediaEngineStore.getState().goLiveSource?.quality.frameRate || 30;
 
-        const onChange = (value: number) => {
-            const otherValue = !isResolution
-                ? MediaEngineStore.getState().goLiveSource?.quality.resolution || 720
-                : MediaEngineStore.getState().goLiveSource?.quality.frameRate || 30;
-            return changeStream(p1, isResolution ? value : otherValue, !isResolution ? value : otherValue, p2);
-        };
-
-        return CustomRange({
-            onChange,
-            initialValue,
-            minMax: [minValue, maxValue],
-            group: isResolution ? "stream-settings-resolution" : "stream-settings-fps",
-            id: isResolution ? "stream-settings-resolution-custom" : "stream-settings-fps-custom",
-            suffix: (isResolution ? "p" : " FPS")
-        });
+        return [
+            CustomRange(isResolution ? {
+                onChange: (value: number) => changeStream(p1, value * rounder, getFPS(), p2),
+                initialValue: getResolution() / rounder,
+                minMax: [MIN_RESOLUTION / rounder, maxResolution / rounder],
+                group: "stream-settings-resolution",
+                id: "stream-settings-resolution",
+                suffix: roundResolution ? "0p" : "p"
+            } : {
+                onChange: (value: number) => changeStream(p1, getResolution(), value, p2),
+                initialValue: getFPS(),
+                minMax: [MIN_FPS, maxFPS],
+                group: "stream-settings-fps",
+                id: "stream-settings-fps",
+                suffix: " FPS"
+            }),
+            ...CustomPresetList(isResolution ? {
+                onChange: (value: number) => changeStream(p1, value, getFPS(), p2),
+                initialValue: getResolution(),
+                group: "stream-settings-resolution",
+                id: "stream-settings-resolution",
+                list: resolutions
+            } : {
+                onChange: (value: number) => changeStream(p1, getResolution(), value, p2),
+                initialValue: getFPS(),
+                group: "stream-settings-fps",
+                id: "stream-settings-fps",
+                list: fpss
+            })
+        ];
     },
 });
