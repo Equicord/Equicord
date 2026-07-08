@@ -260,7 +260,7 @@ async function getActivity(signal?: AbortSignal): Promise<Activity | null> {
         flags: ActivityFlags.INSTANCE,
         timestamps: {
             start: cachedStartTimestamp,
-            end: endTimestamp,
+            end: durationMs > 0 ? endTimestamp : undefined,
         },
         assets,
     };
