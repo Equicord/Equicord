@@ -129,18 +129,3 @@ export function platformName() {
     if (DiscordNative.process.platform === "linux") return `${navigator.platform} (${DiscordNative.os.release})`;
     return DiscordNative.process.platform;
 }
-
-export interface ConnectionLink {
-    /**
-     * The name of the connection (as in Discord)
-     */
-    name: string;
-    /**
-     * The uri to use.
-     * There are also two variables that you can use, name and id.
-     * The "name" is the name of the account connected (what is shown visually in Discord).
-     * The "id" is the identifier of the account connected, the id could be unrelated to the actual account depending on the service connected.
-     * Make sure to use "" and not `` so the ${} doesnt escape for an actual variable
-     */
-    uri: string;
-}
