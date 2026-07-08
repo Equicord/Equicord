@@ -99,16 +99,8 @@ async function fetchNowPlaying(signal?: AbortSignal): Promise<NdTrack | null> {
     }
 }
 
-async function getActivity(signal?: AbortSignal): Promise<Activity | null> {
-    const track = await fetchNowPlaying(signal);
-    if (signal?.aborted) {
-        const e = new Error("Aborted");
-        e.name = "AbortError";
-        throw e;
-    }
-    if (!track) return null;
-
-    const currentSettingsJSON = JSON.stringify({
+function getSettingsJSON() {
+    return JSON.stringify({
         nd_clientId: settings.plain.nd_clientId,
         nd_publicUrl: settings.plain.nd_publicUrl,
         nd_showSmallImage: settings.plain.nd_showSmallImage,
@@ -125,6 +117,18 @@ async function getActivity(signal?: AbortSignal): Promise<Activity | null> {
         nd_lastfmApiKey: settings.plain.nd_lastfmApiKey,
         nd_showAlbum: settings.plain.nd_showAlbum
     });
+}
+
+async function getActivity(signal?: AbortSignal): Promise<Activity | null> {
+    const track = await fetchNowPlaying(signal);
+    if (signal?.aborted) {
+        const e = new Error("Aborted");
+        e.name = "AbortError";
+        throw e;
+    }
+    if (!track) return null;
+
+    const currentSettingsJSON = getSettingsJSON();
     if (track.id === currentTrackId && cachedActivity && cachedSettingsJSON === currentSettingsJSON) {
         return cachedActivity;
     }
@@ -304,23 +308,7 @@ export function start() {
 }
 
 export function forceUpdate() {
-    const currentSettingsJSON = JSON.stringify({
-        nd_clientId: settings.plain.nd_clientId,
-        nd_publicUrl: settings.plain.nd_publicUrl,
-        nd_showSmallImage: settings.plain.nd_showSmallImage,
-        nd_username: settings.plain.nd_username,
-        nd_password: settings.plain.nd_password,
-        nd_serverUrl: settings.plain.nd_serverUrl,
-        nd_nameString: settings.plain.nd_nameString,
-        nd_detailsString: settings.plain.nd_detailsString,
-        nd_stateString: settings.plain.nd_stateString,
-        nd_largeTextString: settings.plain.nd_largeTextString,
-        nd_activityType: settings.plain.nd_activityType,
-        nd_statusDisplayType: settings.plain.nd_statusDisplayType,
-        nd_albumArtMode: settings.plain.nd_albumArtMode,
-        nd_lastfmApiKey: settings.plain.nd_lastfmApiKey,
-        nd_showAlbum: settings.plain.nd_showAlbum
-    });
+    const currentSettingsJSON = getSettingsJSON();
 
     if (cachedSettingsJSON === currentSettingsJSON) {
         return;
