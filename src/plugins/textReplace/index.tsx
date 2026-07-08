@@ -180,6 +180,7 @@ function normalizeRule(rule: Rule) {
 
 function TextReplace({ title, description, rulesArray, isRegex = false }: TextReplaceProps) {
     const [searchQuery, setSearchQuery] = useState("");
+    const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
 
     function onClickRemove(index: number) {
         rulesArray.splice(index, 1);
@@ -208,6 +209,14 @@ function TextReplace({ title, description, rulesArray, isRegex = false }: TextRe
         return acc;
     }, []);
 
+    const handleDrop = (index: number) => (e: React.DragEvent) => {
+        e.preventDefault();
+        if (draggedIndex === null || draggedIndex === index || searchQuery) return;
+        const draggedRule = rulesArray.splice(draggedIndex, 1)[0];
+        rulesArray.splice(index, 0, draggedRule);
+        setDraggedIndex(null);
+    };
+
     return (
         <>
             <div>
@@ -224,64 +233,80 @@ function TextReplace({ title, description, rulesArray, isRegex = false }: TextRe
                     <Paragraph>No rules match your search criteria.</Paragraph>
                 )}
                 {filteredRules.map(({ rule, index }) =>
-                    <ExpandableSection
+                    <div
                         key={rule.id}
-                        renderContent={() => (
-                            <>
-                                <div className={cl("input-grid")}>
-                                    <TextRow
-                                        label="Name"
-                                        description="An optional name to help you identify this rule."
-                                        value={rule.name ?? ""}
-                                        onChange={e => onChange(e, index, "name")}
-                                    />
-                                    <TextRow
-                                        label="Find"
-                                        description={isRegex ? "The regex pattern" : "The text to replace"}
-                                        value={rule.find}
-                                        onChange={e => onChange(e, index, "find")}
-                                    />
-                                    <TextRow
-                                        label="Replace"
-                                        description="The text to replace the found text with"
-                                        value={rule.replace}
-                                        onChange={e => onChange(e, index, "replace")}
-                                    />
-                                    <TextRow
-                                        label="Only if includes"
-                                        description="Optionally, only apply this rule if the message includes this text."
-                                        value={rule.onlyIfIncludes}
-                                        onChange={e => onChange(e, index, "onlyIfIncludes")}
-                                    />
-                                </div>
-                                <div style={{ marginTop: "0.25em" }}>
-                                    <Select
-                                        options={scopeOptions}
-                                        isSelected={e => e === rule.scope}
-                                        select={e => onChange(e, index, "scope")}
-                                        serialize={e => e}
-                                    />
-                                </div>
-                                {isRegex && renderFindError(rule.find)}
-                                <Button
-                                    className={cl("delete-button")}
-                                    variant="dangerPrimary"
-                                    onClick={() => onClickRemove(index)}
-                                >
-                                    Delete Rule
-                                </Button>
-                            </>
-                        )}
+                        onDragOver={e => e.preventDefault()}
+                        onDrop={handleDrop(index)}
+                        style={{ opacity: draggedIndex === index ? 0.5 : 1 }}
                     >
-                        <Paragraph weight="medium" size="md">
-                            {rule.name
-                                ? rule.name
-                                : isEmptyRule(rule)
-                                    ? `Empty Rule ${index + 1}`
-                                    : `Rule ${index + 1} - ${rule.find}`
-                            }
-                        </Paragraph>
-                    </ExpandableSection>
+                        <ExpandableSection
+                            renderContent={() => (
+                                <>
+                                    <div className={cl("input-grid")}>
+                                        <TextRow
+                                            label="Name"
+                                            description="An optional name to help you identify this rule."
+                                            value={rule.name ?? ""}
+                                            onChange={e => onChange(e, index, "name")}
+                                        />
+                                        <TextRow
+                                            label="Find"
+                                            description={isRegex ? "The regex pattern" : "The text to replace"}
+                                            value={rule.find}
+                                            onChange={e => onChange(e, index, "find")}
+                                        />
+                                        <TextRow
+                                            label="Replace"
+                                            description="The text to replace the found text with"
+                                            value={rule.replace}
+                                            onChange={e => onChange(e, index, "replace")}
+                                        />
+                                        <TextRow
+                                            label="Only if includes"
+                                            description="Optionally, only apply this rule if the message includes this text."
+                                            value={rule.onlyIfIncludes}
+                                            onChange={e => onChange(e, index, "onlyIfIncludes")}
+                                        />
+                                    </div>
+                                    <div style={{ marginTop: "0.25em" }}>
+                                        <Select
+                                            options={scopeOptions}
+                                            isSelected={e => e === rule.scope}
+                                            select={e => onChange(e, index, "scope")}
+                                            serialize={e => e}
+                                        />
+                                    </div>
+                                    {isRegex && renderFindError(rule.find)}
+                                    <Button
+                                        className={cl("delete-button")}
+                                        variant="dangerPrimary"
+                                        onClick={() => onClickRemove(index)}
+                                    >
+                                        Delete Rule
+                                    </Button>
+                                </>
+                            )}
+                        >
+                            <div
+                                draggable={!searchQuery}
+                                onDragStart={e => {
+                                    setDraggedIndex(index);
+                                    e.dataTransfer.setData("text/plain", index.toString());
+                                }}
+                                onDragEnd={() => setDraggedIndex(null)}
+                                style={{ cursor: searchQuery ? "default" : "grab", flex: 1 }}
+                            >
+                                <Paragraph weight="medium" size="md">
+                                    {rule.name
+                                        ? rule.name
+                                        : isEmptyRule(rule)
+                                            ? `Empty Rule ${index + 1}`
+                                            : `Rule ${index + 1} - ${rule.find}`
+                                    }
+                                </Paragraph>
+                            </div>
+                        </ExpandableSection>
+                    </div>
                 )}
                 <Button
                     onClick={() => {
