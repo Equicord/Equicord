@@ -21,6 +21,7 @@ import { ComponentType } from "react";
 
 import { PluginButtons } from "./pluginButtons";
 import { PluginCards } from "./pluginCards";
+import { ConnectionLink } from "./utils";
 
 migratePluginToSettings(true, "EquicordHelper", "NoBulletPoints", "noBulletPoints");
 migratePluginToSettings(true, "EquicordHelper", "NoModalAnimation", "noModalAnimation");
@@ -141,6 +142,18 @@ const settings = definePluginSettings({
     }
 });
 
+
+const connectionLinks: ConnectionLink[] = [
+    {
+        name: "Xbox",
+        uri: "https://www.xbox.com/play/user/${name}",
+    },
+    {
+        name: "Epic Games",
+        uri: "https://store.epicgames.com/u/${id}",
+    },
+];
+
 export default definePlugin({
     name: "EquicordHelper",
     description: "Used to provide support, fix discord caused crashes, and other misc features.",
@@ -155,7 +168,8 @@ export default definePlugin({
         EquicordDevs.mart,
         EquicordDevs.omaw,
         Devs.Samwich,
-        Devs.AutumnVN
+        Devs.AutumnVN,
+        EquicordDevs.auggeeo
     ],
     required: true,
     settings,
@@ -348,6 +362,17 @@ export default definePlugin({
                 }
             ],
             predicate: () => settings.store.hideVoiceIndicatorForMutedChannels,
+        },
+        // Add opening profile functionality to some connections
+        {
+            find: "getPlatformUserUrl:",
+            replacement: connectionLinks.map(link => {
+                return {
+                    match: new RegExp(`(?<=${link.name}",.*},.+)(?=},)`),
+                    replace:
+                        `, getPlatformUserUrl:e=>{let {name, id} = e; return \`${link.uri}\`;}`,
+                };
+            }),
         },
     ],
     renderMessageAccessory(props) {
