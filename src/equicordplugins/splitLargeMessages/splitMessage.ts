@@ -21,7 +21,6 @@ function findSplitIndex(content: string, limit: number, mode: SplitMode): number
     return limit;
 }
 
-
  // each returned chunk is at most `limit` UTF-16 code units, matching discord's limit.
 export function splitMessage(content: string, limit: number, mode: SplitMode): string[] {
     if (limit < 1) return [];
