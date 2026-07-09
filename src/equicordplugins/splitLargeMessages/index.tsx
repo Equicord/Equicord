@@ -13,7 +13,7 @@ import ErrorBoundary from "@components/ErrorBoundary";
 import characterCounter from "@plugins/characterCounter";
 import { EquicordDevs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
-import { getCurrentChannel, insertTextIntoChatInputBox, sendMessage } from "@utils/discord";
+import { copyWithToast, getCurrentChannel, insertTextIntoChatInputBox, sendMessage } from "@utils/discord";
 import { classes, sleep } from "@utils/misc";
 import definePlugin, { OptionType } from "@utils/types";
 import { Channel } from "@vencord/discord-types";
@@ -135,12 +135,7 @@ const splitAndSend = async (channelId: string, chunks: string[], delayInMs: numb
             if (getCurrentChannel()?.id === channelId) {
                 insertTextIntoChatInputBox(unsentText);
             } else {
-                DiscordNative.clipboard.copy(unsentText);
-                Toasts.show({
-                    message: "Unsent text copied to clipboard.",
-                    id: "vc-splitLargeMessages-clipboard",
-                    type: Toasts.Type.SUCCESS
-                });
+                copyWithToast(unsentText, "Unsent message parts copied to clipboard.");
             }
         }
     }
