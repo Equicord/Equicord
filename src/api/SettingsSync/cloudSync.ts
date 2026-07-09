@@ -136,14 +136,20 @@ function handleAuthFailure() {
 }
 
 async function doSyncV2(uploads: SyncRequest["uploads"], clientManifest: ManifestEntry[]): Promise<SyncResponse | null> {
-    const res = await fetch(new URL("/v2/sync", getCloudUrl()), {
-        method: "POST",
-        headers: {
-            Authorization: await getCloudAuth(),
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ client_manifest: clientManifest, uploads } satisfies SyncRequest),
-    });
+    let res: Response;
+    try {
+        res = await fetch(new URL("/v2/sync", getCloudUrl()), {
+            method: "POST",
+            headers: {
+                Authorization: await getCloudAuth(),
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ client_manifest: clientManifest, uploads } satisfies SyncRequest),
+        });
+    } catch (e) {
+        logger.error("v2 sync network error, will retry next sync", e);
+        return null;
+    }
 
     if (res.status === 404) {
         logger.info("Server does not support v2, falling back to v1");
@@ -268,12 +274,6 @@ async function deleteV2() {
     const manifestRes = await fetch(new URL("/v2/manifest", getCloudUrl()), {
         headers: { Authorization: auth },
     });
-
-    if (manifestRes.status === 404) {
-        logger.info("Server does not support v2, falling back to v1");
-        await setApiVersion("v1");
-        return;
-    }
 
     if (!manifestRes.ok) {
         showNotification({
@@ -461,15 +461,9 @@ export async function putCloudSettings(manual?: boolean) {
     try {
         const version = await getApiVersion();
         if (version === "v2") {
-            try {
-                await putV2(manual);
-                if (await getApiVersion() === "v1")
-                    await putV1(manual);
-            } catch (e) {
-                logger.info("v2 sync failed with network error, trying v1...");
+            await putV2(manual);
+            if (await getApiVersion() === "v1")
                 await putV1(manual);
-                await setApiVersion("v1");
-            }
         } else {
             await putV1(manual);
         }
@@ -487,17 +481,10 @@ export async function getCloudSettings(shouldNotify = true, force = false) {
     try {
         const version = await getApiVersion();
         if (version === "v2") {
-            try {
-                const result = await getV2(shouldNotify, force);
-                if (await getApiVersion() === "v1")
-                    return await getV1(shouldNotify, force);
-                return result;
-            } catch (e) {
-                logger.info("v2 sync failed with network error, trying v1...");
-                const result = await getV1(shouldNotify, force);
-                await setApiVersion("v1");
-                return result;
-            }
+            const result = await getV2(shouldNotify, force);
+            if (await getApiVersion() === "v1")
+                return await getV1(shouldNotify, force);
+            return result;
         }
         return await getV1(shouldNotify, force);
     } catch (e: any) {
@@ -514,20 +501,10 @@ export async function getCloudSettings(shouldNotify = true, force = false) {
 export async function deleteCloudSettings() {
     try {
         const version = await getApiVersion();
-        if (version === "v2") {
-            try {
-                await deleteV2();
-                if (await getApiVersion() === "v1") {
-                    await deleteV1();
-                }
-            } catch (e) {
-                logger.info("v2 sync failed with network error, trying v1...");
-                await deleteV1();
-                await setApiVersion("v1");
-            }
-        } else {
+        if (version === "v2")
+            await deleteV2();
+        else
             await deleteV1();
-        }
     } catch (e: any) {
         logger.error("Failed to delete", e);
         showNotification({
