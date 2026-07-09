@@ -13,21 +13,15 @@ import ErrorBoundary from "@components/ErrorBoundary";
 import characterCounter from "@plugins/characterCounter";
 import { EquicordDevs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
-import { getCurrentChannel, sendMessage } from "@utils/discord";
+import { getCurrentChannel, insertTextIntoChatInputBox, sendMessage } from "@utils/discord";
 import { classes, sleep } from "@utils/misc";
 import definePlugin, { OptionType } from "@utils/types";
-import { Channel, User } from "@vencord/discord-types";
-import { findByPropsLazy } from "@webpack";
+import { Channel } from "@vencord/discord-types";
 import { ChannelStore, ComponentDispatch, PermissionsBits, PermissionStore, Toasts, UserStore } from "@webpack/common";
 
 const cl = classNameFactory("vc-splitLargeMessages-");
 
 const settings = definePluginSettings({
-    maxLength: {
-        type: OptionType.NUMBER,
-        description: "Maximum length of a message before it is split. Set to 0 to automatically detect.",
-        default: 0,
-    },
     sendDelay: {
         type: OptionType.SLIDER,
         description: "Delay between each chunk in seconds.",
@@ -37,11 +31,10 @@ const settings = definePluginSettings({
     splitMode: {
         type: OptionType.SELECT,
         description: "How the message should be split",
-        default: "spaces",
         options: [
             { value: "hard", label: "Strict Character Limit" },
             { value: "spaces", label: "Spaces" },
-            { value: "newlines", label: "Newlines" }
+            { value: "newlines", label: "Newlines", default: true }
         ]
     },
     leaveGaps: {
@@ -57,9 +50,8 @@ const settings = definePluginSettings({
     slowmodeMax: {
         type: OptionType.SELECT,
         description: "Maximum slowmode time if splitting in slowmode.",
-        default: 5,
         options: [
-            { label: "5 seconds", value: 5 },
+            { label: "5 seconds", value: 5, default: true },
             { label: "10 seconds", value: 10 },
             { label: "15 seconds", value: 15 },
             { label: "30 seconds", value: 30 }
@@ -73,21 +65,10 @@ const SPLIT_LIMIT_FRACTION = 0.975;
 const CODE_BLOCK_REGEX = /`{3,}\S*\n|`{3,}/g;
 const CODE_LINE_REGEX = /[^`]?`{1,2}[^`]|[^`]`{1,2}[^`]?/g;
 
-const NitroUtils = findByPropsLazy("canUseIncreasedMessageLength") as {
-    canUseIncreasedMessageLength?: (user: User) => boolean;
-};
-
-function getMaxAllowedLimit() {
-    const user = UserStore.getCurrentUser();
-    const canUseIncreased = NitroUtils?.canUseIncreasedMessageLength?.(user) ?? false;
-    return canUseIncreased ? DEFAULT_LIMITS.premium : DEFAULT_LIMITS.standard;
-}
-
 function getActiveLimit() {
-    const maxAllowed = getMaxAllowedLimit();
-    return settings.store.maxLength > 0
-        ? Math.min(settings.store.maxLength, maxAllowed)
-        : maxAllowed;
+    const user = UserStore.getCurrentUser();
+    const canUseIncreased = user?.premiumType === 2;
+    return canUseIncreased ? DEFAULT_LIMITS.premium : DEFAULT_LIMITS.standard;
 }
 
 function getSplitLimit() {
@@ -125,18 +106,44 @@ function getEffectiveSendDelay(channel?: Channel | null) {
 
 const splitAndSend = async (channelId: string, chunks: string[], delayInMs: number) => {
     const total = chunks.length;
-    for (let i = 0; i < total; i++) {
-        await sendMessage(channelId, { content: chunks[i] }, true);
+    let sentCount = 0;
+    try {
+        for (let i = 0; i < total; i++) {
+            await sendMessage(channelId, { content: chunks[i] }, true);
+            sentCount++;
 
-        if (i < total - 1 && delayInMs > 0) {
-            await sleep(delayInMs);
+            if (i < total - 1 && delayInMs > 0) {
+                await sleep(delayInMs);
+            }
+        }
+        console.log(`[SplitLargeMessages] Successfully sent ${sentCount}/${total} message parts.`);
+        Toasts.show({
+            message: `${sentCount}/${total} message parts sent.`,
+            id: "vc-splitLargeMessages-success",
+            type: Toasts.Type.SUCCESS
+        });
+    } catch (error) {
+        console.error(`[SplitLargeMessages] Failed to send message parts. Sent ${sentCount}/${total}:`, error);
+        Toasts.show({
+            message: `Failed to send message parts. Sent ${sentCount}/${total}.`,
+            id: "vc-splitLargeMessages-failure",
+            type: Toasts.Type.FAILURE
+        });
+        const unsentChunks = chunks.slice(sentCount);
+        if (unsentChunks.length > 0) {
+            const unsentText = unsentChunks.join("");
+            if (getCurrentChannel()?.id === channelId) {
+                insertTextIntoChatInputBox(unsentText);
+            } else {
+                DiscordNative.clipboard.copy(unsentText);
+                Toasts.show({
+                    message: "Unsent text copied to clipboard.",
+                    id: "vc-splitLargeMessages-clipboard",
+                    type: Toasts.Type.SUCCESS
+                });
+            }
         }
     }
-    Toasts.show({
-        message: `${total}/${total} message parts sent.`,
-        id: "vc-splitLargeMessages-success",
-        type: Toasts.Type.SUCCESS
-    });
 };
 
 const listener: MessageSendListener = (channelId, msg) => {
@@ -161,7 +168,7 @@ const listener: MessageSendListener = (channelId, msg) => {
 
     const chunks = splitMessageSafe(msg.content, limit);
 
-    void splitAndSend(channelId, chunks, delay);
+    splitAndSend(channelId, chunks, delay);
 
     return { cancel: true };
 };
