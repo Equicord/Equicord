@@ -136,8 +136,7 @@ function handleAuthFailure() {
 }
 
 async function doSyncV2(uploads: SyncRequest["uploads"], clientManifest: ManifestEntry[]): Promise<SyncResponse | null> {
-    let res: Response;
-    res = await fetch(new URL("/v2/sync", getCloudUrl()), {
+    const res = await fetch(new URL("/v2/sync", getCloudUrl()), {
         method: "POST",
         headers: {
             Authorization: await getCloudAuth(),
