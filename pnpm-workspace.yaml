@@ -17,3 +17,5 @@ allowBuilds:
     esbuild: true
 pmOnFail: warn
 verifyDepsBeforeRun: prompt
+minimumReleaseAgeExclude:
+  - '@song-spotlight/api@2.2.0'

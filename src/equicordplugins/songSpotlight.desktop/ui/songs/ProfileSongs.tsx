@@ -39,7 +39,7 @@ import {
 import Song from ".";
 import CollapsedProfileSongs from "./CollapsedProfileSongs";
 
-export interface ProfileSongsProps {
+interface ProfileSongsProps {
     user: User;
     isSideBar: boolean;
 }
@@ -49,7 +49,7 @@ export default function ProfileSongs({ user, isSideBar }: ProfileSongsProps) {
     const { isAuthorized } = useAuthorizationStore();
     const { users } = useSongStore();
     const { profileSongsLimit, collapseSongList } = settings.use();
-    const userId = user?.id;
+    const userId = user.id;
     const data = users[userId]?.data;
     useEffect(() => {
         if (isAuthorized() && !data) listData(userId).catch(() => setFailed(true));
