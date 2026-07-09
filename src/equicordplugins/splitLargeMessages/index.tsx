@@ -7,29 +7,27 @@
 import "./styles.css";
 
 import { MessageSendListener } from "@api/MessageEvents";
-import { isPluginEnabled } from "@api/PluginManager";
 import { definePluginSettings } from "@api/Settings";
-import ErrorBoundary from "@components/ErrorBoundary";
-import characterCounter from "@plugins/characterCounter";
 import { EquicordDevs } from "@utils/constants";
-import { classNameFactory } from "@utils/css";
 import { copyWithToast, getCurrentChannel, insertTextIntoChatInputBox, sendMessage } from "@utils/discord";
 import { Logger } from "@utils/Logger";
-import { classes, sleep } from "@utils/misc";
-import definePlugin, { OptionType } from "@utils/types";
+import { sleep } from "@utils/misc";
+import definePlugin, { makeRange, OptionType } from "@utils/types";
 import { Channel } from "@vencord/discord-types";
 import { ChannelStore, ComponentDispatch, PermissionsBits, PermissionStore, Toasts, UserStore } from "@webpack/common";
 
+const SAFE_MARGIN = 10;
+const SPLIT_LIMIT_FRACTION = 0.975;
+const CODE_BLOCK_REGEX = /`{3,}\S*\n|`{3,}/g;
+const CODE_LINE_REGEX = /[^`]?`{1,2}[^`]|[^`]`{1,2}[^`]?/g;
 const logger = new Logger("SplitLargeMessages");
-
-const cl = classNameFactory("vc-splitLargeMessages-");
-
 const settings = definePluginSettings({
     sendDelay: {
         type: OptionType.SLIDER,
         description: "Delay between each chunk in seconds.",
+        markers: makeRange(0.5, 10, 0.5),
         default: 1,
-        markers: [0.5, 1, 2, 3, 4, 5],
+        stickToMarkers: true,
     },
     splitMode: {
         type: OptionType.SELECT,
@@ -51,75 +49,25 @@ const settings = definePluginSettings({
         default: false,
     },
     slowmodeMax: {
-        type: OptionType.SELECT,
+        type: OptionType.SLIDER,
         description: "Maximum slowmode time if splitting in slowmode.",
-        options: [
-            { label: "5 seconds", value: 5, default: true },
-            { label: "10 seconds", value: 10 },
-            { label: "15 seconds", value: 15 },
-            { label: "30 seconds", value: 30 }
-        ]
+        markers: makeRange(1, 30, 1),
+        default: 5,
+        stickToMarkers: true,
     }
 });
 
-function migrateSettings() {
-    const store = settings.store as Record<string, any>;
-
-    if (store.hardSplit === true) {
-        store.splitMode = "hard";
-    }
-
-    if (typeof store.sendDelay >= "number" && store.sendDelay > 5) {
-        store.sendDelay = 5;
-    }
-
-    if (typeof store.slowmodeMax === "number") {
-        const val = store.slowmodeMax;
-        if (val !== 5 && val !== 10 && val !== 15 && val !== 30) {
-            if (val <= 7) store.slowmodeMax = 5;
-            else if (val <= 12) store.slowmodeMax = 10;
-            else if (val <= 22) store.slowmodeMax = 15;
-            else store.slowmodeMax = 30;
-        }
-    }
-
-    const keysToRemove = ["maxLength", "disableFileConversion", "hardSplit"];
-    for (const key of keysToRemove) {
-        if (key in store) {
-            delete store[key];
-        }
-    }
-}
-
-const DEFAULT_LIMITS = { standard: 2000, premium: 4000 };
-const SAFE_MARGIN = 10;
-const SPLIT_LIMIT_FRACTION = 0.975;
-const CODE_BLOCK_REGEX = /`{3,}\S*\n|`{3,}/g;
-const CODE_LINE_REGEX = /[^`]?`{1,2}[^`]|[^`]`{1,2}[^`]?/g;
-
-function getActiveLimit() {
-    const user = UserStore.getCurrentUser();
-    const canUseIncreased = user?.premiumType === 2;
-    return canUseIncreased ? DEFAULT_LIMITS.premium : DEFAULT_LIMITS.standard;
-}
-
 function getSplitLimit() {
-    return Math.max(1, getActiveLimit() - SAFE_MARGIN);
+    const premiumType = UserStore.getCurrentUser().premiumType ?? 0;
+    const charMax = premiumType === 2 ? 4000 : 2000;
+    return Math.max(1, charMax - SAFE_MARGIN);
 }
 
 function canSplitInChannel(channel?: Channel | null) {
     if (!channel) return false;
-
     const slowmode = channel.rateLimitPerUser ?? 0;
     if (slowmode <= 0) return true;
-
-    if (
-        PermissionStore.can(PermissionsBits.MANAGE_MESSAGES, channel) ||
-        PermissionStore.can(PermissionsBits.MANAGE_CHANNELS, channel)
-    ) {
-        return true;
-    }
-
+    if (PermissionStore.can(PermissionsBits.MANAGE_MESSAGES, channel) || PermissionStore.can(PermissionsBits.MANAGE_CHANNELS, channel)) return true;
     return settings.store.splitInSlowmode && slowmode <= (settings.store.slowmodeMax ?? 5);
 }
 
@@ -128,9 +76,7 @@ function getEffectiveSendDelay(channel?: Channel | null) {
     if (!channel) return baseDelay;
 
     const slowmode = (channel.rateLimitPerUser ?? 0) * 1000;
-    const bypassSlowmode =
-        PermissionStore.can(PermissionsBits.MANAGE_MESSAGES, channel) ||
-        PermissionStore.can(PermissionsBits.MANAGE_CHANNELS, channel);
+    const bypassSlowmode = PermissionStore.can(PermissionsBits.MANAGE_MESSAGES, channel) || PermissionStore.can(PermissionsBits.MANAGE_CHANNELS, channel);
 
     if (bypassSlowmode) return baseDelay;
     return Math.max(baseDelay, slowmode + 250);
@@ -181,7 +127,6 @@ const listener: MessageSendListener = (channelId, msg) => {
     const delay = getEffectiveSendDelay(channel);
 
     if (!tooLong) return;
-
     if (!canSplit) {
         Toasts.show({
             message: "Can't split message in this channel (slowmode).",
@@ -192,11 +137,8 @@ const listener: MessageSendListener = (channelId, msg) => {
     }
 
     ComponentDispatch.dispatchToLastSubscribed("CLEAR_TEXT");
-
     const chunks = splitMessageSafe(msg.content, limit);
-
     splitAndSend(channelId, chunks, delay);
-
     return { cancel: true };
 };
 
@@ -215,13 +157,7 @@ export default definePlugin({
     dependencies: ["MessageEventsAPI"],
     tags: ["Chat", "Utility"],
     authors: [EquicordDevs.Reycko, EquicordDevs.lucabeyer],
-
     settings,
-
-    start() {
-        migrateSettings();
-    },
-
     onBeforeMessageSend: listener,
 
     patches: [
@@ -238,34 +174,8 @@ export default definePlugin({
                 match: /(?<=getData\(\i\.type\);)if\(\i.length>\i\)/,
                 replace: "if(false)",
             },
-        },
-        {
-            find: ".CREATE_FORUM_POST||",
-            replacement: {
-                match: /(?<=textValue:(\i),editorHeight:\i,channelId:\i\.id\}\)),/,
-                replace: ",$self.renderSplitCounter({ text: $1 }),"
-            }
         }
     ],
-
-    renderSplitCounter: ErrorBoundary.wrap(({ text }: { text: string; }) => {
-        const limit = getSplitLimit();
-        const channel = getCurrentChannel();
-
-        if (!text?.length || text.length <= limit || !canSplitInChannel(channel)) return null;
-
-        const count = splitMessageSafe(text, limit).length;
-        if (count <= 1) return null;
-
-        const isCharCounterActive = isPluginEnabled(characterCounter.name);
-
-        return (
-            <div className={classes(cl("counter"), isCharCounterActive && cl("shifted"))}>
-                <span>{count}</span>
-                <span> messages</span>
-            </div>
-        );
-    }, { noop: true }),
 });
 
 function splitMessageSafe(text: string, limit: number): string[] {
