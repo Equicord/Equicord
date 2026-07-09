@@ -1,20 +1,20 @@
 packages:
-    - packages/*
+  - packages/*
 patchedDependencies:
-    "@types/less@3.0.8": patches/@types__less@3.0.8.patch
+  "@types/less@3.0.8": patches/@types__less@3.0.8.patch
 peerDependencyRules:
-    ignoreMissing:
-        - eslint-plugin-import
-        - eslint
+  ignoreMissing:
+    - eslint-plugin-import
+    - eslint
 allowedDeprecatedVersions:
-    source-map-resolve: "*"
-    resolve-url: "*"
-    source-map-url: "*"
-    urix: "*"
-    q: "*"
+  source-map-resolve: "*"
+  resolve-url: "*"
+  source-map-url: "*"
+  urix: "*"
+  q: "*"
 strictPeerDependencies: false
 allowBuilds:
-    esbuild: true
+  esbuild: true
 pmOnFail: warn
 verifyDepsBeforeRun: prompt
 minimumReleaseAgeExclude:
