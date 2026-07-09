@@ -70,6 +70,13 @@ export const settings = definePluginSettings({
         hidden: true,
         onChange: () => onServiceChange?.(),
     },
+    nd_enabled: {
+        description: "Enable Navidrome presence.",
+        type: OptionType.BOOLEAN,
+        default: false,
+        hidden: true,
+        onChange: () => onServiceChange?.(),
+    },
 
     // AudioBookShelf
     abs_serverUrl: {
@@ -344,6 +351,122 @@ export const settings = definePluginSettings({
         type: OptionType.SLIDER,
         markers: [1, 2, 2.5, 3, 5, 10, 15],
         default: 15,
+        hidden: true,
+    },
+
+    // Navidrome
+    nd_serverUrl: {
+        description: "Navidrome Server URL (e.g. https://navidrome.example.com)",
+        type: OptionType.STRING,
+        default: "",
+        hidden: true,
+    },
+
+    nd_username: {
+        description: "Navidrome Username",
+        type: OptionType.STRING,
+        default: "",
+        hidden: true,
+    },
+    nd_password: {
+        description: "Navidrome Password",
+        type: OptionType.STRING,
+        default: "",
+        hidden: true,
+    },
+    nd_clientId: {
+        description: "Optional Discord Application Client ID",
+        type: OptionType.STRING,
+        default: "",
+        hidden: true,
+    },
+    nd_showSmallImage: {
+        description: "Show Navidrome logo in bottom right of album art.",
+        type: OptionType.BOOLEAN,
+        default: false,
+        hidden: true,
+    },
+    nd_showAlbum: {
+        description: "Show album name in presence.",
+        type: OptionType.BOOLEAN,
+        default: true,
+        hidden: true,
+    },
+    nd_albumArtMode: {
+        description: "How to fetch album art.",
+        type: OptionType.SELECT,
+        options: [
+            { label: "None", value: "none", default: true },
+            { label: "Navidrome Instance (Exposes Server URL to Discord, no auth sent)", value: "instance" },
+            { label: "Last.fm API (Sends track metadata to Last.fm)", value: "lastfm" },
+        ],
+        hidden: true,
+    },
+    nd_lastfmApiKey: {
+        description: "Optional Last.fm API Key",
+        type: OptionType.STRING,
+        default: "",
+        hidden: true,
+    },
+    nd_refreshInterval: {
+        description: "Refresh interval in seconds.",
+        type: OptionType.SLIDER,
+        markers: [1, 2, 5, 10, 15],
+        default: 10,
+        hidden: true,
+    },
+    nd_activityType: {
+        type: OptionType.SELECT,
+        description: "Which type of activity",
+        options: [
+            { label: "Listening", value: 2, default: true },
+            { label: "Playing (Fixes hidden lines)", value: 0 },
+            { label: "Watching", value: 3 }
+        ],
+        hidden: true,
+    },
+    nd_nameString: {
+        type: OptionType.STRING,
+        description: "Activity name format string",
+        default: "Navidrome",
+        hidden: true,
+    },
+    nd_detailsString: {
+        type: OptionType.STRING,
+        description: "Activity details format string",
+        default: "{song}",
+        hidden: true,
+    },
+    nd_stateString: {
+        type: OptionType.STRING,
+        description: "Activity state format string",
+        default: "{artist}",
+        hidden: true,
+    },
+    nd_largeTextString: {
+        type: OptionType.STRING,
+        description: "Activity large text format string",
+        default: "{album}",
+        hidden: true,
+    },
+    nd_statusDisplayType: {
+        description: "Show the track / artist name in the member list",
+        type: OptionType.SELECT,
+        options: [
+            {
+                label: "Don't show (shows generic listening message)",
+                value: "off"
+            },
+            {
+                label: "Show artist name",
+                value: "artist",
+                default: true
+            },
+            {
+                label: "Show track name",
+                value: "track"
+            }
+        ],
         hidden: true,
     },
 });

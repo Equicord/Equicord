@@ -10,7 +10,7 @@ import { Margins } from "@utils/margins";
 import { classes } from "@utils/misc";
 import { Select, Slider, TabBar, TextInput, useState } from "@webpack/common";
 
-import { onServiceChange, settings, SettingsStore } from "./settings";
+import { settings, SettingsStore } from "./settings";
 import { NameFormat, ServiceTab } from "./types";
 
 type SettingsKey = keyof SettingsStore;
@@ -18,8 +18,11 @@ type SettingsKey = keyof SettingsStore;
 function SwitchSetting({ name, description, settingsKey }: { name: string; description: string; settingsKey: SettingsKey; }) {
     const [value, setValue] = useState(settings.store[settingsKey] ?? false);
     return (
-        <SettingsSection id={name} tag="label" name={name} description={description} inlineSetting>
-            <Switch checked={!!value} onChange={v => { setValue(v); (settings.store[settingsKey] as boolean) = v; onServiceChange?.(); }} />
+        <SettingsSection tag="label" inlineSetting id={name} name={name} description={description}>
+            <Switch
+                checked={Boolean(value)}
+                onChange={v => { setValue(v); (settings.store[settingsKey] as boolean) = v; }}
+            />
         </SettingsSection>
     );
 }
@@ -38,7 +41,7 @@ function TextSetting({ name, description, settingsKey, placeholder }: { name: st
     );
 }
 
-function SelectSetting({ name, description, settingsKey, options }: { name: string; description: string; settingsKey: SettingsKey; options: { label: string; value: string; }[]; }) {
+function SelectSetting({ name, description, settingsKey, options }: { name: string; description: string; settingsKey: SettingsKey; options: { label: string; value: string | number; }[]; }) {
     const [value, setValue] = useState(settings.store[settingsKey] ?? options[0]?.value);
     return (
         <SettingsSection id={name} name={name} description={description}>
@@ -179,6 +182,57 @@ function GensokyoRadioSettings() {
     );
 }
 
+const ND_DYNAMIC_KEYS: SettingsKey[] = ["nd_activityType", "nd_albumArtMode"];
+
+function NavidromeSettings() {
+    const [refreshInterval, setRefreshInterval] = useState(settings.store.nd_refreshInterval ?? 10);
+    const { nd_activityType, nd_albumArtMode } = settings.use(ND_DYNAMIC_KEYS);
+    return (
+        <>
+            <SettingsSection id="navidrome-settings" name="" description="Show what you're currently listening to via Navidrome." />
+            <TextSetting name="Server URL" description="Navidrome Server URL (must be a public domain, e.g. https://navidrome.example.com)." settingsKey="nd_serverUrl" placeholder="https://navidrome.example.com" />
+            <TextSetting name="Username" description="Navidrome username." settingsKey="nd_username" />
+            <TextSetting name="Password" description="Navidrome password." settingsKey="nd_password" />
+            <TextSetting name="Client ID" description="Optional Discord Application Client ID." settingsKey="nd_clientId" placeholder="1470554657506984069" />
+            <SelectSetting name="Album Art Mode" description="How to fetch album art." settingsKey="nd_albumArtMode" options={[
+                { label: "None", value: "none" },
+                { label: "Navidrome Instance (Exposes Server URL. One-time auth sent.)", value: "instance" },
+                { label: "Last.fm API (Sends Metadata to last.fm)", value: "lastfm" },
+            ]} />
+            {nd_albumArtMode === "lastfm" && (
+                <TextSetting name="Last.fm API Key" description="Optional: Provide your own Last.fm API Key (leaves default if empty)." settingsKey="nd_lastfmApiKey" placeholder="feff915bf5987580c9dc354d523dc6b9" />
+            )}
+            <SwitchSetting name="Show Small Image" description="Show Navidrome logo in bottom right of album art." settingsKey="nd_showSmallImage" />
+            <SwitchSetting name="Show Album" description="Show album name in presence." settingsKey="nd_showAlbum" />
+            <SelectSetting name="Activity Type" description="Which type of activity to display." settingsKey="nd_activityType" options={[
+                { label: "Listening", value: 2 },
+                { label: "Playing", value: 0 },
+                { label: "Watching", value: 3 }
+            ]} />
+            <SelectSetting name="Status Display Type" description="Show the state / details line contents in the member list" settingsKey="nd_statusDisplayType" options={[
+                { label: "Don't show (shows generic listening message)", value: "off" },
+                { label: "Show state line content", value: "artist" },
+                { label: "Show details line content", value: "track" }
+            ]} />
+            {Number(nd_activityType ?? 2) !== 0 && (
+                <TextSetting name="Activity Name Format" description="The 'Listening to' text (e.g. {artist})" settingsKey="nd_nameString" placeholder="Navidrome" />
+            )}
+            <TextSetting name="Details Format" description="The main line showing what song is playing (e.g. {song})" settingsKey="nd_detailsString" placeholder="{song}" />
+            <TextSetting name="State Format" description="The line below the song name (e.g. {artist})" settingsKey="nd_stateString" placeholder="{artist}" />
+            <TextSetting name="Large Text Format" description="The album line (e.g. {album})" settingsKey="nd_largeTextString" placeholder="{album}" />
+            <SettingsSection id="nd-refresh-interval" name="Refresh Interval" description="Refresh interval in seconds.">
+                <Slider
+                    markers={[1, 2, 5, 10, 15]}
+                    initialValue={refreshInterval}
+                    onValueChange={v => { setRefreshInterval(v); settings.store.nd_refreshInterval = v; }}
+                    onValueRender={v => `${v}s`}
+                    stickToMarkers
+                />
+            </SettingsSection>
+        </>
+    );
+}
+
 const TAB_COMPONENTS: Record<ServiceTab, React.ComponentType> = {
     [ServiceTab.AudioBookShelf]: AudioBookShelfSettings,
     [ServiceTab.Tosu]: TosuSettings,
@@ -186,6 +240,7 @@ const TAB_COMPONENTS: Record<ServiceTab, React.ComponentType> = {
     [ServiceTab.Jellyfin]: JellyfinSettings,
     [ServiceTab.ListenBrainz]: ListenBrainzSettings,
     [ServiceTab.GensokyoRadio]: GensokyoRadioSettings,
+    [ServiceTab.Navidrome]: NavidromeSettings,
 };
 
 const TAB_LABELS: Record<ServiceTab, string> = {
@@ -195,6 +250,7 @@ const TAB_LABELS: Record<ServiceTab, string> = {
     [ServiceTab.Jellyfin]: "Jellyfin",
     [ServiceTab.ListenBrainz]: "ListenBrainz",
     [ServiceTab.GensokyoRadio]: "Gensokyo Radio",
+    [ServiceTab.Navidrome]: "Navidrome",
 };
 
 const ENABLE_KEYS: Record<ServiceTab, SettingsKey> = {
@@ -204,6 +260,7 @@ const ENABLE_KEYS: Record<ServiceTab, SettingsKey> = {
     [ServiceTab.Jellyfin]: "jf_enabled",
     [ServiceTab.ListenBrainz]: "lb_enabled",
     [ServiceTab.GensokyoRadio]: "gr_enabled",
+    [ServiceTab.Navidrome]: "nd_enabled",
 };
 
 const TABS = Object.values(ServiceTab);
