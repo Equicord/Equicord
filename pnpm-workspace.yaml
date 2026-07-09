@@ -18,4 +18,4 @@ allowBuilds:
 pmOnFail: warn
 verifyDepsBeforeRun: prompt
 minimumReleaseAgeExclude:
-    - '@song-spotlight/api@2.1.4'
+  - '@song-spotlight/api@2.2.0'

@@ -39,7 +39,7 @@ import {
 import Song from ".";
 import CollapsedProfileSongs from "./CollapsedProfileSongs";
 
-export interface ProfileSongsProps {
+interface ProfileSongsProps {
     user: User;
     isSideBar: boolean;
 }

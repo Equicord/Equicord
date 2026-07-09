@@ -21,8 +21,8 @@ importers:
         specifier: ^0.1.2
         version: 0.1.2
       '@song-spotlight/api':
-        specifier: ^2.1.4
-        version: 2.1.4(typescript@6.0.3)
+        specifier: ^2.2.0
+        version: 2.2.0(typescript@6.0.3)
       '@streamparser/json':
         specifier: ^0.0.22
         version: 0.0.22
@@ -575,8 +575,8 @@ packages:
     resolution: {integrity: sha512-tlqY9xq5ukxTUZBmoOp+m61cqwQD5pHJtFY3Mn8CA8ps6yghLH/Hw8UPdqg4OLmFW3IFlcXnQNmo/dh8HzXYIQ==}
     engines: {node: '>=18'}
 
-  '@song-spotlight/api@2.1.4':
-    resolution: {integrity: sha512-+jeJBu39f3OYE3RBrrnBdUdXm7qhD8aH2rhXJl+snxnQBcNF0+ylUmJd718Wrei6aw6bfQMB7NLC+jqBQYsePA==}
+  '@song-spotlight/api@2.2.0':
+    resolution: {integrity: sha512-zKH9X+G1uRYmEHFgluExPEFJWtA87PG8C39Xng0XG7Oh42ycOHjZtqtyEbfGM+hs+QEVos4wOoySeBAggnK7Iw==}
     peerDependencies:
       typescript: ^5
 
@@ -2698,7 +2698,7 @@ snapshots:
 
   '@sindresorhus/merge-streams@4.0.0': {}
 
-  '@song-spotlight/api@2.1.4(typescript@6.0.3)':
+  '@song-spotlight/api@2.2.0(typescript@6.0.3)':
     dependencies:
       typescript: 6.0.3
     optionalDependencies:
