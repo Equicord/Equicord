@@ -356,7 +356,7 @@ export const settings = definePluginSettings({
 
     // Navidrome
     nd_serverUrl: {
-        description: "Navidrome Server URL (e.g. http://192.168.1.100:4533)",
+        description: "Navidrome Server URL (e.g. https://navidrome.example.com)",
         type: OptionType.STRING,
         default: "",
         hidden: true,

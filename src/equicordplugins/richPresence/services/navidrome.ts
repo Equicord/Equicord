@@ -9,12 +9,12 @@ import { parseUrl } from "@utils/misc";
 import { Activity } from "@vencord/discord-types";
 import { ActivityFlags, ActivityStatusDisplayType } from "@vencord/discord-types/enums";
 import { ApplicationAssetUtils, FluxDispatcher } from "@webpack/common";
-import { createHash } from "md5";
+import md5 from "md5";
 
 import { settings } from "../settings";
 
 function md5Hex(str: string): string {
-    return createHash("md5").update(str).digest("hex");
+    return md5(str);
 }
 
 const SOCKET_ID = "RichPresence_Navidrome";
@@ -109,47 +109,7 @@ async function fetchNowPlaying(signal?: AbortSignal): Promise<NdTrack | null> {
     }
 }
 
-const albumInfoCache = new Map<string, string | null>();
 
-async function fetchAlbumInfo2(albumId: string, signal?: AbortSignal): Promise<string | null> {
-    const { nd_serverUrl, nd_username, nd_password } = settings.store;
-    if (!nd_serverUrl || !nd_username || !nd_password) return null;
-
-    if (albumInfoCache.has(albumId)) {
-        return albumInfoCache.get(albumId) ?? null;
-    }
-
-    try {
-        const parsedUrl = parseUrl(nd_serverUrl);
-        if (!parsedUrl || parsedUrl.protocol !== "https:") return null;
-
-        const salt = Math.random().toString(36).substring(2, 8);
-        const token = md5Hex((nd_password ?? "") + salt);
-
-        const baseUrl = parsedUrl.href.replace(/\/$/, "");
-        const queryParams = `id=${encodeURIComponent(albumId)}&u=${encodeURIComponent(nd_username)}&t=${token}&s=${salt}&v=1.12.0&c=equicord-rpc&f=json`;
-
-        const res = await fetch(`${baseUrl}/rest/getAlbumInfo2?${queryParams}`, { signal });
-        if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
-
-        const data = await res.json();
-        if (data["subsonic-response"]?.status === "failed") {
-            albumInfoCache.set(albumId, null);
-            return null;
-        }
-
-        const info = data["subsonic-response"]?.albumInfo;
-        const imageUrl: string | null = info?.largeImageUrl || info?.mediumImageUrl || info?.smallImageUrl || null;
-
-        albumInfoCache.set(albumId, imageUrl);
-        return imageUrl;
-    } catch (e: unknown) {
-        if (e instanceof Error && e.name === "AbortError") throw e;
-        logger.error("Failed to fetch album info from Navidrome API", e);
-        albumInfoCache.set(albumId, null);
-        return null;
-    }
-}
 
 function getSettingsJSON() {
     return JSON.stringify({
@@ -234,11 +194,10 @@ async function getActivity(signal?: AbortSignal): Promise<Activity | null> {
     let resolvedCoverArtUrl: string | null = null;
 
     if (albumArtMode === "instance" && track.coverArt && externalBaseUrl) {
-        // Subsonic's getAlbumInfo2 expects an album id. Navidrome (and most
-        // Subsonic servers) alias a track's coverArt id to its album id
-        // (both are "al-<uuid>"), so we reuse it here rather than fetching
-        // the album id separately.
-        resolvedCoverArtUrl = await fetchAlbumInfo2(track.coverArt, signal);
+        const { nd_username, nd_password } = settings.store;
+        const salt = Math.random().toString(36).substring(2, 8);
+        const token = md5Hex((nd_password ?? "") + salt);
+        resolvedCoverArtUrl = `${externalBaseUrl}/rest/getCoverArt?id=${encodeURIComponent(track.coverArt)}&u=${encodeURIComponent(nd_username ?? "")}&t=${token}&s=${salt}&v=1.12.0&c=equicord-rpc`;
     } else if (albumArtMode === "lastfm" && track.artist) {
         const trimmedKey = nd_lastfmApiKey?.trim();
         const apiKey = trimmedKey || "feff915bf5987580c9dc354d523dc6b9";
@@ -381,7 +340,6 @@ export function stop() {
     abortController = undefined;
     clearTimeout(updateTimer);
     lastFmCache.clear();
-    albumInfoCache.clear();
     updateTimer = undefined;
     currentTrackId = undefined;
     cachedStartTimestamp = undefined;
