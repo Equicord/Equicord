@@ -6,7 +6,7 @@
 
 import { Devs } from "@utils/constants";
 import definePlugin from "@utils/types";
-import { setColorPicker, setCreateScroller } from "@webpack/common";
+import { setColorPicker, setCreateScroller, setNewCustomizationSection } from "@webpack/common";
 
 export default definePlugin({
     name: "ConcatenatedComponentExtractor",
@@ -29,9 +29,19 @@ export default definePlugin({
                 match: /(?=function (\i)\(\i,\i,\i\)\{.{0,20}?return \i\.forwardRef\(function\(\i,\i\)\{let\{[^}]+?="ltr",orientation:)/,
                 replace: "$self.setCreateScroller($1);"
             }
+        },
+        {
+            find: '("UserProfileModalV2EditingPanel")',
+            replacement: [
+                {
+                    match: /function (\i).{0,50}showNitroIcon:.{0,500}\}\),\i\]\}\)\}/,
+                    replace: "$&$self.setNewCustomizationSection($1);"
+                }
+            ]
         }
     ],
 
     setCreateScroller,
     setColorPicker,
+    setNewCustomizationSection
 });

@@ -19,16 +19,15 @@
 import "./style.css";
 
 import { definePluginSettings } from "@api/Settings";
-import { Devs, EquicordDevs } from "@utils/constants";
+import { Devs } from "@utils/constants";
 import { getIntlMessage } from "@utils/discord";
+import { Logger } from "@utils/Logger";
 import definePlugin, { OptionType } from "@utils/types";
-import type { GuildFolder } from "@vencord/discord-types";
-import { findByPropsLazy, findComponentByCodeLazy, findStoreLazy } from "@webpack";
-import { ChannelStore, FluxDispatcher, ReadStateStore } from "@webpack/common";
+import { findByPropsLazy, findStoreLazy } from "@webpack";
+import { FluxDispatcher } from "@webpack/common";
 import { ReactNode } from "react";
 
 import FolderSideBar from "./FolderSideBar";
-import { areNestedRelated as areNestedRelatedInMap, getChildFolderIds as getChildFolderIdsFromMap, getDescendantFolderIds as getDescendantFolderIdsFromMap, getGuildNavigationExpandTargets, hasParentInChain as hasParentInChainInMap, sanitizeNestedFolderMap } from "./nestedFolders";
 
 enum FolderIconDisplay {
     Never,
@@ -36,130 +35,26 @@ enum FolderIconDisplay {
     MoreThanOneFolderExpanded
 }
 
-type GuildTreeNode = {
-    id: string | number;
-    type?: string;
-    parentId?: string | number | null;
-    name?: string;
-    children?: GuildTreeNode[];
-    isBetterFoldersNested?: boolean;
-    [key: string]: unknown;
-};
-
-type FolderRenderProps = {
-    isBetterFolders?: boolean;
-    folderNode?: GuildTreeNode;
-};
-
-type FolderDragItem = {
-    type?: string;
-    nodeId: string | number;
-};
-
-type FolderMentionProps = {
-    mentionCount?: number;
-    folderNode?: GuildTreeNode;
-};
-
 export const ExpandedGuildFolderStore = findStoreLazy("ExpandedGuildFolderStore");
 export const SortedGuildStore = findStoreLazy("SortedGuildStore");
 const FolderUtils = findByPropsLazy("move", "toggleGuildFolderExpand");
-const FolderItem = findComponentByCodeLazy("FolderItem", "onExpandCollapse", "folderButtonSize");
 
-const MAX_TREE_FILTER_DEPTH = 1000;
+let lastGuildId = null as string | null;
 let dispatchingFoldersClose = false;
-let pendingNavigationGuildId: string | null | undefined;
-let pendingNavigationCloseServerFolder = false;
-let navigationExpandTimeout: ReturnType<typeof setTimeout> | undefined;
 
 function getGuildFolder(id: string) {
-    return SortedGuildStore.getGuildFolders().find((folder: GuildFolder) => folder.guildIds.includes(id));
-}
-
-function getGuildNavigationPathTargets(guildId: string | null | undefined): string[] {
-    if (!guildId || guildId === "@me") return [];
-
-    return getGuildNavigationExpandTargets(
-        getNestedFolderMap(),
-        SortedGuildStore.getGuildFolders(),
-        guildId,
-        ExpandedGuildFolderStore.getExpandedFolders()
-    );
-}
-
-export function getExpandedFolderIdSet() {
-    return new Set(Array.from(ExpandedGuildFolderStore.getExpandedFolders(), id => Number(id)));
-}
-
-function isFolderExpanded(folderId: string | number) {
-    return getExpandedFolderIdSet().has(Number(folderId));
-}
-
-function expandGuildNavigationPathNow(guildId: string | null | undefined) {
-    for (const folderId of getGuildNavigationPathTargets(guildId)) {
-        const numericFolderId = Number(folderId);
-        if (!isFolderExpanded(numericFolderId)) {
-            FolderUtils.toggleGuildFolderExpand(numericFolderId);
-        }
-    }
-}
-
-function flushGuildNavigationPath() {
-    navigationExpandTimeout = undefined;
-
-    const guildId = pendingNavigationGuildId;
-    const shouldCloseServerFolder = pendingNavigationCloseServerFolder;
-    pendingNavigationGuildId = undefined;
-    pendingNavigationCloseServerFolder = false;
-
-    if (!guildId || guildId === "@me") return;
-
-    const folderIds = getGuildNavigationPathTargets(guildId);
-    const guildFolder = getGuildFolder(guildId);
-    const folderId = guildFolder?.folderId;
-    const shouldCloseTargetFolder = shouldCloseServerFolder
-        && folderId != null
-        && folderIds.length === 0
-        && isFolderExpanded(folderId);
-
-    expandGuildNavigationPathNow(guildId);
-
-    if (shouldCloseTargetFolder) {
-        FolderUtils.toggleGuildFolderExpand(folderId);
-    }
-}
-
-function scheduleGuildNavigationPath(guildId: string | null | undefined, closeServerFolder = false) {
-    const isSamePendingGuild = pendingNavigationGuildId === guildId;
-
-    pendingNavigationGuildId = guildId;
-    pendingNavigationCloseServerFolder = isSamePendingGuild
-        ? pendingNavigationCloseServerFolder || closeServerFolder
-        : closeServerFolder;
-
-    if (navigationExpandTimeout != null) return;
-
-    navigationExpandTimeout = setTimeout(flushGuildNavigationPath, 0);
+    return SortedGuildStore.getGuildFolders().find(folder => folder.guildIds.includes(id));
 }
 
 function closeFolders() {
-    for (const id of getExpandedFolderIdSet())
+    for (const id of ExpandedGuildFolderStore.getExpandedFolders())
         FolderUtils.toggleGuildFolderExpand(id);
 }
 
 // Nuckyz: Unsure if this should be a general utility or not
-function filterTreeWithTargetNode(children: any, predicate: (node: any) => boolean, visited = new WeakSet<object>(), depth = 0) {
+function filterTreeWithTargetNode(children: any, predicate: (node: any) => boolean) {
     if (children == null) {
         return false;
-    }
-
-    if (depth > MAX_TREE_FILTER_DEPTH) {
-        return false;
-    }
-
-    if (typeof children === "object") {
-        if (visited.has(children)) return false;
-        visited.add(children);
     }
 
     if (!Array.isArray(children)) {
@@ -167,12 +62,12 @@ function filterTreeWithTargetNode(children: any, predicate: (node: any) => boole
             return true;
         }
 
-        return filterTreeWithTargetNode(children.props?.children, predicate, visited, depth + 1);
+        return filterTreeWithTargetNode(children.props?.children, predicate);
     }
 
     let childIsTargetChild = false;
     for (let i = 0; i < children.length; i++) {
-        const shouldKeep = filterTreeWithTargetNode(children[i], predicate, visited, depth + 1);
+        const shouldKeep = filterTreeWithTargetNode(children[i], predicate);
         if (shouldKeep) {
             childIsTargetChild = true;
             continue;
@@ -182,67 +77,6 @@ function filterTreeWithTargetNode(children: any, predicate: (node: any) => boole
     }
 
     return childIsTargetChild;
-}
-
-function getNestedFolderMap(): Record<string, string> {
-    if (!settings.store.enableNestedFolders) return {};
-
-    const nestedFolders = settings.store.nestedFolders ?? {};
-    const validFolderIds = new Set<string>(
-        SortedGuildStore.getGuildFolders()
-            .map((folder: GuildFolder) => folder.folderId?.toString())
-            .filter((folderId): folderId is string => folderId != null)
-    );
-    const sanitizedFolders = sanitizeNestedFolderMap(nestedFolders, validFolderIds);
-
-    if (JSON.stringify(sanitizedFolders) !== JSON.stringify(nestedFolders)) {
-        settings.store.nestedFolders = sanitizedFolders;
-    }
-
-    return sanitizedFolders;
-}
-
-function saveNestedFolderMap(map: Record<string, string>) {
-    settings.store.nestedFolders = map;
-}
-
-export function getParentFolderId(childId: string | number): string | undefined {
-    return getNestedFolderMap()[childId.toString()];
-}
-
-export function getChildFolderIds(parentId: string | number): string[] {
-    return getChildFolderIdsFromMap(getNestedFolderMap(), parentId);
-}
-
-function getDescendantFolderIds(parentId: string | number): string[] {
-    return getDescendantFolderIdsFromMap(getNestedFolderMap(), parentId);
-}
-
-function nestFolder(childId: string, parentId: string) {
-    if (childId === parentId) return;
-    if (hasParentInChain(parentId, childId)) return;
-
-    const map = { ...getNestedFolderMap() };
-
-    delete map[childId];
-
-    map[childId] = parentId;
-    saveNestedFolderMap(map);
-}
-
-function unnestFolder(childId: string) {
-    const map = { ...getNestedFolderMap() };
-    if (map[childId] == null) return;
-    delete map[childId];
-    saveNestedFolderMap(map);
-}
-
-function hasParentInChain(childId: string, parentId: string): boolean {
-    return hasParentInChainInMap(getNestedFolderMap(), childId, parentId);
-}
-
-function areNestedRelated(firstId: string, secondId: string): boolean {
-    return areNestedRelatedInMap(getNestedFolderMap(), firstId, secondId);
 }
 
 export const settings = definePluginSettings({
@@ -283,11 +117,6 @@ export const settings = definePluginSettings({
         description: "Force a folder to open when switching to a server of that folder",
         default: false
     },
-    enableNestedFolders: {
-        type: OptionType.BOOLEAN,
-        description: "Allow nesting folders inside other folders by dragging.",
-        default: true
-    },
     keepIcons: {
         type: OptionType.BOOLEAN,
         description: "Keep showing guild icons in the primary guild bar folder when it's open in the BetterFolders sidebar",
@@ -303,10 +132,8 @@ export const settings = definePluginSettings({
             { label: "When more than one folder is expanded", value: FolderIconDisplay.MoreThanOneFolderExpanded }
         ],
         restartNeeded: true
-    },
-}).withPrivateSettings<{
-    nestedFolders: Record<string, string>;
-}>();
+    }
+});
 
 const IS_BETTER_FOLDERS_VAR = "typeof isBetterFolders!=='undefined'?isBetterFolders:arguments[0]?.isBetterFolders";
 const BETTER_FOLDERS_EXPANDED_IDS_VAR = "typeof betterFoldersExpandedIds!=='undefined'?betterFoldersExpandedIds:arguments[0]?.betterFoldersExpandedIds";
@@ -315,21 +142,10 @@ const GRID_STYLE_NAME = "vc-betterFolders-sidebar-grid";
 export default definePlugin({
     name: "BetterFolders",
     description: "Shows server folders on dedicated sidebar and adds folder related improvements",
-    tags: ["Organisation", "Servers", "Appearance"],
-    authors: [Devs.juby, Devs.AutumnVN, Devs.Nuckyz, EquicordDevs.justjxke],
+    authors: [Devs.juby, Devs.AutumnVN, Devs.Nuckyz],
     isModified: true,
+    tags: ["Organisation", "Servers", "Appearance"],
     settings,
-    start() {
-        settings.store.nestedFolders = getNestedFolderMap();
-    },
-    stop() {
-        if (navigationExpandTimeout != null) {
-            clearTimeout(navigationExpandTimeout);
-            navigationExpandTimeout = undefined;
-        }
-        pendingNavigationGuildId = undefined;
-        pendingNavigationCloseServerFolder = false;
-    },
 
     patches: [
         {
@@ -373,14 +189,6 @@ export default definePlugin({
                     replace: "$&.filter($self.makeGuildsBarSidebarFilter(!!arguments[0]?.isBetterFolders))"
                 }
             ]
-        },
-        {
-            find: '("guildsnav")',
-            predicate: () => !settings.store.sidebar,
-            replacement: {
-                match: /switch\((\i)\.type\){case \i\.\i\.FOLDER:.{0,800}?case \i\.\i\.GUILD:.{0,800}?default:return null}/,
-                replace: "return $self.wrapGuildNodeComponent($1,()=>{$&},false,void 0);"
-            }
         },
         {
             // This is the parent folder component
@@ -441,23 +249,6 @@ export default definePlugin({
             ]
         },
         {
-            find: ".FOLDER_ITEM_ANIMATION_DURATION),",
-            replacement: [
-                {
-                    match: /mentionCount:(\i),isMentionLowImportance:(\i)/,
-                    replace: "mentionCount:$self.getFolderMentionCountWithNested(arguments[0]),isMentionLowImportance:$self.getFolderIsMentionLowImportanceWithNested(arguments[0],$2)"
-                },
-                {
-                    match: /(\{id:\i,name:\i,children:\i\})=(\i),/,
-                    replace: "$1=$self.getFolderNodeForRender($2),"
-                },
-                {
-                    match: /(?<=gap:"xs",className:)(\i\.\i)/,
-                    replace: "$self.getFolderGuildsListClassName(arguments[0],$1)"
-                }
-            ]
-        },
-        {
             find: "APPLICATION_LIBRARY,render:",
             predicate: () => settings.store.sidebar,
             group: true,
@@ -486,74 +277,28 @@ export default definePlugin({
                 match: /(?<=onClick:\(\)=>{)(?=.{0,300}"discodo")/,
                 replace: "$self.closeFolders();"
             }
-        },
-        {
-            find: "[GuildDropTarget]",
-            all: true,
-            replacement: [
-                {
-                    match: /(\i)=!(\i)&&null==(\i)\.parentId/,
-                    replace: "$1=$self.shouldShowCombineTarget($2,$3)"
-                },
-                {
-                    match: /canDrop:\i=>\i\.nodeId.{0,100}==\i\.parentId\)/,
-                    replace: "canDrop:e=>$self.canDropOnFolder(e,arguments[1],arguments[3])"
-                },
-                {
-                    match: /(\i),(\i)\)\{let (\i)=arguments.*?,(\i)=arguments.{0,250}drop\(\i\)\{(?=.{0,25}!==\i\.\i\.FOLDER)/,
-                    replace: "$&if($self.handleFolderDrop($1,$2,$3,$4))return;"
-                },
-                {
-                    match: /\[\i\.\i\.GUILD\](?=.{0,250}#{intl::DND_DROP_COMBINE})/,
-                    replace: "[...$self.getFolderAcceptTypes(arguments[0]?.targetNode)]"
-                }
-            ]
-        },
-        {
-            find: ".hasFetchedRequestToJoinGuilds)",
-            replacement: {
-                match: /return \i\.type!==\i\.\i\.GUILD/,
-                replace: "return $self.renderFolderChild(arguments[0],arguments[1],arguments[2])"
-            }
-        },
-        {
-            find: "`transitionToGuild - Transitioning to",
-            replacement: {
-                match: /(`transitionToGuild - Transitioning to .{0,80}?guildId:\i,channelId:\i,messageId:\i.{0,40}?`\),)/,
-                replace: "$&$self.handleGuildNavigation(arguments[0]),"
-            }
-        },
-        {
-            find: "`transitionTo - Transitioning to",
-            replacement: {
-                match: /`transitionTo - Transitioning to \$\{\i\}`\);/,
-                replace: "$&$self.handleRouteNavigation(arguments[0]);"
-            }
-        },
-        {
-            find: ".getCompatibleGuildFolders())",
-            replacement: {
-                match: /\i:\(\)=>\i(?=.*?\.FOLDER_ITEM_ANIMATION_DURATION.{0,10}\.animated\)\(\i\.\i\),(\i))/,
-                replace: "$&,FolderItem:()=>$1"
-            }
         }
     ],
 
     flux: {
-        GUILD_SELECT({ guildId }: { guildId: string | null; }) {
-            if (guildId == null) return;
-            scheduleGuildNavigationPath(guildId);
-        },
-
         CHANNEL_SELECT(data) {
-            const guildFolder = getGuildFolder(data.guildId);
+            if (!settings.store.closeAllFolders && !settings.store.forceOpen && !settings.store.closeServerFolder)
+                return;
 
-            if (guildFolder?.folderId) {
-                if (settings.store.forceOpen || settings.store.closeServerFolder) {
-                    scheduleGuildNavigationPath(data.guildId, settings.store.closeServerFolder);
+            if (lastGuildId !== data.guildId) {
+                lastGuildId = data.guildId;
+                const guildFolder = getGuildFolder(data.guildId);
+
+                if (guildFolder?.folderId) {
+                    if (settings.store.forceOpen && !ExpandedGuildFolderStore.isFolderExpanded(guildFolder.folderId)) {
+                        FolderUtils.toggleGuildFolderExpand(guildFolder.folderId);
+                    }
+                    if (settings.store.closeServerFolder && ExpandedGuildFolderStore.isFolderExpanded(guildFolder.folderId)) {
+                        FolderUtils.toggleGuildFolderExpand(guildFolder.folderId);
+                    }
+                } else if (settings.store.closeAllFolders) {
+                    closeFolders();
                 }
-            } else if (settings.store.closeAllFolders) {
-                closeFolders();
             }
         },
 
@@ -563,14 +308,10 @@ export default definePlugin({
 
                 FluxDispatcher.wait(() => {
                     const expandedFolders = ExpandedGuildFolderStore.getExpandedFolders();
-                    const expandedId = data.folderId?.toString();
 
                     if (expandedFolders.size > 1) {
-                        for (const id of expandedFolders) {
-                            const folderId = id?.toString();
-                            if (folderId === expandedId || areNestedRelated(folderId, expandedId)) continue;
+                        for (const id of expandedFolders) if (id !== data.folderId)
                             FolderUtils.toggleGuildFolderExpand(id);
-                        }
                     }
 
                     dispatchingFoldersClose = false;
@@ -585,237 +326,12 @@ export default definePlugin({
 
     FolderSideBar,
     closeFolders,
-    handleGuildNavigation(guildId: string | null | undefined) {
-        expandGuildNavigationPathNow(guildId);
-    },
-    handleRouteNavigation(route: unknown) {
-        if (typeof route !== "string") return;
 
-        const guildId = route.match(/^\/channels\/([^/]+)/)?.[1];
-        if (!guildId) return;
-
-        if (!settings.store.forceOpen && !settings.store.closeServerFolder) return;
-
-        expandGuildNavigationPathNow(guildId);
-    },
-    getGuildMentionCount(guildId: string): number {
-        const mentionChannelIds = ReadStateStore.getMentionChannelIds() ?? [];
-        let count = 0;
-
-        for (const channelId of mentionChannelIds) {
-            const channel = ChannelStore.getChannel(channelId);
-            if (channel?.guild_id !== guildId) continue;
-            count += ReadStateStore.getMentionCount(channelId);
-        }
-
-        return count;
-    },
-    getFolderMentionMetaWithNested(props: FolderMentionProps | undefined): { mentionCount: number, hasNestedMention: boolean; } {
-        const folderNode = props?.folderNode;
-        const baseMentionCount = props?.mentionCount ?? 0;
-        if (folderNode?.id == null) {
-            return {
-                mentionCount: baseMentionCount,
-                hasNestedMention: false
-            };
-        }
-
-        const descendantIds = getDescendantFolderIds(folderNode.id);
-        if (descendantIds.length === 0) {
-            return {
-                mentionCount: baseMentionCount,
-                hasNestedMention: false
-            };
-        }
-
-        const tree = SortedGuildStore.getGuildsTree();
-        if (typeof tree?.getNode !== "function") {
-            return {
-                mentionCount: baseMentionCount,
-                hasNestedMention: false
-            };
-        }
-
-        const nestedGuildIds = new Set<string>();
-        for (const childFolderId of descendantIds) {
-            const stack = [...(tree.getNode(childFolderId)?.children ?? [])];
-            while (stack.length) {
-                const node = stack.pop();
-                if (!node) continue;
-                if (node.type === "guild") {
-                    nestedGuildIds.add(node.id?.toString());
-                    continue;
-                }
-                if (node.type === "folder" && Array.isArray(node.children)) {
-                    stack.push(...node.children);
-                }
-            }
-        }
-
-        if (nestedGuildIds.size === 0) {
-            return {
-                mentionCount: baseMentionCount,
-                hasNestedMention: false
-            };
-        }
-
-        let nestedMentionCount = 0;
-        for (const guildId of nestedGuildIds) nestedMentionCount += this.getGuildMentionCount(guildId);
-        return {
-            mentionCount: baseMentionCount + nestedMentionCount,
-            hasNestedMention: nestedMentionCount > 0
-        };
-    },
-    getFolderMentionCountWithNested(props: FolderMentionProps | undefined): number {
-        return this.getFolderMentionMetaWithNested(props).mentionCount;
-    },
-    getFolderIsMentionLowImportanceWithNested(props: FolderMentionProps | undefined, originalFlag: boolean): boolean {
-        return this.getFolderMentionMetaWithNested(props).hasNestedMention ? false : originalFlag;
-    },
-    augmentFolderChildren(folderNode: GuildTreeNode, originalChildren: GuildTreeNode[]): GuildTreeNode[] {
-        const childIds = getChildFolderIds(folderNode.id);
-        if (childIds.length === 0) return originalChildren;
-
-        try {
-            const tree = SortedGuildStore.getGuildsTree();
-            if (typeof tree?.getNode !== "function") {
-                return originalChildren;
-            }
-            const existingIds = new Set(originalChildren.map(child => child?.id?.toString()));
-            const childFolderNodes: GuildTreeNode[] = [];
-
-            for (const id of childIds) {
-                if (existingIds.has(id?.toString())) continue;
-                const node = tree.getNode(id);
-                if (node) {
-                    childFolderNodes.push({
-                        ...node,
-                        parentId: folderNode.id,
-                        isBetterFoldersNested: true
-                    });
-                }
-            }
-
-            if (childFolderNodes.length === 0) return originalChildren;
-
-            return [...childFolderNodes, ...originalChildren];
-        } catch {
-            return originalChildren;
-        }
-    },
-
-    getFolderNodeForRender(folderNode: GuildTreeNode): GuildTreeNode {
-        const children = this.augmentFolderChildren(folderNode, folderNode.children ?? []);
-        if (children === folderNode.children) return folderNode;
-        return {
-            ...folderNode,
-            children
-        };
-    },
-
-    getFolderGuildsListClassName(
-        props: FolderRenderProps | undefined,
-        baseClassName: string
-    ): string {
-        const folderNode = props?.folderNode;
-        if (folderNode == null) return baseClassName;
-
-        const children = this.getFolderNodeForRender(folderNode)?.children;
-        if (!Array.isArray(children)) return baseClassName;
-
-        return children.some(child => child?.type === "folder")
-            ? `${baseClassName} vc-betterFolders-nested-parent-list`
-            : baseClassName;
-    },
-
-    renderFolderChild(node: GuildTreeNode, posInSet: number, setSize: number): ReactNode | null {
-        if (node?.type !== "folder") return null;
-
-        try {
-            if (!FolderItem) return null;
-            return (
-                <FolderItem
-                    folderNode={node}
-                    aria-setsize={setSize}
-                    aria-posinset={posInSet}
-                />
-            );
-        } catch {
-            return null;
-        }
-    },
-
-    handleFolderDrop(dragItem: FolderDragItem, targetNode: GuildTreeNode, _moveToBelow: boolean, isCombine: boolean): boolean {
-        if (dragItem.type !== "folder") return false;
-        if (!settings.store.enableNestedFolders) return false;
-
-        if (targetNode.type === "folder") {
-            const childId = dragItem.nodeId?.toString();
-            const parentId = targetNode.id?.toString();
-
-            if (childId == null || parentId == null) return false;
-            if (childId === parentId || hasParentInChain(parentId, childId)) return false;
-
-            try {
-                nestFolder(childId, parentId);
-                FluxDispatcher.dispatch({ type: "BETTER_FOLDERS_NESTED_UPDATE" });
-                return true;
-            } catch {
-                return false;
-            }
-        }
-
-        if (!isCombine) {
-            unnestFolder(dragItem.nodeId?.toString());
-            return false;
-        }
-
-        return false;
-    },
-
-    shouldShowCombineTarget(noCombine: boolean, targetNode: GuildTreeNode): boolean {
-        if (noCombine) return false;
-        if (!settings.store.enableNestedFolders) return targetNode.parentId == null;
-        return targetNode.parentId == null || targetNode.type === "folder";
-    },
-
-    getFolderAcceptTypes(targetNode: GuildTreeNode): string[] {
-        const GUILD = "guild";
-        const FOLDER = "folder";
-        if (settings.store.enableNestedFolders && targetNode?.type === FOLDER) return [GUILD, FOLDER];
-        return [GUILD];
-    },
-
-    canDropOnFolder(dragItem: FolderDragItem, targetNode: GuildTreeNode, isCombine: boolean): boolean {
-        if (dragItem.nodeId === targetNode.id) return false;
-
-        if (dragItem.type === "folder" && targetNode.type === "folder") {
-            if (!settings.store.enableNestedFolders) return false;
-            return !hasParentInChain(targetNode.id?.toString(), dragItem.nodeId?.toString());
-        }
-
-        if (isCombine && dragItem.type === "folder") return false;
-        if (dragItem.type === "folder" && targetNode.parentId != null) return false;
-
-        return true;
-    },
-
-    wrapGuildNodeComponent(node: GuildTreeNode, originalComponent: () => ReactNode, isBetterFolders: boolean, expandedFolderIds?: Set<string | number>) {
-        if (node.type === "folder") {
-            const mappedParentId = getParentFolderId(node.id);
-            if (mappedParentId != null && (node.parentId?.toString() !== mappedParentId || node.isBetterFoldersNested !== true)) {
-                return (
-                    <div style={{ display: "none" }}>
-                        {originalComponent()}
-                    </div>
-                );
-            }
-        }
-
+    wrapGuildNodeComponent(node: any, originalComponent: () => ReactNode, isBetterFolders: boolean, expandedFolderIds?: Set<any>) {
         if (
             !isBetterFolders ||
-            node.type === "folder" && (node.isBetterFoldersNested === true || expandedFolderIds?.has(node.id)) ||
-            node.type === "guild" && node.parentId != null && expandedFolderIds?.has(node.parentId)
+            node.type === "folder" && expandedFolderIds?.has(node.id) ||
+            node.type === "guild" && expandedFolderIds?.has(node.parentId)
         ) {
             return originalComponent();
         }
@@ -837,10 +353,12 @@ export default definePlugin({
                 // can cause hang if intl message is not found
                 const serversIntlMsg = getIntlMessage("SERVERS");
                 if (!serversIntlMsg) {
+                    new Logger("BetterFolders").error("Failed to get SERVERS intl message");
                     return true;
                 }
                 return child?.props?.["aria-label"] === serversIntlMsg;
-            } catch {
+            } catch (e) {
+                console.error(e);
                 return true;
             }
         };
@@ -853,14 +371,15 @@ export default definePlugin({
             }
 
             try {
-                return filterTreeWithTargetNode(child, c => c?.props?.renderTreeNode != null);
-            } catch {
+                return filterTreeWithTargetNode(child, child => child?.props?.renderTreeNode != null);
+            } catch (e) {
+                console.error(e);
                 return true;
             }
         };
     },
 
-    shouldShowFolderIconAndBackground(isBetterFolders: boolean, expandedFolderIds?: Set<string | number>) {
+    shouldShowFolderIconAndBackground(isBetterFolders: boolean, expandedFolderIds?: Set<any>) {
         if (!isBetterFolders) {
             return true;
         }
