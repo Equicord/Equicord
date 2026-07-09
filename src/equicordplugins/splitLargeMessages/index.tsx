@@ -59,6 +59,35 @@ const settings = definePluginSettings({
     }
 });
 
+function migrateSettings() {
+    const store = settings.store as Record<string, any>;
+
+    if (store.hardSplit === true) {
+        store.splitMode = "hard";
+    }
+
+    if (typeof store.sendDelay >= "number" && store.sendDelay > 5) {
+        store.sendDelay = 5;
+    }
+
+    if (typeof store.slowmodeMax === "number") {
+        const val = store.slowmodeMax;
+        if (val !== 5 && val !== 10 && val !== 15 && val !== 30) {
+            if (val <= 7) store.slowmodeMax = 5;
+            else if (val <= 12) store.slowmodeMax = 10;
+            else if (val <= 22) store.slowmodeMax = 15;
+            else store.slowmodeMax = 30;
+        }
+    }
+
+    const keysToRemove = ["maxLength", "disableFileConversion", "hardSplit"];
+    for (const key of keysToRemove) {
+        if (key in store) {
+            delete store[key];
+        }
+    }
+}
+
 const DEFAULT_LIMITS = { standard: 2000, premium: 4000 };
 const SAFE_MARGIN = 10;
 const SPLIT_LIMIT_FRACTION = 0.975;
@@ -185,6 +214,11 @@ export default definePlugin({
     authors: [EquicordDevs.Reycko, EquicordDevs.lucabeyer],
 
     settings,
+
+    start() {
+        migrateSettings();
+    },
+
     onBeforeMessageSend: listener,
 
     patches: [
