@@ -7,21 +7,18 @@
 import "./styles.css";
 
 import { BadgePosition, ProfileBadge } from "@api/Badges";
-import { migratePluginSetting } from "@api/Settings";
 import { Button } from "@components/Button";
 import { BadgeContextMenu } from "@plugins/_api/badges";
 import { Devs, EquicordDevs } from "@utils/constants";
 import { openInviteModal } from "@utils/discord";
 import definePlugin from "@utils/types";
-import { ContextMenuApi, React, Toasts, UserStore } from "@webpack/common";
+import { ContextMenuApi, React, Toasts } from "@webpack/common";
 
-import { openBadgeModal } from "./badgeModal";
 import { settings } from "./settings";
 import { cl, GlobalBadges, INVITE_LINK, loadBadges } from "./utils";
 
 let intervalId: any;
 
-migratePluginSetting("GlobalBadges", "showRaincord", "showRa1ncord");
 export default definePlugin({
     name: "GlobalBadges",
     description: "Adds global badges from other client mods",
@@ -74,9 +71,6 @@ export default definePlugin({
             },
             onContextMenu(event, badge) {
                 ContextMenuApi.openContextMenu(event, () => <BadgeContextMenu badge={badge} />);
-            },
-            onClick() {
-                return openBadgeModal(UserStore.getUser(userId));
             },
         } satisfies ProfileBadge));
     }

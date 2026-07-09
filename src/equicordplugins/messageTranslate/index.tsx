@@ -60,12 +60,12 @@ export default definePlugin({
             find: '.CUSTOM_GIFT?""',
             replacement: [
                 {
-                    match: /message:(\i),message:\{id:\i\}.{0,200}renderContentOnly:\i.{0,30}\}=\i;/,
-                    replace: "$&$1=$self.transformMessage($1);",
-                },
-                {
                     match: /childrenMessageContent:(\i),/g,
                     replace: "childrenMessageContent:$self.wrapContent($1,arguments[0].message.id),",
+                },
+                {
+                    match: /\i\.memo\(function\((\i)\)\{(?=let \i,\i)/,
+                    replace: "$&$1.message=$self.transformMessage($1.message);",
                 },
             ],
         },

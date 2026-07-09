@@ -1,0 +1,378 @@
+[data-vc-collapsible-ui-base],
+[data-vc-collapsible-ui-guild-bar],
+[data-vc-collapsible-ui-channel-list],
+[data-vc-collapsible-ui-members-list],
+[data-vc-collapsible-ui-title-bar],
+[data-vc-collapsible-ui-header-bar],
+[data-vc-collapsible-ui-user-area],
+.vc-collapsible-ui-chat-buttons {
+    --vc-cui-peek-size: 12px;
+    --vc-cui-user-area-collapsed-width: 52px;
+    --vc-cui-header-bar-height: 32px;
+    --vc-cui-collapsed-block-size: 8px;
+    --vc-cui-guild-bar-expanded-width: 64px;
+    --vc-cui-channel-list-min-width: 264px;
+    --vc-cui-channel-list-max-width: 432px;
+    --vc-cui-members-list-expanded-width: 240px;
+    --vc-cui-title-bar-expanded-height: 46px;
+    --vc-cui-chat-buttons-offset: 24px;
+    --vc-cui-restore-button-size: 24px;
+    --vc-cui-fade-delay: 80ms;
+    --vc-cui-transition: 140ms ease;
+}
+
+[data-vc-collapsible-ui-base-channel-list-collapsed] {
+    /* stylelint-disable-next-line value-keyword-case */
+    grid-template-columns: [start] min-content [guildsEnd] min-content [sidebarEnd] var(--vc-cui-peek-size) [channelsEnd] 1fr [end] !important;
+}
+
+[data-vc-collapsible-ui-base-channel-list-collapsed][data-vc-collapsible-ui-base-channel-list-interaction-expanded] {
+    /* stylelint-disable-next-line value-keyword-case */
+    grid-template-columns: [start] min-content [guildsEnd] min-content [sidebarEnd] var(--custom-guild-sidebar-width, 312px) [channelsEnd] 1fr [end] !important;
+}
+
+[data-vc-collapsible-ui-guild-bar],
+[data-vc-collapsible-ui-channel-list],
+[data-vc-collapsible-ui-members-list],
+[data-vc-collapsible-ui-title-bar],
+[data-vc-collapsible-ui-header-bar],
+[data-vc-collapsible-ui-user-area] {
+    overflow: hidden;
+    transition: opacity var(--vc-cui-transition);
+}
+
+[data-vc-collapsible-ui-sidebar] {
+    position: relative;
+}
+
+[data-vc-collapsible-ui-sidebar-user-area-detached] {
+    --custom-app-panels-height: 0px !important;
+}
+
+[data-vc-collapsible-ui-sidebar-channel-list-collapsed] {
+    z-index: 5;
+    overflow: visible !important;
+}
+
+[data-vc-collapsible-ui-guild-bar-collapsed]:not(.vc-betterFolders-sidebar *),
+[data-vc-collapsible-ui-channel-list-collapsed],
+[data-vc-collapsible-ui-members-list-collapsed] {
+    width: var(--vc-cui-peek-size) !important;
+    min-width: var(--vc-cui-peek-size) !important;
+    max-width: var(--vc-cui-peek-size) !important;
+    flex: 0 0 var(--vc-cui-peek-size) !important;
+    opacity: 0.01;
+
+    /* Delay only the opacity fade; dimensions change immediately to avoid animated layout work. */
+    transition-delay: var(--vc-cui-fade-delay);
+}
+
+[data-vc-collapsible-ui-guild-bar-collapsed]:not(.vc-betterFolders-sidebar *):is(:hover, :focus-within),
+[data-vc-collapsible-ui-base]:has(.vc-betterFolders-sidebar:is(:hover, :focus-within)) [data-vc-collapsible-ui-guild-bar-collapsed]:not(.vc-betterFolders-sidebar *) {
+    width: var(--vc-cui-guild-bar-expanded-width) !important;
+    min-width: var(--vc-cui-guild-bar-expanded-width) !important;
+    max-width: var(--vc-cui-guild-bar-expanded-width) !important;
+    flex-basis: var(--vc-cui-guild-bar-expanded-width) !important;
+    opacity: 1;
+    transition-delay: 0ms;
+}
+
+/* BetterFolders renders a duplicate guilds nav inside its folder sidebar.
+   The collapse rules above exempt that duplicate; collapse the sidebar
+   wrapper in sync with the real guild bar instead. */
+[data-vc-collapsible-ui-base]:has([data-vc-collapsible-ui-guild-bar-collapsed]) .vc-betterFolders-sidebar {
+    width: 0 !important;
+    min-width: 0 !important;
+    opacity: 0.01;
+    overflow: hidden;
+    transition: opacity var(--vc-cui-transition);
+    transition-delay: var(--vc-cui-fade-delay);
+}
+
+[data-vc-collapsible-ui-base]:has([data-vc-collapsible-ui-guild-bar-collapsed]:is(:hover, :focus-within)) .vc-betterFolders-sidebar,
+[data-vc-collapsible-ui-base]:has([data-vc-collapsible-ui-guild-bar-collapsed]) .vc-betterFolders-sidebar:is(:hover, :focus-within) {
+    width: auto !important;
+    opacity: 1;
+    transition-delay: 0ms;
+}
+
+[data-vc-collapsible-ui-channel-list-expanded],
+[data-vc-collapsible-ui-channel-list-collapsed]:is(:hover, :focus-within) {
+    width: var(--custom-guild-sidebar-width, 312px) !important;
+    min-width: var(--vc-cui-channel-list-min-width) !important;
+    max-width: var(--vc-cui-channel-list-max-width) !important;
+    flex-basis: var(--custom-guild-sidebar-width, 312px) !important;
+    opacity: 1;
+    transition-delay: 0ms;
+}
+
+[data-vc-collapsible-ui-sidebar-channel-list-expanded] {
+    width: var(--custom-guild-sidebar-width, 312px) !important;
+    min-width: var(--custom-guild-sidebar-width, 312px) !important;
+    max-width: var(--custom-guild-sidebar-width, 312px) !important;
+}
+
+[data-vc-collapsible-ui-sidebar-channel-list-expanded] [data-vc-collapsible-ui-channel-list-collapsed] {
+    width: var(--custom-guild-sidebar-width, 312px) !important;
+    min-width: var(--vc-cui-channel-list-min-width) !important;
+    max-width: var(--vc-cui-channel-list-max-width) !important;
+    flex-basis: var(--custom-guild-sidebar-width, 312px) !important;
+    opacity: 1;
+}
+
+[data-vc-collapsible-ui-members-list-collapsed] {
+    flex: 0 1 auto !important;
+    flex-basis: auto !important;
+}
+
+[data-vc-collapsible-ui-members-list-collapsed]:is(:hover, :focus-within) {
+    width: var(--vc-cui-members-list-expanded-width) !important;
+    min-width: var(--vc-cui-members-list-expanded-width) !important;
+    max-width: var(--vc-cui-members-list-expanded-width) !important;
+    flex-basis: auto !important;
+    opacity: 1;
+}
+
+[data-vc-collapsible-ui-title-bar-collapsed] {
+    height: var(--vc-cui-collapsed-block-size) !important;
+    min-height: var(--vc-cui-collapsed-block-size) !important;
+    max-height: var(--vc-cui-collapsed-block-size) !important;
+    padding-block: 0 !important;
+    color: transparent !important;
+    opacity: 0.01 !important;
+}
+
+[data-vc-collapsible-ui-title-bar-collapsed]:is(:hover, :focus-within) {
+    height: var(--vc-cui-title-bar-expanded-height) !important;
+    min-height: var(--vc-cui-title-bar-expanded-height) !important;
+    max-height: var(--vc-cui-title-bar-expanded-height) !important;
+    color: inherit !important;
+    opacity: 1 !important;
+}
+
+[data-vc-collapsible-ui-base-header-bar-collapsed] {
+    --custom-app-top-bar-height: var(--vc-cui-collapsed-block-size) !important;
+}
+
+[data-vc-collapsible-ui-base-header-bar-expanded] {
+    --custom-app-top-bar-height: var(--vc-cui-header-bar-height) !important;
+}
+
+[data-vc-collapsible-ui-header-bar-collapsed] {
+    position: relative;
+    z-index: 10;
+    height: var(--vc-cui-collapsed-block-size) !important;
+    min-height: var(--vc-cui-collapsed-block-size) !important;
+    max-height: var(--vc-cui-collapsed-block-size) !important;
+    opacity: 0.01;
+    -webkit-app-region: drag;
+    overflow: visible;
+}
+
+[data-vc-collapsible-ui-header-bar-expanded] {
+    opacity: 1;
+}
+
+[data-vc-collapsible-ui-header-bar-collapsed]::before {
+    position: absolute;
+    z-index: 2;
+    inset: 0;
+    height: var(--vc-cui-collapsed-block-size);
+    content: "";
+    pointer-events: auto;
+    -webkit-app-region: no-drag;
+}
+
+[data-vc-collapsible-ui-header-bar-collapsed] > * {
+    pointer-events: none;
+}
+
+[data-vc-collapsible-ui-user-area-collapsed] > * {
+    opacity: 0;
+    pointer-events: none;
+}
+
+[data-vc-collapsible-ui-header-bar-collapsed][data-vc-collapsible-ui-header-bar-interaction-expanded] {
+    height: var(--vc-cui-header-bar-height) !important;
+    min-height: var(--vc-cui-header-bar-height) !important;
+    max-height: var(--vc-cui-header-bar-height) !important;
+    opacity: 1;
+    overflow: visible;
+}
+
+[data-vc-collapsible-ui-header-bar-collapsed][data-vc-collapsible-ui-header-bar-interaction-expanded]::before {
+    display: none;
+}
+
+[data-vc-collapsible-ui-header-bar-collapsed][data-vc-collapsible-ui-header-bar-interaction-expanded] > * {
+    pointer-events: auto;
+}
+
+[data-vc-collapsible-ui-user-area-collapsed] {
+    height: var(--vc-cui-peek-size) !important;
+    min-height: var(--vc-cui-peek-size) !important;
+    max-height: var(--vc-cui-peek-size) !important;
+    padding-block: 0 !important;
+    border-top-width: 0 !important;
+}
+
+[data-vc-collapsible-ui-user-area-collapsed]:is(:hover, :focus-within) {
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+}
+
+[data-vc-collapsible-ui-user-area-collapsed]:is(:hover, :focus-within) > * {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* Solid background only where the panel floats over other content;
+   docked states keep the theme's own panel background. */
+[data-vc-collapsible-ui-user-area-detached],
+[data-vc-collapsible-ui-user-area-collapsed]:is(:hover, :focus-within),
+[data-vc-collapsible-ui-sidebar-channel-list-collapsed]:not([data-vc-collapsible-ui-sidebar-user-area-detached]) [data-vc-collapsible-ui-user-area] {
+    background: var(--background-secondary-alt) !important;
+}
+
+[data-vc-collapsible-ui-sidebar-channel-list-collapsed]:not([data-vc-collapsible-ui-sidebar-user-area-detached]) [data-vc-collapsible-ui-user-area] {
+    width: var(--vc-cui-user-area-collapsed-width) !important;
+    min-width: var(--vc-cui-user-area-collapsed-width) !important;
+    max-width: var(--vc-cui-user-area-collapsed-width) !important;
+    z-index: 4;
+}
+
+[data-vc-collapsible-ui-sidebar-channel-list-collapsed]:not([data-vc-collapsible-ui-sidebar-user-area-detached]) [data-vc-collapsible-ui-user-area-expanded] {
+    position: absolute !important;
+    right: auto !important;
+    bottom: 6px !important;
+    left: 6px !important;
+    height: var(--vc-cui-user-area-collapsed-width) !important;
+    min-height: var(--vc-cui-user-area-collapsed-width) !important;
+    max-height: var(--vc-cui-user-area-collapsed-width) !important;
+    flex: 0 0 auto !important;
+    align-self: flex-start;
+    overflow: hidden !important;
+}
+
+[data-vc-collapsible-ui-sidebar-channel-list-collapsed]:not([data-vc-collapsible-ui-sidebar-user-area-detached]) [data-vc-collapsible-ui-user-area-expanded] > * {
+    width: var(--custom-guild-sidebar-width, 312px);
+    min-width: var(--vc-cui-channel-list-min-width);
+    max-width: var(--vc-cui-channel-list-max-width);
+    opacity: 1;
+    pointer-events: auto;
+}
+
+[data-vc-collapsible-ui-sidebar-channel-list-collapsed]:not([data-vc-collapsible-ui-sidebar-user-area-detached]) [data-vc-collapsible-ui-user-area-expanded]:is(:hover, :focus-within) {
+    width: var(--custom-guild-sidebar-width, 312px) !important;
+    min-width: var(--vc-cui-channel-list-min-width) !important;
+    max-width: var(--vc-cui-channel-list-max-width) !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    overflow: visible !important;
+}
+
+[data-vc-collapsible-ui-sidebar-channel-list-collapsed]:not([data-vc-collapsible-ui-sidebar-user-area-detached]) [data-vc-collapsible-ui-user-area-guild-bar-collapsed][data-vc-collapsible-ui-user-area-collapsed] {
+    width: var(--vc-cui-peek-size) !important;
+    min-width: var(--vc-cui-peek-size) !important;
+    max-width: var(--vc-cui-peek-size) !important;
+}
+
+[data-vc-collapsible-ui-sidebar-channel-list-expanded]:not([data-vc-collapsible-ui-sidebar-user-area-detached]) [data-vc-collapsible-ui-user-area] {
+    /* Anchor both edges instead of forcing a width: the guild bar column is
+       min-content and theme-dependent, so a fixed width leaves a right-side
+       gap whenever the guild bar is expanded. */
+    left: 0 !important;
+    right: 0 !important;
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: none !important;
+}
+
+[data-vc-collapsible-ui-user-area-detached] {
+    position: fixed !important;
+    right: auto !important;
+    bottom: auto !important;
+    width: var(--custom-guild-sidebar-width, 312px) !important;
+    min-width: var(--custom-guild-sidebar-width, 312px) !important;
+    max-width: var(--custom-guild-sidebar-width, 312px) !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    cursor: grab;
+    z-index: 2 !important;
+}
+
+[data-vc-collapsible-ui-user-area-detached]:active {
+    cursor: grabbing;
+}
+
+.vc-collapsible-ui-chat-buttons {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    min-inline-size: 0;
+}
+
+.vc-collapsible-ui-chat-buttons-items {
+    display: flex;
+    align-items: center;
+    min-inline-size: 0;
+    overflow: hidden;
+    transition:
+        transform var(--vc-cui-transition),
+        opacity var(--vc-cui-transition);
+    transform-origin: right center;
+}
+
+.vc-collapsible-ui-chat-buttons-collapsed .vc-collapsible-ui-chat-buttons-items {
+    position: absolute;
+    top: 50%;
+    right: var(--vc-cui-chat-buttons-offset);
+    width: max-content;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-50%) scaleX(0);
+    transition-delay: var(--vc-cui-fade-delay);
+}
+
+.vc-collapsible-ui-chat-buttons-collapsed:is(:hover, :focus-within) .vc-collapsible-ui-chat-buttons-items {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(-50%) scaleX(1);
+    transition-delay: 0ms;
+}
+
+.vc-collapsible-ui-restore-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--vc-cui-restore-button-size);
+    height: var(--vc-cui-restore-button-size);
+    border-radius: var(--radius-sm);
+    color: var(--interactive-normal);
+}
+
+.vc-collapsible-ui-restore-button:hover {
+    color: var(--interactive-hover);
+    background: var(--background-modifier-hover);
+}
+
+.vc-collapsible-ui-chat-buttons:not(.vc-collapsible-ui-chat-buttons-collapsed) .vc-collapsible-ui-restore-button {
+    display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    [data-vc-collapsible-ui-guild-bar],
+    [data-vc-collapsible-ui-channel-list],
+    [data-vc-collapsible-ui-members-list],
+    [data-vc-collapsible-ui-title-bar],
+    [data-vc-collapsible-ui-header-bar],
+    [data-vc-collapsible-ui-user-area],
+    .vc-collapsible-ui-chat-buttons,
+    .vc-collapsible-ui-chat-buttons-items {
+        --vc-cui-transition: 0ms;
+    }
+}
