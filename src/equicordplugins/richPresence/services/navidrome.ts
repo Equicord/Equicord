@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { md5 } from "../utils";
 import { Logger } from "@utils/Logger";
 import { parseUrl } from "@utils/misc";
 import { Activity } from "@vencord/discord-types";
@@ -82,10 +83,11 @@ async function fetchNowPlaying(signal?: AbortSignal): Promise<NdTrack | null> {
             return null;
         }
 
-        const hexPassword = Array.from(new TextEncoder().encode(nd_password)).map(b => b.toString(16).padStart(2, '0')).join('');
+        const salt = Math.random().toString(36).substring(2, 8);
+        const token = md5((nd_password ?? "") + salt);
 
         const baseUrl = parsedUrl.href.replace(/\/$/, "");
-        const queryParams = `u=${encodeURIComponent(nd_username)}&p=enc:${hexPassword}&v=1.12.0&c=equicord-rpc&f=json`;
+        const queryParams = `u=${encodeURIComponent(nd_username)}&t=${token}&s=${salt}&v=1.12.0&c=equicord-rpc&f=json`;
 
         const res = await fetch(`${baseUrl}/rest/getNowPlaying?${queryParams}`, { signal });
         if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
@@ -192,7 +194,9 @@ async function getActivity(signal?: AbortSignal): Promise<Activity | null> {
     let resolvedCoverArtUrl: string | null = null;
 
     if (albumArtMode === "instance" && track.coverArt && externalBaseUrl) {
-        resolvedCoverArtUrl = `${externalBaseUrl}/rest/getCoverArt?id=${track.coverArt}`;
+        const salt = Math.random().toString(36).substring(2, 8);
+        const token = md5((nd_password ?? "") + salt);
+        resolvedCoverArtUrl = `${externalBaseUrl}/rest/getCoverArt?id=${track.coverArt}&u=${encodeURIComponent(nd_username ?? "")}&t=${token}&s=${salt}&v=1.12.0&c=equicord-rpc`;
     } else if (albumArtMode === "lastfm" && track.artist) {
         const trimmedKey = nd_lastfmApiKey?.trim();
         const apiKey = trimmedKey ? trimmedKey : "feff915bf5987580c9dc354d523dc6b9";
