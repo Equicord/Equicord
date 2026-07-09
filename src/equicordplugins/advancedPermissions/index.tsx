@@ -16,32 +16,9 @@ import { findCssClassesLazy } from "@webpack";
 import { Clickable, useState } from "@webpack/common";
 import type { ReactNode } from "react";
 
-const AdvancedClasses = findCssClassesLazy(
-    "trigger",
-    "advancedTitle",
-    "titleCaret",
-);
-
-const settings = definePluginSettings({
-    simplifiedCard: {
-        type: OptionType.SELECT,
-        description: "What to do with Discord's simplified permissions card",
-        options: [
-            { label: "Hide it", value: "hide", default: true },
-            { label: "Make it collapsible", value: "collapse" },
-            { label: "Leave it visible", value: "show" },
-        ],
-    },
-    collapsedByDefault: {
-        type: OptionType.BOOLEAN,
-        default: false,
-        description: "Start the simplified permissions collapsed.",
-        disabled: () => settings.store.simplifiedCard !== "collapse",
-    },
-});
-
+const AdvancedClasses = findCssClassesLazy("trigger", "advancedTitle", "titleCaret");
 const CollapsibleCard = ErrorBoundary.wrap(
-    ({ children }: { children: ReactNode }) => {
+    ({ children }: { children: ReactNode; }) => {
         const [open, setOpen] = useState(!settings.store.collapsedByDefault);
 
         return (
@@ -49,7 +26,7 @@ const CollapsibleCard = ErrorBoundary.wrap(
                 <Clickable
                     className={AdvancedClasses.trigger}
                     aria-expanded={open}
-                    onClick={() => setOpen((v) => !v)}
+                    onClick={() => setOpen(v => !v)}
                 >
                     <BaseText
                         size="lg"
@@ -83,10 +60,27 @@ const CollapsibleCard = ErrorBoundary.wrap(
     { noop: true },
 );
 
+const settings = definePluginSettings({
+    simplifiedCard: {
+        type: OptionType.SELECT,
+        description: "What to do with Discord's simplified permissions card",
+        options: [
+            { label: "Hide it", value: "hide", default: true },
+            { label: "Make it collapsible", value: "collapse" },
+            { label: "Leave it visible", value: "show" },
+        ],
+    },
+    collapsedByDefault: {
+        type: OptionType.BOOLEAN,
+        default: false,
+        description: "Start the simplified permissions collapsed.",
+        disabled: () => settings.store.simplifiedCard !== "collapse",
+    },
+});
+
 export default definePlugin({
-    name: "IAmAdvanced",
-    description:
-        "Hide Discord's simplified permissions card and make the advanced permissions the primary view.",
+    name: "AdvancedPermissions",
+    description: "Show advanced permissions card by default.",
     authors: [EquicordDevs.bastih18],
     settings,
 
@@ -96,8 +90,18 @@ export default definePlugin({
             replacement: [
                 {
                     // simplified card renderer
-                    match: /\(0,\i\.jsx\)\(\i,\{channel:\i,guild:\i,isPrivateGuildChannel:\i,roles:\i,members:\i\}\)/,
+                    match: /(?<=permissionUpdates:\i\}\):null,).{0,100}roles:\i,members:\i\}\)/,
                     replace: "$self.renderCard($&)",
+                },
+                {
+                    // hide divider when card hidden, else tighten it
+                    match: /(?<=advancedMode\);.{0,30}children:\[)/,
+                    replace: "$self.cardHidden()?null:",
+                },
+                {
+                    // hide divider when card hidden, else tighten it
+                    match: /className:\i\.\i(?=.{0,50}onExpandedChange)/,
+                    replace: '$&+" vc-iamadvanced-divider"',
                 },
                 {
                     // always force advanced open
@@ -106,14 +110,8 @@ export default definePlugin({
                 },
                 {
                     // drop advanced header
-                    match: /component:(?=\(0,\i\.jsx\)\(\i\.\i,\{children:\(0,\i\.jsx\)\(\i\.\i,\{slot:"trigger")/,
+                    match: /component:(?=.{0,50}slot:"trigger")/,
                     replace: "component:null&&",
-                },
-                {
-                    // hide divider when card hidden, else tighten it
-                    match: /(?<=children:\[)(\(0,\i\.jsx\)\(\i\.\i,\{className:)(\i\.\i)(\}\))(?=,\(0,\i\.jsx\)\(\i\.\i,\{isExpanded:)/,
-                    replace:
-                        '$self.cardHidden()?null:$1$2+" vc-iamadvanced-divider"$3',
                 },
             ],
         },
