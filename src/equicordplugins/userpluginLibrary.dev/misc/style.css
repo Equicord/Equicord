@@ -76,3 +76,30 @@
         color: var(--red-new-46)
     }
 }
+
+.vc-userplugininstaller-unordered-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    li {
+        margin-left: 16px;
+        list-style: disc;
+    }
+}
+
+.vc-userplugininstaller-safety-icons-modal-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    .vc-userplugininstaller-safety-icons-list-item {
+        svg {
+            flex: 0 0 48px;
+            display: flex;
+            width: 64px !important;
+        }
+
+        display: flex;
+    }
+}

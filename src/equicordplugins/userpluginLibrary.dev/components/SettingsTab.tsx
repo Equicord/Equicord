@@ -12,6 +12,8 @@ import { Card } from "@components/Card";
 import { CheckedTextInput } from "@components/CheckedTextInput";
 import { HeadingTertiary } from "@components/Heading";
 import { DeleteIcon } from "@components/Icons";
+import { Link } from "@components/Link";
+import { Notice } from "@components/Notice";
 import { Paragraph } from "@components/Paragraph";
 import { AddonCard } from "@components/settings";
 import {
@@ -22,7 +24,7 @@ import { classes, isObjectEmpty } from "@utils/misc";
 import { relaunch } from "@utils/native";
 import { Alerts, closeAllModals,NavigationRouter, Toasts, useEffect, useState } from "@webpack/common";
 
-import userpluginInstaller, { Native } from "..";
+import userpluginInstaller, { Native, OpenSettingsModule } from "..";
 import {
     cl,
     CLONE_LINK_REGEX,
@@ -118,6 +120,9 @@ function UserPluginsTab() {
                     git.nin0.dev, or plugins.nin0.dev by pasting its clone URL
                     here.
                 </Paragraph>
+                <Notice.Info style={{ marginTop: "10px" }}>
+                    Looking for plugins to install? The <Link onClick={() => OpenSettingsModule.openUserSettings("vencord_userplugins_lib_panel")}>plugin library</Link> has some.
+                </Notice.Info>
                 <div className={cl("install-field")}>
                     <CheckedTextInput
                         onChange={t => setUrl(t)}
