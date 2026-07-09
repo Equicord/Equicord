@@ -48,11 +48,7 @@ function SelectSetting({ name, description, settingsKey, options }: { name: stri
             <Select
                 options={options}
                 isSelected={v => v === value}
-                select={v => {
-                    setValue(v);
-                    // @ts-expect-error TS cannot narrow dynamic store assignment
-                    settings.store[settingsKey] = v;
-                }}
+                select={v => { setValue(v); (settings.store[settingsKey] as string) = v; }}
                 serialize={String}
                 closeOnSelect
                 maxVisibleItems={5}

@@ -121,7 +121,5 @@ export function migrateOldSettings() {
         setStoreValue("tosu_enabled", true);
     }
 
-
-
     Settings.plugins.RichPresence._migrated = true;
 }

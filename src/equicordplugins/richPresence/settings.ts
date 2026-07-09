@@ -6,21 +6,12 @@
 
 import { definePluginSettings } from "@api/Settings";
 import { OptionType } from "@utils/types";
-import { lodash } from "@webpack/common";
 
 import { SettingsPanel } from "./SettingsPanel";
 import { NameFormat } from "./types";
 
 export let onServiceChange: (() => void) | null = null;
 export function setOnServiceChange(fn: (() => void) | null) { onServiceChange = fn; }
-
-let debouncedServiceChange: ReturnType<typeof lodash.debounce> | undefined;
-function triggerDebouncedServiceChange() {
-    if (!debouncedServiceChange) {
-        debouncedServiceChange = lodash.debounce(() => onServiceChange?.(), 500);
-    }
-    debouncedServiceChange();
-}
 
 export const settings = definePluginSettings({
     enabled: {
@@ -369,7 +360,6 @@ export const settings = definePluginSettings({
         type: OptionType.STRING,
         default: "",
         hidden: true,
-        onChange: triggerDebouncedServiceChange,
     },
 
     nd_username: {
@@ -377,35 +367,30 @@ export const settings = definePluginSettings({
         type: OptionType.STRING,
         default: "",
         hidden: true,
-        onChange: triggerDebouncedServiceChange,
     },
     nd_password: {
         description: "Navidrome Password",
         type: OptionType.STRING,
         default: "",
         hidden: true,
-        onChange: triggerDebouncedServiceChange,
     },
     nd_clientId: {
         description: "Optional Discord Application Client ID",
         type: OptionType.STRING,
         default: "",
         hidden: true,
-        onChange: triggerDebouncedServiceChange,
     },
     nd_showSmallImage: {
         description: "Show Navidrome logo in bottom right of album art.",
         type: OptionType.BOOLEAN,
         default: false,
         hidden: true,
-        onChange: triggerDebouncedServiceChange,
     },
     nd_showAlbum: {
         description: "Show album name in presence.",
         type: OptionType.BOOLEAN,
         default: true,
         hidden: true,
-        onChange: triggerDebouncedServiceChange,
     },
     nd_albumArtMode: {
         description: "How to fetch album art.",
@@ -416,14 +401,12 @@ export const settings = definePluginSettings({
             { label: "Last.fm API (Sends track metadata to Last.fm)", value: "lastfm" },
         ],
         hidden: true,
-        onChange: triggerDebouncedServiceChange,
     },
     nd_lastfmApiKey: {
         description: "Optional Last.fm API Key",
         type: OptionType.STRING,
         default: "",
         hidden: true,
-        onChange: triggerDebouncedServiceChange,
     },
     nd_refreshInterval: {
         description: "Refresh interval in seconds.",
@@ -431,7 +414,6 @@ export const settings = definePluginSettings({
         markers: [1, 2, 5, 10, 15],
         default: 10,
         hidden: true,
-        onChange: triggerDebouncedServiceChange,
     },
     nd_activityType: {
         type: OptionType.SELECT,
@@ -442,35 +424,30 @@ export const settings = definePluginSettings({
             { label: "Watching", value: 3 }
         ],
         hidden: true,
-        onChange: triggerDebouncedServiceChange,
     },
     nd_nameString: {
         type: OptionType.STRING,
         description: "Activity name format string",
         default: "Navidrome",
         hidden: true,
-        onChange: triggerDebouncedServiceChange,
     },
     nd_detailsString: {
         type: OptionType.STRING,
         description: "Activity details format string",
         default: "{song}",
         hidden: true,
-        onChange: triggerDebouncedServiceChange,
     },
     nd_stateString: {
         type: OptionType.STRING,
         description: "Activity state format string",
         default: "{artist}",
         hidden: true,
-        onChange: triggerDebouncedServiceChange,
     },
     nd_largeTextString: {
         type: OptionType.STRING,
         description: "Activity large text format string",
         default: "{album}",
         hidden: true,
-        onChange: triggerDebouncedServiceChange,
     },
     nd_statusDisplayType: {
         description: "Show the track / artist name in the member list",
@@ -491,7 +468,6 @@ export const settings = definePluginSettings({
             }
         ],
         hidden: true,
-        onChange: triggerDebouncedServiceChange,
     },
 });
 

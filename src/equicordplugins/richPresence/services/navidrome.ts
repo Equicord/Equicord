@@ -4,14 +4,18 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { md5 } from "../utils";
 import { Logger } from "@utils/Logger";
 import { parseUrl } from "@utils/misc";
 import { Activity } from "@vencord/discord-types";
 import { ActivityFlags, ActivityStatusDisplayType } from "@vencord/discord-types/enums";
 import { ApplicationAssetUtils, FluxDispatcher } from "@webpack/common";
+import { createHash } from "md5";
 
 import { settings } from "../settings";
+
+function md5Hex(str: string): string {
+    return createHash("md5").update(str).digest("hex");
+}
 
 const SOCKET_ID = "RichPresence_Navidrome";
 const logger = new Logger("RichPresence:Navidrome");
@@ -24,7 +28,6 @@ let lastMinutesAgo: number | undefined;
 let cachedActivity: Activity | undefined;
 let cachedSettingsJSON: string | undefined;
 const lastFmCache = new Map<string, string | null>();
-
 
 interface NdTrack {
     id: string;
@@ -47,7 +50,7 @@ function customFormat(formatStr: string | undefined, track: NdTrack): string {
         .replaceAll("{artist}", track.artist ?? "")
         .replaceAll("{album}", track.album ?? "")
         .replaceAll("{year}", track.year ? `${track.year}` : "")
-        .replaceAll("{quality}", track.suffix ? `${track.suffix.toUpperCase()}${track.bitRate ? ' ' + track.bitRate + 'kbps' : ''}` : "");
+        .replaceAll("{quality}", track.suffix ? `${track.suffix.toUpperCase()}${track.bitRate ? " " + track.bitRate + "kbps" : ""}` : "");
 }
 
 async function getAsset(applicationId: string, key: string): Promise<string> {
@@ -79,7 +82,7 @@ async function fetchNowPlaying(signal?: AbortSignal): Promise<NdTrack | null> {
         }
 
         const salt = Math.random().toString(36).substring(2, 8);
-        const token = md5((nd_password ?? "") + salt);
+        const token = md5Hex((nd_password ?? "") + salt);
 
         const baseUrl = parsedUrl.href.replace(/\/$/, "");
         const queryParams = `u=${encodeURIComponent(nd_username)}&t=${token}&s=${salt}&v=1.12.0&c=equicord-rpc&f=json`;
@@ -100,8 +103,50 @@ async function fetchNowPlaying(signal?: AbortSignal): Promise<NdTrack | null> {
         const myEntry = entries.find((e: NdTrack) => e.username?.toLowerCase() === nd_username.toLowerCase());
         return myEntry ?? null;
     } catch (e: unknown) {
-        if (e instanceof Error && e.name === 'AbortError') throw e;
+        if (e instanceof Error && e.name === "AbortError") throw e;
         logger.error("Failed to fetch from Navidrome API", e);
+        return null;
+    }
+}
+
+const albumInfoCache = new Map<string, string | null>();
+
+async function fetchAlbumInfo2(albumId: string, signal?: AbortSignal): Promise<string | null> {
+    const { nd_serverUrl, nd_username, nd_password } = settings.store;
+    if (!nd_serverUrl || !nd_username || !nd_password) return null;
+
+    if (albumInfoCache.has(albumId)) {
+        return albumInfoCache.get(albumId) ?? null;
+    }
+
+    try {
+        const parsedUrl = parseUrl(nd_serverUrl);
+        if (!parsedUrl || parsedUrl.protocol !== "https:") return null;
+
+        const salt = Math.random().toString(36).substring(2, 8);
+        const token = md5Hex((nd_password ?? "") + salt);
+
+        const baseUrl = parsedUrl.href.replace(/\/$/, "");
+        const queryParams = `id=${encodeURIComponent(albumId)}&u=${encodeURIComponent(nd_username)}&t=${token}&s=${salt}&v=1.12.0&c=equicord-rpc&f=json`;
+
+        const res = await fetch(`${baseUrl}/rest/getAlbumInfo2?${queryParams}`, { signal });
+        if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
+
+        const data = await res.json();
+        if (data["subsonic-response"]?.status === "failed") {
+            albumInfoCache.set(albumId, null);
+            return null;
+        }
+
+        const info = data["subsonic-response"]?.albumInfo;
+        const imageUrl: string | null = info?.largeImageUrl || info?.mediumImageUrl || info?.smallImageUrl || null;
+
+        albumInfoCache.set(albumId, imageUrl);
+        return imageUrl;
+    } catch (e: unknown) {
+        if (e instanceof Error && e.name === "AbortError") throw e;
+        logger.error("Failed to fetch album info from Navidrome API", e);
+        albumInfoCache.set(albumId, null);
         return null;
     }
 }
@@ -139,7 +184,7 @@ async function getActivity(signal?: AbortSignal): Promise<Activity | null> {
         return cachedActivity;
     }
 
-    const { nd_clientId, nd_showSmallImage, nd_username, nd_password, nd_serverUrl, nd_showAlbum, nd_nameString, nd_detailsString, nd_stateString, nd_largeTextString, nd_activityType, nd_statusDisplayType, nd_lastfmApiKey } = settings.store;
+    const { nd_clientId, nd_showSmallImage, nd_serverUrl, nd_showAlbum, nd_nameString, nd_detailsString, nd_stateString, nd_largeTextString, nd_activityType, nd_statusDisplayType, nd_lastfmApiKey } = settings.store;
 
     const _clientId = nd_clientId?.trim();
     const appId = _clientId === "" ? "1470554657506984069" : (_clientId ?? "1470554657506984069");
@@ -168,7 +213,7 @@ async function getActivity(signal?: AbortSignal): Promise<Activity | null> {
     const endTimestamp = cachedStartTimestamp + durationMs;
 
     const isPlaying = Number(nd_activityType ?? 2) === 0;
-    const nameString = !isPlaying ? customFormat(nd_nameString ? nd_nameString : "Navidrome", track) : "Navidrome";
+    const nameString = !isPlaying ? customFormat(nd_nameString || "Navidrome", track) : "Navidrome";
 
     const detailsString = customFormat(nd_detailsString, track);
     let stateString = customFormat(nd_stateString, track);
@@ -189,12 +234,14 @@ async function getActivity(signal?: AbortSignal): Promise<Activity | null> {
     let resolvedCoverArtUrl: string | null = null;
 
     if (albumArtMode === "instance" && track.coverArt && externalBaseUrl) {
-        const salt = Math.random().toString(36).substring(2, 8);
-        const token = md5((nd_password ?? "") + salt);
-        resolvedCoverArtUrl = `${externalBaseUrl}/rest/getCoverArt?id=${track.coverArt}&u=${encodeURIComponent(nd_username ?? "")}&t=${token}&s=${salt}&v=1.12.0&c=equicord-rpc`;
+        // Subsonic's getAlbumInfo2 expects an album id. Navidrome (and most
+        // Subsonic servers) alias a track's coverArt id to its album id
+        // (both are "al-<uuid>"), so we reuse it here rather than fetching
+        // the album id separately.
+        resolvedCoverArtUrl = await fetchAlbumInfo2(track.coverArt, signal);
     } else if (albumArtMode === "lastfm" && track.artist) {
         const trimmedKey = nd_lastfmApiKey?.trim();
-        const apiKey = trimmedKey ? trimmedKey : "feff915bf5987580c9dc354d523dc6b9";
+        const apiKey = trimmedKey || "feff915bf5987580c9dc354d523dc6b9";
         const cacheKey = `${track.id}:${apiKey}`;
 
         if (lastFmCache.has(cacheKey)) {
@@ -259,9 +306,9 @@ async function getActivity(signal?: AbortSignal): Promise<Activity | null> {
 
     const activity: Activity = {
         application_id: appId,
-        name: nameString ? nameString : "Navidrome",
-        details: detailsString ? detailsString : undefined,
-        state: stateString ? stateString : undefined,
+        name: nameString || "Navidrome",
+        details: detailsString || undefined,
+        state: stateString || undefined,
         status_display_type: nd_statusDisplayType ? {
             "off": ActivityStatusDisplayType.NAME,
             "artist": ActivityStatusDisplayType.STATE,
@@ -293,7 +340,7 @@ async function updatePresence() {
             cachedSettingsJSON = undefined;
         }
     } catch (e: unknown) {
-        if (e instanceof Error && e.name === 'AbortError') return;
+        if (e instanceof Error && e.name === "AbortError") return;
         logger.error("Failed to update presence", e);
         setActivity(null);
         currentTrackId = undefined;
@@ -334,6 +381,7 @@ export function stop() {
     abortController = undefined;
     clearTimeout(updateTimer);
     lastFmCache.clear();
+    albumInfoCache.clear();
     updateTimer = undefined;
     currentTrackId = undefined;
     cachedStartTimestamp = undefined;
