@@ -256,9 +256,14 @@
 }
 
 [data-vc-collapsible-ui-sidebar-channel-list-expanded]:not([data-vc-collapsible-ui-sidebar-user-area-detached]) [data-vc-collapsible-ui-user-area] {
-    width: var(--custom-guild-sidebar-width, 312px) !important;
-    min-width: var(--vc-cui-channel-list-min-width) !important;
-    max-width: var(--vc-cui-channel-list-max-width) !important;
+    /* Anchor both edges instead of forcing a width: the guild bar column is
+       min-content and theme-dependent, so a fixed width leaves a right-side
+       gap whenever the guild bar is expanded. */
+    left: 0 !important;
+    right: 0 !important;
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: none !important;
 }
 
 [data-vc-collapsible-ui-user-area-detached] {
