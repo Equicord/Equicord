@@ -98,10 +98,13 @@ jobs:
 
                   git config --global user.name "GitHub-Actions"
                   git config --global user.email actions@github.com
-                  git clone https://$USERNAME:$GITHUB_TOKEN@github.com/$REPO.git equibuilds
-                  cd equibuilds
+
+                  mkdir equibuilds && cd equibuilds
+                  git init -b "$BRANCH"
+                  git remote add origin https://$USERNAME:$GITHUB_TOKEN@github.com/$REPO.git
 
                   if git ls-remote --exit-code --heads origin "$BRANCH" > /dev/null 2>&1; then
+                      git fetch --depth 1 origin "$BRANCH"
                       git checkout "$BRANCH"
                   else
                       git checkout --orphan "$BRANCH"
@@ -117,6 +120,5 @@ jobs:
                   mv extension-*.zip browser/
 
                   git add -A
-
                   git commit -m "Builds for https://github.com/$GITHUB_REPOSITORY/commit/$COMMIT_SHA"
-                  git push --force https://$USERNAME:$GITHUB_TOKEN@github.com/$REPO.git "$BRANCH"
+                  git push --force origin "$BRANCH"
