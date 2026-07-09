@@ -65,7 +65,7 @@ export default definePlugin({
                 },
                 {
                     match: /\i\.memo\(function\((\i)\)\{(?=let \i,\i)/,
-                    replace: "$&e.message=$self.transformMessage($1);",
+                    replace: "$&$1.message=$self.transformMessage($1.message);",
                 },
             ],
         },
