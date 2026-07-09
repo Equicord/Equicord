@@ -128,8 +128,7 @@ const buildConfigs = ([
         footer: { js: "//# sourceURL=file:///VencordPatcher\n" + sourceMapFooter("patcher") },
         sourcemap,
         plugins: [
-            // @ts-ignore this is never undefined
-            ...nodeCommonOpts.plugins,
+            ...(nodeCommonOpts.plugins ?? []),
             globNativesPlugin
         ],
         define: {
@@ -150,7 +149,7 @@ const buildConfigs = ([
         sourcemap,
         plugins: [
             globPlugins("discordDesktop"),
-            ...commonOpts.plugins
+            ...(commonOpts.plugins ?? [])
         ],
         define: {
             ...defines,
@@ -181,7 +180,7 @@ const buildConfigs = ([
         footer: { js: "//# sourceURL=file:///VencordDesktopMain\n" + sourceMapFooter("main") },
         sourcemap,
         plugins: [
-            ...nodeCommonOpts.plugins,
+            ...(nodeCommonOpts.plugins ?? []),
             globNativesPlugin
         ],
         define: {

@@ -2,8 +2,6 @@
     "compilerOptions": {
         "forceConsistentCasingInFileNames": true,
         "resolveJsonModule": true,
-        "allowSyntheticDefaultImports": true,
-        "esModuleInterop": true,
         "skipLibCheck": false,
         "allowJs": true,
         "lib": [
@@ -20,6 +18,7 @@
         "noImplicitAny": false,
         "target": "ESNEXT",
         "jsx": "preserve",
+        "types": ["*"],
         "paths": {
             "@main/*": [
                 "./src/main/*"
@@ -64,13 +63,6 @@
                 "./src/equicordplugins/*"
             ]
         },
-        "plugins": [
-            // Transform paths in output .d.ts files (Include this line if you output declarations files)
-            {
-                "transform": "typescript-transform-paths",
-                "afterDeclarations": true
-            }
-        ],
         "outDir": "who-fucking-cares-dude"
     },
     "include": [
