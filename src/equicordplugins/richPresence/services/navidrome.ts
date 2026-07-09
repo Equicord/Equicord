@@ -73,13 +73,8 @@ async function fetchNowPlaying(signal?: AbortSignal): Promise<NdTrack | null> {
             return null;
         }
 
-        const hostname = parsedUrl.hostname;
-        const isIpV4 = /^(\d{1,3}\.){3}\d{1,3}$/.test(hostname);
-        const isIpV6 = hostname.includes(":");
-        const isLocalHost = hostname === "localhost" || hostname.endsWith(".local") || hostname.endsWith(".lan") || !hostname.includes(".");
-
-        if (isIpV4 || isIpV6 || isLocalHost) {
-            logger.warn("Navidrome server URL must use a public domain. Local IPs and hostnames are not supported.");
+        if (parsedUrl.protocol !== "https:") {
+            logger.warn("Navidrome server URL must use HTTPS.");
             return null;
         }
 
