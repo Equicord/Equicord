@@ -14,10 +14,13 @@ import characterCounter from "@plugins/characterCounter";
 import { EquicordDevs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
 import { copyWithToast, getCurrentChannel, insertTextIntoChatInputBox, sendMessage } from "@utils/discord";
+import { Logger } from "@utils/Logger";
 import { classes, sleep } from "@utils/misc";
 import definePlugin, { OptionType } from "@utils/types";
 import { Channel } from "@vencord/discord-types";
 import { ChannelStore, ComponentDispatch, PermissionsBits, PermissionStore, Toasts, UserStore } from "@webpack/common";
+
+const logger = new Logger("SplitLargeMessages");
 
 const cl = classNameFactory("vc-splitLargeMessages-");
 
@@ -145,14 +148,14 @@ const splitAndSend = async (channelId: string, chunks: string[], delayInMs: numb
                 await sleep(delayInMs);
             }
         }
-        console.log(`[SplitLargeMessages] Successfully sent ${sentCount}/${total} message parts.`);
+        logger.info(`Successfully sent ${sentCount}/${total} message parts.`);
         Toasts.show({
             message: `${sentCount}/${total} message parts sent.`,
             id: "vc-splitLargeMessages-success",
             type: Toasts.Type.SUCCESS
         });
     } catch (error) {
-        console.error(`[SplitLargeMessages] Failed to send message parts. Sent ${sentCount}/${total}:`, error);
+        logger.error(`Failed to send message parts. Sent ${sentCount}/${total}:`, error);
         Toasts.show({
             message: `Failed to send message parts. Sent ${sentCount}/${total}.`,
             id: "vc-splitLargeMessages-failure",
