@@ -117,7 +117,7 @@ export default definePlugin({
             case "collapse":
                 return <><CollapsibleCard>{card}</CollapsibleCard>{other}</>;
             default:
-                return [other, card];
+                return <>{other}{card}</>;
         }
     },
 });
