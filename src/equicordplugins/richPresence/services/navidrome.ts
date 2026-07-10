@@ -114,8 +114,6 @@ async function fetchNowPlaying(signal?: AbortSignal): Promise<NdTrack | null> {
     }
 }
 
-
-
 function getSettingsJSON() {
     return JSON.stringify({
         nd_clientId: settings.store.nd_clientId,
@@ -218,7 +216,7 @@ async function getActivity(signal?: AbortSignal): Promise<Activity | null> {
 
     const detailsString = customFormat(nd_detailsString, track);
     let stateString = customFormat(nd_stateString, track);
-    
+
     if (isPaused) {
         stateString = stateString ? `${stateString} (Paused)` : "Paused";
     }
