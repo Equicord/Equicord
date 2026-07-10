@@ -9,13 +9,14 @@ import "./styles.css";
 import { Settings, useSettings } from "@api/Settings";
 import { BaseText } from "@components/BaseText";
 import ErrorBoundary from "@components/ErrorBoundary";
+import { Link } from "@components/Link";
+import { Notice } from "@components/Notice";
 import { PluginDependencyList } from "@components/settings/tabs/plugins";
 import { PluginCard } from "@components/settings/tabs/plugins/PluginCard";
 import { ChangeList } from "@utils/ChangeList";
 import { classNameFactory } from "@utils/css";
 import { useForceUpdater } from "@utils/react";
 import { RenderModalProps } from "@vencord/discord-types";
-import { findComponentByCodeLazy } from "@webpack";
 import { closeModal, Modal, openModal, Tooltip, useMemo } from "@webpack/common";
 import { ReactNode } from "react";
 
@@ -24,8 +25,6 @@ import Plugins from "~plugins";
 import { getNewPlugins, getNewSettings, KnownPluginSettingsMap, writeKnownSettings } from "./knownSettings";
 
 const cl = classNameFactory("vc-new-plugins-");
-
-const Checkbox = findComponentByCodeLazy('"data-toggleable-component":"checkbox');
 
 let hasSeen = false;
 
@@ -127,10 +126,18 @@ function NewPluginsModal({ modalProps, newPlugins, newSettings }: ModalComponent
                     <BaseText size="lg" weight="semibold" className={cl("title")}>
                         New Plugins and Settings ({totalCount})
                     </BaseText>
+                </div>
+            }
+            subtitle={
+                <>
                     <BaseText size="sm" className={cl("description")}>
                         New plugins have been added since your last visit. Enable any you'd like or continue to dismiss.
                     </BaseText>
-                </div>
+                    <br />
+                    <Notice.Info className={cl("notice")}>
+                        Equicord is Open Source Software. If you enjoy using it, consider supporting us <Link href="https://github.com/sponsors/thororen1234" target="_blank" rel="noopener noreferrer">here</Link>.
+                    </Notice.Info>
+                </>
             }
             actions={[
                 {
@@ -151,7 +158,7 @@ function NewPluginsModal({ modalProps, newPlugins, newSettings }: ModalComponent
                 {pluginCards}
                 {requiredPluginCards}
             </div>
-        </Modal>
+        </Modal >
     );
 }
 
