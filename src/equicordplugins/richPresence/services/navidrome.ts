@@ -109,8 +109,6 @@ async function fetchNowPlaying(signal?: AbortSignal): Promise<NdTrack | null> {
     }
 }
 
-
-
 function getSettingsJSON() {
     return JSON.stringify({
         nd_clientId: settings.store.nd_clientId,
