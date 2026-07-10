@@ -65,6 +65,8 @@ export interface TooltipProps {
 
     tooltipClassName?: string;
     tooltipContentClassName?: string;
+
+    delay?: number;
 }
 
 export type Tooltip = ComponentType<TooltipProps> & {

@@ -14,7 +14,7 @@ import { Devs, EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 import { Message, User } from "@vencord/discord-types";
 import { findByPropsLazy, findCssClassesLazy } from "@webpack";
-import { Button, Menu, openModal,showToast, Toasts, Tooltip, useEffect, UserStore, useState } from "@webpack/common";
+import { Button, Menu, openModal, showToast, Toasts, Tooltip, useEffect, UserStore, useState } from "@webpack/common";
 
 import { deleteTimezone, getTimezone, loadDatabaseTimezones, setUserDatabaseTimezone } from "./database";
 import { SetTimezoneModal } from "./TimezoneModal";
@@ -82,6 +82,12 @@ export const settings = definePluginSettings({
         type: OptionType.BOOLEAN,
         description: "Prefer database over local storage for timezones",
         default: true
+    },
+
+    showLocalTimezone: {
+        type: OptionType.BOOLEAN,
+        description: "Show Local Timezone instead of just local",
+        default: false,
     },
 
     databaseUrl: {
@@ -195,12 +201,14 @@ const TimestampComponent = ErrorBoundary.wrap(({ userId, timestamp, type }: Prop
 
     if (settings.store.showTimezoneInfo) {
         const userTimezone = getSystemTimezone();
-        if (timezone === userTimezone) {
+        if (timezone === userTimezone && !settings.store.showLocalTimezone) {
             displayTime = "local";
             isLocal = true;
         } else {
             const timezoneInfo = getTimezoneAbbreviation(timezone, currentTime);
-            displayTime = `${shortTime} ${timezoneInfo || timezone}`;
+            const tz = timezoneInfo || timezone;
+            const hideLocalTime = settings.store.showLocalTimezone && type === "message";
+            displayTime = hideLocalTime ? tz : `${shortTime} ${tz}`;
         }
     }
 
@@ -218,7 +226,6 @@ const TimestampComponent = ErrorBoundary.wrap(({ userId, timestamp, type }: Prop
     return (
         <Tooltip
             position="top"
-            // @ts-ignore
             delay={750}
             allowOverflow={false}
             spacing={8}
