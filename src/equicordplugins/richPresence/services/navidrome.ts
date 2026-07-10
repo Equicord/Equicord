@@ -153,7 +153,7 @@ async function getActivity(signal?: AbortSignal): Promise<Activity | null> {
             const expectedPosition = Date.now() - cachedStartTimestamp;
             if (Math.abs(expectedPosition - track.positionMs) > 2000) drift = true;
         }
-        if (track.state === cachedTrackState && track.minutesAgo === lastMinutesAgo && !drift) {
+        if (track.state === cachedTrackState && (track.minutesAgo ?? 0) === (lastMinutesAgo ?? 0) && !drift) {
             return cachedActivity;
         }
     }
@@ -342,6 +342,7 @@ async function updatePresence() {
             cachedActivity = undefined;
             cachedSettingsJSON = undefined;
             cachedTrackState = undefined;
+            cachedPauseTimestamp = undefined;
         }
     } catch (e: unknown) {
         if (e instanceof Error && e.name === "AbortError") return;
