@@ -24,6 +24,8 @@ let updateTimer: NodeJS.Timeout | undefined;
 let abortController: AbortController | undefined;
 let currentTrackId: string | undefined;
 let cachedStartTimestamp: number | undefined;
+let cachedPauseTimestamp: number | undefined;
+let cachedTrackState: string | undefined;
 let lastMinutesAgo: number | undefined;
 let cachedActivity: Activity | undefined;
 let cachedSettingsJSON: string | undefined;
@@ -41,6 +43,9 @@ interface NdTrack {
     minutesAgo?: number;
     coverArt?: string;
     username?: string;
+    state?: string;
+    positionMs?: number;
+    playbackRate?: number;
 }
 
 function customFormat(formatStr: string | undefined, track: NdTrack): string {
@@ -109,8 +114,6 @@ async function fetchNowPlaying(signal?: AbortSignal): Promise<NdTrack | null> {
     }
 }
 
-
-
 function getSettingsJSON() {
     return JSON.stringify({
         nd_clientId: settings.store.nd_clientId,
@@ -126,7 +129,8 @@ function getSettingsJSON() {
         nd_statusDisplayType: settings.store.nd_statusDisplayType,
         nd_albumArtMode: settings.store.nd_albumArtMode,
         nd_lastfmApiKey: settings.store.nd_lastfmApiKey,
-        nd_showAlbum: settings.store.nd_showAlbum
+        nd_showAlbum: settings.store.nd_showAlbum,
+        nd_hideOnPause: settings.store.nd_hideOnPause
     });
 }
 
@@ -140,11 +144,26 @@ async function getActivity(signal?: AbortSignal): Promise<Activity | null> {
     if (!track) return null;
 
     const currentSettingsJSON = getSettingsJSON();
+
+    const isPaused = track.state?.toLowerCase() === "paused";
+
     if (track.id === currentTrackId && cachedActivity && cachedSettingsJSON === currentSettingsJSON) {
-        return cachedActivity;
+        let drift = false;
+        if (track.positionMs !== undefined && !isPaused && cachedStartTimestamp) {
+            const expectedPosition = Date.now() - cachedStartTimestamp;
+            if (Math.abs(expectedPosition - track.positionMs) > 2000) drift = true;
+        }
+        if (track.state === cachedTrackState && (track.minutesAgo ?? 0) === (lastMinutesAgo ?? 0) && !drift) {
+            return cachedActivity;
+        }
     }
 
-    const { nd_clientId, nd_showSmallImage, nd_serverUrl, nd_showAlbum, nd_nameString, nd_detailsString, nd_stateString, nd_largeTextString, nd_activityType, nd_statusDisplayType, nd_lastfmApiKey } = settings.store;
+    const { nd_clientId, nd_showSmallImage, nd_serverUrl, nd_showAlbum, nd_nameString, nd_detailsString, nd_stateString, nd_largeTextString, nd_activityType, nd_statusDisplayType, nd_lastfmApiKey, nd_hideOnPause } = settings.store;
+
+    if (isPaused && nd_hideOnPause) {
+        cachedPauseTimestamp = undefined;
+        return null;
+    }
 
     const _clientId = nd_clientId?.trim();
     const appId = _clientId === "" ? "1470554657506984069" : (_clientId ?? "1470554657506984069");
@@ -159,24 +178,49 @@ async function getActivity(signal?: AbortSignal): Promise<Activity | null> {
 
     if (track.id !== currentTrackId || !cachedStartTimestamp) {
         currentTrackId = track.id;
-        const elapsedMs = trackMinutesAgo * 60 * 1000;
+        const elapsedMs = track.positionMs ?? (trackMinutesAgo * 60 * 1000);
         cachedStartTimestamp = Date.now() - elapsedMs;
         lastMinutesAgo = trackMinutesAgo;
     } else {
-        if (trackMinutesAgo < (lastMinutesAgo ?? 0) || trackMinutesAgo > (lastMinutesAgo ?? 0) + 1) {
-            const elapsedMs = trackMinutesAgo * 60 * 1000;
-            cachedStartTimestamp = Date.now() - elapsedMs;
+        if (track.positionMs !== undefined) {
+            if (!isPaused) {
+                const expectedPosition = Date.now() - cachedStartTimestamp;
+                if (Math.abs(expectedPosition - track.positionMs) > 2000) {
+                    cachedStartTimestamp = Date.now() - track.positionMs;
+                }
+            }
+        } else {
+            if (trackMinutesAgo < (lastMinutesAgo ?? 0) || trackMinutesAgo > (lastMinutesAgo ?? 0) + 1) {
+                const elapsedMs = trackMinutesAgo * 60 * 1000;
+                cachedStartTimestamp = Date.now() - elapsedMs;
+            }
         }
         lastMinutesAgo = trackMinutesAgo;
     }
 
+    if (isPaused) {
+        if (!cachedPauseTimestamp) {
+            cachedPauseTimestamp = Date.now();
+        }
+    } else {
+        cachedPauseTimestamp = undefined;
+    }
+
     const endTimestamp = cachedStartTimestamp + durationMs;
+
+    if (!isPaused && durationMs > 0 && Date.now() >= endTimestamp) {
+        return null;
+    }
 
     const isPlaying = Number(nd_activityType ?? 2) === 0;
     const nameString = !isPlaying ? customFormat(nd_nameString || "Navidrome", track) : "Navidrome";
 
     const detailsString = customFormat(nd_detailsString, track);
     let stateString = customFormat(nd_stateString, track);
+
+    if (isPaused) {
+        stateString = stateString ? `${stateString} (Paused)` : "Paused";
+    }
 
     const assets: Activity["assets"] = {};
     if (nd_showAlbum && nd_largeTextString) {
@@ -273,9 +317,11 @@ async function getActivity(signal?: AbortSignal): Promise<Activity | null> {
             "artist": ActivityStatusDisplayType.STATE,
             "track": ActivityStatusDisplayType.DETAILS
         }[nd_statusDisplayType as "off" | "artist" | "track"] : undefined,
-        type: Number(nd_activityType ?? 2),
+        type: (isPaused && !nd_hideOnPause) ? 0 : Number(nd_activityType ?? 2),
         flags: ActivityFlags.INSTANCE,
-        timestamps: {
+        timestamps: isPaused && !nd_hideOnPause ? {
+            start: cachedPauseTimestamp,
+        } : {
             start: cachedStartTimestamp,
             end: durationMs > 0 ? endTimestamp : undefined,
         },
@@ -284,6 +330,7 @@ async function getActivity(signal?: AbortSignal): Promise<Activity | null> {
 
     cachedSettingsJSON = currentSettingsJSON;
     cachedActivity = activity;
+    cachedTrackState = track.state;
     return activity;
 }
 
@@ -297,6 +344,8 @@ async function updatePresence() {
             lastMinutesAgo = undefined;
             cachedActivity = undefined;
             cachedSettingsJSON = undefined;
+            cachedTrackState = undefined;
+            cachedPauseTimestamp = undefined;
         }
     } catch (e: unknown) {
         if (e instanceof Error && e.name === "AbortError") return;
@@ -304,9 +353,11 @@ async function updatePresence() {
         setActivity(null);
         currentTrackId = undefined;
         cachedStartTimestamp = undefined;
+        cachedPauseTimestamp = undefined;
         lastMinutesAgo = undefined;
         cachedActivity = undefined;
         cachedSettingsJSON = undefined;
+        cachedTrackState = undefined;
     }
 
     if (abortController && !abortController.signal.aborted) {
@@ -343,8 +394,10 @@ export function stop() {
     updateTimer = undefined;
     currentTrackId = undefined;
     cachedStartTimestamp = undefined;
+    cachedPauseTimestamp = undefined;
     lastMinutesAgo = undefined;
     cachedActivity = undefined;
     cachedSettingsJSON = undefined;
+    cachedTrackState = undefined;
     setActivity(null);
 }

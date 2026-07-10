@@ -469,6 +469,12 @@ export const settings = definePluginSettings({
         ],
         hidden: true,
     },
+    nd_hideOnPause: {
+        description: "Hide Rich Presence when music is paused",
+        type: OptionType.BOOLEAN,
+        default: true,
+        hidden: true,
+    }
 });
 
 export type SettingsStore = typeof settings["store"];
