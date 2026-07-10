@@ -214,6 +214,7 @@ function NavidromeSettings() {
                 { label: "Show state line content", value: "artist" },
                 { label: "Show details line content", value: "track" }
             ]} />
+            <SwitchSetting name="Hide On Pause" description="Hide Rich Presence when music is paused (instead of showing a stopwatch)" settingsKey="nd_hideOnPause" />
             {Number(nd_activityType ?? 2) !== 0 && (
                 <TextSetting name="Activity Name Format" description="The 'Listening to' text (e.g. {artist})" settingsKey="nd_nameString" placeholder="Navidrome" />
             )}
