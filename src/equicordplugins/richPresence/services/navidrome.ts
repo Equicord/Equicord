@@ -106,9 +106,6 @@ async function fetchNowPlaying(signal?: AbortSignal): Promise<NdTrack | null> {
         if (!entries || !Array.isArray(entries) || entries.length === 0) return null;
 
         const myEntry = entries.find((e: NdTrack) => e.username?.toLowerCase() === nd_username.toLowerCase());
-        if (myEntry) {
-            logger.info("Navidrome NowPlayingEntry:", myEntry);
-        }
         return myEntry ?? null;
     } catch (e: unknown) {
         if (e instanceof Error && e.name === "AbortError") throw e;
