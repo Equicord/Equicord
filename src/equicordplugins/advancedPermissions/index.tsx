@@ -58,6 +58,19 @@ const CollapsibleCard = ErrorBoundary.wrap(
     { noop: true },
 );
 
+let savedCard: ReactNode = null;
+
+const SimplifiedCard = ErrorBoundary.wrap(() => {
+    switch (settings.store.simplifiedCard) {
+        case "hide":
+            return null;
+        case "collapse":
+            return <CollapsibleCard>{savedCard}</CollapsibleCard>;
+        default:
+            return <>{savedCard}</>;
+    }
+}, { noop: true });
+
 const settings = definePluginSettings({
     simplifiedCard: {
         type: OptionType.SELECT,
@@ -87,9 +100,14 @@ export default definePlugin({
             find: 'id:"PrivateChannelSettingCard"',
             replacement: [
                 {
-                    // move the simplified card above the "synced with category" notice
-                    match: /(?<=children:\i\.subtitle\}\),)(.{0,1000}?),(\(0,\i\.jsx\)\(\i,\{channel:\i,guild:\i,isPrivateGuildChannel:\i,roles:\i,members:\i\}\))/,
-                    replace: "$self.renderCard($2,$1)",
+                    // render the card below the subtitle
+                    match: /(?<=children:\i\.subtitle\}\),)/,
+                    replace: "$self.renderCard(),",
+                },
+                {
+                    // grab, store and hide the original card
+                    match: /(?<=permissionUpdates:\i\}\):null,).{0,100}?roles:\i,members:\i\}\)/,
+                    replace: "$self.saveCard($&)",
                 },
                 {
                     // always hide the divider
@@ -110,14 +128,12 @@ export default definePlugin({
         },
     ],
 
-    renderCard(card: ReactNode, other: ReactNode) {
-        switch (settings.store.simplifiedCard) {
-            case "hide":
-                return other;
-            case "collapse":
-                return <><CollapsibleCard>{card}</CollapsibleCard>{other}</>;
-            default:
-                return <>{other}{card}</>;
-        }
+    renderCard() {
+        return <SimplifiedCard />;
+    },
+
+    saveCard(card: ReactNode) {
+        savedCard = card;
+        return null;
     },
 });
