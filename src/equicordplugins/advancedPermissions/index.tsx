@@ -4,8 +4,6 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import "./style.css";
-
 import { definePluginSettings } from "@api/Settings";
 import { BaseText } from "@components/BaseText";
 import ErrorBoundary from "@components/ErrorBoundary";
@@ -89,19 +87,14 @@ export default definePlugin({
             find: 'id:"PrivateChannelSettingCard"',
             replacement: [
                 {
-                    // simplified card renderer
-                    match: /(?<=permissionUpdates:\i\}\):null,).{0,100}roles:\i,members:\i\}\)/,
-                    replace: "$self.renderCard($&)",
+                    // move the simplified card above the "synced with category" notice
+                    match: /(?<=children:\i\.subtitle\}\),)(.{0,1000}?),(\(0,\i\.jsx\)\(\i,\{channel:\i,guild:\i,isPrivateGuildChannel:\i,roles:\i,members:\i\}\))/,
+                    replace: "$self.renderCard($2,$1)",
                 },
                 {
-                    // hide divider when card hidden, else tighten it
+                    // always hide the divider
                     match: /(?<=advancedMode\);.{0,30}children:\[)/,
-                    replace: "$self.cardHidden()?null:",
-                },
-                {
-                    // hide divider when card hidden, else tighten it
-                    match: /className:\i\.\i(?=.{0,50}onExpandedChange)/,
-                    replace: '$&+" vc-iamadvanced-divider"',
+                    replace: "null&&",
                 },
                 {
                     // always force advanced open
@@ -117,18 +110,14 @@ export default definePlugin({
         },
     ],
 
-    cardHidden() {
-        return settings.store.simplifiedCard === "hide";
-    },
-
-    renderCard(card: ReactNode) {
+    renderCard(card: ReactNode, other: ReactNode) {
         switch (settings.store.simplifiedCard) {
             case "hide":
-                return null;
+                return other;
             case "collapse":
-                return <CollapsibleCard>{card}</CollapsibleCard>;
+                return <><CollapsibleCard>{card}</CollapsibleCard>{other}</>;
             default:
-                return card;
+                return <>{other}{card}</>;
         }
     },
 });
