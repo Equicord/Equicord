@@ -363,8 +363,9 @@ export default definePlugin({
 
         if (userId === UserStore.getCurrentUser().id) {
             const channel = recipientTimezoneInDms ? ChannelStore.getChannel(props.message.channel_id) : undefined;
+            const recipientId = channel?.type === 1 ? channel.recipients[0] : undefined;
 
-            if (channel?.type === 1) userId = channel.recipients[0];
+            if (recipientId && resolveUserTimezone(recipientId)) userId = recipientId;
             else if (!showOwnTimezone) return null;
         }
 
