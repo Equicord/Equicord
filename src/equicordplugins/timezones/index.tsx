@@ -207,13 +207,13 @@ const TimestampComponent = ErrorBoundary.wrap(({ userId, timestamp, type }: Prop
 
     if (settings.store.showTimezoneInfo) {
         const userTimezone = getSystemTimezone();
-        if (timezone === userTimezone && !settings.store.showLocalTimezone) {
+        isLocal = timezone === userTimezone;
+        if (isLocal && !settings.store.showLocalTimezone) {
             displayTime = "local";
-            isLocal = true;
         } else {
             const timezoneInfo = getTimezoneAbbreviation(timezone, currentTime);
             const tz = timezoneInfo || timezone;
-            const hideLocalTime = settings.store.showLocalTimezone && type === "message";
+            const hideLocalTime = isLocal && type === "message";
             displayTime = hideLocalTime ? tz : `${shortTime} ${tz}`;
         }
     }
