@@ -339,6 +339,9 @@ async function updatePresence() {
         const activity = await getActivity(abortController?.signal);
         setActivity(activity);
         if (!activity) {
+            currentTrackId = undefined;
+            cachedStartTimestamp = undefined;
+            lastMinutesAgo = undefined;
             cachedActivity = undefined;
             cachedSettingsJSON = undefined;
             cachedTrackState = undefined;
