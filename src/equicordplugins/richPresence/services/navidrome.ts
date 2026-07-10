@@ -129,7 +129,8 @@ function getSettingsJSON() {
         nd_statusDisplayType: settings.store.nd_statusDisplayType,
         nd_albumArtMode: settings.store.nd_albumArtMode,
         nd_lastfmApiKey: settings.store.nd_lastfmApiKey,
-        nd_showAlbum: settings.store.nd_showAlbum
+        nd_showAlbum: settings.store.nd_showAlbum,
+        nd_hideOnPause: settings.store.nd_hideOnPause
     });
 }
 
