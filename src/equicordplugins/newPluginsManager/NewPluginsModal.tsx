@@ -135,7 +135,7 @@ function NewPluginsModal({ modalProps, newPlugins, newSettings }: ModalComponent
                     </BaseText>
                     <br />
                     <Notice.Info className={cl("notice")}>
-                        Equicord is Open Source Software. If you enjoy using it, consider supporting the us <Link href="https://github.com/sponsors/thororen1234" target="_blank" rel="noopener noreferrer">here</Link>.
+                        Equicord is Open Source Software. If you enjoy using it, consider supporting us <Link href="https://github.com/sponsors/thororen1234" target="_blank" rel="noopener noreferrer">here</Link>.
                     </Notice.Info>
                 </>
             }
