@@ -82,6 +82,7 @@ export default definePlugin({
     name: "AdvancedPermissions",
     description: "Show advanced permissions card by default.",
     authors: [EquicordDevs.bastih18],
+    tags: ["Utility"],
     settings,
 
     patches: [

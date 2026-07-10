@@ -22,6 +22,7 @@ export default definePlugin({
     name: "SedEnhanced",
     description: "Expands on Discord's rudimentary `sed` support.",
     authors: [EquicordDevs.dawn, EquicordDevs.Willow, EquicordDevs.kat],
+    tags: ["Chat"],
     patches: [
         {
             find: ".SLASH_COMMAND_USED,{",

@@ -12,7 +12,7 @@ export default definePlugin({
     name: "ConcatenatedComponentExtractor",
     description: "Extract components that have been concatenated by the bundler",
     authors: [Devs.sadan],
-
+    tags: ["Developers", "Utility"],
     required: true,
 
     patches: [

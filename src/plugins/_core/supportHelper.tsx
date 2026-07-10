@@ -319,6 +319,7 @@ export default definePlugin({
     description: "Helps us provide support to you",
     authors: [Devs.Ven],
     dependencies: ["UserSettingsAPI", "CommandsAPI", "MessageAccessoriesAPI"],
+    tags: ["Utility"],
 
     settings,
 
