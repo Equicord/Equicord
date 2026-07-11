@@ -364,10 +364,14 @@ export default definePlugin({
         let userId = props.message.author.id;
 
         if (userId === UserStore.getCurrentUser().id) {
-            if (!showOwnTimezone && !recipientTimezoneInDms) return null;
-
             const channel = ChannelStore.getChannel(props.message.channel_id);
-            if (recipientTimezoneInDms) userId = channel?.getRecipientId() ?? userId;
+            const recipientId = channel?.isDM() ? channel.getRecipientId() : null;
+
+            if (recipientTimezoneInDms && recipientId) {
+                userId = recipientId;
+            } else if (!showOwnTimezone) {
+                return null;
+            }
         }
 
         return <TimestampComponent userId={userId} timestamp={props.message.timestamp.toISOString()} type="message" />;
