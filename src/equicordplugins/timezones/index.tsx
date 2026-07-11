@@ -8,7 +8,7 @@ import "./styles.css";
 
 import { NavContextMenuPatchCallback } from "@api/ContextMenu";
 import * as DataStore from "@api/DataStore";
-import { definePluginSettings } from "@api/Settings";
+import { definePluginSettings, migratePluginSetting } from "@api/Settings";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Devs, EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
@@ -42,14 +42,15 @@ const classes = findCssClassesLazy("timestamp", "compact", "contentOnly");
 const locale = findByPropsLazy("getLocale");
 
 export const settings = definePluginSettings({
-    "Show Own Timezone": {
+    showOwnTimezone: {
         type: OptionType.BOOLEAN,
         description: "Show your own timezone in profiles and message headers",
         default: true
     },
 
-    "24h Time": {
+    twentyFourHourFormat: {
         type: OptionType.BOOLEAN,
+        displayName: "24h Time",
         description: "Show time in 24h format",
         default: false
     },
@@ -146,7 +147,7 @@ export const settings = definePluginSettings({
 function getTime(timezone: string, timestamp: string | number, props: Intl.DateTimeFormatOptions = {}) {
     const date = new Date(timestamp);
     const formatter = new Intl.DateTimeFormat(locale.getLocale() ?? "en-US", {
-        hour12: !settings.store["24h Time"],
+        hour12: !settings.store.twentyFourHourFormat,
         timeZone: timezone,
         ...props
     });
@@ -207,8 +208,8 @@ const TimestampComponent = ErrorBoundary.wrap(({ userId, timestamp, type }: Prop
 
     if (settings.store.showTimezoneInfo) {
         const userTimezone = getSystemTimezone();
-        isLocal = timezone === userTimezone;
-        if (isLocal && !settings.store.showLocalTimezone) {
+        isLocal = timezone === userTimezone && !settings.store.showLocalTimezone;
+        if (isLocal) {
             displayTime = "local";
         } else {
             const timezoneInfo = getTimezoneAbbreviation(timezone, currentTime);
@@ -265,6 +266,8 @@ const userContextMenuPatch: NavContextMenuPatchCallback = (children, { user }: {
     children.push(<Menu.MenuSeparator />, setTimezoneItem);
 };
 
+migratePluginSetting("Timezones", "showOwnTimezone", "Show Own Timezone");
+migratePluginSetting("Timezones", "twentyFourHourFormat", "24h Time");
 export default definePlugin({
     name: "Timezones",
     authors: [Devs.Aria, EquicordDevs.creations],
@@ -349,24 +352,22 @@ export default definePlugin({
 
     renderProfileTimezone: (props?: { user?: User; }) => {
         if (!settings.store.showProfileTime || !props?.user?.id) return null;
-        if (props.user.id === UserStore.getCurrentUser().id && !settings.store["Show Own Timezone"]) return null;
+        if (props.user.id === UserStore.getCurrentUser().id && !settings.store.showOwnTimezone) return null;
 
         return <TimestampComponent userId={props.user.id} type="profile" />;
     },
 
     renderMessageTimezone: (props?: { message?: Message; }) => {
-        const { showMessageHeaderTime, recipientTimezoneInDms, "Show Own Timezone": showOwnTimezone } = settings.store;
-
+        const { showMessageHeaderTime, recipientTimezoneInDms, showOwnTimezone } = settings.store;
         if (!showMessageHeaderTime || !props?.message) return null;
 
         let userId = props.message.author.id;
 
         if (userId === UserStore.getCurrentUser().id) {
-            const channel = recipientTimezoneInDms ? ChannelStore.getChannel(props.message.channel_id) : undefined;
-            const recipientId = channel?.type === 1 ? channel.recipients[0] : undefined;
+            if (!showOwnTimezone) return null;
 
-            if (recipientId && resolveUserTimezone(recipientId)) userId = recipientId;
-            else if (!showOwnTimezone) return null;
+            const channel = ChannelStore.getChannel(props.message.channel_id);
+            if (recipientTimezoneInDms) userId = channel?.getRecipientId() ?? userId;
         }
 
         return <TimestampComponent userId={userId} timestamp={props.message.timestamp.toISOString()} type="message" />;
