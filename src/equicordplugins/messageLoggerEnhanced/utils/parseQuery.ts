@@ -22,7 +22,7 @@ import { LoggedMessageJSON } from "../types";
 import { getGuildIdByChannel } from "./index";
 import { memoize } from "./memoize";
 
-const validIdSearchTypes = ["server", "guild", "channel", "in", "user", "from", "message", "has", "before", "after", "around", "near", "during"] as const;
+const validIdSearchTypes = ["server", "guild", "channel", "in", "user", "from", "message", "attachment", "file", "has", "before", "after", "around", "near", "during"] as const;
 type ValidIdSearchTypesUnion = typeof validIdSearchTypes[number];
 
 interface QueryResult {
@@ -40,7 +40,7 @@ export const parseQuery = memoize((query: string = ""): QueryResult | string => 
     let negate = false;
     if (trimmedQuery.startsWith("!")) {
         negate = true;
-        trimmedQuery = trimmedQuery.substring(trimmedQuery.length, 1);
+        trimmedQuery = trimmedQuery.slice(1);
     }
 
     const [filter, rest] = trimmedQuery.split(" ", 2);
@@ -48,7 +48,8 @@ export const parseQuery = memoize((query: string = ""): QueryResult | string => 
         return query;
     }
 
-    const [type, id] = filter.split(":") as [ValidIdSearchTypesUnion, string];
+    const [rawType, id] = filter.split(":") as [ValidIdSearchTypesUnion, string];
+    const type = rawType?.toLowerCase() as ValidIdSearchTypesUnion;
     if (!type || !id || !validIdSearchTypes.includes(type)) {
         return query;
     }
@@ -61,7 +62,7 @@ export const parseQuery = memoize((query: string = ""): QueryResult | string => 
 });
 
 export const tokenizeQuery = (query: string) => {
-    const parts = query.split(" ").map(parseQuery);
+    const parts = query.split(/\s+/).map(parseQuery);
     const queries = parts.filter(p => typeof p !== "string") as QueryResult[];
     const rest = parts.filter(p => typeof p === "string") as string[];
 
@@ -71,6 +72,8 @@ export const tokenizeQuery = (query: string) => {
 const linkRegex = /[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/;
 
 export const doesMatch = (type: typeof validIdSearchTypes[number], value: string, message: LoggedMessageJSON) => {
+    const lowerValue = value.toLowerCase();
+
     switch (type) {
         case "in":
         case "channel":
@@ -79,14 +82,25 @@ export const doesMatch = (type: typeof validIdSearchTypes[number], value: string
                 return message.channel_id === value;
             const { name, id } = channel;
             return id === value
-                || name.toLowerCase().includes(value.toLowerCase());
+                || name.toLowerCase().includes(lowerValue);
         case "message":
             return message.id === value;
+        case "attachment":
+        case "file":
+            return message.attachments.some(attachment =>
+                attachment.id === value
+                || attachment.filename?.toLowerCase().includes(lowerValue)
+                || attachment.url?.toLowerCase().includes(lowerValue)
+                || attachment.proxy_url?.toLowerCase().includes(lowerValue)
+                || attachment.path?.toLowerCase().includes(lowerValue)
+                || attachment.oldUrl?.toLowerCase().includes(lowerValue)
+                || attachment.oldProxyUrl?.toLowerCase().includes(lowerValue)
+            );
         case "from":
         case "user":
             return message.author.id === value
-                || message.author?.username?.toLowerCase().includes(value.toLowerCase())
-                || (message.author as any)?.globalName?.toLowerCase()?.includes(value.toLowerCase());
+                || message.author?.username?.toLowerCase().includes(lowerValue)
+                || (message.author as any)?.globalName?.toLowerCase()?.includes(lowerValue);
         case "guild":
         case "server": {
             const guildId = message.guildId ?? getGuildIdByChannel(message.channel_id);
@@ -97,18 +111,27 @@ export const doesMatch = (type: typeof validIdSearchTypes[number], value: string
                 return guildId === value;
 
             return guild.id === value
-                || guild.name.toLowerCase().includes(value.toLowerCase());
+                || guild.name.toLowerCase().includes(lowerValue);
         }
-        case "before":
-            return new Date(message.timestamp) < new Date(value);
-        case "after":
-            return new Date(message.timestamp) > new Date(value);
+        case "before": {
+            const messageTime = Date.parse(message.timestamp);
+            const targetTime = Date.parse(value);
+            return !Number.isNaN(messageTime) && !Number.isNaN(targetTime) && messageTime < targetTime;
+        }
+        case "after": {
+            const messageTime = Date.parse(message.timestamp);
+            const targetTime = Date.parse(value);
+            return !Number.isNaN(messageTime) && !Number.isNaN(targetTime) && messageTime > targetTime;
+        }
         case "around":
         case "near":
-        case "during":
-            return Math.abs(new Date(message.timestamp)?.getTime() - new Date(value)?.getTime()) < 1000 * 60 * 60 * 24;
+        case "during": {
+            const messageTime = Date.parse(message.timestamp);
+            const targetTime = Date.parse(value);
+            return !Number.isNaN(messageTime) && !Number.isNaN(targetTime) && Math.abs(messageTime - targetTime) < 1000 * 60 * 60 * 24;
+        }
         case "has": {
-            switch (value) {
+            switch (lowerValue) {
                 case "attachment":
                     return message.attachments.length > 0;
                 case "image":

@@ -109,6 +109,14 @@ export async function getMessagesByStatusIDB(status: DBMessageStatus) {
     return cacheRecords(await db.getAllFromIndex("messages", "by_status", status));
 }
 
+export async function getRawMessagesByStatusIDB(status: DBMessageStatus) {
+    return db.getAllFromIndex("messages", "by_status", status);
+}
+
+export async function hydrateRecordsForDisplay(records: DBMessageRecord[]) {
+    return cacheRecords(records);
+}
+
 export async function getOldestMessagesIDB(limit: number) {
     return cacheRecords(await db.getAllFromIndex("messages", "by_timestamp", undefined, limit));
 }
@@ -167,7 +175,7 @@ export async function getOlderThanTimestampForGuildsIDB(timestamp: string, curre
     });
 }
 
-export async function getDateStortedMessagesByStatusIDB(newest: boolean, limit: number, status: DBMessageStatus) {
+export async function getDateStortedMessagesByStatusIDB(newest: boolean, limit: number, status: DBMessageStatus, offset = 0) {
     const tx = db.transaction("messages", "readonly");
     const { store } = tx;
     const index = store.index("by_status");
@@ -181,12 +189,42 @@ export async function getDateStortedMessagesByStatusIDB(newest: boolean, limit: 
     }
 
     const messages: DBMessageRecord[] = [];
+    let skipped = 0;
     for await (const c of cursor) {
+        if (skipped < offset) {
+            skipped++;
+            continue;
+        }
+
         messages.push(c.value);
         if (messages.length >= limit) break;
     }
 
     return cacheRecords(messages);
+}
+
+export async function* iterateMessagesByStatusIDB(status: DBMessageStatus, newest: boolean, batchSize = 500) {
+    const tx = db.transaction("messages", "readonly");
+    const { store } = tx;
+    const index = store.index("by_status");
+
+    const direction = newest ? "prev" : "next";
+    const cursor = await index.openCursor(IDBKeyRange.only(status), direction);
+
+    if (!cursor) return;
+
+    let batch: DBMessageRecord[] = [];
+    for await (const c of cursor) {
+        batch.push(c.value);
+        if (batch.length >= batchSize) {
+            yield batch;
+            batch = [];
+        }
+    }
+
+    if (batch.length > 0) {
+        yield batch;
+    }
 }
 
 export async function getMessagesByChannelAndAfterTimestampIDB(channel_id: string, start: string) {
