@@ -7,12 +7,12 @@
 import { BaseText } from "@components/BaseText";
 import { Button } from "@components/Button";
 import { Flex } from "@components/Flex";
-import { InfoIcon } from "@components/Icons";
+import { CopyIcon, InfoIcon } from "@components/Icons";
 import { copyWithToast, openUserProfile } from "@utils/discord";
 import { LazyComponent } from "@utils/react";
 import { RenderModalProps, type User } from "@vencord/discord-types";
 import { find, findByCode, findByCodeLazy } from "@webpack";
-import { Alerts, ChannelStore, closeAllModals, ContextMenuApi, FluxDispatcher, GuildStore, Menu, Modal, NavigationRouter, openModal, React, TabBar, TextInput, Tooltip, useMemo, useRef, useState } from "@webpack/common";
+import { Alerts, ChannelStore, closeAllModals, ContextMenuApi, FluxDispatcher, GuildStore, Menu, Modal, NavigationRouter, openModal, React, TabBar, TextInput, Tooltip, useEffect, useMemo, useRef, useState } from "@webpack/common";
 
 import { DBMessageRecord, deleteMessageIDB, deleteMessagesBulkIDB } from "../db";
 import { cl, clearLogs, settings } from "../index";
@@ -59,19 +59,149 @@ export enum LogTabs {
     GHOST_PING = "Ghost Pinged"
 }
 
+const FILTER_HELP_SECTIONS = [
+    {
+        title: "Kullanıcı filtreleri",
+        rows: [
+            ["user:<id veya ad>", "Kullanıcı ID'si, kullanıcı adı ya da görünen adına göre o kullanıcının mesajlarını bulur."],
+            ["from:<id veya ad>", "user: ile aynıdır. Sorguyu \"kimden geldi\" gibi okumak istersen kullanışlıdır."],
+        ]
+    },
+    {
+        title: "Konum filtreleri",
+        rows: [
+            ["channel:<id veya ad>", "Kanal ID'si ya da kanal adına göre o kanaldaki logları bulur."],
+            ["in:<id veya ad>", "channel: ile aynıdır."],
+            ["server:<id veya ad>", "Sunucu ID'si ya da sunucu adına göre o sunucudaki logları bulur."],
+            ["guild:<id veya ad>", "server: ile aynıdır."],
+        ]
+    },
+    {
+        title: "Mesaj filtreleri",
+        rows: [
+            ["message:<id>", "Tam olarak bu mesaj ID'sine sahip logu bulur."],
+            ["attachment:<id>", "savedImages klasöründeki dosya adında gördüğün ek/attachment ID'sini taşıyan mesajı bulur."],
+            ["file:<id>", "attachment: ile aynıdır; dosya ID'siyle aramak için kısa kullanım."],
+            ["has:attachment", "En az bir eki olan mesajları gösterir."],
+            ["has:image", "Resim eki ya da resim embed'i olan mesajları gösterir."],
+            ["has:video", "Video eki ya da video embed'i olan mesajları gösterir."],
+            ["has:embed", "Embed içeren mesajları gösterir."],
+            ["has:link", "İçeriğinde bağlantı olan mesajları gösterir."],
+        ]
+    },
+    {
+        title: "Zaman filtreleri",
+        rows: [
+            ["before:2026-06-01", "Bu tarihten önce loglanan mesajları gösterir."],
+            ["after:2026-06-01", "Bu tarihten sonra loglanan mesajları gösterir."],
+            ["around:2026-06-01", "Bu tarihin 24 saat yakınındaki mesajları gösterir."],
+            ["near:2026-06-01", "around: ile aynıdır."],
+            ["during:2026-06-01", "around: ile aynıdır."],
+        ]
+    },
+    {
+        title: "Filtreleri birleştirme",
+        rows: [
+            ["user:123 gif", "Önce kullanıcıya göre süzer, sonra log içinde gif kelimesini arar."],
+            ["attachment:1509744495510687837", "Bu ID'ye sahip kayıtlı dosyanın hangi mesajda olduğunu gösterir."],
+            ["!user:123", "Bir filtrenin başına ! koyarsan o filtre tersine çalışır."],
+            ["server:123 has:image merhaba", "Birden fazla filtreyi ve düz metin aramasını boşluklarla birleştirebilirsin."],
+        ]
+    },
+] as const;
+
 interface Props {
     modalProps: RenderModalProps;
     initalQuery?: string;
+}
+
+function openFilterHelpModal() {
+    openModal(modalProps => (
+        <Modal
+            {...modalProps}
+            size="lg"
+            title="Filtre Yardımı"
+            actions={[
+                {
+                    text: "Tamam",
+                    variant: "primary",
+                    onClick: modalProps.onClose
+                }
+            ]}
+        >
+            <div className={cl("filter-help")}>
+                <BaseText size="sm" color="text-muted">
+                    Filtreler anahtar:değer biçiminde çalışır. Komutları kopyalamak için örneğe ya da yanındaki kopya düğmesine tıklayabilirsin.
+                </BaseText>
+                <BaseText size="sm" color="text-muted">
+                    Filtre olmayan düz kelimeler mesaj içeriğinde, eklerde, embed'lerde ve düzenleme geçmişinde aranır.
+                </BaseText>
+
+                {FILTER_HELP_SECTIONS.map(section => (
+                    <section className={cl("filter-help-section")} key={section.title}>
+                        <BaseText tag="h3" size="md" weight="semibold" color="text-strong">
+                            {section.title}
+                        </BaseText>
+                        <div className={cl("filter-help-list")}>
+                            {section.rows.map(row => {
+                                const [syntax, description] = row;
+
+                                return (
+                                    <div className={cl("filter-help-row")} key={syntax}>
+                                        <button
+                                            type="button"
+                                            className={cl("filter-help-copy-syntax")}
+                                            onClick={() => copyWithToast(syntax)}
+                                        >
+                                            <code>{syntax}</code>
+                                        </button>
+                                        <BaseText size="sm">{description}</BaseText>
+                                        <Tooltip text="Kopyala">
+                                            {({ onMouseEnter, onMouseLeave }) => (
+                                                <Button
+                                                    type="button"
+                                                    variant="secondary"
+                                                    size="iconOnly"
+                                                    className={cl("filter-help-copy-button")}
+                                                    onMouseEnter={onMouseEnter}
+                                                    onMouseLeave={onMouseLeave}
+                                                    onClick={() => copyWithToast(syntax)}
+                                                    aria-label={`${syntax} filtresini kopyala`}
+                                                >
+                                                    <CopyIcon width={16} height={16} />
+                                                </Button>
+                                            )}
+                                        </Tooltip>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    </section>
+                ))}
+            </div>
+        </Modal>
+    ));
 }
 
 export function LogsModal({ modalProps, initalQuery }: Props) {
     const [currentTab, setCurrentTab] = useState(LogTabs.DELETED);
     const [queryEh, setQuery] = useState(initalQuery ?? "");
     const [sortNewest, setSortNewest] = useState(settings.store.sortNewest);
-    const [numDisplayedMessages, setNumDisplayedMessages] = useState(settings.store.messagesToDisplayAtOnceInLogs);
+    const [currentPage, setCurrentPage] = useState(0);
     const contentRef = useRef<HTMLDivElement | null>(null);
+    const pageSize = settings.store.messagesToDisplayAtOnceInLogs;
 
-    const { messages, total, statusTotal, pending, reset } = useMessages(queryEh, currentTab, sortNewest, numDisplayedMessages);
+    const { messages, total, pending, hasNextPage, reset } = useMessages(queryEh, currentTab, sortNewest, currentPage, pageSize);
+
+    const scrollToTop = () => contentRef.current?.firstElementChild?.scrollTo(0, 0);
+    const goToPage = (page: number) => {
+        setCurrentPage(Math.max(0, page));
+        scrollToTop();
+    };
+
+    useEffect(() => {
+        setCurrentPage(0);
+    }, [queryEh, currentTab, sortNewest]);
 
     return (
         <Modal
@@ -86,8 +216,7 @@ export function LogsModal({ modalProps, initalQuery }: Props) {
                         selectedItem={currentTab}
                         onItemSelect={e => {
                             setCurrentTab(e);
-                            setNumDisplayedMessages(settings.store.messagesToDisplayAtOnceInLogs);
-                            contentRef.current?.firstElementChild?.scrollTo(0, 0);
+                            scrollToTop();
                         }}
                     >
                         <TabBar.Item
@@ -110,7 +239,29 @@ export function LogsModal({ modalProps, initalQuery }: Props) {
                         </TabBar.Item>
                     </TabBar>
                     <div className={cl("modal-filter")}>
-                        <TextInput value={queryEh} onChange={e => setQuery(e)} placeholder="Filter Messages" />
+                        <div className={cl("modal-filter-input")}>
+                            <TextInput value={queryEh} onChange={e => setQuery(e)} placeholder="Mesajları filtrele" />
+                        </div>
+                        <Tooltip text="Filtre yardımı">
+                            {({ onMouseEnter, onMouseLeave }) => (
+                                <Button
+                                    type="button"
+                                    variant="secondary"
+                                    size="iconOnly"
+                                    className={cl("modal-filter-help-button")}
+                                    onClick={event => {
+                                        event.preventDefault();
+                                        event.stopPropagation();
+                                        openFilterHelpModal();
+                                    }}
+                                    onMouseEnter={onMouseEnter}
+                                    onMouseLeave={onMouseLeave}
+                                    aria-label="Filtre yardımını aç"
+                                >
+                                    <InfoIcon width={18} height={18} />
+                                </Button>
+                            )}
+                        </Tooltip>
                     </div>
                 </div>
             }
@@ -124,7 +275,7 @@ export function LogsModal({ modalProps, initalQuery }: Props) {
                             settings.store.sortNewest = val;
                             return val;
                         });
-                        contentRef.current?.firstElementChild?.scrollTo(0, 0);
+                        scrollToTop();
                     }
                 },
                 {
@@ -174,11 +325,13 @@ export function LogsModal({ modalProps, initalQuery }: Props) {
                         {!pending && messages != null && (
                             <LogsContentMemo
                                 visibleMessages={messages}
-                                canLoadMore={messages.length < statusTotal && messages.length >= settings.store.messagesToDisplayAtOnceInLogs}
+                                currentPage={currentPage}
+                                hasNextPage={hasNextPage}
                                 tab={currentTab}
                                 sortNewest={sortNewest}
                                 reset={reset}
-                                handleLoadMore={() => setNumDisplayedMessages(e => e + settings.store.messagesToDisplayAtOnceInLogs)}
+                                handlePreviousPage={() => goToPage(currentPage - 1)}
+                                handleNextPage={() => goToPage(currentPage + 1)}
                             />
                         )}
                     </div>
@@ -192,35 +345,51 @@ interface LogContentProps {
     sortNewest: boolean;
     tab: LogTabs;
     visibleMessages: DBMessageRecord[];
-    canLoadMore: boolean;
+    currentPage: number;
+    hasNextPage: boolean;
     reset: () => void;
-    handleLoadMore: () => void;
+    handlePreviousPage: () => void;
+    handleNextPage: () => void;
 }
 
-function LogsContent({ visibleMessages, canLoadMore, sortNewest, tab, reset, handleLoadMore }: LogContentProps) {
-    if (visibleMessages.length === 0)
-        return <NoResults tab={tab} />;
-
+function LogsContent({ visibleMessages, currentPage, hasNextPage, sortNewest, tab, reset, handlePreviousPage, handleNextPage }: LogContentProps) {
     return (
         <div className={cl("modal-content-inner")}>
-            {visibleMessages
-                .map(({ message }, i) => (
+            {visibleMessages.length === 0 ? (
+                <NoResults tab={tab} />
+            ) : (
+                visibleMessages.map(({ message }, i) => (
                     <LMessage
                         key={message.id}
                         log={{ message }}
                         reset={reset}
                         isGroupStart={isGroupStart(message, visibleMessages[i - 1]?.message, sortNewest)}
                     />
-                ))}
-            {
-                canLoadMore &&
-                <Button
-                    style={{ marginTop: "1rem", width: "100%" }}
-                    size="small" onClick={() => handleLoadMore()}
-                >
-                    Load More
-                </Button>
-            }
+                ))
+            )}
+            {(currentPage > 0 || hasNextPage) && (
+                <div className={cl("modal-pagination")}>
+                    <Button
+                        size="small"
+                        variant="secondary"
+                        disabled={currentPage === 0}
+                        onClick={handlePreviousPage}
+                    >
+                        Önceki Sayfa
+                    </Button>
+                    <BaseText size="sm" color="text-muted">
+                        Sayfa {currentPage + 1}
+                    </BaseText>
+                    <Button
+                        size="small"
+                        variant="secondary"
+                        disabled={!hasNextPage}
+                        onClick={handleNextPage}
+                    >
+                        Sonraki Sayfa
+                    </Button>
+                </div>
+            )}
         </div>
     );
 }

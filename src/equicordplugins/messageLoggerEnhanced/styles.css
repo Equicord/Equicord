@@ -101,5 +101,104 @@
 }
 
 .vc-msg-logger-enhanced-modal-filter {
+    display: flex;
+    align-items: center;
+    gap: 8px;
     width: 106%;
+}
+
+.vc-msg-logger-enhanced-modal-filter-input {
+    flex: 1;
+    min-width: 0;
+}
+
+.vc-msg-logger-enhanced-modal-filter-help-button {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    min-height: 36px;
+    padding: 0;
+    flex: 0 0 36px;
+    color: var(--interactive-icon-default);
+    background: var(--background-secondary);
+    border: 1px solid var(--background-modifier-accent);
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.vc-msg-logger-enhanced-modal-filter-help-button:hover {
+    color: var(--interactive-icon-active);
+    background: var(--background-modifier-hover);
+}
+
+.vc-msg-logger-enhanced-filter-help {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding-bottom: 8px;
+}
+
+.vc-msg-logger-enhanced-filter-help-section {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.vc-msg-logger-enhanced-filter-help-list {
+    display: grid;
+    gap: 8px;
+}
+
+.vc-msg-logger-enhanced-filter-help-row {
+    display: grid;
+    grid-template-columns: minmax(150px, 220px) minmax(0, 1fr) 32px;
+    gap: 12px;
+    align-items: center;
+}
+
+.vc-msg-logger-enhanced-filter-help-copy-syntax {
+    width: fit-content;
+    max-width: 100%;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+    text-align: left;
+}
+
+.vc-msg-logger-enhanced-filter-help-copy-syntax code {
+    display: inline-block;
+    width: fit-content;
+    max-width: 100%;
+    padding: 3px 6px;
+    border-radius: 4px;
+    color: var(--text-code-default);
+    background: var(--background-secondary);
+    font-family: var(--font-code);
+    overflow-wrap: anywhere;
+}
+
+.vc-msg-logger-enhanced-filter-help-copy-syntax:hover code {
+    background: var(--background-modifier-hover);
+}
+
+.vc-msg-logger-enhanced-filter-help-copy-button {
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+    min-height: 32px;
+    padding: 0;
+}
+
+.vc-msg-logger-enhanced-modal-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 1rem;
 }
