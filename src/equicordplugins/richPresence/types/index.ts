@@ -12,6 +12,7 @@ export enum ServiceTab {
     ListenBrainz = "listenbrainz",
     GensokyoRadio = "gensokyoRadio",
     Navidrome = "navidrome",
+    Storyteller = "storyteller",
 }
 
 export const enum NameFormat {

@@ -77,6 +77,13 @@ export const settings = definePluginSettings({
         hidden: true,
         onChange: () => onServiceChange?.(),
     },
+    st_enabled: {
+        description: "Enable Storyteller presence.",
+        type: OptionType.BOOLEAN,
+        default: false,
+        hidden: true,
+        onChange: () => onServiceChange?.(),
+    },
 
     // AudioBookShelf
     abs_serverUrl: {
@@ -467,6 +474,39 @@ export const settings = definePluginSettings({
                 value: "track"
             }
         ],
+        hidden: true,
+    },
+
+    // Storyteller
+    st_serverUrl: {
+        description: "Storyteller server URL.",
+        type: OptionType.STRING,
+        default: "",
+        hidden: true,
+    },
+    st_username: {
+        description: "Storyteller username or email.",
+        type: OptionType.STRING,
+        default: "",
+        hidden: true,
+    },
+    st_password: {
+        description: "Storyteller password.",
+        type: OptionType.STRING,
+        default: "",
+        hidden: true,
+    },
+    st_fetchCovers: {
+        description: "Fetch book cover art from Open Library and Google Books. Sends book title and author to these services.",
+        type: OptionType.BOOLEAN,
+        default: true,
+        hidden: true,
+    },
+    st_activeThreshold: {
+        description: "Seconds since last position update to consider a book as 'currently playing'.",
+        type: OptionType.SLIDER,
+        markers: [30, 60, 120, 300, 600],
+        default: 120,
         hidden: true,
     },
 });

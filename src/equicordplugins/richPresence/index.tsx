@@ -15,6 +15,7 @@ import * as jellyfin from "./services/jellyfin";
 import * as listenbrainz from "./services/listenbrainz";
 import * as navidrome from "./services/navidrome";
 import * as statsfm from "./services/statsfm";
+import * as storyteller from "./services/storyteller";
 import * as tosu from "./services/tosu";
 import { setOnServiceChange, settings, SettingsStore } from "./settings";
 import { ServiceTab } from "./types";
@@ -31,6 +32,7 @@ const services: Record<string, { start(): void; stop(): void; forceUpdate?(): vo
     [ServiceTab.ListenBrainz]: listenbrainz,
     [ServiceTab.GensokyoRadio]: gensokyoRadio,
     [ServiceTab.Navidrome]: navidrome,
+    [ServiceTab.Storyteller]: storyteller,
 };
 
 const enableKeys: Record<string, SettingsKey> = {
@@ -41,6 +43,7 @@ const enableKeys: Record<string, SettingsKey> = {
     [ServiceTab.ListenBrainz]: "lb_enabled",
     [ServiceTab.GensokyoRadio]: "gr_enabled",
     [ServiceTab.Navidrome]: "nd_enabled",
+    [ServiceTab.Storyteller]: "st_enabled",
 };
 
 const activeServices = new Set<string>();
@@ -77,7 +80,7 @@ function stopAllServices() {
 
 export default definePlugin({
     name: "RichPresence",
-    description: "Unified rich presence hub for AudioBookShelf, osu!, stats.fm, Jellyfin, ListenBrainz, Navidrome, and Gensokyo Radio.",
+    description: "Unified rich presence hub for AudioBookShelf, osu!, stats.fm, Jellyfin, ListenBrainz, Navidrome, Gensokyo Radio, and Storyteller.",
     tags: ["Activity"],
     authors: [
         EquicordDevs.vmohammad,

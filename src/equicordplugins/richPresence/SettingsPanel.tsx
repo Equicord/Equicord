@@ -233,6 +233,28 @@ function NavidromeSettings() {
     );
 }
 
+
+function StorytellerSettings() {
+    const [threshold, setThreshold] = useState(settings.store.st_activeThreshold ?? 120);
+    return (
+        <>
+            <SettingsSection id="storyteller-settings" name="" description="Display your currently playing audiobook from Storyteller as Discord Rich Presence. Requires your Storyteller server URL, username, and password. The plugin detects active listening by checking which book had its position updated most recently." />
+            <TextSetting name="Server URL" description="Storyteller server URL." settingsKey="st_serverUrl" placeholder="https://storyteller.example.com" />
+            <TextSetting name="Username / Email" description="Storyteller username or email." settingsKey="st_username" />
+            <TextSetting name="Password" description="Storyteller password." settingsKey="st_password" />
+            <SwitchSetting name="Fetch Cover Art" description="Look up book covers from Open Library and Google Books. Sends book title and author name to these services." settingsKey="st_fetchCovers" />
+            <SettingsSection id="st-active-threshold" name="Active Threshold" description="How many seconds since last position update to consider a book as 'currently playing'. Increase this if your presence disappears too quickly.">
+                <Slider
+                    markers={[30, 60, 120, 300, 600]}
+                    initialValue={threshold}
+                    onValueChange={v => { setThreshold(v); settings.store.st_activeThreshold = v; }}
+                    onValueRender={v => `${v}s`}
+                    stickToMarkers
+                />
+            </SettingsSection>
+        </>
+    );
+}
 const TAB_COMPONENTS: Record<ServiceTab, React.ComponentType> = {
     [ServiceTab.AudioBookShelf]: AudioBookShelfSettings,
     [ServiceTab.Tosu]: TosuSettings,
@@ -241,6 +263,7 @@ const TAB_COMPONENTS: Record<ServiceTab, React.ComponentType> = {
     [ServiceTab.ListenBrainz]: ListenBrainzSettings,
     [ServiceTab.GensokyoRadio]: GensokyoRadioSettings,
     [ServiceTab.Navidrome]: NavidromeSettings,
+    [ServiceTab.Storyteller]: StorytellerSettings,
 };
 
 const TAB_LABELS: Record<ServiceTab, string> = {
@@ -251,6 +274,7 @@ const TAB_LABELS: Record<ServiceTab, string> = {
     [ServiceTab.ListenBrainz]: "ListenBrainz",
     [ServiceTab.GensokyoRadio]: "Gensokyo Radio",
     [ServiceTab.Navidrome]: "Navidrome",
+    [ServiceTab.Storyteller]: "Storyteller",
 };
 
 const ENABLE_KEYS: Record<ServiceTab, SettingsKey> = {
@@ -261,6 +285,7 @@ const ENABLE_KEYS: Record<ServiceTab, SettingsKey> = {
     [ServiceTab.ListenBrainz]: "lb_enabled",
     [ServiceTab.GensokyoRadio]: "gr_enabled",
     [ServiceTab.Navidrome]: "nd_enabled",
+    [ServiceTab.Storyteller]: "st_enabled",
 };
 
 const TABS = Object.values(ServiceTab);
