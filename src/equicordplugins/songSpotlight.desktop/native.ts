@@ -12,7 +12,7 @@ import { type IpcMainInvokeEvent, net } from "electron";
 setFetchHandler(net.fetch as unknown as typeof fetch);
 
 export async function parseLink(_: IpcMainInvokeEvent, link: string) {
-    return handlers.parseLink(link);
+    return handlers.parseLink(link.replace(/\/intl-[^/]+\//, "/"));
 }
 export async function renderSong(_: IpcMainInvokeEvent, song: Song) {
     return handlers.renderSong(song);
