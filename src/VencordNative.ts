@@ -7,6 +7,7 @@
 import type { Settings } from "@api/Settings";
 import type { CspRequestResult } from "@main/csp/manager";
 import type { PluginIpcMappings } from "@main/ipcPlugins";
+import { NativeSettings } from "@main/settings";
 import { UserThemeHeader } from "@main/themes";
 import { IpcEvents } from "@shared/IpcEvents";
 import type { IpcRes } from "@utils/types";
@@ -56,6 +57,9 @@ export default {
         get: () => sendSync<Settings>(IpcEvents.GET_SETTINGS),
         set: (settings: Settings, pathToNotify?: string) => invoke<void>(IpcEvents.SET_SETTINGS, settings, pathToNotify),
         getSettingsDir: () => invoke<string>(IpcEvents.GET_SETTINGS_DIR),
+
+        getNative: () => sendSync<NativeSettings>(IpcEvents.GET_NATIVE_SETTINGS),
+        setNative: (settings: NativeSettings) => invoke<void>(IpcEvents.SET_NATIVE_SETTINGS, settings),
 
         openFolder: () => invoke<void>(IpcEvents.OPEN_SETTINGS_FOLDER),
     },

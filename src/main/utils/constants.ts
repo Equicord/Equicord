@@ -29,11 +29,33 @@ export const DATA_DIR = process.env.EQUICORD_USER_DATA_DIR ?? (
 );
 
 export const SETTINGS_DIR = join(DATA_DIR, "settings");
-export const THEMES_DIR = join(DATA_DIR, "themes");
-export const QUICK_CSS_PATH = join(SETTINGS_DIR, "quickCss.css");
-export const SETTINGS_FILE = join(SETTINGS_DIR, "settings.json");
 export const NATIVE_SETTINGS_FILE = join(SETTINGS_DIR, "native-settings.json");
 export const DEV_MIGRATED = join(SETTINGS_DIR, "migration");
+
+function getBranchName(): string {
+    const name = app.getName().toLowerCase();
+    if (name.includes("canary")) return "canary";
+    if (name.includes("ptb")) return "ptb";
+    if (name.includes("development")) return "dev";
+    return "stable";
+}
+
+function isSeparateSettingsEnabled(): boolean {
+    try {
+        if (!existsSync(NATIVE_SETTINGS_FILE)) return false;
+        const parsed = JSON.parse(readFileSync(NATIVE_SETTINGS_FILE, "utf-8"));
+        return !!parsed?.separateSettings;
+    } catch {
+        return false;
+    }
+}
+
+const BRANCH_DIR = isSeparateSettingsEnabled() ? join(DATA_DIR, getBranchName()) : DATA_DIR;
+
+export const THEMES_DIR = join(BRANCH_DIR, "themes");
+export const QUICK_CSS_PATH = join(BRANCH_DIR, "settings", "quickCss.css");
+export const SETTINGS_FILE = join(BRANCH_DIR, "settings", "settings.json");
+
 export const ALLOWED_PROTOCOLS = [
     "https:",
     "http:",

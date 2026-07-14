@@ -26,7 +26,7 @@ import { classNameFactory } from "@utils/css";
 import { Margins } from "@utils/margins";
 import { isAnyPluginDev } from "@utils/misc";
 import { relaunch } from "@utils/native";
-import { Alerts, GuildMemberStore, React, useMemo, UserStore } from "@webpack/common";
+import { Alerts, GuildMemberStore, React, useMemo, UserStore, useState } from "@webpack/common";
 
 import { DonateButtonComponent } from "./DonateButton";
 import { MacOSVibrancySettings } from "./MacVibrancySettings";
@@ -48,8 +48,20 @@ type KeysOfType<Object, Type> = {
     [K in keyof Object]: Object[K] extends Type ? K : never;
 }[keyof Object];
 
+function useSeparateSettings() {
+    const [value, setValue] = useState(() => VencordNative.settings.getNative().separateSettings ?? false);
+
+    return [value, (v: boolean) => {
+        const native = VencordNative.settings.getNative();
+        native.separateSettings = v;
+        VencordNative.settings.setNative(native);
+        setValue(v);
+    }] as const;
+}
+
 function Switches() {
     const settings = useSettings(["useQuickCss", "enableReactDevtools", "mainWindowFrameless", "frameless", "winNativeTitleBar", "transparent", "winCtrlQ", "disableMinSize"]);
+    const [separateSettings, setSeparateSettings] = useSeparateSettings();
 
     const Switches = [
         {
@@ -112,34 +124,58 @@ function Switches() {
         warning?: string;
     }>;
 
-    return Switches.map(setting => {
-        if (!setting) {
-            return null;
-        }
-
-        const { key, title, description, restartRequired, warning } = setting;
-
-        return (
-            <FormSwitch
-                key={key}
-                title={title}
-                description={
-                    warning ? (
-                        <>
-                            {description}
-                            <Notice.Warning className={Margins.top8} style={{ width: "100%" }}>
-                                {warning}
-                            </Notice.Warning>
-                        </>
-                    ) : (
-                        description
-                    )
+    return (
+        <>
+            {Switches.map(setting => {
+                if (!setting) {
+                    return null;
                 }
-                value={settings[key]}
-                onChange={v => {
-                    settings[key] = v;
 
-                    if (restartRequired) {
+                const { key, title, description, restartRequired, warning } = setting;
+
+                return (
+                    <FormSwitch
+                        key={key}
+                        title={title}
+                        description={
+                            warning ? (
+                                <>
+                                    {description}
+                                    <Notice.Warning className={Margins.top8} style={{ width: "100%" }}>
+                                        {warning}
+                                    </Notice.Warning>
+                                </>
+                            ) : (
+                                description
+                            )
+                        }
+                        value={settings[key]}
+                        onChange={v => {
+                            settings[key] = v;
+
+                            if (restartRequired) {
+                                Alerts.show({
+                                    title: "Restart Required",
+                                    body: "A restart is required to apply this change",
+                                    confirmText: "Restart now",
+                                    cancelText: "Later!",
+                                    onConfirm: relaunch
+                                });
+                            }
+                        }}
+                        hideBorder
+                    />
+                );
+            })}
+            {!IS_WEB && (
+                <FormSwitch
+                    key="separateSettings"
+                    title="Separate Settings Files"
+                    description="Keep separate settings for each Discord branch (Stable, PTB, Canary, Development)."
+                    value={separateSettings}
+                    onChange={v => {
+                        setSeparateSettings(v);
+
                         Alerts.show({
                             title: "Restart Required",
                             body: "A restart is required to apply this change",
@@ -147,12 +183,12 @@ function Switches() {
                             cancelText: "Later!",
                             onConfirm: relaunch
                         });
-                    }
-                }}
-                hideBorder
-            />
-        );
-    });
+                    }}
+                    hideBorder
+                />
+            )}
+        </>
+    );
 }
 
 function EquicordSettings() {

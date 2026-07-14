@@ -56,4 +56,7 @@ export const enum IpcEvents {
     TRAY_CHECK_UPDATES = "VencordTrayCheckUpdates",
     TRAY_ABOUT = "VencordTrayAbout",
     SUPPORTS_WINDOWS_MATERIAL = "VencordSupportsWindowsMaterial",
+
+    GET_NATIVE_SETTINGS = "VencordGetNativeSettings",
+    SET_NATIVE_SETTINGS = "VencordSetNativeSettings",
 }

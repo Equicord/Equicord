@@ -50,11 +50,13 @@ export interface NativeSettings {
         };
     };
     customCspRules: Record<string, string[]>;
+    separateSettings?: boolean;
 }
 
 const DefaultNativeSettings: NativeSettings = {
     plugins: {},
-    customCspRules: {}
+    customCspRules: {},
+    separateSettings: false
 };
 
 const nativeSettings = readSettings<NativeSettings>("native", NATIVE_SETTINGS_FILE);
@@ -68,4 +70,10 @@ NativeSettings.addGlobalChangeListener(() => {
     } catch (e) {
         console.error("Failed to write native settings", e);
     }
+});
+
+ipcMain.on(IpcEvents.GET_NATIVE_SETTINGS, e => e.returnValue = NativeSettings.plain);
+
+ipcMain.handle(IpcEvents.SET_NATIVE_SETTINGS, (_, data: NativeSettings) => {
+    NativeSettings.setData(data);
 });
