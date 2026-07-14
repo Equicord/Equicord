@@ -1,7 +1,5 @@
 packages:
     - packages/*
-patchedDependencies:
-    "@types/less@3.0.8": patches/@types__less@3.0.8.patch
 peerDependencyRules:
     ignoreMissing:
         - eslint-plugin-import
@@ -18,4 +16,4 @@ allowBuilds:
 pmOnFail: warn
 verifyDepsBeforeRun: prompt
 minimumReleaseAgeExclude:
-  - '@song-spotlight/api@2.2.0'
+    - "@song-spotlight/api@2.2.0"

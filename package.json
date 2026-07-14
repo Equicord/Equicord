@@ -47,9 +47,6 @@
         "@intrnl/xxhash64": "^0.1.2",
         "@song-spotlight/api": "^2.2.0",
         "@streamparser/json": "^0.0.22",
-        "@types/less": "^3.0.8",
-        "@types/stylus": "^0.48.42",
-        "@types/tinycolor2": "^1.4.6",
         "@vap/core": "0.0.12",
         "@vap/shiki": "0.10.5",
         "fflate": "^0.8.3",
@@ -60,7 +57,6 @@
         "monaco-editor": "^0.55.1",
         "nanoid": "^5.1.16",
         "native-file-system-adapter": "^3.0.1",
-        "usercss-meta": "^0.12.0",
         "virtual-merge": "^1.0.1",
         "yaml-js": "^0.3.1"
     },
@@ -101,7 +97,7 @@
         "typescript-transform-paths": "^3.5.6",
         "zip-local": "^0.3.5"
     },
-    "packageManager": "pnpm@11.10.0",
+    "packageManager": "pnpm@11.12.0",
     "engines": {
         "node": ">=22"
     }
