@@ -20,7 +20,7 @@ import { getIntlMessage } from "@utils/discord";
 import { Logger } from "@utils/Logger";
 import { classes } from "@utils/misc";
 import definePlugin, { OptionType } from "@utils/types";
-import { Message } from "@vencord/discord-types";
+import { Message, MessageAttachment } from "@vencord/discord-types";
 import { findCssClassesLazy } from "@webpack";
 import { ChannelStore, FluxDispatcher, Menu, MessageStore, Parser, SelectedChannelStore, Timestamp, UserStore, useStateFromStores } from "@webpack/common";
 
@@ -34,6 +34,15 @@ interface MLMessage extends Message {
     editHistory?: { timestamp: Date; content: string; }[];
     firstEditTimestamp?: Date;
     diffViewDisabled?: boolean;
+}
+
+interface MLAttachment extends MessageAttachment {
+    /**
+     * if the attachment was deleted
+     *
+     * a non-deleted {@link MLMessage|Message} can have deleted attachments
+     */
+    deleted?: boolean;
 }
 
 const MessageClasses = findCssClassesLazy("edited", "communicationDisabled", "isSystemMessage");
@@ -418,7 +427,11 @@ export default definePlugin({
     name: "MessageLogger",
     description: "Temporarily logs deleted and edited messages.",
     tags: ["Chat", "Utility"],
+<<<<<<< HEAD
     authors: [Devs.rushii, Devs.Ven, Devs.AutumnVN, Devs.Nickyux, Devs.Kyuuhachi, EquicordDevs.justjxke],
+=======
+    authors: [Devs.rushii, Devs.Ven, Devs.AutumnVN, Devs.Nickyux, Devs.Kyuuhachi, Devs.sadan],
+>>>>>>> fea94b791 (MessageLogger: Fix deleted attachments patches (#4342))
     dependencies: ["MessageUpdaterAPI"],
     isModified: true,
     settings,
@@ -550,11 +563,37 @@ export default definePlugin({
         };
     },
 
+<<<<<<< HEAD
     handleDelete(
         cache: any,
         data: { ids: string[]; id: string; mlDeleted?: boolean; },
         isBulk: boolean,
     ) {
+=======
+    handleUpdateAttachments(newMessage: MLMessage): MLAttachment[] {
+        const oldMessage = MessageStore.getMessage(newMessage.channel_id, newMessage.id) as MLMessage | undefined;
+        // if oldMessage is undefined, this is a new message and we shouldn't touch the attachments
+        if (!oldMessage || this.shouldIgnore(newMessage, true)) {
+            return newMessage.attachments;
+        }
+        // not sure if it's ever actually null after an edit but discord does a null check here
+        if (!newMessage.attachments?.length) {
+            return oldMessage.attachments.map((a): MLAttachment => ({ ...a, deleted: true }));
+        }
+        const attachments: MLAttachment[] = [];
+        for (const oldAttachment of oldMessage.attachments) {
+            const wasDeleted = newMessage.attachments.every(a => a.id !== oldAttachment.id);
+            if (wasDeleted) {
+                attachments.push({ ...oldAttachment, deleted: true });
+            } else {
+                attachments.push(oldAttachment);
+            }
+        }
+        return attachments;
+    },
+
+    handleDelete(cache: any, data: { ids: string[], id: string; mlDeleted?: boolean; }, isBulk: boolean) {
+>>>>>>> fea94b791 (MessageLogger: Fix deleted attachments patches (#4342))
         try {
             if (cache == null || (!isBulk && !cache.has(data.id))) return cache;
 
@@ -728,17 +767,31 @@ export default definePlugin({
         },
 
         {
-            // Updated message transformer(?)
+            // Updated message transformer
             find: ".PREMIUM_REFERRAL&&(",
             replacement: [
                 {
+<<<<<<< HEAD
                     // Pass through editHistory & deleted & original attachments to the "edited message" transformer
                     match:
                         /(?<=null!=\i\.edited_timestamp\)return )\i\(\i,\{reactions:(\i)\.reactions.{0,50}\}\)/,
+=======
+                    // Pass through editHistory & deleted to the "edited message" transformer
+                    match: /(?<=null!=\i\.edited_timestamp\)return )\i\(\i,\{reactions:(\i)\.reactions.{0,50}\}\)/,
+>>>>>>> fea94b791 (MessageLogger: Fix deleted attachments patches (#4342))
                     replace:
                         "Object.assign($&,{ deleted:$1.deleted, editHistory:$1.editHistory, firstEditTimestamp:$1.firstEditTimestamp, diffViewDisabled:$1.diffViewDisabled })",
                 },
+<<<<<<< HEAD
             ],
+=======
+                // just mark deleted attachments as deleted on MESSAGE_UPDATE
+                {
+                    match: /attachments:(\i)\.attachments\?\?\[\],/,
+                    replace: "attachments: $self.handleUpdateAttachments($1),"
+                }
+            ]
+>>>>>>> fea94b791 (MessageLogger: Fix deleted attachments patches (#4342))
         },
 
         {
@@ -751,8 +804,14 @@ export default definePlugin({
                     match: /\.SPOILER,(?=\[\i\.\i\]:)(?<=item:(\i),.{0,200}?)/,
                     replace: '$&"messagelogger-deleted-attachment": $1?.originalItem?.deleted,'
                 },
+<<<<<<< HEAD
                 {
                     match: /(?<=function \i\(\i\)\{let\{[^}]*?item:(\i),\i:\i,)canRemoveItem:(\i)(?=,onRemoveItem:)/,
+=======
+                // dont allow deleting attachments from deleted messages
+                {
+                    match: /(?<=\{let\{[^}]*?item:(\i),autoPlayGif:\i,)canRemoveItem:(\i)(?=,onRemoveItem:)/,
+>>>>>>> fea94b791 (MessageLogger: Fix deleted attachments patches (#4342))
                     replace: "_canRemoveItem:$2 = arguments[0].canRemoveItem && !$1?.originalItem?.deleted",
                 }
             ]
