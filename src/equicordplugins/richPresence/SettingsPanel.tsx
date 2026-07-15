@@ -108,9 +108,9 @@ function StatsFmSettings() {
 function JellyfinSettings() {
     return (
         <>
-            <SettingsSection id="jellyfin-settings" name="" description="Show what you're playing on Jellyfin. To get your API key: open your Jellyfin web UI, press F12 to open Developer Tools, go to the Network tab, look for requests to your server, and find the X-MediaBrowser-Token header (Ctrl+F to search). Your user ID can be found in your profile page URL." />
+            <SettingsSection id="jellyfin-settings" name="" description="Show what you're playing on Jellyfin. To get your API key: open your Jellyfin web UI, press F12 to open Developer Tools, go to the Network tab, look for requests to your server, find the Authorization header (Ctrl+F to search), and You need the part from Token='this'. Your user ID can be found in your profile page URL." />
             <TextSetting name="Server URL" description="Jellyfin server URL." settingsKey="jf_serverUrl" placeholder="https://jellyfin.example.com" />
-            <TextSetting name="API Key" description="Jellyfin API key." settingsKey="jf_apiKey" placeholder="X-MediaBrowser-Token" />
+            <TextSetting name="API Key" description="Jellyfin API key." settingsKey="jf_apiKey" placeholder="Authorization" />
             <TextSetting name="User ID" description="Jellyfin user ID." settingsKey="jf_userId" placeholder="User ID from profile URL" />
             <SelectSetting name="Name Display" description="Name display format." settingsKey="jf_nameDisplay" options={[
                 { label: "Series/Movie Name", value: "default" },

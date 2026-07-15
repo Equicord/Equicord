@@ -28,18 +28,6 @@
     gap: 8px;
 }
 
-.vc-settings-usercss-ie-buttons>div {
-    color: var(--interactive-icon-default, var(--interactive-normal));
-    opacity: 0.5;
-    padding: 4px;
-    cursor: pointer;
-}
-
-.vc-settings-usercss-ie-buttons>div:hover {
-    color: var(--interactive-icon-hover, var(--interactive-hover));
-    opacity: 1;
-}
-
 .vc-settings-csp-row {
     display: flex;
     justify-content: space-between;

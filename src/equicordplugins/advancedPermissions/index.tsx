@@ -4,8 +4,6 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import "./style.css";
-
 import { definePluginSettings } from "@api/Settings";
 import { BaseText } from "@components/BaseText";
 import ErrorBoundary from "@components/ErrorBoundary";
@@ -60,6 +58,19 @@ const CollapsibleCard = ErrorBoundary.wrap(
     { noop: true },
 );
 
+let savedCard: ReactNode = null;
+
+const SimplifiedCard = ErrorBoundary.wrap(() => {
+    switch (settings.store.simplifiedCard) {
+        case "hide":
+            return null;
+        case "collapse":
+            return <CollapsibleCard>{savedCard}</CollapsibleCard>;
+        default:
+            return <>{savedCard}</>;
+    }
+}, { noop: true });
+
 const settings = definePluginSettings({
     simplifiedCard: {
         type: OptionType.SELECT,
@@ -90,19 +101,19 @@ export default definePlugin({
             find: 'id:"PrivateChannelSettingCard"',
             replacement: [
                 {
-                    // simplified card renderer
-                    match: /(?<=permissionUpdates:\i\}\):null,).{0,100}roles:\i,members:\i\}\)/,
-                    replace: "$self.renderCard($&)",
+                    // render the card below the subtitle
+                    match: /(?<=children:\i\.subtitle\}\),)/,
+                    replace: "$self.renderCard(),",
                 },
                 {
-                    // hide divider when card hidden, else tighten it
+                    // grab, store and hide the original card
+                    match: /(?<=permissionUpdates:\i\}\):null,).{0,100}?roles:\i,members:\i\}\)/,
+                    replace: "$self.saveCard($&)",
+                },
+                {
+                    // always hide the divider
                     match: /(?<=advancedMode\);.{0,30}children:\[)/,
-                    replace: "$self.cardHidden()?null:",
-                },
-                {
-                    // hide divider when card hidden, else tighten it
-                    match: /className:\i\.\i(?=.{0,50}onExpandedChange)/,
-                    replace: '$&+" vc-iamadvanced-divider"',
+                    replace: "null&&",
                 },
                 {
                     // always force advanced open
@@ -118,18 +129,12 @@ export default definePlugin({
         },
     ],
 
-    cardHidden() {
-        return settings.store.simplifiedCard === "hide";
+    renderCard() {
+        return <SimplifiedCard />;
     },
 
-    renderCard(card: ReactNode) {
-        switch (settings.store.simplifiedCard) {
-            case "hide":
-                return null;
-            case "collapse":
-                return <CollapsibleCard>{card}</CollapsibleCard>;
-            default:
-                return card;
-        }
+    saveCard(card: ReactNode) {
+        savedCard = card;
+        return null;
     },
 });

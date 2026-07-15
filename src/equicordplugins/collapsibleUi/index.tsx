@@ -20,8 +20,8 @@ import managedStyle from "./style.css?managed";
 const cl = classNameFactory("vc-collapsible-ui-");
 
 const panelDependentSurfaces: Record<PanelId, SurfaceId[]> = {
-    guildBar: ["guildBar", "userArea"],
-    channelList: ["channelList", "base", "sidebar", "userArea"],
+    guildBar: ["guildBar", "sidebar", "userArea"],
+    channelList: ["channelList", "base", "sidebar"],
     membersList: ["membersList"],
     chatButtons: [],
     titleBar: ["titleBar"],
@@ -37,6 +37,7 @@ const DETACHED_USER_AREA_DEFAULT_OFFSET_Y = 88;
 
 let providerUnsubs: Array<() => void> = [];
 let channelListExpandedByInteraction = false;
+let guildBarExpandedByInteraction = false;
 let headerBarExpandedByInteraction = false;
 let headerBarPointerTrackerEnabled = false;
 let userAreaDragState: { offsetX: number; offsetY: number; width: number; height: number; } | undefined;
@@ -84,7 +85,17 @@ function setChannelListExpandedByInteraction(expanded: boolean) {
     notifySurfaceClassesChanged("sidebar");
 }
 
+function setGuildBarExpandedByInteraction(expanded: boolean) {
+    if (guildBarExpandedByInteraction === expanded) return;
+    guildBarExpandedByInteraction = expanded;
+    notifySurfaceClassesChanged("guildBar");
+}
+
 function syncPanelCollapsedState(panelId: PanelId, collapsed: boolean) {
+    if (panelId === "guildBar") {
+        guildBarExpandedByInteraction = false;
+    }
+
     if (panelId === "channelList") {
         channelListExpandedByInteraction = false;
     }
@@ -187,7 +198,17 @@ function eventWithin(element: HTMLElement | null, event: ReactFocusEvent<HTMLEle
     return false;
 }
 
+// The BetterFolders sidebar mounts and unmounts with folder state, so match
+// it by class instead of holding an element reference.
+function eventWithinBetterFolders(event: ReactFocusEvent<HTMLElement> | ReactMouseEvent<HTMLElement>) {
+    return event.target instanceof Element && !!event.target.closest(".vc-betterFolders-sidebar");
+}
+
 function handleSidebarEnter(event: ReactFocusEvent<HTMLElement> | ReactMouseEvent<HTMLElement>) {
+    if (isPanelCollapsed("guildBar")) {
+        setGuildBarExpandedByInteraction(eventWithinBetterFolders(event));
+    }
+
     if (eventWithin(userAreaElement, event)) {
         setChannelListExpandedByInteraction(false);
         return;
@@ -199,6 +220,10 @@ function handleSidebarEnter(event: ReactFocusEvent<HTMLElement> | ReactMouseEven
 }
 
 function handleSidebarLeave(event: ReactFocusEvent<HTMLElement> | ReactMouseEvent<HTMLElement>) {
+    if (!(event.relatedTarget instanceof Element && event.relatedTarget.closest(".vc-betterFolders-sidebar"))) {
+        setGuildBarExpandedByInteraction(false);
+    }
+
     if (nodeWithin(userAreaElement, event.relatedTarget)) {
         setChannelListExpandedByInteraction(false);
         return;
@@ -446,7 +471,14 @@ export default definePlugin({
         } as SurfaceProvidedProps);
 
         providerUnsubs = [
-            addSurfacePropsProvider("guildBar", () => panelAttr(panelRegistry.guildBar.classId, isPanelCollapsed("guildBar"))),
+            addSurfacePropsProvider("guildBar", () => {
+                const collapsed = isPanelCollapsed("guildBar");
+                const attrs: SurfaceProvidedProps = panelAttr(panelRegistry.guildBar.classId, collapsed);
+                if (collapsed && guildBarExpandedByInteraction) {
+                    attrs["data-vc-collapsible-ui-guild-bar-interaction-expanded"] = "";
+                }
+                return attrs;
+            }),
             addSurfacePropsProvider("channelList", () => {
                 const attrs: SurfaceProvidedProps = panelAttr(panelRegistry.channelList.classId, isPanelCollapsed("channelList"));
                 attrs.ref = setChannelListElement;
@@ -471,7 +503,6 @@ export default definePlugin({
             }),
             addSurfacePropsProvider("userArea", () => {
                 const uaCollapsed = isPanelCollapsed("userArea");
-                const clCollapsed = isPanelCollapsed("channelList");
                 const gbCollapsed = isPanelCollapsed("guildBar");
                 const userAreaDetached = shouldDetachUserArea();
                 const attrs: SurfaceProvidedProps = panelAttr(panelRegistry.userArea.classId, uaCollapsed);
@@ -485,9 +516,6 @@ export default definePlugin({
                         transform: `translate3d(${position.x}px, ${position.y}px, 0)`,
                     };
                     attrs.onMouseDownCapture = startDetachedUserAreaDrag;
-                }
-                if (!userAreaDetached && clCollapsed) {
-                    attrs["data-vc-collapsible-ui-user-area-channel-list-collapsed"] = "";
                 }
                 if (!userAreaDetached && gbCollapsed) {
                     attrs["data-vc-collapsible-ui-user-area-guild-bar-collapsed"] = "";
@@ -512,6 +540,7 @@ export default definePlugin({
                     "data-vc-collapsible-ui-sidebar": "",
                     [`data-vc-collapsible-ui-sidebar-channel-list-${collapsed ? "collapsed" : "expanded"}`]: "",
                     ...(collapsed && channelListExpandedByInteraction ? { "data-vc-collapsible-ui-sidebar-channel-list-expanded": "" } : {}),
+                    ...(isPanelCollapsed("guildBar") ? { "data-vc-collapsible-ui-sidebar-guild-bar-collapsed": "" } : {}),
                     ...(userAreaDetached ? { "data-vc-collapsible-ui-sidebar-user-area-detached": "" } : {}),
                     onFocusCapture: handleSidebarEnter,
                     onBlurCapture: handleSidebarLeave,
@@ -536,6 +565,7 @@ export default definePlugin({
         channelListElement = null;
         userAreaElement = null;
         channelListExpandedByInteraction = false;
+        guildBarExpandedByInteraction = false;
         headerBarExpandedByInteraction = false;
         surfaceCssPxCache.clear();
     },

@@ -70,7 +70,7 @@ function ThemeTab() {
     const onStatusChange = (status: SearchStatus) => setSearchValue(prev => ({ ...prev, status }));
 
     const themeFilter = (theme: Theme) => {
-        const enabled = themeLinks.includes(`${apiUrl}/${theme.name}`);
+        const enabled = themeLinks.includes(`${apiUrl}/${theme.id}`);
 
         const tags = new Set(theme.tags.map(tag => tag?.toLowerCase()));
 

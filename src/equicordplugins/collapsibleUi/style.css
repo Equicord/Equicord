@@ -23,10 +23,22 @@
 
 [data-vc-collapsible-ui-base-channel-list-collapsed] {
     /* stylelint-disable-next-line value-keyword-case */
-    grid-template-columns: [start] min-content [guildsEnd] min-content [sidebarEnd] var(--vc-cui-peek-size) [channelsEnd] 1fr [end] !important;
+    grid-template-columns: [start] min-content [guildsEnd] var(--vc-cui-peek-size) [channelsEnd] 1fr [end] !important;
 }
 
 [data-vc-collapsible-ui-base-channel-list-collapsed][data-vc-collapsible-ui-base-channel-list-interaction-expanded] {
+    /* stylelint-disable-next-line value-keyword-case */
+    grid-template-columns: [start] min-content [guildsEnd] var(--custom-guild-sidebar-width, 312px) [channelsEnd] 1fr [end] !important;
+}
+
+/* BetterFolders redefines the base grid with an extra folder column, so the
+   collapsed templates must keep its [sidebarEnd] track to stay in sync. */
+[data-vc-collapsible-ui-base-channel-list-collapsed].vc-betterFolders-sidebar-grid {
+    /* stylelint-disable-next-line value-keyword-case */
+    grid-template-columns: [start] min-content [guildsEnd] min-content [sidebarEnd] var(--vc-cui-peek-size) [channelsEnd] 1fr [end] !important;
+}
+
+[data-vc-collapsible-ui-base-channel-list-collapsed][data-vc-collapsible-ui-base-channel-list-interaction-expanded].vc-betterFolders-sidebar-grid {
     /* stylelint-disable-next-line value-keyword-case */
     grid-template-columns: [start] min-content [guildsEnd] min-content [sidebarEnd] var(--custom-guild-sidebar-width, 312px) [channelsEnd] 1fr [end] !important;
 }
@@ -67,8 +79,8 @@
     transition-delay: var(--vc-cui-fade-delay);
 }
 
-[data-vc-collapsible-ui-guild-bar-collapsed]:not(.vc-betterFolders-sidebar *):is(:hover, :focus-within),
-[data-vc-collapsible-ui-base]:has(.vc-betterFolders-sidebar:is(:hover, :focus-within)) [data-vc-collapsible-ui-guild-bar-collapsed]:not(.vc-betterFolders-sidebar *) {
+[data-vc-collapsible-ui-guild-bar-collapsed]:not(.vc-betterFolders-sidebar *):hover,
+[data-vc-collapsible-ui-guild-bar-collapsed][data-vc-collapsible-ui-guild-bar-interaction-expanded]:not(.vc-betterFolders-sidebar *) {
     width: var(--vc-cui-guild-bar-expanded-width) !important;
     min-width: var(--vc-cui-guild-bar-expanded-width) !important;
     max-width: var(--vc-cui-guild-bar-expanded-width) !important;
@@ -80,7 +92,7 @@
 /* BetterFolders renders a duplicate guilds nav inside its folder sidebar.
    The collapse rules above exempt that duplicate; collapse the sidebar
    wrapper in sync with the real guild bar instead. */
-[data-vc-collapsible-ui-base]:has([data-vc-collapsible-ui-guild-bar-collapsed]) .vc-betterFolders-sidebar {
+[data-vc-collapsible-ui-sidebar-guild-bar-collapsed] .vc-betterFolders-sidebar {
     width: 0 !important;
     min-width: 0 !important;
     opacity: 0.01;
@@ -89,8 +101,8 @@
     transition-delay: var(--vc-cui-fade-delay);
 }
 
-[data-vc-collapsible-ui-base]:has([data-vc-collapsible-ui-guild-bar-collapsed]:is(:hover, :focus-within)) .vc-betterFolders-sidebar,
-[data-vc-collapsible-ui-base]:has([data-vc-collapsible-ui-guild-bar-collapsed]) .vc-betterFolders-sidebar:is(:hover, :focus-within) {
+[data-vc-collapsible-ui-guild-bar-collapsed]:hover ~ .vc-betterFolders-sidebar,
+[data-vc-collapsible-ui-sidebar-guild-bar-collapsed] .vc-betterFolders-sidebar:hover {
     width: auto !important;
     opacity: 1;
     transition-delay: 0ms;
@@ -277,6 +289,12 @@
     width: var(--vc-cui-peek-size) !important;
     min-width: var(--vc-cui-peek-size) !important;
     max-width: var(--vc-cui-peek-size) !important;
+}
+
+[data-vc-collapsible-ui-sidebar-channel-list-collapsed]:not([data-vc-collapsible-ui-sidebar-user-area-detached]) [data-vc-collapsible-ui-user-area-collapsed]:is(:hover, :focus-within) {
+    width: var(--custom-guild-sidebar-width, 312px) !important;
+    min-width: var(--vc-cui-channel-list-min-width) !important;
+    max-width: var(--vc-cui-channel-list-max-width) !important;
 }
 
 [data-vc-collapsible-ui-sidebar-channel-list-expanded]:not([data-vc-collapsible-ui-sidebar-user-area-detached]) [data-vc-collapsible-ui-user-area] {

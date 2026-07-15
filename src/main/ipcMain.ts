@@ -30,6 +30,7 @@ import { release } from "os";
 import { join, normalize } from "path";
 
 import { registerCspIpcHandlers } from "./csp/manager";
+import { getThemeInfo, stripBOM, UserThemeHeader } from "./themes";
 import { ALLOWED_PROTOCOLS, QUICK_CSS_PATH, SETTINGS_DIR, THEMES_DIR } from "./utils/constants";
 import { makeLinksOpenExternally } from "./utils/externalLinks";
 
@@ -50,15 +51,21 @@ function readCss() {
     return readFile(QUICK_CSS_PATH, "utf-8").catch(() => "");
 }
 
-async function listThemes(): Promise<{ fileName: string; content: string; }[]> {
-    try {
-        const entries = await readdir(THEMES_DIR, { withFileTypes: true });
-        const fileNames = entries.filter(entry => entry.isFile() && entry.name.endsWith(".css")).map(entry => entry.name);
-        const results = await Promise.allSettled(fileNames.map(async fileName => ({ fileName, content: await getThemeData(fileName) })));
-        return results.flatMap(result => result.status === "fulfilled" ? [result.value] : []);
-    } catch {
-        return [];
+async function listThemes(): Promise<UserThemeHeader[]> {
+    const files = await readdir(THEMES_DIR).catch(() => []);
+
+    const themeInfo: UserThemeHeader[] = [];
+
+    for (const fileName of files) {
+        if (!fileName.endsWith(".css")) continue;
+
+        const data = await getThemeData(fileName).then(stripBOM).catch(() => null);
+        if (data == null) continue;
+
+        themeInfo.push(getThemeInfo(data, fileName));
     }
+
+    return themeInfo;
 }
 
 function getThemeData(fileName: string) {
@@ -87,7 +94,6 @@ ipcMain.handle(IpcEvents.SET_QUICK_CSS, (_, css) =>
     writeFileSync(QUICK_CSS_PATH, css)
 );
 
-ipcMain.handle(IpcEvents.GET_THEMES_DIR, () => THEMES_DIR);
 ipcMain.handle(IpcEvents.GET_THEMES_LIST, () => listThemes());
 ipcMain.handle(IpcEvents.GET_THEME_DATA, (_, fileName) => getThemeData(fileName));
 ipcMain.handle(IpcEvents.DELETE_THEME, (_, fileName) => {
