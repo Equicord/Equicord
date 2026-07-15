@@ -101,7 +101,7 @@ function Switches() {
         IS_DISCORD_DESKTOP && IS_LINUX && {
             key: "enableLinuxNvidiaVideoDecode",
             title: "Enable NVIDIA VA-API Video Decoding",
-            description: "Enable experimental hardware video decoding on Linux. Requires nvidia-vaapi-driver and Wayland.",
+            description: "Enable experimental hardware video decoding on Linux. Requires nvidia-vaapi-driver. Wayland is supported and preferred.",
             restartRequired: true,
         },
         !IS_WEB && IS_WINDOWS && {
