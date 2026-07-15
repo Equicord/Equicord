@@ -49,39 +49,66 @@ if (!IS_VANILLA) {
         "VaapiOnNvidiaGPUs",
         "VaapiIgnoreDriverChecks"
     ];
+    const videoDecodeEnv: Record<string, string> = {
+        LIBVA_DRIVER_NAME: "nvidia",
+        NVD_BACKEND: "direct",
+        ELECTRON_OZONE_PLATFORM_HINT: "wayland"
+    };
+    const videoDecodeOwnedMarker = "EQUICORD_VIDEO_DECODE_OWNED";
     const enableLinuxNvidiaVideoDecode = IS_DISCORD_DESKTOP
         && process.platform === "linux"
         && settings.enableLinuxNvidiaVideoDecode;
     const videoDecodeRelaunched = app.commandLine.hasSwitch(videoDecodeMarker.slice(2));
+    const owned = new Set((process.env[videoDecodeOwnedMarker] ?? "").split(",").filter(Boolean));
 
     if (enableLinuxNvidiaVideoDecode !== videoDecodeRelaunched) {
         const features = new Set<string>();
         const featurePrefix = "--enable-features=";
         const args = process.argv.slice(1).filter(arg => {
-            if (arg === videoDecodeMarker
-                || arg === "--ignore-gpu-blocklist"
-                || ["--ozone-platform=", "--use-angle=", "--use-gl="].some(prefix => arg.startsWith(prefix)))
-                return false;
+            if (arg === videoDecodeMarker || (!enableLinuxNvidiaVideoDecode && owned.has(arg))) return false;
 
             if (!arg.startsWith(featurePrefix)) return true;
             for (const feature of arg.slice(featurePrefix.length).split(","))
-                if (feature && !videoDecodeFeatures.includes(feature)) features.add(feature);
+                if (feature) features.add(feature);
             return false;
         });
 
         if (enableLinuxNvidiaVideoDecode) {
-            process.env.LIBVA_DRIVER_NAME ??= "nvidia";
-            process.env.NVD_BACKEND ??= "direct";
-            for (const feature of videoDecodeFeatures) features.add(feature);
-            args.push(videoDecodeMarker, "--use-gl=angle", "--use-angle=gl", "--ignore-gpu-blocklist");
-            if (process.env.XDG_SESSION_TYPE === "wayland" || process.env.WAYLAND_DISPLAY) {
-                process.env.ELECTRON_OZONE_PLATFORM_HINT ??= "wayland";
-                args.push("--ozone-platform=wayland");
+            for (const name of ["LIBVA_DRIVER_NAME", "NVD_BACKEND"]) {
+                if (process.env[name] == null) {
+                    process.env[name] = videoDecodeEnv[name];
+                    owned.add(name);
+                }
             }
+
+            const requiredArgs = ["--use-gl=angle", "--use-angle=gl", "--ignore-gpu-blocklist"];
+            if (process.env.XDG_SESSION_TYPE === "wayland" || process.env.WAYLAND_DISPLAY) {
+                if (process.env.ELECTRON_OZONE_PLATFORM_HINT == null) {
+                    process.env.ELECTRON_OZONE_PLATFORM_HINT = videoDecodeEnv.ELECTRON_OZONE_PLATFORM_HINT;
+                    owned.add("ELECTRON_OZONE_PLATFORM_HINT");
+                }
+                requiredArgs.push("--ozone-platform=wayland");
+            }
+
+            for (const arg of requiredArgs) {
+                if (!args.includes(arg)) {
+                    args.push(arg);
+                    owned.add(arg);
+                }
+            }
+
+            for (const feature of videoDecodeFeatures) {
+                if (!features.has(feature)) owned.add(feature);
+                features.add(feature);
+            }
+            process.env[videoDecodeOwnedMarker] = [...owned].join(",");
+            args.push(videoDecodeMarker);
         } else {
-            if (process.env.LIBVA_DRIVER_NAME === "nvidia") delete process.env.LIBVA_DRIVER_NAME;
-            if (process.env.NVD_BACKEND === "direct") delete process.env.NVD_BACKEND;
-            if (process.env.ELECTRON_OZONE_PLATFORM_HINT === "wayland") delete process.env.ELECTRON_OZONE_PLATFORM_HINT;
+            for (const feature of videoDecodeFeatures)
+                if (owned.has(feature)) features.delete(feature);
+            for (const [name, value] of Object.entries(videoDecodeEnv))
+                if (owned.has(name) && process.env[name] === value) delete process.env[name];
+            delete process.env[videoDecodeOwnedMarker];
         }
 
         if (features.size) args.push(`${featurePrefix}${[...features].join(",")}`);
