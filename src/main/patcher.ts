@@ -42,6 +42,53 @@ app.setAppPath(asarPath);
 if (!IS_VANILLA) {
     const settings = RendererSettings.store;
 
+    const videoDecodeMarker = "--equicord-linux-nvidia-video-decode";
+    const videoDecodeFeatures = [
+        "AcceleratedVideoDecodeLinuxGL",
+        "AcceleratedVideoDecodeLinuxZeroCopyGL",
+        "VaapiOnNvidiaGPUs",
+        "VaapiIgnoreDriverChecks"
+    ];
+    const enableLinuxNvidiaVideoDecode = IS_DISCORD_DESKTOP
+        && process.platform === "linux"
+        && settings.enableLinuxNvidiaVideoDecode;
+    const videoDecodeRelaunched = app.commandLine.hasSwitch(videoDecodeMarker.slice(2));
+
+    if (enableLinuxNvidiaVideoDecode !== videoDecodeRelaunched) {
+        const features = new Set<string>();
+        const featurePrefix = "--enable-features=";
+        const args = process.argv.slice(1).filter(arg => {
+            if (arg === videoDecodeMarker
+                || arg === "--ignore-gpu-blocklist"
+                || ["--ozone-platform=", "--use-angle=", "--use-gl="].some(prefix => arg.startsWith(prefix)))
+                return false;
+
+            if (!arg.startsWith(featurePrefix)) return true;
+            for (const feature of arg.slice(featurePrefix.length).split(","))
+                if (feature && !videoDecodeFeatures.includes(feature)) features.add(feature);
+            return false;
+        });
+
+        if (enableLinuxNvidiaVideoDecode) {
+            process.env.LIBVA_DRIVER_NAME ??= "nvidia";
+            process.env.NVD_BACKEND ??= "direct";
+            for (const feature of videoDecodeFeatures) features.add(feature);
+            args.push(videoDecodeMarker, "--use-gl=angle", "--use-angle=gl", "--ignore-gpu-blocklist");
+            if (process.env.XDG_SESSION_TYPE === "wayland" || process.env.WAYLAND_DISPLAY) {
+                process.env.ELECTRON_OZONE_PLATFORM_HINT ??= "wayland";
+                args.push("--ozone-platform=wayland");
+            }
+        } else {
+            if (process.env.LIBVA_DRIVER_NAME === "nvidia") delete process.env.LIBVA_DRIVER_NAME;
+            if (process.env.NVD_BACKEND === "direct") delete process.env.NVD_BACKEND;
+            if (process.env.ELECTRON_OZONE_PLATFORM_HINT === "wayland") delete process.env.ELECTRON_OZONE_PLATFORM_HINT;
+        }
+
+        if (features.size) args.push(`${featurePrefix}${[...features].join(",")}`);
+        app.relaunch({ args });
+        app.exit(0);
+    }
+
     patchTrayMenu();
 
     /*
@@ -165,6 +212,14 @@ if (!IS_VANILLA) {
             disabledFeatures.add("WidgetLayering");
             disabledFeatures.add("UseEcoQoSForBackgroundProcess");
             args[1] += [...disabledFeatures].join(",");
+        } else if (enableLinuxNvidiaVideoDecode && args[0] === "enable-features") {
+            const enabledFeatures = new Set([
+                ...app.commandLine.getSwitchValue("enable-features").split(","),
+                ...(args[1] ?? "").split(","),
+                ...videoDecodeFeatures
+            ]);
+            enabledFeatures.delete("");
+            args[1] = [...enabledFeatures].join(",");
         }
         return originalAppend.apply(this, args);
     };

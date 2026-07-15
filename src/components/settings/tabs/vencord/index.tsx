@@ -21,7 +21,7 @@ import { QuickAction, QuickActionCard } from "@components/settings/QuickAction";
 import { SpecialCard } from "@components/settings/SpecialCard";
 import BadgeAPI from "@plugins/_api/badges";
 import { gitRemote } from "@shared/vencordUserAgent";
-import { DONOR_ROLE_ID, GUILD_ID, IS_WINDOWS, VC_DONOR_ROLE_ID, VC_GUILD_ID } from "@utils/constants";
+import { DONOR_ROLE_ID, GUILD_ID, IS_LINUX, IS_WINDOWS, VC_DONOR_ROLE_ID, VC_GUILD_ID } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
 import { Margins } from "@utils/margins";
 import { isAnyPluginDev } from "@utils/misc";
@@ -49,7 +49,7 @@ type KeysOfType<Object, Type> = {
 }[keyof Object];
 
 function Switches() {
-    const settings = useSettings(["useQuickCss", "enableReactDevtools", "mainWindowFrameless", "frameless", "winNativeTitleBar", "transparent", "winCtrlQ", "disableMinSize"]);
+    const settings = useSettings(["useQuickCss", "enableReactDevtools", "mainWindowFrameless", "frameless", "winNativeTitleBar", "transparent", "winCtrlQ", "disableMinSize", "enableLinuxNvidiaVideoDecode"]);
 
     const Switches = [
         {
@@ -96,6 +96,12 @@ function Switches() {
             key: "disableMinSize",
             title: "Disable Minimum Window Size",
             description: "Allow the Discord window to be resized smaller than its default minimum size. Useful for tiling window managers or small screens.",
+            restartRequired: true,
+        },
+        IS_DISCORD_DESKTOP && IS_LINUX && {
+            key: "enableLinuxNvidiaVideoDecode",
+            title: "Enable NVIDIA VA-API Video Decoding",
+            description: "Enable experimental hardware video decoding on Linux. Requires nvidia-vaapi-driver and Wayland.",
             restartRequired: true,
         },
         !IS_WEB && IS_WINDOWS && {
