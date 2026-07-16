@@ -75,14 +75,6 @@ export default definePlugin({
                 replace: "$1$self.handleNavigation($2,$3);$4"
             }
         },
-        // ctrl click to open in new tab in inbox unread
-        {
-            find: '[data-recents-channel="',
-            replacement: {
-                match: /(?<=className:\i.\i,onJump:)\i=>(\i)\(\i,(\i)\.id\)/,
-                replace: "event => { if (event.ctrlKey) $self.open($2); else $1(event, $2.id) }"
-            }
-        },
         // ctrl click to open in new tab in inbox mentions
         {
             find: ".deleteRecentMention(",
