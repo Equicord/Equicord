@@ -343,7 +343,7 @@ export default definePlugin({
             find: "#{intl::RECENT_MENTIONS_EMPTY_STATE_TIP}",
             replacement: [
                 {
-                    match: /function (\i)\(\i\){let{message:\i,gotoMessage/,
+                    match: /function (\i)\(\i\){let{message:\i,onJump/,
                     replace: "$self.renderMsg = $1; $&"
                 },
                 {

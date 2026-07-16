@@ -98,7 +98,6 @@ export default definePlugin({
             ]
         },
         ...[
-            "#{intl::GUILD_COMMUNICATION_DISABLED_ICON_TOOLTIP_BODY}", // Messages
             "#{intl::COLLECTIBLES_NAMEPLATE_PREVIEW_A11Y}", // Nameplate preview
             "#{intl::COLLECTIBLES_PROFILE_PREVIEW_A11Y}", // Avatar preview
         ].map(find => ({
