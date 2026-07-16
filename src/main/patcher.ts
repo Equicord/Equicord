@@ -55,9 +55,7 @@ if (!IS_VANILLA) {
         ELECTRON_OZONE_PLATFORM_HINT: "wayland"
     };
     const videoDecodeOwnedMarker = "EQUICORD_VIDEO_DECODE_OWNED";
-    const enableLinuxNvidiaVideoDecode = IS_DISCORD_DESKTOP
-        && process.platform === "linux"
-        && settings.enableLinuxNvidiaVideoDecode;
+    const { enableLinuxNvidiaVideoDecode } = settings;
     const videoDecodeRelaunched = app.commandLine.hasSwitch(videoDecodeMarker.slice(2));
     const owned = new Set((process.env[videoDecodeOwnedMarker] ?? "").split(",").filter(Boolean));
 
