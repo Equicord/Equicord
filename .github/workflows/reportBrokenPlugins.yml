@@ -17,6 +17,14 @@ on:
                     visible for everyone, so DO NOT pass sensitive webhooks like
                     discord webhook. This is meant to be used by Equibot."
                 required: false
+            pr_repo:
+                type: string
+                description: "Fork repo to checkout when testing a PR"
+                required: false
+            pr_branch:
+                type: string
+                description: "Branch to checkout when testing a PR"
+                required: false
     schedule:
         #   # Every day at midnight
         - cron: 0 0 * * *
@@ -32,7 +40,8 @@ jobs:
         steps:
             - uses: actions/checkout@v7
               with:
-                  ref: ${{ github.event_name == 'schedule' && 'dev' || github.ref }}
+                  repository: ${{ inputs.pr_repo || github.repository }}
+                  ref: ${{ inputs.pr_branch || (github.event_name == 'schedule' && 'dev' || github.ref) }}
 
             - uses: pnpm/action-setup@v6
 
