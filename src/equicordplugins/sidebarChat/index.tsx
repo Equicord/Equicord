@@ -45,7 +45,7 @@ import {
 } from "@webpack/common";
 
 import { getOpenPopoutWindowKeys, getPersistedPopoutChannelIds, getPopoutWindowKey, isPopoutWindowOpen, settings, SidebarStore, syncPersistedPopoutWindows } from "./store";
-import style from "./style.css?managed";
+import style from "./styles.css?managed";
 
 const cl = classNameFactory("vc-sidebar-chat-");
 
