@@ -470,8 +470,9 @@ export async function openStartupTabs(props: BasicChannelTabsProps & { userId: s
     await saveQueue;
     if (generation !== hydrationGeneration) return;
 
+    const keepCurrentChannel = settings.store.onStartup !== "nothing" && isPluginEnabled("KeepCurrentChannel");
     let savedTabs: PersistedTabs[string] | undefined;
-    if (settings.store.onStartup === "remember" && !isPluginEnabled("KeepCurrentChannel")) {
+    if (settings.store.onStartup === "remember" && !keepCurrentChannel) {
         try {
             const persistedTabs = await DataStore.get<PersistedTabs>("ChannelTabs_openChannels_v2");
             if (generation !== hydrationGeneration) return;
@@ -488,11 +489,13 @@ export async function openStartupTabs(props: BasicChannelTabsProps & { userId: s
     tabStateCache.clear();
     highestIdIndex = 0;
 
-    const keepCurrentChannel = settings.store.onStartup !== "nothing" && isPluginEnabled("KeepCurrentChannel");
-    if (keepCurrentChannel)
+    if (keepCurrentChannel) {
+        hydratedUserId = undefined;
         showToast("Not restoring tabs as KeepCurrentChannel is enabled", Toasts.Type.FAILURE);
+        return;
+    }
 
-    switch (keepCurrentChannel ? "nothing" : settings.store.onStartup) {
+    switch (settings.store.onStartup) {
         case "remember": {
             if (!savedTabs?.openTabs.length) {
                 showToast("Failed to restore tabs", Toasts.Type.FAILURE);
