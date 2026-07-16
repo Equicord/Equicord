@@ -4,8 +4,6 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import "./styles.css";
-
 import { NavContextMenuPatchCallback } from "@api/ContextMenu";
 import { HeaderBarButton } from "@api/HeaderBar";
 import ErrorBoundary from "@components/ErrorBoundary";
@@ -47,6 +45,7 @@ import {
 } from "@webpack/common";
 
 import { getOpenPopoutWindowKeys, getPersistedPopoutChannelIds, getPopoutWindowKey, isPopoutWindowOpen, settings, SidebarStore, syncPersistedPopoutWindows } from "./store";
+import style from "./style.css?managed";
 
 const cl = classNameFactory("vc-sidebar-chat-");
 
@@ -324,6 +323,23 @@ export default definePlugin({
             ],
         },
     ],
+    managedStyle: style,
+    settings,
+    contextMenus: {
+        "user-context": UserContextPatch,
+        "channel-context": ChannelContextPatch,
+        "thread-context": ChannelContextPatch,
+        "gdm-context": ChannelContextPatch,
+    },
+
+    toolboxActions: {
+        "Open Previous Chat"() {
+            FluxDispatcher.dispatch({
+                // @ts-ignore
+                type: "VC_SIDEBAR_CHAT_PREVIOUS",
+            });
+        }
+    },
 
     headerBarButton: {
         icon: WindowLaunchIcon,
@@ -345,23 +361,6 @@ export default definePlugin({
 
     async start() {
         restorePersistedPopouts();
-    },
-
-    settings,
-    contextMenus: {
-        "user-context": UserContextPatch,
-        "channel-context": ChannelContextPatch,
-        "thread-context": ChannelContextPatch,
-        "gdm-context": ChannelContextPatch,
-    },
-
-    toolboxActions: {
-        "Open Previous Chat"() {
-            FluxDispatcher.dispatch({
-                // @ts-ignore
-                type: "VC_SIDEBAR_CHAT_PREVIOUS",
-            });
-        }
     },
 
     renderSidebar() {

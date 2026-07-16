@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { disableStyle, enableStyle } from "@api/Styles";
 import { EquicordDevs } from "@utils/constants";
 import { getUserAvatarUrl } from "@utils/misc";
 import definePlugin from "@utils/types";
@@ -17,6 +16,7 @@ export default definePlugin({
     description: "Makes avatars take up the entire vc tile",
     tags: ["Appearance", "Voice"],
     authors: [EquicordDevs.mochienya],
+    managedStyle: style,
     patches: [
         {
             find: "\"data-selenium-video-tile\":",
@@ -43,12 +43,5 @@ export default definePlugin({
         return {
             "--full-res-avatar": `url(${avatarUrl})`
         };
-    },
-
-    start() {
-        enableStyle(style);
-    },
-    stop() {
-        disableStyle(style);
     },
 });
