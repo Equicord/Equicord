@@ -102,21 +102,25 @@ export const defs = defineItems({
 const fallbackThumbnail = new URL("https://images-ext-1.discordapp.net/external/pGTJg3YdSHpyGTltH4vZUKEyQoNzf5mtqbSJs7I4ebc/https/equicord.org/assets/plugins/favoriteAnything/invalid.png");
 
 export async function getThumbnailUrl(data: string, width: number, height: number): Promise<URL | null> {
-    const decoded = defs.decode(data);
-    if (!decoded || !width || !height) return null;
+    try {
+        const decoded = defs.decode(data);
+        if (!decoded || !width || !height) return null;
 
-    const text = defs.stringify(decoded.format, decoded.data);
-    const url = new URL(`https://placehold.jp/42/444/fff/${width}x${height}.png`);
-    url.searchParams.append("text", text);
+        const text = defs.stringify(decoded.format, decoded.data);
+        const url = new URL(`https://placehold.jp/42/444/fff/${width}x${height}.png`);
+        url.searchParams.append("text", text);
 
-    return await RestAPI.post({
-        url: Constants.Endpoints.UNFURL_EMBED_URLS,
-        body: { urls: [url] },
-        retries: 3
-    }).then(({ body }: { body: UnfurledEmbedsResponse; }) => {
-        const [{ thumbnail } = {}] = body.embeds;
-        return (thumbnail?.proxy_url && URL.parse(thumbnail.proxy_url)) || fallbackThumbnail;
-    });
+        return await RestAPI.post({
+            url: Constants.Endpoints.UNFURL_EMBED_URLS,
+            body: { urls: [url] },
+            retries: 3
+        }).then(({ body }: { body: UnfurledEmbedsResponse; }) => {
+            const [{ thumbnail } = {}] = body.embeds;
+            return thumbnail?.proxy_url ? new URL(thumbnail.proxy_url) : fallbackThumbnail;
+        });
+    } catch {
+        return fallbackThumbnail;
+    }
 }
 
 export const isAllowedHost = proxyLazy(() => {
