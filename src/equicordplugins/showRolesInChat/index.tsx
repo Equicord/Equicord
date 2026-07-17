@@ -12,6 +12,7 @@ import { EyeIcon } from "@components/Icons";
 import { EquicordDevs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
 import { getCurrentGuild } from "@utils/discord";
+import { classes } from "@utils/misc";
 import definePlugin, { OptionType } from "@utils/types";
 import { User } from "@vencord/discord-types";
 import { ChannelStore, ContextMenuApi, GuildMemberStore, GuildRoleStore, Menu, Tooltip, useStateFromStores } from "@webpack/common";
@@ -76,7 +77,7 @@ function ShieldUserIcon({ color }: { color: string; }) {
     );
 }
 
-const HighestRoleIndicator = ErrorBoundary.wrap(({ user, channelId }: { user: User; channelId: string; }) => {
+const HighestRoleIndicator = ErrorBoundary.wrap(({ user, channelId, isCompact }: { user: User; channelId: string; isCompact?: boolean; }) => {
     const { showBots, useRoleColor, excludedRoles } = settings.use(SETTINGS_KEYS);
 
     const guildId = (!user.bot || showBots) ? ChannelStore.getChannel(channelId)?.guild_id : null;
@@ -118,7 +119,7 @@ const HighestRoleIndicator = ErrorBoundary.wrap(({ user, channelId }: { user: Us
             {tooltipProps => (
                 <span
                     {...tooltipProps}
-                    className={cl("indicator")}
+                    className={classes(cl("indicator"), isCompact && cl("indicator-compact"))}
                     onContextMenu={handleContextMenu}
                 >
                     <ShieldUserIcon color={(useRoleColor && role.colorString) || "currentColor"} />
@@ -155,10 +156,11 @@ export default definePlugin({
             );
         }
     },
-    renderMessageDecoration: ({ message }) => (
+    renderMessageDecoration: ({ message, compact }) => (
         <HighestRoleIndicator
             user={message.author}
             channelId={message.channel_id}
+            isCompact={compact}
         />
     )
 });

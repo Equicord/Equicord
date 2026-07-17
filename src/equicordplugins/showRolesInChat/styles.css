@@ -1,6 +1,7 @@
 .vc-sric-indicator {
     display: inline-flex;
     align-items: center;
+    gap: 4px;
     box-sizing: border-box;
     height: 16px;
     padding: 0 6px 0 4px;
@@ -16,7 +17,6 @@
 .vc-sric-icon {
     width: 14px;
     height: 14px;
-    margin-right: 4px;
     flex-shrink: 0;
 }
 
@@ -27,14 +27,10 @@
     text-overflow: ellipsis;
 }
 
-[class*="compact_"] .vc-sric-name {
+.vc-sric-indicator-compact {
+    padding: 0 2px;
+}
+
+.vc-sric-indicator-compact .vc-sric-name {
     display: none;
-}
-
-[class*="compact_"] .vc-sric-icon {
-    margin-right: 0;
-}
-
-[class*="compact_"] .vc-sric-indicator {
-    padding: 0 4px;
 }
