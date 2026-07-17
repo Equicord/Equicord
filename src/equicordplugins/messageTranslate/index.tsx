@@ -79,6 +79,10 @@ export default definePlugin({
 
         const cached = getCached(message.id);
         if (cached) {
+            if (message.content === cached.translated) {
+                translatedMessages.set(message.id, cached.sourceLang);
+                return message;
+            }
             if (cached.original !== message.content) {
                 clearCache(message.id);
                 translatedMessages.delete(message.id);
