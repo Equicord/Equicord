@@ -4,35 +4,40 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { definePluginSettings } from "@api/Settings";
-import { Devs } from "@utils/constants";
-import definePlugin, { OptionType } from "@utils/types";
-import { OverridePremiumTypeStore } from "@webpack/common";
+import { definePluginSettings } from "@api/Settings"
+import { Devs } from "@utils/constants"
+import definePlugin, { OptionType } from "@utils/types"
+import { OverridePremiumTypeStore } from "@webpack/common"
 
-export const settings = definePluginSettings({
-    superReactByDefault: {
-        type: OptionType.BOOLEAN,
-        description: "Reaction picker will default to Super Reactions",
-        default: true,
-    },
-    unlimitedSuperReactionPlaying: {
-        type: OptionType.BOOLEAN,
-        description: "Remove the limit on Super Reactions playing at once",
-        default: false,
-    },
+export const settings = definePluginSettings(
+    {
+        superReactByDefault: {
+            type: OptionType.BOOLEAN,
+            description: "Reaction picker will default to Super Reactions",
+            default: true,
+        },
+        unlimitedSuperReactionPlaying: {
+            type: OptionType.BOOLEAN,
+            description: "Remove the limit on Super Reactions playing at once",
+            default: false,
+        },
 
-    superReactionPlayingLimit: {
-        description: "Max Super Reactions to play at once. 0 to disable playing Super Reactions",
-        type: OptionType.SLIDER,
-        default: 20,
-        markers: [0, 5, 10, 20, 40, 60, 80, 100],
-        stickToMarkers: true,
+        superReactionPlayingLimit: {
+            description: "Max Super Reactions to play at once. 0 to disable playing Super Reactions",
+            type: OptionType.SLIDER,
+            default: 20,
+            markers: [0, 5, 10, 20, 40, 60, 80, 100],
+            stickToMarkers: true,
+        },
     },
-}, {
-    superReactionPlayingLimit: {
-        disabled() { return this.store.unlimitedSuperReactionPlaying; },
-    }
-});
+    {
+        superReactionPlayingLimit: {
+            disabled() {
+                return this.store.unlimitedSuperReactionPlaying
+            },
+        },
+    },
+)
 
 export default definePlugin({
     name: "SuperReactionTweaks",
@@ -46,27 +51,28 @@ export default definePlugin({
                 {
                     // if (inlinedCalculatePlayingCount(a,b) >= limit) return;
                     match: /(BURST_REACTION_EFFECT_PLAY:(\i=>|function\(\i\)){.+?if\()(\(\(\i,\i\)=>.+?\(\i,\i\))>=5+?(?=\))/,
-                    replace: (_, rest, playingCount) => `${rest}!$self.shouldPlayBurstReaction(${playingCount})`
-                }
-            ]
+                    replace: (_, rest, playingCount) => `${rest}!$self.shouldPlayBurstReaction(${playingCount})`,
+                },
+            ],
         },
         {
             find: ".EMOJI_PICKER_CONSTANTS_EMOJI_CONTAINER_PADDING_HORIZONTAL)",
             replacement: {
                 match: /(openPopoutType:void 0(?=.+?isBurstReaction:(\i).+?;(\i===\i\.\i\.REACTION)&&\i\.push\().+?\[\2,\i\]=\i\.useState\()!1\)/,
-                replace: (_, rest, _isBurstReactionVariable, isReactionIntention) => `${rest}$self.shouldSuperReactByDefault&&${isReactionIntention})`
-            }
-        }
+                replace: (_, rest, _isBurstReactionVariable, isReactionIntention) =>
+                    `${rest}$self.shouldSuperReactByDefault&&${isReactionIntention})`,
+            },
+        },
     ],
     settings,
 
     shouldPlayBurstReaction(playingCount: number) {
-        if (settings.store.unlimitedSuperReactionPlaying) return true;
-        if (settings.store.superReactionPlayingLimit > playingCount) return true;
-        return false;
+        if (settings.store.unlimitedSuperReactionPlaying) return true
+        if (settings.store.superReactionPlayingLimit > playingCount) return true
+        return false
     },
 
     get shouldSuperReactByDefault() {
-        return settings.store.superReactByDefault && (OverridePremiumTypeStore.getState().premiumTypeActual != null);
-    }
-});
+        return settings.store.superReactByDefault && OverridePremiumTypeStore.getState().premiumTypeActual != null
+    },
+})
