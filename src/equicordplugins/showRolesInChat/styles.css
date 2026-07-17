@@ -26,3 +26,15 @@
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
+[class*="compact_"] .vc-sric-name {
+    display: none;
+}
+
+[class*="compact_"] .vc-sric-icon {
+    margin-right: 0;
+}
+
+[class*="compact_"] .vc-sric-indicator {
+    padding: 0 4px;
+}

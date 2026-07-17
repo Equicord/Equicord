@@ -14,7 +14,7 @@ import { classNameFactory } from "@utils/css";
 import { getCurrentGuild } from "@utils/discord";
 import definePlugin, { OptionType } from "@utils/types";
 import { User } from "@vencord/discord-types";
-import { ChannelStore, ContextMenuApi, GuildMemberStore, GuildRoleStore, Menu, useStateFromStores } from "@webpack/common";
+import { ChannelStore, ContextMenuApi, GuildMemberStore, GuildRoleStore, Menu, Tooltip, useStateFromStores } from "@webpack/common";
 import type React from "react";
 
 const cl = classNameFactory("vc-sric-");
@@ -114,12 +114,20 @@ const HighestRoleIndicator = ErrorBoundary.wrap(({ user, channelId }: { user: Us
     };
 
     return (
-        <span className={cl("indicator")} onContextMenu={handleContextMenu}>
-            <ShieldUserIcon color={(useRoleColor && role.colorString) || "currentColor"} />
-            <span className={cl("name")}>
-                {role.name}
-            </span>
-        </span>
+        <Tooltip text={role.name}>
+            {tooltipProps => (
+                <span
+                    {...tooltipProps}
+                    className={cl("indicator")}
+                    onContextMenu={handleContextMenu}
+                >
+                    <ShieldUserIcon color={(useRoleColor && role.colorString) || "currentColor"} />
+                    <span className={cl("name")}>
+                        {role.name}
+                    </span>
+                </span>
+            )}
+        </Tooltip>
     );
 }, { noop: true });
 
