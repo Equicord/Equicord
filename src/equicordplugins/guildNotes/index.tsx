@@ -74,7 +74,7 @@ export const contextMenus = {
 export default definePlugin({
     name: "Server Notes",
     description:
-        "Allows you to add server notes",
+        "Allows you to add server notes.",
     authors: [EquicordDevs.BastiGame],
     contextMenus,
 });
