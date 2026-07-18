@@ -6,7 +6,7 @@
 
 import { Logger } from "@utils/Logger";
 
-import { settings } from "../settings";
+import { getExcludedLanguages, settings } from "../settings";
 import { CachedTranslation, TranslateResponse } from "../types";
 
 const logger = new Logger("MessageTranslate");
@@ -53,7 +53,10 @@ export async function translate(messageId: string, text: string): Promise<Cached
         const targetLang = settings.store.targetLanguage;
         const response = await fetchTranslation(text, targetLang);
 
-        if (response.src === targetLang || response.confidence < settings.store.confidenceRequirement) {
+        if (response.src === targetLang ||
+            response.confidence < settings.store.confidenceRequirement ||
+            getExcludedLanguages().has(response.src)
+        ) {
             failed.set(messageId, text);
             return null;
         }

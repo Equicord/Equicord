@@ -13,9 +13,15 @@ export const settings = definePluginSettings({
         description: "Target language code for translations (e.g. en, es, fr, de, ja).",
         default: "en",
     },
+    excludedLanguages: {
+        type: OptionType.STRING,
+        description: "Language codes to exclude from translation (e.g. en, es, fr, de, ja).",
+        default: "en",
+    },
     confidenceRequirement: {
-        type: OptionType.NUMBER,
+        type: OptionType.SLIDER,
         description: "Minimum confidence (0 to 1) required to show a translation.",
+        markers: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1],
         default: 0.8,
     },
     autoTranslate: {
@@ -55,18 +61,22 @@ export const settings = definePluginSettings({
     },
 });
 
-function parseIdList(value: string): Set<string> {
+function parseList(value: string): Set<string> {
     return new Set(value.split(",").map(s => s.trim()).filter(Boolean));
 }
 
+export function getExcludedLanguages(): Set<string> {
+    return parseList(settings.store.excludedLanguages);
+}
+
 export function getIgnoredGuilds(): Set<string> {
-    return parseIdList(settings.store.ignoredGuilds);
+    return parseList(settings.store.ignoredGuilds);
 }
 
 export function getIgnoredChannels(): Set<string> {
-    return parseIdList(settings.store.ignoredChannels);
+    return parseList(settings.store.ignoredChannels);
 }
 
 export function getIgnoredUsers(): Set<string> {
-    return parseIdList(settings.store.ignoredUsers);
+    return parseList(settings.store.ignoredUsers);
 }
