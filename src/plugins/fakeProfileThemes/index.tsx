@@ -223,7 +223,7 @@ export default definePlugin({
             replacement: [
                 {
                     match: /\(0,\i\.jsxs?\)\(\i,\{heading:.{0,40}#{intl::USER_SETTINGS_PROFILE_EFFECT}/,
-                    replace: "$self.addCopy3y3Button(),$&"
+                    replace: " $self.addCopy3y3Button(),$&"
                 }
             ]
         }

@@ -122,11 +122,19 @@ export default definePlugin({
             find: '("UserProfileModalV2EditingPanel")',
             replacement: [
                 {
+<<<<<<< HEAD
                     match: /"inline"===.{0,100}#{intl::Zenogr::raw}\)/,
                     replace: "$self.ExperimentDecorSection(),$&",
                 },
             ],
         },
+=======
+                    match: /"inline"===.{0,100}bannerErrorMessage:\i\}\)/,
+                    replace: "$self.ExperimentDecorSection(),$&"
+                }
+            ]
+        }
+>>>>>>> e16946bde (Fix some patches)
     ],
     settings,
 
