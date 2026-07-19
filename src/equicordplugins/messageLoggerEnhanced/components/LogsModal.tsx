@@ -164,15 +164,15 @@ export function LogsModal({ modalProps, initalQuery }: Props) {
                 {
                     modalProps.transitionState === 1 &&
                     <div>
+                        {pending && (
+                            <LoadingLogs />
+                        )}
+
                         {messages != null && total === 0 && (
                             <EmptyLogs
                                 hasQuery={queryEh.length !== 0}
                                 reset={reset}
                             />
-                        )}
-
-                        {pending && (
-                            <LoadingLogs />
                         )}
 
                         {!pending && messages != null && (
