@@ -9,7 +9,7 @@ import { cl, Translation } from "@equicordplugins/translatePlus/misc/types";
 import { Message } from "@vencord/discord-types";
 import { Parser, useEffect, useState } from "@webpack/common";
 
-import { SmallIcon } from "./icon";
+import { Icon } from "./icon";
 import { translate } from "./translator";
 
 const setters = new Map();
@@ -29,7 +29,7 @@ export function Accessory({ message }: { message: Message; }) {
 
     return (
         <div className={cl("accessory")}>
-            <SmallIcon />
+            <Icon height={16} width={16} />
             {Parser.parse(translation.text)}
             {" "}
             (translated from {languages[translation.src] ?? translation.src} - <button onClick={() => setTranslation(undefined)} className={cl("dismiss")}>Dismiss</button>)
