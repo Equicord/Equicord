@@ -171,6 +171,10 @@ export function LogsModal({ modalProps, initalQuery }: Props) {
                             />
                         )}
 
+                        {pending && (
+                            <LoadingLogs />
+                        )}
+
                         {!pending && messages != null && (
                             <LogsContentMemo
                                 visibleMessages={messages}
@@ -283,6 +287,19 @@ function EmptyLogs({ hasQuery, reset: forceUpdate }: { hasQuery: boolean; reset:
                         </Button>
                     </>
                 )}
+            </Flex>
+        </div>
+    );
+}
+
+function LoadingLogs() {
+    return (
+        <div className={cl("modal-empty-logs", "modal-content-inner")} style={{ textAlign: "center" }}>
+            <Flex flexDirection="column" style={{ position: "relative" }}>
+
+                <BaseText size="lg">
+                    Loading Logs...
+                </BaseText>
             </Flex>
         </div>
     );
