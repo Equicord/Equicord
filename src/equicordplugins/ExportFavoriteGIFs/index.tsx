@@ -185,7 +185,7 @@ export default definePlugin({
     description: "Export favorited GIF urls",
     dependencies: ["CommandsAPI"],
     tags: ["Emotes", "Utility"],
-    authors: [Devs.ytt],
+    authors: [Devs.thororen],
     settings,
     commands: [
         {
