@@ -1,0 +1,32 @@
+.vc-keywordnotify-form-generic-label-wrapper {
+    margin-bottom: 20px;
+    cursor: pointer;
+}
+
+.vc-keywordnotify-form-generic-label {
+    display: flex;
+    width: 100%;
+
+    > :last-child {
+        margin-left: auto;
+        max-width: fit-content;
+        min-width: fit-content;
+    }
+}
+
+.vc-keywordnotify-form-generic-label-disabled {
+    opacity: 0.5;
+    pointer-events: none;
+    cursor: not-allowed;
+}
+
+.vc-keywordnotify-form-generic-label-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 8px;
+}
+
+.vc-keywordnotify-form-generic-label-border {
+    margin-top: 20px;
+}
