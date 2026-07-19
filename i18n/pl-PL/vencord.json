@@ -116,6 +116,7 @@
     "arRPC": {
         "connected": "Połączono z arRPC",
         "connectionFailed": "Nie udało się połączyć z arRPC, czy działa?",
+        "description": "",
         "retry": "Ponów",
         "settingsAbout": {
             "description": "Postępuj zgodnie z instrukcjami w repozytorium GitHub, aby uruchomić serwer, a następnie włącz wtyczkę.",
@@ -188,6 +189,7 @@
         }
     },
     "betterSessions": {
+        "description": "Udoskonala menu sesji (urządzeń). Pozwala na podgląd dokładnych znaczników czasu, nadawanie własnych nazw sesjom oraz otrzymywanie powiadomień o nowych sesjach.",
         "newBadge": "NOWY",
         "newSession": "Nowa sesja:",
         "rename": "Przemianować",
@@ -203,6 +205,7 @@
         }
     },
     "betterSettings": {
+        "description": "Usprawnia otwieranie menu ustawień",
         "settings": {
             "disableFade": "Wyłącz animację przenikania",
             "eagerLoad": "Usuwa opóźnienie ładowania przy pierwszym otwarciu menu",
@@ -276,6 +279,7 @@
             "noSettings": "W chmurze nie ma żadnych ustawień.",
             "success": "Zsynchronizowane ustawienia z chmurą!",
             "syncFromCloud": "Nie można zsynchronizować ustawień z chmury ([[PH0]]]).",
+            "syncedCloud": "Zsynchronizowano z chmurą.",
             "upToDate": "Twoje ustawienia są aktualne.",
             "updated": "Twoje ustawienia zostały zaktualizowane! Kliknij tutaj, aby uruchomić ponownie i w pełni zastosować zmiany!",
             "updatedRemote": "Twoje ustawienia zostały zaktualizowane! Kliknij tutaj, aby uruchomić ponownie i w pełni zastosować zmiany!"
@@ -384,6 +388,7 @@
         "button1Url": "Przycisk 1 URL",
         "button2Text": "Tekst przycisku 2",
         "button2Url": "Przycisk2 URL",
+        "description": "Dodaj w pełni konfigurowalny Rich Presence (status gry) do swojego profilu Discord",
         "detailLine1": "Szczegóły (linia 1)",
         "detailUrl": "Szczegóły URL",
         "endTimestamp": "Znacznik czasu zakończenia (w milisekundach)",
@@ -449,9 +454,27 @@
     },
     "decor": {
         "accessFromProfiles": "Dostęp do dekoracji Decor można także uzyskać ze strony {link}.",
+        "agreedToGuidelines": "Zaakceptowano wytyczne",
+        "apply": "Zastosuj",
+        "browse": "Przeglądaj",
         "changeDecoration": "Zmień dekorację",
+        "chooseAFile": "Wybierz plik",
+        "confirmLogOut": "Czy na pewno chcesz się wylogować z Decor?",
+        "continue": "Kontynuuj",
+        "copyHash": "Kopiuj skrót dekoracji",
+        "copyPresetId": "Kopiuj ID presetu",
+        "createDecoration": "Stwórz Dekoracje",
+        "createdBy": "Stworzone przez",
+        "delete": "Usuń",
+        "deleteConfirm": "Czy na pewno chcesz usunąć {name}?",
+        "deleteDecoration": "Usuń Dekoracje",
         "description": "Twórz i używaj własnych dekoracji awatarów lub wybierz ulubione z gotowych ustawień.",
         "enableAndRestart": "Włącz Decor i uruchom ponownie klienta, aby zmienić dekorację awatara.",
+        "file": "Plik",
+        "fileNotice": "Plik powinien być w formacie APNG lub PNG.",
+        "guidelinesAgreementNotice": "Przesyłając dekorację, akceptujesz {guidelines}. Nieprzeczytanie tych wytycznych może skutkować zawieszeniem Twojego konta i odebraniem możliwości tworzenia kolejnych dekoracji w przyszłości.",
+        "holdOn": "Zaczekaj",
+        "options": "Opcje Dekoracji",
         "profilesLink": "Profile",
         "removeDecoration": "Usuń dekorację",
         "title": "Dekoracje"
@@ -501,10 +524,12 @@
     },
     "expressionCloner": {
         "cloneEmoji": "Klonuj emoji",
+        "cloneName": "Sklonuj {name}",
         "cloneSticker": "Naklejka klon",
         "cloneTo": "Sklonuj do {guild}",
         "clonedSuccess": "Pomyślnie sklonowano {name} do {guild}!",
         "customName": "Nazwa niestandardowa",
+        "description": "Umożliwia kopiowanie emotek i naklejek na własny serwer (poprzez kliknięcie prawym przyciskiem myszy)",
         "failedToClone": "Nie udało się sklonować: {error}",
         "nameValidation": "Nazwa musi mieć od 2 do 32 znaków",
         "somethingWentWrong": "Coś poszło nie tak (sprawdź konsolę!)"
@@ -1157,6 +1182,12 @@
     "noSystemBadge": {
         "description": "Wyłącza pasek zadań i pasek zadań z licznikiem nieprzeczytanych informacji."
     },
+    "noTrack": {
+        "description": "Wyłącz śledzenie Discorda (analityka/„science”), metryki oraz raportowanie błędów Sentry",
+        "settings": {
+            "disableAnalytics": "Wyłącz śledzenie Discorda (analityka/„science”)"
+        }
+    },
     "noTypingAnimation": {
         "description": "Wyłącza animację kropek podczas pisania obciążającą procesor"
     },
@@ -1280,6 +1311,7 @@
         "color": "Kolor",
         "create": "Stwórz",
         "deleteCategory": "Usuń kategorię",
+        "description": "Umożliwia przypinanie prywatnych kanałów na górę listy wiadomości prywatnych. Aby przypiąć, odpiąć lub zmienić kolejność przypiętych elementów, kliknij prawym przyciskiem myszy na wiadomości prywatnej",
         "editCategory": "Edytuj kategorię",
         "editCategoryTitle": "Edytuj kategorię",
         "moveDown": "Opuszczać",
@@ -1853,6 +1885,7 @@
             "membersListIndicators": "Wskaźniki listy członków",
             "silentTyping": "Ciche pisanie"
         },
+        "description": "Ukryj swój wskaźnik pisania na czacie.",
         "noChanges": "Nie wprowadzono żadnych zmian w ustawieniach cichego pisania.",
         "settings": {
             "chatContextMenu": "Pokaż listę rozwijaną w menu kontekstowym czatu, aby modyfikować ustawienia wtyczki, gdziekolwiek jesteś.",
@@ -1914,6 +1947,9 @@
             "unlimitedSuperReactionPlaying": "Usuń limit jednoczesnego odtwarzania superreakcji"
         }
     },
+    "supportHelper": {
+        "description": "Pomaga nam w zapewnieniu wsparcia dla Ciebie"
+    },
     "tabs": {
         "settings": "Equicord Ustawienia"
     },
@@ -1947,6 +1983,15 @@
         "openTranslateModal": "Otwórz moduł Tłumaczenia",
         "selectLanguage": "Wybierz język",
         "translate": "Tłumaczyć"
+    },
+    "translation": {
+        "description": "Pomaga w tłumaczeniu Equicord",
+        "settings": {
+            "forceLocale": {
+                "description": "Wymuś inny język dla Equicord",
+                "followDiscord": "Domyślne (zgodnie z Discordem)"
+            }
+        }
     },
     "typingIndicator": {
         "description": "Dodaje wskaźnik, jeśli ktoś pisze na kanale.",
@@ -2094,6 +2139,7 @@
         "downloadVoiceMessage": "Pobierz wiadomość głosową"
     },
     "voiceMessages": {
+        "description": "Umożliwia wysyłanie wiadomości głosowych tak samo, jak na urządzeniach mobilnych. Aby to zrobić, kliknij prawym przyciskiem myszy przycisk przesyłania i wybierz „Wyślij wiadomość głosową”.",
         "echoCancellation": "Usuwanie echa",
         "failedToParse": "Nie udało się przeanalizować wybranego pliku audio: {error}",
         "failedToUpload": "Nie udało się przesłać wiadomości głosowej",
