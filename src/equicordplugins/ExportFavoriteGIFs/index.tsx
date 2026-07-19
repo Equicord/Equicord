@@ -20,7 +20,7 @@ interface FavoriteGif {
     width?: number;
     height?: number;
     order?: number;
-    format?: number; // 1 = IMAGE, 2 = VIDEO
+    format?: number;
 }
 
 const enum LinkType {
@@ -85,7 +85,6 @@ function getGifUrls(): string[] {
         UserSettingsActionCreators.FrecencyUserSettingsActionCreators
             .getCurrentValue().favoriteGifs.gifs;
 
-    // Sort by the order they appear in the GIF picker (falls back to insertion order)
     const entries = Object.entries(gifs)
         .sort((a, b) => (a[1]?.order ?? 0) - (b[1]?.order ?? 0));
 
@@ -96,7 +95,6 @@ function getGifUrls(): string[] {
         return unwrapDiscordProxy(raw);
     });
 
-    // De-duplicate while preserving order
     return [...new Set(urls)];
 }
 
@@ -187,7 +185,7 @@ export default definePlugin({
     description: "Export favorited GIF urls",
     dependencies: ["CommandsAPI"],
     tags: ["Emotes", "Utility"],
-    authors: [Devs.thororen],
+    authors: [Devs.ytt],
     settings,
     commands: [
         {
