@@ -82,6 +82,12 @@ export const settings = definePluginSettings({
         default: false,
         restartNeeded: true,
     },
+    removeLibraryAboveDms: {
+        type: OptionType.BOOLEAN,
+        description: "Remove Library above DMs list. (Only applicable for users that have ever used Library)",
+        default: false,
+        restartNeeded: true,
+    },
     miscHeader: {
         type: OptionType.COMPONENT,
         component: () => SectionSeparator("Misc"),
@@ -139,7 +145,7 @@ export default definePlugin({
     name: "Declutter",
     description: "Cleans up Discord by removing non-essential UI elements like profile effects, shop tabs, boosts, and more.",
     tags: ["Appearance", "Customisation"],
-    authors: [EquicordDevs.Leon135, Devs.prism, Devs.Kyuuhachi],
+    authors: [EquicordDevs.Leon135, Devs.prism, Devs.Kyuuhachi, Devs.SomeAspy],
     start() {
         if (isPluginEnabled("Decor") && settings.store.removeAvatarDecoration) {
             settings.store.removeAvatarDecoration = false;
@@ -286,7 +292,7 @@ export default definePlugin({
             predicate: () => settings.store.removeButtonTooltips
         },
         {
-            // Above DMs section, shops and quests
+            // Above DMs section, shops, games library, and quests
             find: 'tutorialId:"direct-messages"',
             replacement: [
                 {
@@ -305,6 +311,12 @@ export default definePlugin({
                     replace: "$&&&undefined",
                     predicate: () => settings.store.removeQuestsAboveDms
                 },
+                // Mostly thororen's work but..... my idea and I made the Pr (with his code) so ill claim it -- SomeAspy
+                {
+                    match: /\.APPLICATION_LIBRARY\},"library"\)/,
+                    replace: "$&&&undefined",
+                    predicate: () => settings.store.removeLibraryAboveDms
+                }
             ],
         },
         {
