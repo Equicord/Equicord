@@ -82,6 +82,18 @@ export const settings = definePluginSettings({
         default: false,
         restartNeeded: true,
     },
+    removeLibraryAboveDms: {
+        type: OptionType.BOOLEAN,
+        description: "Remove library above DMs list.",
+        default: false,
+        restartNeeded: true,
+    },
+    removeFamilyCenterAboveDms: {
+        type: OptionType.BOOLEAN,
+        description: "Remove family center above DMs list.",
+        default: false,
+        restartNeeded: true,
+    },
     miscHeader: {
         type: OptionType.COMPONENT,
         component: () => SectionSeparator("Misc"),
@@ -139,7 +151,7 @@ export default definePlugin({
     name: "Declutter",
     description: "Cleans up Discord by removing non-essential UI elements like profile effects, shop tabs, boosts, and more.",
     tags: ["Appearance", "Customisation"],
-    authors: [EquicordDevs.Leon135, Devs.prism, Devs.Kyuuhachi],
+    authors: [EquicordDevs.Leon135, Devs.prism, Devs.Kyuuhachi, Devs.SomeAspy],
     start() {
         if (isPluginEnabled("Decor") && settings.store.removeAvatarDecoration) {
             settings.store.removeAvatarDecoration = false;
@@ -286,7 +298,7 @@ export default definePlugin({
             predicate: () => settings.store.removeButtonTooltips
         },
         {
-            // Above DMs section, shops and quests
+            // Above DMs section
             find: 'tutorialId:"direct-messages"',
             replacement: [
                 {
@@ -298,12 +310,21 @@ export default definePlugin({
                     match: /NAVIGATION_LINK\}\}\},"discord-shop"\)/,
                     replace: "$&&&undefined",
                     predicate: () => settings.store.removeShopAboveDms
-
                 },
                 {
                     match: /\.QUEST_HOME\},"quests"\)/,
                     replace: "$&&&undefined",
                     predicate: () => settings.store.removeQuestsAboveDms
+                },
+                {
+                    match: /\.APPLICATION_LIBRARY\},"library"\)/,
+                    replace: "$&&&undefined",
+                    predicate: () => settings.store.removeLibraryAboveDms
+                },
+                {
+                    match: /\.FAMILY_CENTER\)\},"family-center"\)/,
+                    replace: "$&&&undefined",
+                    predicate: () => settings.store.removeFamilyCenterAboveDms
                 },
             ],
         },
