@@ -88,7 +88,6 @@ const settings = definePluginSettings({
     }
 });
 
-
 export function buildExtraRoleContextMenuItems(role: Role, guild: Guild, popoutRef?: React.RefObject<any>) {
     if (!role) return { before: [], after: [] };
 
