@@ -16,7 +16,7 @@ import definePlugin, { OptionType } from "@utils/types";
 import { Icon } from "@vencord/discord-types";
 import { findCssClassesLazy } from "@webpack";
 import { ComponentDispatch, FocusLock, Menu, useEffect, useRef } from "@webpack/common";
-import type { HTMLAttributes, ReactNode } from "react";
+import type { HTMLAttributes, ReactElement, ReactNode } from "react";
 
 import fullHeightStyle from "./fullHeightContext.css?managed";
 
@@ -192,7 +192,7 @@ export default definePlugin({
         return <Layer {...props} />;
     },
 
-    transformSettingsEntries(list) {
+    transformSettingsEntries(list: ReactElement<any>[]): ReactNode[] {
         const items: ReactNode[] = [];
         const SECTION_NAMES: Record<string, string> = {
             user_section: getIntlMessage("USER_SETTINGS"),
