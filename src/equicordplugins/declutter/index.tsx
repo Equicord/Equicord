@@ -46,6 +46,12 @@ export const settings = definePluginSettings({
         default: true,
         restartNeeded: true,
     },
+    removeProfileFrame: {
+        type: OptionType.BOOLEAN,
+        description: "Remove profile frames.",
+        default: true,
+        restartNeeded: true,
+    },
     removeClanTag: {
         type: OptionType.BOOLEAN,
         description: "Remove clan tags.",
@@ -165,6 +171,14 @@ export default definePlugin({
     },
     settings,
     patches: [
+        {
+            find: '"--custom-profile-frame-container-width"',
+            replacement: {
+                match: /profileFrameStyle:\{"--custom-profile-frame-container-width":\i\.innerWidth,"--custom-profile-frame-overflow-top":\i\.overflowTop,"--custom-profile-frame-overflow-bottom":\i\.overflowBottom,"--custom-profile-frame-overflow-horizontal":\i\.overflowHorizontal\},profileFrameClassName:"custom-profile-frame"/,
+                replace: 'profileFrameStyle:{},profileFrameClassName:""',
+            },
+            predicate: () => settings.store.removeProfileFrame,
+        },
         {
             // Avatar decoration
             find: "isAvatarDecorationAnimating:",
