@@ -202,7 +202,7 @@ export default definePlugin({
             predicate: () => getQuestifySettings().disableQuestsEverything,
             replacement: [
                 {
-                    match: /(?<="family-center"\):null,)/,
+                    match: /(?<="family-center"\).{0,15}:null,)/,
                     replace: "null&&"
                 }
             ]
