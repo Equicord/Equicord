@@ -212,39 +212,31 @@ for (const platform of PLATFORMS) {
 
 const fixerValue = (fixer: Fixer) => Object.values(fixer.hosts)[0];
 
-function makeSettings() {
-    const def: SettingsDefinition = {
-        bypassKeyword: {
-            type: OptionType.STRING,
-            description: "Messages containing this word are sent unchanged, with the word itself removed. Leave empty to disable.",
-            default: "fxignore"
-        }
-    };
-    for (const platform of PLATFORMS) {
-        def[platform.key] = {
-            type: OptionType.BOOLEAN,
-            displayName: platform.name,
-            description: `Rewrite ${platform.name} links.`,
-            default: platform.enabledByDefault ?? true
-        };
-        if (platform.fixers.length > 1) {
-            def[platform.key + "Fixer"] = {
-                type: OptionType.SELECT,
-                displayName: `${platform.name} fixer`,
-                description: `Fixer service used for ${platform.name} links.`,
-                options: platform.fixers.map((fixer, i) => ({ label: fixer.label, value: fixerValue(fixer), default: i === 0 }))
-            };
-        }
+const settingsDef: SettingsDefinition = {
+    bypassKeyword: {
+        type: OptionType.STRING,
+        description: "Messages containing this word are sent unchanged, with the word itself removed. Leave empty to disable.",
+        default: "fxignore"
     }
-    return def;
+};
+for (const platform of PLATFORMS) {
+    settingsDef[platform.key] = {
+        type: OptionType.BOOLEAN,
+        displayName: platform.name,
+        description: `Rewrite ${platform.name} links.`,
+        default: platform.enabledByDefault ?? true
+    };
+    if (platform.fixers.length > 1) {
+        settingsDef[platform.key + "Fixer"] = {
+            type: OptionType.SELECT,
+            displayName: `${platform.name} fixer`,
+            description: `Fixer service used for ${platform.name} links.`,
+            options: platform.fixers.map((fixer, i) => ({ label: fixer.label, value: fixerValue(fixer), default: i === 0 }))
+        };
+    }
 }
 
-const settings = definePluginSettings(makeSettings());
-
-function activeFixer(platform: Platform) {
-    const chosen = settings.store[platform.key + "Fixer"];
-    return platform.fixers.find(fixer => fixerValue(fixer) === chosen) ?? platform.fixers[0];
-}
+const settings = definePluginSettings(settingsDef);
 
 function fixUrl(link: string) {
     try {
@@ -262,7 +254,8 @@ function fixUrl(link: string) {
         }
         if (!settings.store[platform.key]) return link;
 
-        const fixer = activeFixer(platform);
+        const chosen = settings.store[platform.key + "Fixer"];
+        const fixer = platform.fixers.find(fixer => fixerValue(fixer) === chosen) ?? platform.fixers[0];
         url.hostname = subdomain + fixer.hosts[host];
         if (fixer.prependsHost) url.pathname = "/" + host + url.pathname;
         return url.toString();
