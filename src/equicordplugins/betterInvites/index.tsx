@@ -59,7 +59,7 @@ export default definePlugin({
                 },
                 {
                     match: /(?<=\]\}\),)(?=.{0,15}onlineCount:\i\.onlineCount)/,
-                    replace: "$self.Header(arguments[0]?.invite?.inviter,arguments[0]?.profile?.name)"
+                    replace: "$self.Header(arguments[0]?.invite?.inviter,arguments[0]?.profile?.name),"
                 },
             ]
         },
