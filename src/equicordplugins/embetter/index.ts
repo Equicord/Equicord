@@ -6,6 +6,7 @@
 
 import { MessageObject } from "@api/MessageEvents";
 import { definePluginSettings } from "@api/Settings";
+import { EquicordDevs } from "@utils/constants";
 import { escapeRegExp } from "@utils/text";
 import definePlugin, { OptionType, SettingsDefinition } from "@utils/types";
 
@@ -288,7 +289,7 @@ function fixMessage(msg: MessageObject) {
 export default definePlugin({
     name: "Embetter",
     description: "Rewrites social media links to embed fixing services like FxTwitter before your message is sent, so they embed properly.",
-    authors: [{ name: "lostf1sh", id: 470904884946796544n }],
+    authors: [EquicordDevs.lostf1sh],
     tags: ["Chat", "Utility"],
     dependencies: ["MessageEventsAPI"],
     settings,

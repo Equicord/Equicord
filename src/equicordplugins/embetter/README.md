@@ -46,34 +46,6 @@ Everything is enabled by default except YouTube, since native YouTube embeds alr
 
 All fixer domains were verified reachable as of July 2026. Notably, `vxthreads.net` and `ddinstagram.com` are dead and were intentionally not included.
 
-## Installation
-
-Userplugins require building Equicord from source. Full guide: [docs.equicord.org/plugins](https://docs.equicord.org/plugins).
-
-1. Set up the Equicord dev environment ([docs](https://docs.equicord.org/building-from-source)):
-
-    ```
-    git clone https://github.com/Equicord/Equicord
-    cd Equicord
-    pnpm install --no-frozen-lockfile
-    ```
-
-2. Create the userplugins folder if it doesn't exist and drop this plugin in:
-
-    ```
-    mkdir -p src/userplugins
-    git clone https://github.com/lostf1sh/embetter src/userplugins/embetter
-    ```
-
-3. Build and inject:
-
-    ```
-    pnpm build
-    pnpm inject
-    ```
-
-4. Restart Discord and enable **Embetter** in the plugins tab.
-
 ## Credits
 
 All the heavy lifting is done by the embed fixing services this plugin points at:
