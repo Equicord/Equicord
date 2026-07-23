@@ -27,6 +27,7 @@ export function PresetManager({ userId }: { userId: string; }) {
     const [selectedPreset, setSelectedPreset] = React.useState<number>(-1);
     const [searchMode, setSearchMode] = React.useState(false);
     const lastRandomIndexRef = React.useRef<number>(-1);
+    const generationRef = React.useRef(0);
 
     React.useEffect(() => {
         let isActive = true;
@@ -76,10 +77,14 @@ export function PresetManager({ userId }: { userId: string; }) {
     const applyPreset = (index: number) => {
         setSelectedPreset(index);
         setCurrentPresetIndex(index);
-        loadPresetAsPending(presets[index]).catch(() => {
+        const gen = ++generationRef.current;
+        loadPresetAsPending(presets[index]).then(() => {
+            if (generationRef.current !== gen) return;
+            showToast("Preset applied. Review and save in Settings.", Toasts.Type.SUCCESS);
+        }).catch(() => {
+            if (generationRef.current !== gen) return;
             showToast("Failed to load profile preset.", Toasts.Type.FAILURE);
         });
-        showToast("Preset applied. Review and save in Settings.", Toasts.Type.SUCCESS);
         forceUpdate();
     };
 
