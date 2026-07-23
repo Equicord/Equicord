@@ -1,15 +1,6 @@
 .vc-profile-presets-section {
-    margin-bottom: 20px;
-    padding: 0;
-    background-color: transparent;
-    max-width: 660px;
+    padding: 16px 0;
     width: 100%;
-    min-width: 0;
-    align-self: flex-start;
-}
-
-.vc-profile-presets-section-server {
-    max-width: 660px;
 }
 
 .vc-profile-presets-heading {
@@ -24,7 +15,6 @@
 
 .vc-profile-presets-text-input {
     width: 100%;
-    max-width: 500px;
     min-width: 0;
     height: 38px;
     padding: 1px 12px;
@@ -59,7 +49,7 @@
 .vc-profile-presets-search {
     display: flex;
     gap: 8px;
-    margin-bottom: 12px;
+    margin-bottom: 4px;
     flex-wrap: wrap;
 }
 
@@ -73,11 +63,7 @@
     align-items: center;
     gap: 8px;
     margin-top: 12px;
-}
-
-.vc-profile-presets-section-server .vc-profile-presets-pagination {
-    width: 300px;
-    max-width: 100%;
+    width: 100%;
 }
 
 .vc-profile-presets-page {
@@ -130,14 +116,11 @@
     flex-direction: column;
     gap: 4px;
     margin-bottom: 12px;
-    padding: 12px;
+    padding: 12px 0;
     background-color: var(--background-secondary);
     border-radius: 8px;
     border: 2px solid var(--background-modifier-accent);
-    min-width: 0;
     width: 100%;
-    max-width: 660px;
-    align-self: flex-start;
 }
 
 .vc-profile-presets-row {
@@ -145,16 +128,33 @@
     justify-content: space-between;
     align-items: center;
     padding: 10px 12px;
-    background-color: var(--background-primary);
     border-radius: 6px;
     cursor: pointer;
     transition: all 0.15s ease;
     border: 2px solid transparent;
     outline: none;
-    min-width: 0;
     width: 100%;
-    max-width: 300px;
-    align-self: flex-start;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+    min-height: 50px;
+    overflow: hidden;
+}
+
+.vc-profile-presets-row::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: var(--background-primary);
+    opacity: 0.85;
+    border-radius: 6px;
+    z-index: 0;
+    transition: opacity 0.15s ease;
+}
+
+.vc-profile-presets-row:hover::before {
+    opacity: 0.55;
 }
 
 .vc-profile-presets-row:hover {
@@ -167,8 +167,14 @@
     box-shadow: 0 0 0 2px var(--brand-experiment-30a);
 }
 
-.vc-profile-presets-row.selected {
-    background-color: var(--background-modifier-selected);
+.vc-profile-presets-row.selected::before {
+    opacity: 0.7;
+    background: var(--background-modifier-selected);
+}
+
+.vc-profile-presets-row > * {
+    position: relative;
+    z-index: 1;
 }
 
 .vc-profile-presets-avatar {

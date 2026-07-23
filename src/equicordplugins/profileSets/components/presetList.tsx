@@ -12,7 +12,7 @@ import { ContextMenuApi, Menu, React, TextInput } from "@webpack/common";
 import { cl } from "..";
 import { deletePreset, movePreset, renamePreset, updatePresetField } from "../utils/actions";
 import { getCurrentProfile } from "../utils/profile";
-import { PresetSection, type ProfilePresetEx } from "../utils/storage";
+import { type ProfilePresetEx } from "../utils/storage";
 
 interface PresetListProps {
     presets: ProfilePresetEx[];
@@ -21,8 +21,6 @@ interface PresetListProps {
     selectedPreset: number;
     onLoad: (index: number) => void;
     onUpdate: () => void;
-    guildId?: string;
-    section: PresetSection;
     currentPage: number;
     onPageChange: (page: number) => void;
 }
@@ -34,15 +32,12 @@ export function PresetList({
     selectedPreset,
     onLoad,
     onUpdate,
-    guildId,
-    section,
     currentPage,
     onPageChange
 }: PresetListProps) {
     type EditableProfile = Omit<ProfilePreset, "name" | "timestamp">;
     const [renaming, setRenaming] = React.useState<number>(-1);
     const [renameText, setRenameText] = React.useState("");
-    const isGuildProfile = section === "server";
 
     return (
         <div className={cl("list-container")}>
@@ -50,6 +45,7 @@ export function PresetList({
                 const actualIndex = allPresets.indexOf(preset);
                 const isRenaming = renaming === actualIndex;
                 const isSelected = !isRenaming && selectedPreset === actualIndex;
+                const showMoveOptions = actualIndex > 0 || actualIndex < allPresets.length - 1 || currentPage > 1;
                 const date = new Date(preset.timestamp);
                 const formattedDate = date.toLocaleDateString(undefined, {
                     month: "short",
@@ -64,11 +60,9 @@ export function PresetList({
                 const commitRename = () => {
                     const nextName = renameText.trim();
                     if (!nextName) return;
-                    renamePreset(actualIndex, nextName, section, guildId);
+                    renamePreset(actualIndex, nextName);
                     onUpdate();
                 };
-
-                const showMoveOptions = actualIndex > 0 || actualIndex < allPresets.length - 1 || currentPage > 1;
 
                 return (
                     <div
@@ -76,9 +70,7 @@ export function PresetList({
                         tabIndex={isRenaming ? -1 : 0}
                         role="button"
                         onClick={() => {
-                            if (!isRenaming) {
-                                onLoad(actualIndex);
-                            }
+                            if (!isRenaming) onLoad(actualIndex);
                         }}
                         onKeyDown={e => {
                             if (!isRenaming && (e.key === "Enter" || e.key === " ")) {
@@ -87,6 +79,7 @@ export function PresetList({
                             }
                         }}
                         className={classes(cl("row"), isSelected ? "selected" : "")}
+                        style={preset.bannerDataUrl ? { backgroundImage: `url(${preset.bannerDataUrl})` } : undefined}
                     >
                         <div className={cl("avatar-url")}>
                             {preset.avatarDataUrl && (
@@ -138,7 +131,6 @@ export function PresetList({
                                 className={cl("menu-icon")}
                                 onClick={e => {
                                     e.stopPropagation();
-                                    const target = e.currentTarget;
                                     ContextMenuApi.openContextMenu(e, () => (
                                         <Menu.Menu navId="preset-options" onClose={ContextMenuApi.closeContextMenu}>
                                             <Menu.MenuItem
@@ -153,11 +145,11 @@ export function PresetList({
                                                 id="update"
                                                 label="Update"
                                                 action={async () => {
-                                                    const profile = await getCurrentProfile(guildId, { isGuildProfile });
+                                                    const profile = await getCurrentProfile();
                                                     await Promise.all(
                                                         (Object.entries(profile) as [keyof EditableProfile, EditableProfile[keyof EditableProfile]][])
                                                             .filter(([, value]) => isNonNullish(value))
-                                                            .map(([key, value]) => updatePresetField(actualIndex, key, value, section, guildId))
+                                                            .map(([key, value]) => updatePresetField(actualIndex, key, value))
                                                     );
                                                     onUpdate();
                                                 }}
@@ -168,7 +160,7 @@ export function PresetList({
                                                     id="move-up"
                                                     label="Move Up"
                                                     action={() => {
-                                                        movePreset(actualIndex, actualIndex - 1, section, guildId);
+                                                        movePreset(actualIndex, actualIndex - 1);
                                                         onUpdate();
                                                     }}
                                                 />
@@ -178,7 +170,7 @@ export function PresetList({
                                                     id="move-down"
                                                     label="Move Down"
                                                     action={() => {
-                                                        movePreset(actualIndex, actualIndex + 1, section, guildId);
+                                                        movePreset(actualIndex, actualIndex + 1);
                                                         onUpdate();
                                                     }}
                                                 />
@@ -188,7 +180,7 @@ export function PresetList({
                                                     id="move-to-page-1"
                                                     label="Move to Page 1"
                                                     action={() => {
-                                                        movePreset(actualIndex, 0, section, guildId);
+                                                        movePreset(actualIndex, 0);
                                                         onPageChange(1);
                                                         onUpdate();
                                                     }}
@@ -200,7 +192,7 @@ export function PresetList({
                                                 label="Delete"
                                                 color="danger"
                                                 action={async () => {
-                                                    await deletePreset(actualIndex, section, guildId);
+                                                    await deletePreset(actualIndex);
                                                     onUpdate();
                                                 }}
                                             />

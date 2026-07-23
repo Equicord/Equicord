@@ -10,11 +10,9 @@ import { ProfilePreset } from "@vencord/discord-types";
 import { UserStore } from "@webpack/common";
 
 const logger = new Logger("ProfilePresets");
-const LEGACY_PRESETS_KEY = "ProfileDataset";
-const MAIN_PRESETS_KEY = "ProfilePresets_v2_Main";
-const SERVER_PRESETS_KEY = "ProfilePresets_v2_Server";
-
-export type PresetSection = "main" | "server";
+const PRESETS_KEY = "Profiles_v1";
+const LEGACY_MAIN_KEY = "ProfilePresets_v2_Main";
+const LEGACY_DATASET_KEY = "ProfileDataset";
 
 export type ProfilePresetEx = ProfilePreset & {
     avatarRaw?: string | null;
@@ -22,46 +20,49 @@ export type ProfilePresetEx = ProfilePreset & {
 
 export let presets: ProfilePresetEx[] = [];
 export let currentPresetIndex = -1;
-let activeScopeKey: string | null = null;
 
 function resetPresets(nextPresets: ProfilePresetEx[] = []) {
     presets = nextPresets;
     currentPresetIndex = -1;
 }
 
-function getPresetsKey(section: PresetSection, userId: string) {
-    const baseKey = section === "main" ? MAIN_PRESETS_KEY : SERVER_PRESETS_KEY;
-    return `${baseKey}:${userId}`;
+function getPresetsKey(userId: string) {
+    return `${PRESETS_KEY}:${userId}`;
 }
 
-function getLegacyKey(userId: string) {
-    return `${LEGACY_PRESETS_KEY}:${userId}:main`;
+async function migrateLegacyPresets(userId: string, targetKey: string): Promise<boolean> {
+    const v2Key = `${LEGACY_MAIN_KEY}:${userId}`;
+    const stored = await DataStore.get(v2Key);
+    if (stored && Array.isArray(stored)) {
+        await DataStore.set(targetKey, stored);
+        await DataStore.del(v2Key);
+        return true;
+    }
+    const datasetKey = `${LEGACY_DATASET_KEY}:${userId}:main`;
+    const datasetStored = await DataStore.get(datasetKey);
+    if (datasetStored && Array.isArray(datasetStored)) {
+        await DataStore.set(targetKey, datasetStored);
+        await DataStore.del(datasetKey);
+        return true;
+    }
+    return false;
 }
 
-export async function loadPresets(section: PresetSection) {
+export async function loadPresets() {
     try {
         const currentUser = UserStore.getCurrentUser();
-        const userId = currentUser!.id;
-        const key = getPresetsKey(section, userId);
-        activeScopeKey = key;
+        if (!currentUser) return;
+        const key = getPresetsKey(currentUser.id);
         const stored = await DataStore.get(key);
         if (stored && Array.isArray(stored)) {
             resetPresets(stored);
             return;
         }
-
-        if (section === "main") {
-            const legacyKey = getLegacyKey(userId);
-            const legacyStored = await DataStore.get(legacyKey);
-            const legacyBaseStored = await DataStore.get(LEGACY_PRESETS_KEY);
-            const legacyToUse = Array.isArray(legacyStored)
-                ? legacyStored
-                : (Array.isArray(legacyBaseStored) ? legacyBaseStored : null);
-            if (legacyToUse) {
-                resetPresets(legacyToUse);
-                await DataStore.set(key, legacyToUse);
-                await DataStore.del(legacyKey);
-                await DataStore.del(LEGACY_PRESETS_KEY);
+        const migrated = await migrateLegacyPresets(currentUser.id, key);
+        if (migrated) {
+            const migratedData = await DataStore.get(key);
+            if (migratedData && Array.isArray(migratedData)) {
+                resetPresets(migratedData);
                 return;
             }
         }
@@ -72,12 +73,11 @@ export async function loadPresets(section: PresetSection) {
     }
 }
 
-export async function savePresetsData(section?: PresetSection) {
+export async function savePresetsData() {
     try {
-        if (!activeScopeKey && !section) return;
         const currentUser = UserStore.getCurrentUser();
-        const userId = currentUser!.id;
-        const key = section ? getPresetsKey(section, userId) : activeScopeKey!;
+        if (!currentUser) return;
+        const key = getPresetsKey(currentUser.id);
         await DataStore.set(key, presets);
     } catch (err) {
         logger.error("Failed to save presets", err);

@@ -7,15 +7,17 @@
 import "./styles.css";
 
 import { definePluginSettings } from "@api/Settings";
+import ErrorBoundary from "@components/ErrorBoundary";
 import { EquicordDevs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
 import definePlugin, { OptionType } from "@utils/types";
-import { React } from "@webpack/common";
+import { React, UserStore } from "@webpack/common";
 
 import { PresetManager } from "./components/presetManager";
-import { loadPresets, PresetSection } from "./utils/storage";
+import { loadPresets } from "./utils/storage";
 
 export const cl = classNameFactory("vc-profile-presets-");
+
 export const settings = definePluginSettings({
     avatarSize: {
         type: OptionType.SLIDER,
@@ -27,31 +29,35 @@ export const settings = definePluginSettings({
 });
 
 export default definePlugin({
-    name: "ProfileSets",
-    description: "Allows you to save and load different profile presets, via the Profile Section in Settings.",
+    name: "Profiles",
+    description: "Save and load profile presets directly from your profile modal.",
     tags: ["Appearance", "Customisation", "Utility"],
-    authors: [EquicordDevs.omaw, EquicordDevs.justjxke],
+    authors: [EquicordDevs.Jahbas, EquicordDevs.omaw, EquicordDevs.justjxke],
     settings,
     patches: [
         {
-            find: "DefaultCustomizationSections: user cannot be undefined",
+            find: "#{intl::USER_PROFILE_ACTIVITY}",
             replacement: {
-                match: /return.{0,50}children:\[(?=.{0,50},\{placeholder:)/,
-                replace: "$&$self.renderPresetSection(\"main\"),"
+                match: /(\i)\.id!==\i\?\.id&&\i&&\(.{0,300}\.MUTUAL_GUILDS\}\)\)(?=,(\i))/,
+                replace: '$&,$self.pushProfilesTab($1.id,$2)',
             }
         },
         {
-            find: "USER_SETTINGS_GUILD_PROFILE)",
+            find: ".WIDGETS?",
             replacement: {
-                match: /guildId:(\i\.id),onChange:(\i)\}\)(?=.{0,25}profilePreviewTitle:)/,
-                replace: 'guildId:$1,onChange:$2}),$self.renderPresetSection("server",$1)'
+                match: /(\i)===\i\.\i\.WISHLIST/,
+                replace: '$1==="PROFILES"?$self.renderProfilesTab(arguments[0]):$&',
             }
         }
     ],
     start() {
-        loadPresets("main");
+        loadPresets();
     },
-    renderPresetSection(section: PresetSection, guildId?: string) {
-        return <PresetManager section={section} guildId={guildId} />;
-    }
+    pushProfilesTab(userId: string, sections: { push: (entry: { text: string; section: string; }) => void; }) {
+        if (userId !== UserStore.getCurrentUser()?.id) return;
+        sections.push({ text: "Profiles", section: "PROFILES" });
+    },
+    renderProfilesTab: ErrorBoundary.wrap((props: { user: { id: string; }; }) => {
+        return <PresetManager userId={props.user.id} />;
+    }, { noop: true }),
 });
