@@ -44,7 +44,7 @@ export function PresetManager({ userId }: { userId: string; }) {
 
     const filteredPresets = !searchMode
         ? presets
-        : presets.filter(preset => preset.name.toLowerCase().includes(presetName.toLowerCase()));
+        : presets.filter(preset => preset.name?.toLowerCase().includes(presetName.toLowerCase()));
 
     const totalPages = Math.ceil(filteredPresets.length / PRESETS_PER_PAGE);
     const startIndex = (currentPage - 1) * PRESETS_PER_PAGE;

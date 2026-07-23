@@ -49,7 +49,7 @@ export default definePlugin({
             }
         }
     ],
-    start() {}
+    start() {},
     pushProfilesTab(userId: string, sections: { push: (entry: { text: string; section: string; }) => void; }) {
         if (userId !== UserStore.getCurrentUser()?.id) return;
         sections.push({ text: "Profiles", section: "PROFILES" });
