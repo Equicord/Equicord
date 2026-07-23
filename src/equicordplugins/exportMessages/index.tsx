@@ -138,21 +138,19 @@ export default definePlugin({
     patches: [
         {
             find: "fetchRelationships(){",
+            predicate: () => settings.store.exportContacts,
             replacement: {
                 match: /(\.then\(\i)=>(\i\.\i\.dispatch\({type:"LOAD_RELATIONSHIPS_SUCCESS",relationships:(\i\.body)}\))/,
                 replace: "$1=>{$2; $self.getContacts($3)}"
             }
         },
         {
-            find: "[role=\"tab\"][aria-disabled=\"false\"]",
+            find: '[role="tab"][aria-disabled="false"]',
+            predicate: () => settings.store.exportContacts,
             replacement: {
-                match: /("aria-label":(\i).{0,25})(\i)\.Children\.map\((\i),this\.renderChildren\)/,
+                match: /("aria-label":(\i).{0,25}children:null!=\i)\?(this\.renderChildren\(\i\)):null/,
                 replace:
-                    "$1($3 && $3.Children" +
-                    "? ($2 === 'Friends'" +
-                    "? [...$3.Children.map($4, this.renderChildren), $self.addExportButton()]" +
-                    ": [...$3.Children.map($4, this.renderChildren)])" +
-                    ": $3.map($4, this.renderChildren))"
+                    '$1?($2==="Friends"?[...$3,$self.addExportButton()]:$3):null'
             }
         }
     ],
