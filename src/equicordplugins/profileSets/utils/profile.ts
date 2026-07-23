@@ -42,6 +42,7 @@ export type LoadPresetOptions = {
     skipGlobalName?: boolean;
     skipBio?: boolean;
     skipPronouns?: boolean;
+    generation?: { current: number };
 };
 
 function dispatch(type: string, payload: Record<string, unknown>) {
@@ -291,9 +292,14 @@ function nameplateEq(a: { skuId?: string | number | null; asset?: string | null;
 }
 
 export async function loadPresetAsPending(preset: ProfilePreset, options: LoadPresetOptions = {}) {
+        const genSnapshot = options.generation?.current ?? 0;
+        const isStale = () => options.generation && options.generation.current !== genSnapshot;
+
         const current = await getCurrentProfile();
+        if (isStale()) return;
         const pendingChanges = UserProfileSettingsStore.getPendingChanges();
         const setPending = (payload: Record<string, unknown>) => {
+            if (isStale()) return;
             const cleanPayload = Object.fromEntries(Object.entries(payload).filter(([, v]) => v !== undefined));
             if (!Object.keys(cleanPayload).length) return;
             setPendingChanges(cleanPayload);
@@ -317,7 +323,7 @@ export async function loadPresetAsPending(preset: ProfilePreset, options: LoadPr
                     ? (avatarPayload as { imageUri?: unknown; }).imageUri
                     : null;
                 if (isNonEmptyString(avatarImageUri)) {
-                    openProfileImagePreview("AVATAR", { ...Object(avatarPayload), imageUri: avatarImageUri });
+                    if (!isStale()) openProfileImagePreview("AVATAR", { ...Object(avatarPayload), imageUri: avatarImageUri });
                 } else {
                     setPending({ pendingAvatar: avatarPayload });
                 }
@@ -337,7 +343,7 @@ export async function loadPresetAsPending(preset: ProfilePreset, options: LoadPr
                 ? (bannerPayload as { imageUri?: unknown; }).imageUri
                 : null;
             if (isNonEmptyString(bannerImageUri)) {
-                openProfileImagePreview("BANNER", { ...Object(bannerPayload), imageUri: bannerImageUri });
+                if (!isStale()) openProfileImagePreview("BANNER", { ...Object(bannerPayload), imageUri: bannerImageUri });
             } else {
                 setPending({ pendingBanner: bannerPayload });
             }
@@ -389,7 +395,7 @@ export async function loadPresetAsPending(preset: ProfilePreset, options: LoadPr
         }
 
         if (preset.customStatus && !customStatusEq(preset.customStatus, current.customStatus)) {
-            CustomStatusSettings?.updateSetting?.({
+            if (!isStale()) CustomStatusSettings?.updateSetting?.({
                 text: preset.customStatus?.text ?? "",
                 expiresAtMs: preset.customStatus?.expiresAtMs ?? "0",
                 emojiId: preset.customStatus?.emojiId ?? "0",

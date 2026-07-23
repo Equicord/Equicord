@@ -48,12 +48,6 @@ async function migrateLegacyPresets(userId: string, targetKey: string): Promise<
         await DataStore.del(datasetKey);
         return true;
     }
-    const bareStored = await DataStore.get(LEGACY_DATASET_KEY);
-    if (bareStored && Array.isArray(bareStored) && bareStored.length > 0) {
-        await DataStore.set(targetKey, bareStored);
-        await DataStore.del(LEGACY_DATASET_KEY);
-        return true;
-    }
     return false;
 }
 

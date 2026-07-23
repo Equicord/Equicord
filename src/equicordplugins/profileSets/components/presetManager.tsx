@@ -78,7 +78,7 @@ export function PresetManager({ userId }: { userId: string; }) {
         setSelectedPreset(index);
         setCurrentPresetIndex(index);
         const gen = ++generationRef.current;
-        loadPresetAsPending(presets[index]).then(() => {
+        loadPresetAsPending(presets[index], { generation: generationRef }).then(() => {
             if (generationRef.current !== gen) return;
             showToast("Preset applied. Review and save in Settings.", Toasts.Type.SUCCESS);
         }).catch(() => {
