@@ -5,6 +5,7 @@
  */
 
 import { isNonNullish } from "@utils/guards";
+import { Logger } from "@utils/Logger";
 import { ProfilePreset } from "@vencord/discord-types";
 import { findStoreLazy } from "@webpack";
 import { showToast, Toasts } from "@webpack/common";
@@ -123,7 +124,8 @@ export async function importPresets(
 
             await savePresetsData();
             forceUpdate();
-        } catch {
+        } catch (err) {
+            new Logger("ProfilePresets").error("Failed to import presets", err);
             showToast("Failed to import presets. The file might be invalid.", Toasts.Type.FAILURE);
         }
     };

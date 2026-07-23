@@ -10,7 +10,7 @@ import { findStoreLazy } from "@webpack";
 import { FluxDispatcher, GuildMemberStore, IconUtils, UserProfileStore, UserStore } from "@webpack/common";
 
 const UserProfileSettingsStore = findStoreLazy("UserProfileSettingsStore");
-const CustomStatusSettings = getUserSettingLazy("status", "customStatus")!;
+const CustomStatusSettings = getUserSettingLazy("status", "customStatus");
 
 type PendingChanges = Record<string, unknown> & {
     pendingAvatar?: ImageInput;
@@ -72,7 +72,7 @@ function isNonEmptyString(value: unknown): value is string {
 function hasImageInput(value: ImageInput): boolean {
     if (!value) return false;
     if (typeof value === "string") return value.length > 0;
-    return typeof value === "object" && isNonEmptyString(value?.imageUri);
+    return typeof value === "object" && isNonEmptyString(value.imageUri);
 }
 
 function hasAvatarDecoration(value: unknown): value is AvatarDecorationLike {
@@ -110,7 +110,8 @@ export async function imageUrlToBase64(url: string): Promise<string | null> {
             reader.onerror = reject;
             reader.readAsDataURL(blob);
         });
-    } catch {
+    } catch (err) {
+        new Logger("ProfilePresets").warn("Failed to convert image URL to base64", err);
         return null;
     }
 }
@@ -140,11 +141,12 @@ async function processImage(imageData: ImageInput, userId: string, type: "avatar
 
 export async function getCurrentProfile(): Promise<Omit<ProfilePreset, "name" | "timestamp">> {
     const currentUser = UserStore.getCurrentUser();
-    const baseProfile = UserProfileStore.getUserProfile(currentUser.id);
-    const userAny = currentUser;
+    if (!currentUser) throw new Error("No authenticated user");
 
-    const pendingChanges: PendingChanges = UserProfileSettingsStore.getPendingChanges() ?? {};
-    const customStatusSetting = CustomStatusSettings.getSetting();
+    const baseProfile = UserProfileStore.getUserProfile(currentUser.id);
+
+    const pendingChanges: PendingChanges = UserProfileSettingsStore.getPendingChanges?.() ?? {};
+    const customStatusSetting = CustomStatusSettings?.getSetting?.();
     const customStatus = {
         text: customStatusSetting?.text ?? "",
         emojiId: customStatusSetting?.emojiId ?? "0",
@@ -152,7 +154,7 @@ export async function getCurrentProfile(): Promise<Omit<ProfilePreset, "name" | 
         expiresAtMs: customStatusSetting?.expiresAtMs ?? "0"
     };
 
-    const avatarDecorationSource = pendingChanges.pendingAvatarDecoration ?? userAny.avatarDecorationData;
+    const avatarDecorationSource = pendingChanges.pendingAvatarDecoration ?? currentUser.avatarDecorationData;
     const avatarDecoration = hasAvatarDecoration(avatarDecorationSource)
         ? {
             ...avatarDecorationSource,
@@ -198,7 +200,7 @@ export async function getCurrentProfile(): Promise<Omit<ProfilePreset, "name" | 
         }
     }
 
-    const nameplateToUse = pendingChanges.pendingNameplate ?? userAny.collectibles?.nameplate;
+    const nameplateToUse = pendingChanges.pendingNameplate ?? currentUser.collectibles?.nameplate;
     const nameplate = nameplateToUse ? {
         skuId: nameplateToUse.skuId,
         asset: nameplateToUse.asset,
@@ -207,7 +209,7 @@ export async function getCurrentProfile(): Promise<Omit<ProfilePreset, "name" | 
         type: nameplateToUse.type || 2
     } : null;
 
-    const savedDisplayNameStyles = userAny.displayNameStyles;
+    const savedDisplayNameStyles = currentUser.displayNameStyles;
     const displayNameStylesToUse = pendingChanges.pendingDisplayNameStyles ?? savedDisplayNameStyles;
     const displayNameStyles = normalizeDisplayNameStyles(displayNameStylesToUse);
 
@@ -240,7 +242,7 @@ export async function getCurrentProfile(): Promise<Omit<ProfilePreset, "name" | 
         avatarDecoration,
         profileEffect,
         nameplate,
-        primaryGuildId: pendingChanges.pendingPrimaryGuildId ?? userAny.primaryGuild?.identityGuildId ?? null,
+        primaryGuildId: pendingChanges.pendingPrimaryGuildId ?? currentUser.primaryGuild?.identityGuildId ?? null,
         customStatus,
         displayNameStyles
     };
@@ -289,7 +291,6 @@ function nameplateEq(a: { skuId?: string | number | null; asset?: string | null;
 }
 
 export async function loadPresetAsPending(preset: ProfilePreset, options: LoadPresetOptions = {}) {
-    try {
         const current = await getCurrentProfile();
         const pendingChanges = UserProfileSettingsStore.getPendingChanges();
         const setPending = (payload: Record<string, unknown>) => {
@@ -388,14 +389,11 @@ export async function loadPresetAsPending(preset: ProfilePreset, options: LoadPr
         }
 
         if (preset.customStatus && !customStatusEq(preset.customStatus, current.customStatus)) {
-            CustomStatusSettings.updateSetting({
+            CustomStatusSettings?.updateSetting?.({
                 text: preset.customStatus?.text ?? "",
                 expiresAtMs: preset.customStatus?.expiresAtMs ?? "0",
                 emojiId: preset.customStatus?.emojiId ?? "0",
                 emojiName: preset.customStatus?.emojiName ?? ""
             });
         }
-    } catch (err) {
-        throw err;
-    }
 }

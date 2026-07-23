@@ -7,7 +7,7 @@
 import { Button } from "@components/Button";
 import { Heading } from "@components/Heading";
 import { classes } from "@utils/misc";
-import { openModal, React, TextInput } from "@webpack/common";
+import { openModal, React, showToast, TextInput, Toasts } from "@webpack/common";
 
 import { cl, settings } from "../index";
 import { exportPresets, ImportDecision, importPresets, savePreset } from "../utils/actions";
@@ -60,18 +60,26 @@ export function PresetManager({ userId }: { userId: string; }) {
         const trimmedName = presetName.trim();
         if (!trimmedName) return;
         setIsSaving(true);
-        await savePreset(trimmedName);
-        setPresetName("");
-        setIsSaving(false);
-        const newTotalPages = Math.ceil(presets.length / PRESETS_PER_PAGE);
-        handlePageChange(newTotalPages);
-        forceUpdate();
+        try {
+            await savePreset(trimmedName);
+            setPresetName("");
+            const newTotalPages = Math.ceil(presets.length / PRESETS_PER_PAGE);
+            handlePageChange(newTotalPages);
+            forceUpdate();
+        } catch (err) {
+            showToast("Failed to save profile.", Toasts.Type.FAILURE);
+        } finally {
+            setIsSaving(false);
+        }
     };
 
     const applyPreset = (index: number) => {
         setSelectedPreset(index);
         setCurrentPresetIndex(index);
-        loadPresetAsPending(presets[index]);
+        loadPresetAsPending(presets[index]).catch(() => {
+            showToast("Failed to load profile preset.", Toasts.Type.FAILURE);
+        });
+        showToast("Preset applied. Review and save in Settings.", Toasts.Type.SUCCESS);
         forceUpdate();
     };
 
@@ -212,8 +220,8 @@ export function PresetManager({ userId }: { userId: string; }) {
                                     onChange={e => {
                                         const { value } = e.target;
                                         setPageInput(value);
-                                        const num = parseInt(value);
-                                        if (!isNaN(num) && num >= 1 && num <= totalPages) {
+                                        const num = Number(value);
+                                        if (Number.isInteger(num) && num >= 1 && num <= totalPages) {
                                             setCurrentPage(num);
                                         }
                                     }}

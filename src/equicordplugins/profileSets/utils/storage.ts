@@ -31,18 +31,27 @@ function getPresetsKey(userId: string) {
 }
 
 async function migrateLegacyPresets(userId: string, targetKey: string): Promise<boolean> {
+    const existing = await DataStore.get(targetKey);
+    if (existing && Array.isArray(existing) && existing.length > 0) return false;
+
     const v2Key = `${LEGACY_MAIN_KEY}:${userId}`;
     const stored = await DataStore.get(v2Key);
-    if (stored && Array.isArray(stored)) {
+    if (stored && Array.isArray(stored) && stored.length > 0) {
         await DataStore.set(targetKey, stored);
         await DataStore.del(v2Key);
         return true;
     }
     const datasetKey = `${LEGACY_DATASET_KEY}:${userId}:main`;
     const datasetStored = await DataStore.get(datasetKey);
-    if (datasetStored && Array.isArray(datasetStored)) {
+    if (datasetStored && Array.isArray(datasetStored) && datasetStored.length > 0) {
         await DataStore.set(targetKey, datasetStored);
         await DataStore.del(datasetKey);
+        return true;
+    }
+    const bareStored = await DataStore.get(LEGACY_DATASET_KEY);
+    if (bareStored && Array.isArray(bareStored) && bareStored.length > 0) {
+        await DataStore.set(targetKey, bareStored);
+        await DataStore.del(LEGACY_DATASET_KEY);
         return true;
     }
     return false;
@@ -117,4 +126,5 @@ export function movePresetInArray(fromIndex: number, toIndex: number) {
 
 export function replaceAllPresets(newPresets: ProfilePresetEx[]) {
     presets = newPresets;
+    currentPresetIndex = -1;
 }

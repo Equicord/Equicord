@@ -66,7 +66,7 @@ export function PresetList({
 
                 return (
                     <div
-                        key={actualIndex}
+                        key={`${preset.timestamp}-${preset.name}`}
                         tabIndex={isRenaming ? -1 : 0}
                         role="button"
                         onClick={() => {
@@ -78,14 +78,14 @@ export function PresetList({
                                 onLoad(actualIndex);
                             }
                         }}
-                        className={classes(cl("row"), isSelected ? "selected" : "")}
+                        className={classes(cl("row"), isSelected && cl("row-selected"))}
                         style={preset.bannerDataUrl ? { backgroundImage: `url(${preset.bannerDataUrl})` } : undefined}
                     >
                         <div className={cl("avatar-url")}>
                             {preset.avatarDataUrl && (
                                 <img
                                     src={preset.avatarDataUrl}
-                                    alt=""
+                                    alt={`${preset.name} avatar`}
                                     className={cl("avatar")}
                                     style={{ width: `${avatarSize}px`, height: `${avatarSize}px` }}
                                 />

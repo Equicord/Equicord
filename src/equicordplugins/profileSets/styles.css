@@ -167,7 +167,7 @@
     box-shadow: 0 0 0 2px var(--brand-experiment-30a);
 }
 
-.vc-profile-presets-row.selected::before {
+.vc-profile-presets-row-selected::before {
     opacity: 0.7;
     background: var(--background-modifier-selected);
 }
