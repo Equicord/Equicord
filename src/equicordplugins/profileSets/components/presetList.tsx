@@ -42,7 +42,8 @@ export function PresetList({
     return (
         <div className={cl("list-container")}>
             {presets.map(preset => {
-                const actualIndex = allPresets.indexOf(preset);
+                const findIndex = () => allPresets.findIndex(p => p.timestamp === preset.timestamp && p.name === preset.name);
+                const actualIndex = findIndex();
                 const isRenaming = renaming === actualIndex;
                 const isSelected = !isRenaming && selectedPreset === actualIndex;
                 const showMoveOptions = actualIndex > 0 || actualIndex < allPresets.length - 1 || currentPage > 1;
@@ -60,7 +61,9 @@ export function PresetList({
                 const commitRename = () => {
                     const nextName = renameText.trim();
                     if (!nextName) return;
-                    renamePreset(actualIndex, nextName);
+                    const idx = findIndex();
+                    if (idx === -1) return;
+                    renamePreset(idx, nextName);
                     onUpdate();
                 };
 
@@ -70,12 +73,16 @@ export function PresetList({
                         tabIndex={isRenaming ? -1 : 0}
                         role="button"
                         onClick={() => {
-                            if (!isRenaming) onLoad(actualIndex);
+                            if (!isRenaming) {
+                                const idx = findIndex();
+                                if (idx !== -1) onLoad(idx);
+                            }
                         }}
                         onKeyDown={e => {
                             if (!isRenaming && (e.key === "Enter" || e.key === " ")) {
                                 e.preventDefault();
-                                onLoad(actualIndex);
+                                const idx = findIndex();
+                                if (idx !== -1) onLoad(idx);
                             }
                         }}
                         className={classes(cl("row"), isSelected && cl("row-selected"))}
@@ -137,7 +144,9 @@ export function PresetList({
                                                 id="rename"
                                                 label="Rename"
                                                 action={() => {
-                                                    setRenaming(actualIndex);
+                                                    const idx = findIndex();
+                                                    if (idx === -1) return;
+                                                    setRenaming(idx);
                                                     setRenameText(preset.name);
                                                 }}
                                             />
@@ -145,11 +154,13 @@ export function PresetList({
                                                 id="update"
                                                 label="Update"
                                                 action={async () => {
+                                                    const idx = findIndex();
+                                                    if (idx === -1) return;
                                                     const profile = await getCurrentProfile();
                                                     await Promise.all(
                                                         (Object.entries(profile) as [keyof EditableProfile, EditableProfile[keyof EditableProfile]][])
                                                             .filter(([, value]) => isNonNullish(value))
-                                                            .map(([key, value]) => updatePresetField(actualIndex, key, value))
+                                                            .map(([key, value]) => updatePresetField(idx, key, value))
                                                     );
                                                     onUpdate();
                                                 }}
@@ -160,7 +171,9 @@ export function PresetList({
                                                     id="move-up"
                                                     label="Move Up"
                                                     action={() => {
-                                                        movePreset(actualIndex, actualIndex - 1);
+                                                        const idx = findIndex();
+                                                        if (idx <= 0) return;
+                                                        movePreset(idx, idx - 1);
                                                         onUpdate();
                                                     }}
                                                 />
@@ -170,7 +183,9 @@ export function PresetList({
                                                     id="move-down"
                                                     label="Move Down"
                                                     action={() => {
-                                                        movePreset(actualIndex, actualIndex + 1);
+                                                        const idx = findIndex();
+                                                        if (idx === -1 || idx >= allPresets.length - 1) return;
+                                                        movePreset(idx, idx + 1);
                                                         onUpdate();
                                                     }}
                                                 />
@@ -180,7 +195,9 @@ export function PresetList({
                                                     id="move-to-page-1"
                                                     label="Move to Page 1"
                                                     action={() => {
-                                                        movePreset(actualIndex, 0);
+                                                        const idx = findIndex();
+                                                        if (idx === -1) return;
+                                                        movePreset(idx, 0);
                                                         onPageChange(1);
                                                         onUpdate();
                                                     }}
@@ -192,7 +209,9 @@ export function PresetList({
                                                 label="Delete"
                                                 color="danger"
                                                 action={async () => {
-                                                    await deletePreset(actualIndex);
+                                                    const idx = findIndex();
+                                                    if (idx === -1) return;
+                                                    await deletePreset(idx);
                                                     onUpdate();
                                                 }}
                                             />

@@ -14,7 +14,6 @@ import definePlugin, { OptionType } from "@utils/types";
 import { React, UserStore } from "@webpack/common";
 
 import { PresetManager } from "./components/presetManager";
-import { loadPresets } from "./utils/storage";
 
 export const cl = classNameFactory("vc-profile-presets-");
 
@@ -50,9 +49,7 @@ export default definePlugin({
             }
         }
     ],
-    start() {
-        loadPresets();
-    },
+    start() {}
     pushProfilesTab(userId: string, sections: { push: (entry: { text: string; section: string; }) => void; }) {
         if (userId !== UserStore.getCurrentUser()?.id) return;
         sections.push({ text: "Profiles", section: "PROFILES" });
