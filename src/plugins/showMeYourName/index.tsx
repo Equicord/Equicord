@@ -1122,7 +1122,7 @@ export default definePlugin({
         {
             // Don't block name style in friends list just
             // because the name is the same as the username.
-            find: "location:\"DiscordTag\"});",
+            find: 'location:"DiscordTag"})',
             replacement: {
                 match: /(?<=,forceUsername:(\i),.*?displayNameStyles:)\i!==\i\?(\i.displayNameStyles):null/,
                 replace: "!$1?$2:null"
