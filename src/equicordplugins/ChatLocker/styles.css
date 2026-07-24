@@ -1,0 +1,102 @@
+/* ChatLockButton – Overlay Internal Styles */
+
+/* Icon */
+#chatlock-overlay .lock-icon {
+    font-size: 72px;
+    line-height: 1;
+    user-select: none;
+}
+
+#chatlock-overlay .lock-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-normal);
+    text-align: center;
+}
+
+#chatlock-overlay .lock-subtitle {
+    font-size: 14px;
+    color: var(--text-muted);
+    text-align: center;
+}
+
+
+
+/* Unlock button – Discord style */
+#chatlock-overlay .unlock-button {
+    margin-top: 12px;
+    padding: 10px 24px;
+    background: var(--brand-experiment);
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s;
+    pointer-events: auto;
+}
+
+#chatlock-overlay .unlock-button:hover {
+    background: var(--brand-experiment-hover);
+}
+
+#chatlock-overlay .unlock-button:active {
+    background: var(--brand-experiment-active);
+    transform: scale(0.96);
+}
+
+#chatlock-overlay .unlock-button:focus-visible {
+    outline: 2px solid var(--brand-experiment);
+    outline-offset: 2px;
+}
+
+/* Change Password button (secondary) */
+#chatlock-overlay .change-button {
+    margin-top: 4px;
+    padding: 10px 24px;
+    background: var(--background-secondary);
+    color: var(--text-normal);
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.15s, transform 0.1s;
+    pointer-events: auto;
+    user-select: none;
+    width: 100%;
+}
+
+#chatlock-overlay .change-button:hover {
+    background: var(--background-modifier-hover);
+}
+
+#chatlock-overlay .change-button:active {
+    transform: scale(0.96);
+}
+
+/* Remove Lock button (danger) */
+#chatlock-overlay .remove-button {
+    margin-top: 4px;
+    padding: 10px 24px;
+    background: var(--button-danger-background);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.15s, transform 0.1s;
+    pointer-events: auto;
+    user-select: none;
+    width: 100%;
+}
+
+#chatlock-overlay .remove-button:hover {
+    background: var(--button-danger-background-hover);
+}
+
+#chatlock-overlay .remove-button:active {
+    transform: scale(0.96);
+}
