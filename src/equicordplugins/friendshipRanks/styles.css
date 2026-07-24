@@ -17,3 +17,14 @@
     padding: 1em;
     text-align: center;
 }
+
+.vc-friendship-ranks-decoration {
+    vertical-align: middle;
+    display: inline-flex;
+    align-items: center;
+}
+
+.vc-friendship-ranks-icon {
+    width: 16px;
+    height: 16px;
+}
