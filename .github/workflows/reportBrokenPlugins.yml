@@ -19,7 +19,7 @@ on:
                 required: false
             repository:
                 type: string
-                description: epository to test patches on
+                description: repository to test patches on
                 required: false
             ref:
                 type: string
