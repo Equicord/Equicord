@@ -16,7 +16,7 @@ import { Devs, EquicordDevs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
 import definePlugin, { OptionType } from "@utils/types";
 import { RenderModalProps } from "@vencord/discord-types";
-import { Forms, Modal, openModal, RelationshipStore, Tooltip } from "@webpack/common";
+import { Forms, Modal, openModal, RelationshipStore, Tooltip, useStateFromStores } from "@webpack/common";
 
 interface rankInfo {
     title: string;
@@ -153,7 +153,9 @@ function getBadgesToApply() {
 
 const FriendDecoration = ErrorBoundary.wrap(({ userId }: { userId: string; }) => {
     const { showFriendsInChat } = settings.use(SETTINGS_KEYS);
-    if (!showFriendsInChat || !RelationshipStore.isFriend(userId)) return null;
+    const isFriend = useStateFromStores([RelationshipStore], () => RelationshipStore.isFriend(userId), [userId]);
+
+    if (!showFriendsInChat || !isFriend) return null;
 
     return (
         <Tooltip text="Friend">
