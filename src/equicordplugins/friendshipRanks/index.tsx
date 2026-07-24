@@ -174,7 +174,7 @@ export default definePlugin({
     authors: [Devs.Samwich, EquicordDevs.lucabeyer],
     settings,
     renderMessageDecoration({ message }) {
-        if (!settings.store.showFriendsInChat || message?.author) return null;
+        if (!settings.store.showFriendsInChat || !message?.author) return null;
         return <FriendDecoration userId={message.author.id} />;
     },
     start() {
