@@ -147,6 +147,7 @@ function LeaderboardModal(props: LeaderboardModalProps) {
     useEffect(() => {
         const listener = () => setHasLiveSessions(sessionStarts.size > 0);
         sessionListeners.add(listener);
+        setHasLiveSessions(sessionStarts.size > 0);
         return () => { sessionListeners.delete(listener); };
     }, []);
 
@@ -195,6 +196,7 @@ const VoiceStatsSection = ErrorBoundary.wrap(({ userId, isSideBar }: { userId: s
     useEffect(() => {
         const listener = () => setIsLive(sessionStarts.has(userId));
         sessionListeners.add(listener);
+        setIsLive(sessionStarts.has(userId));
         return () => { sessionListeners.delete(listener); };
     }, [userId]);
 
