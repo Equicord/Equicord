@@ -15,11 +15,10 @@ import { classNameFactory } from "@utils/css";
 import { fetchUserProfile, openUserProfile } from "@utils/discord";
 import { Logger } from "@utils/Logger";
 import { classes } from "@utils/misc";
-import { useTimer } from "@utils/react";
 import definePlugin from "@utils/types";
 import type { VoiceState } from "@vencord/discord-types";
 import { findComponentByCodeLazy, findCssClassesLazy } from "@webpack";
-import { Avatar, Clickable, IconUtils, Modal, openModal, ScrollerThin, SelectedChannelStore, useEffect, UserStore, useStateFromStores, VoiceStateStore } from "@webpack/common";
+import { Avatar, Clickable, IconUtils, Modal, openModal, ScrollerThin, SelectedChannelStore, useEffect, UserStore, useState, useStateFromStores, VoiceStateStore } from "@webpack/common";
 import type { ComponentProps } from "react";
 
 const wrapperClasses = findCssClassesLazy("memberSinceWrapper");
@@ -35,18 +34,22 @@ const sessionStarts = new Map<string, number>();
 const totalsByUser = new Map<string, number>();
 let trackedChannelId: string | null = null;
 let saveIntervalId: ReturnType<typeof setInterval> | null = null;
-let hasLoaded = false;
+let loadPromise: Promise<void> | null = null;
 
-async function loadStoredTotals() {
-    const saved = await get<Record<string, number>>(storageKey);
-    if (saved) {
-        for (const [userId, value] of Object.entries(saved)) totalsByUser.set(userId, value);
-    }
-    hasLoaded = true;
+function loadStoredTotals() {
+    loadPromise = get<Record<string, number>>(storageKey).then(saved => {
+        if (saved) {
+            for (const [userId, value] of Object.entries(saved)) {
+                const current = totalsByUser.get(userId) ?? 0;
+                totalsByUser.set(userId, current + value);
+            }
+        }
+    }).catch(e => logger.error("Failed to load VoiceStats", e));
+    return loadPromise;
 }
 
 async function persistTotals() {
-    if (!hasLoaded) return;
+    if (loadPromise) await loadPromise;
     await set(storageKey, Object.fromEntries(totalsByUser));
 }
 
@@ -134,9 +137,14 @@ function LeaderboardRow({ userId, total, index }: { userId: string, total: numbe
 
 function LeaderboardModal(props: LeaderboardModalProps) {
     const hasLiveSessions = sessionStarts.size > 0;
-    useTimer({ interval: hasLiveSessions ? 1000 : 0 });
+    const [now, setNow] = useState(Date.now());
 
-    const now = Date.now();
+    useEffect(() => {
+        if (!hasLiveSessions) return;
+        const intervalId = setInterval(() => setNow(Date.now()), 1000);
+        return () => clearInterval(intervalId);
+    }, [hasLiveSessions]);
+
     const allUserIds = new Set([...totalsByUser.keys(), ...sessionStarts.keys()]);
 
     const sorted = Array.from(allUserIds).map(userId => {
@@ -170,7 +178,13 @@ function LeaderboardModal(props: LeaderboardModalProps) {
 
 const VoiceStatsSection = ErrorBoundary.wrap(({ userId, isSideBar }: { userId: string; isSideBar: boolean; }) => {
     const isLive = sessionStarts.has(userId);
-    useTimer({ interval: isLive ? 1000 : 0 });
+    const [, forceUpdate] = useState(0);
+
+    useEffect(() => {
+        if (!isLive) return;
+        const intervalId = setInterval(() => forceUpdate(n => n + 1), 1000);
+        return () => clearInterval(intervalId);
+    }, [isLive]);
 
     const seconds = getLiveSeconds(userId);
     if (seconds <= 0) return null;
