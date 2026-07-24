@@ -35,8 +35,6 @@ const settings = definePluginSettings({
     },
 });
 
-const SETTINGS_KEYS: (keyof typeof settings.store)[] = ["showFriendsInChat"];
-
 function daysSince(dateString: string): number {
     const date = new Date(dateString);
     const currentDate = new Date();
@@ -152,10 +150,8 @@ function getBadgesToApply() {
 }
 
 const FriendDecoration = ErrorBoundary.wrap(({ userId }: { userId: string; }) => {
-    const { showFriendsInChat } = settings.use(SETTINGS_KEYS);
     const isFriend = useStateFromStores([RelationshipStore], () => RelationshipStore.isFriend(userId), [userId]);
-
-    if (!showFriendsInChat || !isFriend) return null;
+    if (!isFriend) return null;
 
     return (
         <Tooltip text="Friend">
@@ -177,9 +173,10 @@ export default definePlugin({
     tags: ["Friends"],
     authors: [Devs.Samwich, EquicordDevs.lucabeyer],
     settings,
-    renderMessageDecoration: ({ message }) => (
-        <FriendDecoration userId={message.author.id} />
-    ),
+    renderMessageDecoration({ message }) {
+        if (!settings.store.showFriendsInChat || message?.author) return null;
+        return <FriendDecoration userId={message.author.id} />;
+    },
     start() {
         getBadgesToApply().forEach(b => Badges.addProfileBadge(b));
 
