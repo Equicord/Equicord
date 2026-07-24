@@ -1,6 +1,21 @@
 /* ChatLockButton – Overlay Internal Styles */
 
-/* Icon */
+/* Discord fades the top/bottom edges of the message list via a CSS mask
+   on its container. Since our overlay renders inside that same container,
+   it inherits that fade too (the "feathers toward the edges" look).
+   Strip the mask off whichever element directly contains our overlay. */
+div:has(> #chatlock-overlay) {
+    mask-image: none !important;
+    -webkit-mask-image: none !important;
+}
+
+/* Fallback: if the fade mask is on a higher ancestor rather than the
+   immediate parent, strip it from any ancestor of the overlay too. */
+body :has(#chatlock-overlay) {
+    mask-image: none !important;
+    -webkit-mask-image: none !important;
+}
+
 #chatlock-overlay .lock-icon {
     font-size: 72px;
     line-height: 1;
@@ -19,8 +34,6 @@
     color: var(--text-muted);
     text-align: center;
 }
-
-
 
 /* Unlock button – Discord style */
 #chatlock-overlay .unlock-button {

@@ -3,28 +3,40 @@
  */
 
 import { DataStore } from "@api/index";
+import { SelectedChannelStore } from "@webpack/common";
 
 export const DATASTORE_KEY = "ChatLockButton_data";
 export const SALT = "ChatLockButton_2025_salt";
 
 export let settingsCache: Record<string, string> | null = null;
 let settingsLoaded = false;
+let loadPromise: Promise<Record<string, string>> | null = null;
+
+export function getCurrentId(): string | null {
+    return SelectedChannelStore.getChannelId();
+}
 
 export async function loadAll(): Promise<Record<string, string>> {
     if (settingsCache !== null) return settingsCache;
-    try {
-        const data = await DataStore.get(DATASTORE_KEY) as Record<string, string> | undefined;
-        if (data && typeof data === "object") {
-            settingsCache = data;
-            settingsLoaded = true;
-            return data;
+    if (loadPromise) return loadPromise;
+
+    loadPromise = (async () => {
+        try {
+            const data = await DataStore.get(DATASTORE_KEY) as Record<string, string> | undefined;
+            if (data && typeof data === "object") {
+                settingsCache = data;
+                settingsLoaded = true;
+                return data;
+            }
+        } catch (e) {
+            console.warn("[ChatLockButton] Failed to load from DataStore:", e);
         }
-    } catch (e) {
-        console.warn("[ChatLockButton] Failed to load from DataStore:", e);
-    }
-    settingsCache = {};
-    settingsLoaded = true;
-    return settingsCache;
+        settingsCache = {};
+        settingsLoaded = true;
+        return settingsCache;
+    })();
+
+    return loadPromise;
 }
 
 export async function saveAll(data: Record<string, string>) {
