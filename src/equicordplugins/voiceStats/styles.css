@@ -1,3 +1,65 @@
 .vc-voicestats-profile-section {
     gap: 4px;
 }
+
+.vc-voicestats-leaderboard {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding-bottom: 16px;
+    max-height: 60vh;
+    padding-right: 8px;
+}
+
+.vc-voicestats-empty {
+    color: var(--text-muted);
+    text-align: center;
+    padding: 24px 0;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.vc-voicestats-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.15s ease-out;
+}
+
+.vc-voicestats-row:hover {
+    background-color: var(--interactive-background-hover);
+}
+
+
+.vc-voicestats-rank {
+    width: 30px;
+    text-align: right;
+    color: var(--text-muted);
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.vc-voicestats-name {
+    flex: 1;
+    font-weight: 500;
+    font-size: 16px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.vc-voicestats-time {
+    font-size: 14px;
+    color: var(--text-muted);
+}
+
+.vc-voicestats-clickable {
+    cursor: pointer;
+}
+
+.vc-voicestats-clickable:hover {
+    opacity: 0.8;
+}

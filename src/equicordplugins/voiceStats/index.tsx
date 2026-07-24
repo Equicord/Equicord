@@ -7,18 +7,26 @@
 import "./styles.css";
 
 import { get, set } from "@api/DataStore";
+import { HeaderBarButton } from "@api/HeaderBar";
 import { BaseText } from "@components/BaseText";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { EquicordDevs } from "@utils/constants";
+import { classNameFactory } from "@utils/css";
+import { fetchUserProfile, openUserProfile } from "@utils/discord";
+import { Logger } from "@utils/Logger";
+import { classes } from "@utils/misc";
 import { useTimer } from "@utils/react";
 import definePlugin from "@utils/types";
-import { VoiceState } from "@vencord/discord-types";
+import type { VoiceState } from "@vencord/discord-types";
 import { findComponentByCodeLazy, findCssClassesLazy } from "@webpack";
-import { SelectedChannelStore, UserStore, VoiceStateStore } from "@webpack/common";
+import { Avatar, Clickable, IconUtils, Modal, openModal, ScrollerThin, SelectedChannelStore, useEffect, UserStore, useStateFromStores, VoiceStateStore } from "@webpack/common";
+import type { ComponentProps } from "react";
 
 const wrapperClasses = findCssClassesLazy("memberSinceWrapper");
 const containerClasses = findCssClassesLazy("memberSince");
+const cl = classNameFactory("vc-voicestats-");
 const Section = findComponentByCodeLazy("headingVariant:", '"section"', "headingIcon:");
+const logger = new Logger("VoiceStats");
 
 const storageKey = "VoiceStats_totals";
 const saveIntervalMs = 30_000;
@@ -27,14 +35,18 @@ const sessionStarts = new Map<string, number>();
 const totalsByUser = new Map<string, number>();
 let trackedChannelId: string | null = null;
 let saveIntervalId: ReturnType<typeof setInterval> | null = null;
+let hasLoaded = false;
 
 async function loadStoredTotals() {
     const saved = await get<Record<string, number>>(storageKey);
-    if (!saved) return;
-    for (const [userId, value] of Object.entries(saved)) totalsByUser.set(userId, value);
+    if (saved) {
+        for (const [userId, value] of Object.entries(saved)) totalsByUser.set(userId, value);
+    }
+    hasLoaded = true;
 }
 
 async function persistTotals() {
+    if (!hasLoaded) return;
     await set(storageKey, Object.fromEntries(totalsByUser));
 }
 
@@ -87,6 +99,75 @@ function formatDuration(seconds: number): string {
     return `${s}s`;
 }
 
+function AnalyticsIcon(props: ComponentProps<"svg">) {
+    return (
+        <svg viewBox="0 0 24 24" {...props}>
+            <path fill="currentColor" fillRule="evenodd" d="M2 19V5a3 3 0 0 1 3-3h14a3 3 0 0 1 3 3v14a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3Zm16-9.59V13a1 1 0 1 0 2 0V7a1 1 0 0 0-1-1h-6a1 1 0 1 0 0 2h3.59l-5.09 5.09-1.8-1.8a1 1 0 0 0-1.4 0l-4 4a1 1 0 1 0 1.4 1.42L9 13.4l1.8 1.8a1 1 0 0 0 1.4 0L18 9.4Z" clipRule="evenodd" />
+        </svg>
+    );
+}
+
+type LeaderboardModalProps = ComponentProps<typeof Modal>;
+
+function LeaderboardRow({ userId, total, index }: { userId: string, total: number, index: number; }) {
+    const user = useStateFromStores([UserStore], () => UserStore.getUser(userId), [userId]);
+
+    useEffect(() => {
+        if (!user) fetchUserProfile(userId).catch(e => logger.error("Failed to fetch user profile.", e));
+    }, [user, userId]);
+
+    const avatarUrl = user ? IconUtils.getUserAvatarURL(user, true, 32) : IconUtils.getDefaultAvatarURL(userId);
+    const username = user ? (user.globalName ?? user.username) : userId;
+
+    return (
+        <Clickable
+            className={cl("row")}
+            onClick={() => openUserProfile(userId)}
+        >
+            <div className={cl("rank")}>#{index + 1}</div>
+            <Avatar src={avatarUrl} size="SIZE_32" />
+            <div className={cl("name")}>{username}</div>
+            <div className={cl("time")}>{formatDuration(total)}</div>
+        </Clickable>
+    );
+}
+
+function LeaderboardModal(props: LeaderboardModalProps) {
+    const hasLiveSessions = sessionStarts.size > 0;
+    useTimer({ interval: hasLiveSessions ? 1000 : 0 });
+
+    const now = Date.now();
+    const allUserIds = new Set([...totalsByUser.keys(), ...sessionStarts.keys()]);
+
+    const sorted = Array.from(allUserIds).map(userId => {
+        let currentTotal = totalsByUser.get(userId) ?? 0;
+        const startedAt = sessionStarts.get(userId);
+        if (startedAt) currentTotal += Math.floor((now - startedAt) / 1000);
+        return { userId, total: currentTotal };
+    }).filter(x => x.total > 0).sort((a, b) => b.total - a.total).slice(0, 99);
+
+    return (
+        <Modal {...props}>
+            <ScrollerThin className={cl("leaderboard")}>
+                {sorted.length === 0 ? (
+                    <div className={cl("empty")}>
+                        No data available.
+                    </div>
+                ) : (
+                    sorted.map((item, index) => (
+                        <LeaderboardRow
+                            key={item.userId}
+                            userId={item.userId}
+                            total={item.total}
+                            index={index}
+                        />
+                    ))
+                )}
+            </ScrollerThin>
+        </Modal>
+    );
+}
+
 const VoiceStatsSection = ErrorBoundary.wrap(({ userId, isSideBar }: { userId: string; isSideBar: boolean; }) => {
     const isLive = sessionStarts.has(userId);
     useTimer({ interval: isLive ? 1000 : 0 });
@@ -113,9 +194,12 @@ const VoiceStatsSection = ErrorBoundary.wrap(({ userId, isSideBar }: { userId: s
             heading="Voice Time"
             headingVariant="text-xs/medium"
             headingColor="text-default"
-            className="vc-voicestats-profile-section"
+            className={cl("profile-section")}
         >
-            <div className={wrapperClasses.memberSinceWrapper}>
+            <Clickable
+                className={classes(wrapperClasses.memberSinceWrapper, cl("clickable"))}
+                onClick={() => openModal(p => <LeaderboardModal {...p} title="VoiceStats Leaderboard" size="md" />)}
+            >
                 <div className={containerClasses.memberSince}>
                     <svg
                         aria-hidden="true"
@@ -129,8 +213,19 @@ const VoiceStatsSection = ErrorBoundary.wrap(({ userId, isSideBar }: { userId: s
                     </svg>
                     <BaseText size="sm">{text}</BaseText>
                 </div>
-            </div>
+            </Clickable>
         </Section>
+    );
+}, { noop: true });
+
+const VoiceStatsButton = ErrorBoundary.wrap(function VoiceStatsButton() {
+    return (
+        <HeaderBarButton
+            className="vc-voicestats-btn"
+            onClick={() => openModal(p => <LeaderboardModal {...p} title="VoiceStats Leaderboard" size="md" />)}
+            tooltip="VoiceStats Leaderboard"
+            icon={AnalyticsIcon}
+        />
     );
 }, { noop: true });
 
@@ -138,8 +233,13 @@ export default definePlugin({
     name: "VoiceStats",
     description: "Shows how long you've spent in voice with each user in their profile",
     tags: ["Voice", "Friends"],
-    authors: [EquicordDevs.Moowi],
-    dependencies: ["ProfileSectionsAPI"],
+    authors: [EquicordDevs.Moowi, EquicordDevs.lucabeyer],
+    dependencies: ["ProfileSectionsAPI", "HeaderBarAPI"],
+    headerBarButton: {
+        icon: AnalyticsIcon,
+        render: () => <VoiceStatsButton />,
+        priority: 0,
+    },
     renderProfileSection: {
         render: VoiceStatsSection,
         priority: 0,
