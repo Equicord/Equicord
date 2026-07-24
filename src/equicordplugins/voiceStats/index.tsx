@@ -32,11 +32,15 @@ const saveIntervalMs = 30_000;
 
 const sessionStarts = new Map<string, number>();
 const totalsByUser = new Map<string, number>();
+const sessionListeners = new Set<() => void>();
+const emitSessionChange = () => sessionListeners.forEach(cb => cb());
+
 let trackedChannelId: string | null = null;
 let saveIntervalId: ReturnType<typeof setInterval> | null = null;
 let loadPromise: Promise<void> | null = null;
 
 function loadStoredTotals() {
+    if (loadPromise) return loadPromise;
     loadPromise = get<Record<string, number>>(storageKey).then(saved => {
         if (saved) {
             for (const [userId, value] of Object.entries(saved)) {
@@ -69,6 +73,7 @@ function startTrackingChannel(channelId: string, myId: string) {
     for (const state of Object.values(states) as VoiceState[]) {
         if (state.userId !== myId) sessionStarts.set(state.userId, now);
     }
+    emitSessionChange();
     saveIntervalId = setInterval(() => {
         flushActiveSessions();
         persistTotals();
@@ -83,6 +88,7 @@ function stopTrackingChannel() {
     if (!trackedChannelId) return;
     flushActiveSessions();
     sessionStarts.clear();
+    emitSessionChange();
     trackedChannelId = null;
     persistTotals();
 }
@@ -136,7 +142,14 @@ function LeaderboardRow({ userId, total, index }: { userId: string, total: numbe
 }
 
 function LeaderboardModal(props: LeaderboardModalProps) {
-    const hasLiveSessions = sessionStarts.size > 0;
+    const [hasLiveSessions, setHasLiveSessions] = useState(sessionStarts.size > 0);
+
+    useEffect(() => {
+        const listener = () => setHasLiveSessions(sessionStarts.size > 0);
+        sessionListeners.add(listener);
+        return () => { sessionListeners.delete(listener); };
+    }, []);
+
     const [now, setNow] = useState(Date.now());
 
     useEffect(() => {
@@ -177,7 +190,14 @@ function LeaderboardModal(props: LeaderboardModalProps) {
 }
 
 const VoiceStatsSection = ErrorBoundary.wrap(({ userId, isSideBar }: { userId: string; isSideBar: boolean; }) => {
-    const isLive = sessionStarts.has(userId);
+    const [isLive, setIsLive] = useState(sessionStarts.has(userId));
+
+    useEffect(() => {
+        const listener = () => setIsLive(sessionStarts.has(userId));
+        sessionListeners.add(listener);
+        return () => { sessionListeners.delete(listener); };
+    }, [userId]);
+
     const [, forceUpdate] = useState(0);
 
     useEffect(() => {
@@ -281,11 +301,13 @@ export default definePlugin({
 
                 if (joinedMyChannel) {
                     sessionStarts.set(userId, Date.now());
+                    emitSessionChange();
                 } else if (leftMyChannel && sessionStarts.has(userId)) {
                     const startedAt = sessionStarts.get(userId)!;
                     const accrued = Math.floor((Date.now() - startedAt) / 1000);
                     totalsByUser.set(userId, (totalsByUser.get(userId) ?? 0) + accrued);
                     sessionStarts.delete(userId);
+                    emitSessionChange();
                     persistTotals();
                 }
             }
