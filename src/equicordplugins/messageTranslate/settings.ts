@@ -59,6 +59,25 @@ export const settings = definePluginSettings({
         description: "Append a small (translated) indicator to translated messages.",
         default: true,
     },
+    showOriginal: {
+        type: OptionType.SELECT,
+        description: "Show the original and translated text.",
+        options: [
+            {
+                label: "Don't show original.",
+                value: "no-orig",
+                default: true,
+            },
+            {
+                label: "Show original in subtext",
+                value: "orig-in-subtext",
+            },
+            {
+                label: "Show original message, translation in subtext",
+                value: "trans-in-subtext",
+            },
+        ]
+    },
 });
 
 function parseList(value: string): Set<string> {
