@@ -28,6 +28,8 @@ export const useResizeObserver: ResizeObserverHook = findByCodeLazy("borderBoxSi
 export const ImageUtils: ImageUtils_ = findByPropsLazy("isAnimated", "getFormatQuality");
 export const transformAttachment: AttachmentTransformer = findByCodeLazy("return{uniqueId", ".IS_ANIMATED");
 
+const encoder = new TextEncoder(), decoder = new TextDecoder();
+
 const defineItem = <const A, const B extends JsonValue>(item: CustomItemDef<A, B>) => item;
 function defineItems<T extends Record<CustomItemFormat, CustomItemDef>>(def: ItemsDef<T>) {
     type Type<F extends CustomItemFormat> = T[F] extends CustomItemDef<infer A> ? A : never;
@@ -37,7 +39,7 @@ function defineItems<T extends Record<CustomItemFormat, CustomItemDef>>(def: Ite
             try {
                 const obj = [format, def[format].encode(data)];
 
-                const buf = deflateSync(new TextEncoder().encode(JSON.stringify(obj)));
+                const buf = deflateSync(encoder.encode(JSON.stringify(obj)));
                 return uint8ArrayToBase64(buf);
             } catch {
                 return null;
@@ -48,7 +50,7 @@ function defineItems<T extends Record<CustomItemFormat, CustomItemDef>>(def: Ite
                 if (!raw) return null;
 
                 const buf = inflateSync(base64ToUint8Array(raw));
-                const parsed: unknown[] | null = JSON.parse(new TextDecoder().decode(buf));
+                const parsed: unknown[] | null = JSON.parse(decoder.decode(buf));
                 if (!Array.isArray(parsed)) return null;
 
                 const [format, data] = parsed as [keyof typeof def, JsonValue];
@@ -215,43 +217,48 @@ function fuzzySearch(searchQuery: string, searchString: string) {
     return null;
 }
 
-function filterItems(items: Record<string, FavouriteItem> | null, itemFormat: CustomItemFormat, query?: string) {
-    if (!items) return null;
-
-    const validItems = Object.entries(items)
-        .filter(([, { format }]) => format === FavouriteItemFormat.NONE)
-        .map(([url, { src, ...rest }]) => ({
-            ...rest,
-            ...defs.decode(URL.parse(src)?.hash.replace("#", "") ?? "")!,
-            url
-        }))
-        .filter(({ format, data }) => data && format === itemFormat);
-
-    if (!query) return validItems.sort((a, b) => b.order - a.order);
-
-    return validItems
-        .map(item => ({
-            item,
-            score: fuzzySearch(query, normalize(defs.stringify(item.format, item.data)))
-        }))
-        .filter(({ score }) => score !== null)
-        .sort((a, b) => b.score! - a.score!)
-        .map(({ item }) => item);
-}
-
 export function useFavourites(itemFormat: CustomItemFormat, searchQuery?: string) {
     useEffect(() => void UserSettingsActionCreators.FrecencyUserSettingsActionCreators.loadIfNecessary(), []);
+
+    const items = useStateFromStores(
+        [UserSettingsProtoStore],
+        () => {
+            const gifs: Record<string, FavouriteItem> | undefined =
+                UserSettingsProtoStore.frecencyWithoutFetchingLatest.favoriteGifs?.gifs;
+            if (!gifs) return null;
+
+            return Object.entries(gifs)
+                .filter(([, { format }]) => format === FavouriteItemFormat.NONE)
+                .map(([url, { src, ...rest }]) => ({
+                    ...rest,
+                    ...defs.decode(URL.parse(src)?.hash.replace("#", "") ?? "")!,
+                    url
+                }))
+                .filter(({ format, data }) => data && format === itemFormat);
+        },
+        [itemFormat]
+    );
 
     const { state } = useStateFromStores(
         [UserSettingsProtoStore],
         () => {
             const query = searchQuery && normalize(searchQuery);
-            const items: Record<string, FavouriteItem> | null =
-                UserSettingsProtoStore.frecencyWithoutFetchingLatest.favoriteGifs?.gifs;
 
-            return { query, state: filterItems(items, itemFormat, query) };
+            if (!items) return { query, state: null };
+            if (!query) return { query, state: items.toSorted((a, b) => b.order - a.order) };
+
+            const state = items
+                .map(item => ({
+                    item,
+                    score: fuzzySearch(query, normalize(defs.stringify(item.format, item.data)))
+                }))
+                .filter(({ score }) => score !== null)
+                .sort((a, b) => b.score! - a.score!)
+                .map(({ item }) => item);
+
+            return { query, state };
         },
-        [searchQuery],
+        [items, searchQuery],
         // Do not rerender components using this hook unless the query has changed or the items were loaded for the first time
         // This matches the behavior of the gif picker, where unfavouriting an item doesn't immediately hide it
         (prev, next) => !!prev.state === !!next.state && prev.query === next.query

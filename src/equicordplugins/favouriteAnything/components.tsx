@@ -7,16 +7,19 @@
 import { BaseText } from "@components/BaseText";
 import { Button } from "@components/Button";
 import { LazyComponentWrapper } from "@utils/lazyReact";
-import { Message, MessageAttachment, ScrollerBaseRef } from "@vencord/discord-types";
+import { Embed, ListRow, Message, MessageAttachment, ScrollerBaseRef } from "@vencord/discord-types";
 import { ChannelType } from "@vencord/discord-types/enums";
 import { findByCodeLazy, findComponentByCode, findComponentByCodeLazy, findCssClassesLazy, proxyLazyWebpack } from "@webpack";
 import { ChannelStore, ExpressionPickerStore, ListScrollerThin, lodash, PermissionsBits, PermissionStore, React, useCallback, useEffect, useMemo, useRef, useState, useStateFromStores } from "@webpack/common";
 import { ReactNode } from "react";
 
-import { AttachmentContext, EmbedContext, EmbedMosaicContext } from ".";
 import { SignedUrlsStore } from "./stores";
-import { AttachmentItem, AttachmentsComponentProps, CustomItemFormat, FavoriteButtonProps, FavouriteItemFormat, FilePickerItemProps, FilePickerProps, ManaSearchBarProps, MessageComponentClass } from "./types";
-import { cl, defs, hasPermission, ImageUtils, sendAttachment, useFavourites, useListScroller, useResizeObserver } from "./utils";
+import { AttachmentContextProviderProps, AttachmentItem, AttachmentsComponentProps, CustomItemFormat, FavoriteButtonProps, FavouriteItemFormat, FilePickerItemProps, FilePickerProps, ManaSearchBarProps, MessageComponentClass } from "./types";
+import { cl, defs, hasPermission, ImageUtils, sendAttachment, transformAttachment, useFavourites, useListScroller, useResizeObserver } from "./utils";
+
+export const EmbedContext = proxyLazyWebpack(() => React.createContext<null | Embed>(null));
+export const EmbedMosaicContext = proxyLazyWebpack(() => React.createContext<null | number>(null));
+const AttachmentContext = proxyLazyWebpack(() => React.createContext<null | AttachmentItem>(null));
 
 const ManaSearchBar = findComponentByCodeLazy<ManaSearchBarProps>("#{intl::SEARCH}),ref");
 const FavoriteButton = findComponentByCodeLazy<FavoriteButtonProps>("#{intl::GIF_TOOLTIP_ADD_TO_FAVORITES}");
@@ -70,6 +73,8 @@ export const AttachmentPreview = proxyLazyWebpack(() => {
     };
 });
 
+const noopRender = () => null;
+
 export function FilePicker({ onSelectItem }: FilePickerProps) {
     const listRef = useRef<ScrollerBaseRef>(null);
 
@@ -86,8 +91,10 @@ export function FilePicker({ onSelectItem }: FilePickerProps) {
     const [rowHeights, handleResize] = useListScroller();
 
     const handleSubmit = useCallback((url: string) => onSelectItem({ url }), []);
+    const handleChange = useCallback((query: string) => ExpressionPickerStore.setSearchQuery(query), []);
+    const handleClear = useCallback(() => ExpressionPickerStore.setSearchQuery(""), []);
 
-    const renderRow = (row: number) => {
+    const renderRow = useCallback(({ row }: ListRow) => {
         const item = favs?.[row];
         if (!item) return null;
 
@@ -102,7 +109,12 @@ export function FilePicker({ onSelectItem }: FilePickerProps) {
                 onSubmit={handleSubmit}
             />
         );
-    };
+    }, [favs, channel, count, handleResize, handleSubmit]);
+
+    const rowHeight = useCallback(
+        (_: number, row: number) => (favs?.[row] && rowHeights.get(favs[row].url)) ?? 100,
+        [favs, rowHeights]
+    );
 
     useEffect(() => void listRef.current?.scrollToTop(), [query]);
 
@@ -113,8 +125,8 @@ export function FilePicker({ onSelectItem }: FilePickerProps) {
                     autoFocus
                     placeholder="Search files"
                     query={query}
-                    onChange={query => ExpressionPickerStore.setSearchQuery(query)}
-                    onClear={() => ExpressionPickerStore.setSearchQuery("")}
+                    onChange={handleChange}
+                    onClear={handleClear}
                 />
             </div>
             {count > 0 ? (
@@ -123,9 +135,9 @@ export function FilePicker({ onSelectItem }: FilePickerProps) {
                         ref={listRef}
                         sections={[count]}
                         sectionHeight={0}
-                        rowHeight={(_, row) => (favs?.[row] && rowHeights.get(favs[row].url)) ?? 100}
-                        renderSection={() => null}
-                        renderRow={({ row }) => renderRow(row)}
+                        rowHeight={rowHeight}
+                        renderSection={noopRender}
+                        renderRow={renderRow}
                     />
                 </div>
             ) : (
@@ -266,6 +278,49 @@ export function EmbedAccessory() {
             </div>
         )
     );
+}
+
+export function AttachmentContextProvider({ attachment, component, children }: AttachmentContextProviderProps) {
+    const attachmentItem: AttachmentItem | null = useMemo(() => {
+        if (component) {
+            const { id, size, name, spoiler, file } = component;
+            const raw = {
+                ...file,
+                size,
+                filename: name,
+                id,
+                spoiler,
+                content_type: file.contentType,
+                proxy_url: file.proxyUrl
+            };
+
+            return transformAttachment(raw);
+        }
+
+        if (attachment) {
+            const { originalItem, ...rest } = attachment;
+
+            // Regular media attachments and cv2 media attachments are structured differently
+            const raw: MessageAttachment =
+                "media" in originalItem
+                    ? {
+                          ...originalItem.media,
+                          id: rest.uniqueId,
+                          size: 0,
+                          spoiler: rest.spoiler,
+                          filename: (rest.spoiler ? "SPOILER_" : "") + rest.uniqueId,
+                          content_type: originalItem.media.contentType,
+                          proxy_url: originalItem.media.proxyUrl
+                      }
+                    : originalItem;
+
+            return { originalItem: raw, ...rest };
+        }
+
+        return null;
+    }, [attachment, component]);
+
+    return <AttachmentContext.Provider value={attachmentItem}>{children}</AttachmentContext.Provider>;
 }
 
 const visualMediaFormats: Partial<Record<AttachmentItem["type"], FavouriteItemFormat>> = Object.freeze({

@@ -72,6 +72,11 @@ export interface AttachmentsComponentProps {
     attachment: MessageAttachment;
 }
 
+export interface AttachmentContextProviderProps extends PropsWithChildren {
+    attachment?: AttachmentItem<MessageAttachment | { media: CV2Attachment; }>;
+    component?: { id: string; size: number; name: string; spoiler: boolean; file: CV2Attachment; };
+}
+
 export interface EmbedComponent extends Component<{ embed: Embed; }> {
     __render: () => ReactNode;
 }
