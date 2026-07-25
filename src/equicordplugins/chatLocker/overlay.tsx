@@ -22,7 +22,7 @@ export const Overlay: React.FC = () => {
         <div id="chatlock-overlay" style={{
             position: "absolute",
             inset: -200,
-            zIndex: 2,
+            zIndex: 4,
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
