@@ -57,7 +57,7 @@ if (!IS_VANILLA) {
     const videoDecodeOwnedMarker = "EQUICORD_VIDEO_DECODE_OWNED";
     const enableLinuxNvidiaVideoDecode = IS_DISCORD_DESKTOP
         && process.platform === "linux"
-        && settings.enableLinuxNvidiaVideoDecode;
+        && settings.enableLinuxNvidiaVideoDecode === true;
     const videoDecodeRelaunched = app.commandLine.hasSwitch(videoDecodeMarker.slice(2));
     const owned = new Set((process.env[videoDecodeOwnedMarker] ?? "").split(",").filter(Boolean));
 
