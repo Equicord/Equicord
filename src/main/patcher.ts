@@ -72,6 +72,8 @@ if (!IS_VANILLA) {
                 if (feature) features.add(feature);
             return false;
         });
+        const separatorIndex = args.indexOf("--");
+        const trailingArgs = separatorIndex === -1 ? [] : args.splice(separatorIndex);
 
         if (enableLinuxNvidiaVideoDecode) {
             for (const name of ["LIBVA_DRIVER_NAME", "NVD_BACKEND"]) {
@@ -112,6 +114,7 @@ if (!IS_VANILLA) {
         }
 
         if (features.size) args.push(`${featurePrefix}${[...features].join(",")}`);
+        args.push(...trailingArgs);
         app.relaunch({ args });
         app.exit(0);
     }
