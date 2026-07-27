@@ -50,12 +50,13 @@ export async function translate(messageId: string, text: string): Promise<Cached
     inProgress.add(messageId);
 
     try {
-        const targetLang = settings.store.targetLanguage;
+        const targetLang = settings.store.targetLanguage.trim().toLowerCase();
         const response = await fetchTranslation(text, targetLang);
+        const sourceLang = response.src.trim().toLowerCase();
 
-        if (response.src === targetLang ||
+        if (sourceLang === targetLang ||
             response.confidence < settings.store.confidenceRequirement ||
-            getExcludedLanguages().has(response.src)
+            getExcludedLanguages().has(sourceLang)
         ) {
             failed.set(messageId, text);
             return null;

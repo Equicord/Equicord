@@ -80,12 +80,18 @@ export const settings = definePluginSettings({
     },
 });
 
-function parseList(value: string): Set<string> {
-    return new Set(value.split(",").map(s => s.trim()).filter(Boolean));
+function parseList(value: string, callback?: (s: string) => string): Set<string> {
+    let list = value.split(",").map(s => s.trim()).filter(Boolean);
+
+    if (callback) {
+        list = list.map(callback);
+    }
+
+    return new Set(list);
 }
 
 export function getExcludedLanguages(): Set<string> {
-    return parseList(settings.store.excludedLanguages);
+    return parseList(settings.store.excludedLanguages, s => s.toLowerCase());
 }
 
 export function getIgnoredGuilds(): Set<string> {
