@@ -54,10 +54,7 @@ export async function translate(messageId: string, text: string): Promise<Cached
         const response = await fetchTranslation(text, targetLang);
         const sourceLang = response.src.trim().toLowerCase();
 
-        if (sourceLang === targetLang ||
-            response.confidence < settings.store.confidenceRequirement ||
-            getExcludedLanguages().has(sourceLang)
-        ) {
+        if (sourceLang === targetLang || response.confidence < settings.store.confidenceRequirement || getExcludedLanguages().has(sourceLang)) {
             failed.set(messageId, text);
             return null;
         }

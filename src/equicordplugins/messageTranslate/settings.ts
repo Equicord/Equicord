@@ -5,7 +5,7 @@
  */
 
 import { definePluginSettings } from "@api/Settings";
-import { OptionType } from "@utils/types";
+import { makeRange, OptionType } from "@utils/types";
 
 export const settings = definePluginSettings({
     targetLanguage: {
@@ -21,7 +21,7 @@ export const settings = definePluginSettings({
     confidenceRequirement: {
         type: OptionType.SLIDER,
         description: "Minimum confidence (0 to 1) required to show a translation.",
-        markers: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1],
+        markers: makeRange(0, 1, 0.1),
         default: 0.8,
     },
     autoTranslate: {
@@ -80,18 +80,12 @@ export const settings = definePluginSettings({
     },
 });
 
-function parseList(value: string, callback?: (s: string) => string): Set<string> {
-    let list = value.split(",").map(s => s.trim()).filter(Boolean);
-
-    if (callback) {
-        list = list.map(callback);
-    }
-
-    return new Set(list);
+function parseList(value: string): Set<string> {
+    return new Set(value.split(",").map(s => s.trim().toLowerCase()).filter(Boolean));
 }
 
 export function getExcludedLanguages(): Set<string> {
-    return parseList(settings.store.excludedLanguages, s => s.toLowerCase());
+    return parseList(settings.store.excludedLanguages);
 }
 
 export function getIgnoredGuilds(): Set<string> {
