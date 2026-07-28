@@ -11,7 +11,7 @@ import { EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 import { Channel, User, VoiceState } from "@vencord/discord-types";
 import { findByPropsLazy, findStoreLazy } from "@webpack";
-import { Menu, React, VoiceStateStore } from "@webpack/common";
+import { Menu, React, SelectedChannelStore, VoiceStateStore } from "@webpack/common";
 
 type TFollowedUserInfo = {
     lastChannelId: string;
@@ -89,7 +89,7 @@ export default definePlugin({
 
             if (
                 settings.store.onlyWhenInVoice
-                && !VoiceStateStore.getVoiceStateForUser(UserStore.getCurrentUser().id)
+                && !SelectedChannelStore.getChannelId()
             ) return;
 
             voiceStates.forEach(voiceState => {

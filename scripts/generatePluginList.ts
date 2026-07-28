@@ -14,50 +14,50 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
+ */
 
-import { readdirSync, writeFileSync } from "fs";
-import { getEntryPoint, isPluginFile, parseDevs, parseEquicordDevs, parseFile, PluginData } from "./utils";
+import { readdirSync, writeFileSync } from "fs"
+import { getEntryPoint, isPluginFile, parseDevs, parseEquicordDevs, parseFile, parseOutcordDevs, PluginData } from "./utils"
+;(async () => {
+    parseDevs()
+    parseEquicordDevs()
+    parseOutcordDevs()
 
-(async () => {
-    parseDevs();
-    parseEquicordDevs();
+    const args = process.argv.slice(2)
 
-    const args = process.argv.slice(2);
+    const equicordFlag = args.includes("--equicord")
+    const vencordFlag = args.includes("--vencord")
 
-    const equicordFlag = args.includes("--equicord");
-    const vencordFlag = args.includes("--vencord");
-
-    let dirs: string[];
+    let dirs: string[]
 
     if (equicordFlag) {
-        dirs = ["src/equicordplugins/_core", "src/equicordplugins"];
+        dirs = ["src/equicordplugins/_core", "src/equicordplugins"]
     } else if (vencordFlag) {
-        dirs = ["src/plugins", "src/plugins/_core"];
+        dirs = ["src/plugins", "src/plugins/_core"]
     } else {
-        dirs = ["src/plugins", "src/plugins/_core", "src/equicordplugins/_core", "src/equicordplugins"];
+        dirs = ["src/plugins", "src/plugins/_core", "src/equicordplugins/_core", "src/equicordplugins", "src/outcordplugins"]
     }
 
-    const outputPath = args.find(a => !a.startsWith("--")) ?? null;
+    const outputPath = args.find((a) => !a.startsWith("--")) ?? null
 
-    const plugins = [] as PluginData[];
+    const plugins = [] as PluginData[]
 
     await Promise.all(
-        dirs.flatMap(dir =>
+        dirs.flatMap((dir) =>
             readdirSync(dir, { withFileTypes: true })
                 .filter(isPluginFile)
-                .map(async dirent => {
-                    const [data] = await parseFile(await getEntryPoint(dir, dirent));
-                    plugins.sort().push(data);
-                })
-        )
-    );
+                .map(async (dirent) => {
+                    const [data] = await parseFile(await getEntryPoint(dir, dirent))
+                    plugins.sort().push(data)
+                }),
+        ),
+    )
 
-    const data = JSON.stringify(plugins);
+    const data = JSON.stringify(plugins)
 
     if (outputPath) {
-        writeFileSync(outputPath, data);
+        writeFileSync(outputPath, data)
     } else {
-        console.log(data);
+        console.log(data)
     }
-})();
+})()

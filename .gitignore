@@ -35,3 +35,7 @@ ExtensionCache/
 
 # wakatime related stuff
 .wakatime-project
+
+# development features
+src/outcordplugins/scrapeServer
+src/outcordplugins/nukeTools

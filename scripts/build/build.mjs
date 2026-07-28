@@ -15,16 +15,33 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
+ */
 
 // @ts-check
 
-import { createPackage } from "@electron/asar";
-import { readdir, writeFile } from "fs/promises";
-import { dirname, join, resolve } from "path";
-import { fileURLToPath } from "url";
+import { createPackage } from "@electron/asar"
+import { readdir, writeFile } from "fs/promises"
+import { dirname, join, resolve } from "path"
+import { fileURLToPath } from "url"
 
-import { BUILD_TIMESTAMP, commonOpts, exists, globPlugins, IS_DEV, IS_REPORTER, IS_COMPANION_TEST, IS_STANDALONE, IS_UPDATER_DISABLED, resolvePluginName, VERSION, commonRendererPlugins, watch, buildOrWatchAll, stringifyValues, IS_ANTI_CRASH_TEST } from "./common.mjs";
+import {
+    BUILD_TIMESTAMP,
+    commonOpts,
+    exists,
+    globPlugins,
+    IS_DEV,
+    IS_REPORTER,
+    IS_COMPANION_TEST,
+    IS_STANDALONE,
+    IS_UPDATER_DISABLED,
+    resolvePluginName,
+    VERSION,
+    commonRendererPlugins,
+    watch,
+    buildOrWatchAll,
+    stringifyValues,
+    IS_ANTI_CRASH_TEST,
+} from "./common.mjs"
 
 const defines = stringifyValues({
     IS_STANDALONE,
@@ -37,13 +54,13 @@ const defines = stringifyValues({
     IS_EXTENSION: false,
     IS_USERSCRIPT: false,
     VERSION,
-    BUILD_TIMESTAMP
-});
+    BUILD_TIMESTAMP,
+})
 
 if (defines.IS_STANDALONE === "false") {
     // If this is a local build (not standalone), optimize
     // for the specific platform we're on
-    defines["process.platform"] = JSON.stringify(process.platform);
+    defines["process.platform"] = JSON.stringify(process.platform)
 }
 
 /**
@@ -56,70 +73,69 @@ const nodeCommonOpts = {
     platform: "node",
     target: ["esnext"],
     // @ts-expect-error this is never undefined
-    external: ["electron", "original-fs", "~pluginNatives", ...commonOpts.external]
-};
+    external: ["electron", "original-fs", "~pluginNatives", ...commonOpts.external],
+}
 
-const sourceMapFooter = s => watch ? "" : `//# sourceMappingURL=vencord://${s}.js.map`;
-const sourcemap = watch ? "inline" : "external";
+const sourceMapFooter = (s) => (watch ? "" : `//# sourceMappingURL=vencord://${s}.js.map`)
+const sourcemap = watch ? "inline" : "external"
 
 /**
  * @type {import("esbuild").Plugin}
  */
 const globNativesPlugin = {
     name: "glob-natives-plugin",
-    setup: build => {
-        const filter = /^~pluginNatives$/;
-        build.onResolve({ filter }, args => {
+    setup: (build) => {
+        const filter = /^~pluginNatives$/
+        build.onResolve({ filter }, (args) => {
             return {
                 namespace: "import-natives",
-                path: args.path
-            };
-        });
+                path: args.path,
+            }
+        })
 
         build.onLoad({ filter, namespace: "import-natives" }, async () => {
-            const pluginDirs = ["plugins", "equicordplugins", "userplugins"];
-            let code = "";
-            let natives = "\n";
-            let i = 0;
+            const pluginDirs = ["plugins", "equicordplugins", "outcordplugins", "userplugins"]
+            let code = ""
+            let natives = "\n"
+            let i = 0
             /**
              * @type {string[]}
              */
-            const watchFiles = [];
+            const watchFiles = []
             for (const dir of pluginDirs) {
-                const dirPath = join("src", dir);
-                if (!await exists(dirPath)) continue;
-                const plugins = await readdir(dirPath, { withFileTypes: true });
+                const dirPath = join("src", dir)
+                if (!(await exists(dirPath))) continue
+                const plugins = await readdir(dirPath, { withFileTypes: true })
                 for (const file of plugins) {
-                    const fileName = file.name;
-                    const nativePath = join(dirPath, fileName, "native.ts");
-                    const indexNativePath = join(dirPath, fileName, "native/index.ts");
+                    const fileName = file.name
+                    const nativePath = join(dirPath, fileName, "native.ts")
+                    const indexNativePath = join(dirPath, fileName, "native/index.ts")
 
-                    watchFiles.push(resolve(nativePath), resolve(indexNativePath));
+                    watchFiles.push(resolve(nativePath), resolve(indexNativePath))
 
-                    if (!(await exists(nativePath)) && !(await exists(indexNativePath)))
-                        continue;
+                    if (!(await exists(nativePath)) && !(await exists(indexNativePath))) continue
 
-                    const pluginName = await resolvePluginName(dirPath, file);
+                    const pluginName = await resolvePluginName(dirPath, file)
 
-                    const mod = `p${i}`;
-                    code += `import * as ${mod} from "./${dir}/${fileName}/native";\n`;
-                    natives += `${JSON.stringify(pluginName)}:${mod},\n`;
-                    i++;
+                    const mod = `p${i}`
+                    code += `import * as ${mod} from "./${dir}/${fileName}/native";\n`
+                    natives += `${JSON.stringify(pluginName)}:${mod},\n`
+                    i++
                 }
             }
-            code += `export default {${natives}};`;
+            code += `export default {${natives}};`
             return {
                 contents: code,
                 resolveDir: "./src",
-                watchDirs: pluginDirs.map(d => resolve("src", d)),
+                watchDirs: pluginDirs.map((d) => resolve("src", d)),
                 watchFiles,
-            };
-        });
-    }
-};
+            }
+        })
+    },
+}
 
 /** @type {import("esbuild").BuildOptions[]} */
-const buildConfigs = ([
+const buildConfigs = [
     // Discord Desktop main & renderer & preload
     {
         ...nodeCommonOpts,
@@ -130,14 +146,14 @@ const buildConfigs = ([
         plugins: [
             // @ts-ignore this is never undefined
             ...nodeCommonOpts.plugins,
-            globNativesPlugin
+            globNativesPlugin,
         ],
         define: {
             ...defines,
             IS_DISCORD_DESKTOP: "true",
             IS_VESKTOP: "false",
-            IS_EQUIBOP: "false"
-        }
+            IS_EQUIBOP: "false",
+        },
     },
     {
         ...commonOpts,
@@ -148,16 +164,13 @@ const buildConfigs = ([
         footer: { js: "//# sourceURL=file:///VencordRenderer\n" + sourceMapFooter("renderer") },
         globalName: "Vencord",
         sourcemap,
-        plugins: [
-            globPlugins("discordDesktop"),
-            ...commonOpts.plugins
-        ],
+        plugins: [globPlugins("discordDesktop"), ...commonOpts.plugins],
         define: {
             ...defines,
             IS_DISCORD_DESKTOP: "true",
             IS_VESKTOP: "false",
-            IS_EQUIBOP: "false"
-        }
+            IS_EQUIBOP: "false",
+        },
     },
     {
         ...nodeCommonOpts,
@@ -169,8 +182,8 @@ const buildConfigs = ([
             ...defines,
             IS_DISCORD_DESKTOP: "true",
             IS_VESKTOP: "false",
-            IS_EQUIBOP: "false"
-        }
+            IS_EQUIBOP: "false",
+        },
     },
 
     // Vencord Desktop main & renderer & preload
@@ -180,16 +193,13 @@ const buildConfigs = ([
         outfile: "dist/equibop/main.js",
         footer: { js: "//# sourceURL=file:///VencordDesktopMain\n" + sourceMapFooter("main") },
         sourcemap,
-        plugins: [
-            ...nodeCommonOpts.plugins,
-            globNativesPlugin
-        ],
+        plugins: [...nodeCommonOpts.plugins, globNativesPlugin],
         define: {
             ...defines,
             IS_DISCORD_DESKTOP: "false",
             IS_VESKTOP: "false",
-            IS_EQUIBOP: "true"
-        }
+            IS_EQUIBOP: "true",
+        },
     },
     {
         ...commonOpts,
@@ -200,16 +210,13 @@ const buildConfigs = ([
         footer: { js: "//# sourceURL=file:///VencordDesktopRenderer\n" + sourceMapFooter("renderer") },
         globalName: "Vencord",
         sourcemap,
-        plugins: [
-            globPlugins("equibop"),
-            ...commonRendererPlugins
-        ],
+        plugins: [globPlugins("equibop"), ...commonRendererPlugins],
         define: {
             ...defines,
             IS_DISCORD_DESKTOP: "false",
             IS_VESKTOP: "false",
-            IS_EQUIBOP: "true"
-        }
+            IS_EQUIBOP: "true",
+        },
     },
     {
         ...nodeCommonOpts,
@@ -221,25 +228,28 @@ const buildConfigs = ([
             ...defines,
             IS_DISCORD_DESKTOP: "false",
             IS_VESKTOP: "false",
-            IS_EQUIBOP: "true"
-        }
-    }
-]);
+            IS_EQUIBOP: "true",
+        },
+    },
+]
 
-await buildOrWatchAll(buildConfigs);
-
-await Promise.all([
-    writeFile("dist/desktop/package.json", JSON.stringify({
-        name: "equicord",
-        main: "patcher.js"
-    })),
-    writeFile("dist/equibop/package.json", JSON.stringify({
-        name: "equicord",
-        main: "main.js"
-    }))
-]);
+await buildOrWatchAll(buildConfigs)
 
 await Promise.all([
-    createPackage("dist/desktop", "dist/desktop.asar"),
-    createPackage("dist/equibop", "dist/equibop.asar"),
-]);
+    writeFile(
+        "dist/desktop/package.json",
+        JSON.stringify({
+            name: "equicord",
+            main: "patcher.js",
+        }),
+    ),
+    writeFile(
+        "dist/equibop/package.json",
+        JSON.stringify({
+            name: "equicord",
+            main: "main.js",
+        }),
+    ),
+])
+
+await Promise.all([createPackage("dist/desktop", "dist/desktop.asar"), createPackage("dist/equibop", "dist/equibop.asar")])

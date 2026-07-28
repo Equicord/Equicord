@@ -5,14 +5,7 @@
         "esModuleInterop": true,
         "skipLibCheck": false,
         "allowJs": true,
-        "lib": [
-            "DOM",
-            "DOM.Iterable",
-            "esnext",
-            "esnext.array",
-            "esnext.asynciterable",
-            "esnext.symbol"
-        ],
+        "lib": ["DOM", "DOM.Iterable", "esnext", "esnext.array", "esnext.asynciterable", "esnext.symbol"],
         "module": "esnext",
         "moduleResolution": "bundler",
         "strict": true,
@@ -20,62 +13,30 @@
         "target": "ESNEXT",
         "jsx": "preserve",
         "paths": {
-            "@main/*": [
-                "./src/main/*"
-            ],
-            "@api/*": [
-                "./src/api/*"
-            ],
-            "@components/*": [
-                "./src/components/*"
-            ],
-            "@debug/*": [
-                "./src/debug/*"
-            ],
-            "@utils/*": [
-                "./src/utils/*"
-            ],
-            "@plugins/*": [
-                "./src/plugins/*"
-            ],
-            "@shared/*": [
-                "./src/shared/*"
-            ],
-            "@webpack/common": [
-                "./src/webpack/common"
-            ],
-            "@webpack/common/*": [
-                "./src/webpack/common/*"
-            ],
-            "@webpack": [
-                "./src/webpack/webpack"
-            ],
-            "@webpack/patcher": [
-                "./src/webpack/patchWebpack"
-            ],
-            "@webpack/wreq.d": [
-                "./src/webpack/wreq.d"
-            ],
-            "@webpack/types": [
-                "./src/webpack/types"
-            ],
-            "@equicordplugins/*": [
-                "./src/equicordplugins/*"
-            ]
+            "@main/*": ["./src/main/*"],
+            "@api/*": ["./src/api/*"],
+            "@components/*": ["./src/components/*"],
+            "@debug/*": ["./src/debug/*"],
+            "@utils/*": ["./src/utils/*"],
+            "@plugins/*": ["./src/plugins/*"],
+            "@shared/*": ["./src/shared/*"],
+            "@webpack/common": ["./src/webpack/common"],
+            "@webpack/common/*": ["./src/webpack/common/*"],
+            "@webpack": ["./src/webpack/webpack"],
+            "@webpack/patcher": ["./src/webpack/patchWebpack"],
+            "@webpack/wreq.d": ["./src/webpack/wreq.d"],
+            "@webpack/types": ["./src/webpack/types"],
+            "@equicordplugins/*": ["./src/equicordplugins/*"],
+            "@outcordplugins/*": ["./src/outcordplugins/*"],
         },
         "plugins": [
             // Transform paths in output .d.ts files (Include this line if you output declarations files)
             {
                 "transform": "typescript-transform-paths",
-                "afterDeclarations": true
-            }
+                "afterDeclarations": true,
+            },
         ],
-        "outDir": "who-fucking-cares-dude"
+        "outDir": "who-fucking-cares-dude",
     },
-    "include": [
-        "src/**/*",
-        "browser/**/*",
-        "scripts/**/*",
-        "eslint.config.mjs"
-    ],
+    "include": ["src/**/*", "browser/**/*", "scripts/**/*", "eslint.config.mjs"],
 }
