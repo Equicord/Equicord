@@ -1,0 +1,13 @@
+.vc-excludeGifsFromSearch-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: 12px;
+}
+
+.vc-excludeGifsFromSearch-toggle-label {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--header-secondary);
+    white-space: nowrap;
+}
