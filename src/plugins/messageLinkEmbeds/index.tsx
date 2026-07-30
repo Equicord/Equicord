@@ -16,8 +16,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import "./styles.css"
-
 import { addMessageAccessory, removeMessageAccessory } from "@api/MessageAccessories"
 import { updateMessage } from "@api/MessageUpdater"
 import { definePluginSettings } from "@api/Settings"
