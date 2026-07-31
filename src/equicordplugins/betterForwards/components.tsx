@@ -8,6 +8,7 @@ import { BaseText } from "@components/BaseText";
 import { Flex, FlexProps } from "@components/Flex";
 import { RightArrow } from "@components/Icons";
 import { iconsModule } from "@equicordplugins/_core/concatenatedModules";
+import { getIntlMessage } from "@utils/discord";
 import { Channel, Guild, Icon, MessageAttachment } from "@vencord/discord-types";
 import { findByCodeLazy, findComponentByCodeLazy, findCssClassesLazy } from "@webpack";
 import { ChannelStore, DateUtils, GuildStore, IconUtils, NavigationRouter, Popout, React, RelationshipStore, SelectedGuildStore, SnowflakeUtils, useMemo, useRef, UserStore, useStateFromStores } from "@webpack/common";
@@ -63,11 +64,11 @@ export function ChannelName({ guildId, channelId, messageId }: { guildId?: strin
     const channel = useStateFromStores([ChannelStore], () => ChannelStore.getChannel(channelId), [channelId]);
     const name: ReactNode = useStateFromStores(
         [UserStore, RelationshipStore],
-        () => channel && formatChannelName(channel, UserStore, RelationshipStore, false, false),
+        () => channel ? formatChannelName(channel, UserStore, RelationshipStore, false, false) : getIntlMessage("UNKNOWN_CHANNEL"),
         [channelId]
     );
 
-    const Icon = useMemo(() => getChannelIcon(channel), [channel]);
+    const Icon = useMemo(() => channel ? getChannelIcon(channel) : iconsModule.TextIcon, [channel]);
 
     return (
         name && (

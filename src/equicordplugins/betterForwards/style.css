@@ -40,6 +40,11 @@
         border-radius: 4px;
         vertical-align: middle;
         color: var(--text-muted);
+
+        svg,
+        img {
+            flex-shrink: 0;
+        }
     }
 }
 
