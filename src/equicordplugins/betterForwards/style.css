@@ -39,6 +39,7 @@
         padding: 1px 0 1px 2px;
         border-radius: 4px;
         vertical-align: middle;
+        color: var(--text-muted);
     }
 }
 
@@ -48,6 +49,26 @@
     text-overflow: ellipsis;
 }
 
-[class^="forwardPreview"] > [class^="contentWrapper"] {
-    overflow: hidden;
+[class^="forwardPreview"] {
+    height: fit-content;
+
+    > [class^="contentWrapper"] {
+        max-height: 250px;
+        overflow-y: auto;
+        scrollbar-width: thin;
+
+        > [class^="forwardPreviewMessage"] {
+            flex-shrink: 0;
+        }
+
+        [class^="tagGroup"] > [class^="tag"] {
+            text-wrap: nowrap !important;
+            min-width: 0;
+
+            .vc-text-base {
+                text-overflow: ellipsis;
+                overflow: hidden;
+            }
+        }
+    }
 }
