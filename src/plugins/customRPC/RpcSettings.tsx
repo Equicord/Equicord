@@ -6,20 +6,54 @@
 
 import "./settings.css";
 
+import * as DataStore from "@api/DataStore";
 import { isPluginEnabled } from "@api/PluginManager";
 import { Divider } from "@components/Divider";
 import { Heading } from "@components/Heading";
 import { resolveError } from "@components/settings/tabs/plugins/components/Common";
 import { debounce } from "@shared/debounce";
 import { classNameFactory } from "@utils/css";
+import { useAwaiter } from "@utils/react";
 import { ActivityType } from "@vencord/discord-types/enums";
-import { Select, Text, TextInput, useState } from "@webpack/common";
+import { Button, Select, showToast, Text, TextInput, Toasts, useState } from "@webpack/common";
 
-import CustomRPCPlugin, { setRpc, settings, TimestampMode } from ".";
+import CustomRPCPlugin, { type RpcConfig, setRpc, settings, TimestampMode } from ".";
 
 const cl = classNameFactory("vc-customRPC-settings-");
+const PRESETS_KEY = "CustomRPC_presets";
+const REACTIVE_SETTINGS_KEYS = ["type", "timestampMode"] satisfies (keyof RpcConfig)[];
+const RPC_SETTINGS_KEYS = [
+    "appID",
+    "appName",
+    "details",
+    "detailsURL",
+    "state",
+    "stateURL",
+    "type",
+    "streamLink",
+    "timestampMode",
+    "startTime",
+    "endTime",
+    "imageBig",
+    "imageBigURL",
+    "imageBigTooltip",
+    "imageSmall",
+    "imageSmallURL",
+    "imageSmallTooltip",
+    "buttonOneText",
+    "buttonOneURL",
+    "buttonTwoText",
+    "buttonTwoURL",
+    "partySize",
+    "partyMaxSize",
+] as const satisfies readonly (keyof RpcConfig)[];
 
 type SettingsKey = keyof typeof settings.store;
+
+interface RpcPreset {
+    name: string;
+    config: RpcConfig;
+}
 
 interface TextOption<T> {
     settingsKey: SettingsKey;
@@ -151,11 +185,89 @@ function SelectSetting<T>({ settingsKey, label, options, disabled }: SelectOptio
     );
 }
 
-export function RPCSettings() {
-    const s = settings.use();
+function getCurrentConfig() {
+    return Object.fromEntries(RPC_SETTINGS_KEYS.map(key => [key, settings.store[key]])) as RpcConfig;
+}
+
+function PresetSettings({ onLoad }: { onLoad(): void; }) {
+    const [storedPresets] = useAwaiter(async () => await DataStore.get<RpcPreset[]>(PRESETS_KEY) ?? [], { fallbackValue: [] });
+    const [changedPresets, setChangedPresets] = useState<RpcPreset[] | null>(null);
+    const [presetName, setPresetName] = useState("");
+    const [selectedPreset, setSelectedPreset] = useState("");
+    const presets = changedPresets ?? storedPresets;
+
+    async function savePreset() {
+        const name = presetName.trim();
+        if (!name) return;
+
+        const nextPresets = [
+            ...presets.filter(preset => preset.name !== name),
+            { name, config: getCurrentConfig() }
+        ].sort((a, b) => a.name.localeCompare(b.name));
+
+        await DataStore.set(PRESETS_KEY, nextPresets);
+        setChangedPresets(nextPresets);
+        setSelectedPreset(name);
+        showToast(`Saved preset ${name}.`, Toasts.Type.SUCCESS);
+    }
+
+    function loadPreset() {
+        const preset = presets.find(preset => preset.name === selectedPreset);
+        if (!preset) return;
+
+        Object.assign(settings.store, Object.fromEntries(RPC_SETTINGS_KEYS.map(key => [key, preset.config[key]])));
+        onLoad();
+        updateRPC();
+        showToast(`Loaded preset ${preset.name}.`, Toasts.Type.SUCCESS);
+    }
+
+    async function deletePreset() {
+        const nextPresets = presets.filter(preset => preset.name !== selectedPreset);
+        if (nextPresets.length === presets.length) return;
+
+        await DataStore.set(PRESETS_KEY, nextPresets);
+        setChangedPresets(nextPresets);
+        setSelectedPreset("");
+        showToast(`Deleted preset ${selectedPreset}.`, Toasts.Type.SUCCESS);
+    }
 
     return (
-        <div className={cl("root")}>
+        <div className={cl("presets")}>
+            <Heading tag="h5">Presets</Heading>
+            <div className={cl("preset-create")}>
+                <TextInput
+                    type="text"
+                    placeholder="Preset name"
+                    value={presetName}
+                    onChange={setPresetName}
+                />
+                <Button disabled={!presetName.trim()} onClick={savePreset}>Save</Button>
+            </div>
+            {presets.length ? (
+                <div className={cl("preset-actions")}>
+                    <Select
+                        placeholder="Select a preset"
+                        options={presets.map(preset => ({ label: preset.name, value: preset.name }))}
+                        closeOnSelect={true}
+                        select={setSelectedPreset}
+                        isSelected={value => value === selectedPreset}
+                        serialize={String}
+                    />
+                    <Button disabled={!selectedPreset} onClick={loadPreset}>Load</Button>
+                    <Button color={Button.Colors.RED} disabled={!selectedPreset} onClick={deletePreset}>Delete</Button>
+                </div>
+            ) : (
+                <Text variant="text-sm/normal">No saved presets yet.</Text>
+            )}
+        </div>
+    );
+}
+
+function RPCFields() {
+    const s = settings.use(REACTIVE_SETTINGS_KEYS);
+
+    return (
+        <>
             <SelectSetting
                 settingsKey="type"
                 label="Activity Type"
@@ -290,6 +402,18 @@ export function RPCSettings() {
                     disabled: s.timestampMode !== TimestampMode.CUSTOM,
                 },
             ]} />
+        </>
+    );
+}
+
+export function RPCSettings() {
+    const [formVersion, setFormVersion] = useState(0);
+
+    return (
+        <div className={cl("root")}>
+            <PresetSettings onLoad={() => setFormVersion(version => version + 1)} />
+            <Divider />
+            <RPCFields key={formVersion} />
         </div>
     );
 }
