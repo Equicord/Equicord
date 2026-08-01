@@ -116,7 +116,7 @@
     "arRPC": {
         "connected": "Połączono z arRPC",
         "connectionFailed": "Nie udało się połączyć z arRPC, czy działa?",
-        "description": "",
+        "description": "Wtyczka arRPC umożliwiająca korzystanie z RPC w przeglądarce Discord",
         "retry": "Ponów",
         "settingsAbout": {
             "description": "Postępuj zgodnie z instrukcjami w repozytorium GitHub, aby uruchomić serwer, a następnie włącz wtyczkę.",
@@ -140,6 +140,7 @@
         "description": "API do dodawania odznak użytkownikom"
     },
     "betterFolders": {
+        "description": "Wyświetla foldery serwera w osobnym pasku bocznym i wprowadza ulepszenia związane z folderami.",
         "settings": {
             "closeAllFolders": "Zamknij wszystkie foldery, jeśli wybierzesz serwer, który nie znajduje się w folderze",
             "closeAllHomeButton": "Zamknij wszystkie foldery po kliknięciu przycisku strony głównej",
@@ -275,6 +276,7 @@
             "failedToDelete": "Nie można usunąć ustawień ([[PH0]]]).",
             "failedToSync": "Nie można zsynchronizować ustawień z chmurą ([[PH0]]]).",
             "header": "Ustawienia chmury",
+            "manifest": "Nie udało się pobrać manifestu do usunięcia (API zwróciło {e}).",
             "newerThanCloud": "Twoje ustawienia lokalne są nowsze niż te w chmurze.",
             "noSettings": "W chmurze nie ma żadnych ustawień.",
             "success": "Zsynchronizowane ustawienia z chmurą!",
@@ -282,7 +284,7 @@
             "syncedCloud": "Zsynchronizowano z chmurą.",
             "upToDate": "Twoje ustawienia są aktualne.",
             "updated": "Twoje ustawienia zostały zaktualizowane! Kliknij tutaj, aby uruchomić ponownie i w pełni zastosować zmiany!",
-            "updatedRemote": "Twoje ustawienia zostały zaktualizowane! Kliknij tutaj, aby uruchomić ponownie i w pełni zastosować zmiany!"
+            "updatedRemote": "Ustawienia zsynchronizowane z chmurą!"
         }
     },
     "colorSighted": {
@@ -455,6 +457,7 @@
     "decor": {
         "accessFromProfiles": "Dostęp do dekoracji Decor można także uzyskać ze strony {link}.",
         "agreedToGuidelines": "Zaakceptowano wytyczne",
+        "alreadyPending": "Posiadasz już jedną dekorację oczekującą na weryfikację.",
         "apply": "Zastosuj",
         "browse": "Przeglądaj",
         "changeDecoration": "Zmień dekorację",
@@ -468,16 +471,28 @@
         "delete": "Usuń",
         "deleteConfirm": "Czy na pewno chcesz usunąć {name}?",
         "deleteDecoration": "Usuń Dekoracje",
+        "deleteInstructions": "Możesz usunąć swoje dekoracje, klikając je prawym przyciskiem myszy.",
         "description": "Twórz i używaj własnych dekoracji awatarów lub wybierz ulubione z gotowych ustawień.",
+        "discordServerNotice": "Aby otrzymywać powiadomienia dotyczące weryfikacji twojej dekoracji, dołącz do {link} i zezwól na wysyłanie bezpośrednich wiadomości.",
+        "discordTooltip": "Dołącz do serwera Decor na Discordzie, aby otrzymywać powiadomienia o recenzjach Twoich dekoracji oraz o premierach nowych presetów.",
         "enableAndRestart": "Włącz Decor i uruchom ponownie klienta, aby zmienić dekorację awatara.",
         "file": "Plik",
         "fileNotice": "Plik powinien być w formacie APNG lub PNG.",
         "guidelinesAgreementNotice": "Przesyłając dekorację, akceptujesz {guidelines}. Nieprzeczytanie tych wytycznych może skutkować zawieszeniem Twojego konta i odebraniem możliwości tworzenia kolejnych dekoracji w przyszłości.",
+        "guidelinesNotice": "Przed przesłaniem dekoracji upewnij się, że nie narusza ona {wytycznych}.",
         "holdOn": "Zaczekaj",
+        "logOut": "Wyloguj",
+        "name": "Nazwa",
+        "nameNotice": "Ta nazwa będzie używana w odniesieniu do tej dekoracji.",
         "options": "Opcje Dekoracji",
+        "pendingReview": "Oczekuje na weryfikację",
+        "presetPart": "Część zestawu {name}",
         "profilesLink": "Profile",
         "removeDecoration": "Usuń dekorację",
-        "title": "Dekoracje"
+        "submitForReview": "Prześlij do weryfikacji",
+        "theGuidelines": "wytyczne",
+        "title": "Dekoracje",
+        "yourDecorations": "Twoje Dekoracje"
     },
     "devCompanion": {
         "description": "Wtyczka towarzysząca deweloperom. Proszę zgłaszać wszystko, co nie działa lub jest dziwne (najprawdopodobniej jest to błąd) do sadan, albo poprzez ping, albo dm, dzięki!",
@@ -552,6 +567,7 @@
             "body3": "Czy na pewno chcesz wysłać tę wiadomość? Twoje przedmioty FakeNitro pojawią się jedynie jako linki.",
             "disableNotice": "Możesz wyłączyć to powiadomienie w ustawieniach wtyczki."
         },
+        "ok": "OK",
         "sendAnyway": "Wyślij mimo to",
         "settings": {
             "disableEmbedPermissionCheck": "Określa, czy wyłączyć sprawdzanie uprawnień do osadzania podczas wysyłania fałszywych emoji i naklejek",
@@ -724,6 +740,7 @@
         "description": "Nie ukrywaj wiadomości od „prawdopodobnych spamerów”"
     },
     "ignoreActivities": {
+        "description": "Ignoruj wyświetlanie aktywności WYŁĄCZNIE w swoim statusie. Możesz określić, które z nich mają być ignorowane, w zakładkach „Zarejestrowane gry” i „Aktywności” lub skorzystać z poniższych ustawień ogólnych.",
         "disableActivity": "Wyłącz aktywność",
         "enableActivity": "Włącz aktywność",
         "filterList": {
@@ -757,6 +774,7 @@
         "description": "Nigdy nie ukrywaj linków do obrazów w wiadomościach, nawet jeśli jest to jedyna treść"
     },
     "imageZoom": {
+        "description": "Umożliwia powiększanie obrazów i plików GIF. Użyj kółka myszy, aby powiększyć, a kombinację klawiszy Shift + kółko myszy, aby zwiększyć promień obiektywu / rozmiar.",
         "lensSize": "Rozmiar obiektywu",
         "nearestNeighbour": "Najbliższy sąsiad",
         "settings": {
@@ -865,6 +883,7 @@
         "showLogs": "Pokaż logi"
     },
     "memberCount": {
+        "description": "Wyświetla liczbę dostępnych członków, całkowitą liczbę członków oraz liczbę użytkowników na kanałach głosowych na serwerze — na liście członków oraz w podpowiedzi.",
         "settings": {
             "memberList": "Pokaż liczbę członków na liście członków",
             "toolTip": "Pokaż liczbę członków w podpowiedzi serwera",
@@ -955,6 +974,7 @@
     "messageLatency": {
         "clockAhead": "Zegar tego użytkownika jest o {delta} do przodu.",
         "delayedMessage": "Opóźniona wiadomość",
+        "description": "Wyświetla indykator dla wiadomości, których wysłanie zajęło ≥n sekund",
         "messageDelayed": "Ta wiadomość została wysłana z opóźnieniem {delta}.",
         "oldAndroidClient": "Stary [[PH0]]] klient Androida",
         "oldDiscordAndroid": "Podejrzewa się, że użytkownik korzysta ze starego klienta Androida Discord.",
@@ -1014,6 +1034,7 @@
         "deletedMessages_one": "{count} usunięto wiadomość",
         "deletedMessages_other": "{count} usunięte wiadomości",
         "deletedMessages_zero": "Brak usuniętych wiadomości",
+        "description": "Tymczasowo rejestruje usunięte i edytowane wiadomości.",
         "disableDiffView": "Wyłącz widok różnicowy",
         "editHistory": "Historia edycji wiadomości",
         "enableDiffView": "Włącz widok różnicowy",
@@ -1261,6 +1282,7 @@
         }
     },
     "permissionsViewer": {
+        "description": "Wyświetl uprawnienia użytkownika lub kanału oraz role serwera.",
         "noPermissions": "Brak uprawnień do wyświetlania!",
         "owner": "właściciel",
         "permissions": "Uprawnienia",
@@ -1446,6 +1468,7 @@
         "confirmDelete": "Czy na pewno chcesz usunąć tę recenzję?",
         "confirmReport": "Czy na pewno chcesz zgłosić tę recenzję?",
         "delete": "Usuń",
+        "description": "Oceniaj innych użytkowników (Dodaje nową opcję do profili)",
         "failedToFetchBlocks": "Nie udało się pobrać bloków: {error}",
         "mustBeLoggedInBlock": "Aby blokować użytkowników musisz być zalogowany.",
         "mustBeLoggedInDelete": "Aby usuwać recenzje, musisz się zalogować.",
@@ -1453,6 +1476,7 @@
         "nevermind": "Nieważne",
         "newReviews": "Masz nowe recenzje na swoim profilu!",
         "noBlockedUsers": "Brak zablokowanych użytkowników.",
+        "noReviewsYet": "Jeszcze nie ma żadnych recenzji",
         "notLoggedIn": "Nie jesteś zalogowany do ReviewDB!",
         "ok": "OK",
         "readMore": "Przeczytaj więcej",
@@ -1478,6 +1502,8 @@
         },
         "system": "System",
         "unblockUser": "Odblokuj użytkownika",
+        "userOptedOut": "Użytkownik zrezygnował",
+        "userReviews": "Opinie użytkowników",
         "viewReviews": "Zobacz recenzje"
     },
     "roleColorEverywhere": {
@@ -1636,7 +1662,7 @@
         },
         "frameless": {
             "description": "Usuń natywną ramę okna, aby uzyskać czystszy wygląd. Nadal możesz przesuwać okno, przeciągając obszar paska tytułu.",
-            "title": "Wyłącz ramę okna"
+            "title": "Wyłącz wszystkie ramki okien"
         },
         "hint": "Wskazówka: możesz zmienić położenie tej sekcji ustawień w <0>ustawieniach wtyczki Ustawienia</0>!",
         "macosVibrancyStyle": {
@@ -1685,6 +1711,16 @@
             "description": "Zastąp niestandardowy pasek tytułu Discord standardowym paskiem tytułu systemu Windows. Może to poprawić kompatybilność z niektórymi narzędziami do zarządzania oknami.",
             "title": "Użyj natywnego paska tytułu systemu Windows zamiast niestandardowego paska tytułu Discord."
         }
+    },
+    "settingsPlugin": {
+        "aboveActivity": "Powyżej ustawień aktywności",
+        "aboveNitro": "Nad sekcją Nitro",
+        "belowActivity": "Poniżej ustawień aktywności",
+        "belowNitro": "Pod sekcją Nitro",
+        "bottom": "Na samym dole",
+        "description": "Dodaje interfejs użytkownika ustawień oraz informacje debugowania",
+        "settingsLocation": "Gdzie umieścić sekcję ustawień Equicord",
+        "top": "Na samym szczycie"
     },
     "settingsSync": {
         "failedToImport": "Nie udało się zaimportować ustawień: {e}",
@@ -1948,23 +1984,33 @@
         }
     },
     "supportHelper": {
-        "description": "Pomaga nam w zapewnieniu wsparcia dla Ciebie"
+        "debug": "Wysyłaj informacje dotyczące debugowania Equicord",
+        "description": "Pomaga nam w zapewnieniu wsparcia dla Ciebie",
+        "plugins": "Wyślij listę wtyczek Equicord"
     },
     "tabs": {
         "settings": "Equicord Ustawienia"
     },
     "textReplace": {
+        "description": "Zastąp tekst w swoich wiadomościach lub wiadomościach innych użytkowników. Gotowe reguły znajdziesz na kanale #textreplace-rules na serwerze Vencord.",
         "find": "Szukaj",
+        "findDesc": "Tekst do zastąpienia",
+        "findDescRegex": "Wzór Regex",
         "messageWithRules": "Wiadomość z zastosowanymi regułami",
         "onlyIfIncludes": "Tylko jeśli zawiera",
+        "onlyIfIncludesDesc": "Ta reguła zostanie zastosowana tylko wtedy, gdy wiadomość zawiera ten tekst. Jest to opcjonalne.",
+        "regexRules": "Bardziej zaawansowane metody zamiany z wykorzystaniem Regex. Ta sekcja jest przeznaczona dla zaawansowanych użytkowników. Jeśli nie rozumiesz jej treści, po prostu ją zignoruj.",
         "replace": "Zastępować",
+        "replaceDesc": "Tekst, który ma zastąpić znaleziony tekst.",
         "scope.allMessages": "Apply to all messages",
         "scope.myMessages": "Apply to your messages (visible to everyone)",
         "scope.othersMessages": "Apply to others' messages (only visible to you)",
+        "stringRules": "Proste reguły wyszukiwania i zamiany. Na przykład: wyszukaj „zw” i zamień to na „zaraz wracam”",
+        "testMessage": "Wpisz wiadomość, aby przetestować zasady Regex",
         "testRules": "Zasady testu",
         "typeMessage": "Wpisz wiadomość",
-        "usingRegex": "Korzystanie z Regexa",
-        "usingString": "Używanie ciągu"
+        "usingRegex": "Zastąpienia za pomocą Regex",
+        "usingString": "Proste Zastąpienia"
     },
     "themeAttributes": {
         "description": "Dodaje atrybuty danych do różnych elementów w celach tematycznych"
@@ -1976,6 +2022,7 @@
             "title": "Equicord Automatyczne tłumaczenie włączone"
         },
         "autoTranslateEnabledLabel": "Automatyczne tłumaczenie włączone",
+        "description": "Przetłumacz wiadomości za pomocą Google Translate lub DeepL",
         "disableAutoTranslate": "Wyłącz automatyczne tłumaczenie",
         "dontShowAgain": "Nie pokazuj więcej",
         "gotIt": "Rozumiem",
@@ -1990,7 +2037,8 @@
             "forceLocale": {
                 "description": "Wymuś inny język dla Equicord",
                 "followDiscord": "Domyślne (zgodnie z Discordem)"
-            }
+            },
+            "showMissingKeys": "Jeśli w bieżącej lokalizacji brakuje tłumaczeń, należy wyświetlić klucze zamiast przechodzić na język angielski."
         }
     },
     "typingIndicator": {
@@ -2106,6 +2154,11 @@
         },
         "speechSynthesisNotSupported": "Synteza mowy nie jest obsługiwana lub nie znaleziono głosów Narratora. Dlatego ta wtyczka nie będzie działać. Sprawdź moje Ustawienia, aby uzyskać więcej informacji"
     },
+    "vencordDonor": {
+        "description": "Ta odznaka stanowi specjalną korzyść dla darczyńców Vencord",
+        "description2": "Prosimy o rozważenie wsparcia rozwoju Vencord poprzez zostanie darczyńcą. To dla nas bardzo wiele znaczy!!",
+        "title": "Donator Vencord"
+    },
     "viewIcons": {
         "description": "Umożliwia klikanie awatarów i banerów w profilach użytkowników, dodaje wpisy ikon/banerów widoku w menu kontekstowym użytkownika, serwera i kanału grupowego.",
         "settings": {
@@ -2129,6 +2182,7 @@
         "settings": {
             "clickMethodDescription": "Zmień przycisk, aby wyświetlić surową treść/dane dowolnej wiadomości.",
             "leftClick": "Kliknij lewym przyciskiem myszy, aby wyświetlić surową zawartość.",
+            "messageContextMenu": "Wyświetl w menu kontekstu wiadomości",
             "rightClick": "Kliknij prawym przyciskiem myszy, aby wyświetlić surową zawartość."
         },
         "viewRaw": "Zobacz surowe",
@@ -2172,6 +2226,7 @@
         "description": "Usuwa ograniczenie szybkości transmisji bitów do 2500 kb/s na klientach Chromium i Vesktop."
     },
     "whoReacted": {
+        "description": "Wyświetla awatary użytkowników, którzy zareagowali na wiadomość",
         "settings": {
             "avatarClick": "Przełącz kliknięcie awatara w reakcjach"
         }
