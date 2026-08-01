@@ -61,23 +61,21 @@ export function GuildName({ guildId }: { guildId: string; }) {
     useEffect(() => void fetchBasicGuild(guildId), [guildId]);
 
     return (
-        guild && (
-            <Popout
-                position="top"
-                renderPopout={() => <ServerProfileComponent guildId={guildId} />}
-                targetElementRef={guildDivRef}
-            >
-                {popoutProps => (
-                    <div ref={guildDivRef} className={cl("footer-element")} {...popoutProps}>
-                        {icon}
-                        <BaseText size="sm" weight="medium" className={cl("footer-text")}>
-                            {guild ? guild.name : "View server"}
-                        </BaseText>
-                        <RightArrow width={12} height={12} fill="currentColor" />
-                    </div>
-                )}
-            </Popout>
-        )
+        <Popout
+            position="top"
+            renderPopout={() => <ServerProfileComponent guildId={guildId} />}
+            targetElementRef={guildDivRef}
+        >
+            {popoutProps => (
+                <div ref={guildDivRef} className={cl("footer-element")} {...popoutProps}>
+                    {icon}
+                    <BaseText size="sm" weight="medium" className={cl("footer-text")}>
+                        {guild ? guild.name : "View server"}
+                    </BaseText>
+                    <RightArrow width={12} height={12} fill="currentColor" />
+                </div>
+            )}
+        </Popout>
     );
 }
 
@@ -126,19 +124,17 @@ export function ChannelName({ guildId, channelId, messageId }: { guildId?: strin
     }, [channel, guildId, name]);
 
     return (
-        name && (
-            <div
-                className={cl("footer-element")}
-                onClick={() => navigateTo(guildId ?? "@me", channelId, messageId)}
-                onMouseEnter={() => ChannelActionCreators.preload(guildId ?? "@me", channelId)}
-            >
-                {icon}
-                <BaseText size="sm" weight="medium" className={cl("footer-text")}>
-                    {name}
-                </BaseText>
-                <RightArrow width={12} height={12} fill="currentColor" />
-            </div>
-        )
+        <div
+            className={cl("footer-element")}
+            onClick={() => navigateTo(guildId ?? "@me", channelId, messageId)}
+            onMouseEnter={() => ChannelActionCreators.preload(guildId ?? "@me", channelId)}
+        >
+            {icon}
+            <BaseText size="sm" weight="medium" className={cl("footer-text")}>
+                {name}
+            </BaseText>
+            <RightArrow width={12} height={12} fill="currentColor" />
+        </div>
     );
 }
 
