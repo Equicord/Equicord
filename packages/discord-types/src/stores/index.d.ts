@@ -6,6 +6,7 @@ export * from "./ApplicationStore";
 export * from "./ApplicationStreamingStore";
 export * from "./ApplicationStreamPreviewStore";
 export * from "./AuthenticationStore";
+export * from "./BasicGuildStore";
 export * from "./CallStore";
 export * from "./ChannelRTCStore";
 export * from "./ChannelStore";

@@ -8,10 +8,10 @@ import { BaseText } from "@components/BaseText";
 import { Flex, FlexProps } from "@components/Flex";
 import { RightArrow } from "@components/Icons";
 import { iconsModule } from "@equicordplugins/_core/concatenatedModules";
-import { getIntlMessage } from "@utils/discord";
-import { Channel, Guild, Icon, MessageAttachment } from "@vencord/discord-types";
+import { getGuildAcronym, getIntlMessage } from "@utils/discord";
+import { BasicGuild, Channel, Guild, Icon, MessageAttachment } from "@vencord/discord-types";
 import { findByCodeLazy, findComponentByCodeLazy, findCssClassesLazy } from "@webpack";
-import { ChannelStore, DateUtils, GuildStore, IconUtils, NavigationRouter, Popout, React, RelationshipStore, SelectedGuildStore, SnowflakeUtils, useMemo, useRef, UserStore, useStateFromStores } from "@webpack/common";
+import { BasicGuildStore, ChannelActionCreators, ChannelStore, DateUtils, GuildStore, IconUtils, Popout, React, RelationshipStore, SelectedGuildStore, SnowflakeUtils, useEffect, useMemo, useRef, UserStore, useStateFromStores } from "@webpack/common";
 import { PropsWithChildren, ReactNode } from "react";
 
 import { cl, ForwardOptionsContext, ForwardOptionsState } from ".";
@@ -20,24 +20,44 @@ type AttachmentType = "IMAGE" | "VIDEO" | "CLIP" | "AUDIO" | "VISUAL_PLACEHOLDER
 
 const tagClasses = findCssClassesLazy("tagList", "tagGroup", "tag");
 const ServerProfileComponent = findComponentByCodeLazy("{guildProfile:", "GUILD_PROFILE");
+
 const getAttachmentType: (attachment: MessageAttachment, inlineAttachmentMedia?: boolean) => AttachmentType = findByCodeLazy('"PLAINTEXT_PREVIEW":"OTHER"');
+/** Generates a formatted channel name string based on the channel type */
 const formatChannelName: (channel: Channel, userStore: typeof UserStore, relationshipStore: typeof RelationshipStore, userTagSign?: boolean, channelTagSign?: boolean) => string = findByCodeLazy("#{intl::NO_ACCESS}", "isObfuscated()");
+/** Returns a predefined icon component based on the channel type */
 const getChannelIcon: (channel: Channel, guild?: Guild, options?: Record<string, boolean>) => Icon | null = findByCodeLazy("textFocused:", "isGameInvitesChannel()");
+/** Navigates to a message in the given channel. If the channel is not accessible, it will first try to lurk in the guild and then show an error popups if it fails. */
+const navigateTo: (guildId: string, channelId: string, messageId: string) => Promise<void> = findByCodeLazy('getConfig({location:"channel_mention"})');
+/** Prefetches the {@link BasicGuild} */
+const fetchBasicGuild: (guildId: string) => Promise<void> = findByCodeLazy('type:"BASIC_GUILD_FETCH_SUCCESS"');
 
 export function GuildName({ guildId }: { guildId: string; }) {
-    const guild = useStateFromStores(
-        [GuildStore, SelectedGuildStore],
+    const guild: Guild | BasicGuild | null = useStateFromStores(
+        [GuildStore, BasicGuildStore, SelectedGuildStore],
         () => {
             const current = SelectedGuildStore.getGuildId();
-            return current !== guildId ? GuildStore.getGuild(guildId) : null;
+            return current !== guildId ? GuildStore.getGuild(guildId) ?? BasicGuildStore.getGuild(guildId) : null;
         },
         [guildId]
     );
+
     const icon = useMemo(() => {
-        if (!guild?.icon) return null;
-        return IconUtils.getGuildIconURL({ id: guildId, icon: guild.icon, canAnimate: true, size: 16 });
-    }, [guildId, guild?.icon]);
+        if (!guild) return null;
+
+        return guild.icon ? (
+            <img
+                src={IconUtils.getGuildIconURL({ ...guild, canAnimate: true, size: 16 })}
+                alt={`Server icon for ${guild.name}`}
+                className={cl("guild-icon")}
+            />
+        ) : (
+            <div className={cl("guild-acronym")}>{getGuildAcronym(guild)}</div>
+        );
+    }, [guild]);
+
     const guildDivRef = useRef(null);
+
+    useEffect(() => void fetchBasicGuild(guildId), [guildId]);
 
     return (
         guild && (
@@ -48,7 +68,7 @@ export function GuildName({ guildId }: { guildId: string; }) {
             >
                 {popoutProps => (
                     <div ref={guildDivRef} className={cl("footer-element")} {...popoutProps}>
-                        {icon && <img src={icon} alt={`Server icon for ${guild.name}`} className={cl("guild-icon")} />}
+                        {icon}
                         <BaseText size="sm" weight="medium" className={cl("footer-text")}>
                             {guild ? guild.name : "View server"}
                         </BaseText>
@@ -64,17 +84,26 @@ export function ChannelName({ guildId, channelId, messageId }: { guildId?: strin
     const channel = useStateFromStores([ChannelStore], () => ChannelStore.getChannel(channelId), [channelId]);
     const name: ReactNode = useStateFromStores(
         [UserStore, RelationshipStore],
-        () => channel ? formatChannelName(channel, UserStore, RelationshipStore, false, false) : getIntlMessage("UNKNOWN_CHANNEL"),
-        [channelId]
+        () =>
+            channel ? (
+                formatChannelName(channel, UserStore, RelationshipStore, false, false)
+            ) : (
+                <em>{guildId ? getIntlMessage("UNKNOWN_CHANNEL").toLowerCase() : getIntlMessage("UNKNOWN_USER")}</em>
+            ),
+        [channel, guildId]
     );
 
-    const Icon = useMemo(() => channel ? getChannelIcon(channel) : iconsModule.TextIcon, [channel]);
+    const Icon = useMemo(
+        () => (channel ? getChannelIcon(channel) : guildId ? iconsModule.TextIcon : iconsModule.AtIcon),
+        [channel, guildId]
+    );
 
     return (
         name && (
             <div
                 className={cl("footer-element")}
-                onClick={() => NavigationRouter.transitionTo(`/channels/${guildId ?? "@me"}/${channelId}/${messageId}`)}
+                onClick={() => navigateTo(guildId ?? "@me", channelId, messageId)}
+                onMouseEnter={() => ChannelActionCreators.preload(guildId ?? "@me", channelId)}
             >
                 {Icon && <Icon size="xs" color="currentColor" />}
                 <BaseText size="sm" weight="medium" className={cl("footer-text")}>
