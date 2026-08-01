@@ -595,7 +595,6 @@ function patchFactory(moduleId: PropertyKey, originalFactory: AnyModuleFactory):
                                 id: moduleId
                             });
 
-
                         shouldRestorePrevious = true;
                         break;
                     }

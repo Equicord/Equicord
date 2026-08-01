@@ -212,8 +212,8 @@ export default definePlugin({
             find: "QUEST_HOME)},[]),",
             predicate: () => !getQuestifySettings().disableQuestsEverything && getQuestifySettings().disableSponsoredBanner,
             replacement: {
-                match: /(?<=,{questHomeHero:(\i),isLoading:(\i)}=.{0,300}?ORBS_BALANCE_MENU}\)},\[\]\);)/,
-                replace: "$1=null;$2=false;"
+                match: /(?<=,{questHomeHero:(\i),isLoading:(\i),confirmedEmpty:(\i)}=.{0,300}?ORBS_BALANCE_MENU}\)},\[\]\);)/,
+                replace: "$1=null;$2=false;$3=true;"
             }
         },
         {
@@ -487,7 +487,7 @@ export default definePlugin({
                 },
                 {
                     // If we already applied Questify's sort, skip further sorting.
-                    match: /(?<=\{sortMethod:(\i).{0,750}?return )((\i).sort)/,
+                    match: /(?<=\{sortMethod:(\i).{0,800}?return )((\i).sort)/,
                     replace: "$1===\"questify\"?$3:$2"
                 },
                 {

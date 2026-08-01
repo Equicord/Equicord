@@ -125,7 +125,7 @@ export default definePlugin({
             ]
         },
         {
-            find: "#{intl::QUICKSWITCHER_PROTIP}",
+            find: "#{intl::MfbDzS::raw}",
             replacement: {
                 match: /(?<=renderResults\(\){.{0,100})let{query/,
                 replace: "this.props.results = $self.filteredGuildResults(this.props.results);$&",
