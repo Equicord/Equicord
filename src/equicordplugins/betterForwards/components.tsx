@@ -9,6 +9,7 @@ import { Flex, FlexProps } from "@components/Flex";
 import { RightArrow } from "@components/Icons";
 import { iconsModule } from "@equicordplugins/_core/concatenatedModules";
 import { getGuildAcronym, getIntlMessage } from "@utils/discord";
+import { getUserAvatarUrl } from "@utils/misc";
 import { BasicGuild, Channel, Guild, Icon, MessageAttachment } from "@vencord/discord-types";
 import { findByCodeLazy, findComponentByCodeLazy, findCssClassesLazy } from "@webpack";
 import { BasicGuildStore, ChannelActionCreators, ChannelStore, DateUtils, GuildStore, IconUtils, Popout, React, RelationshipStore, SelectedGuildStore, SnowflakeUtils, useEffect, useMemo, useRef, UserStore, useStateFromStores } from "@webpack/common";
@@ -88,15 +89,41 @@ export function ChannelName({ guildId, channelId, messageId }: { guildId?: strin
             channel ? (
                 formatChannelName(channel, UserStore, RelationshipStore, false, false)
             ) : (
-                <em>{guildId ? getIntlMessage("UNKNOWN_CHANNEL").toLowerCase() : getIntlMessage("UNKNOWN_USER")}</em>
+                <i>{guildId ? getIntlMessage("UNKNOWN_CHANNEL").toLowerCase() : getIntlMessage("UNKNOWN_USER")}</i>
             ),
         [channel, guildId]
     );
 
-    const Icon = useMemo(
-        () => (channel ? getChannelIcon(channel) : guildId ? iconsModule.TextIcon : iconsModule.AtIcon),
-        [channel, guildId]
-    );
+    const icon = useMemo(() => {
+        if (channel?.isDM()) {
+            const [user] = channel.recipients.map(UserStore.getUser).filter(Boolean);
+            if (user)
+                return (
+                    <img
+                        src={getUserAvatarUrl(user, guildId, true, 16)}
+                        alt={`DM icon for ${name}`}
+                        className={cl("user-icon")}
+                    />
+                );
+        }
+
+        if (channel?.isGroupDM()) {
+            return (
+                <img
+                    src={IconUtils.getChannelIconURL({
+                        ...channel,
+                        applicationId: channel.getApplicationId(),
+                        size: 16
+                    })}
+                    alt={`Group DM icon for ${name}`}
+                    className={cl("user-icon")}
+                />
+            );
+        }
+
+        const Icon = (channel && getChannelIcon(channel)) ?? (guildId ? iconsModule.TextIcon : iconsModule.AtIcon);
+        return <Icon size="xs" color="currentColor" />;
+    }, [channel, guildId, name]);
 
     return (
         name && (
@@ -105,7 +132,7 @@ export function ChannelName({ guildId, channelId, messageId }: { guildId?: strin
                 onClick={() => navigateTo(guildId ?? "@me", channelId, messageId)}
                 onMouseEnter={() => ChannelActionCreators.preload(guildId ?? "@me", channelId)}
             >
-                {Icon && <Icon size="xs" color="currentColor" />}
+                {icon}
                 <BaseText size="sm" weight="medium" className={cl("footer-text")}>
                     {name}
                 </BaseText>

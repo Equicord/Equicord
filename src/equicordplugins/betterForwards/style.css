@@ -9,20 +9,28 @@
     }
 
     .vc-betterforwards-guild-icon,
+    .vc-betterforwards-user-icon,
     .vc-betterforwards-guild-acronym {
-        margin-block: 0;
-        border-radius: 4px;
+        margin-right: 2px;
         width: 16px;
         height: 16px;
         flex-shrink: 0;
     }
 
+    .vc-betterforwards-guild-icon {
+        border-radius: 4px;
+    }
+
+    .vc-betterforwards-user-icon {
+        border-radius: 9999px;
+    }
 
     .vc-betterforwards-guild-acronym {
         line-height: 16px;
         text-align: center;
         overflow: hidden;
         font-size: 9.6px;
+        border-radius: 4px;
         white-space: nowrap;
         background-color: var(--background-base-lower);
         color: var(--text-default);
