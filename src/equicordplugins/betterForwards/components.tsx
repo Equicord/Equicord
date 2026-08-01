@@ -33,12 +33,10 @@ const navigateTo: (guildId: string, channelId: string, messageId: string) => Pro
 const fetchBasicGuild: (guildId: string) => Promise<void> = findByCodeLazy('type:"BASIC_GUILD_FETCH_SUCCESS"');
 
 export function GuildName({ guildId }: { guildId: string; }) {
-    const guild: Guild | BasicGuild | null = useStateFromStores(
-        [GuildStore, BasicGuildStore, SelectedGuildStore],
-        () => {
-            const current = SelectedGuildStore.getGuildId();
-            return current !== guildId ? GuildStore.getGuild(guildId) ?? BasicGuildStore.getGuild(guildId) : null;
-        },
+    const currentGuildId = useStateFromStores([SelectedGuildStore], () => SelectedGuildStore.getGuildId(), []);
+    const guild: Guild | BasicGuild | undefined = useStateFromStores(
+        [GuildStore, BasicGuildStore],
+        () => GuildStore.getGuild(guildId) ?? BasicGuildStore.getGuild(guildId),
         [guildId]
     );
 
@@ -61,21 +59,23 @@ export function GuildName({ guildId }: { guildId: string; }) {
     useEffect(() => void fetchBasicGuild(guildId), [guildId]);
 
     return (
-        <Popout
-            position="top"
-            renderPopout={() => <ServerProfileComponent guildId={guildId} />}
-            targetElementRef={guildDivRef}
-        >
-            {popoutProps => (
-                <div ref={guildDivRef} className={cl("footer-element")} {...popoutProps}>
-                    {icon}
-                    <BaseText size="sm" weight="medium" className={cl("footer-text")}>
-                        {guild ? guild.name : "View server"}
-                    </BaseText>
-                    <RightArrow width={12} height={12} fill="currentColor" />
-                </div>
-            )}
-        </Popout>
+        currentGuildId !== guildId && (
+            <Popout
+                position="top"
+                renderPopout={() => <ServerProfileComponent guildId={guildId} />}
+                targetElementRef={guildDivRef}
+            >
+                {popoutProps => (
+                    <div ref={guildDivRef} className={cl("footer-element")} {...popoutProps}>
+                        {icon}
+                        <BaseText size="sm" weight="medium" className={cl("footer-text")}>
+                            {guild ? guild.name : "View server"}
+                        </BaseText>
+                        <RightArrow width={12} height={12} fill="currentColor" />
+                    </div>
+                )}
+            </Popout>
+        )
     );
 }
 
