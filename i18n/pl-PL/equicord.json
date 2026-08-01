@@ -55,6 +55,9 @@
         },
         "description": "Wspomnij o kimś losowo"
     },
+    "audioPlayerAPI": {
+        "description": "API służące do odtwarzania wewnętrznych plików audio serwisu Discord lub zewnętrznych linków audio."
+    },
     "autoZipper": {
         "description": "Automatycznie zipuje określone typy plików i folderów przed przesłaniem do Discord",
         "settings": {
@@ -555,6 +558,11 @@
             "reset": "Resetuj"
         }
     },
+    "equicordDonor": {
+        "description": "Ta odznaka stanowi specjalną korzyść dla darczyńców Equicord (nie Vencord).",
+        "description2": "Rozważ wsparcie rozwoju Equicord poprzez zostanie darczyńcą. To dla nas bardzo wiele znaczy!!",
+        "title": "Donator Equicord"
+    },
     "equicordHelper": {
         "alerts": {
             "equicordSupport": "Equicord Wsparcie",
@@ -602,6 +610,10 @@
             "themes": "Motywy",
             "tooltip": "Equicord Przybornik"
         }
+    },
+    "equicordTranslator": {
+        "description": "Przyznawane osobom, które przyczyniają się do rozszerzenia obsługi językowej  Equicord poprzez tłumaczenie treści dla społeczności.",
+        "title": "Tłumacz Equicord"
     },
     "equissant": {
         "description": "Rogalik co określoną ilość kliknięć :trolley:",
@@ -938,6 +950,9 @@
             "disableAdoptTagPrompt": "Wyłącz monit o przyjęcie tagów",
             "hideTags": "Ukryj tagi"
         }
+    },
+    "headerBarAPI": {
+        "description": "API służące do dodawania przycisków do paska nagłówkowego i paska narzędzi kanału."
     },
     "hideChatButtons": {
         "description": "Możliwość ukrycia przycisków czatu",
@@ -1319,6 +1334,10 @@
             "enableAndRestart": "Włącz wtyczkę i uruchom ponownie klienta, aby zeskanować kod QR logowania",
             "scanQrCode": "Zeskanuj kod QR"
         }
+    },
+    "mainWindowFrameless": {
+        "description": "Usuń domyślną ramkę okna, aby uzyskać bardziej przejrzysty wygląd. Nadal możesz przesuwać okno, ciągnąc obszar paska tytułu.",
+        "title": "Wyłącz ramkę okna"
     },
     "mediaPlaybackSpeed": {
         "description": "Kontroluj prędkość odtwarzania multimediów dla wiadomości głosowych, filmów i załączników audio",
@@ -2098,6 +2117,8 @@
             "apiKey": "Klawisz API",
             "autoReply": "Automatyczna odpowiedź",
             "autoRespond": "Jak mają być obsługiwane odpowiedzi?",
+            "bot": "Clyde",
+            "chatbar": "Zmień tekst na pasku czatu",
             "endpoint": "Punkt końcowy AI zgodny z OpenAI.",
             "maxTokens": "Maksymalna liczba tokenów w odpowiedzi.",
             "model": "Model AI do użycia.",
@@ -2154,6 +2175,9 @@
             "patternPlaceholder": "*.example.com",
             "urlPatterns": "URL Wzory"
         }
+    },
+    "userAreaAPI": {
+        "description": "API służące do dodawania przycisków do panelu obszaru użytkownika."
     },
     "userpfp": {
         "avatarOptions": {
