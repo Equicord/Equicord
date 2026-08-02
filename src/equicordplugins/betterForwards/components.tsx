@@ -10,7 +10,7 @@ import { RightArrow } from "@components/Icons";
 import { iconsModule } from "@equicordplugins/_core/concatenatedModules";
 import { getGuildAcronym, getIntlMessage } from "@utils/discord";
 import { getUserAvatarUrl } from "@utils/misc";
-import { BasicGuild, Channel, Guild, Icon, MessageAttachment } from "@vencord/discord-types";
+import { BasicGuild, Guild, MessageAttachment } from "@vencord/discord-types";
 import { findByCodeLazy, findComponentByCodeLazy, findCssClassesLazy } from "@webpack";
 import { BasicGuildStore, ChannelActionCreators, ChannelStore, DateUtils, GuildStore, IconUtils, Popout, React, RelationshipStore, SelectedGuildStore, SnowflakeUtils, useEffect, useMemo, useRef, UserStore, useStateFromStores } from "@webpack/common";
 import { PropsWithChildren, ReactNode } from "react";
@@ -21,16 +21,11 @@ type AttachmentType = "IMAGE" | "VIDEO" | "CLIP" | "AUDIO" | "VISUAL_PLACEHOLDER
 
 const tagClasses = findCssClassesLazy("tagList", "tagGroup", "tag");
 const ServerProfileComponent = findComponentByCodeLazy("{guildProfile:", "GUILD_PROFILE");
-
-const getAttachmentType: (attachment: MessageAttachment, inlineAttachmentMedia?: boolean) => AttachmentType = findByCodeLazy('"PLAINTEXT_PREVIEW":"OTHER"');
-/** Generates a formatted channel name string based on the channel type */
-const formatChannelName: (channel: Channel, userStore: typeof UserStore, relationshipStore: typeof RelationshipStore, userTagSign?: boolean, channelTagSign?: boolean) => string = findByCodeLazy("#{intl::NO_ACCESS}", "isObfuscated()");
-/** Returns a predefined icon component based on the channel type */
-const getChannelIcon: (channel: Channel, guild?: Guild, options?: Record<string, boolean>) => Icon | null = findByCodeLazy("textFocused:", "isGameInvitesChannel()");
-/** Navigates to a message in the given channel. If the channel is not accessible, it will first try to lurk in the guild and then show an error popups if it fails. */
-const navigateTo: (guildId: string, channelId: string, messageId: string) => Promise<void> = findByCodeLazy('getConfig({location:"channel_mention"})');
-/** Prefetches the {@link BasicGuild} */
-const fetchBasicGuild: (guildId: string) => Promise<void> = findByCodeLazy('type:"BASIC_GUILD_FETCH_SUCCESS"');
+const getAttachmentType = findByCodeLazy('"PLAINTEXT_PREVIEW":"OTHER"');
+const formatChannelName = findByCodeLazy("#{intl::NO_ACCESS}", "isObfuscated()");
+const getChannelIcon = findByCodeLazy("textFocused:", "isGameInvitesChannel()");
+const navigateTo = findByCodeLazy('getConfig({location:"channel_mention"})');
+const fetchBasicGuild = findByCodeLazy('type:"BASIC_GUILD_FETCH_SUCCESS"');
 
 export function GuildName({ guildId }: { guildId: string; }) {
     const currentGuildId = useStateFromStores([SelectedGuildStore], () => SelectedGuildStore.getGuildId(), []);
