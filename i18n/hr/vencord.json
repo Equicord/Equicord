@@ -116,6 +116,7 @@
     "arRPC": {
         "connected": "Povezan na arRPC",
         "connectionFailed": "Nije uspjelo povezivanje s arRPC-om, radi li?",
+        "description": "Klijentski dodatak za arRPC za omogućavanje RPC-a na Discord Webu (eksperimentalno)",
         "retry": "Pokušaj ponovno",
         "settingsAbout": {
             "description": "Slijedite upute u GitHub repou da pokrenete poslužitelj, a zatim omogućite dodatak.",
@@ -139,6 +140,7 @@
         "description": "API za dodavanje bedževa korisnicima"
     },
     "betterFolders": {
+        "description": "Prikazuje mape servera na namjenskoj bočnoj traci i dodaje poboljšanja vezana uz mape",
         "settings": {
             "closeAllFolders": "Zatvorite sve mape kada odaberete poslužitelj koji nije u mapi",
             "closeAllHomeButton": "Zatvorite sve mape kada kliknete na početni gumb",
@@ -188,6 +190,7 @@
         }
     },
     "betterSessions": {
+        "description": "Poboljšava izbornik sesija (uređaja). Omogućuje vam pregled točnih vremenskih oznaka, davanje prilagođenog naziva svakoj sesiji i primanje obavijesti o novim sesijama.",
         "newBadge": "NOVI",
         "newSession": "Nova sesija:",
         "rename": "Preimenovati",
@@ -203,6 +206,7 @@
         }
     },
     "betterSettings": {
+        "description": "Poboljšava iskustvo otvaranja izbornika postavki",
         "settings": {
             "disableFade": "Onemogući animaciju križanja",
             "eagerLoad": "Uklanja odgodu učitavanja pri prvom otvaranju izbornika",
@@ -272,13 +276,15 @@
             "failedToDelete": "Nije moguće izbrisati postavke ({e}).",
             "failedToSync": "Nije moguće sinkronizirati postavke s oblakom ({e}).",
             "header": "Postavke oblaka",
+            "manifest": "Nije moguće dohvatiti manifest za brisanje (API je vratio {e}).",
             "newerThanCloud": "Vaše lokalne postavke novije su od onih u oblaku.",
             "noSettings": "Nema postavki u oblaku.",
             "success": "Sinkronizirane postavke u oblak!",
             "syncFromCloud": "Nije moguće sinkronizirati postavke iz oblaka ({e}).",
+            "syncedCloud": "Podatci u Cloud-u sinkronizirani.",
             "upToDate": "Vaše postavke su ažurne.",
             "updated": "Vaše postavke su ažurirane! Kliknite ovdje za ponovno pokretanje kako biste u potpunosti primijenili promjene!",
-            "updatedRemote": "Vaše postavke su ažurirane! Kliknite ovdje za ponovno pokretanje kako biste u potpunosti primijenili promjene!"
+            "updatedRemote": "Postavke sinkronizirane u Cloud-u!"
         }
     },
     "colorSighted": {
@@ -384,6 +390,7 @@
         "button1Url": "Gumb1 URL",
         "button2Text": "Button2 Tekst",
         "button2Url": "Gumb2 URL",
+        "description": "Dodaj potpuno prilagodljivu Bogatu Prisutnost (Status igre) u svoj Discord profil",
         "detailLine1": "Detalj (linija 1)",
         "detailUrl": "Detalj URL",
         "endTimestamp": "Vremenska oznaka završetka (u milisekundama)",
@@ -449,12 +456,43 @@
     },
     "decor": {
         "accessFromProfiles": "Dekoracijama također možete pristupiti sa stranice {link}.",
+        "agreedToGuidelines": "Suglasan sa pravilima",
+        "alreadyPending": "Već imate dekoraciju koja čeka na recenziju",
+        "apply": "Primjena",
+        "browse": "Pregled",
         "changeDecoration": "Promjena dekoracije",
+        "chooseAFile": "Izbaberite datoteku",
+        "confirmLogOut": "Jeste li sigurni da se želite odjaviti iz Decor?",
+        "continue": "Nastavak",
+        "copyHash": "Kopirajte Unaprijed Postavljeni ID",
+        "copyPresetId": "Kopirajte Unaprijed Postavljeni ID",
+        "createDecoration": "Izrada Dekoracije",
+        "createdBy": "Izradio",
+        "delete": "Brisanje",
+        "deleteConfirm": "Jeste li sigurni da želite maknuti {name}?",
+        "deleteDecoration": "Brisanje Dekoracije",
+        "deleteInstructions": "Vlastite dekoracije možete izbrisati desnim klikom na njih",
         "description": "Stvorite i koristite vlastite prilagođene ukrase za avatare ili odaberite svoje omiljene među unaprijed postavljenim postavkama.",
+        "discordServerNotice": "Da biste primali ažuriranja o recenziji vaše dekoracije, pridružite se {link} i dopustite izravne poruke.",
+        "discordTooltip": "Pridružite se Decor Discord serveru za obavijesti o recenziji vašeg ukrasa i kada se objave novi unaprijed postavljeni elementi",
         "enableAndRestart": "Omogućite Decor i ponovno pokrenite klijent kako biste promijenili ukras avatara.",
+        "file": "Datoteka",
+        "fileNotice": "Datoteka treba biti APNG ili PNG.",
+        "guidelinesAgreementNotice": "Slanjem dekoracije, slažete se sa {pravila}. Izbjegavanje čitanja ovih smjernica može dovesti do suspenzije vašeg računa i sprječavanja izrade dekoracija u budućnosti.",
+        "guidelinesNotice": "Prije slanja ukrasa provjerite krši li {pravila}",
+        "holdOn": "Pričekajte",
+        "logOut": "Odjava",
+        "name": "Naziv",
+        "nameNotice": "Ovo će se ime koristiti prilikom pozivanja na ovu dekoraciju.",
+        "options": "Opcije Dekoracije",
+        "pendingReview": "Na čekanju za pregled",
+        "presetPart": "Dio {name} unaprijed postavljenih postavki",
         "profilesLink": "Profili",
         "removeDecoration": "Uklonite ukras",
-        "title": "Dekor"
+        "submitForReview": "Slanje na Pregled",
+        "theGuidelines": "Pravila",
+        "title": "Dekor",
+        "yourDecorations": "Vaše dekoracije"
     },
     "devCompanion": {
         "description": "Dev Companion dodatak. Prijavite sve što ne radi ili je čudno (najvjerojatnije je greška) sadanu, bilo pingu ili dm-u, hvala!",
@@ -501,10 +539,12 @@
     },
     "expressionCloner": {
         "cloneEmoji": "Klonirajte Emoji",
+        "cloneName": "Kloniranje {name}",
         "cloneSticker": "Naljepnica klona",
         "cloneTo": "Kloniraj u {guild}",
         "clonedSuccess": "Uspješno klonirano {name} u {guild}!",
         "customName": "Prilagođeno ime",
+        "description": "Omogućuje kloniranje Emotikona i Stikera na vlastiti server (desni klik)",
         "failedToClone": "Kloniranje nije uspjelo: {error}",
         "nameValidation": "Ime mora imati između 2 i 32 znaka",
         "somethingWentWrong": "Nešto nije u redu (provjerite konzolu!)"
@@ -527,6 +567,7 @@
             "body3": "Jeste li sigurni da želite poslati ovu poruku? Vaši FakeNitro artikli pojavit će se samo kao poveznica.",
             "disableNotice": "Ovu obavijest možete onemogućiti u postavkama dodatka."
         },
+        "ok": "OK",
         "sendAnyway": "Svejedno pošalji",
         "settings": {
             "disableEmbedPermissionCheck": "Treba li onemogućiti provjeru dopuštenja za ugradnju prilikom slanja lažnih emojija i naljepnica",
@@ -699,6 +740,7 @@
         "description": "Nemojte skrivati poruke od \"vjerojatnih pošiljatelja neželjene pošte\""
     },
     "ignoreActivities": {
+        "description": "Ignorirajte aktivnosti SAMO u svom statusu. Možete konfigurirati koje će se posebno ignorirati na karticama Registrirane Igre i Aktivnosti ili koristiti opće postavke u nastavku",
         "disableActivity": "Onemogući aktivnost",
         "enableActivity": "Omogući aktivnost",
         "filterList": {
@@ -732,6 +774,7 @@
         "description": "Nikada nemojte skrivati poveznice na slike u porukama, čak i ako je to jedini sadržaj"
     },
     "imageZoom": {
+        "description": "Omogućuje vam zumiranje slika i gifova. Koristite kotačić za pomicanje za zumiranje i shift + kotačić za pomicanje za povećanje radijusa/veličine leće",
         "lensSize": "Veličina objektiva",
         "nearestNeighbour": "Najbliži susjed",
         "settings": {
@@ -840,6 +883,7 @@
         "showLogs": "Prikaži zapisnike"
     },
     "memberCount": {
+        "description": "Prikazuje broj online članova, ukupan broj članova i korisnika u glasovnim kanalima na poslužitelju — na popisu članova i u opisu.",
         "settings": {
             "memberList": "Prikaži broj članova na popisu članova",
             "toolTip": "Prikaži broj članova na opisu poslužitelja",
@@ -930,6 +974,7 @@
     "messageLatency": {
         "clockAhead": "Sat ovog korisnika je {delta} ispred.",
         "delayedMessage": "Odgođena poruka",
+        "description": "Prikazuje indikator za poruke čije je slanje trajalo ≥n sekundi",
         "messageDelayed": "Ova je poruka poslana s odgodom od {delta}.",
         "oldAndroidClient": "Stari Discord Android klijent",
         "oldDiscordAndroid": "Sumnja se da korisnik koristi stari Discord Android klijent",
@@ -989,6 +1034,7 @@
         "deletedMessages_one": "{count} obrisana poruka",
         "deletedMessages_other": "{count} obrisane poruke",
         "deletedMessages_zero": "Nema izbrisanih poruka",
+        "description": "Privremeno bilježite izbrisane i uređene poruke.",
         "disableDiffView": "Onemogući Diff View",
         "editHistory": "Povijest uređivanja poruka",
         "enableDiffView": "Omogući Diff View",
@@ -1157,6 +1203,12 @@
     "noSystemBadge": {
         "description": "Onemogućuje oznaku broja nepročitanih na programskoj traci i traci sustava."
     },
+    "noTrack": {
+        "description": "Onemogućite Discord praćenja (analiza/'znanost'), metrika i Sentry prijava pada sustava",
+        "settings": {
+            "disableAnalytics": "Onemogućite Discord praćenja (analiza/'znanost')"
+        }
+    },
     "noTypingAnimation": {
         "description": "Onemogućuje CPU intenzivnu animaciju točaka za tipkanje"
     },
@@ -1230,6 +1282,7 @@
         }
     },
     "permissionsViewer": {
+        "description": "Pogledajte dopuštenja koja korisnik ili kanal ima i uloge poslužitelja",
         "noPermissions": "Nema dopuštenja za prikaz!",
         "owner": "vlasnik",
         "permissions": "Dozvole",
@@ -1280,6 +1333,7 @@
         "color": "Boja",
         "create": "Napravi",
         "deleteCategory": "Izbriši kategoriju",
+        "description": "Omogućuje prikvačivanje privatnih kanala na vrh popisa privatnih poruka. Za prikvačivanje/otkvačivanje ili mijenjanja rasporeda, klinknite na poruke desnim klikom",
         "editCategory": "Uredi kategoriju",
         "editCategoryTitle": "Uredi kategoriju",
         "moveDown": "Pomakni dolje",
@@ -1414,6 +1468,7 @@
         "confirmDelete": "Želite li stvarno izbrisati ovu recenziju?",
         "confirmReport": "Želite li stvarno prijaviti ovu recenziju?",
         "delete": "Izbriši",
+        "description": "Pregledajte druge korisnike (Dodaje nove postavke profilima)",
         "failedToFetchBlocks": "Nije uspjelo dohvaćanje blokova: {error}",
         "mustBeLoggedInBlock": "Morate biti prijavljeni da biste blokirali korisnike.",
         "mustBeLoggedInDelete": "Za brisanje recenzija morate biti prijavljeni.",
@@ -1421,6 +1476,7 @@
         "nevermind": "Nema veze",
         "newReviews": "Imate nove recenzije na svom profilu!",
         "noBlockedUsers": "Nema blokiranih korisnika.",
+        "noReviewsYet": "Još nema recenzija",
         "notLoggedIn": "Niste prijavljeni na ReviewDB!",
         "ok": "U redu",
         "readMore": "Pročitaj više",
@@ -1446,6 +1502,8 @@
         },
         "system": "sustav",
         "unblockUser": "Deblokiraj korisnika",
+        "userOptedOut": "Korisnik se isključio",
+        "userReviews": "Recenzije korisnika",
         "viewReviews": "Pogledaj recenzije"
     },
     "roleColorEverywhere": {
@@ -1604,7 +1662,7 @@
         },
         "frameless": {
             "description": "Uklonite izvorni okvir prozora za čišći izgled. I dalje možete pomicati prozor povlačenjem područja naslovne trake.",
-            "title": "Onemogućite okvir prozora"
+            "title": "Onemogućite Svih Prozor"
         },
         "hint": "Savjet: Možete promijeniti položaj ovog odjeljka s postavkama u <0>postavkama dodatka za postavke</0>!",
         "macosVibrancyStyle": {
@@ -1653,6 +1711,16 @@
             "description": "Zamijenite prilagođenu naslovnu traku Discord standardnom naslovnom trakom sustava Windows. Ovo može poboljšati kompatibilnost s nekim alatima za upravljanje prozorima.",
             "title": "Koristite izvornu naslovnu traku sustava Windows umjesto prilagođene Discord."
         }
+    },
+    "settingsPlugin": {
+        "aboveActivity": "iznad postavka aktivnosti",
+        "aboveNitro": "ispod nitro sekcije",
+        "belowActivity": "Ispod postavka aktivnosti",
+        "belowNitro": "Ispod nitro sekcije",
+        "bottom": "Na samom dnu",
+        "description": "Dodaj UI Postavke i informacije o uklanjanju grešaka",
+        "settingsLocation": "Gdje staviti odjeljak Equicord postavki",
+        "top": "Najviše"
     },
     "settingsSync": {
         "failedToImport": "Uvoz postavki nije uspio: {e}",
@@ -1853,6 +1921,7 @@
             "membersListIndicators": "Pokazatelji popisa članova",
             "silentTyping": "Tiho tipkanje"
         },
+        "description": "Sakrijte indikator tipkanja iz poruka.",
         "noChanges": "Nema promjena u postavkama tihog tipkanja.",
         "settings": {
             "chatContextMenu": "Prikaži padajući izbornik u kontekstualnom izborniku chata za izmjenu postavki dodatka u pokretu.",
@@ -1914,21 +1983,34 @@
             "unlimitedSuperReactionPlaying": "Uklonite ograničenje za Super Reactions igranje odjednom"
         }
     },
+    "supportHelper": {
+        "debug": "Pošaljite informacije o otklanjanju pogrešaka u Equicord",
+        "description": "Pomaže nam da vam pružimo podršku",
+        "plugins": "Pošaljite popis dodataka Equicord"
+    },
     "tabs": {
         "settings": "Equicord Postavke"
     },
     "textReplace": {
+        "description": "Zamjena teksta u vašim ili tuđim porukama. Unaprijed izrađena pravila možete pronaći u kanalu #textreplace-rules na Vencord serveru.",
         "find": "Pronađi",
+        "findDesc": "Tekst koji treba zamijeniti",
+        "findDescRegex": "Regex uzorak",
         "messageWithRules": "Poruka s primijenjenim pravilima",
         "onlyIfIncludes": "Samo ako uključuje",
+        "onlyIfIncludesDesc": "Ovo će se pravilo primijeniti samo ako poruka sadrži ovaj tekst. Ovo nije obavezno.",
+        "regexRules": "Moćnije zamjene korištenjem Regularnih Izraza. Ovaj odjeljak je za napredne korisnike. Ako ga ne razumijete, jednostavno ga zanemarite",
         "replace": "Zamijeniti",
+        "replaceDesc": "Tekst kojim treba zamijeniti pronađeni tekst",
         "scope.allMessages": "Primijeni na sve poruke",
         "scope.myMessages": "Primijeni na svoje poruke (vidljivo svima)",
         "scope.othersMessages": "Primijeni na tuđe poruke (vidljivo samo tebi)",
+        "stringRules": "Pravila jednostavnog pronalaženja i zamjene. Na primjer, pronalazak 'npr' i zamijena s 'na primjer'",
+        "testMessage": "Upišite poruku za testiranje pravila.",
         "testRules": "Pravila testiranja",
         "typeMessage": "Upišite poruku",
-        "usingRegex": "Korištenje Regexa",
-        "usingString": "Korištenje niza"
+        "usingRegex": "Regex Zamjena",
+        "usingString": "Jednostavne Zamjene"
     },
     "themeAttributes": {
         "description": "Dodaje atribute podataka različitim elementima u svrhu tematiziranja"
@@ -1940,6 +2022,7 @@
             "title": "Equicord Automatsko prevođenje omogućeno"
         },
         "autoTranslateEnabledLabel": "Automatski prijevod omogućen",
+        "description": "Prevedite poruke pomoću Google prevoditelja ili sa DeepL.",
         "disableAutoTranslate": "Onemogući automatsko prevođenje",
         "dontShowAgain": "Ne prikazuj više",
         "gotIt": "shvaćam",
@@ -1947,6 +2030,16 @@
         "openTranslateModal": "Otvorite Translate Modal",
         "selectLanguage": "Odaberite jezik",
         "translate": "Prevesti"
+    },
+    "translation": {
+        "description": "Pomoć pri prevođenju Equicord",
+        "settings": {
+            "forceLocale": {
+                "description": "Prisilite Equicord da koristi drugu lokalizaciju",
+                "followDiscord": "Zadana (pratite Discord)"
+            },
+            "showMissingKeys": "Ako trenutnom mjestu nedostaju prijevodi, prikažite tipke umjesto da se vratite na engleski"
+        }
     },
     "typingIndicator": {
         "description": "Dodaje indikator ako netko tipka na kanalu.",
@@ -2061,6 +2154,11 @@
         },
         "speechSynthesisNotSupported": "SpeechSynthesis nije podržan ili nisu pronađeni glasovi pripovjedača. Stoga ovaj dodatak neće raditi. Provjerite moje postavke za više informacija"
     },
+    "vencordDonor": {
+        "description": "Ova značka je posebna pogodnost za Vencord donatore",
+        "description2": "Molimo vas da razmislite o podršci razvoju Vencord-a tako što ćete postati donator. To bi nam puno značilo!!",
+        "title": "Vencord Donor"
+    },
     "viewIcons": {
         "description": "Omogućuje klikanje na avatare i bannere u korisničkim profilima, dodaje unose ikone prikaza/bannera u kontekstni izbornik kanala korisnika, poslužitelja i grupe.",
         "settings": {
@@ -2084,6 +2182,7 @@
         "settings": {
             "clickMethodDescription": "Promijenite gumb za pregled neobrađenog sadržaja/podataka bilo koje poruke.",
             "leftClick": "Lijevi klik za pregled sirovog sadržaja.",
+            "messageContextMenu": "Prikaz u kontekstnom izborniku poruke",
             "rightClick": "Desni klik za pregled sirovog sadržaja."
         },
         "viewRaw": "Pogledaj sirovo",
@@ -2094,6 +2193,7 @@
         "downloadVoiceMessage": "Preuzmite glasovnu poruku"
     },
     "voiceMessages": {
+        "description": "Omogućuje slanje glasovnih poruka kao na mobitelu. Kako biste to učinili, kliknite gumb za prijenos desnim klikom i odaberite Pošalji Glasovnu Poruku.",
         "echoCancellation": "Poništavanje odjeka",
         "failedToParse": "Nije uspjelo analiziranje odabrane audio datoteke: {error}",
         "failedToUpload": "Prijenos glasovne poruke nije uspio",
@@ -2126,6 +2226,7 @@
         "description": "Uklanja ograničenje brzine prijenosa od 2500 kbps na Chromium i Vesktop klijentima."
     },
     "whoReacted": {
+        "description": "Prikazuje avatare korisnika koji su reagirali na poruku",
         "settings": {
             "avatarClick": "Uključivanje/isključivanje klikanja avatara u reakcijama"
         }
