@@ -43,7 +43,6 @@ export let GuildRoleStore: t.GuildRoleStore;
 export let GuildScheduledEventStore: t.GuildScheduledEventStore;
 export let GuildMemberCountStore: t.GuildMemberCountStore;
 export let GuildMemberStore: t.GuildMemberStore;
-export let BasicGuildStore: t.BasicGuildStore;
 export let UserStore: t.UserStore;
 export let AuthenticationStore: t.AuthenticationStore;
 export let ApplicationStore: t.ApplicationStore;
@@ -108,6 +107,7 @@ export let ReferencedMessageStore: t.ReferencedMessageStore;
 export let SessionsStore: t.SessionsStore;
 export let GuildAvailabilityStore: t.GuildAvailabilityStore;
 export let UserGuildJoinRequestStore: t.UserGuildJoinRequestStore;
+export let BasicGuildStore: t.BasicGuildStore;
 
 /**
  * @see jsdoc of {@link t.useStateFromStores}
@@ -136,7 +136,6 @@ waitForStore("GuildChannelStore", m => GuildChannelStore = m);
 waitForStore("GuildRoleStore", m => GuildRoleStore = m);
 waitForStore("GuildScheduledEventStore", m => GuildScheduledEventStore = m);
 waitForStore("GuildMemberCountStore", m => GuildMemberCountStore = m);
-waitForStore("BasicGuildStore", m => BasicGuildStore = m);
 waitForStore("MessageStore", m => MessageStore = m);
 waitForStore("WindowStore", m => WindowStore = m);
 waitForStore("EmojiStore", m => EmojiStore = m);
@@ -181,14 +180,13 @@ waitForStore("AuthSessionsStore", m => AuthSessionsStore = m);
 waitForStore("ClientThemesBackgroundStore", m => ClientThemesBackgroundStore = m);
 waitForStore("ConnectedAccountsStore", m => ConnectedAccountsStore = m);
 waitForStore("ChannelMemberStore", m => ChannelMemberStore = m);
-// comeback
 waitForStore("ThreadMemberListStore", m => ThreadMemberListStore = m);
 waitForStore("CollapsedVoiceChannelStore", m => CollapsedVoiceChannelStore = m);
 waitForStore("ReferencedMessageStore", m => ReferencedMessageStore = m);
-// comeback
 waitForStore("SessionsStore", m => SessionsStore = m);
 waitForStore("GuildAvailabilityStore", m => GuildAvailabilityStore = m);
 waitForStore("UserGuildJoinRequestStore", m => UserGuildJoinRequestStore = m);
+waitForStore("BasicGuildStore", m => BasicGuildStore = m);
 waitForStore("ThemeStore", m => {
     ThemeStore = m;
     // Importing this directly causes all webpack commons to be imported, which can easily cause circular dependencies.
