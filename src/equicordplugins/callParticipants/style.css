@@ -1,0 +1,18 @@
+.vc-callParticipants-root {
+    display: flex;
+    align-items: center;
+    margin-top: -4px;
+}
+
+.vc-callParticipants-avatar {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 2px solid var(--background-primary);
+    margin-left: -8px;
+    box-sizing: content-box;
+}
+
+.vc-callParticipants-avatar:first-child {
+    margin-left: 0;
+}
