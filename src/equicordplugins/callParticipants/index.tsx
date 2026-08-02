@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { classNameFactory } from "@utils/css";
 import { EquicordDevs } from "@utils/constants";
+import { classNameFactory } from "@utils/css";
 import definePlugin from "@utils/types";
 import { MessageType } from "@vencord/discord-types/enums";
 import { ChannelStore, UserStore, UserSummaryItem } from "@webpack/common";
