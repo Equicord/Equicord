@@ -6,7 +6,7 @@
 
 import "./settings.css";
 
-import * as DataStore from "@api/DataStore";
+import { DataStore } from "@api/index";
 import { isPluginEnabled } from "@api/PluginManager";
 import { Divider } from "@components/Divider";
 import { Heading } from "@components/Heading";
@@ -17,36 +17,10 @@ import { useAwaiter } from "@utils/react";
 import { ActivityType } from "@vencord/discord-types/enums";
 import { Button, Select, showToast, Text, TextInput, Toasts, useState } from "@webpack/common";
 
-import CustomRPCPlugin, { type RpcConfig, setRpc, settings, TimestampMode } from ".";
+import CustomRPCPlugin, { RpcConfig, setRpc, settings, TimestampMode } from ".";
 
 const cl = classNameFactory("vc-customRPC-settings-");
 const PRESETS_KEY = "CustomRPC_presets";
-const REACTIVE_SETTINGS_KEYS = ["type", "timestampMode"] satisfies (keyof RpcConfig)[];
-const RPC_SETTINGS_KEYS = [
-    "appID",
-    "appName",
-    "details",
-    "detailsURL",
-    "state",
-    "stateURL",
-    "type",
-    "streamLink",
-    "timestampMode",
-    "startTime",
-    "endTime",
-    "imageBig",
-    "imageBigURL",
-    "imageBigTooltip",
-    "imageSmall",
-    "imageSmallURL",
-    "imageSmallTooltip",
-    "buttonOneText",
-    "buttonOneURL",
-    "buttonTwoText",
-    "buttonTwoURL",
-    "partySize",
-    "partyMaxSize",
-] as const satisfies readonly (keyof RpcConfig)[];
 
 type SettingsKey = keyof typeof settings.store;
 
@@ -185,8 +159,9 @@ function SelectSetting<T>({ settingsKey, label, options, disabled }: SelectOptio
     );
 }
 
-function getCurrentConfig() {
-    return Object.fromEntries(RPC_SETTINGS_KEYS.map(key => [key, settings.store[key]])) as RpcConfig;
+function getCurrentConfig(): RpcConfig {
+    const { config, ...rpcConfig } = settings.store;
+    return rpcConfig;
 }
 
 function PresetSettings({ onLoad }: { onLoad(): void; }) {
@@ -215,7 +190,7 @@ function PresetSettings({ onLoad }: { onLoad(): void; }) {
         const preset = presets.find(preset => preset.name === selectedPreset);
         if (!preset) return;
 
-        Object.assign(settings.store, Object.fromEntries(RPC_SETTINGS_KEYS.map(key => [key, preset.config[key]])));
+        Object.assign(settings.store, preset.config);
         onLoad();
         updateRPC();
         showToast(`Loaded preset ${preset.name}.`, Toasts.Type.SUCCESS);
@@ -264,7 +239,7 @@ function PresetSettings({ onLoad }: { onLoad(): void; }) {
 }
 
 function RPCFields() {
-    const s = settings.use(REACTIVE_SETTINGS_KEYS);
+    const { type, timestampMode } = settings.use(["type", "timestampMode"]);
 
     return (
         <>
@@ -314,7 +289,7 @@ function RPCFields() {
             <SingleSetting
                 settingsKey="streamLink"
                 label="Stream Link (Twitch or YouTube, only if activity type is Streaming)"
-                disabled={s.type !== ActivityType.STREAMING}
+                disabled={type !== ActivityType.STREAMING}
                 isValid={isStreamLinkValid}
             />
 
@@ -324,14 +299,14 @@ function RPCFields() {
                     label: "Party Size",
                     transform: parseNumber,
                     isValid: isNumberValid,
-                    disabled: s.type !== ActivityType.PLAYING,
+                    disabled: type !== ActivityType.PLAYING,
                 },
                 {
                     settingsKey: "partyMaxSize",
                     label: "Maximum Party Size",
                     transform: parseNumber,
                     isValid: isNumberValid,
-                    disabled: s.type !== ActivityType.PLAYING,
+                    disabled: type !== ActivityType.PLAYING,
                 },
             ]} />
 
@@ -392,14 +367,14 @@ function RPCFields() {
                     label: "Start Timestamp (in milliseconds)",
                     transform: parseNumber,
                     isValid: isNumberValid,
-                    disabled: s.timestampMode !== TimestampMode.CUSTOM,
+                    disabled: timestampMode !== TimestampMode.CUSTOM,
                 },
                 {
                     settingsKey: "endTime",
                     label: "End Timestamp (in milliseconds)",
                     transform: parseNumber,
                     isValid: isNumberValid,
-                    disabled: s.timestampMode !== TimestampMode.CUSTOM,
+                    disabled: timestampMode !== TimestampMode.CUSTOM,
                 },
             ]} />
         </>
