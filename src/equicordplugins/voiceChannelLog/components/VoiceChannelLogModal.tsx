@@ -6,14 +6,11 @@
 
 import { classes } from "@utils/misc";
 import { Channel, RenderModalProps } from "@vencord/discord-types";
-import { findStoreLazy } from "@webpack";
-import { Modal, openModal, React, ScrollerThin } from "@webpack/common";
+import { AccessibilityStore, Modal, openModal, React, ScrollerThin } from "@webpack/common";
 
 import { clearLogs, getVcLogs, vcLogSubscribe } from "../logs";
 import { cl } from "../utils";
 import { VoiceChannelLogEntryComponent } from "./VoiceChannelLogEntryComponent";
-
-const AccessibilityStore = findStoreLazy("AccessibilityStore");
 
 export function openVoiceChannelLog(channel: Channel) {
     return openModal(props => (

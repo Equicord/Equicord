@@ -23,22 +23,10 @@ import { getUserSettingLazy } from "@api/UserSettings";
 import equicordToolbox from "@equicordplugins/equicordToolbox";
 import { Devs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
-import { FluxStore } from "@vencord/discord-types";
-import { findByPropsLazy, findComponentByCodeLazy, findStoreLazy } from "@webpack";
-import { Menu, Popout, useRef, useState, useStateFromStores } from "@webpack/common";
-interface ConnectedAccount {
-    id: string;
-    type: string;
-    revoked: boolean;
-    showActivity: boolean;
-}
-
-interface ConnectedAccountsStore extends FluxStore {
-    getAccounts(): ConnectedAccount[];
-}
+import { findByPropsLazy, findComponentByCodeLazy } from "@webpack";
+import { ConnectedAccountsStore, Menu, Popout, useRef, useState, useStateFromStores } from "@webpack/common";
 
 const Button = findComponentByCodeLazy(".GREEN,positionKeyStemOverride:");
-const ConnectedAccountsStore = findStoreLazy("ConnectedAccountsStore") as ConnectedAccountsStore;
 const ConnectedAccountActions = findByPropsLazy("setShowActivity");
 
 const ShowCurrentGame = getUserSettingLazy<boolean>("status", "showCurrentGame")!;

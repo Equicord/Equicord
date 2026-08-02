@@ -18,11 +18,11 @@ import {
     findByPropsLazy,
     findComponentByCodeLazy,
     findCssClassesLazy,
-    findStoreLazy,
 } from "@webpack";
 import {
     ChannelActionCreators,
     ChannelRouter,
+    ChannelSectionStore,
     ChannelStore,
     FluxDispatcher,
     GuildStore,
@@ -78,8 +78,6 @@ const WanderingCubesLoading = findComponentByCodeLazy('="wanderingCubes"');
 const ChatInputTypes = findByPropsLazy("FORM", "NORMAL");
 const Sidebars = findByPropsLazy("ThreadSidebar", "MessageRequestSidebar");
 const ChatClasses = findCssClassesLazy("threadSidebarOpen", "loader");
-
-const ChannelSectionStore = findStoreLazy("ChannelSectionStore");
 
 const requireForumView = extractAndLoadChunksLazy(
     ["Missing channel in Channel.renderHeaderToolbar"],
@@ -377,7 +375,7 @@ export default definePlugin({
         const [channelSidebar, guildSidebar] = useStateFromStores(
             [ChannelSectionStore, SelectedChannelStore, ChannelStore], () => {
                 const currentChannelId = SelectedChannelStore.getChannelId();
-                const currentGuildId = SelectedGuildStore.getGuildId();
+                const currentGuildId = SelectedGuildStore.getGuildId()!;
                 return [
                     ChannelSectionStore.getSidebarState(currentChannelId),
                     ChannelSectionStore.getGuildSidebarState(currentGuildId),

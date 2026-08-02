@@ -19,15 +19,13 @@ import { Devs, EquicordDevs } from "@utils/constants";
 import { classNameFactory } from "@utils/index";
 import definePlugin, { OptionType } from "@utils/types";
 import { GuildMember, Message, RenderModalProps, User } from "@vencord/discord-types";
-import { findByCodeLazy, findStoreLazy } from "@webpack";
-import { ChannelStore, GuildMemberStore, GuildStore, Menu, MessageStore, Modal, openModal, RelationshipStore, StreamerModeStore, TextInput, useEffect, useState } from "@webpack/common";
+import { findByCodeLazy } from "@webpack";
+import { AccessibilityStore, ChannelStore, GuildMemberStore, GuildStore, Menu, MessageStore, Modal, openModal, RelationshipStore, StreamerModeStore, TextInput, useEffect, UserStore, useState } from "@webpack/common";
 import { JSX } from "react";
 
 const SMYNC = classNameFactory();
-const UserStore = findStoreLazy("UserStore");
 const wrapEmojis = findByCodeLazy("lastIndex;return");
 const adjustColor = findByCodeLazy("light1", '.get("hsl.s"))');
-const AccessibilityStore = findStoreLazy("AccessibilityStore");
 
 const roleColorPattern = /^role((?:\+|-)\d{0,4})?$/iu;
 const symbolPattern = /^[\p{S}\p{P}]{1,3}$/iu;

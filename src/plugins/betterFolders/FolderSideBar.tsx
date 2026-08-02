@@ -18,10 +18,10 @@
 
 import ErrorBoundary from "@components/ErrorBoundary";
 import { findComponentByCodeLazy } from "@webpack";
-import { Animations, ChannelRTCStore, useStateFromStores } from "@webpack/common";
+import { Animations, ChannelRTCStore, ExpandedGuildFolderStore, SortedGuildStore, useStateFromStores } from "@webpack/common";
 import type { CSSProperties } from "react";
 
-import { ExpandedGuildFolderStore, settings, SortedGuildStore } from ".";
+import { settings } from ".";
 
 const GuildsBar = findComponentByCodeLazy('("guildsnav")');
 
@@ -29,11 +29,11 @@ function getExpandedFolderIds() {
     const expandedFolders = ExpandedGuildFolderStore.getExpandedFolders();
     const folders = SortedGuildStore.getGuildFolders();
 
-    const expandedFolderIds = new Set<string>();
+    const expandedFolderIds = new Set<number>();
 
     for (const folder of folders) {
-        if (expandedFolders.has(folder.folderId) && folder.guildIds?.length) {
-            expandedFolderIds.add(folder.folderId);
+        if (expandedFolders.has(folder.folderId!) && folder.guildIds?.length) {
+            expandedFolderIds.add(folder.folderId!);
         }
     }
 

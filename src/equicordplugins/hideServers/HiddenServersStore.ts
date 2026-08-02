@@ -6,13 +6,12 @@
 
 import * as DataStore from "@api/DataStore";
 import { Guild } from "@vencord/discord-types";
-import { findStoreLazy, proxyLazyWebpack } from "@webpack";
-import { Flux, FluxDispatcher, GuildStore } from "@webpack/common";
+import { proxyLazyWebpack } from "@webpack";
+import { Flux, FluxDispatcher, GuildStore, SortedGuildStore } from "@webpack/common";
 
 export const HiddenServersStore = proxyLazyWebpack(() => {
     const { Store } = Flux;
 
-    const SortedGuildStore = findStoreLazy("SortedGuildStore");
     const DB_KEY = "HideServers_servers";
     class HiddenServersStore extends Store {
         public _hiddenGuilds: Set<string> = new Set();

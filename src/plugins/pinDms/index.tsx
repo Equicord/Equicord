@@ -12,7 +12,7 @@ import { Devs } from "@utils/constants";
 import { classes } from "@utils/misc";
 import definePlugin, { OptionType, StartAt } from "@utils/types";
 import { Channel } from "@vencord/discord-types";
-import { findCssClassesLazy, findStoreLazy } from "@webpack";
+import { findCssClassesLazy } from "@webpack";
 import { Clickable, ContextMenuApi, FluxDispatcher, Menu, React } from "@webpack/common";
 
 import { contextMenus } from "./components/contextMenu";
@@ -27,8 +27,6 @@ interface ChannelComponentProps {
 }
 
 const headerClasses = findCssClassesLazy("privateChannelsHeaderContainer", "headerText");
-
-export const PrivateChannelSortStore = findStoreLazy("PrivateChannelSortStore") as { getPrivateChannelIds: () => string[]; };
 
 export let instance: any;
 

@@ -89,6 +89,26 @@ export let UserAffinitiesStore: t.UserAffinitiesStore;
 export let ApplicationStreamingStore: t.ApplicationStreamingStore;
 export let ApplicationStreamPreviewStore: t.ApplicationStreamPreviewStore;
 
+export let SortedGuildStore: t.SortedGuildStore;
+export let JoinedThreadsStore: t.JoinedThreadsStore;
+export let SafetyHubStore: t.SafetyHubStore;
+export let PrivateChannelSortStore: t.PrivateChannelSortStore;
+export let ApplicationStreamingSettingsStore: t.ApplicationStreamingSettingsStore;
+export let UserProfileSettingsStore: t.UserProfileSettingsStore;
+export let AuthorizedAppsStore: t.AuthorizedAppsStore;
+export let ChannelSectionStore: t.ChannelSectionStore;
+export let ExpandedGuildFolderStore: t.ExpandedGuildFolderStore;
+export let AuthSessionsStore: t.AuthSessionsStore;
+export let ClientThemesBackgroundStore: t.ClientThemesBackgroundStore;
+export let ConnectedAccountsStore: t.ConnectedAccountsStore;
+export let ChannelMemberStore: t.ChannelMemberStore;
+export let ThreadMemberListStore: t.ThreadMemberListStore;
+export let CollapsedVoiceChannelStore: t.CollapsedVoiceChannelStore;
+export let ReferencedMessageStore: t.ReferencedMessageStore;
+export let SessionsStore: t.SessionsStore;
+export let GuildAvailabilityStore: t.GuildAvailabilityStore;
+export let UserGuildJoinRequestStore: t.UserGuildJoinRequestStore;
+
 /**
  * @see jsdoc of {@link t.useStateFromStores}
  */
@@ -148,6 +168,27 @@ waitForStore("QuestStore", m => QuestStore = m);
 waitForStore("UserAffinitiesV2Store", m => UserAffinitiesStore = m);
 waitForStore("ApplicationStreamingStore", m => ApplicationStreamingStore = m);
 waitForStore("ApplicationStreamPreviewStore", m => ApplicationStreamPreviewStore = m);
+waitForStore("SortedGuildStore", m => SortedGuildStore = m);
+waitForStore("JoinedThreadsStore", m => JoinedThreadsStore = m);
+waitForStore("SafetyHubStore", m => SafetyHubStore = m);
+waitForStore("PrivateChannelSortStore", m => PrivateChannelSortStore = m);
+waitForStore("ApplicationStreamingSettingsStore", m => ApplicationStreamingSettingsStore = m);
+waitForStore("UserProfileSettingsStore", m => UserProfileSettingsStore = m);
+waitForStore("AuthorizedAppsStore", m => AuthorizedAppsStore = m);
+waitForStore("ChannelSectionStore", m => ChannelSectionStore = m);
+waitForStore("ExpandedGuildFolderStore", m => ExpandedGuildFolderStore = m);
+waitForStore("AuthSessionsStore", m => AuthSessionsStore = m);
+waitForStore("ClientThemesBackgroundStore", m => ClientThemesBackgroundStore = m);
+waitForStore("ConnectedAccountsStore", m => ConnectedAccountsStore = m);
+waitForStore("ChannelMemberStore", m => ChannelMemberStore = m);
+// comeback
+waitForStore("ThreadMemberListStore", m => ThreadMemberListStore = m);
+waitForStore("CollapsedVoiceChannelStore", m => CollapsedVoiceChannelStore = m);
+waitForStore("ReferencedMessageStore", m => ReferencedMessageStore = m);
+// comeback
+waitForStore("SessionsStore", m => SessionsStore = m);
+waitForStore("GuildAvailabilityStore", m => GuildAvailabilityStore = m);
+waitForStore("UserGuildJoinRequestStore", m => UserGuildJoinRequestStore = m);
 waitForStore("ThemeStore", m => {
     ThemeStore = m;
     // Importing this directly causes all webpack commons to be imported, which can easily cause circular dependencies.

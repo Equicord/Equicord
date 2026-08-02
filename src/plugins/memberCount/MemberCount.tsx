@@ -6,9 +6,9 @@
 
 import { getCurrentChannel } from "@utils/discord";
 import { isObjectEmpty } from "@utils/misc";
-import { ChannelStore, GuildMemberCountStore, PermissionsBits, PermissionStore, SelectedChannelStore, Tooltip, useEffect, useStateFromStores, VoiceStateStore } from "@webpack/common";
+import { ChannelMemberStore, ChannelStore, GuildMemberCountStore, PermissionsBits, PermissionStore, SelectedChannelStore, ThreadMemberListStore, Tooltip, useEffect, useStateFromStores, VoiceStateStore } from "@webpack/common";
 
-import { ChannelMemberStore, cl, numberFormat, settings, ThreadMemberListStore } from ".";
+import { cl, numberFormat, settings } from ".";
 import { CircleIcon } from "./CircleIcon";
 import { OnlineMemberCountStore } from "./OnlineMemberCountStore";
 import { VoiceIcon } from "./VoiceIcon";
