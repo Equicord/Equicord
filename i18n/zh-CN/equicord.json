@@ -146,7 +146,7 @@
                 "userOption": "特定用户尝试刷新"
             }
         },
-        "description": "通过其他改进增强了指挥系统。",
+        "description": "在本地刷新指定应用程序的命令。",
         "settings": {
             "allowNewlinesInCommands": "允许在命令输入中换行（CTRL + Shift + Enter）",
             "autoFillArguments": "自动用所有参数填充命令，而不仅仅是必需的参数"
