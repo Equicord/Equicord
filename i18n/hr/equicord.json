@@ -55,6 +55,9 @@
         },
         "description": "Nasumično spomenite nekoga"
     },
+    "audioPlayerAPI": {
+        "description": "API za reprodukciju internih Discord audio datoteka ili vanjskih audio linkova."
+    },
     "autoZipper": {
         "description": "Automatski komprimira određene vrste datoteka i mapa prije učitavanja u Discord",
         "settings": {
@@ -111,7 +114,7 @@
             "oscilloscopeColor": "Boja za osciloskop",
             "oscilloscopeSolidColor": "Koristite punu boju za osciloskop",
             "spectrograph": "Omogući vizualizator spektrografa",
-            "spectrographColor": "Boja za spektrograf",
+            "spectrographColor": "Boja za spektrograf (R, G, B ili #hex)",
             "spectrographSolidColor": "Koristite punu boju za spektrograf"
         },
         "toasts": {
@@ -146,7 +149,7 @@
                 "userOption": "određenog korisnika za pokušaj i osvježavanje"
             }
         },
-        "description": "Poboljšava sustav zapovijedanja raznim poboljšanjima.",
+        "description": "Osvježava naredbe navedenih aplikacija lokalno.",
         "settings": {
             "allowNewlinesInCommands": "Dopusti nove retke u unosu naredbi (CTRL + Shift + Enter)",
             "autoFillArguments": "Automatski ispuni naredbu sa svim argumentima umjesto samo potrebnim"
@@ -321,6 +324,7 @@
             "clipsLink": "Promijenite FPS i opcije trajanja u postavkama isječaka!",
             "enableAdvancedSignals": "Omogući napredne signale isječka (okidači automatskog isječka)",
             "enableScreenshotKeybind": "Omogućite značajku povezivanja tipki snimke zaslona",
+            "enableSpeakingIndicators": "Omogući govorne indikatore",
             "enableVoiceOnlyClips": "Omogući samo glasovne isječke (audio bez videa)",
             "ignorePlatformRestriction": "Dopusti izrezivanje ograničeno platformom (može uzrokovati pogreške pri spremanju)",
             "richPresenceTagging": "Kada bi isječci trebali biti označeni trenutnom Rich Presence?",
@@ -334,6 +338,8 @@
     "commandPalette": {
         "description": "Brzo pokrenite akcije kroz paletu naredbi koja se može pretraživati",
         "settings": {
+            "closeAfterExecute": "Zatvori paletu nakon izvršavanja naredbe.",
+            "compactStartEnabled": "Otvori paletu prvo u kompaktnom načinu.",
             "customCommands": "Upravljanje prilagođenim unosima palete naredbi",
             "enableTagFilter": "Prikaži traku filtera oznaka",
             "hotkey": "Prečac koji se koristi za otvaranje palete naredbi",
@@ -551,6 +557,11 @@
             "reset": "Vrati izvorno"
         }
     },
+    "equicordDonor": {
+        "description": "Ova značka je posebna pogodnost za Equicord donatore",
+        "description2": "Molimo razmislite o podršci razvoju Equicorda tako što ćete postati donator. To bi nam puno značilo!!",
+        "title": "Equicord Donor"
+    },
     "equicordHelper": {
         "alerts": {
             "equicordSupport": "Equicord Podrška",
@@ -598,6 +609,10 @@
             "themes": "Teme",
             "tooltip": "Equicord Kutija s alatima"
         }
+    },
+    "equicordTranslator": {
+        "description": "Dodjeljuje se suradnicima koji proširuju jezičnu podršku Equicorda prevođenjem sadržaja za zajednicu.",
+        "title": "Equicord prevoditelj"
     },
     "equissant": {
         "description": "Kroasan na svaku navedenu količinu klikova :trolley:",
@@ -889,6 +904,7 @@
     },
     "githubRepos": {
         "description": "Prikazuje korisnikova javna GitHub spremišta u njegovom profilu",
+        "githubRepos": "GitHub repozitoriji",
         "settings": {
             "showInMiniProfile": "Prikaži cijelo korisničko sučelje u mini profilu umjesto samo gumba",
             "showLanguage": "Prikaži jezik spremišta",
@@ -934,6 +950,9 @@
             "hideTags": "Sakrij oznake"
         }
     },
+    "headerBarAPI": {
+        "description": "API za dodavanje gumba na traku zaglavlja i alatnu traku kanala."
+    },
     "hideChatButtons": {
         "description": "Mogućnost sakrivanja gumba za chat",
         "settings": {
@@ -976,7 +995,7 @@
         "description": "Mijenja početni gumb u indikator tipkanja ako netko u vašem dms-u tipka"
     },
     "hopOn": {
-        "description": "Hop on Fortnite ili Hop on bloons :3",
+        "description": "Uskoči! Otvara konfigurabilni URL kada poruka odgovara prilagođenom regexu u trenutnom kanalu.",
         "settings": {
             "regex": "Regularni izraz za okidanje",
             "url": "URL za otvaranje"
@@ -1303,6 +1322,10 @@
             "scanQrCode": "Skeniraj QR kod"
         }
     },
+    "mainWindowFrameless": {
+        "description": "Ukloni izvorni okvir prozora za čišći izgled. Prozor i dalje možeš pomicati povlačenjem područja naslovne trake.",
+        "title": "Onemogući glavni okvir prozora"
+    },
     "mediaPlaybackSpeed": {
         "description": "Upravljajte brzinom reprodukcije medija za glasovne poruke, video i audio privitke",
         "settings": {
@@ -1484,7 +1507,7 @@
         }
     },
     "moyai": {
-        "description": "Pusti moyai zvučni efekt kada se koristi 🗿 emoji",
+        "description": "Pusti 🗿 zvučni efekt kad god se moyai emoji pošalje, reagira se njime ili se koristi kao glasovni efekt u tvom trenutnom kanalu.",
         "settings": {
             "ignoreBlocked": "Ignorirajte poruke blokiranih korisnika",
             "ignoreBots": "Ignorirajte poruke botova",
@@ -2079,7 +2102,10 @@
         "description": "Dodatak koji vam pomaže odgovoriti na trivijalna pitanja pomoću umjetne inteligencije.",
         "settings": {
             "apiKey": "API Tipka.",
-            "autoRespond": "Automatski odgovarajte na poruke kada primite odgovor.",
+            "autoReply": "Automatski odgovor",
+            "autoRespond": "Kako treba postupati s odgovorima?",
+            "bot": "Clyde",
+            "chatbar": "Text Zamijeni tekst chat trake",
             "endpoint": "OpenAI kompatibilna AI krajnja točka.",
             "maxTokens": "Maksimalan broj tokena u odgovoru.",
             "model": "AI model za korištenje.",
@@ -2136,6 +2162,9 @@
             "patternPlaceholder": "*.example.com",
             "urlPatterns": "URL Uzorci"
         }
+    },
+    "userAreaAPI": {
+        "description": "API za dodavanje gumba na ploču korisničkog područja."
     },
     "userpfp": {
         "avatarOptions": {
