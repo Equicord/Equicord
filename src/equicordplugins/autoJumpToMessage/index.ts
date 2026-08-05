@@ -49,7 +49,6 @@ export default definePlugin({
             "RPC_NOTIFICATION_CREATE",
             this.handleNotification,
         );
-        console.log("AutoJumpToMessage plugin is UP!.");
     },
 
     stop() {
@@ -57,6 +56,5 @@ export default definePlugin({
             "RPC_NOTIFICATION_CREATE",
             this.handleNotification,
         );
-        console.log("AutoJumpToMessage plugin stoped.");
     },
 });
