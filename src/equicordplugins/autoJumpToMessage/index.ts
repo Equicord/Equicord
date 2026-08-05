@@ -18,7 +18,7 @@ export default definePlugin({
         "Automatically opens the channel from new messages. Muted channels are ignored. Made for those who keep Discord on another monitor.",
     tags: ["Chat", "Utility"],
     searchTerms: ["jump", "message", "auto", "notification", "focus", "unfocused"],
-    authors: [EquicordDevs.k304, EquicordDevs.k304],
+    authors: [EquicordDevs.k304],
     settings,
 
     handleNotification(payload: any) {
