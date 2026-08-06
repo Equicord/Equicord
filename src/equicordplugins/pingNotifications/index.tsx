@@ -10,7 +10,6 @@ import { EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 import {
     ChannelStore,
-    GuildStore,
     NavigationRouter,
     PresenceStore,
     RelationshipStore,
@@ -70,7 +69,6 @@ function checkIfMuted(channel) {
     }
 
     if (channel.guild_id) {
-        const guild = GuildStore.getGuild(channel.guild_id);
         if (UserGuildSettingsStore.isMuted(channel.guild_id)) return true;
 
         if (UserGuildSettingsStore.isMuted(channel.guild_id)) return true;
