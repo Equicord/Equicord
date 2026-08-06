@@ -21,7 +21,6 @@ export default definePlugin({
     name: "AutoJumpToMessage",
     description: "Automatically opens the channel from new messages.",
     tags: ["Chat", "Utility"],
-    searchTerms: ["jump", "message", "auto", "notification", "focus", "unfocused"],
     authors: [EquicordDevs.k304],
     settings,
     flux: {
