@@ -1246,7 +1246,7 @@
         "description": "Envoie une notification si un message donné correspond à certains mots-clés ou expressions régulières",
         "options": {
             "blacklist": "Liste noire",
-            "whitelist": "Liste blanche"
+            "whitelist": "Autorisé"
         },
         "settings": {
             "amountToKeep": "Nombre de messages à conserver dans le journal",
@@ -1678,7 +1678,7 @@
             "claimedAsc": "Revendiqué (le plus ancien en premier)",
             "claimedDesc": "Réclamé (le plus récent en premier)",
             "expiringAsc": "Expiration (le plus tôt en premier)",
-            "expiringDesc": "Expiration (au plus tard en premier)",
+            "expiringDesc": "Expiration (le plus tard en premier)",
             "recentAsc": "Récent (le plus ancien en premier)",
             "recentDesc": "Récent (le plus récent en premier)"
         }
