@@ -55,6 +55,9 @@
         },
         "description": "Mention someone randomly"
     },
+    "audioPlayerAPI": {
+        "description": "API to play internal Discord audio files or external audio links."
+    },
     "autoZipper": {
         "description": "Automatically zips specified file types and folders before uploading to Discord",
         "settings": {
@@ -111,7 +114,7 @@
             "oscilloscopeColor": "Color for oscilloscope",
             "oscilloscopeSolidColor": "Use solid color for oscilloscope",
             "spectrograph": "Enable spectrograph visualizer",
-            "spectrographColor": "Color for spectrograph",
+            "spectrographColor": "Color for spectrograph (R, G, B or #hex)",
             "spectrographSolidColor": "Use solid color for spectrograph"
         },
         "toasts": {
@@ -146,7 +149,7 @@
                 "userOption": "specific user to try and refresh"
             }
         },
-        "description": "Enhances the command system with miscellaneous improvements.",
+        "description": "Refreshes the specified applications commands locally.",
         "settings": {
             "allowNewlinesInCommands": "Allow newlines in command inputs (CTRL + Shift + Enter)",
             "autoFillArguments": "Automatically fill command with all arguements instead of just required ones"
@@ -321,6 +324,7 @@
             "clipsLink": "Change FPS and duration options in Clips settings!",
             "enableAdvancedSignals": "Enable advanced clip signals (auto-clip triggers)",
             "enableScreenshotKeybind": "Enable the screenshot keybind feature",
+            "enableSpeakingIndicators": "Enable speaking indicators",
             "enableVoiceOnlyClips": "Enable voice-only clips (audio without video)",
             "ignorePlatformRestriction": "Allow Platform Restricted Clipping (may cause save errors)",
             "richPresenceTagging": "When should clips be tagged with the current Rich Presence?",
@@ -553,6 +557,11 @@
             "reset": "Reset"
         }
     },
+    "equicordDonor": {
+        "description": "This Badge is a special perk for Equicord (Not Vencord) Donors",
+        "description2": "Please consider supporting the development of Equicord by becoming a donor. It would mean a lot!!",
+        "title": "Equicord Donor"
+    },
     "equicordHelper": {
         "alerts": {
             "equicordSupport": "Equicord Support",
@@ -600,6 +609,10 @@
             "themes": "Themes",
             "tooltip": "Equicord Toolbox"
         }
+    },
+    "equicordTranslator": {
+        "description": "Awarded to contributors who expand Equicord's language support by translating content for the community.",
+        "title": "Equicord Translator"
     },
     "equissant": {
         "description": "Crossant every specified amount of clicks :trolley:",
@@ -891,6 +904,7 @@
     },
     "githubRepos": {
         "description": "Displays a user's public GitHub repositories in their profile",
+        "githubRepos": "GitHub Repositories",
         "settings": {
             "showInMiniProfile": "Show full ui in the mini profile instead of just a button",
             "showLanguage": "Show repository language",
@@ -936,6 +950,9 @@
             "hideTags": "Hide tags"
         }
     },
+    "headerBarAPI": {
+        "description": "API to add buttons to the header bar and channel toolbar."
+    },
     "hideChatButtons": {
         "description": "Able to hide the chat buttons",
         "settings": {
@@ -978,7 +995,7 @@
         "description": "Changes the home button to a typing indicator if someone in your dms is typing"
     },
     "hopOn": {
-        "description": "Hop on Fortnite or Hop on bloons :3",
+        "description": "Hop on! Opens a configurable URL when a message matches a custom regex in the current channel.",
         "settings": {
             "regex": "Regex to trigger on",
             "url": "URL to open"
@@ -1305,6 +1322,10 @@
             "scanQrCode": "Scan QR Code"
         }
     },
+    "mainWindowFrameless": {
+        "description": "Remove the native window frame for a cleaner look. You can still move the window by dragging the title bar area.",
+        "title": "Disable the Main Window Frame"
+    },
     "mediaPlaybackSpeed": {
         "description": "Control media playback speed for voice messages, videos, and audio attachments",
         "settings": {
@@ -1486,7 +1507,7 @@
         }
     },
     "moyai": {
-        "description": "Play the moyai sound effect when 🗿 emoji is used",
+        "description": "Plays a 🗿 sound effect whenever a moyai emoji is sent, reacted, or used as a voice effect in your current channel.",
         "settings": {
             "ignoreBlocked": "Ignore messages from blocked users",
             "ignoreBots": "Ignore messages from bots",
@@ -2081,7 +2102,10 @@
         "description": "A plugin that helps you answer trivia questions using AI.",
         "settings": {
             "apiKey": "API Key.",
-            "autoRespond": "Automatically respond to messages on receiving a response.",
+            "autoReply": "Auto Reply",
+            "autoRespond": "How should answers be handled?",
+            "bot": "Clyde",
+            "chatbar": "Replace Chatbar Text",
             "endpoint": "OpenAI Compatible AI Endpoint.",
             "maxTokens": "Maximum number of tokens in the response.",
             "model": "AI Model to use.",
@@ -2138,6 +2162,9 @@
             "patternPlaceholder": "*.example.com",
             "urlPatterns": "URL Patterns"
         }
+    },
+    "userAreaAPI": {
+        "description": "API to add buttons to the user area panel."
     },
     "userpfp": {
         "avatarOptions": {
