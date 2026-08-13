@@ -284,7 +284,7 @@
             "syncedCloud": "Cloud data synchronised.",
             "upToDate": "Your settings are up to date.",
             "updated": "Your settings have been updated! Click here to restart to fully apply changes!",
-            "updatedRemote": "Your settings have been updated! Click here to restart to fully apply changes!"
+            "updatedRemote": "Settings synchronized to the cloud!"
         }
     },
     "colorSighted": {
@@ -390,6 +390,7 @@
         "button1Url": "Button1 URL",
         "button2Text": "Button2 Text",
         "button2Url": "Button2 URL",
+        "description": "Add a fully customisable Rich Presence (Game status) to your Discord profile",
         "detailLine1": "Detail (line 1)",
         "detailUrl": "Detail URL",
         "endTimestamp": "End Timestamp (in milliseconds)",
@@ -455,12 +456,43 @@
     },
     "decor": {
         "accessFromProfiles": "You can also access Decor decorations from the {link} page.",
+        "agreedToGuidelines": "Agreed to guidelines",
+        "alreadyPending": "You already have a decoration pending review",
+        "apply": "Apply",
+        "browse": "Browse",
         "changeDecoration": "Change Decoration",
+        "chooseAFile": "Choose a file",
+        "confirmLogOut": "Are you sure you want to log out of Decor?",
+        "continue": "Continue",
+        "copyHash": "Copy Decoration Hash",
+        "copyPresetId": "Copy Preset ID",
+        "createDecoration": "Create Decoration",
+        "createdBy": "Created by",
+        "delete": "Delete",
+        "deleteConfirm": "Are you sure you want to delete {name}?",
+        "deleteDecoration": "Delete Decoration",
+        "deleteInstructions": "You can delete your own decorations by right clicking on them.",
         "description": "Create and use your own custom avatar decorations, or pick your favorite from the presets.",
+        "discordServerNotice": "To receive updates on your decoration's review, join {link} and allow direct messages.",
+        "discordTooltip": "Join Decor's Discord Server for notifications on your decoration's review, and when new presets are released",
         "enableAndRestart": "Enable Decor and restart your client to change your avatar decoration.",
+        "file": "File",
+        "fileNotice": "File should be APNG or PNG.",
+        "guidelinesAgreementNotice": "By submitting a decoration, you agree to {guidelines}. Not reading these guidelines may get your account suspended from creating more decorations in the future.",
+        "guidelinesNotice": "Make sure your decoration does not violate {guidelines} before submitting it.",
+        "holdOn": "Hold on",
+        "logOut": "Log Out",
+        "name": "Name",
+        "nameNotice": "This name will be used when referring to this decoration.",
+        "options": "Decoration Options",
+        "pendingReview": "Pending review",
+        "presetPart": "Part of the {name} Preset",
         "profilesLink": "Profiles",
         "removeDecoration": "Remove Decoration",
-        "title": "Decor"
+        "submitForReview": "Submit for Review",
+        "theGuidelines": "the guidelines",
+        "title": "Decor",
+        "yourDecorations": "Your Decorations"
     },
     "devCompanion": {
         "description": "Dev Companion Plugin. Please report anything not working or being weird (most likely its a bug) to sadan, either ping or dm, thanks!",
@@ -507,10 +539,12 @@
     },
     "expressionCloner": {
         "cloneEmoji": "Clone Emoji",
+        "cloneName": "Clone {name}",
         "cloneSticker": "Clone Sticker",
         "cloneTo": "Clone to {guild}",
         "clonedSuccess": "Successfully cloned {name} to {guild}!",
         "customName": "Custom Name",
+        "description": "Allows you to clone Emotes & Stickers to your own server (right click them)",
         "failedToClone": "Failed to clone: {error}",
         "nameValidation": "Name must be between 2 and 32 characters",
         "somethingWentWrong": "Something went wrong (check console!)"
@@ -533,6 +567,7 @@
             "body3": "Are you sure you want to send this message? Your FakeNitro items will appear as a link only.",
             "disableNotice": "You can disable this notice in the plugin settings."
         },
+        "ok": "OK",
         "sendAnyway": "Send Anyway",
         "settings": {
             "disableEmbedPermissionCheck": "Whether to disable the embed permission check when sending fake emojis and stickers",
@@ -705,6 +740,7 @@
         "description": "Do not hide messages from 'likely spammers'"
     },
     "ignoreActivities": {
+        "description": "Ignore activities from showing up on your status ONLY. You can configure which ones are specifically ignored from the Registered Games and Activities tabs, or use the general settings below",
         "disableActivity": "Disable activity",
         "enableActivity": "Enable activity",
         "filterList": {
@@ -738,6 +774,7 @@
         "description": "Never hide image links in messages, even if it's the only content"
     },
     "imageZoom": {
+        "description": "Lets you zoom in to images and gifs. Use scroll wheel to zoom in and shift + scroll wheel to increase lens radius / size",
         "lensSize": "Lens Size",
         "nearestNeighbour": "Nearest Neighbour",
         "settings": {
@@ -846,6 +883,7 @@
         "showLogs": "Show Logs"
     },
     "memberCount": {
+        "description": "Shows the number of online members, total members, and users in voice channels on the server — in the member list and tooltip.",
         "settings": {
             "memberList": "Show member count in the member list",
             "toolTip": "Show member count on the server tooltip",
@@ -936,6 +974,7 @@
     "messageLatency": {
         "clockAhead": "This user's clock is {delta} ahead.",
         "delayedMessage": "Delayed Message",
+        "description": "Displays an indicator for messages that took ≥n seconds to send",
         "messageDelayed": "This message was sent with a delay of {delta}.",
         "oldAndroidClient": "Old Discord Android client",
         "oldDiscordAndroid": "User is suspected to be on an old Discord Android client",
@@ -995,6 +1034,7 @@
         "deletedMessages_one": "{count} deleted message",
         "deletedMessages_other": "{count} deleted messages",
         "deletedMessages_zero": "No deleted messages",
+        "description": "Temporarily logs deleted and edited messages.",
         "disableDiffView": "Disable Diff View",
         "editHistory": "Message Edit History",
         "enableDiffView": "Enable Diff View",
@@ -1163,6 +1203,12 @@
     "noSystemBadge": {
         "description": "Disables the taskbar and system tray unread count badge."
     },
+    "noTrack": {
+        "description": "Disable Discord's tracking (analytics/'science'), metrics and Sentry crash reporting",
+        "settings": {
+            "disableAnalytics": "Disable Discord's tracking (analytics/'science')"
+        }
+    },
     "noTypingAnimation": {
         "description": "Disables the CPU-intensive typing dots animation"
     },
@@ -1236,6 +1282,7 @@
         }
     },
     "permissionsViewer": {
+        "description": "View the permissions a user or channel has, and the roles of a server",
         "noPermissions": "No permissions to display!",
         "owner": "owner",
         "permissions": "Permissions",
@@ -1286,6 +1333,7 @@
         "color": "Color",
         "create": "Create",
         "deleteCategory": "Delete Category",
+        "description": "Allows you to pin private channels to the top of your DM list. To pin/unpin or re-order pins, right click DMs",
         "editCategory": "Edit Category",
         "editCategoryTitle": "Edit Category",
         "moveDown": "Move Down",
@@ -1420,6 +1468,7 @@
         "confirmDelete": "Do you really want to delete this review?",
         "confirmReport": "Do you really want to report this review?",
         "delete": "Delete",
+        "description": "Review other users (Adds a new settings to profiles)",
         "failedToFetchBlocks": "Failed to fetch blocks: {error}",
         "mustBeLoggedInBlock": "You must be logged in to block users.",
         "mustBeLoggedInDelete": "You must be logged in to delete reviews.",
@@ -1427,6 +1476,7 @@
         "nevermind": "Nevermind",
         "newReviews": "You have new reviews on your profile!",
         "noBlockedUsers": "No blocked users.",
+        "noReviewsYet": "No reviews yet",
         "notLoggedIn": "You are not logged into ReviewDB!",
         "ok": "Ok",
         "readMore": "Read more",
@@ -1452,6 +1502,8 @@
         },
         "system": "System",
         "unblockUser": "Unblock user",
+        "userOptedOut": "User opted out",
+        "userReviews": "User Reviews",
         "viewReviews": "View Reviews"
     },
     "roleColorEverywhere": {
@@ -1610,7 +1662,7 @@
         },
         "frameless": {
             "description": "Remove the native window frame for a cleaner look. You can still move the window by dragging the title bar area.",
-            "title": "Disable the window frame"
+            "title": "Disable All Window Frames"
         },
         "hint": "Hint: You can change the position of this settings section in the <0>settings of the Settings plugin</0>!",
         "macosVibrancyStyle": {
@@ -1659,6 +1711,16 @@
             "description": "Replace Discord's custom title bar with the standard Windows title bar. This may improve compatibility with some window management tools.",
             "title": "Use Windows' native title bar instead of Discord's custom one"
         }
+    },
+    "settingsPlugin": {
+        "aboveActivity": "Above Activity Settings",
+        "aboveNitro": "Above the Nitro section",
+        "belowActivity": "Below Activity Settings",
+        "belowNitro": "Below the Nitro section",
+        "bottom": "At the very bottom",
+        "description": "Adds Settings UI and debug info",
+        "settingsLocation": "Where to put the Equicord settings section",
+        "top": "At the very top"
     },
     "settingsSync": {
         "failedToImport": "Failed to import settings: {e}",
@@ -1859,6 +1921,7 @@
             "membersListIndicators": "Members List Indicators",
             "silentTyping": "Silent Typing"
         },
+        "description": "Hide your typing indicator from chat.",
         "noChanges": "No changes made to silent typing settings.",
         "settings": {
             "chatContextMenu": "Show a dropdown in the chat context menu to modify plugin settings on the go.",
@@ -1920,21 +1983,34 @@
             "unlimitedSuperReactionPlaying": "Remove the limit on Super Reactions playing at once"
         }
     },
+    "supportHelper": {
+        "debug": "Send Equicord debug info",
+        "description": "Helps us provide support to you",
+        "plugins": "Send Equicord plugin list"
+    },
     "tabs": {
         "settings": "Equicord Settings"
     },
     "textReplace": {
+        "description": "Replace text in your or others' messages. You can find pre-made rules in the #textreplace-rules channel in Vencord's Server.",
         "find": "Find",
+        "findDesc": "The text to replace",
+        "findDescRegex": "The regex pattern",
         "messageWithRules": "Message with rules applied",
         "onlyIfIncludes": "Only if includes",
+        "onlyIfIncludesDesc": "This rule will only be applied if the message includes this text. This is optional",
+        "regexRules": "More powerful replacements using Regular Expressions. This section is for advanced users. If you don't understand it, just ignore it",
         "replace": "Replace",
+        "replaceDesc": "The text to replace the found text with",
         "scope.allMessages": "Apply to all messages",
         "scope.myMessages": "Apply to your messages (visible to everyone)",
         "scope.othersMessages": "Apply to others' messages (only visible to you)",
+        "stringRules": "Simple find and replace rules. For example, find 'brb' and replace it with 'be right back'",
+        "testMessage": "Type a message to test rules on",
         "testRules": "Test Rules",
         "typeMessage": "Type a message",
-        "usingRegex": "Using Regex",
-        "usingString": "Using String"
+        "usingRegex": "Regex Replacements",
+        "usingString": "Simple Replacements"
     },
     "themeAttributes": {
         "description": "Adds data attributes to various elements for theming purposes"
@@ -1946,6 +2022,7 @@
             "title": "Equicord Auto-Translate Enabled"
         },
         "autoTranslateEnabledLabel": "Auto Translate Enabled",
+        "description": "Translate messages with Google Translate or DeepL",
         "disableAutoTranslate": "Disable Auto-Translate",
         "dontShowAgain": "Don't show again",
         "gotIt": "Got it",
@@ -1953,6 +2030,16 @@
         "openTranslateModal": "Open Translate Modal",
         "selectLanguage": "Select a language",
         "translate": "Translate"
+    },
+    "translation": {
+        "description": "Assists with translating Equicord",
+        "settings": {
+            "forceLocale": {
+                "description": "Force a different locale for Equicord to use",
+                "followDiscord": "Default (follow Discord)"
+            },
+            "showMissingKeys": "If the current locale is missing translations, show the keys instead of falling back to English"
+        }
     },
     "typingIndicator": {
         "description": "Adds an indicator if someone is typing on a channel.",
@@ -2067,6 +2154,11 @@
         },
         "speechSynthesisNotSupported": "SpeechSynthesis not supported or no Narrator voices found. Thus, this plugin will not work. Check my Settings for more info"
     },
+    "vencordDonor": {
+        "description": "This Badge is a special perk for Vencord Donors",
+        "description2": "Please consider supporting the development of Vencord by becoming a donor. It would mean a lot!!",
+        "title": "Vencord Donor"
+    },
     "viewIcons": {
         "description": "Makes avatars and banners in user profiles clickable, adds View Icon/Banner entries in the user, server and group channel context menu.",
         "settings": {
@@ -2090,6 +2182,7 @@
         "settings": {
             "clickMethodDescription": "Change the button to view the raw content/data of any message.",
             "leftClick": "Left Click to view the raw content.",
+            "messageContextMenu": "Show in message context menu",
             "rightClick": "Right click to view the raw content."
         },
         "viewRaw": "View Raw",
@@ -2100,6 +2193,7 @@
         "downloadVoiceMessage": "Download voice message"
     },
     "voiceMessages": {
+        "description": "Allows you to send voice messages like on mobile. To do so, right click the upload button and click Send Voice Message.",
         "echoCancellation": "Echo Cancellation",
         "failedToParse": "Failed to parse selected audio file: {error}",
         "failedToUpload": "Failed to upload voice message",
@@ -2132,6 +2226,7 @@
         "description": "Removes 2500kbps bitrate cap on chromium and vesktop clients."
     },
     "whoReacted": {
+        "description": "Renders the avatars of users who reacted to a message",
         "settings": {
             "avatarClick": "Toggle clicking avatars in reactions"
         }
