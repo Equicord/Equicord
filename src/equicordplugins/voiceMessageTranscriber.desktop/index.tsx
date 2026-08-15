@@ -112,8 +112,8 @@ const settings = definePluginSettings({
             }
         ],
         componentProps: {
-            renderOptionLabel: (option: any) => renderModelOption(option),
-            renderOptionValue: (options: any[]) => renderModelOption(options?.[0]),
+            renderOptionLabel: (option: { label: string; value: string; }) => renderModelOption(option),
+            renderOptionValue: (options: { label: string; value: string; }[]) => renderModelOption(options?.[0]),
         },
         restartNeeded: false
     },
