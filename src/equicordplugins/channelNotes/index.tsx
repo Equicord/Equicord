@@ -7,12 +7,12 @@
 import * as DataStore from "@api/DataStore";
 import { definePluginSettings } from "@api/Settings";
 import { setStyleClassNames } from "@api/Styles";
+import { Button } from "@components/Button";
 import ErrorBoundary from "@components/ErrorBoundary";
 import definePlugin, { OptionType } from "@utils/types";
 import { Channel, RenderModalProps } from "@vencord/discord-types";
 import { findCssClassesLazy } from "@webpack";
 import {
-    Button,
     Modal,
     openModal,
     SelectedChannelStore,
@@ -114,6 +114,7 @@ export function openNoteModal(channelId: string) {
 function ChannelNoteHeader() {
     const { noteColor } = settings.use(SETTINGS_KEYS);
     const [, forceUpdate] = useState(0);
+
     const channelId = useStateFromStores(
         [SelectedChannelStore],
         () => SelectedChannelStore.getChannelId()
@@ -122,6 +123,7 @@ function ChannelNoteHeader() {
     useEffect(() => {
         const unlisten = () => forceUpdate(v => v + 1);
         noteListeners.add(unlisten);
+        unlisten();
 
         return () => void noteListeners.delete(unlisten);
     }, []);
