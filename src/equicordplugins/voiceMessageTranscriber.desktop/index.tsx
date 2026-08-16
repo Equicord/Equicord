@@ -23,11 +23,11 @@ import { RenderModalProps } from "@vencord/discord-types";
 import { findComponentByCodeLazy } from "@webpack";
 import { Modal, openModal, ScrollerAuto, SearchableSelect, Tooltip, useEffect, useRef, useState } from "@webpack/common";
 
-import { cl, decodeAudio, LANGUAGES, TranscriptionWorker } from "./utils";
+import { cl, decodeAudio, LANGUAGES, TranscriptionResult, TranscriptionWorker } from "./utils";
 const Native = VencordNative.pluginHelpers.VoiceMessageTranscriber as PluginNative<typeof import("./native")>;
 
 const ChannelListIcon = findComponentByCodeLazy("1-1-1ZM2 8a1");
-let ManaBaseRadioGroup: any;
+let ManaBaseRadioGroup: React.ComponentType<{ options: { name: string; value: string; }[]; value: string; onChange: (v: string) => void; }>;
 const QUANTIZED_KEYS: ("quantized")[] = ["quantized"];
 const SETTINGS_KEYS: ("embed" | "maintainHorizontal" | "quantized" | "selectedModel")[] = ["embed", "maintainHorizontal", "quantized", "selectedModel"];
 
@@ -81,19 +81,19 @@ function renderModelOption(option?: { label: string; value: string; }) {
 const settings = definePluginSettings({
     embed: {
         type: OptionType.BOOLEAN,
-        description: "Display transcription directly in the voice message attachment instead of a modal",
+        description: "Display transcription directly in the voice message attachment instead of a modal.",
         default: false,
         restartNeeded: false
     },
     maintainHorizontal: {
         type: OptionType.BOOLEAN,
-        description: "Maintain horizontal size for the embedded transcription box and expand vertically",
+        description: "Maintain horizontal size for the embedded transcription box and expand vertically.",
         default: false,
         restartNeeded: false
     },
     selectedModel: {
         type: OptionType.SELECT,
-        description: "Model size",
+        description: "Model size.",
         options: [
             {
                 label: "Tiny (Fastest, lowest accuracy)",
@@ -121,13 +121,13 @@ const settings = definePluginSettings({
     },
     quantized: {
         type: OptionType.BOOLEAN,
-        description: "Use quantized models (smaller size, slight quality loss)",
+        description: "Use quantized models (smaller size, slight quality loss).",
         default: true,
         restartNeeded: false
     },
     deleteModalFiles: {
         type: OptionType.COMPONENT,
-        description: "Delete cached files from storage",
+        description: "Delete cached files from storage.",
         component: () => {
             const [size, setSize] = useState(0);
             const [deleteKeys, setDeleteKeys] = useState<string[]>([]);
@@ -236,7 +236,7 @@ function LanguageSelectionModal(props: { modalProps: RenderModalProps, src: stri
 function TranscriptionModal(props: { modalProps: RenderModalProps, src: string, options: { language: string, task: string; }; }) {
     const { modalProps, src, options } = props;
     const [status, setStatus] = useState<string>("initializing");
-    const [result, setResult] = useState<{ text: string, chunks: { timestamp: [number, number], text: string; }[]; } | null>(null);
+    const [result, setResult] = useState<TranscriptionResult | null>(null);
     const [showTimestamps, setShowTimestamps] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [copied, setCopied] = useState(false);
@@ -253,8 +253,8 @@ function TranscriptionModal(props: { modalProps: RenderModalProps, src: string, 
 
                 let blob: Blob;
                 if (IS_DISCORD_DESKTOP || IS_EQUIBOP) {
-                    const arrayBuffer = await Native.fetchAudio(src);
-                    blob = new Blob([arrayBuffer as any]);
+                    const data = await Native.fetchAudio(src);
+                    blob = new Blob([new Uint8Array(data)]);
                 } else {
                     const res = await fetch(src);
                     if (!res.ok) throw new Error("Failed to download audio");
@@ -382,7 +382,7 @@ function VoiceMessageTranscriber({ src }: { src: string; }) {
     const { embed, maintainHorizontal, quantized, selectedModel } = settings.use(SETTINGS_KEYS);
     const [isOpen, setIsOpen] = useState(false);
     const [status, setStatus] = useState<string>("idle");
-    const [result, setResult] = useState<{ text: string, chunks: { timestamp: [number, number], text: string; }[]; } | null>(null);
+    const [result, setResult] = useState<TranscriptionResult | null>(null);
     const [showTimestamps, setShowTimestamps] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [copied, setCopied] = useState(false);
@@ -410,8 +410,8 @@ function VoiceMessageTranscriber({ src }: { src: string; }) {
         try {
             let blob: Blob;
             if (IS_DISCORD_DESKTOP || IS_EQUIBOP) {
-                const arrayBuffer = await Native.fetchAudio(src);
-                blob = new Blob([arrayBuffer as any]);
+                const data = await Native.fetchAudio(src);
+                blob = new Blob([new Uint8Array(data)]);
             } else {
                 const res = await fetch(src);
                 if (!res.ok) throw new Error("Failed to download audio");
@@ -628,7 +628,7 @@ export default definePlugin({
             }
         },
     ],
-    set ManaBaseRadioGroup(value: any) {
+    set ManaBaseRadioGroup(value: typeof ManaBaseRadioGroup) {
         ManaBaseRadioGroup = value;
     },
     settings,
