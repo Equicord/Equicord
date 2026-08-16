@@ -40,11 +40,11 @@
     flex-shrink: 0;
 }
 
-:has(> .vc-transcription-embed) {
+.vc-transcription-container:has(> .vc-transcription-embed) {
     flex-wrap: wrap !important;
 }
 
-:has(> .vc-transcription-embed-maintain-horizontal) {
+.vc-transcription-container:has(> .vc-transcription-embed-maintain-horizontal) {
     flex-wrap: wrap !important;
     width: fit-content !important;
     max-width: 100% !important;

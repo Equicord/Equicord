@@ -10,8 +10,8 @@ import { DataStore } from "@api/index";
 import { definePluginSettings } from "@api/Settings";
 import { BaseText } from "@components/BaseText";
 import { Button } from "@components/Button";
+import ErrorBoundary from "@components/ErrorBoundary";
 import { Flex } from "@components/Flex";
-import { FormSwitch } from "@components/FormSwitch";
 import { Heading } from "@components/Heading";
 import { ClockIcon, CopyIcon } from "@components/Icons";
 import { Span } from "@components/Span";
@@ -21,13 +21,15 @@ import { classes } from "@utils/misc";
 import definePlugin, { OptionType, PluginNative } from "@utils/types";
 import { RenderModalProps } from "@vencord/discord-types";
 import { findComponentByCodeLazy } from "@webpack";
-import { lodash, Modal, openModal, ScrollerAuto, SearchableSelect, Tooltip, useEffect, useRef, useState } from "@webpack/common";
+import { Modal, openModal, ScrollerAuto, SearchableSelect, Tooltip, useEffect, useRef, useState } from "@webpack/common";
 
 import { cl, decodeAudio, LANGUAGES, TranscriptionWorker } from "./utils";
 const Native = VencordNative.pluginHelpers.VoiceMessageTranscriber as PluginNative<typeof import("./native")>;
 
 const ChannelListIcon = findComponentByCodeLazy("1-1-1ZM2 8a1");
-let ManaBaseRadioGroup;
+let ManaBaseRadioGroup: any;
+const QUANTIZED_KEYS: ("quantized")[] = ["quantized"];
+const SETTINGS_KEYS: ("embed" | "maintainHorizontal" | "quantized" | "selectedModel")[] = ["embed", "maintainHorizontal", "quantized", "selectedModel"];
 
 function formatTimestamp(seconds: number) {
     const m = Math.floor(seconds / 60);
@@ -61,7 +63,7 @@ const MODEL_SIZES: Record<string, { quantized: string; full: string; }> = {
 
 function renderModelOption(option?: { label: string; value: string; }) {
     if (!option) return null;
-    const isQuantized = settings.use(["quantized"])?.quantized ?? true;
+    const isQuantized = settings.use(QUANTIZED_KEYS)?.quantized ?? true;
     const size = MODEL_SIZES[option.value]?.[isQuantized ? "quantized" : "full"];
 
     return (
@@ -119,34 +121,37 @@ const settings = definePluginSettings({
     },
     quantized: {
         type: OptionType.BOOLEAN,
-        description: "Use quantized model (smaller size, slightly lower accuracy)",
+        description: "Use quantized models (smaller size, slight quality loss)",
         default: true,
         restartNeeded: false
     },
-    delete: {
+    deleteModalFiles: {
         type: OptionType.COMPONENT,
+        description: "Delete cached files from storage",
         component: () => {
             const [size, setSize] = useState(0);
             const [deleteKeys, setDeleteKeys] = useState<string[]>([]);
 
             useEffect(() => {
+                let unmounted = false;
                 DataStore.entries().then(entries => {
-                    let size = 0;
-                    const keys = [] as string[];
-
-                    entries.forEach(([key, val]) => {
-                        if (typeof key === "string" && key.startsWith("VoiceMessageTranscriber") && lodash.isArrayBuffer(val)) {
+                    if (unmounted) return;
+                    let totalSize = 0;
+                    const keys: string[] = [];
+                    for (const [key, value] of entries) {
+                        if (typeof key === "string" && (key.startsWith("whisper-") || key.startsWith("onnx-"))) {
+                            totalSize += (value as string).length;
                             keys.push(key);
-                            size += val.byteLength ?? 0;
                         }
-                    });
-
-                    setSize(size);
+                    }
+                    setSize(totalSize);
                     setDeleteKeys(keys);
                 });
+                return () => { unmounted = true; };
             }, []);
 
             return <Button
+                disabled={size === 0}
                 variant="dangerPrimary"
                 onClick={() => {
                     DataStore.delMany(deleteKeys).then(() => { setSize(0); setDeleteKeys([]); });
@@ -261,6 +266,7 @@ function TranscriptionModal(props: { modalProps: RenderModalProps, src: string, 
                 const audioData = await decodeAudio(blob);
 
                 if (!active) return;
+                workerRef.current?.terminate();
                 workerRef.current = new TranscriptionWorker(
                     s => {
                         if (active) setStatus(s);
@@ -272,7 +278,10 @@ function TranscriptionModal(props: { modalProps: RenderModalProps, src: string, 
                         }
                     },
                     err => {
-                        if (active) setError(String(err));
+                        if (active) {
+                            setError(String(err));
+                            setStatus("error");
+                        }
                     },
                     partial => {
                         if (active) setResult(partial);
@@ -288,7 +297,10 @@ function TranscriptionModal(props: { modalProps: RenderModalProps, src: string, 
                     options.task
                 );
             } catch (err) {
-                if (active) setError(String(err));
+                if (active) {
+                    setError(String(err));
+                    setStatus("error");
+                }
             }
         })();
 
@@ -296,14 +308,16 @@ function TranscriptionModal(props: { modalProps: RenderModalProps, src: string, 
             active = false;
             workerRef.current?.terminate();
         };
-    }, [src, retryCount]);
+    }, [retryCount]);
 
-    const retry = () => {
-        setError(null);
-        setStatus("initializing");
-        setResult(null);
-        setCopied(false);
-        setRetryCount(prev => prev + 1);
+    const handleCopy = () => {
+        if (!result) return;
+        const text = showTimestamps
+            ? result.chunks.map(c => `[${formatTimestamp(c.timestamp[0])} - ${formatTimestamp(c.timestamp[1])}] ${c.text}`).join("\n")
+            : result.text;
+        copyToClipboard(text);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
     };
 
     const displayText = result ? (
@@ -312,61 +326,46 @@ function TranscriptionModal(props: { modalProps: RenderModalProps, src: string, 
             : result.text
     ) : "";
 
-    const actions: any[] = [];
-    if (error) {
-        actions.push({
-            text: "Retry",
-            variant: "primary",
-            onClick: retry
-        });
-    } else if (status === "complete" || (status === "transcribing" && result)) {
-        actions.push({
-            text: copied ? "Copied!" : "Copy to Clipboard",
-            variant: "primary",
-            disabled: status === "transcribing" || copied,
-            onClick: () => {
-                copyToClipboard(displayText);
-                setCopied(true);
-                setTimeout(() => setCopied(false), 2000);
-            }
-        });
-    }
-
     return (
         <Modal
             {...modalProps}
-            size="lg"
-            title="Transcription"
-            actions={actions}
+            size="md"
+            title={options.task === "translate" ? "Voice Message Translation" : "Voice Message Transcription"}
+            actions={[
+                ...(error ? [{
+                    text: "Retry",
+                    variant: "primary" as const,
+                    onClick: () => setRetryCount(c => c + 1)
+                }] : []),
+                ...(result ? [
+                    {
+                        text: showTimestamps ? "Hide Timestamps" : "Show Timestamps",
+                        variant: "secondary" as const,
+                        onClick: () => setShowTimestamps(!showTimestamps)
+                    },
+                    {
+                        text: copied ? "Copied!" : "Copy Text",
+                        variant: "secondary" as const,
+                        onClick: handleCopy
+                    }
+                ] : [])
+            ]}
         >
             <div className={cl("content")}>
                 {error ? (
-                    <Flex flexDirection="column" gap={16} style={{ padding: "20px 0" }}>
-                        <Heading tag="h3" style={{ color: "var(--red-360)" }}>Error</Heading>
-                        <Span style={{ whiteSpace: "pre-wrap" }}>{error}</Span>
+                    <Flex flexDirection="column" alignItems="center" gap={12} style={{ padding: "32px 16px" }}>
+                        <Heading tag="h3" style={{ color: "var(--red-360)" }}>Transcription Failed</Heading>
+                        <BaseText size="sm" color="text-muted" style={{ textAlign: "center" }}>
+                            {error}
+                        </BaseText>
                     </Flex>
-                ) : (status === "complete" || (status === "transcribing" && result)) ? (
-                    <Flex flexDirection="column" gap={16} style={{ paddingBottom: "20px" }}>
-                        {status === "transcribing" && (
-                            <Span size="sm" color="text-muted">Transcribing in progress...</Span>
-                        )}
-                        <ScrollerAuto className={cl("result")}>
-                            <Span>{displayText}</Span>
-                        </ScrollerAuto>
-                        <Flex flexDirection="row" gap={12} alignItems="center">
-                            <div style={{ flexGrow: 1 }}>
-                                <FormSwitch
-                                    title="Show Timestamps"
-                                    value={showTimestamps}
-                                    onChange={setShowTimestamps}
-                                />
-                            </div>
-                        </Flex>
-                    </Flex>
+                ) : displayText ? (
+                    <div className={cl("result")}>
+                        <BaseText size="md">{displayText}</BaseText>
+                    </div>
                 ) : (
-                    <Flex flexDirection="column" gap={16} style={{ padding: "20px 0", alignItems: "center" }}>
+                    <Flex flexDirection="column" alignItems="center" justifyContent="center" gap={16} style={{ height: "200px" }}>
                         <Heading tag="h3">
-                            {status === "initializing" && "Initializing..."}
                             {status === "downloading_audio" && "Downloading Audio..."}
                             {status === "processing_audio" && "Processing Audio..."}
                             {status === "loading" && "Loading Model..."}
@@ -380,12 +379,7 @@ function TranscriptionModal(props: { modalProps: RenderModalProps, src: string, 
 }
 
 function VoiceMessageTranscriber({ src }: { src: string; }) {
-    const { embed, maintainHorizontal, quantized, selectedModel } = settings.use([
-        "embed",
-        "maintainHorizontal",
-        "quantized",
-        "selectedModel"
-    ]);
+    const { embed, maintainHorizontal, quantized, selectedModel } = settings.use(SETTINGS_KEYS);
     const [isOpen, setIsOpen] = useState(false);
     const [status, setStatus] = useState<string>("idle");
     const [result, setResult] = useState<{ text: string, chunks: { timestamp: [number, number], text: string; }[]; } | null>(null);
@@ -394,14 +388,21 @@ function VoiceMessageTranscriber({ src }: { src: string; }) {
     const [copied, setCopied] = useState(false);
 
     const workerRef = useRef<TranscriptionWorker | null>(null);
+    const activeRunId = useRef(0);
 
     useEffect(() => {
         return () => {
+            activeRunId.current++;
             workerRef.current?.terminate();
+            workerRef.current = null;
         };
     }, []);
 
     const startTranscription = async () => {
+        const runId = ++activeRunId.current;
+        workerRef.current?.terminate();
+        workerRef.current = null;
+
         setIsOpen(true);
         setError(null);
         setStatus("downloading_audio");
@@ -417,22 +418,31 @@ function VoiceMessageTranscriber({ src }: { src: string; }) {
                 blob = await res.blob();
             }
 
+            if (runId !== activeRunId.current) return;
+
             setStatus("processing_audio");
             const audioData = await decodeAudio(blob);
 
-            workerRef.current?.terminate();
+            if (runId !== activeRunId.current) return;
+
             workerRef.current = new TranscriptionWorker(
-                s => setStatus(s),
+                s => {
+                    if (runId === activeRunId.current) setStatus(s);
+                },
                 out => {
-                    setResult(out);
-                    setStatus("complete");
+                    if (runId === activeRunId.current) {
+                        setResult(out);
+                        setStatus("complete");
+                    }
                 },
                 err => {
-                    setError(String(err));
-                    setStatus("error");
+                    if (runId === activeRunId.current) {
+                        setError(String(err));
+                        setStatus("error");
+                    }
                 },
                 partial => {
-                    setResult(partial);
+                    if (runId === activeRunId.current) setResult(partial);
                 }
             );
 
@@ -444,8 +454,10 @@ function VoiceMessageTranscriber({ src }: { src: string; }) {
                 "transcribe"
             );
         } catch (err) {
-            setError(String(err));
-            setStatus("error");
+            if (runId === activeRunId.current) {
+                setError(String(err));
+                setStatus("error");
+            }
         }
     };
 
@@ -587,6 +599,8 @@ function VoiceMessageTranscriber({ src }: { src: string; }) {
     );
 }
 
+const VoiceMessageTranscriberWrapped = ErrorBoundary.wrap(VoiceMessageTranscriber, { noop: true });
+
 export default definePlugin({
     name: "VoiceMessageTranscriber",
     authors: [Devs.TheSun],
@@ -595,10 +609,16 @@ export default definePlugin({
     patches: [
         {
             find: ".VOICE_MESSAGE)),",
-            replacement: {
-                match: /"source",{src:(\i).{0,700}duration:\i}\),/,
-                replace: "$&$self.button($1),"
-            }
+            replacement: [
+                {
+                    match: /"source",{src:(\i).{0,700}duration:\i}\),/,
+                    replace: "$&$self.button($1),"
+                },
+                {
+                    match: /(?<="div",\{className:)/,
+                    replace: "'vc-transcription-container '+"
+                }
+            ]
         },
         {
             find: '"data-mana-component":"BaseRadioGroup"',
@@ -614,6 +634,6 @@ export default definePlugin({
     settings,
 
     button(src: string) {
-        return <VoiceMessageTranscriber src={src} />;
+        return <VoiceMessageTranscriberWrapped src={src} />;
     },
 });
