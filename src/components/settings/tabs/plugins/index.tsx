@@ -97,17 +97,19 @@ function ReloadRequiredCard({ required, enabledPlugins, openWarningModal, resetC
     );
 }
 
-const enum SearchStatus {
-    ALL,
-    FAVORITES,
-    ENABLED,
-    DISABLED,
-    EQUICORD,
-    VENCORD,
-    NEW,
-    USER_PLUGINS,
-    API_PLUGINS
-}
+const SearchStatus = {
+    ALL: 0,
+    FAVORITES: 1,
+    ENABLED: 2,
+    DISABLED: 3,
+    EQUICORD: 4,
+    VENCORD: 5,
+    NEW: 6,
+    USER_PLUGINS: 7,
+    API_PLUGINS: 8,
+} as const;
+
+type SearchStatus = typeof SearchStatus[keyof typeof SearchStatus];
 
 export const ExcludedReasons: Record<"web" | "discordDesktop" | "vesktop" | "equibop" | "desktop" | "dev", string> = {
     desktop: "Discord Desktop app or Vesktop/Equibop",
