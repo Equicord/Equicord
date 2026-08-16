@@ -1,0 +1,21 @@
+.vc-channel-notes-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    color: #a7aab1;
+    opacity: 0.9;
+    transition: color 0.15s ease, opacity 0.15s ease;
+}
+
+.vc-channel-notes-button svg {
+    width: 15px;
+    height: 15px;
+}
+
+.vc-channel-notes-button:hover {
+    color: #c7c9ce;
+    opacity: 1;
+}
