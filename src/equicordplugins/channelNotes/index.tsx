@@ -4,13 +4,15 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import "./style.css";
-
 import * as DataStore from "@api/DataStore";
 import { definePluginSettings } from "@api/Settings";
+import { setStyleClassNames } from "@api/Styles";
+import ErrorBoundary from "@components/ErrorBoundary";
 import definePlugin, { OptionType } from "@utils/types";
-import { Channel } from "@vencord/discord-types";
+import { Channel, RenderModalProps } from "@vencord/discord-types";
+import { findCssClassesLazy } from "@webpack";
 import {
+    Button,
     Modal,
     openModal,
     SelectedChannelStore,
@@ -20,6 +22,10 @@ import {
     useState,
     useStateFromStores
 } from "@webpack/common";
+
+import style from "./style.css?managed";
+
+const ChannelRowClasses = findCssClassesLazy("iconVisibility", "wrapper");
 
 interface NoteStore {
     [channelId: string]: string;
@@ -31,6 +37,7 @@ let notes: NoteStore = {};
 
 export async function loadNotes() {
     notes = (await DataStore.get<NoteStore>(NOTES_KEY)) ?? {};
+    noteListeners.forEach(listener => listener());
 }
 
 export function getNote(channelId: string): string | null {
@@ -65,7 +72,7 @@ function PencilIcon() {
     );
 }
 
-function NoteEditModal({ channelId, ...modalProps }: { channelId: string; [key: string]: any }) {
+function NoteEditModal({ channelId, ...modalProps }: { channelId: string } & RenderModalProps) {
     const currentNote = getNote(channelId) ?? "";
     const [text, setText] = useState(currentNote);
 
@@ -89,12 +96,12 @@ function NoteEditModal({ channelId, ...modalProps }: { channelId: string; [key: 
                 />
             </div>
             <div style={{ display: "flex", justifyContent: "flex-end", gap: "8px", marginTop: "16px" }}>
-                <button className="button" onClick={handleSave}>
+                <Button variant="primary" onClick={handleSave}>
                     Save
-                </button>
-                <button className="button-link" onClick={() => modalProps.onClose?.()}>
+                </Button>
+                <Button variant="secondary" onClick={() => modalProps.onClose?.()}>
                     Cancel
-                </button>
+                </Button>
             </div>
         </Modal>
     );
@@ -158,7 +165,17 @@ function ChannelNoteButton({ channel }: { channel: Channel }) {
                     className="vc-channel-notes-button"
                     role="button"
                     tabIndex={0}
-                    onClick={() => openNoteModal(channel.id)}
+                    onClick={e => {
+                        e.stopPropagation();
+                        openNoteModal(channel.id);
+                    }}
+                    onKeyDown={e => {
+                        if (e.key === "Enter" || e.key === " ") {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            openNoteModal(channel.id);
+                        }
+                    }}
                 >
                     <PencilIcon />
                 </div>
@@ -167,16 +184,20 @@ function ChannelNoteButton({ channel }: { channel: Channel }) {
     );
 }
 
+const SafeChannelNoteButton = ErrorBoundary.wrap(ChannelNoteButton, { noop: true });
+
 export default definePlugin({
     name: "ChannelNotes",
     description: "Add private notes to individual channels.",
     authors: [{ name: "noxify", id: 1167135976209002508n }],
 
     settings,
+    managedStyle: style,
 
     dependencies: ["HeaderBarAPI"],
 
     async start() {
+        setStyleClassNames(style, ChannelRowClasses);
         await loadNotes();
     },
 
@@ -184,7 +205,6 @@ export default definePlugin({
         icon: PencilIcon,
         render: ChannelNoteHeader
     },
-
     patches: [
         {
             find: "renderInviteButton(){return",
@@ -195,9 +215,9 @@ export default definePlugin({
         }
     ],
 
-    renderNoteButton(channel: Channel) {
-        return <ChannelNoteButton channel={channel} />;
-    },
+   renderNoteButton(channel: Channel) {
+    return <SafeChannelNoteButton channel={channel} />;
+},
 
     getNote,
     saveNote,

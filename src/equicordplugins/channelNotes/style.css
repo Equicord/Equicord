@@ -23,7 +23,7 @@
 }
 
 /* Show button on channel row hover */
-[class*="iconVisibility"]:hover .vc-channel-notes-button {
+[--iconVisibility]:hover .vc-channel-notes-button {
     opacity: 0.9;
     pointer-events: auto;
 }
