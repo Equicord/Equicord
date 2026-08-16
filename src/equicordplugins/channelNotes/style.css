@@ -1,3 +1,4 @@
+/* Channel Notes Header Button */
 .vc-channel-notes-button {
     display: flex;
     align-items: center;
@@ -5,17 +6,17 @@
     width: 20px;
     height: 20px;
     cursor: pointer;
-    color: #a7aab1;
-    opacity: 0.9;
+    color: var(--interactive-normal, #a7aab1);
+    opacity: 0.85;
     transition: color 0.15s ease, opacity 0.15s ease;
-}
 
-.vc-channel-notes-button svg {
-    width: 15px;
-    height: 15px;
-}
+    svg {
+        width: 15px;
+        height: 15px;
+    }
 
-.vc-channel-notes-button:hover {
-    color: #c7c9ce;
-    opacity: 1;
+    &:hover {
+        color: var(--interactive-hover, #c7c9ce);
+        opacity: 1;
+    }
 }

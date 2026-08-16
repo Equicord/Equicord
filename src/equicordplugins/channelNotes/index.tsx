@@ -1,10 +1,8 @@
 /*
  * Vencord, a Discord client mod
- * Copyright (c) 2024 Vendicated and contributors
+ * Copyright (c) 2026 Vendicated and contributors
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
-
-import "./style.css";
 
 import * as DataStore from "@api/DataStore";
 import { definePluginSettings } from "@api/Settings";
@@ -21,199 +19,143 @@ import {
     useStateFromStores
 } from "@webpack/common";
 
-const DATA_KEY = "ChannelNotes_notes";
-
-const settings = definePluginSettings({
-    noteColor: {
-        type: OptionType.STRING,
-        description: "Color of the channel note and pencil shown in the header.",
-        default: "#b5bac1"
-    }
-});
-
-type ChannelNotes = Record<string, string>;
-
-let notes: ChannelNotes = {};
+interface NoteStore {
+    [channelId: string]: string;
+}
 
 const noteListeners = new Set<() => void>();
+const NOTES_KEY = "ChannelNotes_data";
+let notes: NoteStore = {};
 
-function notifyNoteListeners() {
+export async function loadNotes() {
+    notes = (await DataStore.get<NoteStore>(NOTES_KEY)) ?? {};
+}
+
+export function getNote(channelId: string): string | null {
+    return notes[channelId] ?? null;
+}
+
+export async function saveNote(channelId: string, note: string) {
+    if (note.trim()) {
+        notes[channelId] = note.trim();
+    } else {
+        delete notes[channelId];
+    }
+    await DataStore.set(NOTES_KEY, notes);
     noteListeners.forEach(listener => listener());
 }
 
-async function loadNotes() {
-    notes = await DataStore.get<ChannelNotes>(DATA_KEY) ?? {};
-    notifyNoteListeners();
-}
-
-async function saveNote(channelId: string, note: string) {
-    const trimmedNote = note.trim().slice(0, 49);
-
-    if (!trimmedNote) {
-        delete notes[channelId];
-    } else {
-        notes[channelId] = trimmedNote;
+export const settings = definePluginSettings({
+    noteColor: {
+        type: OptionType.STRING,
+        description: "Color for the note preview in header bar",
+        default: "#a7aab1"
     }
+});
 
-    await DataStore.set(DATA_KEY, notes);
-    notifyNoteListeners();
+function PencilIcon() {
+    return (
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+            <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" />
+        </svg>
+    );
 }
 
-function getNote(channelId: string) {
-    return notes[channelId] ?? "";
-}
-function NoteModal({
-    channelId,
-    initialNote,
-    onSave,
-    modalProps
-}: {
-    channelId: string;
-    initialNote: string;
-    onSave: (channelId: string, note: string) => void | Promise<void>;
-    modalProps: any;
-}) {
-    const [note, setNote] = useState(initialNote);
+function NoteEditModal({ channelId, ...modalProps }: { channelId: string; [key: string]: any }) {
+    const currentNote = getNote(channelId) ?? "";
+    const [text, setText] = useState(currentNote);
+
+    const handleSave = async () => {
+        await saveNote(channelId, text);
+        modalProps.onClose?.();
+    };
 
     return (
         <Modal
             {...modalProps}
             size="small"
-            title="Channel Note"
-            actions={[
-                {
-                    text: "Apply",
-                    variant: "primary",
-                    onClick: async () => {
-                        await onSave(channelId, note);
-                        modalProps.onClose();
-                    }
-                }
-            ]}
+            title="Edit Channel Note"
         >
-            <div style={{ padding: "8px 0" }}>
+            <div style={{ padding: "16px 0" }}>
                 <TextInput
-                    value={note}
-                    placeholder="Write a note..."
+                    value={text}
+                    onChange={setText}
+                    placeholder="Type your note for this channel..."
                     maxLength={49}
-                    onChange={setNote}
                 />
-
-                <div
-                    style={{
-                        marginTop: 8,
-                        textAlign: "right",
-                        opacity: 0.7,
-                        fontSize: 12
-                    }}
-                >
-                    {note.length}/49
-                </div>
+            </div>
+            <div style={{ display: "flex", justifyContent: "flex-end", gap: "8px", marginTop: "16px" }}>
+                <button className="button" onClick={handleSave}>
+                    Save
+                </button>
+                <button className="button-link" onClick={() => modalProps.onClose?.()}>
+                    Cancel
+                </button>
             </div>
         </Modal>
     );
 }
 
-function openNoteModal(channelId: string) {
-
-    openModal(modalProps => (
-        <NoteModal
-            channelId={channelId}
-            initialNote={getNote(channelId)}
-            onSave={saveNote}
-            modalProps={modalProps}
-        />
-    ));
-}
-
-function PencilIcon() {
-    return (
-        <svg
-            width="18"
-            height="18"
-            viewBox="0 0 24 24"
-            fill="currentColor"
-            aria-hidden="true"
-        >
-            <path d="M17.7 2.3a2.4 2.4 0 0 1 3.4 3.4L8.4 18.4 3 20l1.6-5.4L17.7 2.3Zm-11.5 13-.8 2.6 2.6-.8L17.8 7.3l-1.8-1.8-9.8 9.8Z" />
-        </svg>
-    );
-}
-
-function ChannelNoteButton({ channel }: { channel: Channel; }) {
-    if (!channel?.id) return null;
-
-    return (
-        <Tooltip text="Channel Note">
-            {tooltipProps => (
-                <div
-                    {...tooltipProps}
-                    className="vc-channel-notes-button"
-                    role="button"
-                    tabIndex={0}
-                    onClick={event => {
-                        event.preventDefault();
-                        event.stopPropagation();
-                        openNoteModal(channel.id);
-                    }}
-                    onKeyDown={event => {
-                        if (event.key === "Enter" || event.key === " ") {
-                            event.preventDefault();
-                            event.stopPropagation();
-                            openNoteModal(channel.id);
-                        }
-                    }}
-                >
-                    <PencilIcon />
-                </div>
-            )}
-        </Tooltip>
-    );
+export function openNoteModal(channelId: string) {
+    openModal(props => <NoteEditModal channelId={channelId} {...props} />);
 }
 
 function ChannelNoteHeader() {
+    const [, forceUpdate] = useState(0);
     const channelId = useStateFromStores(
         [SelectedChannelStore],
         () => SelectedChannelStore.getChannelId()
     );
 
-    const [, forceUpdate] = useState(0);
-
     useEffect(() => {
-        const listener = () => forceUpdate(value => value + 1);
+        const unlisten = () => forceUpdate(v => v + 1);
+        noteListeners.add(unlisten);
 
-        noteListeners.add(listener);
-
-        return () => {
-            noteListeners.delete(listener);
-        };
+        return () => void noteListeners.delete(unlisten);
     }, []);
 
     if (!channelId) return null;
 
     const note = getNote(channelId);
-
     if (!note) return null;
 
     return (
         <Tooltip text="Click to edit channel note">
-            {tooltipProps => (
+            {props => (
                 <div
-                    {...tooltipProps}
+                    {...props}
                     className="vc-channel-notes-header-note"
                     style={{ color: settings.store.noteColor }}
                     role="button"
                     tabIndex={0}
                     onClick={() => openNoteModal(channelId)}
-                    onKeyDown={event => {
-                        if (event.key === "Enter" || event.key === " ") {
-                            event.preventDefault();
+                    onKeyDown={e => {
+                        if (e.key === "Enter" || e.key === " ") {
+                            e.preventDefault();
                             openNoteModal(channelId);
                         }
                     }}
                 >
                     <PencilIcon />
                     <span>{note}</span>
+                </div>
+            )}
+        </Tooltip>
+    );
+}
+
+function ChannelNoteButton({ channel }: { channel: Channel }) {
+    return (
+        <Tooltip text="Edit Channel Note">
+            {props => (
+                <div
+                    {...props}
+                    className="vc-channel-notes-button"
+                    role="button"
+                    tabIndex={0}
+                    onClick={() => openNoteModal(channel.id)}
+                >
+                    <PencilIcon />
                 </div>
             )}
         </Tooltip>
