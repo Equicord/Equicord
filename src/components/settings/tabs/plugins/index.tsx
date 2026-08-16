@@ -37,7 +37,7 @@ import { Margins } from "@utils/margins";
 import { classes } from "@utils/misc";
 import { useAwaiter, useCleanupEffect, useIntersection } from "@utils/react";
 import { PluginTag, PluginTags } from "@utils/types";
-import { Alerts, ConfirmModal, lodash, openModal, Parser, React, SearchableSelect, Select, TextInput, Toasts, Tooltip, useCallback, useMemo, useRef, useState } from "@webpack/common";
+import { Alerts, ConfirmModal, lodash, openModal, Parser, React, SearchableSelect, TextInput, Toasts, Tooltip, useCallback, useMemo, useRef, useState } from "@webpack/common";
 import { JSX } from "react";
 
 import Plugins, { ExcludedPlugins, PluginMeta } from "~plugins";
@@ -206,39 +206,52 @@ export default function PluginSettings() {
 
     const hasUserPlugins = useMemo(() => !IS_STANDALONE && Object.values(PluginMeta).some(m => m.userPlugin), []);
 
-    const [searchValue, setSearchValue] = useState({ value: "", tags: [] as PluginTag[], status: SearchStatus.ALL });
+    const [searchValue, setSearchValue] = useState({ value: "", tags: [] as PluginTag[], statuses: [] as SearchStatus[] });
 
     const search = searchValue.value.toLowerCase();
     const onSearch = (query: string) => setSearchValue(prev => ({ ...prev, value: query }));
 
-    const pluginFilter = useCallback((plugin: typeof Plugins[keyof typeof Plugins], newPluginsSet: Set<string> | null) => {
-        const { status, tags } = searchValue;
+    const onStatusChange = (newStatuses: SearchStatus[]) => {
+        if (newStatuses.includes(SearchStatus.ALL)) {
+            if (!searchValue.statuses.includes(SearchStatus.ALL)) {
+                setSearchValue(prev => ({ ...prev, statuses: [] }));
+                return;
+            }
+            newStatuses = newStatuses.filter(s => s !== SearchStatus.ALL);
+        }
+        setSearchValue(prev => ({ ...prev, statuses: newStatuses }));
+    };
 
-        switch (status) {
-            case SearchStatus.FAVORITES:
-                if (!settings.plugins[plugin.name]?.isFavorite) return false;
-                break;
-            case SearchStatus.DISABLED:
-                if (isPluginEnabled(plugin.name)) return false;
-                break;
-            case SearchStatus.ENABLED:
-                if (!isPluginEnabled(plugin.name)) return false;
-                break;
-            case SearchStatus.EQUICORD:
-                if (!PluginMeta[plugin.name].folderName.startsWith("src/equicordplugins/")) return false;
-                break;
-            case SearchStatus.VENCORD:
-                if (!PluginMeta[plugin.name].folderName.startsWith("src/plugins/")) return false;
-                break;
-            case SearchStatus.NEW:
-                if (!newPluginsSet?.has(plugin.name)) return false;
-                break;
-            case SearchStatus.USER_PLUGINS:
-                if (!PluginMeta[plugin.name]?.userPlugin) return false;
-                break;
-            case SearchStatus.API_PLUGINS:
-                if (!plugin.name.endsWith("API")) return false;
-                break;
+    const pluginFilter = useCallback((plugin: typeof Plugins[keyof typeof Plugins], newPluginsSet: Set<string> | null) => {
+        const { statuses, tags } = searchValue;
+
+        for (const status of statuses) {
+            switch (status) {
+                case SearchStatus.FAVORITES:
+                    if (!settings.plugins[plugin.name]?.isFavorite) return false;
+                    break;
+                case SearchStatus.DISABLED:
+                    if (isPluginEnabled(plugin.name)) return false;
+                    break;
+                case SearchStatus.ENABLED:
+                    if (!isPluginEnabled(plugin.name)) return false;
+                    break;
+                case SearchStatus.EQUICORD:
+                    if (!PluginMeta[plugin.name].folderName.startsWith("src/equicordplugins/")) return false;
+                    break;
+                case SearchStatus.VENCORD:
+                    if (!PluginMeta[plugin.name].folderName.startsWith("src/plugins/")) return false;
+                    break;
+                case SearchStatus.NEW:
+                    if (!newPluginsSet?.has(plugin.name)) return false;
+                    break;
+                case SearchStatus.USER_PLUGINS:
+                    if (!PluginMeta[plugin.name]?.userPlugin) return false;
+                    break;
+                case SearchStatus.API_PLUGINS:
+                    if (!plugin.name.endsWith("API")) return false;
+                    break;
+            }
         }
 
         if (tags.length && tags.some(t => !plugin.tags?.includes(t))) return false;
@@ -251,7 +264,7 @@ export default function PluginSettings() {
             plugin.description.toLowerCase().includes(search) ||
             plugin.searchTerms?.some(t => t.toLowerCase().includes(search))
         );
-    }, [searchValue, search]);
+    }, [searchValue, search, settings.plugins]);
 
     const [newPluginsSet] = useAwaiter(() => DataStore.get("Vencord_existingPlugins").then((cachedPlugins: Record<string, number> | undefined) => {
         const now = Date.now() / 1000;
@@ -272,11 +285,23 @@ export default function PluginSettings() {
 
     const handleRestartNeeded = useCallback((name: string, key: string) => changes.handleChange(`${name}:${key}`), [changes]);
 
+    const statusOptions = useMemo(() => [
+        { label: "Show All", value: SearchStatus.ALL },
+        { label: "Show Favorites", value: SearchStatus.FAVORITES },
+        { label: "Show Enabled", value: SearchStatus.ENABLED },
+        { label: "Show Disabled", value: SearchStatus.DISABLED },
+        { label: "Show Equicord", value: SearchStatus.EQUICORD },
+        { label: "Show Vencord", value: SearchStatus.VENCORD },
+        { label: "Show New", value: SearchStatus.NEW },
+        hasUserPlugins && { label: "Show UserPlugins", value: SearchStatus.USER_PLUGINS },
+        { label: "Show API Plugins", value: SearchStatus.API_PLUGINS },
+    ].filter(isTruthy), [hasUserPlugins]);
+
     const { plugins, requiredPlugins } = useMemo(() => {
         const plugins = [] as JSX.Element[];
         const requiredPlugins = [] as JSX.Element[];
 
-        const showApi = searchValue.status === SearchStatus.API_PLUGINS;
+        const showApi = searchValue.statuses.includes(SearchStatus.API_PLUGINS);
         for (const p of sortedPlugins) {
             if (p.hidden || (!p.settings?.def && p.name.endsWith("API") && !showApi))
                 continue;
@@ -423,23 +448,13 @@ export default function PluginSettings() {
 
             <ErrorBoundary noop>
                 <div className={classes(Margins.bottom20, Margins.top8, cl("filter-controls"))}>
-                    <Select
-                        options={[
-                            { label: "Show All", value: SearchStatus.ALL, default: true },
-                            { label: "Show Favorites", value: SearchStatus.FAVORITES },
-                            { label: "Show Enabled", value: SearchStatus.ENABLED },
-                            { label: "Show Disabled", value: SearchStatus.DISABLED },
-                            { label: "Show Equicord", value: SearchStatus.EQUICORD },
-                            { label: "Show Vencord", value: SearchStatus.VENCORD },
-                            { label: "Show New", value: SearchStatus.NEW },
-                            hasUserPlugins && { label: "Show UserPlugins", value: SearchStatus.USER_PLUGINS },
-                            { label: "Show API Plugins", value: SearchStatus.API_PLUGINS },
-                        ].filter(isTruthy)}
-                        serialize={String}
-                        select={status => setSearchValue(prev => ({ ...prev, status }))}
-                        isSelected={v => v === searchValue.status}
-                        closeOnSelect={true}
+                    <SearchableSelect
+                        options={statusOptions}
+                        value={searchValue.statuses}
+                        onChange={onStatusChange}
+                        closeOnSelect={false}
                         placeholder="Filter by Type"
+                        multi
                     />
                     <SearchableSelect
                         options={PluginTags.map(tag => ({ label: tag, value: tag }))}
