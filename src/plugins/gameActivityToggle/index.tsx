@@ -97,7 +97,7 @@ function GameActivityToggleButton(props: UserAreaRenderProps) {
         tooltipText: showCurrentGame ? "Disable Game Activity" : "Enable Game Activity",
         icon: Icon,
         role: "switch",
-        "aria-checked": !showCurrentGame,
+        ariaChecked: !showCurrentGame,
         redGlow: !showCurrentGame,
         plated: props?.nameplate != null,
         onClick: () => ShowCurrentGame.updateSetting(old => !old)
