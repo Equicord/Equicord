@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import "./style.css";
+
 import * as DataStore from "@api/DataStore";
 import { definePluginSettings } from "@api/Settings";
 import definePlugin, { OptionType } from "@utils/types";
@@ -53,6 +55,8 @@ export const settings = definePluginSettings({
     }
 });
 
+const SETTINGS_KEYS = ["noteColor"] as const;
+
 function PencilIcon() {
     return (
         <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
@@ -101,6 +105,7 @@ export function openNoteModal(channelId: string) {
 }
 
 function ChannelNoteHeader() {
+    const { noteColor } = settings.use(SETTINGS_KEYS);
     const [, forceUpdate] = useState(0);
     const channelId = useStateFromStores(
         [SelectedChannelStore],
@@ -125,7 +130,7 @@ function ChannelNoteHeader() {
                 <div
                     {...props}
                     className="vc-channel-notes-header-note"
-                    style={{ color: settings.store.noteColor }}
+                    style={{ color: noteColor }}
                     role="button"
                     tabIndex={0}
                     onClick={() => openNoteModal(channelId)}

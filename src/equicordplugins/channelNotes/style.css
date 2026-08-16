@@ -1,4 +1,4 @@
-/* Channel Notes Header Button */
+/* Channel Notes Button (Channel List) */
 .vc-channel-notes-button {
     display: flex;
     align-items: center;
@@ -7,7 +7,8 @@
     height: 20px;
     cursor: pointer;
     color: var(--interactive-normal, #a7aab1);
-    opacity: 0.85;
+    opacity: 0;
+    pointer-events: none;
     transition: color 0.15s ease, opacity 0.15s ease;
 
     svg {
@@ -18,5 +19,32 @@
     &:hover {
         color: var(--interactive-hover, #c7c9ce);
         opacity: 1;
+    }
+}
+
+/* Show button on channel row hover */
+[class*="iconVisibility"]:hover .vc-channel-notes-button {
+    opacity: 0.9;
+    pointer-events: auto;
+}
+
+/* Channel Notes Header Preview */
+.vc-channel-notes-header-note {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0 8px;
+    font-size: 13px;
+    cursor: pointer;
+    border-radius: 4px;
+    line-height: 1;
+
+    svg {
+        width: 14px;
+        height: 14px;
+    }
+
+    &:hover {
+        background: var(--background-modifier-hover);
     }
 }
