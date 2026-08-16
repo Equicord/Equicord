@@ -11,15 +11,15 @@ import { definePluginSettings } from "@api/Settings";
 import definePlugin, { OptionType } from "@utils/types";
 import { Channel } from "@vencord/discord-types";
 import {
+    Modal,
     openModal,
     SelectedChannelStore,
+    TextInput,
     Tooltip,
     useEffect,
     useState,
     useStateFromStores
 } from "@webpack/common";
-
-import { NoteModal } from "./NoteModal";
 
 const DATA_KEY = "ChannelNotes_notes";
 
@@ -62,8 +62,60 @@ async function saveNote(channelId: string, note: string) {
 function getNote(channelId: string) {
     return notes[channelId] ?? "";
 }
+function NoteModal({
+    channelId,
+    initialNote,
+    onSave,
+    modalProps
+}: {
+    channelId: string;
+    initialNote: string;
+    onSave: (channelId: string, note: string) => void | Promise<void>;
+    modalProps: any;
+}) {
+    const [note, setNote] = useState(initialNote);
+
+    return (
+        <Modal
+            {...modalProps}
+            size="small"
+            title="Channel Note"
+            actions={[
+                {
+                    text: "Apply",
+                    variant: "primary",
+                    onClick: async () => {
+                        await onSave(channelId, note);
+                        modalProps.onClose();
+                    }
+                }
+            ]}
+        >
+            <div style={{ padding: "8px 0" }}>
+                <TextInput
+                    value={note}
+                    placeholder="Write a note..."
+                    maxLength={49}
+                    onChange={setNote}
+                />
+
+                <div
+                    style={{
+                        marginTop: 8,
+                        textAlign: "right",
+                        opacity: 0.7,
+                        fontSize: 12
+                    }}
+                >
+                    {note.length}/49
+                </div>
+            </div>
+        </Modal>
+    );
+}
 
 function openNoteModal(channelId: string) {
+
     openModal(modalProps => (
         <NoteModal
             channelId={channelId}
