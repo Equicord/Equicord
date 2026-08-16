@@ -389,6 +389,23 @@ function VoiceMessageTranscriber({ src }: { src: string; }) {
 
     const workerRef = useRef<TranscriptionWorker | null>(null);
     const activeRunId = useRef(0);
+    const buttonRef = useRef<HTMLButtonElement>(null);
+
+    useEffect(() => {
+        const parent = buttonRef.current?.parentElement;
+        if (!parent) return;
+        parent.classList.add("vc-transcription-container");
+        return () => {
+            parent.classList.remove("vc-transcription-container", "vc-transcription-has-embed", "vc-transcription-maintain-horizontal");
+        };
+    }, []);
+
+    useEffect(() => {
+        const parent = buttonRef.current?.parentElement;
+        if (!parent) return;
+        parent.classList.toggle("vc-transcription-has-embed", Boolean(embed && isOpen));
+        parent.classList.toggle("vc-transcription-maintain-horizontal", Boolean(embed && isOpen && maintainHorizontal));
+    }, [embed, isOpen, maintainHorizontal]);
 
     useEffect(() => {
         return () => {
@@ -497,6 +514,7 @@ function VoiceMessageTranscriber({ src }: { src: string; }) {
     return (
         <>
             <button
+                ref={buttonRef}
                 className={cl("button")}
                 style={{ backgroundColor: "transparent" }}
                 onClick={handleClick}
@@ -609,16 +627,10 @@ export default definePlugin({
     patches: [
         {
             find: ".VOICE_MESSAGE)),",
-            replacement: [
-                {
-                    match: /"source",{src:(\i).{0,700}duration:\i}\),/,
-                    replace: "$&$self.button($1),"
-                },
-                {
-                    match: /(?<="div",\{className:)/,
-                    replace: "'vc-transcription-container '+"
-                }
-            ]
+            replacement: {
+                match: /"source",{src:(\i).{0,700}duration:\i}\),/,
+                replace: "$&$self.button($1),"
+            }
         },
         {
             find: '"data-mana-component":"BaseRadioGroup"',
