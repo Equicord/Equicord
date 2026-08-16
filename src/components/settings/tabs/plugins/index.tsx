@@ -208,7 +208,7 @@ export default function PluginSettings() {
 
     const hasUserPlugins = useMemo(() => !IS_STANDALONE && Object.values(PluginMeta).some(m => m.userPlugin), []);
 
-    const [searchValue, setSearchValue] = useState({ value: "", tags: [] as PluginTag[], statuses: [] as SearchStatus[] });
+    const [searchValue, setSearchValue] = useState({ value: "", tags: [] as PluginTag[], statuses: [SearchStatus.ALL] as SearchStatus[] });
 
     const search = searchValue.value.toLowerCase();
     const onSearch = (query: string) => setSearchValue(prev => ({ ...prev, value: query }));
@@ -216,11 +216,16 @@ export default function PluginSettings() {
     const onStatusChange = (newStatuses: SearchStatus[]) => {
         if (newStatuses.includes(SearchStatus.ALL)) {
             if (!searchValue.statuses.includes(SearchStatus.ALL)) {
-                setSearchValue(prev => ({ ...prev, statuses: [] }));
+                setSearchValue(prev => ({ ...prev, statuses: [SearchStatus.ALL] }));
                 return;
             }
             newStatuses = newStatuses.filter(s => s !== SearchStatus.ALL);
         }
+
+        if (!newStatuses.length) {
+            newStatuses = [SearchStatus.ALL];
+        }
+
         setSearchValue(prev => ({ ...prev, statuses: newStatuses }));
     };
 
