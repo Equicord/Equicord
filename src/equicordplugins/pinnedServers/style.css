@@ -1,0 +1,15 @@
+.vc-pinnedservers-separator-wrapper {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    width: 72px;
+    margin-bottom: 8px;
+    pointer-events: none;
+}
+
+.vc-pinnedservers-separator-line {
+    height: 2px;
+    width: 32px;
+    border-radius: 1px;
+    background-color: var(--background-modifier-accent);
+}

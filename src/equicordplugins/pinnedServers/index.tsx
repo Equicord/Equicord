@@ -4,20 +4,26 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import "./style.css";
+
 import { findGroupChildrenByChildId, NavContextMenuPatchCallback } from "@api/ContextMenu";
 import { definePluginSettings } from "@api/Settings";
 import { EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 import { Guild } from "@vencord/discord-types";
+import { findCssClassesLazy } from "@webpack";
 import { Menu, React, useMemo, UserStore } from "@webpack/common";
 
 interface GuildNode {
-    type: "guild" | "folder";
+    type: "guild" | "folder" | "pinned-separator";
     id: number | string;
     children?: GuildNode[];
     parentId?: number | string;
     [key: string]: unknown;
 }
+
+const GuildSeparatorClasses = findCssClassesLazy("guildSeparator");
+const ListItemClasses = findCssClassesLazy("listItem");
 
 const SETTINGS_KEYS: (keyof typeof settings.store)[] = ["userBasedPinnedServers"];
 
@@ -93,6 +99,7 @@ function reorderGuildsTree(guilds: GuildNode[], pinnedIds: string[]): GuildNode[
     const unpinnedGuilds: GuildNode[] = [];
 
     for (const node of guilds) {
+        if (node.type === "pinned-separator") continue;
         const idStr = node.id.toString();
         const folderKey = `folder-${idStr}`;
 
@@ -104,7 +111,9 @@ function reorderGuildsTree(guilds: GuildNode[], pinnedIds: string[]): GuildNode[
                 for (const child of node.children ?? []) {
                     const childIdStr = child.id.toString();
                     if (pinnedIds.includes(childIdStr)) {
-                        pinnedMap.set(childIdStr, child);
+                        const unnestedNode = { ...child };
+                        delete unnestedNode.parentId;
+                        pinnedMap.set(childIdStr, unnestedNode);
                     } else {
                         remainingChildren.push(child);
                     }
@@ -115,7 +124,9 @@ function reorderGuildsTree(guilds: GuildNode[], pinnedIds: string[]): GuildNode[
             }
         } else if (node.type === "guild") {
             if (pinnedIds.includes(idStr)) {
-                pinnedMap.set(idStr, node);
+                const rootNode = { ...node };
+                delete rootNode.parentId;
+                pinnedMap.set(idStr, rootNode);
             } else {
                 unpinnedGuilds.push(node);
             }
@@ -130,6 +141,14 @@ function reorderGuildsTree(guilds: GuildNode[], pinnedIds: string[]): GuildNode[
         if (node) {
             orderedPinned.push(node);
         }
+    }
+
+    if (orderedPinned.length > 0 && unpinnedGuilds.length > 0) {
+        return [
+            ...orderedPinned,
+            { type: "pinned-separator", id: "vc-pinned-servers-separator" },
+            ...unpinnedGuilds
+        ];
     }
 
     return [...orderedPinned, ...unpinnedGuilds];
@@ -251,10 +270,30 @@ export default definePlugin({
                 {
                     match: /(\i)(\.map\(.{0,30}\}\),\i)/,
                     replace: "$self.useReorderedGuilds($1)$2"
+                },
+                {
+                    match: /switch\((\i)\.type\)\{(.+?)default:return null\}/,
+                    replace: "switch($1.type){$2default:return $self.renderSpecialNode($1)}"
                 }
             ]
         }
     ],
+
+    renderSpecialNode(node: GuildNode): React.ReactNode {
+        if (node?.type === "pinned-separator") {
+            return (
+                <div
+                    key="vc-pinned-servers-separator"
+                    className={ListItemClasses.listItem || "vc-pinnedservers-separator-wrapper"}
+                    role="separator"
+                    aria-hidden={true}
+                >
+                    <div className={GuildSeparatorClasses.guildSeparator || "vc-pinnedservers-separator-line"} />
+                </div>
+            );
+        }
+        return null;
+    },
 
     useReorderedGuilds(guilds: GuildNode[]): GuildNode[] {
         settings.use(SETTINGS_KEYS);
