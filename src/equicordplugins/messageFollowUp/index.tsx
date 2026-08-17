@@ -23,10 +23,7 @@ interface Reminder {
     time: number;
 }
 
-const BASE_STORAGE_KEY = "MessageFollowUp_reminders";
-
-const getCurrentUserId = () => UserStore.getCurrentUser()?.id;
-const getStorageKey = (userId: string) => `${BASE_STORAGE_KEY}_${userId}`;
+const BASE_STORAGE_KEY = "MessageFollowUp_reminders_";
 
 const DURATIONS = [
     { id: "30s", label: "In 30 Seconds", ms: 30 * 1000 },
@@ -44,59 +41,75 @@ const DURATIONS = [
 
 let reminders: Reminder[] = [];
 let checkInterval: NodeJS.Timeout;
-let loadedUserId: string | null = null;
-let loadPromise: Promise<void> | null = null;
 
-async function loadReminders() {
+// Tracking state variables for account management & async handling
+let loadedUserId: string | null = null;
+let loadingUserId: string | null = null;
+let loadPromise: Promise<void> | null = null;
+let loadGeneration = 0;
+
+function getStorageKey(userId: string) {
+    return `${BASE_STORAGE_KEY}${userId}`;
+}
+
+function getCurrentUserId(): string | null {
+    return UserStore.getCurrentUser()?.id ?? null;
+}
+
+async function loadReminders(): Promise<void> {
     const userId = getCurrentUserId();
 
     if (!userId) {
         reminders = [];
         loadedUserId = null;
-        loadPromise = null;
+        loadingUserId = null;
         return;
     }
 
-    if (loadedUserId !== userId) {
-        reminders = [];
-        loadedUserId = userId;
-        loadPromise = null;
-    }
+    // Already loaded for this user
+    if (loadedUserId === userId) return;
 
-    if (loadPromise) {
+    // Reuse existing loading promise if we're currently fetching for the exact same user
+    if (loadPromise && loadingUserId === userId) {
         await loadPromise;
         return;
     }
 
-    const key = getStorageKey(userId);
+    const currentGen = ++loadGeneration;
+    loadingUserId = userId;
 
-    const promise = (async () => {
-        const loaded = (await DataStore.get<Reminder[]>(key)) ?? [];
+    loadPromise = (async () => {
+        try {
+            const data = await DataStore.get<Reminder[]>(getStorageKey(userId));
 
-        if (getCurrentUserId() === userId) {
-            reminders = loaded;
+            // Only commit the data if we're still on the exact same load attempt and user
+            if (currentGen === loadGeneration && getCurrentUserId() === userId) {
+                reminders = data ?? [];
+                loadedUserId = userId;
+            }
+        } catch (err) {
+            console.error("[MessageFollowUp] Failed to load reminders from DataStore:", err);
+            if (currentGen === loadGeneration && getCurrentUserId() === userId) {
+                reminders = [];
+            }
+        } finally {
+            if (currentGen === loadGeneration) {
+                loadingUserId = null;
+                loadPromise = null;
+            }
         }
     })();
 
-    loadPromise = promise;
-
-    try {
-        await promise;
-    } catch {
-        if (getCurrentUserId() === userId) {
-            reminders = [];
-            loadedUserId = null;
-        }
-    } finally {
-        if (loadPromise === promise) {
-            loadPromise = null;
-        }
-    }
+    await loadPromise;
 }
 
-async function saveReminders(userId: string) {
-    const snapshot = [...reminders];
-    await DataStore.set(getStorageKey(userId), snapshot);
+async function saveReminders(userId: string): Promise<void> {
+    try {
+        const snapshot = [...reminders];
+        await DataStore.set(getStorageKey(userId), snapshot);
+    } catch (err) {
+        console.error("[MessageFollowUp] Failed to save reminders:", err);
+    }
 }
 
 async function addReminder(msg: Message, ms: number) {
@@ -105,6 +118,7 @@ async function addReminder(msg: Message, ms: number) {
 
     await loadReminders();
 
+    // Verify context is still valid post-async operation
     if (getCurrentUserId() !== userId || loadedUserId !== userId) return;
 
     reminders.push({
@@ -123,10 +137,12 @@ async function addReminder(msg: Message, ms: number) {
 }
 
 async function checkReminders() {
+    const userId = getCurrentUserId();
+    if (!userId) return;
+
     await loadReminders();
 
-    const userId = getCurrentUserId();
-    if (!userId || loadedUserId !== userId) return;
+    if (loadedUserId !== userId || !reminders.length) return;
 
     const now = Date.now();
     const due = reminders.filter(r => r.time <= now);
@@ -146,7 +162,7 @@ async function checkReminders() {
                 NavigationRouter.transitionTo(path);
 
                 setTimeout(() => {
-                    jumper.jumpToMessage({
+                    jumper?.jumpToMessage({
                         channelId: r.chanId,
                         messageId: r.msgId,
                         flash: true
@@ -176,7 +192,7 @@ export default definePlugin({
                             key={id}
                             id={`message-follow-up-${id}`}
                             label={label}
-                            action={() => addReminder(message, ms)}
+                            action={() => void addReminder(message, ms)}
                         />
                     ))}
                 </Menu.MenuItem>
@@ -188,7 +204,10 @@ export default definePlugin({
         CONNECTION_OPEN() {
             reminders = [];
             loadedUserId = null;
+            loadingUserId = null;
             loadPromise = null;
+            loadGeneration++;
+
             void loadReminders();
         }
     },
@@ -201,8 +220,11 @@ export default definePlugin({
 
     stop() {
         clearInterval(checkInterval);
+
         reminders = [];
         loadedUserId = null;
+        loadingUserId = null;
         loadPromise = null;
+        loadGeneration++;
     }
 });
