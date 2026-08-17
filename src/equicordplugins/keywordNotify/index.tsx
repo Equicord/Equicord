@@ -144,6 +144,11 @@ const settings = definePluginSettings({
         description: "Ignore messages in unselected channels (from Channels & Roles)",
         default: true,
     },
+    ignoreNothing: {
+        type: OptionType.BOOLEAN,
+        description: "Ignore messages in channels with Notification Settings set to Nothing",
+        default: true,
+    },
     amountToKeep: {
         type: OptionType.NUMBER,
         description: "Amount of messages to keep in the log",
@@ -236,12 +241,21 @@ export default definePlugin({
     applyKeywordEntries(m: Message) {
         if (!m?.channel_id) return;
 
+        const channel = ChannelStore.getChannel(m.channel_id);
+
         if (settings.store.ignoreUnselected) {
-            const channel = ChannelStore.getChannel(m.channel_id);
             if (channel?.guild_id && UserGuildSettingsStore.isOptInEnabled(channel.guild_id)) {
                 if (!UserGuildSettingsStore.isChannelOrParentOptedIn(channel.guild_id, channel.id)) {
                     return;
                 }
+            }
+        }
+
+        if (settings.store.ignoreNothing && channel) {
+            const notifications = UserGuildSettingsStore.resolvedMessageNotifications?.(channel)
+                ?? (channel.guild_id ? UserGuildSettingsStore.getChannelMessageNotifications?.(channel.guild_id, channel.id) : null);
+            if (notifications === 2 || UserGuildSettingsStore.allowNoMessages?.(channel)) {
+                return;
             }
         }
 
