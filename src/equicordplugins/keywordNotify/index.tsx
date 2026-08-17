@@ -141,12 +141,12 @@ const settings = definePluginSettings({
     },
     ignoreUnselected: {
         type: OptionType.BOOLEAN,
-        description: "Ignore messages in unselected channels (from Channels & Roles)",
+        description: "Ignore messages in unselected channels (from Channels & Roles).",
         default: true,
     },
     ignoreNothing: {
         type: OptionType.BOOLEAN,
-        description: "Ignore messages in channels with Notification Settings set to Nothing",
+        description: "Ignore messages in channels with Notification Settings set to Nothing.",
         default: true,
     },
     amountToKeep: {
@@ -164,25 +164,18 @@ const settings = definePluginSettings({
 const NO_MESSAGES = 2;
 
 function isChannelUnselected(channel: Channel): boolean {
-    if (!channel?.guild_id) return false;
+    if (!channel.guild_id) return false;
     if (!UserGuildSettingsStore.isOptInEnabled(channel.guild_id)) return false;
     return !UserGuildSettingsStore.isChannelOrParentOptedIn(channel.guild_id, channel.id);
 }
 
 function isChannelSetToNothing(channel: Channel): boolean {
-    if (!channel?.guild_id) return false;
+    if (!channel.guild_id) return false;
 
     const override = UserGuildSettingsStore.getChannelMessageNotifications(channel.guild_id, channel.id);
     if (override === NO_MESSAGES) return true;
 
-    if (UserGuildSettingsStore.resolvedMessageNotifications(channel) === NO_MESSAGES) return true;
-
-    const guildSettings = UserGuildSettingsStore.getAllSettings?.()?.userGuildSettings?.[channel.guild_id];
-    if (guildSettings?.channel_overrides?.[channel.id]?.message_notifications === NO_MESSAGES) {
-        return true;
-    }
-
-    return false;
+    return UserGuildSettingsStore.resolvedMessageNotifications(channel) === NO_MESSAGES;
 }
 
 export default definePlugin({
