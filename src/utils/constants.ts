@@ -733,6 +733,10 @@ export const EquicordDevs = Object.freeze({
         name: "FoxStorm1",
         id: 789872551731527690n
     },
+    tt: {
+        name: "_.tt",
+        id: 497966466617049089n
+    },
     camila314: {
         name: "camila314",
         id: 738592270617542716n

@@ -229,7 +229,7 @@ export default definePlugin({
     name: "PinnedServers",
     description: "Allows you to pin servers and folders to the top of your server list by right clicking them.",
     tags: ["Servers", "Organisation", "Utility"],
-    authors: [EquicordDevs.bep],
+    authors: [EquicordDevs.tt],
     searchTerms: ["pin", "guild", "server", "folder", "top"],
     settings,
 
