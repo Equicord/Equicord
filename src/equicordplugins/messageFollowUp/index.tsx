@@ -6,22 +6,29 @@
 
 import * as DataStore from "@api/DataStore";
 import { showNotification } from "@api/Notifications";
+import { EquicordDevs } from "@utils/constants";
 import definePlugin from "@utils/types";
 import { Message } from "@vencord/discord-types";
 import { findByPropsLazy } from "@webpack";
-import { Menu, NavigationRouter } from "@webpack/common";
+import { Menu, NavigationRouter, UserStore } from "@webpack/common";
 
-const jumper: any = findByPropsLazy("jumpToMessage");
+const jumper = findByPropsLazy<{
+    jumpToMessage: (opts: { channelId: string; messageId: string; flash?: boolean }) => void;
+}>("jumpToMessage");
 
 interface Reminder {
     msgId: string;
     chanId: string;
     guildId?: string;
-    text: string;
     time: number;
 }
 
-const STORAGE_KEY = "MessageFollowUp_reminders";
+const BASE_STORAGE_KEY = "MessageFollowUp_reminders";
+
+const getStorageKey = () => {
+    const userId = UserStore.getCurrentUser()?.id;
+    return userId ? `${BASE_STORAGE_KEY}_${userId}` : BASE_STORAGE_KEY;
+};
 
 const DURATIONS = [
     { id: "30s", label: "In 30 Seconds", ms: 30 * 1000 },
@@ -39,21 +46,30 @@ const DURATIONS = [
 
 let reminders: Reminder[] = [];
 let checkInterval: NodeJS.Timeout;
+let loadPromise: Promise<void> | null = null;
 
-async function loadReminders() {
-    reminders = await DataStore.get<Reminder[]>(STORAGE_KEY) ?? [];
+function loadReminders() {
+    if (loadPromise) return loadPromise;
+
+    loadPromise = (async () => {
+        const key = getStorageKey();
+        reminders = (await DataStore.get<Reminder[]>(key)) ?? [];
+    })();
+
+    return loadPromise;
 }
-
 async function saveReminders() {
-    await DataStore.set(STORAGE_KEY, reminders);
+    const key = getStorageKey();
+    await DataStore.set(key, reminders);
 }
 
 async function addReminder(msg: Message, ms: number) {
+    await loadReminders();
+
     reminders.push({
         msgId: msg.id,
         chanId: msg.channel_id,
         guildId: msg.guild_id,
-        text: msg.content || "Message reminder",
         time: Date.now() + ms
     });
 
@@ -74,7 +90,7 @@ async function checkReminders() {
     for (const r of due) {
         showNotification({
     title: "Message Follow Up",
-    body: r.text.length > 100 ? `${r.text.slice(0, 100)}...` : r.text,
+    body: "Click to jump back to the message",
     dismissOnClick: true,
   onClick: () => {
     const path = r.guildId ? `/channels/${r.guildId}/${r.chanId}` : `/channels/@me/${r.chanId}`;
@@ -98,7 +114,7 @@ async function checkReminders() {
 export default definePlugin({
     name: "MessageFollowUp",
     description: "Set reminders for Discord messages and jump back to them later.",
-    authors: [{ name: "noxify", id: 1167135976209002508n }],
+    authors: [EquicordDevs.noxify],
 
     contextMenus: {
         "message"(children, { message }: { message: Message }) {
@@ -116,6 +132,13 @@ export default definePlugin({
                     ))}
                 </Menu.MenuItem>
             );
+        }
+    },
+    flux: {
+        CONNECTION_OPEN() {
+            reminders = [];
+            loadPromise = null;
+            void loadReminders();
         }
     },
 
