@@ -15,7 +15,7 @@ import { EquicordDevs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
 import { classes } from "@utils/misc";
 import definePlugin, { OptionType } from "@utils/types";
-import { Message, ScrollerBaseRef } from "@vencord/discord-types";
+import { Channel, Message, ScrollerBaseRef } from "@vencord/discord-types";
 import { findByCodeLazy, findCssClassesLazy } from "@webpack";
 import {
     ChannelStore,
@@ -161,6 +161,30 @@ const settings = definePluginSettings({
     }
 });
 
+const NO_MESSAGES = 2;
+
+function isChannelUnselected(channel: Channel): boolean {
+    if (!channel?.guild_id) return false;
+    if (!UserGuildSettingsStore.isOptInEnabled(channel.guild_id)) return false;
+    return !UserGuildSettingsStore.isChannelOrParentOptedIn(channel.guild_id, channel.id);
+}
+
+function isChannelSetToNothing(channel: Channel): boolean {
+    if (!channel?.guild_id) return false;
+
+    const override = UserGuildSettingsStore.getChannelMessageNotifications(channel.guild_id, channel.id);
+    if (override === NO_MESSAGES) return true;
+
+    if (UserGuildSettingsStore.resolvedMessageNotifications(channel) === NO_MESSAGES) return true;
+
+    const guildSettings = UserGuildSettingsStore.getAllSettings?.()?.userGuildSettings?.[channel.guild_id];
+    if (guildSettings?.channel_overrides?.[channel.id]?.message_notifications === NO_MESSAGES) {
+        return true;
+    }
+
+    return false;
+}
+
 export default definePlugin({
     name: "KeywordNotify",
     authors: [EquicordDevs.camila314, EquicordDevs.x3rt, EquicordDevs.benjas333, EquicordDevs.tt],
@@ -243,18 +267,12 @@ export default definePlugin({
 
         const channel = ChannelStore.getChannel(m.channel_id);
 
-        if (settings.store.ignoreUnselected) {
-            if (channel?.guild_id && UserGuildSettingsStore.isOptInEnabled(channel.guild_id)) {
-                if (!UserGuildSettingsStore.isChannelOrParentOptedIn(channel.guild_id, channel.id)) {
-                    return;
-                }
+        if (channel) {
+            if (settings.store.ignoreUnselected && isChannelUnselected(channel)) {
+                return;
             }
-        }
 
-        if (settings.store.ignoreNothing && channel) {
-            const notifications = UserGuildSettingsStore.resolvedMessageNotifications?.(channel)
-                ?? (channel.guild_id ? UserGuildSettingsStore.getChannelMessageNotifications?.(channel.guild_id, channel.id) : null);
-            if (notifications === 2 || UserGuildSettingsStore.allowNoMessages?.(channel)) {
+            if (settings.store.ignoreNothing && isChannelSetToNothing(channel)) {
                 return;
             }
         }
