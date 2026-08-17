@@ -24,6 +24,7 @@ import {
     TabBar,
     Tooltip,
     useRef,
+    UserGuildSettingsStore,
     UserStore,
     useState
 } from "@webpack/common";
@@ -138,6 +139,11 @@ const settings = definePluginSettings({
         default: true,
         hidden: true,
     },
+    ignoreUnselected: {
+        type: OptionType.BOOLEAN,
+        description: "Ignore messages in unselected channels (from Channels & Roles)",
+        default: true,
+    },
     amountToKeep: {
         type: OptionType.NUMBER,
         description: "Amount of messages to keep in the log",
@@ -152,7 +158,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "KeywordNotify",
-    authors: [EquicordDevs.camila314, EquicordDevs.x3rt, EquicordDevs.benjas333],
+    authors: [EquicordDevs.camila314, EquicordDevs.x3rt, EquicordDevs.benjas333, EquicordDevs.tt],
     description: "Sends a notification if a given message matches certain keywords or regexes",
     settings,
     patches: [
@@ -228,6 +234,17 @@ export default definePlugin({
     },
 
     applyKeywordEntries(m: Message) {
+        if (!m?.channel_id) return;
+
+        if (settings.store.ignoreUnselected) {
+            const channel = ChannelStore.getChannel(m.channel_id);
+            if (channel?.guild_id && UserGuildSettingsStore.isOptInEnabled(channel.guild_id)) {
+                if (!UserGuildSettingsStore.isChannelOrParentOptedIn(channel.guild_id, channel.id)) {
+                    return;
+                }
+            }
+        }
+
         let matches = false;
 
         for (const entry of keywordEntries) {
