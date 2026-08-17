@@ -25,10 +25,8 @@ interface Reminder {
 
 const BASE_STORAGE_KEY = "MessageFollowUp_reminders";
 
-const getStorageKey = () => {
-    const userId = UserStore.getCurrentUser()?.id;
-    return userId ? `${BASE_STORAGE_KEY}_${userId}` : BASE_STORAGE_KEY;
-};
+const getCurrentUserId = () => UserStore.getCurrentUser()?.id;
+const getStorageKey = (userId: string) => `${BASE_STORAGE_KEY}_${userId}`;
 
 const DURATIONS = [
     { id: "30s", label: "In 30 Seconds", ms: 30 * 1000 },
@@ -46,25 +44,68 @@ const DURATIONS = [
 
 let reminders: Reminder[] = [];
 let checkInterval: NodeJS.Timeout;
+let loadedUserId: string | null = null;
 let loadPromise: Promise<void> | null = null;
 
-function loadReminders() {
-    if (loadPromise) return loadPromise;
+async function loadReminders() {
+    const userId = getCurrentUserId();
 
-    loadPromise = (async () => {
-        const key = getStorageKey();
-        reminders = (await DataStore.get<Reminder[]>(key)) ?? [];
+    if (!userId) {
+        reminders = [];
+        loadedUserId = null;
+        loadPromise = null;
+        return;
+    }
+
+    if (loadedUserId !== userId) {
+        reminders = [];
+        loadedUserId = userId;
+        loadPromise = null;
+    }
+
+    if (loadPromise) {
+        await loadPromise;
+        return;
+    }
+
+    const key = getStorageKey(userId);
+
+    const promise = (async () => {
+        const loaded = (await DataStore.get<Reminder[]>(key)) ?? [];
+
+        if (getCurrentUserId() === userId) {
+            reminders = loaded;
+        }
     })();
 
-    return loadPromise;
+    loadPromise = promise;
+
+    try {
+        await promise;
+    } catch {
+        if (getCurrentUserId() === userId) {
+            reminders = [];
+            loadedUserId = null;
+        }
+    } finally {
+        if (loadPromise === promise) {
+            loadPromise = null;
+        }
+    }
 }
-async function saveReminders() {
-    const key = getStorageKey();
-    await DataStore.set(key, reminders);
+
+async function saveReminders(userId: string) {
+    const snapshot = [...reminders];
+    await DataStore.set(getStorageKey(userId), snapshot);
 }
 
 async function addReminder(msg: Message, ms: number) {
+    const userId = getCurrentUserId();
+    if (!userId) return;
+
     await loadReminders();
+
+    if (getCurrentUserId() !== userId || loadedUserId !== userId) return;
 
     reminders.push({
         msgId: msg.id,
@@ -73,7 +114,7 @@ async function addReminder(msg: Message, ms: number) {
         time: Date.now() + ms
     });
 
-    await saveReminders();
+    await saveReminders(userId);
 
     showNotification({
         title: "Reminder Set",
@@ -82,6 +123,11 @@ async function addReminder(msg: Message, ms: number) {
 }
 
 async function checkReminders() {
+    await loadReminders();
+
+    const userId = getCurrentUserId();
+    if (!userId || loadedUserId !== userId) return;
+
     const now = Date.now();
     const due = reminders.filter(r => r.time <= now);
 
@@ -89,26 +135,29 @@ async function checkReminders() {
 
     for (const r of due) {
         showNotification({
-    title: "Message Follow Up",
-    body: "Click to jump back to the message",
-    dismissOnClick: true,
-  onClick: () => {
-    const path = r.guildId ? `/channels/${r.guildId}/${r.chanId}` : `/channels/@me/${r.chanId}`;
-    NavigationRouter.transitionTo(path);
+            title: "Message Follow Up",
+            body: "Click to jump back to the message",
+            dismissOnClick: true,
+            onClick: () => {
+                const path = r.guildId
+                    ? `/channels/${r.guildId}/${r.chanId}`
+                    : `/channels/@me/${r.chanId}`;
 
-    setTimeout(() => {
-        jumper.jumpToMessage({
-            channelId: r.chanId,
-            messageId: r.msgId,
-            flash: true
+                NavigationRouter.transitionTo(path);
+
+                setTimeout(() => {
+                    jumper.jumpToMessage({
+                        channelId: r.chanId,
+                        messageId: r.msgId,
+                        flash: true
+                    });
+                }, 300);
+            }
         });
-    }, 300);
-}
-});
     }
 
     reminders = reminders.filter(r => r.time > now);
-    await saveReminders();
+    await saveReminders(userId);
 }
 
 export default definePlugin({
@@ -134,9 +183,11 @@ export default definePlugin({
             );
         }
     },
+
     flux: {
         CONNECTION_OPEN() {
             reminders = [];
+            loadedUserId = null;
             loadPromise = null;
             void loadReminders();
         }
@@ -150,5 +201,8 @@ export default definePlugin({
 
     stop() {
         clearInterval(checkInterval);
+        reminders = [];
+        loadedUserId = null;
+        loadPromise = null;
     }
 });
