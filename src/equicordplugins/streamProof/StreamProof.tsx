@@ -54,10 +54,11 @@ const settings = definePluginSettings({
         description: "Automatically enable StreamProof when you start streaming",
         default: false,
         onChange(value) {
-            if (value && isStreaming()) {
-                enableStreamProof();
-            }
-        }
+    if (value && isStreaming() && !settings.store.enabled) {
+        enableStreamProof();
+        autoEnabledStreamProof = true;
+    }
+}
     }
 });
 
@@ -304,12 +305,14 @@ export default definePlugin({
     },
 
     start() {
-        if (settings.store.autoStreamProof && isStreaming()) {
-            enableStreamProof();
-        }
-    },
+    if (settings.store.autoStreamProof && isStreaming() && !settings.store.enabled) {
+        enableStreamProof();
+        autoEnabledStreamProof = true;
+    }
+},
 
     stop() {
-        disableStreamProof();
-    }
+    autoEnabledStreamProof = false;
+    disableStreamProof();
+}
 });
