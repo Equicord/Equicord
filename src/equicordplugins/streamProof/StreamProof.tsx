@@ -61,6 +61,7 @@ const settings = definePluginSettings({
     }
 });
 
+let autoEnabledStreamProof = false;
 function isStreaming(): boolean {
     const user = UserStore.getCurrentUser();
     if (!user) return false;
@@ -72,9 +73,13 @@ function handleStreamChange() {
     if (!settings.store.autoStreamProof) return;
 
     if (isStreaming()) {
-        enableStreamProof();
-    } else {
+        if (!settings.store.enabled) {
+            enableStreamProof();
+            autoEnabledStreamProof = true;
+        }
+    } else if (autoEnabledStreamProof) {
         disableStreamProof();
+        autoEnabledStreamProof = false;
     }
 }
 
