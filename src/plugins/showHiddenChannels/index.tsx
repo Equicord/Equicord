@@ -510,8 +510,8 @@ export default definePlugin({
         {
             find: "2026-02-private-channel-hiding",
             replacement: {
-                match: /(function \i\(\i\)).{0,50}\.enableObfuscation\}/g,
-                replace: "$1{return false;}"
+                match: /(?<=enableObfuscation|enableIntegrityCheck):!0/g,
+                replace: ":false"
             }
         }
     ],

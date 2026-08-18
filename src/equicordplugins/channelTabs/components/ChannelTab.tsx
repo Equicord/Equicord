@@ -133,7 +133,7 @@ export const NotificationDot = ({ channelIds }: { channelIds: string[]; }) => {
                 width: "16px"
             }}
             ref={node => node?.style.setProperty("background-color",
-                hasMention ? "var(--red-400)" : "var(--brand-500)", "important"
+                hasMention ? "var(--danger-color, var(--red-400))" : "var(--main-color, var(--brand-experiment, var(--brand-500)))", "important"
             )}
         >
             {badgeText}

@@ -31,7 +31,7 @@ function AnimationSettings(): JSX.Element {
         { label: "Plus Button Pulse", value: "plus-pulse", selected: settings.store.animationPlusPulse },
         { label: "Mention Badge Glow", value: "mention-glow", selected: settings.store.animationMentionGlow },
         { label: "Compact Mode Expansion", value: "compact-expand", selected: settings.store.animationCompactExpand },
-        { label: "Selected Tab Blue Border", value: "selected-border", selected: settings.store.animationSelectedBorder },
+        { label: "Selected Tab Accent Border", value: "selected-border", selected: settings.store.animationSelectedBorder },
         { label: "Selected Tab Background Color", value: "selected-background", selected: settings.store.animationSelectedBackground },
         { label: "Tab Shadow Effects", value: "tab-shadows", selected: settings.store.animationTabShadows },
         { label: "Tab Repositioning (smooth position changes)", value: "tab-positioning", selected: settings.store.animationTabPositioning },

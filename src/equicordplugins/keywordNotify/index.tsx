@@ -253,7 +253,7 @@ export default definePlugin({
             if (!isInBlacklist) {
                 const channel = ChannelStore.getChannel(m.channel_id);
                 if (channel != null) {
-                    isInBlacklist = entry.whitelist.some(id => id.trim() === channel.guild_id);
+                    isInBlacklist = entry.blacklist.some(id => id.trim() === channel.guild_id);
                 }
             }
 
