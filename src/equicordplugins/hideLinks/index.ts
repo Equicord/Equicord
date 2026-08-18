@@ -34,15 +34,16 @@ const settings = definePluginSettings({
         hidden() { return !this.store.useCustomCharacter; },
         isValid(value: string) {
             if (!value) return "The hyperlink label character cannot be empty.";
+            if (/[[\]]/.test(value)) return "The hyperlink label character cannot contain square brackets.";
             return true;
         }
     },
     onlyMatchingLinks: {
         type: OptionType.STRING,
-        description: "Only hide links matching these patterns, one per line. Each line is a regular expression (e.g. .*\\.mp4$) or a glob where * matches anything (e.g. *.mp4). Patterns match the link without its query string. Leave empty to hide every media link.",
+        description: "Only hide links matching these patterns, one per line. Each line is a glob where * matches anything (e.g. *.mp4), or a regular expression prefixed with re: (e.g. re:.*\\.mp4$). Patterns match the link without its query string. Leave empty to hide every media link.",
         default: "",
         multiline: true,
-        placeholder: "*.mp4\n.*discord(?:app)?\\.net.*"
+        placeholder: "*.mp4\nre:.*discord(?:app)?\\.net.*"
     }
 });
 
@@ -56,11 +57,15 @@ function recompileFilters(pattern: string) {
             line = line.trim();
             if (!line) return null;
 
-            try {
-                return new RegExp(line, "i");
-            } catch {
-                return new RegExp(`^${escapeRegExp(line).replaceAll("\\*", ".*")}$`, "i");
+            if (line.startsWith("re:")) {
+                try {
+                    return new RegExp(line.slice(3), "i");
+                } catch {
+                    return null;
+                }
             }
+
+            return new RegExp(`^${escapeRegExp(line).replaceAll("\\*", ".*")}$`, "i");
         })
         .filter((filter): filter is RegExp => filter != null);
 }
