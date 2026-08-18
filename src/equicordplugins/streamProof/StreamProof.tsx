@@ -9,13 +9,46 @@ import "./styles.css";
 import { ChatBarButton, ChatBarButtonFactory } from "@api/ChatButtons";
 import { definePluginSettings } from "@api/Settings";
 import { EquicordDevs } from "@utils/constants";
+import { classNameFactory } from "@utils/css";
 import definePlugin, { OptionType } from "@utils/types";
 import { findByPropsLazy } from "@webpack";
-import { React, UserStore, useState, useStateFromStores } from "@webpack/common";
+import { React, UserStore, useStateFromStores } from "@webpack/common";
 
 const StreamStore = findByPropsLazy("getActiveStreamForUser", "getAllActiveStreams");
+const cl = classNameFactory("vc-streamproof-");
 
 const settings = definePluginSettings({
+    enabled: {
+        type: OptionType.BOOLEAN,
+        description: "Whether StreamProof is currently enabled",
+        default: false,
+        hidden: true
+    },
+
+    blurMessages: {
+        type: OptionType.BOOLEAN,
+        description: "Blur message text",
+        default: true
+    },
+
+    blurMedia: {
+        type: OptionType.BOOLEAN,
+        description: "Blur images, videos, embeds and attachments",
+        default: true
+    },
+
+    blurDMs: {
+        type: OptionType.BOOLEAN,
+        description: "Blur direct messages in the DM list",
+        default: true
+    },
+
+    blurProfileBio: {
+        type: OptionType.BOOLEAN,
+        description: "Blur profile bios",
+        default: true
+    },
+
     autoStreamProof: {
         type: OptionType.BOOLEAN,
         description: "Automatically enable StreamProof when you start streaming",
@@ -28,18 +61,13 @@ const settings = definePluginSettings({
     }
 });
 
-let clickHandler: ((e: MouseEvent) => void) | null = null;
-let streamProofActive = false;
-
 function isStreaming(): boolean {
     const user = UserStore.getCurrentUser();
     if (!user) return false;
 
-    if (StreamStore.getActiveStreamForUser(user.id)) return true;
-
-    const streams = StreamStore.getAllActiveStreams();
-    return streams?.some((s: any) => s.ownerId === user.id) ?? false;
+    return Boolean(StreamStore.getActiveStreamForUser(user.id));
 }
+
 function handleStreamChange() {
     if (!settings.store.autoStreamProof) return;
 
@@ -51,62 +79,107 @@ function handleStreamChange() {
 }
 
 function enableStreamProof() {
-    if (streamProofActive) return;
-    streamProofActive = true;
-
-    document.body.classList.add("stream-proof-enabled");
-
-    if (!clickHandler) {
-        clickHandler = e => {
-            const target = e.target as HTMLElement | null;
-            if (!target) return;
-
-            const selectors = [
-                '[class*="messageContent_"]',
-                '[class*="markup_"]',
-                '[class*="imageWrapper_"]',
-                '[class*="embedWrapper_"]',
-                '[id^="message-accessories-"] article',
-                '[class*="attachment_"]',
-                '[class*="video_"]',
-                '[class*="voiceMessage_"]',
-                '[class*="wrapperPaused_"]',
-                '[class*="wrapperPlaying_"]',
-                '[class*="audioAttachment_"]',
-                '[class*="fileUpload_"]',
-                '[class*="wrapperAudio_"]',
-                '[class*="mediaBarInteraction_"]',
-                '[class*="newMosaicStyle_"]',
-                '[class*="stickerAsset_"]',
-                '[class*="channel_"][class*="interactive_"]'
-            ].join(", ");
-
-            const targetElement = target.closest(selectors);
-            if (targetElement && !targetElement.classList.contains("stream-proof-revealed")) {
-                targetElement.classList.add("stream-proof-revealed");
-                e.preventDefault();
-                e.stopPropagation();
-            }
-        };
-
-        document.addEventListener("click", clickHandler, true);
-    }
+    settings.store.enabled = true;
 }
 
 function disableStreamProof() {
-    if (!streamProofActive) return;
-    streamProofActive = false;
+    settings.store.enabled = false;
+}
 
-    document.body.classList.remove("stream-proof-enabled");
+function StreamProofContentRevealed({ children }: { children: React.ReactNode }) {
+    const [revealed, setRevealed] = React.useState(false);
 
-    if (clickHandler) {
-        document.removeEventListener("click", clickHandler, true);
-        clickHandler = null;
-    }
+    return (
+        <span
+            className={cl(revealed ? "revealed" : "blurred")}
+            onClick={() => setRevealed(true)}
+        >
+            {children}
+        </span>
+    );
+}
 
-    document.querySelectorAll(".stream-proof-revealed").forEach(el => {
-        el.classList.remove("stream-proof-revealed");
-    });
+function StreamProofContent({ children }: { children: React.ReactNode }) {
+    const { enabled, blurMessages } = settings.use(["enabled", "blurMessages"]);
+
+    if (!enabled || !blurMessages) return children;
+
+    return <StreamProofContentRevealed>{children}</StreamProofContentRevealed>;
+}
+
+function StreamProofMediaRevealed({ children }: { children: React.ReactNode }) {
+    const [revealed, setRevealed] = React.useState(false);
+
+    return (
+        <div
+            className={cl(revealed ? "revealed" : "media-blurred")}
+            onClickCapture={e => {
+                if (!revealed) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setRevealed(true);
+                }
+            }}
+        >
+            {children}
+        </div>
+    );
+}
+
+function StreamProofMedia({ children }: { children: React.ReactNode }) {
+    const { enabled, blurMedia } = settings.use(["enabled", "blurMedia"]);
+
+    if (!enabled || !blurMedia) return children;
+
+    return <StreamProofMediaRevealed>{children}</StreamProofMediaRevealed>;
+}
+
+function StreamProofDMRevealed({ children }: { children: React.ReactNode }) {
+    const [revealed, setRevealed] = React.useState(false);
+
+    return (
+        <div
+            className={cl(revealed ? "revealed" : "blurred")}
+            onClickCapture={e => {
+                if (!revealed) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setRevealed(true);
+                }
+            }}
+        >
+            {children}
+        </div>
+    );
+}
+
+function StreamProofDM({ children }: { children: React.ReactNode }) {
+    const { enabled, blurDMs } = settings.use(["enabled", "blurDMs"]);
+
+    if (!enabled || !blurDMs) return children;
+
+    return <StreamProofDMRevealed>{children}</StreamProofDMRevealed>;
+}
+
+function StreamProofBioRevealed({ children }: { children: React.ReactNode }) {
+    const [revealed, setRevealed] = React.useState(false);
+
+    return (
+        <span
+            className={cl(revealed ? "revealed" : "blurred")}
+            onClick={() => setRevealed(true)}
+        >
+            {children}
+        </span>
+    );
+}
+
+function StreamProofBio({ children }: { children: React.ReactNode }) {
+    const { enabled, blurProfileBio } = settings.use(["enabled", "blurProfileBio"]);
+
+    if (!enabled || !blurProfileBio) return children;
+
+    return <StreamProofBioRevealed>{children}</StreamProofBioRevealed>;
 }
 
 function EyeIcon() {
@@ -133,17 +206,15 @@ function EyeSlashIcon() {
 
 const StreamProofButton: ChatBarButtonFactory = ({ isMainChat }) => {
     useStateFromStores([StreamStore], () => isStreaming());
-    const [enabled, setEnabled] = useState(streamProofActive);
+    const { enabled } = settings.use(["enabled"]);
 
     if (!isMainChat) return null;
 
     function toggle() {
-        if (streamProofActive) {
+        if (settings.store.enabled) {
             disableStreamProof();
-            setEnabled(false);
         } else {
             enableStreamProof();
-            setEnabled(true);
         }
     }
 
@@ -168,17 +239,64 @@ export default definePlugin({
     enabledByDefault: true,
     settings,
 
+    patches: [
+        {
+            find: '.CUSTOM_GIFT?""',
+            replacement: {
+                match: /childrenMessageContent:(\i),/g,
+                replace: "childrenMessageContent:$self.wrapContent($1),"
+            }
+        },
+        {
+            find: "this.renderAttachments(",
+            replacement: {
+                match: /(?<=\i=)this\.render(?:Attachments|Embeds|StickersAccessories|ComponentAccessories)\((\i)\)/g,
+                replace: "$self.wrapMedia($&)"
+            }
+        },
+        {
+            find: "parseBioReact",
+            replacement: {
+                match: /\(0,\i\.parseBioReact\)\((\i)\)/,
+                replace: "$self.wrapBio($&)"
+            }
+        },
+        {
+            find: "PrivateChannel.renderAvatar",
+            replacement: {
+                match: /(?<=children:)(\(0,\i\.jsx\)\(\i\.\i,\{ref:\i,avatar:.*?withDisplayNameStyles:\i\}\))/,
+                replace: "$self.wrapDM($1)"
+            }
+        }
+    ],
+
     chatBarButton: {
         icon: EyeSlashIcon,
         render: StreamProofButton
     },
 
-   flux: {
-    STREAM_START: handleStreamChange,
-    STREAM_STOP: handleStreamChange,
-    STREAM_CREATE: handleStreamChange,
-    STREAM_DELETE: handleStreamChange
-},
+    flux: {
+        STREAM_START: handleStreamChange,
+        STREAM_STOP: handleStreamChange,
+        STREAM_CREATE: handleStreamChange,
+        STREAM_DELETE: handleStreamChange
+    },
+
+    wrapContent(content: React.ReactNode) {
+        return <StreamProofContent>{content}</StreamProofContent>;
+    },
+
+    wrapMedia(content: React.ReactNode) {
+        return <StreamProofMedia>{content}</StreamProofMedia>;
+    },
+
+    wrapBio(content: React.ReactNode) {
+        return <StreamProofBio>{content}</StreamProofBio>;
+    },
+
+    wrapDM(content: React.ReactNode) {
+        return <StreamProofDM>{content}</StreamProofDM>;
+    },
 
     start() {
         if (settings.store.autoStreamProof && isStreaming()) {
