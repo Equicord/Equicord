@@ -6,9 +6,11 @@
 
 import definePlugin, { OptionType } from "@utils/types";
 import { definePluginSettings } from "@api/Settings";
-import { UserSettingsActionCreators, Toasts, openModal, Modal, React, useState, RestAPI, Checkbox, Alerts, Button as DiscordButton } from "@webpack/common";
+import { UserSettingsActionCreators, Toasts, openModal, Modal, React, useState, RestAPI, Checkbox, Alerts, Button as DiscordButton, Constants } from "@webpack/common";
 import { Button } from "@components/Button";
 import { BaseText as Text } from "@components/BaseText";
+import { chooseFile, saveFile } from "@utils/web";
+import "./style.css";
 
 interface FavoriteGif {
     url: string;
@@ -57,17 +59,8 @@ const exportGifs = () => {
                             const timeStr = now.toTimeString().split(" ")[0].replace(/:/g, "-");
                             const filename = `favorite_gifs_${dateStr}_${timeStr}.json`;
                             
-                            if (window.DiscordNative?.fileManager?.saveWithDialog) {
-                                await window.DiscordNative.fileManager.saveWithDialog(json, filename);
-                            } else {
-                                const blob = new Blob([json], { type: "application/json" });
-                                const url = URL.createObjectURL(blob);
-                                const a = document.createElement("a");
-                                a.href = url;
-                                a.download = filename;
-                                a.click();
-                                URL.revokeObjectURL(url);
-                            }
+                            const file = new File([json], filename, { type: "application/json" });
+                            saveFile(file);
 
                             Toasts.show({
                                 message: "GIFs exported successfully!",
@@ -88,111 +81,103 @@ const exportGifs = () => {
     ));
 };
 
-const importGifs = () => {
-    const input = document.createElement("input");
-    input.type = "file";
-    input.accept = ".json";
+const importGifs = async () => {
+    const file = await chooseFile(".json");
+    if (!file) return;
     
-    input.onchange = async (e) => {
-        const file = (e.target as HTMLInputElement).files?.[0];
-        if (!file) return;
-        
+    try {
+        const text = await file.text();
+        let parsedData: unknown;
         try {
-            const text = await file.text();
-            let parsedData: unknown;
-            try {
-                parsedData = JSON.parse(text);
-            } catch {
-                Toasts.show({ message: "Couldn't read that file. Is it a valid JSON backup?", type: Toasts.Type.FAILURE, id: Toasts.genId() });
-                return;
-            }
-            
-            if (!Array.isArray(parsedData)) {
-                Toasts.show({ message: "This backup file doesn't look like a valid list of GIFs.", type: Toasts.Type.FAILURE, id: Toasts.genId() });
-                return;
-            }
-
-            const importedGifs = parsedData
-                .filter(isValidGif)
-                .map(gif => ({
-                    url: gif.url,
-                    src: gif.src || gif.url,
-                    width: gif.width || 250,
-                    height: gif.height || 250,
-                    format: gif.format || 1,
-                }));
-
-            if (importedGifs.length === 0) {
-                Toasts.show({ message: "Didn't find any valid GIFs in that backup.", type: Toasts.Type.FAILURE, id: Toasts.genId() });
-                return;
-            }
-            
-            openModal(modalProps => (
-                <Modal
-                    {...modalProps}
-                    title="Import GIFs"
-                    subtitle={`Found ${importedGifs.length} GIFs in this backup. Import them?`}
-                    actions={[
-                        {
-                            text: "Cancel",
-                            variant: "secondary",
-                            onClick: modalProps.onClose
-                        },
-                        {
-                            text: "Import",
-                            variant: "primary",
-                            onClick: async () => {
-                                modalProps.onClose();
-                                
-                                let newCount = 0;
-                                let overwriteCount = 0;
-                                
-                                await UserSettingsActionCreators.FrecencyUserSettingsActionCreators.updateAsync("favoriteGifs", (settings: FavoriteGifsSettings) => {
-                                    if (!settings.gifs) settings.gifs = {};
-                                    for (const gif of importedGifs) {
-                                        if (settings.gifs[gif.url]) {
-                                            overwriteCount++;
-                                        } else {
-                                            newCount++;
-                                        }
-                                        const { url, ...rest } = gif;
-                                        settings.gifs[url] = rest;
-                                    }
-                                });
-                                
-                                Toasts.show({
-                                    message: `Imported ${newCount} new GIFs (${overwriteCount} updated)!`,
-                                    type: Toasts.Type.SUCCESS,
-                                    id: Toasts.genId()
-                                });
-                            }
-                        }
-                    ]}
-                />
-            ));
+            parsedData = JSON.parse(text);
         } catch {
-            Toasts.show({
-                message: "Failed to read file.",
-                type: Toasts.Type.FAILURE,
-                id: Toasts.genId()
-            });
+            Toasts.show({ message: "Couldn't read that file. Is it a valid JSON backup?", type: Toasts.Type.FAILURE, id: Toasts.genId() });
+            return;
         }
-    };
-    
-    input.click();
+        
+        if (!Array.isArray(parsedData)) {
+            Toasts.show({ message: "This backup file doesn't look like a valid list of GIFs.", type: Toasts.Type.FAILURE, id: Toasts.genId() });
+            return;
+        }
+
+        const importedGifs = parsedData
+            .filter(isValidGif)
+            .map(gif => ({
+                url: gif.url,
+                src: gif.src || gif.url,
+                width: gif.width || 250,
+                height: gif.height || 250,
+                format: gif.format || 1,
+            }));
+
+        if (importedGifs.length === 0) {
+            Toasts.show({ message: "Didn't find any valid GIFs in that backup.", type: Toasts.Type.FAILURE, id: Toasts.genId() });
+            return;
+        }
+        
+        openModal(modalProps => (
+            <Modal
+                {...modalProps}
+                title="Import GIFs"
+                subtitle={`Found ${importedGifs.length} GIFs in this backup. Import them?`}
+                actions={[
+                    {
+                        text: "Cancel",
+                        variant: "secondary",
+                        onClick: modalProps.onClose
+                    },
+                    {
+                        text: "Import",
+                        variant: "primary",
+                        onClick: async () => {
+                            modalProps.onClose();
+                            
+                            let newCount = 0;
+                            let overwriteCount = 0;
+                            
+                            await UserSettingsActionCreators.FrecencyUserSettingsActionCreators.updateAsync("favoriteGifs", (settings: FavoriteGifsSettings) => {
+                                if (!settings.gifs) settings.gifs = {};
+                                for (const gif of importedGifs) {
+                                    if (settings.gifs[gif.url]) {
+                                        overwriteCount++;
+                                    } else {
+                                        newCount++;
+                                    }
+                                    const { url, ...rest } = gif;
+                                    settings.gifs[url] = rest;
+                                }
+                            });
+                            
+                            Toasts.show({
+                                message: `Imported ${newCount} new GIFs (${overwriteCount} updated)!`,
+                                type: Toasts.Type.SUCCESS,
+                                id: Toasts.genId()
+                            });
+                        }
+                    }
+                ]}
+            />
+        ));
+    } catch {
+        Toasts.show({
+            message: "Failed to read file.",
+            type: Toasts.Type.FAILURE,
+            id: Toasts.genId()
+        });
+    }
 };
 
 const doubleConfirm = (title: string, subtitle: string, title2: string, subtitle2: string, onConfirm: () => void) => {
     Alerts.show({
         title,
-        body: <Text size="md" style={{ color: "var(--text-normal)" }}>{subtitle}</Text>,
+        body: <Text size="md" className="favGifManager-textNormal">{subtitle}</Text>,
         confirmText: "Yes",
         cancelText: "Cancel",
         confirmColor: DiscordButton.Colors.RED,
         onConfirm: () => {
             Alerts.show({
                 title: title2,
-                body: <Text size="md" style={{ color: "var(--text-normal)" }}>{subtitle2}</Text>,
+                body: <Text size="md" className="favGifManager-textNormal">{subtitle2}</Text>,
                 confirmText: "I'm Sure",
                 cancelText: "Cancel",
                 confirmColor: DiscordButton.Colors.RED,
@@ -221,64 +206,56 @@ const removeAllGifs = () => {
     );
 };
 
-const removeBackupGifsFromFavorites = () => {
-    const input = document.createElement("input");
-    input.type = "file";
-    input.accept = ".json";
+const removeBackupGifsFromFavorites = async () => {
+    const file = await chooseFile(".json");
+    if (!file) return;
     
-    input.onchange = async (e) => {
-        const file = (e.target as HTMLInputElement).files?.[0];
-        if (!file) return;
-        
+    try {
+        const text = await file.text();
+        let toRemove: unknown;
         try {
-            const text = await file.text();
-            let toRemove: unknown;
-            try {
-                toRemove = JSON.parse(text);
-            } catch {
-                Toasts.show({ message: "Couldn't read that file. Is it a valid JSON backup?", type: Toasts.Type.FAILURE, id: Toasts.genId() });
+            toRemove = JSON.parse(text);
+        } catch {
+            Toasts.show({ message: "Couldn't read that file. Is it a valid JSON backup?", type: Toasts.Type.FAILURE, id: Toasts.genId() });
+            return;
+        }
+        
+        if (Array.isArray(toRemove)) {
+            const validToRemove = toRemove.filter(isValidGif);
+            if (validToRemove.length === 0) {
+                Toasts.show({ message: "Didn't find any valid GIFs in that file.", type: Toasts.Type.FAILURE, id: Toasts.genId() });
                 return;
             }
             
-            if (Array.isArray(toRemove)) {
-                const validToRemove = toRemove.filter(isValidGif);
-                if (validToRemove.length === 0) {
-                    Toasts.show({ message: "Didn't find any valid GIFs in that file.", type: Toasts.Type.FAILURE, id: Toasts.genId() });
-                    return;
-                }
-                
-                doubleConfirm(
-                    "Bulk Remove GIFs",
-                    `${validToRemove.length} GIFs from this file will be removed from your favorites. Are you sure?`,
-                    "Double Check",
-                    "This will permanently delete these GIFs from your favorites. Sure about this?",
-                    async () => {
-                        let count = 0;
-                        await UserSettingsActionCreators.FrecencyUserSettingsActionCreators.updateAsync("favoriteGifs", (settings: FavoriteGifsSettings) => {
-                            if (!settings.gifs) return;
-                            for (const gif of validToRemove) {
-                                if (settings.gifs[gif.url]) {
-                                    delete settings.gifs[gif.url];
-                                    count++;
-                                }
+            doubleConfirm(
+                "Bulk Remove GIFs",
+                `${validToRemove.length} GIFs from this file will be removed from your favorites. Are you sure?`,
+                "Double Check",
+                "This will permanently delete these GIFs from your favorites. Sure about this?",
+                async () => {
+                    let count = 0;
+                    await UserSettingsActionCreators.FrecencyUserSettingsActionCreators.updateAsync("favoriteGifs", (settings: FavoriteGifsSettings) => {
+                        if (!settings.gifs) return;
+                        for (const gif of validToRemove) {
+                            if (settings.gifs[gif.url]) {
+                                delete settings.gifs[gif.url];
+                                count++;
                             }
-                        });
-                        Toasts.show({
-                            message: `${count} GIFs have been removed!`,
-                            type: Toasts.Type.SUCCESS,
-                            id: Toasts.genId()
-                        });
-                    }
-                );
-            } else {
-                Toasts.show({ message: "File must contain a list of GIFs.", type: Toasts.Type.FAILURE, id: Toasts.genId() });
-            }
-        } catch {
-            Toasts.show({ message: "Failed to read file.", type: Toasts.Type.FAILURE, id: Toasts.genId() });
+                        }
+                    });
+                    Toasts.show({
+                        message: `${count} GIFs have been removed!`,
+                        type: Toasts.Type.SUCCESS,
+                        id: Toasts.genId()
+                    });
+                }
+            );
+        } else {
+            Toasts.show({ message: "File must contain a list of GIFs.", type: Toasts.Type.FAILURE, id: Toasts.genId() });
         }
-    };
-    
-    input.click();
+    } catch {
+        Toasts.show({ message: "Failed to read file.", type: Toasts.Type.FAILURE, id: Toasts.genId() });
+    }
 };
 
 const GifManagerModal = ({ modalProps }: { modalProps: Record<string, unknown> }) => {
@@ -310,7 +287,7 @@ const GifManagerModal = ({ modalProps }: { modalProps: Record<string, unknown> }
                     let hasUpdates = false;
                     for (let i = 0; i < toRefresh.length; i += 50) {
                         const chunk = toRefresh.slice(i, i + 50);
-                        const res = await RestAPI.post({ url: "/attachments/refresh-urls", body: { attachment_urls: chunk } });
+                        const res = await RestAPI.post({ url: Constants.Endpoints.ATTACHMENTS_REFRESH_URLS, body: { attachment_urls: chunk } });
                         if (res.ok && res.body.refreshed_urls) {
                             const map: Record<string, string> = {};
                             for (const { original, refreshed } of res.body.refreshed_urls) {
@@ -413,15 +390,10 @@ const GifManagerModal = ({ modalProps }: { modalProps: Record<string, unknown> }
             ]}
         >
             {loading ? (
-                <div style={{ padding: "40px", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--text-muted)" }}>Loading GIFs...</div>
+                <div className="favGifManager-loading">Loading GIFs...</div>
             ) : (
-                <div style={{ padding: "16px", maxHeight: "70vh", overflowY: "auto", overflowX: "hidden" }}>
-                    <div style={{ 
-                        display: "grid", 
-                        gridTemplateColumns: "repeat(auto-fill, minmax(140px, 1fr))", 
-                        gap: "12px",
-                        alignItems: "start"
-                    }}>
+                <div className="favGifManager-scrollContainer">
+                    <div className="favGifManager-grid">
                                 {gifs.map(gif => {
                                     const isSelected = selected.has(gif.url);
                                     const mediaSrc = gif.src || gif.url;
@@ -433,19 +405,11 @@ const GifManagerModal = ({ modalProps }: { modalProps: Record<string, unknown> }
                                         <div 
                                             key={gif.url} 
                                             onClick={() => toggleSelect(gif.url)}
-                                            style={{ 
-                                                position: "relative",
-                                                cursor: "pointer",
-                                                borderRadius: "8px",
-                                                overflow: "hidden",
-                                                backgroundColor: "var(--background-secondary-alt)",
-                                                boxSizing: "border-box",
-                                                border: isSelected ? "4px solid var(--brand-experiment)" : "4px solid transparent"
-                                            }}
+                                            className={`favGifManager-gifItem ${isSelected ? "favGifManager-gifItem-selected" : ""}`}
                                         >
                                             {isFailed ? (
-                                                <div style={{ width: "100%", height: "150px", display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column" }}>
-                                                    <Text size="sm" weight="semibold" style={{ color: "var(--text-danger)" }}>Load Error</Text>
+                                                <div className="favGifManager-errorBox">
+                                                    <Text size="sm" weight="semibold" className="favGifManager-errorText">Load Error</Text>
                                                 </div>
                                             ) : isVideo ? (
                                                 <video 
@@ -455,18 +419,18 @@ const GifManagerModal = ({ modalProps }: { modalProps: Record<string, unknown> }
                                                     muted 
                                                     playsInline
                                                     onError={() => handleMediaError(gif.url)}
-                                                    style={{ width: "100%", maxHeight: "250px", display: "block", objectFit: "cover" }}
+                                                    className="favGifManager-media"
                                                 />
                                             ) : (
                                                 <img 
                                                     src={mediaSrc} 
                                                     referrerPolicy="no-referrer"
                                                     onError={() => handleMediaError(gif.url)}
-                                                    style={{ width: "100%", maxHeight: "250px", display: "block", objectFit: "cover" }} 
+                                                    className="favGifManager-media"
                                                 />
                                             )}
                                             {isSelected && (
-                                                <div style={{ position: "absolute", top: "8px", right: "8px", pointerEvents: "none" }}>
+                                                <div className="favGifManager-checkboxContainer">
                                                     <Checkbox value={true} onChange={() => {}} shape="round" size={24} />
                                                 </div>
                                             )}
@@ -475,8 +439,8 @@ const GifManagerModal = ({ modalProps }: { modalProps: Record<string, unknown> }
                                 })}
                     </div>
                     {gifs.length === 0 && (
-                        <div style={{ width: "100%", textAlign: "center", marginTop: "20px" }}>
-                            <Text size="md" style={{ color: "var(--text-muted)" }}>You don't have any favorite GIFs.</Text>
+                        <div className="favGifManager-emptyState">
+                            <Text size="md" className="favGifManager-emptyStateText">You don't have any favorite GIFs.</Text>
                         </div>
                     )}
                 </div>
@@ -491,10 +455,10 @@ const openManager = () => {
 
 const TransferMenu = () => {
     return (
-        <div style={{ marginTop: "16px", display: "flex", flexDirection: "column", gap: "16px" }}>
-            <div style={{ padding: "16px", backgroundColor: "var(--background-secondary)", borderRadius: "8px" }}>
-                <Text size="md" weight="semibold" style={{ marginBottom: "8px" }}>Manage Favorites</Text>
-                <Text size="sm" style={{ color: "var(--text-muted)", marginBottom: "16px" }}>
+        <div className="favGifManager-menu">
+            <div className="favGifManager-card">
+                <Text size="md" weight="semibold" className="favGifManager-card-title">Manage Favorites</Text>
+                <Text size="sm" className="favGifManager-card-subtitle">
                     Visually browse and bulk-remove your favorite GIFs.
                 </Text>
                 <Button variant="primary" onClick={() => openManager()}>
@@ -502,12 +466,12 @@ const TransferMenu = () => {
                 </Button>
             </div>
 
-            <div style={{ padding: "16px", backgroundColor: "var(--background-secondary)", borderRadius: "8px" }}>
-                <Text size="md" weight="semibold" style={{ marginBottom: "8px" }}>Backup & Restore</Text>
-                <Text size="sm" style={{ color: "var(--text-muted)", marginBottom: "16px" }}>
+            <div className="favGifManager-card">
+                <Text size="md" weight="semibold" className="favGifManager-card-title">Backup & Restore</Text>
+                <Text size="sm" className="favGifManager-card-subtitle">
                     Save your favorite GIFs to a JSON file, or load an existing backup.
                 </Text>
-                <div style={{ display: "flex", gap: "12px" }}>
+                <div className="favGifManager-buttonGroup">
                     <Button variant="secondary" onClick={() => exportGifs()}>
                         Export to Backup File
                     </Button>
@@ -517,12 +481,12 @@ const TransferMenu = () => {
                 </div>
             </div>
 
-            <div style={{ padding: "16px", backgroundColor: "var(--background-secondary)", borderRadius: "8px", border: "1px solid var(--background-modifier-accent)" }}>
-                <Text size="md" weight="semibold" style={{ marginBottom: "8px", color: "var(--text-danger)" }}>Danger Zone</Text>
-                <Text size="sm" style={{ color: "var(--text-muted)", marginBottom: "16px" }}>
+            <div className="favGifManager-card favGifManager-card-danger">
+                <Text size="md" weight="semibold" className="favGifManager-card-danger-title">Danger Zone</Text>
+                <Text size="sm" className="favGifManager-card-subtitle">
                     Delete your favorite GIFs. These actions are permanent unless you have a backup.
                 </Text>
-                <div style={{ display: "flex", gap: "12px" }}>
+                <div className="favGifManager-buttonGroup">
                     <Button variant="dangerPrimary" onClick={() => removeBackupGifsFromFavorites()}>
                         Remove GIFs listed in Backup
                     </Button>
