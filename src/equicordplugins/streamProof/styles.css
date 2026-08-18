@@ -1,0 +1,54 @@
+.stream-proof-enabled [class*="messageContent_"]:not(.stream-proof-revealed),
+.stream-proof-enabled [class*="markup_"]:not(.stream-proof-revealed) {
+    filter: blur(8px);
+    transition: filter 0.2s ease-in-out;
+    cursor: pointer !important;
+    user-select: none;
+    border-radius: 4px;
+}
+
+.stream-proof-enabled [id^="message-accessories-"] article:not(.stream-proof-revealed) {
+    filter: blur(20px);
+    transition: filter 0.2s ease-in-out;
+    cursor: pointer !important;
+}
+
+.stream-proof-enabled [class*="imageWrapper_"]:not(.stream-proof-revealed),
+.stream-proof-enabled [class*="embedWrapper_"]:not(.stream-proof-revealed),
+.stream-proof-enabled [class*="attachment_"]:not(.stream-proof-revealed),
+.stream-proof-enabled [class*="chatContent_"] [class*="video_"]:not(.stream-proof-revealed),
+.stream-proof-enabled [class*="message_"] [class*="video_"]:not(.stream-proof-revealed),
+.stream-proof-enabled [class*="newMosaicStyle_"]:not(.stream-proof-revealed),
+.stream-proof-enabled [class*="stickerAsset_"]:not(.stream-proof-revealed) {
+    filter: blur(20px);
+    transition: filter 0.2s ease-in-out;
+    cursor: pointer !important;
+}
+
+.stream-proof-enabled [class*="wrapperPaused_"]:not(.stream-proof-revealed),
+.stream-proof-enabled [class*="wrapperPlaying_"]:not(.stream-proof-revealed),
+.stream-proof-enabled [class*="voiceMessage_"]:not(.stream-proof-revealed),
+.stream-proof-enabled [class*="audioAttachment_"]:not(.stream-proof-revealed),
+.stream-proof-enabled [class*="wrapperAudio_"]:not(.stream-proof-revealed),
+.stream-proof-enabled [class*="mediaBarInteraction_"]:not(.stream-proof-revealed) {
+    filter: blur(20px);
+    transition: filter 0.2s ease-in-out;
+    cursor: pointer !important;
+}
+
+.stream-proof-enabled [class*="fileUpload_"]:not(.stream-proof-revealed) {
+    filter: blur(20px);
+    transition: filter 0.2s ease-in-out;
+    cursor: pointer !important;
+}
+
+.stream-proof-enabled [class*="privateChannels_"] [class*="channel_"][class*="interactive_"]:not(.stream-proof-revealed) {
+    filter: blur(8px);
+    transition: filter 0.2s ease-in-out;
+    cursor: pointer !important;
+}
+
+.stream-proof-enabled [class*="messageContent_"]:not(.stream-proof-revealed) a,
+.stream-proof-enabled [class*="markup_"]:not(.stream-proof-revealed) a {
+    pointer-events: none;
+}
