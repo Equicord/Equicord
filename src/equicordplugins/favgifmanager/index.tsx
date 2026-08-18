@@ -300,7 +300,6 @@ const GifManagerModal = ({ modalProps }: { modalProps: Record<string, unknown> }
                     const parsed = new URL(url);
                     const ex = parsed.searchParams.get("ex");
                     if (!ex) return true;
-                    // Refresh if the link expires in less than 1 hour (3600000 ms)
                     if (parseInt(ex, 16) * 1000 < Date.now() + 3600000) return true;
                 } catch {}
                 return false;
