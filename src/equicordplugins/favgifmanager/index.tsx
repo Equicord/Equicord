@@ -4,13 +4,14 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import definePlugin, { OptionType } from "@utils/types";
-import { definePluginSettings } from "@api/Settings";
-import { UserSettingsActionCreators, Toasts, openModal, Modal, React, useState, RestAPI, Checkbox, Alerts, Button as DiscordButton, Constants } from "@webpack/common";
-import { Button } from "@components/Button";
-import { BaseText as Text } from "@components/BaseText";
-import { chooseFile, saveFile } from "@utils/web";
 import "./style.css";
+
+import { definePluginSettings } from "@api/Settings";
+import { BaseText as Text } from "@components/BaseText";
+import { Button } from "@components/Button";
+import definePlugin, { OptionType } from "@utils/types";
+import { chooseFile, saveFile } from "@utils/web";
+import { Alerts, Button as DiscordButton, Checkbox, Constants,Modal, openModal, React, RestAPI, Toasts, UserSettingsActionCreators, useState } from "@webpack/common";
 
 interface FavoriteGif {
     url: string;
@@ -30,39 +31,46 @@ const isSafeUrl = (link?: unknown): boolean => {
         const parsed = new URL(link);
         if (parsed.protocol !== "http:" && parsed.protocol !== "https:") return false;
         
-        const host = parsed.hostname;
-        if (
-            host === "localhost" ||
-            host === "127.0.0.1" ||
-            host === "[::1]" ||
-            host === "0.0.0.0" ||
-            host.startsWith("192.168.") ||
-            host.startsWith("10.") ||
-            host.match(/^172\.(1[6-9]|2\d|3[0-1])\./)
-        ) {
+        const host = parsed.hostname.toLowerCase().replace(/\.$/, "");
+        
+        if (host.endsWith(".localhost") || host.endsWith(".local")) {
             return false;
         }
+
+        if (host.startsWith("[") && host.endsWith("]")) {
+            return false;
+        }
+
+        const parts = host.split(".");
+        if (parts.length === 1) {
+            return false;
+        }
+
+        const tld = parts[parts.length - 1];
+        if (!/[a-z]/.test(tld)) {
+            return false;
+        }
+
         return true;
     } catch {
         return false;
     }
 };
 
-const isValidGif = (gif: any): gif is FavoriteGif => {
+const isValidGif = (gif: unknown): gif is FavoriteGif => {
     if (typeof gif !== "object" || gif === null) return false;
-    if (!isSafeUrl(gif.url)) return false;
-    if (gif.src !== undefined && !isSafeUrl(gif.src)) return false;
+    const typedGif = gif as Record<string, unknown>;
+    if (!isSafeUrl(typedGif.url)) return false;
+    if (typedGif.src !== undefined && !isSafeUrl(typedGif.src)) return false;
     return true;
 };
-
-
 
 const exportGifs = () => {
     const gifs = UserSettingsActionCreators.FrecencyUserSettingsActionCreators.getCurrentValue()?.favoriteGifs?.gifs;
     if (!gifs) return;
-    
+
     const favorites = Object.entries(gifs).map(([url, gif]) => ({ url, ...(gif as Record<string, unknown>) })) as FavoriteGif[];
-    
+
     openModal(modalProps => (
         <Modal
             {...modalProps}
@@ -85,7 +93,7 @@ const exportGifs = () => {
                             const dateStr = now.toISOString().split("T")[0];
                             const timeStr = now.toTimeString().split(" ")[0].replace(/:/g, "-");
                             const filename = `favorite_gifs_${dateStr}_${timeStr}.json`;
-                            
+
                             const file = new File([json], filename, { type: "application/json" });
                             saveFile(file);
 
@@ -111,7 +119,7 @@ const exportGifs = () => {
 const importGifs = async () => {
     const file = await chooseFile(".json");
     if (!file) return;
-    
+
     try {
         const text = await file.text();
         let parsedData: unknown;
@@ -121,7 +129,7 @@ const importGifs = async () => {
             Toasts.show({ message: "Couldn't read that file. Is it a valid JSON backup?", type: Toasts.Type.FAILURE, id: Toasts.genId() });
             return;
         }
-        
+
         if (!Array.isArray(parsedData)) {
             Toasts.show({ message: "This backup file doesn't look like a valid list of GIFs.", type: Toasts.Type.FAILURE, id: Toasts.genId() });
             return;
@@ -141,7 +149,7 @@ const importGifs = async () => {
             Toasts.show({ message: "Didn't find any valid GIFs in that backup.", type: Toasts.Type.FAILURE, id: Toasts.genId() });
             return;
         }
-        
+
         openModal(modalProps => (
             <Modal
                 {...modalProps}
@@ -158,10 +166,10 @@ const importGifs = async () => {
                         variant: "primary",
                         onClick: async () => {
                             modalProps.onClose();
-                            
+
                             let newCount = 0;
                             let overwriteCount = 0;
-                            
+
                             await UserSettingsActionCreators.FrecencyUserSettingsActionCreators.updateAsync("favoriteGifs", (settings: FavoriteGifsSettings) => {
                                 if (!settings.gifs) settings.gifs = {};
                                 for (const gif of importedGifs) {
@@ -174,7 +182,7 @@ const importGifs = async () => {
                                     settings.gifs[url] = rest;
                                 }
                             });
-                            
+
                             Toasts.show({
                                 message: `Imported ${newCount} new GIFs (${overwriteCount} updated)!`,
                                 type: Toasts.Type.SUCCESS,
@@ -197,14 +205,14 @@ const importGifs = async () => {
 const doubleConfirm = (title: string, subtitle: string, title2: string, subtitle2: string, onConfirm: () => void) => {
     Alerts.show({
         title,
-        body: <Text size="md" className="favGifManager-textNormal">{subtitle}</Text>,
+        body: <Text size="md" className="vc-FavGifManager-textNormal">{subtitle}</Text>,
         confirmText: "Yes",
         cancelText: "Cancel",
         confirmColor: DiscordButton.Colors.RED,
         onConfirm: () => {
             Alerts.show({
                 title: title2,
-                body: <Text size="md" className="favGifManager-textNormal">{subtitle2}</Text>,
+                body: <Text size="md" className="vc-FavGifManager-textNormal">{subtitle2}</Text>,
                 confirmText: "I'm Sure",
                 cancelText: "Cancel",
                 confirmColor: DiscordButton.Colors.RED,
@@ -236,7 +244,7 @@ const removeAllGifs = () => {
 const removeBackupGifsFromFavorites = async () => {
     const file = await chooseFile(".json");
     if (!file) return;
-    
+
     try {
         const text = await file.text();
         let toRemove: unknown;
@@ -246,14 +254,14 @@ const removeBackupGifsFromFavorites = async () => {
             Toasts.show({ message: "Couldn't read that file. Is it a valid JSON backup?", type: Toasts.Type.FAILURE, id: Toasts.genId() });
             return;
         }
-        
+
         if (Array.isArray(toRemove)) {
             const validToRemove = toRemove.filter(isValidGif);
             if (validToRemove.length === 0) {
                 Toasts.show({ message: "Didn't find any valid GIFs in that file.", type: Toasts.Type.FAILURE, id: Toasts.genId() });
                 return;
             }
-            
+
             doubleConfirm(
                 "Bulk Remove GIFs",
                 `${validToRemove.length} GIFs from this file will be removed from your favorites. Are you sure?`,
@@ -296,7 +304,7 @@ const GifManagerModal = ({ modalProps }: { modalProps: Record<string, unknown> }
         const fetchAndRefresh = async () => {
             const initialGifs = UserSettingsActionCreators.FrecencyUserSettingsActionCreators.getCurrentValue()?.favoriteGifs?.gifs || {};
             const items = (Object.entries(initialGifs).map(([url, data]) => ({ url, ...(data as Record<string, unknown>) })) as FavoriteGif[]).reverse();
-            
+
             const toRefresh = items.map(g => g.src || g.url).filter(url => {
                 if (!url) return false;
                 if (!url.includes("/attachments/")) return false;
@@ -347,14 +355,14 @@ const GifManagerModal = ({ modalProps }: { modalProps: Record<string, unknown> }
                     });
                 }
             }
-            
+
             if (isMounted) {
                 setGifs(items);
                 setLoading(false);
             }
         };
         fetchAndRefresh();
-        
+
         return () => {
             isMounted = false;
         };
@@ -417,47 +425,47 @@ const GifManagerModal = ({ modalProps }: { modalProps: Record<string, unknown> }
             ]}
         >
             {loading ? (
-                <div className="favGifManager-loading">Loading GIFs...</div>
+                <div className="vc-FavGifManager-loading">Loading GIFs...</div>
             ) : (
-                <div className="favGifManager-scrollContainer">
-                    <div className="favGifManager-grid">
+                <div className="vc-FavGifManager-scrollContainer">
+                    <div className="vc-FavGifManager-grid">
                                 {gifs.map(gif => {
                                     const isSelected = selected.has(gif.url);
                                     const mediaSrc = gif.src || gif.url;
                                     const cleanUrl = mediaSrc.split("?")[0].toLowerCase();
                                     const isVideo = cleanUrl.endsWith(".mp4") || cleanUrl.endsWith(".webm") || gif.format === 2 || gif.format === 3;
                                     const isFailed = failedGifs.has(gif.url);
-                                    
+
                                     return (
-                                        <div 
-                                            key={gif.url} 
+                                        <div
+                                            key={gif.url}
                                             onClick={() => toggleSelect(gif.url)}
-                                            className={`favGifManager-gifItem ${isSelected ? "favGifManager-gifItem-selected" : ""}`}
+                                            className={`vc-FavGifManager-gifItem ${isSelected ? "vc-FavGifManager-gifItem-selected" : ""}`}
                                         >
                                             {isFailed ? (
-                                                <div className="favGifManager-errorBox">
-                                                    <Text size="sm" weight="semibold" className="favGifManager-errorText">Load Error</Text>
+                                                <div className="vc-FavGifManager-errorBox">
+                                                    <Text size="sm" weight="semibold" className="vc-FavGifManager-errorText">Load Error</Text>
                                                 </div>
                                             ) : isVideo ? (
-                                                <video 
-                                                    src={mediaSrc} 
-                                                    autoPlay 
-                                                    loop 
-                                                    muted 
+                                                <video
+                                                    src={mediaSrc}
+                                                    autoPlay
+                                                    loop
+                                                    muted
                                                     playsInline
                                                     onError={() => handleMediaError(gif.url)}
-                                                    className="favGifManager-media"
+                                                    className="vc-FavGifManager-media"
                                                 />
                                             ) : (
-                                                <img 
-                                                    src={mediaSrc} 
+                                                <img
+                                                    src={mediaSrc}
                                                     referrerPolicy="no-referrer"
                                                     onError={() => handleMediaError(gif.url)}
-                                                    className="favGifManager-media"
+                                                    className="vc-FavGifManager-media"
                                                 />
                                             )}
                                             {isSelected && (
-                                                <div className="favGifManager-checkboxContainer">
+                                                <div className="vc-FavGifManager-checkboxContainer">
                                                     <Checkbox value={true} onChange={() => {}} shape="round" size={24} />
                                                 </div>
                                             )}
@@ -466,8 +474,8 @@ const GifManagerModal = ({ modalProps }: { modalProps: Record<string, unknown> }
                                 })}
                     </div>
                     {gifs.length === 0 && (
-                        <div className="favGifManager-emptyState">
-                            <Text size="md" className="favGifManager-emptyStateText">You don't have any favorite GIFs.</Text>
+                        <div className="vc-FavGifManager-emptyState">
+                            <Text size="md" className="vc-FavGifManager-emptyStateText">You don't have any favorite GIFs.</Text>
                         </div>
                     )}
                 </div>
@@ -482,10 +490,10 @@ const openManager = () => {
 
 const TransferMenu = () => {
     return (
-        <div className="favGifManager-menu">
-            <div className="favGifManager-card">
-                <Text size="md" weight="semibold" className="favGifManager-card-title">Manage Favorites</Text>
-                <Text size="sm" className="favGifManager-card-subtitle">
+        <div className="vc-FavGifManager-menu">
+            <div className="vc-FavGifManager-card">
+                <Text size="md" weight="semibold" className="vc-FavGifManager-card-title">Manage Favorites</Text>
+                <Text size="sm" className="vc-FavGifManager-card-subtitle">
                     Visually browse and bulk-remove your favorite GIFs.
                 </Text>
                 <Button variant="primary" onClick={() => openManager()}>
@@ -493,12 +501,12 @@ const TransferMenu = () => {
                 </Button>
             </div>
 
-            <div className="favGifManager-card">
-                <Text size="md" weight="semibold" className="favGifManager-card-title">Backup & Restore</Text>
-                <Text size="sm" className="favGifManager-card-subtitle">
+            <div className="vc-FavGifManager-card">
+                <Text size="md" weight="semibold" className="vc-FavGifManager-card-title">Backup & Restore</Text>
+                <Text size="sm" className="vc-FavGifManager-card-subtitle">
                     Save your favorite GIFs to a JSON file, or load an existing backup.
                 </Text>
-                <div className="favGifManager-buttonGroup">
+                <div className="vc-FavGifManager-buttonGroup">
                     <Button variant="secondary" onClick={() => exportGifs()}>
                         Export to Backup File
                     </Button>
@@ -508,12 +516,12 @@ const TransferMenu = () => {
                 </div>
             </div>
 
-            <div className="favGifManager-card favGifManager-card-danger">
-                <Text size="md" weight="semibold" className="favGifManager-card-danger-title">Danger Zone</Text>
-                <Text size="sm" className="favGifManager-card-subtitle">
+            <div className="vc-FavGifManager-card vc-FavGifManager-card-danger">
+                <Text size="md" weight="semibold" className="vc-FavGifManager-card-danger-title">Danger Zone</Text>
+                <Text size="sm" className="vc-FavGifManager-card-subtitle">
                     Delete your favorite GIFs. These actions are permanent unless you have a backup.
                 </Text>
-                <div className="favGifManager-buttonGroup">
+                <div className="vc-FavGifManager-buttonGroup">
                     <Button variant="dangerPrimary" onClick={() => removeBackupGifsFromFavorites()}>
                         Remove GIFs listed in Backup
                     </Button>
