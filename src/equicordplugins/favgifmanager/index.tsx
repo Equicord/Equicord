@@ -24,8 +24,35 @@ interface FavoriteGifsSettings {
     gifs?: Record<string, Omit<FavoriteGif, "url">>;
 }
 
+const isSafeUrl = (link?: unknown): boolean => {
+    if (typeof link !== "string") return false;
+    try {
+        const parsed = new URL(link);
+        if (parsed.protocol !== "http:" && parsed.protocol !== "https:") return false;
+        
+        const host = parsed.hostname;
+        if (
+            host === "localhost" ||
+            host === "127.0.0.1" ||
+            host === "[::1]" ||
+            host === "0.0.0.0" ||
+            host.startsWith("192.168.") ||
+            host.startsWith("10.") ||
+            host.match(/^172\.(1[6-9]|2\d|3[0-1])\./)
+        ) {
+            return false;
+        }
+        return true;
+    } catch {
+        return false;
+    }
+};
+
 const isValidGif = (gif: any): gif is FavoriteGif => {
-    return typeof gif === "object" && gif !== null && typeof gif.url === "string" && gif.url.startsWith("http");
+    if (typeof gif !== "object" || gif === null) return false;
+    if (!isSafeUrl(gif.url)) return false;
+    if (gif.src !== undefined && !isSafeUrl(gif.src)) return false;
+    return true;
 };
 
 
