@@ -293,7 +293,7 @@ const removeBackupGifsFromFavorites = async () => {
     }
 };
 
-const GifManagerModal = ({ modalProps }: { modalProps: Record<string, unknown> }) => {
+const GifManagerModal = ({ modalProps }: { modalProps: { transitionState?: number; onClose: () => void; [key: string]: unknown } }) => {
     const [gifs, setGifs] = useState<FavoriteGif[]>([]);
     const [selected, setSelected] = useState<Set<string>>(new Set());
     const [failedGifs, setFailedGifs] = useState<Set<string>>(new Set());
