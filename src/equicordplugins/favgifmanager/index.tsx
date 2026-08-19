@@ -30,28 +30,43 @@ const isSafeUrl = (link?: unknown): boolean => {
     try {
         const parsed = new URL(link);
         if (parsed.protocol !== "http:" && parsed.protocol !== "https:") return false;
-        
+
         const host = parsed.hostname.toLowerCase().replace(/\.$/, "");
-        
-        if (host.endsWith(".localhost") || host.endsWith(".local")) {
-            return false;
+
+        // Strict allowlist to completely prevent SSRF & DNS rebinding bypasses
+        const allowedDomains = [
+            ".discordapp.com", ".discordapp.net", ".discord.com", ".discord.gg", ".discord.media",
+            ".tenor.com", ".tenor.co", ".giphy.com", ".klipy.com", ".klipy.co",
+            ".imgur.com", ".gfycat.com", ".redgifs.com", ".gyazo.com",
+            ".twimg.com", ".twitter.com", ".x.com",
+            ".tiktok.com", ".tiktokcdn.com",
+            ".reddit.com", ".redditmedia.com", ".redd.it",
+            ".puu.sh", ".prnt.sc", ".imgflip.com"
+        ];
+
+        // Allow exact matches for base domains just in case
+        const exactMatches = [
+            "discordapp.com", "discordapp.net", "discord.com", "discord.gg", "discord.media",
+            "tenor.com", "tenor.co", "giphy.com", "klipy.com", "klipy.co",
+            "imgur.com", "gfycat.com", "redgifs.com", "gyazo.com",
+            "twimg.com", "twitter.com", "x.com",
+            "tiktok.com", "tiktokcdn.com",
+            "reddit.com", "redditmedia.com", "redd.it",
+            "puu.sh", "prnt.sc", "imgflip.com"
+        ];
+
+        if (exactMatches.includes(host)) {
+            return true;
         }
 
-        if (host.startsWith("[") && host.endsWith("]")) {
-            return false;
+        // Allow subdomains of trusted domains
+        for (const domain of allowedDomains) {
+            if (host.endsWith(domain)) {
+                return true;
+            }
         }
 
-        const parts = host.split(".");
-        if (parts.length === 1) {
-            return false;
-        }
-
-        const tld = parts[parts.length - 1];
-        if (!/[a-z]/.test(tld)) {
-            return false;
-        }
-
-        return true;
+        return false;
     } catch {
         return false;
     }
