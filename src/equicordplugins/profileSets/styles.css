@@ -1,3 +1,22 @@
+.vc-profile-presets-tab-heading {
+    margin-bottom: 16px;
+}
+
+.vc-profile-presets-section-switch {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.vc-profile-presets-guild-picker {
+    max-width: 300px;
+    margin-bottom: 16px;
+}
+
+.vc-profile-presets-empty-state {
+    color: var(--text-muted);
+}
+
 .vc-profile-presets-section {
     margin-bottom: 20px;
     padding: 0;

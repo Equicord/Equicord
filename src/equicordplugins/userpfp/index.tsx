@@ -153,6 +153,8 @@ export default definePlugin({
 
         if (avatars[userId]) {
             const customUrl = avatars[userId];
+            if (customUrl.startsWith("data:")) return customUrl;
+
             try {
                 const res = new URL(customUrl);
                 if (size) res.searchParams.set("size", size.toString());

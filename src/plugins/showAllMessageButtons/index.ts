@@ -55,7 +55,7 @@ export default definePlugin({
                 },
                 {
                     predicate: () => !settings.store.noQuickReacts,
-                    match: /\i(\?null:\(0,\i\.jsxs\).{0,100}message:\i\}\)),\(0,\i\.jsxs?\)\(\i\.\i,\{\}\)/,
+                    match: /\i(\?null:\(0,\i\.jsxs\).{0,100}message:\i\}\)),\(0,\i\.jsxs?\)\(\i,\{\}\)/,
                     replace: "false$1"
                 },
             ]

@@ -222,8 +222,8 @@ export default definePlugin({
             find: '("UserProfileModalV2EditingPanel")',
             replacement: [
                 {
-                    match: /\(0,\i\.jsxs?\)\(\i,\{heading:.{0,40}#{intl::USER_SETTINGS_PROFILE_EFFECT}/,
-                    replace: "$self.addCopy3y3Button(),$&"
+                    match: /disabled:\i\|\|\i\}\)/,
+                    replace: "$&,$self.addCopy3y3Button()"
                 }
             ]
         }

@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { PinOrder, PrivateChannelSortStore, settings } from "@plugins/pinDms";
+import { PinOrder, settings } from "@plugins/pinDms";
 import { useForceUpdater } from "@utils/react";
-import { UserStore } from "@webpack/common";
+import { PrivateChannelSortStore, UserStore } from "@webpack/common";
 
 export interface Category {
     id: string;

@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { ensureSafePath } from "@main/ipcMain";
 import { THEMES_DIR } from "@main/utils/constants";
+import { ensureSafePath } from "@main/utils/ensureSafePath";
 import { IpcMainInvokeEvent } from "electron";
 import { existsSync, writeFileSync } from "fs";
 

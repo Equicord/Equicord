@@ -113,7 +113,8 @@ function SongLinkerList({ urls }: { urls: string[]; }) {
         display: "flex",
         flexDirection: "column",
         gap: "10px",
-        marginTop: "7px"
+        marginTop: "7px",
+        width: "fit-content"
     }}>
         {dedupedUrls.map(url => (
             <SongLinker key={url} url={url} onResolved={onResolved} />

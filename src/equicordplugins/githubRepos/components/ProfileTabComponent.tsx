@@ -5,32 +5,24 @@
  */
 
 import { BaseText } from "@components/BaseText";
-import { fetchReposByUserId, fetchReposByUsername, fetchUserInfo, GitHubUserInfo } from "@equicordplugins/githubRepos/githubApi";
-import { GitHubRepo } from "@equicordplugins/githubRepos/types";
-import { openModal,React, useEffect, UserProfileStore, useState } from "@webpack/common";
+import { fetchOrgRepos, fetchReposByUserId, fetchReposByUsername, fetchUserInfo, fetchUserOrgs } from "@equicordplugins/githubRepos/githubApi";
+import { GitHubRepo, RepoGroup, RepoSortMode } from "@equicordplugins/githubRepos/types";
+import { buildRepoGroups, PERSONAL_GROUP_KEY, sortGroups } from "@equicordplugins/githubRepos/utils";
+import { React, useEffect, UserProfileStore, useState } from "@webpack/common";
 
 import { cl, settings } from "..";
 import { RepoCard } from "./RepoCard";
-import { ReposModal } from "./ReposModal";
+import { RepoSubTabs } from "./RepoSubTabs";
 
 export function ProfileTabComponent({ id }: { id: string, theme: string; }) {
-    const [repos, setRepos] = useState<GitHubRepo[]>([]);
+    const [groups, setGroups] = useState<RepoGroup[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    const [userInfo, setUserInfo] = useState<GitHubUserInfo | null>(null);
+    const [activeKey, setActiveKey] = useState<string>(PERSONAL_GROUP_KEY);
+    const [sortMode, setSortMode] = useState<RepoSortMode>("count");
 
-    const openReposModal = () => {
-        if (!userInfo) return;
-
-        const sortedRepos = [...repos].sort((a, b) => b.stargazers_count - a.stargazers_count);
-        openModal(props => (
-            <ReposModal
-                repos={sortedRepos}
-                username={userInfo.username}
-                rootProps={props}
-            />
-        ));
-    };
+    const sortedGroups = sortGroups(groups, sortMode);
+    const activeGroup = sortedGroups.find(g => g.key === activeKey) ?? sortedGroups[0];
 
     useEffect(() => {
         const fetchData = async () => {
@@ -55,22 +47,19 @@ export function ProfileTabComponent({ id }: { id: string, theme: string; }) {
 
                 const username = githubConnection.name;
                 const userInfoData = await fetchUserInfo(username);
-                if (userInfoData) {
-                    setUserInfo(userInfoData);
-                }
-
                 const githubId = githubConnection.id;
 
                 // Try to fetch by ID first, fall back to username
-                const reposById = await fetchReposByUserId(githubId);
-                if (reposById) {
-                    setRepos(reposById);
-                    setLoading(false);
-                    return;
-                }
+                let personalRepos: GitHubRepo[] | null = await fetchReposByUserId(githubId);
+                if (!personalRepos) personalRepos = await fetchReposByUsername(username);
 
-                const reposByUsername = await fetchReposByUsername(username);
-                setRepos(reposByUsername);
+                const orgs = await fetchUserOrgs(username);
+                const orgReposEntries = await Promise.all(orgs.map(async org => [org.login, await fetchOrgRepos(org.login)]));
+                const orgRepos = Object.fromEntries(orgReposEntries);
+
+                const builtGroups = buildRepoGroups(userInfoData?.username ?? username, personalRepos ?? [], orgs, orgRepos, userInfoData?.avatarUrl);
+                setGroups(builtGroups);
+                setActiveKey(builtGroups[0]?.key ?? PERSONAL_GROUP_KEY);
                 setLoading(false);
             } catch (error) {
                 const errorMessage = error instanceof Error ? error.message : "Failed to fetch repositories";
@@ -92,20 +81,20 @@ export function ProfileTabComponent({ id }: { id: string, theme: string; }) {
         Error: {error}
     </BaseText>;
 
-    if (!repos.length) return null;
+    if (!groups.length) return null;
 
     return (
         <div className={cl("container", "tab")}>
-            <BaseText size="xs" weight="semibold" className={cl("header")}>
-                GitHub Repositories
-                {userInfo && (
-                    <span className={cl("count")}>
-                        {` (${repos.length})`}
-                    </span>
-                )}
-            </BaseText>
+            <RepoSubTabs
+                groups={sortedGroups}
+                activeKey={activeGroup?.key ?? PERSONAL_GROUP_KEY}
+                onSelect={setActiveKey}
+                sortMode={sortMode}
+                onToggleSort={() => setSortMode(mode => mode === "count" ? "alpha" : "count")}
+                canSort={sortedGroups.length > 2}
+            />
             <div className={cl("list")}>
-                {repos.map(repo => (
+                {activeGroup?.repos.map(repo => (
                     <RepoCard
                         key={repo.id}
                         repo={repo}

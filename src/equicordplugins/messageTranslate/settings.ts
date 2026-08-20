@@ -5,7 +5,7 @@
  */
 
 import { definePluginSettings } from "@api/Settings";
-import { OptionType } from "@utils/types";
+import { makeRange, OptionType } from "@utils/types";
 
 export const settings = definePluginSettings({
     targetLanguage: {
@@ -13,9 +13,15 @@ export const settings = definePluginSettings({
         description: "Target language code for translations (e.g. en, es, fr, de, ja).",
         default: "en",
     },
+    excludedLanguages: {
+        type: OptionType.STRING,
+        description: "Language codes to exclude from translation (e.g. en, es, fr, de, ja).",
+        default: "en",
+    },
     confidenceRequirement: {
-        type: OptionType.NUMBER,
+        type: OptionType.SLIDER,
         description: "Minimum confidence (0 to 1) required to show a translation.",
+        markers: makeRange(0, 1, 0.1),
         default: 0.8,
     },
     autoTranslate: {
@@ -53,20 +59,43 @@ export const settings = definePluginSettings({
         description: "Append a small (translated) indicator to translated messages.",
         default: true,
     },
+    showOriginal: {
+        type: OptionType.SELECT,
+        description: "Show the original and translated text.",
+        options: [
+            {
+                label: "Don't show original.",
+                value: "no-orig",
+                default: true,
+            },
+            {
+                label: "Show original in subtext",
+                value: "orig-in-subtext",
+            },
+            {
+                label: "Show original message, translation in subtext",
+                value: "trans-in-subtext",
+            },
+        ]
+    },
 });
 
-function parseIdList(value: string): Set<string> {
-    return new Set(value.split(",").map(s => s.trim()).filter(Boolean));
+function parseList(value: string): Set<string> {
+    return new Set(value.split(",").map(s => s.trim().toLowerCase()).filter(Boolean));
+}
+
+export function getExcludedLanguages(): Set<string> {
+    return parseList(settings.store.excludedLanguages);
 }
 
 export function getIgnoredGuilds(): Set<string> {
-    return parseIdList(settings.store.ignoredGuilds);
+    return parseList(settings.store.ignoredGuilds);
 }
 
 export function getIgnoredChannels(): Set<string> {
-    return parseIdList(settings.store.ignoredChannels);
+    return parseList(settings.store.ignoredChannels);
 }
 
 export function getIgnoredUsers(): Set<string> {
-    return parseIdList(settings.store.ignoredUsers);
+    return parseList(settings.store.ignoredUsers);
 }

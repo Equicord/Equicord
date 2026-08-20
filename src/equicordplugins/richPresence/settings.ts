@@ -56,13 +56,6 @@ export const settings = definePluginSettings({
         hidden: true,
         onChange: () => onServiceChange?.(),
     },
-    lb_enabled: {
-        description: "Enable ListenBrainz presence.",
-        type: OptionType.BOOLEAN,
-        default: false,
-        hidden: true,
-        onChange: () => onServiceChange?.(),
-    },
     gr_enabled: {
         description: "Enable Gensokyo Radio presence.",
         type: OptionType.BOOLEAN,
@@ -258,90 +251,6 @@ export const settings = definePluginSettings({
         description: "Hide media details.",
         type: OptionType.BOOLEAN,
         default: false,
-        hidden: true,
-    },
-
-    // ListenBrainz
-    lb_username: {
-        description: "ListenBrainz username.",
-        type: OptionType.STRING,
-        default: "",
-        hidden: true,
-    },
-    lb_mbContact: {
-        description: "MusicBrainz contact for user agent.",
-        type: OptionType.STRING,
-        default: "",
-        hidden: true,
-    },
-    lb_shareUsername: {
-        description: "Show link to ListenBrainz profile.",
-        type: OptionType.BOOLEAN,
-        default: false,
-        hidden: true,
-    },
-    lb_shareSong: {
-        description: "Show link to song on ListenBrainz.",
-        type: OptionType.BOOLEAN,
-        default: true,
-        hidden: true,
-    },
-    lb_hideWithSpotify: {
-        description: "Hide presence if Spotify is running.",
-        type: OptionType.BOOLEAN,
-        default: true,
-        hidden: true,
-    },
-    lb_hideWithActivity: {
-        description: "Hide presence if any other presence exists.",
-        type: OptionType.BOOLEAN,
-        default: false,
-        hidden: true,
-    },
-    lb_useTimeBar: {
-        description: "Use track duration to display a time bar.",
-        type: OptionType.BOOLEAN,
-        default: true,
-        hidden: true,
-    },
-    lb_statusName: {
-        description: "Custom status text.",
-        type: OptionType.STRING,
-        default: "some music",
-        hidden: true,
-    },
-    lb_nameFormat: {
-        description: "Name format.",
-        type: OptionType.SELECT,
-        options: [
-            { label: "Use custom status name", value: NameFormat.StatusName, default: true },
-            { label: "Use format 'artist - song'", value: NameFormat.ArtistFirst },
-            { label: "Use format 'song - artist'", value: NameFormat.SongFirst },
-            { label: "Use artist name only", value: NameFormat.ArtistOnly },
-            { label: "Use song name only", value: NameFormat.SongOnly },
-            { label: "Use album name", value: NameFormat.AlbumName },
-        ],
-        hidden: true,
-    },
-    lb_useListeningStatus: {
-        description: "Show listening status.",
-        type: OptionType.BOOLEAN,
-        default: true,
-        hidden: true,
-    },
-    lb_missingArt: {
-        description: "Fallback when art is missing.",
-        type: OptionType.SELECT,
-        options: [
-            { label: "Use large ListenBrainz logo", value: "listenbrainzLogo", default: true },
-            { label: "Use generic placeholder", value: "placeholder" },
-        ],
-        hidden: true,
-    },
-    lb_useLogo: {
-        description: "Show ListenBrainz logo on album art.",
-        type: OptionType.BOOLEAN,
-        default: true,
         hidden: true,
     },
 

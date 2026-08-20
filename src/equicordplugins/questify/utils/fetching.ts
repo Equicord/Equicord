@@ -9,7 +9,7 @@ import { showNotification } from "@api/Notifications";
 import { sleep } from "@utils/misc";
 import type { PluginNative } from "@utils/types";
 import type { Quest } from "@vencord/discord-types";
-import { findByCodeLazy, findStoreLazy } from "@webpack";
+import { findByCodeLazy } from "@webpack";
 import { QuestStore, RestAPI } from "@webpack/common";
 import { NavigationRouter } from "@webpack/common/utils";
 
@@ -19,7 +19,6 @@ import { getNewQuests, normalizeQuestName, type QuestIncludedTypes, questMatches
 import { QL } from "./logging";
 import { QUEST_PAGE } from "./ui";
 
-export const AuthorizedAppsStore = findStoreLazy("AuthorizedAppsStore");
 const QuestifyNative = VencordNative?.pluginHelpers?.Questify as PluginNative<typeof import("../native")> | undefined;
 
 export function snakeToCamel(obj: any): any {

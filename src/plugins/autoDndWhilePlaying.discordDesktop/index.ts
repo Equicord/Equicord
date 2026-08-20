@@ -4,10 +4,11 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { definePluginSettings, migratePluginSettings } from "@api/Settings";
+import { definePluginSettings } from "@api/Settings";
 import { getUserSettingLazy } from "@api/UserSettings";
 import { Devs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
+import { UserSettingsProtoStore } from "@webpack/common";
 
 let savedStatus: string | null;
 
@@ -36,36 +37,58 @@ const settings = definePluginSettings({
                 value: "invisible",
             }
         ]
-    },
-    excludeInvisible: {
-        type: OptionType.BOOLEAN,
-        description: "Prevent automatic status changes while your status is set to invisible",
-        default: false
-    },
+    }
 });
 
-migratePluginSettings("AutoDNDWhilePlaying", "StatusWhilePlaying");
+let lastStatus: string | null = null;
+
+function handleUserSettingsChange() {
+    const status = StatusSettings.getSetting();
+    if (status !== lastStatus) {
+        lastStatus = status;
+
+        savedStatus = null;
+    }
+}
+
+async function setStatus(status: string) {
+    lastStatus = status;
+    await StatusSettings.updateSetting(status);
+}
+
 export default definePlugin({
     name: "AutoDNDWhilePlaying",
     description: "Automatically updates your online status (online, idle, dnd) when launching games",
     tags: ["Activity", "Utility"],
     authors: [Devs.thororen],
-    isModified: true,
     settings,
+
     flux: {
-        RUNNING_GAMES_CHANGE({ games }) {
+        async RUNNING_GAMES_CHANGE({ games }) {
             const status = StatusSettings.getSetting();
 
-            if (settings.store.excludeInvisible && (savedStatus ?? status) === "invisible") return;
-
             if (games.length > 0) {
-                if (status !== settings.store.statusToSet) {
+                if (status !== settings.store.statusToSet && status !== "invisible") {
                     savedStatus = status;
-                    StatusSettings.updateSetting(settings.store.statusToSet);
+                    await setStatus(settings.store.statusToSet);
                 }
-            } else if (savedStatus && savedStatus !== settings.store.statusToSet) {
-                StatusSettings.updateSetting(savedStatus);
+            } else if (savedStatus) {
+                const toRestore = savedStatus;
+                savedStatus = null;
+
+                if (status !== toRestore) {
+                    await setStatus(toRestore);
+                }
             }
         }
+    },
+
+    start() {
+        lastStatus = StatusSettings.getSetting();
+        UserSettingsProtoStore.addChangeListener(handleUserSettingsChange);
+    },
+
+    stop() {
+        UserSettingsProtoStore.removeChangeListener(handleUserSettingsChange);
     }
 });

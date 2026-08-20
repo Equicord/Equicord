@@ -73,6 +73,10 @@ const fakeNitroEmojiRegex = /\/emojis\/(\d+?)\.(png|webp|gif)/;
 const fakeNitroStickerRegex = /\/stickers\/(\d+?)\./;
 const fakeNitroGifStickerRegex = /\/attachments\/\d+?\/\d+?\/(\d+?)\.gif/;
 const hyperLinkRegex = /\[.+?\]\((https?:\/\/.+?)\)/;
+const mediaSizes = [16, 32, 48, 56, 64, 96, 128, 160, 256, 512, 1024];
+
+const DEFAULT_EMOJI_SIZE = 48;
+const DEFAULT_STICKER_SIZE = 160;
 
 const settings = definePluginSettings({
     enableEmojiBypass: {
@@ -83,9 +87,12 @@ const settings = definePluginSettings({
     },
     emojiSize: {
         description: "Size of the emojis when sending",
-        type: OptionType.SLIDER,
-        default: 48,
-        markers: [32, 48, 56, 64, 96, 128, 160, 256, 512]
+        type: OptionType.SELECT,
+        default: DEFAULT_EMOJI_SIZE,
+        options: mediaSizes.map(size => ({
+            label: `${size}px`,
+            value: size
+        }))
     },
     transformEmojis: {
         description: "Whether to transform fake emojis into real ones",
@@ -101,9 +108,12 @@ const settings = definePluginSettings({
     },
     stickerSize: {
         description: "Size of the stickers when sending",
-        type: OptionType.SLIDER,
-        default: 160,
-        markers: [32, 64, 128, 160, 256, 512]
+        type: OptionType.SELECT,
+        default: DEFAULT_STICKER_SIZE,
+        options: mediaSizes.map(size => ({
+            label: `${size}px`,
+            value: size
+        }))
     },
     transformStickers: {
         description: "Whether to transform fake stickers into real ones",
@@ -752,7 +762,7 @@ export default definePlugin({
             .then(parseAPNG);
 
         const gif = GIFEncoder();
-        const resolution = settings.store.stickerSize;
+        const resolution = settings.store.stickerSize ?? DEFAULT_STICKER_SIZE;
 
         const canvas = document.createElement("canvas");
         canvas.width = resolution;
@@ -892,10 +902,11 @@ export default definePlugin({
 
                     hasBypass = true;
 
+                    const emojiSize = s.emojiSize ?? DEFAULT_EMOJI_SIZE;
                     const emojiString = `<${emoji.animated ? "a" : ""}:${emoji.originalName || emoji.name}:${emoji.id}>`;
 
-                    const url = new URL(IconUtils.getEmojiURL({ id: emoji.id, animated: emoji.animated, size: s.emojiSize }));
-                    url.searchParams.set("size", s.emojiSize.toString());
+                    const url = new URL(IconUtils.getEmojiURL({ id: emoji.id, animated: emoji.animated, size: emojiSize }));
+                    url.searchParams.set("size", emojiSize.toString());
                     url.searchParams.set("name", emoji.name);
                     url.searchParams.set("lossless", "true");
 
@@ -930,8 +941,10 @@ export default definePlugin({
 
                 hasBypass = true;
 
-                const url = new URL(IconUtils.getEmojiURL({ id: emoji.id, animated: emoji.animated, size: s.emojiSize }));
-                url.searchParams.set("size", s.emojiSize.toString());
+                const emojiSize = s.emojiSize ?? DEFAULT_EMOJI_SIZE;
+
+                const url = new URL(IconUtils.getEmojiURL({ id: emoji.id, animated: emoji.animated, size: emojiSize }));
+                url.searchParams.set("size", emojiSize.toString());
                 url.searchParams.set("name", emoji.name);
                 url.searchParams.set("lossless", "true");
 

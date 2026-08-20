@@ -6,11 +6,12 @@
 
 import { Paragraph } from "@components/Paragraph";
 import { Span } from "@components/Span";
-import { fetchReposByUserId, fetchReposByUsername, fetchUserInfo, GitHubUserInfo } from "@equicordplugins/githubRepos/githubApi";
-import { GitHubRepo } from "@equicordplugins/githubRepos/types";
+import { fetchOrgRepos, fetchReposByUserId, fetchReposByUsername, fetchUserInfo, fetchUserOrgs, GitHubUserInfo } from "@equicordplugins/githubRepos/githubApi";
+import { GitHubRepo, RepoGroup } from "@equicordplugins/githubRepos/types";
+import { buildRepoGroups, getLanguageIconUrl, PERSONAL_GROUP_KEY } from "@equicordplugins/githubRepos/utils";
 import { classes } from "@utils/misc";
 import { findCssClassesLazy } from "@webpack";
-import { Clickable, openModal,React, useEffect, UserProfileStore, useState } from "@webpack/common";
+import { Clickable, openModal, React, useEffect, UserProfileStore, useState } from "@webpack/common";
 
 import { ReposModal } from "./ReposModal";
 
@@ -19,39 +20,23 @@ const ProfileCardClasses = findCssClassesLazy("cardsList", "firstCardContainer",
 const ProfileCardContainerClasses = findCssClassesLazy("innerContainer", "icons", "icon", "displayCount", "displayCountText", "displayCountTextColor", "breadcrumb");
 const ProfileCardOverlayClasses = findCssClassesLazy("overlay", "isPrivate", "outer");
 
-const LANGUAGE_MAP: Record<string, string> = {
-    "c++": "cplusplus",
-    "c#": "csharp",
-    "f#": "fsharp",
-    "q#": "qsharp",
-    "objective-c": "objectivec",
-    "visual basic": "visualbasic",
-    "shell": "bash",
-    "batchfile": "bash",
-    "vim script": "vim",
-    "dockerfile": "docker",
-    "gdscript": "godot",
-    "html": "html5",
-};
-
-function getLanguageIconUrl(language: string | null): string {
-    if (!language) return "https://cdn.jsdelivr.net/gh/devicons/devicon@develop/icons/github/github-original.svg";
-
-    const normalized = LANGUAGE_MAP[language.toLowerCase()] ?? language.toLowerCase().replace(/\s+/g, "");
-    return `https://cdn.jsdelivr.net/gh/devicons/devicon@develop/icons/${normalized}/${normalized}-original.svg`;
-}
-
 export function ProfilePopoutComponent({ id, isSideBar = false }: { id: string, isSideBar?: boolean; }) {
     const [repos, setRepos] = useState<GitHubRepo[]>([]);
+    const [groups, setGroups] = useState<RepoGroup[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [userInfo, setUserInfo] = useState<GitHubUserInfo | null>(null);
 
     const openReposModal = () => {
         if (!userInfo) return;
-        const sortedRepos = [...repos].sort((a, b) => b.stargazers_count - a.stargazers_count);
+
         openModal(props => (
-            <ReposModal repos={sortedRepos} username={userInfo.username} rootProps={props} />
+            <ReposModal
+                groups={groups.length ? groups : [{ key: PERSONAL_GROUP_KEY, label: userInfo?.username ?? "Personal", avatarUrl: userInfo?.avatarUrl, repos }]}
+                initialActiveKey={PERSONAL_GROUP_KEY}
+                username={userInfo.username}
+                rootProps={props}
+            />
         ));
     };
 
@@ -73,12 +58,17 @@ export function ProfilePopoutComponent({ id, isSideBar = false }: { id: string, 
 
                 const githubId = githubConnection.id;
 
-                const reposById = await fetchReposByUserId(githubId);
-                if (reposById) { setRepos(reposById); setLoading(false); return; }
+                let personalRepos = await fetchReposByUserId(githubId);
+                if (!personalRepos) personalRepos = await fetchReposByUsername(username);
 
-                const reposByUsername = await fetchReposByUsername(username);
-                setRepos(reposByUsername);
+                setRepos(personalRepos);
                 setLoading(false);
+
+                const orgs = await fetchUserOrgs(username);
+                const orgReposEntries = await Promise.all(orgs.map(async org => [org.login, await fetchOrgRepos(org.login)]));
+                const orgRepos = Object.fromEntries(orgReposEntries);
+
+                setGroups(buildRepoGroups(userInfoData?.username ?? username, personalRepos, orgs, orgRepos, userInfoData?.avatarUrl));
             } catch (error) {
                 setError(error instanceof Error ? error.message : "Failed to fetch repositories");
                 setLoading(false);

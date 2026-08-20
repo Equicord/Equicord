@@ -24,7 +24,6 @@ export function Link({
     children,
     ...restProps
 }: PropsWithChildren<LinkProps>) {
-
     const isInternal = href && /^(?:discord:\/)?\/[a-zA-Z0-9_-]/.test(href);
     const needsSafeAttrs = href && !isInternal;
 

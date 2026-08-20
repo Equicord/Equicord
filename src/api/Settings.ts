@@ -76,6 +76,7 @@ export interface Settings {
     plugins: {
         [plugin: string]: {
             enabled: boolean;
+            isFavorite?: boolean;
             [setting: string]: any;
         };
     };
@@ -101,12 +102,6 @@ export interface Settings {
     };
 
     ignoreResetWarning: boolean;
-
-    userCssVars: {
-        [themeId: string]: {
-            [varName: string]: string;
-        };
-    };
 }
 
 const DefaultSettings: Settings = {
@@ -153,8 +148,6 @@ const DefaultSettings: Settings = {
     },
 
     ignoreResetWarning: false,
-
-    userCssVars: {}
 };
 
 const settings = !IS_REPORTER ? VencordNative.settings.get() : {} as Settings;

@@ -4,9 +4,6 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-// brutally ripped out of usercss
-// (remove when usercss is merged)
-
 import "./colorStyles.css";
 
 import { classNameFactory } from "@utils/css";

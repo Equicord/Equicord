@@ -19,8 +19,8 @@ import { Modal, openModal, showToast, useEffect, useMemo, UserProfileStore, useS
 
 import Plugins, { PluginMeta } from "~plugins";
 
-import { GithubButton, WebsiteButton } from "./LinkIconButton";
 import { PluginCard } from "./PluginCard";
+import { GithubButton, WebsiteButton } from "./PluginModalButtons";
 
 const cl = classNameFactory("vc-author-modal-");
 

@@ -57,7 +57,7 @@ export default definePlugin({
         {
             find: "type:\"GIF_PICKER_QUERY\"",
             replacement: {
-                match: /(function \i\(.{1,10}\){)(.{1,100}.GIFS_SEARCH,query:)/,
+                match: /(function \i\(.{1,10}\){)(.{1,200}.GIFS_SEARCH,query:)/,
                 replace: "$1if($self.shouldStopFetch(arguments[0])) return;$2",
             },
         },

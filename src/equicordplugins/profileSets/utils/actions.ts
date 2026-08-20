@@ -6,17 +6,14 @@
 
 import { isNonNullish } from "@utils/guards";
 import { ProfilePreset } from "@vencord/discord-types";
-import { findStoreLazy } from "@webpack";
-import { showToast, Toasts } from "@webpack/common";
+import { showToast, Toasts, UserProfileSettingsStore } from "@webpack/common";
 
 import { getCurrentProfile } from "./profile";
 import { addPreset, movePresetInArray, presets, PresetSection, type ProfilePresetEx, removePreset, replaceAllPresets, savePresetsData, updatePreset } from "./storage";
 
-const UserProfileSettingsStore = findStoreLazy("UserProfileSettingsStore");
-
 function isImageInput(value: unknown): value is string | { imageUri: string; } {
     if (typeof value === "string") return value.length > 0;
-    return typeof value === "object" && isNonNullish(value) && "imageUri" in value && typeof (value as { imageUri: unknown }).imageUri === "string";
+    return typeof value === "object" && isNonNullish(value) && "imageUri" in value && typeof (value as { imageUri: unknown; }).imageUri === "string";
 }
 
 function getFreshPendingAvatar(section: PresetSection, guildId?: string): string | null {

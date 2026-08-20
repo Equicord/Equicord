@@ -1,0 +1,36 @@
+.vc-sric-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    box-sizing: border-box;
+    height: 16px;
+    padding: 0 6px 0 4px;
+    background: var(--background-mod-strong);
+    border-radius: 4px;
+    font-size: .72rem;
+    font-weight: 600;
+    line-height: 16px;
+    color: var(--text-default);
+    cursor: default;
+}
+
+.vc-sric-icon {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+}
+
+.vc-sric-name {
+    white-space: nowrap;
+    max-width: 120px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.vc-sric-indicator-compact {
+    padding: 0 2px;
+}
+
+.vc-sric-indicator-compact .vc-sric-name {
+    display: none;
+}

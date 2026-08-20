@@ -75,20 +75,12 @@ export default definePlugin({
                 replace: "$1$self.handleNavigation($2,$3);$4"
             }
         },
-        // ctrl click to open in new tab in inbox unread
-        {
-            find: '[data-recents-channel="',
-            replacement: {
-                match: /(?<=className:\i.\i,onJump:)\i=>(\i)\(\i,(\i)\.id\)/,
-                replace: "event => { if (event.ctrlKey) $self.open($2); else $1(event, $2.id) }"
-            }
-        },
         // ctrl click to open in new tab in inbox mentions
         {
             find: ".deleteRecentMention(",
             replacement: {
-                match: /(?<=className:\i.\i,onJump:)(\i)(?=.{0,20}message:(\i))/,
-                replace: "event => { if (event.ctrlKey) $self.open($2); else $1(event) }"
+                match: /(?<=className:\i.\i,onJump:)(\i)=>(\i\(\i,\i\.id\))(?=.{0,40}message:(\i))/,
+                replace: "$1 => { if ($1?.ctrlKey) $self.open($3); else $2 }"
             }
         },
         // ctrl click to open in new tab in search results
@@ -99,14 +91,6 @@ export default definePlugin({
                 replace: "$&if ($1.ctrlKey) return $self.open($2);"
             }
         },
-        // prevent issues with the pins/inbox popouts being too tall
-        {
-            find: "#{intl::JUMP}),onClick:",
-            replacement: {
-                match: /\i&&\((\i).maxHeight.{0,5}\)/,
-                replace: "$&;$1.maxHeight-=$self.containerHeight"
-            }
-        }
     ],
 
     settings,

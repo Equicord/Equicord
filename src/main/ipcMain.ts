@@ -27,10 +27,12 @@ import monacoHtml from "file://monacoWin.html?minify&base64";
 import { FSWatcher, mkdirSync, readFileSync, watch, writeFileSync } from "fs";
 import { open, readdir, readFile, unlink } from "fs/promises";
 import { release } from "os";
-import { join, normalize } from "path";
+import { join } from "path";
 
 import { registerCspIpcHandlers } from "./csp/manager";
+import { getThemeInfo, stripBOM, UserThemeHeader } from "./themes";
 import { ALLOWED_PROTOCOLS, QUICK_CSS_PATH, SETTINGS_DIR, THEMES_DIR } from "./utils/constants";
+import { ensureSafePath } from "./utils/ensureSafePath";
 import { makeLinksOpenExternally } from "./utils/externalLinks";
 
 const RENDERER_CSS_PATH = join(__dirname, "renderer.css");
@@ -39,26 +41,25 @@ mkdirSync(THEMES_DIR, { recursive: true });
 
 registerCspIpcHandlers();
 
-export function ensureSafePath(basePath: string, path: string) {
-    const normalizedBasePath = normalize(basePath + "/");
-    const newPath = join(basePath, path);
-    const normalizedPath = normalize(newPath);
-    return normalizedPath.startsWith(normalizedBasePath) ? normalizedPath : null;
-}
-
 function readCss() {
     return readFile(QUICK_CSS_PATH, "utf-8").catch(() => "");
 }
 
-async function listThemes(): Promise<{ fileName: string; content: string; }[]> {
-    try {
-        const entries = await readdir(THEMES_DIR, { withFileTypes: true });
-        const fileNames = entries.filter(entry => entry.isFile() && entry.name.endsWith(".css")).map(entry => entry.name);
-        const results = await Promise.allSettled(fileNames.map(async fileName => ({ fileName, content: await getThemeData(fileName) })));
-        return results.flatMap(result => result.status === "fulfilled" ? [result.value] : []);
-    } catch {
-        return [];
+async function listThemes(): Promise<UserThemeHeader[]> {
+    const files = await readdir(THEMES_DIR).catch(() => []);
+
+    const themeInfo: UserThemeHeader[] = [];
+
+    for (const fileName of files) {
+        if (!fileName.endsWith(".css")) continue;
+
+        const data = await getThemeData(fileName).then(stripBOM).catch(() => null);
+        if (data == null) continue;
+
+        themeInfo.push(getThemeInfo(data, fileName));
     }
+
+    return themeInfo;
 }
 
 function getThemeData(fileName: string) {
@@ -79,7 +80,8 @@ ipcMain.handle(IpcEvents.OPEN_EXTERNAL, (_, url) => {
     if (!ALLOWED_PROTOCOLS.includes(protocol))
         throw "Disallowed protocol.";
 
-    shell.openExternal(url);
+    shell.openExternal(url)
+        .catch(err => console.error("[Vencord] Failed to open external link", url, err));
 });
 
 ipcMain.handle(IpcEvents.GET_QUICK_CSS, () => readCss());
@@ -87,7 +89,6 @@ ipcMain.handle(IpcEvents.SET_QUICK_CSS, (_, css) =>
     writeFileSync(QUICK_CSS_PATH, css)
 );
 
-ipcMain.handle(IpcEvents.GET_THEMES_DIR, () => THEMES_DIR);
 ipcMain.handle(IpcEvents.GET_THEMES_LIST, () => listThemes());
 ipcMain.handle(IpcEvents.GET_THEME_DATA, (_, fileName) => getThemeData(fileName));
 ipcMain.handle(IpcEvents.DELETE_THEME, (_, fileName) => {
@@ -110,7 +111,11 @@ ipcMain.handle(IpcEvents.GET_THEME_SYSTEM_VALUES, () => {
 ipcMain.handle(IpcEvents.OPEN_THEMES_FOLDER, () => shell.openPath(THEMES_DIR));
 ipcMain.handle(IpcEvents.OPEN_SETTINGS_FOLDER, () => shell.openPath(SETTINGS_DIR));
 
+let fsWatchers = [] as FSWatcher[];
+
 ipcMain.handle(IpcEvents.INIT_FILE_WATCHERS, ({ sender }) => {
+    fsWatchers.forEach(w => w.close());
+
     let quickCssWatcher: FSWatcher | undefined;
     let rendererCssWatcher: FSWatcher | undefined;
 
@@ -131,10 +136,13 @@ ipcMain.handle(IpcEvents.INIT_FILE_WATCHERS, ({ sender }) => {
         });
     }
 
+    fsWatchers = [quickCssWatcher, themesWatcher, rendererCssWatcher].filter(Boolean) as FSWatcher[];
+
     sender.once("destroyed", () => {
         quickCssWatcher?.close();
         themesWatcher.close();
         rendererCssWatcher?.close();
+        fsWatchers = [];
     });
 });
 

@@ -99,6 +99,7 @@ function ReloadRequiredCard({ required, enabledPlugins, openWarningModal, resetC
 
 const enum SearchStatus {
     ALL,
+    FAVORITES,
     ENABLED,
     DISABLED,
     EQUICORD,
@@ -170,10 +171,10 @@ export default function PluginSettings() {
                         <p>The following plugins require a restart:</p>
                         <div>
                             {displayed.map((s, i) => (
-                                <span key={i}>
+                                <React.Fragment key={i}>
                                     {i > 0 && ", "}
                                     {Parser.parse("`" + s + "`")}
-                                </span>
+                                </React.Fragment>
                             ))}
                             {remainingCount > 0 && <span> and {remainingCount} more</span>}
                         </div>
@@ -197,8 +198,11 @@ export default function PluginSettings() {
         return o;
     }, []);
 
-    const sortedPlugins = useMemo(() => Object.values(Plugins)
-        .sort((a, b) => a.name.localeCompare(b.name)), []);
+    const sortedPlugins = useMemo(() =>
+        Object.values(Plugins).sort((a, b) => a.name.localeCompare(b.name)),
+        []
+    )
+        .toSorted((a, b) => Number(settings.plugins[b.name]?.isFavorite ?? false) - Number(settings.plugins[a.name]?.isFavorite ?? false));
 
     const hasUserPlugins = useMemo(() => !IS_STANDALONE && Object.values(PluginMeta).some(m => m.userPlugin), []);
 
@@ -211,6 +215,9 @@ export default function PluginSettings() {
         const { status, tags } = searchValue;
 
         switch (status) {
+            case SearchStatus.FAVORITES:
+                if (!settings.plugins[plugin.name]?.isFavorite) return false;
+                break;
             case SearchStatus.DISABLED:
                 if (isPluginEnabled(plugin.name)) return false;
                 break;
@@ -419,6 +426,7 @@ export default function PluginSettings() {
                     <Select
                         options={[
                             { label: "Show All", value: SearchStatus.ALL, default: true },
+                            { label: "Show Favorites", value: SearchStatus.FAVORITES },
                             { label: "Show Enabled", value: SearchStatus.ENABLED },
                             { label: "Show Disabled", value: SearchStatus.DISABLED },
                             { label: "Show Equicord", value: SearchStatus.EQUICORD },

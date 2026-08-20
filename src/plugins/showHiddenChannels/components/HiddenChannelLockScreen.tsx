@@ -23,7 +23,7 @@ import PermissionsViewerPlugin from "@plugins/permissionsViewer";
 import openRolesAndUsersPermissionsModal from "@plugins/permissionsViewer/components/RolesAndUsersPermissions";
 import { sortPermissionOverwrites } from "@plugins/permissionsViewer/utils";
 import { classes } from "@utils/misc";
-import { formatDuration } from "@utils/text";
+import { formatDurationVerbose } from "@utils/text";
 import type { Channel, RoleOrUserPermission } from "@vencord/discord-types";
 import { findByPropsLazy, findComponentByCodeLazy, findCssClassesLazy } from "@webpack";
 import { EmojiStore, FluxDispatcher, GuildMemberStore, GuildStore, Parser, PermissionsBits, PermissionStore, SnowflakeUtils, Timestamp, Tooltip, useEffect, useState } from "@webpack/common";
@@ -207,13 +207,11 @@ function HiddenChannelLockScreen({ channel }: { channel: Channel; }) {
                     </BaseText>
                 }
                 {(rateLimitPerUser ?? 0) > 0 &&
-                    <BaseText size="md">
-                        Slowmode: {formatDuration(rateLimitPerUser!, "seconds")}
-                    </BaseText>
+                    <BaseText size="md">Slowmode: {formatDurationVerbose(rateLimitPerUser!, "seconds")}</BaseText>
                 }
                 {(defaultThreadRateLimitPerUser ?? 0) > 0 &&
                     <BaseText size="md">
-                        Default thread slowmode: {formatDuration(defaultThreadRateLimitPerUser!, "seconds")}
+                        Default thread slowmode: {formatDurationVerbose(defaultThreadRateLimitPerUser!, "seconds")}
                     </BaseText>
                 }
                 {((channel.isGuildVoice() || channel.isGuildStageVoice()) && bitrate != null) &&
@@ -232,7 +230,7 @@ function HiddenChannelLockScreen({ channel }: { channel: Channel; }) {
                 {(defaultAutoArchiveDuration ?? 0) > 0 &&
                     <BaseText size="md">
                         Default inactivity duration before archiving {channel.isForumChannel() ? "posts" : "threads"}:
-                        {" " + formatDuration(defaultAutoArchiveDuration!, "minutes")}
+                        {" " + formatDurationVerbose(defaultAutoArchiveDuration!, "minutes")}
                     </BaseText>
                 }
                 {defaultForumLayout != null &&

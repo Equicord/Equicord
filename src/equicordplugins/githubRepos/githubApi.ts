@@ -6,13 +6,14 @@
 
 import { Logger } from "@utils/Logger";
 
-import { GitHubRepo } from "./types";
+import { GitHubOrg, GitHubRepo } from "./types";
 
 const logger = new Logger("GitHubRepos");
 
 export interface GitHubUserInfo {
     username: string;
     totalRepos: number;
+    avatarUrl: string;
 }
 
 export async function fetchUserInfo(username: string): Promise<GitHubUserInfo | null> {
@@ -25,7 +26,8 @@ export async function fetchUserInfo(username: string): Promise<GitHubUserInfo | 
         const userData = await userInfoResponse.json();
         return {
             username: userData.login,
-            totalRepos: userData.public_repos
+            totalRepos: userData.public_repos,
+            avatarUrl: userData.avatar_url
         };
     } catch (error) {
         logger.error("Error fetching user info", error);
@@ -58,6 +60,35 @@ export async function fetchReposByUsername(username: string, perPage: number = 3
 
     const data = await response.json();
     return sortReposByStars(data);
+}
+
+export async function fetchUserOrgs(username: string): Promise<GitHubOrg[]> {
+    try {
+        const apiUrl = `https://api.github.com/users/${username}/orgs`;
+        const response = await fetch(apiUrl);
+
+        if (!response.ok) return [];
+
+        return await response.json();
+    } catch (error) {
+        logger.error("Error fetching user orgs", error);
+        return [];
+    }
+}
+
+export async function fetchOrgRepos(org: string, perPage: number = 30): Promise<GitHubRepo[]> {
+    try {
+        const apiUrl = `https://api.github.com/orgs/${org}/repos?sort=stars&direction=desc&per_page=${perPage}`;
+        const response = await fetch(apiUrl);
+
+        if (!response.ok) return [];
+
+        const data = await response.json();
+        return sortReposByStars(data);
+    } catch (error) {
+        logger.error("Error fetching org repos", error);
+        return [];
+    }
 }
 
 function sortReposByStars(repos: GitHubRepo[]): GitHubRepo[] {

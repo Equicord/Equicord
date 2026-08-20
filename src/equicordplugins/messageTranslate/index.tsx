@@ -6,10 +6,11 @@
 
 import "./styles.css";
 
+import { TranslateIcon } from "@plugins/translate/TranslateIcon";
 import { EquicordDevs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
 import definePlugin from "@utils/types";
-import { ChannelStore, FluxDispatcher, MessageStore, UserStore } from "@webpack/common";
+import { ChannelStore, FluxDispatcher, MessageStore, Parser, UserStore } from "@webpack/common";
 
 import { getIgnoredChannels, getIgnoredGuilds, getIgnoredUsers, settings } from "./settings";
 import { MessageWithContent } from "./types";
@@ -61,11 +62,11 @@ export default definePlugin({
             replacement: [
                 {
                     match: /childrenMessageContent:(\i),/g,
-                    replace: "childrenMessageContent:$self.wrapContent($1,arguments[0].message.id),",
+                    replace: "childrenMessageContent:$self.wrapContent($1,arguments[0].message.id,arguments[0].message.channel_id),",
                 },
                 {
                     match: /\i\.memo\(function\((\i)\)\{(?=let \i,\i)/,
-                    replace: "$&$1.message=$self.transformMessage($1.message);",
+                    replace: "$&$1.message=$self.transformMessage($1?.message);",
                 },
             ],
         },
@@ -79,15 +80,22 @@ export default definePlugin({
 
         const cached = getCached(message.id);
         if (cached) {
+            if (message.content === cached.translated) {
+                translatedMessages.set(message.id, cached.sourceLang);
+                return message;
+            }
             if (cached.original !== message.content) {
                 clearCache(message.id);
                 translatedMessages.delete(message.id);
                 return message;
             }
             translatedMessages.set(message.id, cached.sourceLang);
-            return Object.assign(Object.create(Object.getPrototypeOf(message)), message, {
-                content: cached.translated,
-            }) as MessageWithContent;
+
+            return settings.store.showOriginal !== "trans-in-subtext"
+                ? Object.assign(Object.create(Object.getPrototypeOf(message)), message, {
+                    content: cached.translated,
+                })
+                : message;
         }
 
         translatedMessages.delete(message.id);
@@ -100,16 +108,44 @@ export default definePlugin({
         return message;
     },
 
-    wrapContent(content: any, messageId: string) {
+    wrapContent(content, messageId, channelId) {
         const sourceLang = translatedMessages.get(messageId);
-        if (!sourceLang) return content;
-        return (
-            <>
-                {content}
-                {settings.store.showIndicator && (
-                    <div className={cl("indicator")}>translated from {sourceLang}</div>
-                )}
-            </>
+        const cached = getCached(messageId);
+        if (!sourceLang || !cached) return content;
+
+        const indicatorElement = settings.store.showIndicator && (
+            <div className={cl("indicator")}>translated from {sourceLang}</div>
         );
-    },
+
+        switch (settings.store.showOriginal) {
+            case "trans-in-subtext":
+                return (
+                    <>
+                        {content}
+                        <div className={cl("subtext")}>
+                            <TranslateIcon height={16} width={16} className={cl("icon")} />{Parser.parse(cached.translated, true, { channelId, messageId })}
+                        </div>
+                        {indicatorElement}
+                    </>
+                );
+            case "orig-in-subtext":
+                return (
+                    <>
+                        {content}
+                        <div className={cl("subtext")}>
+                            {Parser.parse(cached.original, true, { channelId, messageId })}
+                        </div>
+                        {indicatorElement}
+                    </>
+                );
+            case "no-orig":
+            default:
+                return (
+                    <>
+                        {content}
+                        {indicatorElement}
+                    </>
+                );
+        }
+    }
 });

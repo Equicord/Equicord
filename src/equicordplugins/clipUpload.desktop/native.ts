@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { ensureSafePath } from "@main/ipcMain";
 import { DATA_DIR } from "@main/utils/constants";
+import { ensureSafePath } from "@main/utils/ensureSafePath";
 import { randomUUID } from "crypto";
 import { dialog, type IpcMainInvokeEvent } from "electron";
 import { mkdir, readFile, rm, writeFile } from "fs/promises";

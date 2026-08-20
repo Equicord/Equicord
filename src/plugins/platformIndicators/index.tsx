@@ -23,30 +23,15 @@ import { Devs, EquicordDevs } from "@utils/constants";
 import { classes } from "@utils/misc";
 import definePlugin, { OptionType } from "@utils/types";
 import { DiscordPlatform, User } from "@vencord/discord-types";
-import { filters, findStoreLazy, mapMangledModuleLazy } from "@webpack";
-import { AuthenticationStore, PresenceStore, Tooltip, UserStore, useStateFromStores } from "@webpack/common";
-
-export interface Session {
-    sessionId: string;
-    status: string;
-    active: boolean;
-    clientInfo: {
-        version: number;
-        os: string;
-        client: string;
-    };
-}
-
-const SessionsStore = findStoreLazy("SessionsStore") as {
-    getSessions(): Record<string, Session>;
-};
+import { filters, mapMangledModuleLazy } from "@webpack";
+import { AuthenticationStore, PresenceStore, SessionsStore, Tooltip, UserStore, useStateFromStores } from "@webpack/common";
 
 const { useStatusFillColor } = mapMangledModuleLazy([".5625*", "translate"], {
     useStatusFillColor: filters.byCode(".hex")
 });
 
 const platformMap = {
-    embedded: "Console",
+    embedded: "Embedded (Console or Game)",
     vr: "VR"
 };
 
@@ -103,12 +88,11 @@ const PlatformIcon = ({ platform, status, small }) => {
 };
 
 function useEnsureOwnStatus(user: User) {
-    if (user.id !== AuthenticationStore.getId()) {
-        return;
-    }
+    if (user.id !== AuthenticationStore.getId()) return;
 
     const sessions = useStateFromStores([SessionsStore], () => SessionsStore.getSessions());
     if (typeof sessions !== "object") return null;
+
     const sortedSessions = Object.values(sessions).sort(({ status: a }, { status: b }) => {
         if (a === b) return 0;
         if (a === "online") return 1;
@@ -151,10 +135,7 @@ const PlatformIndicator = ({ user, isProfile, isMessage, isMemberList }: Platfor
         />
     ));
 
-    if (!icons.length) {
-        return null;
-    }
-
+    if (!icons.length) return null;
     return (
         <div
             className={classes("vc-platform-indicator", isProfile && "vc-platform-indicator-profile", isMessage && "vc-platform-indicator-message")}

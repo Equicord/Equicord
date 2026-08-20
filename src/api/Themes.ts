@@ -18,6 +18,7 @@
 
 import { Settings, SettingsStore, type ThemeActivationMode } from "@api/Settings";
 import { createAndAppendStyle } from "@utils/css";
+import { isNonNullish } from "@utils/guards";
 import { ThemeStore } from "@vencord/discord-types";
 import { PopoutWindowStore } from "@webpack/common";
 
@@ -25,6 +26,8 @@ import { coreStyleRootNode, managedStyleRootNode, userStyleRootNode, vencordRoot
 
 let style: HTMLStyleElement;
 let themesStyle: HTMLStyleElement;
+
+const themeChangeListeners = new Set<() => void>();
 
 function getThemeActivationMode(themeId: string) {
     return Settings.themeActivationModes?.[themeId] ?? "always";
@@ -52,6 +55,9 @@ async function toggle(isEnabled: boolean) {
         style.disabled = !isEnabled;
 }
 
+// for cleanup
+let previousThemeBlobObjectURLs = [] as string[];
+
 async function initThemes() {
     themesStyle ??= createAndAppendStyle("vencord-themes", userStyleRootNode);
 
@@ -78,15 +84,22 @@ async function initThemes() {
     }
 
     if (IS_WEB) {
-        for (const theme of enabledThemes) {
-            const mode = getThemeActivationMode(theme);
-            if (!shouldApplyTheme(mode, activeTheme)) continue;
+        previousThemeBlobObjectURLs.forEach(url => URL.revokeObjectURL(url));
 
+        const themesToApply = enabledThemes.filter(theme =>
+            shouldApplyTheme(getThemeActivationMode(theme), activeTheme)
+        );
+
+        const objectUrls = await Promise.all(themesToApply.map(async theme => {
             const themeData = await VencordNative.themes.getThemeData(theme);
-            if (!themeData) continue;
+            if (!themeData) return null;
+
             const blob = new Blob([themeData], { type: "text/css" });
-            links.add(URL.createObjectURL(blob));
-        }
+            return URL.createObjectURL(blob);
+        }));
+
+        previousThemeBlobObjectURLs = objectUrls.filter(isNonNullish);
+        previousThemeBlobObjectURLs.forEach(url => links.add(url));
     } else {
         const version = Date.now();
         for (const theme of enabledThemes) {
@@ -98,6 +111,7 @@ async function initThemes() {
 
     themesStyle.textContent = Array.from(links).map(link => `@import url("${link.trim()}");`).join("\n");
     updatePopoutWindows();
+    themeChangeListeners.forEach(listener => listener());
 }
 
 function applyToPopout(popoutWindow: Window | undefined, key: string) {
@@ -165,4 +179,12 @@ export function initQuickCssThemeStore(themeStore: ThemeStore) {
         currentTheme = themeStore.theme;
         initThemes();
     });
+}
+
+export function addThemeChangeListener(listener: () => void) {
+    themeChangeListeners.add(listener);
+}
+
+export function removeThemeChangeListener(listener: () => void) {
+    themeChangeListeners.delete(listener);
 }

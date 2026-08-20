@@ -6,6 +6,7 @@
 
 import { Devs } from "@utils/constants";
 import definePlugin from "@utils/types";
+import { Message } from "@vencord/discord-types";
 import { MessageStore } from "@webpack/common";
 
 export default definePlugin({
@@ -47,7 +48,7 @@ export default definePlugin({
             ]
         },
     ],
-    message: null,
+    message: null as Message | null,
     getMsgReference() {
         const { message } = this;
         this.message = null;
@@ -55,6 +56,6 @@ export default definePlugin({
     },
     setMsgReference(plusses: string, channelId: string) {
         const { getMessages } = MessageStore;
-        this.message = getMessages(channelId).getByIndex(getMessages(channelId).length - plusses.split("+").length + 1);
+        this.message = getMessages(channelId).getByIndex(getMessages(channelId).length - plusses.split("+").length + 1) ?? null;
     }
 });

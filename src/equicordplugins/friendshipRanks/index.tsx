@@ -8,14 +8,15 @@ import "./styles.css";
 
 import { BadgePosition, BadgeUserArgs } from "@api/Badges";
 import { Badges } from "@api/index";
+import { definePluginSettings } from "@api/Settings";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Flex } from "@components/Flex";
 import { Paragraph } from "@components/Paragraph";
-import { Devs } from "@utils/constants";
+import { Devs, EquicordDevs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
-import definePlugin from "@utils/types";
+import definePlugin, { OptionType } from "@utils/types";
 import { RenderModalProps } from "@vencord/discord-types";
-import { Forms, Modal,openModal, RelationshipStore } from "@webpack/common";
+import { Forms, Modal, openModal, RelationshipStore, Tooltip, useStateFromStores } from "@webpack/common";
 
 interface rankInfo {
     title: string;
@@ -25,6 +26,14 @@ interface rankInfo {
 }
 
 const cl = classNameFactory("vc-friendship-ranks-");
+
+const settings = definePluginSettings({
+    showFriendsInChat: {
+        type: OptionType.BOOLEAN,
+        description: "Show a friend icon on messages from friends.",
+        default: false,
+    },
+});
 
 function daysSince(dateString: string): number {
     const date = new Date(dateString);
@@ -140,11 +149,34 @@ function getBadgesToApply() {
     });
 }
 
+const FriendDecoration = ErrorBoundary.wrap(({ userId }: { userId: string; }) => {
+    const isFriend = useStateFromStores([RelationshipStore], () => RelationshipStore.isFriend(userId), [userId]);
+    if (!isFriend) return null;
+
+    return (
+        <Tooltip text="Friend">
+            {tooltipProps => (
+                <span {...tooltipProps} className={cl("decoration")}>
+                    <svg className={cl("icon")} aria-hidden="true" viewBox="0 0 24 24">
+                        <path fill="currentColor" d="M13 10a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z" />
+                        <path fill="currentColor" d="M3 5v-.75C3 3.56 3.56 3 4.25 3s1.24.56 1.33 1.25C6.12 8.65 9.46 12 13 12h1a8 8 0 0 1 8 8 2 2 0 0 1-2 2 .21.21 0 0 1-.2-.15 7.65 7.65 0 0 0-1.32-2.3c-.15-.2-.42-.06-.39.17l.25 2c.02.15-.1.28-.25.28H9a2 2 0 0 1-2-2v-2.22c0-1.57-.67-3.05-1.53-4.37A15.85 15.85 0 0 1 3 5Z" />
+                    </svg>
+                </span>
+            )}
+        </Tooltip>
+    );
+}, { noop: true });
+
 export default definePlugin({
     name: "FriendshipRanks",
     description: "Adds badges showcasing how long you have been friends with a user for",
     tags: ["Friends"],
-    authors: [Devs.Samwich],
+    authors: [Devs.Samwich, EquicordDevs.lucabeyer],
+    settings,
+    renderMessageDecoration({ message }) {
+        if (!settings.store.showFriendsInChat || !message?.author) return null;
+        return <FriendDecoration userId={message.author.id} />;
+    },
     start() {
         getBadgesToApply().forEach(b => Badges.addProfileBadge(b));
 

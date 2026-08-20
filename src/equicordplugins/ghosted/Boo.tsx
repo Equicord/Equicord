@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { Channel, Message } from "@vencord/discord-types";
+import { Channel } from "@vencord/discord-types";
 import { findCssClassesLazy } from "@webpack";
 import { MessageStore, useEffect, UserStore, useState, useStateFromStores } from "@webpack/common";
 
@@ -87,9 +87,8 @@ export function Boo({ channel }: { channel: Channel; }) {
     const { id } = channel;
 
     const currentUserId = useStateFromStores([UserStore], () => UserStore.getCurrentUser()?.id);
-    const lastMessage: Message = useStateFromStores([MessageStore], () =>
-        MessageStore.getMessages(id)?.last()
-    );
+    const lastMessage = useStateFromStores([MessageStore], () => MessageStore.getMessages(id)?.last());
+    if (!lastMessage || !currentUserId) return null;
 
     const [state, setState] = useState({
         isCurrentUser: null as boolean | null,

@@ -8,10 +8,32 @@
         color: var(--text-muted);
     }
 
-    .vc-betterforwards-guild-icon {
-        margin-block: 0;
-        border-radius: 4px;
+    .vc-betterforwards-guild-icon,
+    .vc-betterforwards-user-icon,
+    .vc-betterforwards-guild-acronym {
+        margin-right: 2px;
         width: 16px;
+        height: 16px;
+        flex-shrink: 0;
+    }
+
+    .vc-betterforwards-guild-icon {
+        border-radius: 4px;
+    }
+
+    .vc-betterforwards-user-icon {
+        border-radius: 9999px;
+    }
+
+    .vc-betterforwards-guild-acronym {
+        line-height: 16px;
+        text-align: center;
+        overflow: hidden;
+        font-size: 9.6px;
+        border-radius: 4px;
+        white-space: nowrap;
+        background-color: var(--background-base-lower);
+        color: var(--text-default);
     }
 
     .vc-betterforwards-footer-element {
@@ -39,6 +61,12 @@
         padding: 1px 0 1px 2px;
         border-radius: 4px;
         vertical-align: middle;
+        color: var(--text-muted);
+
+        svg,
+        img {
+            flex-shrink: 0;
+        }
     }
 }
 
@@ -48,6 +76,26 @@
     text-overflow: ellipsis;
 }
 
-[class^="forwardPreview"] > [class^="contentWrapper"] {
-    overflow: hidden;
+[class^="forwardPreview"] {
+    height: fit-content;
+
+    > [class^="contentWrapper"] {
+        max-height: 250px;
+        overflow-y: auto;
+        scrollbar-width: thin;
+
+        > [class^="forwardPreviewMessage"] {
+            flex-shrink: 0;
+        }
+
+        [class^="tagGroup"] > [class^="tag"] {
+            text-wrap: nowrap !important;
+            min-width: 0;
+
+            .vc-text-base {
+                text-overflow: ellipsis;
+                overflow: hidden;
+            }
+        }
+    }
 }
