@@ -11,11 +11,11 @@ import { Embed, ListRow, Message, MessageAttachment, ScrollerBaseRef } from "@ve
 import { ChannelType } from "@vencord/discord-types/enums";
 import { findByCodeLazy, findComponentByCode, findComponentByCodeLazy, findCssClassesLazy, proxyLazyWebpack } from "@webpack";
 import { ChannelStore, ExpressionPickerStore, ListScrollerThin, lodash, PermissionsBits, PermissionStore, React, useCallback, useEffect, useMemo, useRef, useState, useStateFromStores } from "@webpack/common";
-import { ReactNode } from "react";
+import { ComponentProps, ReactNode } from "react";
 
 import { SignedUrlsStore } from "./stores";
-import { AttachmentContextProviderProps, AttachmentItem, AttachmentsComponentProps, CustomItemFormat, FavoriteButtonProps, FavouriteItemFormat, FilePickerItemProps, FilePickerProps, ManaSearchBarProps, MessageComponentClass } from "./types";
-import { cl, defs, hasPermission, ImageUtils, sendAttachment, transformAttachment, useFavourites, useListScroller, useResizeObserver } from "./utils";
+import { AttachmentContextProviderProps, AttachmentItem, AttachmentsComponentProps, CustomItemFormat, FavoriteButtonProps, FavouriteItemFormat, FilePickerItemProps, FilePickerProps, ManaSearchBarProps, MessageComponentClass, StaticFilePickerItemProps } from "./types";
+import { cl, getFilenameAndExtension, getFileThumbnailUrl, hasPermission, ImageUtils, sendAttachment, transformAttachment, useFavourites, useListScroller, useResizeObserver } from "./utils";
 
 export const EmbedContext = proxyLazyWebpack(() => React.createContext<null | Embed>(null));
 export const EmbedMosaicContext = proxyLazyWebpack(() => React.createContext<null | number>(null));
@@ -23,7 +23,6 @@ const AttachmentContext = proxyLazyWebpack(() => React.createContext<null | Atta
 
 const ManaSearchBar = findComponentByCodeLazy<ManaSearchBarProps>("#{intl::SEARCH}),ref");
 const FavoriteButton = findComponentByCodeLazy<FavoriteButtonProps>("#{intl::GIF_TOOLTIP_ADD_TO_FAVORITES}");
-const SendIcon = findComponentByCodeLazy("M6.6 10.02 14 11.4a.6.6");
 
 const createChannelRecordFromServer = findByCodeLazy(".GUILD_TEXT]", "fromServer)");
 const createMessageRecord = findByCodeLazy(".createFromServer(", ".isBlockedForMessage", "messageReference:");
@@ -73,8 +72,6 @@ export const AttachmentPreview = proxyLazyWebpack(() => {
     };
 });
 
-const noopRender = () => null;
-
 export function FilePicker({ onSelectItem }: FilePickerProps) {
     const listRef = useRef<ScrollerBaseRef>(null);
 
@@ -121,24 +118,11 @@ export function FilePicker({ onSelectItem }: FilePickerProps) {
     return (
         <div id="files-picker-tab-panel" role="tabpanel" aria-labelledby="files-picker-tab" className={cl("container")}>
             <div className={cl("container-header")}>
-                <ManaSearchBar
-                    autoFocus
-                    placeholder="Search files"
-                    query={query}
-                    onChange={handleChange}
-                    onClear={handleClear}
-                />
+                <ManaSearchBar autoFocus placeholder="Search files" query={query} onChange={handleChange} onClear={handleClear} />
             </div>
             {count > 0 ? (
                 <div className={cl("container-body")}>
-                    <ListScrollerThin
-                        ref={listRef}
-                        sections={[count]}
-                        sectionHeight={0}
-                        rowHeight={rowHeight}
-                        renderSection={noopRender}
-                        renderRow={renderRow}
-                    />
+                    <ListScrollerThin ref={listRef} sections={[count]} sectionHeight={0} rowHeight={rowHeight} renderRow={renderRow} />
                 </div>
             ) : (
                 <div className={cl("container-body", "container-info")} inert>
@@ -177,12 +161,39 @@ function Demo() {
                     format={FavouriteItemFormat.NONE}
                 />
             </div>
-            <BaseText className={cl("info-text")}>
+            <BaseText className={cl("info-text")} size="md">
                 Click the star to favourite a file.
                 <br />
                 Favourite files will show up here!
             </BaseText>
         </>
+    );
+}
+
+function SendIcon({ height = 24, width = 24, ...props }: ComponentProps<"svg">) {
+    return (
+        <svg xmlns="http://www.w3.org/2000/svg" width={width} height={height} fill="currentColor" viewBox="0 0 24 24" {...props}>
+            <path d="M6.6 10.02 14 11.4a.6.6 0 0 1 0 1.18L6.6 14l-2.94 5.87a1.48 1.48 0 0 0 1.99 1.98l17.03-8.52a1.48 1.48 0 0 0 0-2.64L5.65 2.16a1.48 1.48 0 0 0-1.99 1.98l2.94 5.88Z" />
+        </svg>
+    );
+}
+
+export function StaticFilePickerItem({ name, subtitle }: StaticFilePickerItemProps) {
+    const [, ext] = getFilenameAndExtension(name);
+
+    // Keep this compact! Long prop names, styles, numbers, etc could be wasteful
+    return (
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="-2 -2 32 11" style={{ font: "2px sans-serif" }} fill="#242429">
+            <path d="M-2-2h32v11H-2" />
+            <rect width="5" height="7" rx=".5" fill="#ddf" />
+            <g fill="#78e">
+                <path d="M3-1v2.5q0 .5.5.5H6" />
+                {ext && <text x=".85" y="6" fontFamily="monospace">{ext.slice(1, 4)}</text>}
+            </g>
+            <path d="M6 3V-2H1" />
+            <text x="7" y="2.8" fill="#eff">{name}</text>
+            <text x="7" y="5.6" fill="#777">{subtitle}</text>
+        </svg>
     );
 }
 
@@ -229,7 +240,7 @@ export function FilePickerItem({ url, file, channel, onResize, onSubmit, reduceP
             <AttachmentPreview attachment={attachment} />
             {handleClick && (
                 <Button onClick={handleClick} variant="secondary" disabled={isFetching}>
-                    <SendIcon size="refresh_sm" color="currentColor" />
+                    <SendIcon width={20} height={20} />
                 </Button>
             )}
         </div>
@@ -304,14 +315,14 @@ export function AttachmentContextProvider({ attachment, component, children }: A
             const raw: MessageAttachment =
                 "media" in originalItem
                     ? {
-                          ...originalItem.media,
-                          id: rest.uniqueId,
-                          size: 0,
-                          spoiler: rest.spoiler,
-                          filename: (rest.spoiler ? "SPOILER_" : "") + rest.uniqueId,
-                          content_type: originalItem.media.contentType,
-                          proxy_url: originalItem.media.proxyUrl
-                      }
+                        ...originalItem.media,
+                        id: rest.uniqueId,
+                        size: 0,
+                        spoiler: rest.spoiler,
+                        filename: (rest.spoiler ? "SPOILER_" : "") + rest.uniqueId,
+                        content_type: originalItem.media.contentType,
+                        proxy_url: originalItem.media.proxyUrl
+                    }
                     : originalItem;
 
             return { originalItem: raw, ...rest };
@@ -335,28 +346,21 @@ export function AttachmentAccessory() {
     const props: FavoriteButtonProps | null = useMemo(() => {
         if (!attachment?.downloadUrl) return null;
         const { originalItem, type, downloadUrl, srcIsAnimated } = attachment;
-        const width = attachment.width || 600, height = attachment.height || 400;
+        const width = attachment.width || 160, height = attachment.height || 55;
 
         // Do not render the custom accessory if the original attachment component already has a gif accessory
-        const isAnimated = ImageUtils.isAnimated({
-            original: originalItem.url,
-            src: originalItem.proxy_url,
-            animated: false,
-            srcIsAnimated
-        });
+        const isAnimated = ImageUtils.isAnimated({ original: originalItem.url, src: originalItem.proxy_url, animated: false, srcIsAnimated });
         if (isAnimated) return null;
 
         if (type in visualMediaFormats) {
             return { format: visualMediaFormats[type]!, src: originalItem.proxy_url, url: downloadUrl, width, height };
         }
 
-        // Non visual attachments have to be encoded to store metadata in the src property.
-        // Note that this isn't a valid url yet, the full url (with a fallback image for vanilla client compat)
-        // is generated via `getThumbnailUrl` once the user clicks the favourite button
-        const src = defs.encode(CustomItemFormat.ATTACHMENT, originalItem)?.toString();
-        if (!src) return null;
-
-        return { format: FavouriteItemFormat.NONE, src, url: downloadUrl, width, height };
+        const gifSrc = Object.assign(
+            () => getFileThumbnailUrl(originalItem).then(url => url.toString()),
+            { [Symbol.toPrimitive]: () => "" }
+        );
+        return { format: FavouriteItemFormat.NONE, src: originalItem.proxy_url, url: downloadUrl, width, height, gifSrc };
     }, [attachment]);
 
     return props && <FavoriteButton {...props} className={cl("attachment-accessory")} />;

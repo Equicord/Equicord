@@ -12,12 +12,13 @@ import { useForceUpdater } from "@utils/react";
 import { PluginNative } from "@utils/types";
 import { Channel, MessageAttachment } from "@vencord/discord-types";
 import { findByCodeLazy, findByPropsLazy } from "@webpack";
-import { Constants, DraftType, FluxDispatcher, MessageActions, PendingReplyStore, PermissionStore, RestAPI, Toasts, UploadAttachmentStore, UploadHandler, UploadManager, useCallback, useEffect, useRef, UserSettingsActionCreators, UserSettingsProtoStore, useStateFromStores } from "@webpack/common";
+import { Constants, createRoot, DraftType, FluxDispatcher, Humanize, MessageActions, PendingReplyStore, PermissionStore, ReactDOM, RestAPI, Toasts, UploadAttachmentStore, UploadHandler, UploadManager, useCallback, useEffect, useRef, UserSettingsActionCreators, UserSettingsProtoStore, useStateFromStores } from "@webpack/common";
 import { deflateSync, inflateSync } from "fflate";
-import { Key } from "react";
+import { Key, ReactNode } from "react";
 import { JsonValue } from "type-fest";
 
-import { base64ToUint8Array, uint8ArrayToBase64 } from "./polyfills";
+import { settings } from ".";
+import { StaticFilePickerItem } from "./components";
 import { AttachmentTransformer, CustomItemDef, CustomItemFormat, FavouriteItem, FavouriteItemFormat, ImageUtils as ImageUtils_, ItemsDef, ResizeObserverHook, UnfurledEmbedsResponse } from "./types";
 
 const Native = VencordNative.pluginHelpers.FavouriteAnything as PluginNative<typeof import("./native")>;
@@ -40,7 +41,7 @@ function defineItems<T extends Record<CustomItemFormat, CustomItemDef>>(def: Ite
                 const obj = [format, def[format].encode(data)];
 
                 const buf = deflateSync(encoder.encode(JSON.stringify(obj)));
-                return uint8ArrayToBase64(buf);
+                return buf.toBase64({ alphabet: "base64url", omitPadding: true });
             } catch {
                 return null;
             }
@@ -49,7 +50,7 @@ function defineItems<T extends Record<CustomItemFormat, CustomItemDef>>(def: Ite
             try {
                 if (!raw) return null;
 
-                const buf = inflateSync(base64ToUint8Array(raw));
+                const buf = inflateSync(Uint8Array.fromBase64(raw, { alphabet: "base64url" }));
                 const parsed: unknown[] | null = JSON.parse(decoder.decode(buf));
                 if (!Array.isArray(parsed)) return null;
 
@@ -98,28 +99,58 @@ export const defs = defineItems({
     // This could be expanded in the future with other item types (e.g. voice messages)
 });
 
-// TODO: make thumbnails prettier
-const fallbackThumbnail = new URL("https://images-ext-1.discordapp.net/external/pGTJg3YdSHpyGTltH4vZUKEyQoNzf5mtqbSJs7I4ebc/https/equicord.org/assets/plugins/favoriteAnything/invalid.png");
+export function getFilenameAndExtension(filename: string): [name: string, ext: string | null] {
+    const ext = filename.lastIndexOf(".");
+    return ext > 0 ? [filename.substring(0, ext), filename.substring(ext)] : [filename, null];
+}
 
-export async function getThumbnailUrl(data: string, width: number, height: number): Promise<URL | null> {
-    try {
-        const decoded = defs.decode(data);
-        if (!decoded || !width || !height) return null;
+function renderToHTML(node: ReactNode): Promise<string> {
+    return new Promise(resolve => {
+        const container = document.createElement("div");
+        const root = createRoot(container);
 
-        const text = defs.stringify(decoded.format, decoded.data);
-        const url = new URL(`https://placehold.jp/42/444/fff/${width}x${height}.png`);
-        url.searchParams.append("text", text);
-
-        return await RestAPI.post({
-            url: Constants.Endpoints.UNFURL_EMBED_URLS,
-            body: { urls: [url] },
-            retries: 3
-        }).then(({ body }: { body: UnfurledEmbedsResponse; }) => {
-            const [{ thumbnail } = {}] = body.embeds;
-            return thumbnail?.proxy_url ? new URL(thumbnail.proxy_url) : fallbackThumbnail;
+        queueMicrotask(() => {
+            ReactDOM.flushSync(() => root.render(node));
+            resolve(container.innerHTML);
+            root.unmount();
         });
+    });
+}
+
+export const FALLBACK_THUMBNAIL = new URL("https://images-ext-1.discordapp.net/external/085KIKMVni8n60G3GHE1rGcA0xgH6OgBKIZqUiQYsXc/%3Fname%3DUnknown%2520file%26subtitle%3D0%2520MB/https/placeholder.nin0.dev/image");
+
+async function getThumbnailBase(item: MessageAttachment): Promise<URL | null> {
+    const [filename, ext] = getFilenameAndExtension(item.filename);
+    const name = Humanize.truncatechars(item.title ? item.title : filename, 50) + (ext?.slice(0, 6) ?? "");
+    const subtitle = Humanize.filesize(item.size);
+
+    if (settings.store.localThumbnails) {
+        const html = await renderToHTML(<StaticFilePickerItem name={ name } subtitle = { subtitle } />);
+        // encodeURIComponent is intentionally avoided since it would bloat the url size by replacing otherwise safe characters
+        return URL.parse("data:image/svg+xml," + html.replaceAll("%", "%25").replaceAll("#", "%23"));
+    } else {
+        const url = new URL("https://placeholder.nin0.dev/image");
+        url.searchParams.append("name", name || " ");
+        url.searchParams.append("subtitle", subtitle);
+
+        return await RestAPI.post({ url: Constants.Endpoints.UNFURL_EMBED_URLS, body: { urls: [url] }, retries: 3 })
+            .then(({ body }: { body: UnfurledEmbedsResponse; }) => {
+                const [{ thumbnail } = {}] = body.embeds;
+                return thumbnail?.proxy_url ? URL.parse(thumbnail.proxy_url) : null;
+            });
+    }
+}
+
+export async function getFileThumbnailUrl(item: MessageAttachment): Promise<URL> {
+    try {
+        const base = await getThumbnailBase(item);
+        const metadata = defs.encode(CustomItemFormat.ATTACHMENT, item)?.toString();
+        if (!base || !metadata) return FALLBACK_THUMBNAIL;
+
+        base.hash = metadata;
+        return base;
     } catch {
-        return fallbackThumbnail;
+        return FALLBACK_THUMBNAIL;
     }
 }
 
@@ -175,8 +206,9 @@ export async function sendAttachment(attachment: MessageAttachment, channel: Cha
 
     const [upload] = uploads.splice(uploadIdx);
     UploadManager.setUploads({ uploads, channelId: channel.id, draftType: DraftType.ChannelMessage });
+
     // Empty titles and descriptions are allowed
-    if (title != null) upload.filename = title;
+    if (title != null) upload.filename = title + (getFilenameAndExtension(upload.filename)[1] ?? "");
     if (description != null) upload.description = description;
 
     FluxDispatcher.dispatch({ type: "DELETE_PENDING_REPLY", channelId: channel.id });

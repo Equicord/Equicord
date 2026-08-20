@@ -24,9 +24,7 @@ export interface ExpressionPickerTabProps extends PropsWithChildren {
     viewType: ExpressionPickerView;
 }
 
-export interface FavoriteButtonProps extends Omit<FavouriteItem, "order"> {
-    url: string;
-    gifSrc?: string;
+export interface FavoriteButtonProps extends Omit<FullFavouriteItem, "order"> {
     className?: string;
 }
 
@@ -59,9 +57,14 @@ export interface FilePickerProps {
     onSelectItem: (item: { url: string; }) => void;
 }
 
+export interface StaticFilePickerItemProps {
+    name: string;
+    subtitle: string;
+}
+
 export interface FilePickerItemProps {
-    url: string;
     file: MessageAttachment;
+    url: string;
     channel: Channel | null;
     reducePadding?: boolean;
     onResize: (key: Key, height: number) => void;
@@ -117,6 +120,11 @@ export interface FavouriteItem {
     order: number;
 }
 
+export interface FullFavouriteItem extends FavouriteItem {
+    gifSrc?: () => Promise<string>;
+    url: string;
+}
+
 export enum CustomItemFormat {
     ATTACHMENT = 0
 }
@@ -131,6 +139,10 @@ export type ItemsDef<T> = T & {
     [K in keyof T]: T[K] extends CustomItemDef<infer A, infer B> ? CustomItemDef<A, B> : never;
 };
 
+export interface UnfurledEmbedsResponse {
+    embeds: EmbedJSON[];
+}
+
 export interface RefreshedUrlsResponse {
     refreshed_urls: [
         {
@@ -138,10 +150,6 @@ export interface RefreshedUrlsResponse {
             refreshed: string | null;
         }
     ];
-}
-
-export interface UnfurledEmbedsResponse {
-    embeds: EmbedJSON[];
 }
 
 export type ResizeObserverHook = (

@@ -93,7 +93,7 @@ export default definePlugin({
     description: "Message forward utilities including NSFW bypass and UI improvements.",
     tags: ["Chat", "Utility"],
     searchTerms: ["selfForward", "betterForwardMeta"],
-    authors: [Devs.thororen, Devs.sadan, Devs.nin0dev, EquicordDevs.VillainsRule, EquicordDevs.davri],
+    authors: [Devs.thororen, Devs.sadan, Devs.nin0dev, EquicordDevs.VillainsRule, Devs.Davri],
     settings,
     managedStyle,
     patches: [
