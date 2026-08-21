@@ -529,6 +529,7 @@ function SelectionBar({ channelId, guildId, selectedIds, onSelectAll, onClear, o
     onExit: () => void;
 }) {
     React.useSyncExternalStore(bulkStore.subscribe, bulkStore.getVersion);
+    React.useSyncExternalStore(ignoredStore.subscribe, ignoredStore.getVersion);
     const busy = bulkRunning;
 
     const perms = useStateFromStores([PermissionStore], () => {
