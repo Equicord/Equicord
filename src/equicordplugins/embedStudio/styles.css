@@ -1,0 +1,217 @@
+.vc-embed-studio-tab-bar {
+    margin-bottom: 16px;
+}
+
+.vc-embed-studio-content {
+    min-height: 300px;
+}
+
+.vc-embed-studio-section {
+    margin-top: 16px;
+}
+
+.vc-embed-studio-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.vc-embed-studio-wrap {
+    flex-wrap: wrap;
+}
+
+.vc-embed-studio-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 8px 12px;
+}
+
+.vc-embed-studio-input {
+    margin-bottom: 8px;
+    flex: 1;
+}
+
+.vc-embed-studio-input-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 4px;
+    color: var(--header-secondary);
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.vc-embed-studio-counter {
+    color: var(--text-muted);
+    font-size: 12px;
+    font-weight: 400;
+    text-transform: none;
+}
+
+.vc-embed-studio-counter-over {
+    color: var(--text-feedback-critical);
+    font-weight: 600;
+}
+
+.vc-embed-studio-usage {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 4px 16px;
+    padding: 12px;
+    border-radius: 8px;
+    background: var(--background-secondary);
+}
+
+.vc-embed-studio-usage-stat {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.vc-embed-studio-warnings {
+    margin-top: 12px;
+}
+
+.vc-embed-studio-warning,
+.vc-embed-studio-notice {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+    color: var(--text-feedback-critical);
+    font-size: 14px;
+}
+
+.vc-embed-studio-notice {
+    margin: 0 0 12px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    background: var(--background-secondary);
+}
+
+.vc-embed-studio-warning svg,
+.vc-embed-studio-notice svg {
+    flex-shrink: 0;
+}
+
+.vc-embed-studio-field {
+    padding: 12px;
+    border: 1px solid var(--background-modifier-accent);
+    border-radius: 8px;
+    margin-bottom: 8px;
+}
+
+.vc-embed-studio-field textarea {
+    margin: 8px 0;
+    resize: vertical;
+}
+
+.vc-embed-studio-description textarea {
+    min-height: 220px;
+    resize: vertical;
+}
+
+.vc-embed-studio-json textarea {
+    width: 100%;
+    min-height: 280px;
+    font-family: var(--font-code);
+    resize: vertical;
+}
+
+.vc-embed-studio-error {
+    margin-top: 8px;
+    color: var(--text-feedback-critical);
+}
+
+.vc-embed-studio-asset {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--background-modifier-accent);
+}
+
+.vc-embed-studio-asset:last-child {
+    border-bottom: none;
+}
+
+.vc-embed-studio-asset .vc-embed-studio-row {
+    margin-bottom: 0;
+    flex-shrink: 0;
+}
+
+.vc-embed-studio-asset-thumb {
+    width: 48px;
+    height: 48px;
+    border-radius: 8px;
+    object-fit: cover;
+    background: var(--background-secondary);
+}
+
+.vc-embed-studio-asset-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.vc-embed-studio-asset-url {
+    overflow: hidden;
+    color: var(--text-muted);
+    font-size: 12px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.vc-embed-studio-info-row {
+    display: flex;
+    gap: 12px;
+    padding: 4px 0;
+}
+
+.vc-embed-studio-info-label {
+    flex-shrink: 0;
+    min-width: 160px;
+    color: var(--header-secondary);
+    font-weight: 600;
+}
+
+.vc-embed-studio-info-value {
+    color: var(--text-default);
+    overflow-wrap: anywhere;
+}
+
+.vc-embed-studio-media-info {
+    padding: 8px 0;
+    border-bottom: 1px solid var(--background-modifier-accent);
+}
+
+.vc-embed-studio-media-info:last-child {
+    border-bottom: none;
+}
+
+.vc-embed-studio-template {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--background-modifier-accent);
+}
+
+.vc-embed-studio-template:last-child {
+    border-bottom: none;
+}
+
+.vc-embed-studio-preview-image {
+    display: block;
+    max-width: 100%;
+    border-radius: 4px;
+    object-fit: contain;
+}
+
+.vc-embed-studio-empty {
+    padding: 16px 0;
+    color: var(--text-muted);
+    text-align: center;
+}
