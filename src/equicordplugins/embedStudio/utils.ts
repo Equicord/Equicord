@@ -75,10 +75,6 @@ export function parseDiscordColor(value: unknown): number | undefined {
     const hex = hexToInt(value);
     if (hex !== undefined) return hex;
 
-    // Discord renders role colors as hsl(H, calc(var(--saturation-factor, 1) * S%), L%).
-    // Match any calc(...) expression for the saturation slot, not that exact variable name,
-    // and accept both comma and space separated hsl() syntax, so a future CSS format change
-    // in Discord doesn't silently drop the color.
     const hsl = value.match(/^hsla?\(\s*([\d.]+)(?:deg)?[\s,]+(?:calc\([^)]*?([\d.]+)%\)|([\d.]+)%)[\s,]+([\d.]+)%/i);
     if (hsl) return hslToInt(parseFloat(hsl[1]), parseFloat(hsl[2] ?? hsl[3]), parseFloat(hsl[4]));
 
@@ -313,7 +309,7 @@ function coerceEmbed(raw: Record<string, unknown>): WebhookEmbed {
     };
 }
 
-export function parseEmbedJson(text: string): { embed: WebhookEmbed; } | { error: string; } {
+export function parseEmbedJson(text: string): { embed: WebhookEmbed; discardedEmbeds: number; } | { error: string; } {
     let raw: unknown;
     try {
         raw = JSON.parse(text);
@@ -324,13 +320,15 @@ export function parseEmbedJson(text: string): { embed: WebhookEmbed; } | { error
     if (!isObject(raw)) return { error: "JSON must be an object." };
 
     let obj = raw as Record<string, unknown>;
+    let discardedEmbeds = 0;
     if (Array.isArray(obj.embeds)) {
-        const [first] = obj.embeds;
+        const [first, ...rest] = obj.embeds;
         if (!isObject(first)) return { error: "The embeds array does not contain an embed object." };
+        discardedEmbeds = rest.length;
         obj = first as Record<string, unknown>;
     }
 
-    return { embed: coerceEmbed(obj) };
+    return { embed: coerceEmbed(obj), discardedEmbeds };
 }
 
 function jsString(value: string) {

@@ -8,6 +8,7 @@ import { BaseText } from "@components/BaseText";
 import { Button } from "@components/Button";
 import { Paragraph } from "@components/Paragraph";
 import { copyWithToast } from "@utils/discord";
+import { pluralise } from "@utils/misc";
 import { RenderModalProps } from "@vencord/discord-types";
 import { Modal, openModal, showToast, TextArea, TextInput, Toasts, useEffect, useState } from "@webpack/common";
 
@@ -42,7 +43,11 @@ export function EmbedJsonTab({ embed, raw, onChange }: EmbedJsonTabProps) {
         }
         setError(null);
         onChange(result.embed);
-        showToast("JSON is valid and has been applied", Toasts.Type.SUCCESS);
+        if (result.discardedEmbeds > 0) {
+            showToast(`Only the first embed was applied. ${pluralise(result.discardedEmbeds, "other embed")} in this payload were discarded, this editor only supports one embed at a time.`, Toasts.Type.FAILURE);
+        } else {
+            showToast("JSON is valid and has been applied", Toasts.Type.SUCCESS);
+        }
     };
 
     const reformat = (pretty: boolean) => {
@@ -53,6 +58,9 @@ export function EmbedJsonTab({ embed, raw, onChange }: EmbedJsonTabProps) {
         }
         setError(null);
         setText(webhookJson(result.embed, pretty));
+        if (result.discardedEmbeds > 0) {
+            showToast(`Only the first embed was kept. ${pluralise(result.discardedEmbeds, "other embed")} in this payload were discarded, this editor only supports one embed at a time.`, Toasts.Type.FAILURE);
+        }
     };
 
     return (
