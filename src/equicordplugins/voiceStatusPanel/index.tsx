@@ -228,7 +228,7 @@ function openBulkMoveMenu(event: React.UIEvent, { guildId, channelId, userIds }:
                     key={c.id}
                     id={`vsp-bulk-move-${c.id}`}
                     label={c.name}
-                    action={() => runBulk(userIds, guildId, { channel_id: c.id }, n => `Moved ${pluralise(n, "user")} to ${c.name}.`)}
+                    action={() => runBulk(userIds.filter(id => !ignoredIds.has(id)), guildId, { channel_id: c.id }, n => `Moved ${pluralise(n, "user")} to ${c.name}.`)}
                 />
             ))}
         </Menu.Menu>
