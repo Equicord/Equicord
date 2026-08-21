@@ -10,7 +10,7 @@ import { Paragraph } from "@components/Paragraph";
 import { copyWithToast } from "@utils/discord";
 import { pluralise } from "@utils/misc";
 import { RenderModalProps } from "@vencord/discord-types";
-import { Modal, openModal, showToast, TextArea, TextInput, Toasts, useEffect, useState } from "@webpack/common";
+import { Alerts, Modal, openModal, showToast, TextArea, TextInput, Toasts, useEffect, useState } from "@webpack/common";
 
 import { Section } from "./components";
 import { settings } from "./settings";
@@ -35,6 +35,20 @@ export function EmbedJsonTab({ embed, raw, onChange }: EmbedJsonTabProps) {
         setError(null);
     }, [embed, prettyPrintJson]);
 
+    const withDiscardConfirm = (discardedEmbeds: number, apply: () => void) => {
+        if (discardedEmbeds <= 0) {
+            apply();
+            return;
+        }
+        Alerts.show({
+            title: "Multiple embeds found",
+            body: `This payload has ${pluralise(discardedEmbeds, "other embed")} besides the first. Embed Studio only edits one embed at a time, so the rest will be discarded if you continue.`,
+            confirmText: "Continue",
+            cancelText: "Cancel",
+            onConfirm: apply
+        });
+    };
+
     const validate = () => {
         const result = parseEmbedJson(text);
         if ("error" in result) {
@@ -42,12 +56,10 @@ export function EmbedJsonTab({ embed, raw, onChange }: EmbedJsonTabProps) {
             return;
         }
         setError(null);
-        onChange(result.embed);
-        if (result.discardedEmbeds > 0) {
-            showToast(`Only the first embed was applied. ${pluralise(result.discardedEmbeds, "other embed")} in this payload were discarded, this editor only supports one embed at a time.`, Toasts.Type.FAILURE);
-        } else {
+        withDiscardConfirm(result.discardedEmbeds, () => {
+            onChange(result.embed);
             showToast("JSON is valid and has been applied", Toasts.Type.SUCCESS);
-        }
+        });
     };
 
     const reformat = (pretty: boolean) => {
@@ -57,10 +69,9 @@ export function EmbedJsonTab({ embed, raw, onChange }: EmbedJsonTabProps) {
             return;
         }
         setError(null);
-        setText(webhookJson(result.embed, pretty));
-        if (result.discardedEmbeds > 0) {
-            showToast(`Only the first embed was kept. ${pluralise(result.discardedEmbeds, "other embed")} in this payload were discarded, this editor only supports one embed at a time.`, Toasts.Type.FAILURE);
-        }
+        withDiscardConfirm(result.discardedEmbeds, () => {
+            setText(webhookJson(result.embed, pretty));
+        });
     };
 
     return (
