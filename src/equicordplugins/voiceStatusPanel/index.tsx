@@ -8,7 +8,6 @@ import "./style.css";
 
 import * as DataStore from "@api/DataStore";
 import { HeaderBarButton } from "@api/HeaderBar";
-import { definePluginSettings } from "@api/Settings";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { CopyIcon, MagnifyingGlassIcon, ScreenshareIcon, ShieldIcon, VideoIcon } from "@components/Icons";
 import { EquicordDevs } from "@utils/constants";
@@ -17,33 +16,17 @@ import { copyWithToast, getTheme, openUserProfile, Theme } from "@utils/discord"
 import { Logger } from "@utils/Logger";
 import { classes, pluralise, sleep } from "@utils/misc";
 import { useFixedTimer } from "@utils/react";
-import definePlugin, { OptionType } from "@utils/types";
-import type { Channel } from "@vencord/discord-types";
+import definePlugin from "@utils/types";
 import { findComponentByCodeLazy, proxyLazyWebpack } from "@webpack";
-import { Alerts, Avatar, Button, ChannelRouter, ChannelStore, Clickable, ContextMenuApi, GuildActions, GuildChannelStore, GuildMemberStore, IconUtils, Menu, moment, PermissionsBits, PermissionStore, PopoutActions, PopoutWindowStore, React, RestAPI, SelectedChannelStore, showToast, TextInput, Toasts, Tooltip, UserStore, useStateFromStores, VoiceStateStore } from "@webpack/common";
+import { Alerts, Avatar, Button, ChannelRouter, ChannelStore, Clickable, Constants, ContextMenuApi, GuildActions, GuildMemberStore, IconUtils, Menu, moment, PermissionsBits, PermissionStore, PopoutActions, PopoutWindowStore, React, RestAPI, SelectedChannelStore, showToast, TextInput, Toasts, Tooltip, UserStore, useStateFromStores, VoiceStateStore } from "@webpack/common";
 import type { ReactNode } from "react";
+
+import { DeafenedIcon, MutedIcon, SelectIcon, SpeakerIcon, XIcon } from "./icons";
+import { settings } from "./settings";
+import { AVATAR_TIERS, type AvatarTier, clampNum, getDisplayName, getVoiceChannels, GROUP_KEYS, type Groups, moveUser, pickAvatarTier, sameGroups, shortDuration } from "./utils";
 
 const cl = classNameFactory("vc-vsp-");
 const logger = new Logger("VoiceStatusPanel");
-
-const settings = definePluginSettings({
-    theme: {
-        type: OptionType.SELECT,
-        description: "Theme used by the voice status popout window.",
-        options: [
-            { label: "Match Discord", value: "match", default: true },
-            { label: "Always dark", value: "dark" },
-            { label: "Always light", value: "light" }
-        ]
-    },
-    cardOpacity: {
-        type: OptionType.SLIDER,
-        description: "Opacity of the panel's card sections (columns, staff actions, activity log).",
-        markers: [0, 25, 50, 75, 100],
-        default: 60,
-        stickToMarkers: false
-    }
-});
 
 const PopoutWindow = findComponentByCodeLazy("Missing guestWindow reference");
 const WINDOW_KEY = "DISCORD_VC_STATUS_PANEL";
@@ -115,13 +98,6 @@ interface LogEntry {
 
 const joinTimes = new Map<string, number>();
 
-function shortDuration(ms: number) {
-    const m = Math.floor(ms / 60_000);
-    if (m < 1) return "<1m";
-    if (m < 60) return `${m}m`;
-    return `${Math.floor(m / 60)}h ${m % 60}m`;
-}
-
 const activityLog: LogEntry[] = [];
 let logId = 0;
 let myJoinedAt = 0;
@@ -164,7 +140,7 @@ async function runBulk(targets: string[], guildId: string, body: Record<string, 
     try {
         for (const userId of targets) {
             try {
-                await RestAPI.patch({ url: `/guilds/${guildId}/members/${userId}`, body });
+                await RestAPI.patch({ url: Constants.Endpoints.GUILD_MEMBER(guildId, userId), body });
                 ok++;
             } catch (e) {
                 logger.error("Bulk action failed for", userId, e);
@@ -189,44 +165,6 @@ function othersInChannel(channelId: string) {
     return voiceStates(channelId).filter(s => s.userId !== myId && !ignoredIds.has(s.userId));
 }
 
-function MutedIcon() {
-    return (
-        <svg width="16" height="16" viewBox="0 0 24 24">
-            <path d="M12 1a4 4 0 0 0-4 4v7a4 4 0 0 0 8 0V5a4 4 0 0 0-4-4z" fill="currentColor" />
-            <path d="M19 10v2a7 7 0 0 1-14 0v-2" stroke="currentColor" strokeWidth="2" fill="none" />
-            <line x1="12" y1="19" x2="12" y2="23" stroke="currentColor" strokeWidth="2" />
-            <line x1="3" y1="3" x2="21" y2="21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-        </svg>
-    );
-}
-
-function DeafenedIcon() {
-    return (
-        <svg width="16" height="16" viewBox="0 0 24 24">
-            <path d="M3 14h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H3v-7zM21 14h-3a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h3v-7z" fill="currentColor" />
-            <path d="M3 14v-2a9 9 0 0 1 18 0v2" stroke="currentColor" strokeWidth="2" fill="none" />
-            <line x1="3" y1="3" x2="21" y2="21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-        </svg>
-    );
-}
-
-function XIcon() {
-    return (
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
-            <path d="M5 5l14 14M19 5 5 19" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
-        </svg>
-    );
-}
-
-function SelectIcon() {
-    return (
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-            <rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" strokeWidth="2" />
-            <path d="M7 12.5l3 3 7-7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
-    );
-}
-
 function RowCheckbox({ selected }: { selected: boolean; }) {
     return (
         <svg className={cl("checkbox")} width="18" height="18" viewBox="0 0 24 24" fill="none">
@@ -238,38 +176,7 @@ function RowCheckbox({ selected }: { selected: boolean; }) {
     );
 }
 
-function SpeakerIcon({ width = 16, height = 16 }: { width?: number; height?: number; }) {
-    return (
-        <svg width={width} height={height} viewBox="0 0 24 24">
-            <path d="M3 9v6h4l5 5V4L7 9H3z" fill="currentColor" />
-            <path d="M16 8a5.5 5.5 0 0 1 0 8M18.5 5.5a9 9 0 0 1 0 13" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" />
-        </svg>
-    );
-}
-
-interface AvatarTier {
-    size: "SIZE_32" | "SIZE_40" | "SIZE_48" | "SIZE_56";
-    px: number;
-}
-
-const AVATAR_TIERS: Array<AvatarTier & { min: number; }> = [
-    { min: 0, size: "SIZE_32", px: 80 },
-    { min: 900, size: "SIZE_40", px: 128 },
-    { min: 1300, size: "SIZE_48", px: 128 },
-    { min: 1700, size: "SIZE_56", px: 256 }
-];
-
-function pickAvatarTier(width: number): AvatarTier {
-    let tier = AVATAR_TIERS[0];
-    for (const t of AVATAR_TIERS) if (width >= t.min) tier = t;
-    return tier;
-}
-
 const AvatarScaleContext = proxyLazyWebpack(() => React.createContext<AvatarTier>(AVATAR_TIERS[0]));
-
-function clampNum(min: number, value: number, max: number) {
-    return Math.min(max, Math.max(min, value));
-}
 
 function useElementWidth(ref: React.RefObject<HTMLElement | null>) {
     const [width, setWidth] = React.useState(960);
@@ -289,19 +196,6 @@ function useElementWidth(ref: React.RefObject<HTMLElement | null>) {
     return width;
 }
 
-function getDisplayName(guildId: string | null, userId: string) {
-    const user = UserStore.getUser(userId);
-    if (!user) return "";
-    return (guildId && GuildMemberStore.getNick(guildId, userId)) || user.globalName || user.username;
-}
-
-const GROUP_KEYS = ["speaking", "live", "listening", "muted", "deafened"] as const;
-type Groups = Record<typeof GROUP_KEYS[number], string[]>;
-
-function sameGroups(a: Groups, b: Groups) {
-    return GROUP_KEYS.every(k => a[k].length === b[k].length && a[k].every((id, i) => id === b[k][i]));
-}
-
 function getGroups(channelId: string, guildId: string | null): Groups {
     const groups: Groups = { speaking: [], live: [], listening: [], muted: [], deafened: [] };
     for (const s of voiceStates(channelId)) {
@@ -318,18 +212,6 @@ function getGroups(channelId: string, guildId: string | null): Groups {
         );
     }
     return groups;
-}
-
-function getVoiceChannels(guildId: string) {
-    const channels = GuildChannelStore.getChannels(guildId) as { VOCAL?: { channel: Channel; comparator: number; }[]; };
-    return (channels.VOCAL ?? []).map(({ channel }) => channel);
-}
-
-function moveUser(guildId: string, userId: string, targetChannelId: string) {
-    return RestAPI.patch({
-        url: `/guilds/${guildId}/members/${userId}`,
-        body: { channel_id: targetChannelId }
-    });
 }
 
 function openBulkMoveMenu(event: React.UIEvent, { guildId, channelId, userIds }: { guildId: string; channelId: string; userIds: string[]; }) {
@@ -407,7 +289,7 @@ function openUserModMenu(event: React.UIEvent, { userId, channelId, guildId }: {
                     id="vsp-disconnect"
                     label="Disconnect"
                     color="danger"
-                    action={() => RestAPI.patch({ url: `/guilds/${guildId}/members/${userId}`, body: { channel_id: null } }).catch(e => {
+                    action={() => RestAPI.patch({ url: Constants.Endpoints.GUILD_MEMBER(guildId, userId), body: { channel_id: null } }).catch(e => {
                         logger.error("Failed to disconnect", userId, e);
                         showToast("Could not disconnect that user.", Toasts.Type.FAILURE);
                     })}
@@ -660,7 +542,7 @@ function SelectionBar({ channelId, guildId, selectedIds, onSelectAll, onClear, o
 
     const myId = UserStore.getCurrentUser().id;
     const targets = guildId
-        ? [...selectedIds].filter(id => id !== myId && voiceStates(channelId).some(s => s.userId === id))
+        ? [...selectedIds].filter(id => id !== myId && !ignoredIds.has(id) && voiceStates(channelId).some(s => s.userId === id))
         : [];
     const count = targets.length;
 
@@ -1107,8 +989,22 @@ export default definePlugin({
             clearLog();
             joinTimes.clear();
             if (channelId) {
+                const myId = UserStore.getCurrentUser().id;
                 myJoinedAt = Date.now();
-                joinTimes.set(UserStore.getCurrentUser().id, myJoinedAt);
+                joinTimes.set(myId, myJoinedAt);
+
+                for (const s of voiceStates(channelId)) {
+                    if (s.userId === myId) continue;
+                    joinTimes.set(s.userId, Date.now());
+                    prevStates.set(s.userId, {
+                        mute: s.mute,
+                        deaf: s.deaf,
+                        selfMute: s.selfMute,
+                        selfDeaf: s.selfDeaf,
+                        selfVideo: s.selfVideo,
+                        selfStream: !!s.selfStream
+                    });
+                }
             } else if (PopoutWindowStore.getWindowOpen(WINDOW_KEY)) {
                 PopoutActions.close(WINDOW_KEY);
             }
