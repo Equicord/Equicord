@@ -25,3 +25,62 @@
 .export-contacts-button:hover {
     background-color: #454fbf;
 }
+
+.vc-exportmessages-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.vc-exportmessages-row {
+    display: flex;
+    align-items: center;
+    border-radius: 8px;
+    user-select: none;
+}
+
+.vc-exportmessages-checkbox {
+    display: flex;
+    flex: 0 0 20px;
+    align-items: center;
+    justify-content: center;
+    margin-left: 8px;
+    pointer-events: none;
+}
+
+.vc-exportmessages-row:hover {
+    background-color: var(--background-modifier-hover);
+}
+
+.vc-exportmessages-row-selected {
+    background-color: var(--background-modifier-selected);
+}
+
+.vc-exportmessages-row-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+    min-width: 0;
+    padding: 8px 8px 8px 12px;
+}
+
+.vc-exportmessages-details {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+    min-width: 0;
+}
+
+.vc-exportmessages-meta {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+}
+
+.vc-exportmessages-preview {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}

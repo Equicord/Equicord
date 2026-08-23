@@ -6,23 +6,24 @@
 
 import "./styles.css";
 
-import { showNotification } from "@api/Notifications";
 import { definePluginSettings } from "@api/Settings";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { copyToClipboard } from "@utils/clipboard";
 import { EquicordDevs } from "@utils/constants";
+import { openModal } from "@utils/modal";
 import { showItemInFolder } from "@utils/native";
 import definePlugin, { OptionType } from "@utils/types";
 import { saveFile } from "@utils/web";
 import { Message } from "@vencord/discord-types";
-import { Menu, Toasts } from "@webpack/common";
+import { Menu, showToast, Toasts } from "@webpack/common";
 
+import { MultiMessageExportModal } from "./MultiMessageExportModal";
 import { ContactsList } from "./types";
 
 const settings = definePluginSettings({
     openFileAfterExport: {
         type: OptionType.BOOLEAN,
-        description: "Open the exported file in the default file handler after export",
+        description: "Show the exported file in its folder after export",
         default: true
     },
     exportContacts: {
@@ -61,36 +62,36 @@ function formatMessage(message: Message) {
     return content;
 }
 
-async function exportMessage(message: Message) {
-    const timestamp = new Date(message.timestamp.toString()).toISOString().split("T")[0];
-    const filename = `message-${message.id}-${timestamp}.txt`;
+async function exportMessages(messages: Message[]) {
+    const first = messages[0];
+    const last = messages[messages.length - 1];
+    const isMultiple = messages.length > 1;
+    const timestamp = (isMultiple ? new Date() : new Date(first.timestamp.toString())).toISOString().split("T")[0];
+    const filename = isMultiple
+        ? `messages-${first.id}-${last.id}-${timestamp}.txt`
+        : `message-${first.id}-${timestamp}.txt`;
 
-    const content = formatMessage(message);
+    const content = messages.map(formatMessage).join("\n\n");
 
     try {
         if (IS_DISCORD_DESKTOP) {
             const data = new TextEncoder().encode(content);
-            const result = await DiscordNative.fileManager.saveWithDialog(data, filename);
+            const result: { canceledByUser: boolean; filePath: string; } | null = await DiscordNative.fileManager.saveWithDialog2(data, filename);
+            if (!result || result.canceledByUser) return false;
 
-            if (result && settings.store.openFileAfterExport) {
-                showItemInFolder(result);
+            if (settings.store.openFileAfterExport) {
+                showItemInFolder(result.filePath);
             }
         } else {
             const file = new File([content], filename, { type: "text/plain" });
             saveFile(file);
         }
 
-        showNotification({
-            title: "Export Messages",
-            body: `Message exported successfully as ${filename}`,
-            icon: "📄"
-        });
-    } catch (error) {
-        showNotification({
-            title: "Export Messages",
-            body: "Failed to export message",
-            icon: "❌"
-        });
+        showToast(isMultiple ? `${messages.length} messages exported.` : "Message exported.", Toasts.Type.SUCCESS);
+        return true;
+    } catch {
+        showToast(isMultiple ? "Failed to export messages." : "Failed to export message.", Toasts.Type.FAILURE);
+        return false;
     }
 }
 
@@ -101,15 +102,31 @@ const messageContextMenuPatch = (children: Array<React.ReactElement<any> | null>
 
     children.push(
         <Menu.MenuItem
-            id="export-message"
-            label="Export Message"
+            id="export-messages"
+            label="Export Messages"
             icon={() => (
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z" />
                 </svg>
             )}
-            action={() => exportMessage(message)}
-        />
+        >
+            <Menu.MenuItem
+                id="export-message"
+                label="This Message"
+                action={() => exportMessages([message])}
+            />
+            <Menu.MenuItem
+                id="export-multiple-messages"
+                label="Select Messages..."
+                action={() => openModal(modalProps => (
+                    <MultiMessageExportModal
+                        modalProps={modalProps}
+                        initialMessage={message}
+                        onExport={exportMessages}
+                    />
+                ))}
+            />
+        </Menu.MenuItem>
     );
 };
 
@@ -128,9 +145,9 @@ function getUsernames(contacts: ContactsList[], type: number): string[] {
 
 export default definePlugin({
     name: "ExportMessages",
-    description: "Allows you to export any message to a file",
+    description: "Allows you to export one or multiple messages to a file",
     tags: ["Chat", "Utility"],
-    authors: [EquicordDevs.veygax, EquicordDevs.dat_insanity],
+    authors: [EquicordDevs.veygax, EquicordDevs.dat_insanity, EquicordDevs.Z1xus],
     settings,
     contextMenus: {
         "message": messageContextMenuPatch
