@@ -30,8 +30,8 @@ export function MultiMessageExportModal({ modalProps, initialMessage, onExport }
         [MessageStore],
         () => {
             const cached = [...MessageStore.getMessages(initialMessage.channel_id)?._array ?? []].filter(m => !m.deleted);
-            if (cached.some(m => m.id === initialMessage.id)) return cached;
-            return [...cached, initialMessage].sort((a, b) => a.timestamp.getTime() - b.timestamp.getTime());
+            if (!cached.some(m => m.id === initialMessage.id)) cached.push(initialMessage);
+            return cached.sort((a, b) => a.timestamp.getTime() - b.timestamp.getTime());
         },
         [initialMessage]
     );
