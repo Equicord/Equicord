@@ -28,8 +28,6 @@ const Native = VencordNative.pluginHelpers.VoiceMessageTranscriber as PluginNati
 
 const ChannelListIcon = findComponentByCodeLazy("1-1-1ZM2 8a1");
 let ManaBaseRadioGroup: React.ComponentType<{ options: { name: string; value: string; }[]; value: string; onChange: (v: string) => void; }>;
-const QUANTIZED_KEYS: ("quantized")[] = ["quantized"];
-const SETTINGS_KEYS: ("embed" | "maintainHorizontal" | "quantized" | "selectedModel")[] = ["embed", "maintainHorizontal", "quantized", "selectedModel"];
 
 function formatTimestamp(seconds: number) {
     const m = Math.floor(seconds / 60);
@@ -63,7 +61,7 @@ const MODEL_SIZES: Record<string, { quantized: string; full: string; }> = {
 
 function renderModelOption(option?: { label: string; value: string; }) {
     if (!option) return null;
-    const isQuantized = settings.use(QUANTIZED_KEYS)?.quantized ?? true;
+    const isQuantized = settings.use(["quantized"])?.quantized ?? true;
     const size = MODEL_SIZES[option.value]?.[isQuantized ? "quantized" : "full"];
 
     return (
@@ -379,7 +377,7 @@ function TranscriptionModal(props: { modalProps: RenderModalProps, src: string, 
 }
 
 function VoiceMessageTranscriber({ src }: { src: string; }) {
-    const { embed, maintainHorizontal, quantized, selectedModel } = settings.use(SETTINGS_KEYS);
+    const { embed, maintainHorizontal, quantized, selectedModel } = settings.use(["embed", "maintainHorizontal", "quantized", "selectedModel"]);
     const [isOpen, setIsOpen] = useState(false);
     const [status, setStatus] = useState<string>("idle");
     const [result, setResult] = useState<TranscriptionResult | null>(null);
