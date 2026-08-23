@@ -10,12 +10,11 @@ import { definePluginSettings } from "@api/Settings";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { copyToClipboard } from "@utils/clipboard";
 import { EquicordDevs } from "@utils/constants";
-import { openModal } from "@utils/modal";
 import { showItemInFolder } from "@utils/native";
 import definePlugin, { OptionType } from "@utils/types";
 import { saveFile } from "@utils/web";
 import { Message } from "@vencord/discord-types";
-import { Menu, showToast, Toasts } from "@webpack/common";
+import { Menu, openModal, showToast, Toasts } from "@webpack/common";
 
 import { MultiMessageExportModal } from "./MultiMessageExportModal";
 import { ContactsList } from "./types";
