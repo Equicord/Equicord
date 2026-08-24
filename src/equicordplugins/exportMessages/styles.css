@@ -27,14 +27,18 @@
 }
 
 .vc-exportmessages-list {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
+    height: clamp(240px, 60vh, 600px);
+}
+
+.vc-exportmessages-list-scroller {
+    height: 100%;
 }
 
 .vc-exportmessages-row {
     display: flex;
     align-items: center;
+    height: 48px;
+    margin-bottom: 2px;
     border-radius: 8px;
     user-select: none;
 }
