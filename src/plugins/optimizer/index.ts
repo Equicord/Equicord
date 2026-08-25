@@ -1,3 +1,10 @@
+/*
+ * Optimizer
+ * Disables anims and transitions to reduce Discord's rendering load
+ * without hiding content or breaking menus/media viewers.
+ *
+ * Author: Zot
+ */
 import definePlugin from "@utils/types";
 import { FluxDispatcher } from "@webpack/common";
 
@@ -147,22 +154,22 @@ function addMessage(event: any) {
 }
 
 export default definePlugin({
-    name: "ZXTUltraPerformance",
-    description: "Discord performance mode: pauses cosmetic animations without hiding content or breaking menus/media viewer.",
-    authors: [{ name: "ZXT", id: 1531412914005606513n }],
+    name: "optimizer",
+    description: "Discord perf mode, stops anims w/out hiding content or breaking menus/media viewer.",
+    authors: [{ name: "Zot", id: 1531412914005606513n }],
 
     start() {
         styleElement = document.createElement("style");
-        styleElement.id = "zxt-ultra-performance";
+        styleElement.id = "zot-optimizer";
         styleElement.textContent = css;
         document.head.appendChild(styleElement);
 
         initHoverGating();
 
         FluxDispatcher.subscribe("MESSAGE_CREATE", addMessage);
-        (window as any).ZXTMessages = messages;
+        (window as any).ZotMessages = messages;
 
-        console.log("%c[ZXT] Ultra Performance Enabled", "color:#00ff88;font-weight:bold");
+        console.log("%c[Zot] Optimizer Enabled", "color:#00ff88;font-weight:bold");
     },
 
     stop() {
@@ -173,8 +180,8 @@ export default definePlugin({
 
         FluxDispatcher.unsubscribe("MESSAGE_CREATE", addMessage);
         messages = [];
-        delete (window as any).ZXTMessages;
+        delete (window as any).ZotMessages;
 
-        console.log("%c[ZXT] Ultra Performance Disabled", "color:#ff5555;font-weight:bold");
+        console.log("%c[Zot] Optimizer Disabled", "color:#ff5555;font-weight:bold");
     }
 });
