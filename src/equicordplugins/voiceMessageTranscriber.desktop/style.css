@@ -25,3 +25,174 @@
     max-height: 400px;
     overflow-y: auto;
 }
+
+.vc-transcription-model-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+}
+
+.vc-transcription-model-size {
+    font-size: 12px;
+    color: var(--text-muted);
+    opacity: 0.75;
+    flex-shrink: 0;
+}
+
+.vc-transcription-container:has(> .vc-transcription-embed),
+.vc-transcription-container.vc-transcription-has-embed {
+    flex-wrap: wrap !important;
+}
+
+.vc-transcription-container:has(> .vc-transcription-embed-maintain-horizontal),
+.vc-transcription-container.vc-transcription-maintain-horizontal {
+    flex-wrap: wrap !important;
+    width: fit-content !important;
+    max-width: 100% !important;
+}
+
+.vc-transcription-embed {
+    order: 9999 !important;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    flex-basis: 100%;
+    min-width: 0;
+    margin-top: 8px;
+    border-radius: 8px;
+    background: rgb(0 0 0 / 25%);
+    border: 1px solid var(--border-subtle, rgb(255 255 255 / 8%));
+    backdrop-filter: blur(4px);
+    box-sizing: border-box;
+    overflow: hidden;
+    user-select: text;
+}
+
+.vc-transcription-embed-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 10px;
+    background: rgb(0 0 0 / 15%);
+    border-bottom: 1px solid var(--border-subtle, rgb(255 255 255 / 6%));
+}
+
+.vc-transcription-embed-title {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--text-muted);
+}
+
+.vc-transcription-status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: var(--text-muted);
+    transition: background-color 0.2s ease;
+}
+
+.vc-transcription-status-dot-active {
+    background-color: var(--main-color, var(--brand-experiment, var(--brand-500, #5865f2)));
+    animation: vc-transcription-pulse 1.5s infinite;
+}
+
+.vc-transcription-status-dot-error {
+    background-color: var(--text-feedback-critical, #ed4245);
+}
+
+@keyframes vc-transcription-pulse {
+    0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.35;
+        transform: scale(0.85);
+    }
+}
+
+.vc-transcription-embed-actions {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.vc-transcription-action-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    padding: 0;
+    border: none;
+    border-radius: 4px;
+    background: transparent;
+    color: var(--interactive-icon-default, var(--text-muted));
+    cursor: pointer;
+    transition: color 0.15s ease, background-color 0.15s ease;
+}
+
+.vc-transcription-action-btn:hover {
+    color: var(--interactive-icon-hover, var(--text-normal));
+    background-color: var(--background-modifier-hover, rgb(255 255 255 / 8%));
+}
+
+.vc-transcription-action-btn-active {
+    color: var(--main-color, var(--brand-experiment, var(--brand-500, #5865f2)));
+    background-color: var(--background-modifier-selected, rgb(255 255 255 / 12%));
+}
+
+.vc-transcription-embed-body {
+    padding: 8px 12px;
+    max-height: 180px;
+    overflow-y: auto;
+}
+
+.vc-transcription-embed-text {
+    white-space: pre-wrap;
+    user-select: text;
+}
+
+.vc-transcription-embed-maintain-horizontal {
+    order: 9999 !important;
+    width: 0 !important;
+    min-width: 100% !important;
+    max-width: 100% !important;
+    flex-basis: 100% !important;
+    flex-grow: 1 !important;
+    box-sizing: border-box !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}
+
+.vc-transcription-embed-maintain-horizontal .vc-transcription-embed-header {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+.vc-transcription-embed-maintain-horizontal .vc-transcription-embed-body {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    max-height: 280px;
+    box-sizing: border-box !important;
+    overflow-wrap: anywhere;
+}
+
+.vc-transcription-embed-maintain-horizontal .vc-transcription-embed-text {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    overflow-wrap: anywhere;
+    display: block;
+}

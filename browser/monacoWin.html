@@ -11,7 +11,6 @@
         html,
         body,
         #container {
-            position: absolute;
             left: 0;
             top: 0;
             width: 100%;
@@ -19,6 +18,29 @@
             margin: 0;
             padding: 0;
             overflow: hidden;
+            background-color: #1e1e1e;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+        }
+
+        #title-bar {
+            display: none;
+        }
+
+        @media all and (display-mode: window-controls-overlay) {
+            #title-bar {
+                display: flex;
+                align-items: center;
+                padding-left: 14px;
+                font-family: Consolas, Courier New, monospace;
+                line-height: 1;
+                height: env(titlebar-area-height, 0px);
+                app-region: drag;
+                color: white;
+            }
         }
 
         header {
@@ -62,6 +84,7 @@
                 style="background: #1e1e1e; color: #ffffff; border: 1px solid transparent; padding: 5px 10px; border-radius: 4px; transition: background 0.3s, border 0.3s;">Redo</button>
         </div>
     </header>
+    <div id="title-bar">Equicord QuickCSS Editor</div>
     <div id="container"></div>
 
     <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.50.0/min/vs/loader.js"

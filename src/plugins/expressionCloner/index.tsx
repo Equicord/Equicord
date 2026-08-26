@@ -22,6 +22,7 @@ import { BaseText } from "@components/BaseText";
 import { CheckedTextInput } from "@components/CheckedTextInput";
 import { Flex } from "@components/Flex";
 import { Heading } from "@components/Heading";
+import { PlusIcon } from "@components/Icons";
 import { Paragraph } from "@components/Paragraph";
 import { Devs } from "@utils/constants";
 import { getGuildAcronym, hasGuildFeature } from "@utils/discord";
@@ -329,6 +330,7 @@ function buildMenuItem(type: "Emoji" | "Sticker", fetchData: () => Promisable<Om
             id="emote-cloner"
             key="emote-cloner"
             label={`Clone ${type}`}
+            leadingAccessory={{ type: "icon", icon: PlusIcon }}
             action={() =>
                 openModalLazy(async () => {
                     const res = await fetchData();

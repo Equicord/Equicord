@@ -23,6 +23,7 @@ import { normalize as posixNormalize, sep as posixSep } from "path/posix";
 import { BigIntLiteral, createSourceFile, Identifier, isArrayLiteralExpression, isCallExpression, isExportAssignment, isIdentifier, isObjectLiteralExpression, isPropertyAccessExpression, isPropertyAssignment, isSatisfiesExpression, isStringLiteral, isVariableStatement, NamedDeclaration, NodeArray, ObjectLiteralExpression, PropertyAssignment, ScriptTarget, StringLiteral, SyntaxKind } from "typescript";
 
 import { getPluginTarget } from "./utils.mjs";
+import { PluginTarget, PluginTargets } from "@utils/pluginTargets";
 
 export interface Dev {
     name: string;
@@ -46,7 +47,7 @@ export interface PluginData {
     commands: Command[];
     required: boolean;
     enabledByDefault: boolean;
-    target: "discordDesktop" | "vesktop" | "equibop" | "desktop" | "web" | "browser" | "dev";
+    target?: PluginTarget;
     filePath: string;
     dirName: string;
     isModified: boolean;
@@ -235,7 +236,7 @@ export async function parseFile(fileName: string) {
 
         const target = getPluginTarget(fileName);
         if (target) {
-            if (!["web", "browser", "discordDesktop", "vesktop", "equibop", "desktop", "dev"].includes(target)) throw fail(`invalid target ${target}`);
+            if (!PluginTargets.includes(target as PluginTarget)) throw fail(`invalid target ${target}`);
             data.target = target as any;
         }
 

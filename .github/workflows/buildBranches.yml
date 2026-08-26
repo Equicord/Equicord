@@ -3,8 +3,12 @@ name: Build Branches
 on:
     push:
         branches:
-            - "**"
-            - "!pr-**"
+            - main
+            - dev
+            - i18n_translation
+            - translation
+            - bun
+            - dev2
     workflow_dispatch:
         inputs:
             branch:

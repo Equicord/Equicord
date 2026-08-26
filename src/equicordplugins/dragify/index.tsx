@@ -181,7 +181,7 @@ export default definePlugin({
         {
             find: "__invalid_threadMainContent",
             replacement: {
-                match: /className:\i\.\i,onClick:\i,"aria-label":(?=.{0,100}__invalid_threadMainContent)/,
+                match: /className:\i\.\i,onClick:\i,onAuxClick:(?=.{0,100}__invalid_threadMainContent)/,
                 replace: "draggable:!0,onDragStart:e=>$self.onChannelDragStart(e),$&"
             }
         },

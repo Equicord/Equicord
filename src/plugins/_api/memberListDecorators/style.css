@@ -10,9 +10,6 @@
     margin-left: 0.25em;
 }
 
-.vc-member-list-decorators-display-names {
-    min-width: 0;
-    overflow: visible;
-    text-overflow: clip;
-    white-space: normal
+[class*="withDisplayNameStyles"] [class^="name"] {
+    flex: initial;
 }

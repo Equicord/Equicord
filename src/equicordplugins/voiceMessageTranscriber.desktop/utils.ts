@@ -112,7 +112,11 @@ export const LANGUAGES = {
 
 export const cl = classNameFactory("vc-transcription-");
 
-const getAudioContext = () => new (window.AudioContext || (window as any).webkitAudioContext)({ sampleRate: 16000 });
+const AudioContextClass = window.AudioContext || (window as Window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+const getAudioContext = () => {
+    if (!AudioContextClass) throw new Error("AudioContext is not supported in this environment");
+    return new AudioContextClass({ sampleRate: 16000 });
+};
 export async function decodeAudio(blob: Blob): Promise<Float32Array> {
     const arrayBuffer = await blob.arrayBuffer();
     const audioContext = getAudioContext();
@@ -258,18 +262,28 @@ async function runTranscription({ audio, model, quantized, language, task }) {
 }
 `;
 
+export interface TranscriptionChunk {
+    timestamp: [number, number];
+    text: string;
+}
+
+export interface TranscriptionResult {
+    text: string;
+    chunks: TranscriptionChunk[];
+}
+
 export class TranscriptionWorker {
     private worker: Worker;
     private onStatus: (status: string) => void;
-    private onComplete: (output: any) => void;
-    private onError: (error: any) => void;
-    private onPartial: (output: any) => void;
+    private onComplete: (output: TranscriptionResult) => void;
+    private onError: (error: unknown) => void;
+    private onPartial: (output: TranscriptionResult) => void;
 
     constructor(
         onStatus: (status: string) => void,
-        onComplete: (output: any) => void,
-        onError: (error: any) => void,
-        onPartial: (output: any) => void
+        onComplete: (output: TranscriptionResult) => void,
+        onError: (error: unknown) => void,
+        onPartial: (output: TranscriptionResult) => void
     ) {
         this.onStatus = onStatus;
         this.onComplete = onComplete;

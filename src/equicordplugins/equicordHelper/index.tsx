@@ -335,7 +335,7 @@ export default definePlugin({
                     replace: "$&&&!$self.isChannelMuted($1?.guildId,$1?.id)"
                 },
                 {
-                    match: /\.afkChannelId\?\[\].{0,50}.filter\((\i)=>\i\.type===\i\.\i\.VOICE/,
+                    match: /\.afkChannelId\).{0,80}.filter\((\i)=>\i\.type===\i\.\i\.VOICE/,
                     replace: "$&&&!$self.isChannelMuted($1?.guildId,$1?.channelId)"
                 },
                 {

@@ -86,8 +86,8 @@ function GameActivityToggleButton(props: UserAreaRenderProps) {
 
     const connectedAccounts = useStateFromStores([ConnectedAccountsStore], () => ConnectedAccountsStore.getAccounts());
     const spotifyAccounts = connectedAccounts.filter(account => account.type === "spotify" && !account.revoked);
-    // The update is an API request which takes a bit to update the store, so we have to use our own state to reflect the change immediately
-    const [shareSpotifyActivity, setShareSpotifyActivity] = useState(spotifyAccounts[0]?.showActivity ?? false);
+    // The update is an API request which takes a bit to update the store, so keep local overrides to reflect changes immediately
+    const [spotifyActivityOverrides, setSpotifyActivityOverrides] = useState<Record<string, boolean>>({});
 
     const buttonRef = useRef<HTMLButtonElement | null>(null);
 
@@ -103,11 +103,8 @@ function GameActivityToggleButton(props: UserAreaRenderProps) {
         onClick: () => ShowCurrentGame.updateSetting(old => !old)
     };
 
-    // Only show switch if there's exactly one Spotify account connected. Otherwise it may lead to confusion
-    if (spotifyAccounts.length !== 1)
+    if (spotifyAccounts.length === 0)
         return <Button {...buttonProps} />;
-
-    const spotifyAccount = spotifyAccounts[0];
 
     return (
         <Popout
@@ -116,15 +113,22 @@ function GameActivityToggleButton(props: UserAreaRenderProps) {
             targetElementRef={buttonRef}
             renderPopout={({ closePopout }) => (
                 <Menu.Menu navId="vc-gameActivityToggle-menu" onClose={closePopout}>
-                    <Menu.MenuCheckboxItem
-                        id="vc-toggle-spotify"
-                        label="Share Spotify Activity"
-                        checked={shareSpotifyActivity}
-                        action={async () => {
-                            ConnectedAccountActions.setShowActivity(spotifyAccount.type, spotifyAccount.id, !shareSpotifyActivity);
-                            setShareSpotifyActivity(!shareSpotifyActivity);
-                        }}
-                    />
+                    {spotifyAccounts.map(account => {
+                        const checked = spotifyActivityOverrides[account.id] ?? account.showActivity;
+
+                        return (
+                            <Menu.MenuCheckboxItem
+                                key={account.id}
+                                id={`vc-toggle-spotify-${account.id}`}
+                                label={spotifyAccounts.length === 1 ? "Share Spotify Activity" : `Share Spotify Activity (${account.name})`}
+                                checked={checked}
+                                action={() => {
+                                    ConnectedAccountActions.setShowActivity(account.type, account.id, !checked);
+                                    setSpotifyActivityOverrides(current => ({ ...current, [account.id]: !checked }));
+                                }}
+                            />
+                        );
+                    })}
                 </Menu.Menu>
             )}
         >

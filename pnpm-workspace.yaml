@@ -18,3 +18,5 @@ verifyDepsBeforeRun: prompt
 minimumReleaseAge: 7
 minimumReleaseAgeExclude:
     - "@song-spotlight/api"
+    - "@vencord/*"
+    - "@equicord/*"
