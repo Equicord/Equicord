@@ -23,6 +23,8 @@ interface GuildFolder {
 let origGetMentionCount: typeof MentionCountStore.getMentionCount | null = null;
 let patched = false;
 
+const mutedGuilds = new Set<string>();
+
 function getFolders(): GuildFolder[] {
     return (GuildFolderStore.getGuildFolders?.() ?? []).filter(
         (f: GuildFolder) => f.folderId != null && f.guildIds?.length
@@ -40,11 +42,13 @@ function getSelectedFolders(): GuildFolder[] {
 
 function getSelectedGuildIds(): string[] {
     const ids = new Set<string>();
+
     for (const folder of getSelectedFolders()) {
         for (const guildId of folder.guildIds ?? []) {
             ids.add(guildId);
         }
     }
+
     return [...ids];
 }
 
@@ -55,8 +59,13 @@ function isTargetGuild(guildId: string | undefined | null): boolean {
 
 function resolveGuildId(id: string): string | undefined {
     if (isTargetGuild(id)) return id;
+
     const channel = ChannelStore.getChannel?.(id);
-    if (channel && isTargetGuild(channel.guild_id)) return channel.guild_id;
+
+    if (channel && isTargetGuild(channel.guild_id)) {
+        return channel.guild_id;
+    }
+
     return undefined;
 }
 
@@ -66,6 +75,18 @@ function muteGuild(guildId: string) {
         suppress_everyone: true,
         suppress_roles: true,
     });
+
+    mutedGuilds.add(guildId);
+}
+
+function unmuteGuild(guildId: string) {
+    NotificationUtils.updateGuildNotificationSettings(guildId, {
+        muted: false,
+        suppress_everyone: false,
+        suppress_roles: false,
+    });
+
+    mutedGuilds.delete(guildId);
 }
 
 function markGuildRead(guildId: string) {
@@ -76,7 +97,15 @@ function markGuildRead(guildId: string) {
 }
 
 function applyToSelectedGuilds() {
-    for (const guildId of getSelectedGuildIds()) {
+    const selectedGuilds = new Set(getSelectedGuildIds());
+
+    for (const guildId of [...mutedGuilds]) {
+        if (!selectedGuilds.has(guildId)) {
+            unmuteGuild(guildId);
+        }
+    }
+
+    for (const guildId of selectedGuilds) {
         muteGuild(guildId);
         markGuildRead(guildId);
     }
@@ -87,16 +116,25 @@ function patchMentionCount() {
     patched = true;
 
     origGetMentionCount = MentionCountStore.getMentionCount;
-    MentionCountStore.getMentionCount = function (id: string, ...rest: any[]) {
+
+    MentionCountStore.getMentionCount = function (
+        id: string,
+        ...rest: any[]
+    ) {
         if (resolveGuildId(id)) return 0;
+
         return origGetMentionCount!.call(this, id, ...rest);
     };
 }
 
 function unpatchMentionCount() {
     if (!patched) return;
+
     patched = false;
-    if (origGetMentionCount) MentionCountStore.getMentionCount = origGetMentionCount;
+
+    if (origGetMentionCount) {
+        MentionCountStore.getMentionCount = origGetMentionCount;
+    }
 }
 
 const boxCSS = `
@@ -134,15 +172,22 @@ const boxCSS = `
 
 function FolderSelectComponent() {
     const [folders, setFolders] = useState(getFolders());
-    const [selected, setSelected] = useState<string[]>(settings.store.folders ?? []);
+    const [selected, setSelected] = useState<string[]>(
+        settings.store.folders ?? []
+    );
 
     return (
         <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
             <style>{boxCSS}</style>
-            <div className="silentfolder-list" onFocus={() => setFolders(getFolders())}>
+
+            <div
+                className="silentfolder-list"
+                onFocus={() => setFolders(getFolders())}
+            >
                 {folders.map(folder => {
                     const id = String(folder.folderId);
                     const checked = selected.includes(id);
+
                     return (
                         <label className="silentfolder-row" key={id}>
                             <input
@@ -152,18 +197,22 @@ function FolderSelectComponent() {
                                     const next = checked
                                         ? selected.filter(f => f !== id)
                                         : [...selected, id];
+
                                     setSelected(next);
                                     settings.store.folders = next;
                                     applyToSelectedGuilds();
                                 }}
                             />
+
                             <span className="silentfolder-label">
-                                {folder.folderName || `Folder ${folder.folderId}`}
+                                {folder.folderName ||
+                                    `Folder ${folder.folderId}`}
                             </span>
                         </label>
                     );
                 })}
             </div>
+
             <div
                 style={{
                     fontSize: "12px",
@@ -171,7 +220,8 @@ function FolderSelectComponent() {
                     lineHeight: "16px",
                 }}
             >
-                It is recommended to have a name for every folder to make the process simpler.
+                It is recommended to have a name for every folder to make the
+                process simpler.
             </div>
         </div>
     );
@@ -201,6 +251,10 @@ export default definePlugin({
         patchMentionCount();
     },
     stop() {
+        for (const guildId of [...mutedGuilds]) {
+            unmuteGuild(guildId);
+        }
+
         unpatchMentionCount();
     },
     flux: {
@@ -210,10 +264,14 @@ export default definePlugin({
         GUILD_CREATE() {
             applyToSelectedGuilds();
         },
-        GUILD_DELETE() {
+        GUILD_DELETE({ guildId }: { guildId?: string }) {
+            if (guildId) {
+                mutedGuilds.delete(guildId);
+            }
+
             applyToSelectedGuilds();
         },
-        MESSAGE_CREATE({ guildId }: { guildId?: string; }) {
+        MESSAGE_CREATE({ guildId }: { guildId?: string }) {
             if (isTargetGuild(guildId)) {
                 markGuildRead(guildId!);
             }
