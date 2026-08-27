@@ -111,7 +111,7 @@
             "oscilloscopeColor": "Culoare pentru osciloscop",
             "oscilloscopeSolidColor": "Utilizați culoare solidă pentru osciloscop",
             "spectrograph": "Activați vizualizatorul spectrograf",
-            "spectrographColor": "Culoare pentru spectrograf",
+            "spectrographColor": "Culoare pentru spectrograf (R, G, B sau #hex)",
             "spectrographSolidColor": "Utilizați culoare solidă pentru spectrograf"
         },
         "toasts": {
@@ -146,7 +146,7 @@
                 "userOption": "utilizator specific pentru a încerca și reîmprospăta"
             }
         },
-        "description": "Îmbunătățește sistemul de comandă cu diverse îmbunătățiri.",
+        "description": "Reîmprospătează comenziile aplicaților specifice local.",
         "settings": {
             "allowNewlinesInCommands": "Permite linii noi în intrările de comandă (CTRL + Shift + Enter)",
             "autoFillArguments": "Completați automat comanda cu toate argumentele în loc de doar cu cele necesare"
@@ -321,6 +321,7 @@
             "clipsLink": "Schimbați opțiunile FPS și durată în setările Clips!",
             "enableAdvancedSignals": "Activați semnalele de clipare avansate (declanșatoare de clipare automată)",
             "enableScreenshotKeybind": "Activați funcția de combinare a tastelor capturii de ecran",
+            "enableSpeakingIndicators": "Activează indicatorii de vorbire",
             "enableVoiceOnlyClips": "Activați clipurile doar vocale (audio fără video)",
             "ignorePlatformRestriction": "Permite tăierea restricționată la platformă (poate cauza erori de salvare)",
             "richPresenceTagging": "Când ar trebui să fie etichetate clipurile cu prezența bogată actuală?",
@@ -334,6 +335,8 @@
     "commandPalette": {
         "description": "Rulați rapid acțiuni printr-o paletă de comenzi care poate fi căutată",
         "settings": {
+            "closeAfterExecute": "Închide paleta dupa executarea comenzii.",
+            "compactStartEnabled": "Deschide paleta întai în modul compact.",
             "customCommands": "Gestionați intrările din paleta de comenzi personalizate",
             "enableTagFilter": "Afișați bara de filtrare a etichetelor",
             "hotkey": "Tasta rapidă folosită pentru a deschide paleta de comenzi",
@@ -551,6 +554,11 @@
             "reset": "Resetează"
         }
     },
+    "equicordDonor": {
+        "description": "Această insignă este specială pentru donatorii Equicord (Nu cei Vencord)",
+        "description2": "Consideră să sustini dezvoltarea Equicord devenind donator. Ar însemna foarte mult!!",
+        "title": "Donator Equicord"
+    },
     "equicordHelper": {
         "alerts": {
             "equicordSupport": "[[PH0]]] Asistență",
@@ -598,6 +606,9 @@
             "themes": "Teme",
             "tooltip": "[[PH0]]] Caseta de instrumente"
         }
+    },
+    "equicordTranslator": {
+        "title": "Translator Equicord"
     },
     "equissant": {
         "description": "Croissant fiecare cantitate specificată de clicuri :troley:",
@@ -889,6 +900,7 @@
     },
     "githubRepos": {
         "description": "Afișează depozitele publice GitHub ale unui utilizator în profilul său",
+        "githubRepos": "Depozite GitHub",
         "settings": {
             "showInMiniProfile": "Afișați interfața completă în mini-profil în loc de doar un buton",
             "showLanguage": "Afișați limba depozitului",
@@ -976,7 +988,7 @@
         "description": "Schimbă butonul de pornire într-un indicator de tastare dacă cineva din dms-ul tău scrie"
     },
     "hopOn": {
-        "description": "Hop on Fortnite sau Hop on bloons :3",
+        "description": "Hop on! Se deschide un URL configurabil când un mesaj se potrivește cu regex-ul custom din canalul respectiv.",
         "settings": {
             "regex": "Regex pentru a se declanșa",
             "url": "[[PH0]]] pentru a deschide"
@@ -1315,6 +1327,10 @@
             "scanQrCode": "Scanați codul QR"
         }
     },
+    "mainWindowFrameless": {
+        "description": "Elimină cadrul nativ al ferestrei pentru un aspect mai curat. Poți totuși muta fereastra trăgând de zona barei de titlu.",
+        "title": "Dezactivează fereastra Main Frame"
+    },
     "mediaPlaybackSpeed": {
         "description": "Controlați viteza de redare media pentru mesaje vocale, videoclipuri și atașamente audio",
         "settings": {
@@ -1496,7 +1512,7 @@
         }
     },
     "moyai": {
-        "description": "Redați efectul sonor moyai când este folosit emoji 🗿",
+        "description": "Se aude sunetul 🗿când emoji-ul moyai este trimis, folosit pentru reactie, sau folosit ca un effect sonor in canal.",
         "settings": {
             "ignoreBlocked": "Ignorați mesajele de la utilizatorii blocați",
             "ignoreBots": "Ignorați mesajele de la roboți",
@@ -2091,7 +2107,10 @@
         "description": "Un plugin care vă ajută să răspundeți la întrebări trivia folosind AI.",
         "settings": {
             "apiKey": "[[PH0]]] Tasta.",
-            "autoRespond": "Răspunde automat la mesaje la primirea unui răspuns.",
+            "autoReply": "Raspuns automat",
+            "autoRespond": "Cum ar trebui raspunsurile sa fie tratate?",
+            "bot": "Clyde",
+            "chatbar": "Inlocuiește text-ul Chatbar",
             "endpoint": "Endpoint AI compatibil cu OpenAI.",
             "maxTokens": "Numărul maxim de jetoane în răspuns.",
             "model": "Model AI de utilizat.",
