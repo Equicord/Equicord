@@ -38,6 +38,8 @@ let active: ActivePlayback | undefined;
 let lastCacheSync = 0;
 let voicePlaybackSpeed = 1;
 
+const NATIVE_END_TOLERANCE = 0.05;
+
 function playbackPosition(current: ActivePlayback) {
     if (current.paused) return current.position;
 
@@ -114,7 +116,10 @@ function createBackgroundPlayback(src: string, cacheKey: string | undefined, pos
     const { duration } = player;
     if (duration) {
         void duration.then(value => {
-            if (active === current && Number.isFinite(value)) current.duration = value;
+            if (active !== current || !Number.isFinite(value)) return;
+
+            current.duration = value;
+            if (current.paused && value > 0 && current.position >= value - NATIVE_END_TOLERANCE) stopPlayback();
         }).catch(() => {
             if (active === current) stopPlayback();
         });
@@ -150,7 +155,13 @@ function pauseFromNative(src: string, position: number) {
     const current = active;
     if (!current || current.src !== src || !current.attached) return;
 
-    updatePosition(current, position);
+    const latestPosition = Math.max(position, playbackPosition(current));
+    if (current.duration > 0 && latestPosition >= current.duration - NATIVE_END_TOLERANCE) {
+        stopPlayback();
+        return;
+    }
+
+    updatePosition(current, latestPosition);
     current.paused = true;
     current.player.pause();
     syncPlaybackCache(current, true);
