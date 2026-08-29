@@ -14,7 +14,7 @@ import { classNameFactory } from "@utils/css";
 import { Logger } from "@utils/Logger";
 import definePlugin from "@utils/types";
 import { findByPropsLazy } from "@webpack";
-import { FluxDispatcher, MessageStore, SelectedChannelStore, UserStore } from "@webpack/common";
+import { FluxDispatcher, MessageActions, MessageStore, SelectedChannelStore, UserStore } from "@webpack/common";
 
 import { OpenLogsButton } from "./components/LogsButton";
 import { openLogModal } from "./components/LogsModal";
@@ -23,7 +23,7 @@ import * as LoggedMessageManager from "./LoggedMessageManager";
 import { addMessage } from "./LoggedMessageManager";
 import { settings } from "./settings";
 import { FetchMessagesResponse, LoadMessagePayload, LoggedMessage, LoggedMessageJSON, MessageCreatePayload, MessageDeleteBulkPayload, MessageDeletePayload, MessageUpdatePayload } from "./types";
-import { cleanUpCachedMessage, cleanupUserObject, getNative, isGhostPinged, mapTimestamp, messageJsonToMessageClass, reAddDeletedMessages } from "./utils";
+import { cleanUpCachedMessage, cleanupUserObject, getNative, isGhostPinged, mapTimestamp, messageJsonToMessageClass, pendingAutoDeleteNonces, reAddDeletedMessages } from "./utils";
 import { removeContextMenuBindings, setupContextMenuPatches } from "./utils/contextMenu";
 import { shouldIgnore } from "./utils/index";
 import { LimitedMap } from "./utils/LimitedMap";
@@ -180,6 +180,16 @@ async function messageUpdateHandler(payload: MessageUpdatePayload) {
 }
 
 function messageCreateHandler(payload: MessageCreatePayload) {
+    if (
+        !payload.optimistic &&
+        payload.message?.nonce &&
+        pendingAutoDeleteNonces.has(String(payload.message.nonce))
+    ) {
+        const nonce = String(payload.message.nonce);
+        pendingAutoDeleteNonces.delete(nonce);
+        MessageActions.deleteMessage(payload.channelId ?? payload.message.channel_id, payload.message.id);
+    }
+
     // we do this here because cache is limited and to save memory
     if (!settings.store.cacheMessagesFromServers && payload.guildId != null) {
         const ids = [payload.channelId, payload.message?.author?.id, payload.guildId];

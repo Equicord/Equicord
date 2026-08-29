@@ -174,3 +174,13 @@ export function getNative(): PluginNative<typeof import("../native")> {
         .find(m => m.messageLoggerEnhancedUniqueIdThingyIdkMan) as PluginNative<typeof import("../native")>;
 
 }
+
+export const pendingAutoDeleteNonces = new Set<string>();
+
+export function queueAutoDeleteNonce(nonce: string) {
+    pendingAutoDeleteNonces.add(String(nonce));
+    setTimeout(() => {
+        pendingAutoDeleteNonces.delete(String(nonce));
+    }, 30000);
+}
+

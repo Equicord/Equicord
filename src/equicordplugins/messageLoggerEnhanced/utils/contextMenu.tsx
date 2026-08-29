@@ -10,7 +10,7 @@ import { FluxDispatcher, Menu, MessageActions, React, SortedGuildStore, Toasts, 
 import { openLogModal } from "../components/LogsModal";
 import { deleteMessageIDB } from "../db";
 import { settings } from "../index";
-import { addToXAndRemoveFromOpposite, ListType, removeFromX } from ".";
+import { addToXAndRemoveFromOpposite, ListType, queueAutoDeleteNonce, removeFromX } from ".";
 
 const idFunctions = {
     Folder: props =>
@@ -141,6 +141,9 @@ export const contextMenuPath: NavContextMenuPatchCallback = (children, props) =>
 
                                 action={async () => {
                                     await MessageActions.deleteMessage(props.message.channel_id, props.message.id);
+                                    if (settings.store.autoDeleteHideMessageFromMessageLoggersDeletedMessage) {
+                                        queueAutoDeleteNonce(props.message.id);
+                                    }
                                     MessageActions._sendMessage(props.message.channel_id, {
                                         "content": settings.store.hideMessageFromMessageLoggersDeletedMessage,
                                         "tts": false,
