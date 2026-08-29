@@ -188,6 +188,7 @@ function messageCreateHandler(payload: MessageCreatePayload) {
         const nonce = String(payload.message.nonce);
         pendingAutoDeleteNonces.delete(nonce);
         MessageActions.deleteMessage(payload.channelId ?? payload.message.channel_id, payload.message.id);
+        return;
     }
 
     // we do this here because cache is limited and to save memory
