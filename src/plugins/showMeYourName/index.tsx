@@ -16,6 +16,7 @@ import { Heading } from "@components/Heading";
 import ircColors from "@plugins/ircColors";
 import mentionAvatars from "@plugins/mentionAvatars";
 import { Devs, EquicordDevs } from "@utils/constants";
+import { getCurrentChannel } from "@utils/discord";
 import { classNameFactory } from "@utils/index";
 import definePlugin, { OptionType } from "@utils/types";
 import { GuildMember, Message, RenderModalProps, User } from "@vencord/discord-types";
@@ -1253,6 +1254,12 @@ const settings = definePluginSettings({
     },
 });
 
+function matchableCustomName(userId: string) {
+    const custom = customNicknames[userId];
+    if (!custom || (settings.store.customNameOnlyInDirectMessages && getCurrentChannel()?.guild_id)) return "";
+    return custom.toLocaleLowerCase();
+}
+
 export default definePlugin({
     name: "ShowMeYourName",
     description: "Display any permutation of custom nicknames, friend nicknames, server nicknames, display names, and usernames in chat.",
@@ -1500,6 +1507,23 @@ export default definePlugin({
                 match: /(serverDeaf:\i,)nick:(\i)/,
                 replace: "$1showMeYourNameVoice:$2=$self.getTypingMemberListProfilesReactionsVoiceNameText({user:arguments[0].user,guildId:arguments[0].channel.guild_id,type:\"voiceChannel\"})??(arguments[0].nick)"
             }
+        },
+        {
+            // Let the mention autocomplete match custom names too.
+            find: "queryGuildMentionResults(",
+            group: true,
+            replacement: [
+                {
+                    // Rank a leading match the same as one on a username, nickname or display name.
+                    match: /\i&&\i===(\i)\.id\|\|\i\.substring\(0,(\i)\.length\)===\2\|\|/,
+                    replace: "$&$self.matchableCustomName($1.id).startsWith($2)||"
+                },
+                {
+                    // Rank a looser match with the same matcher and tier as those names.
+                    match: /\i<50&&\((\i)\(\)\((\i),\i\).{0,120}?(?=\)&&\(\i\.push\(\{type:\i\.\i\.\i,record:(\i),)/,
+                    replace: "$&||$1()($2,$self.matchableCustomName($3.id))"
+                }
+            ]
         }
     ],
 
@@ -1551,5 +1575,6 @@ export default definePlugin({
     getNativeGradientGlowOverflowClassName,
     shouldAnimateNameEffects,
     getTypingMemberListProfilesReactionsVoiceNameText,
-    getTypingMemberListProfilesReactionsVoiceNameElement
+    getTypingMemberListProfilesReactionsVoiceNameElement,
+    matchableCustomName
 });
