@@ -54,7 +54,7 @@
     outline: 2px solid var(--focus-primary);
 }
 
-/* only the action that follows the tabs gets pushed right; later ones sit beside it */
+/* pushes the first action right; later ones sit beside it */
 .bie-tab + .bie-action {
     margin-left: auto;
 }
@@ -78,7 +78,6 @@
     gap: 8px;
 }
 
-/* the bar keeps its space so nothing shifts, and only shows itself on hover */
 .bie-strip::-webkit-scrollbar {
     height: 6px;
 }

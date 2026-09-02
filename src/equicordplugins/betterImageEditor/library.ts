@@ -8,12 +8,11 @@ import * as DataStore from "@api/DataStore";
 
 const store = DataStore.createStore("BetterImageEditor", "library");
 
-// Discord's own uploadType: AVATAR, BANNER, GUILD_ICON, GUILD_BANNER and the rest
+// Discord's uploadType, such as AVATAR or GUILD_BANNER
 export type Kind = string;
 export type Group = "original" | "cropped";
 
-// the shape of the cropper's own initialTransform prop. offsetRatio is a fraction of the
-// drag range rather than pixels, so it replays at any image size.
+// the cropper's initialTransform prop. offsetRatio is a fraction of the drag range, not pixels
 export interface CropState {
     zoomRatio: number;
     imageRotation: number;
@@ -40,8 +39,7 @@ const thumbKey = (id: string) => `thumb:${id}`;
 
 const THUMB_MAX = 160;
 
-// entries predating the cropped shelf carry no group and are all originals; ones predating
-// the wider upload types are named in lower case. crops kept in pixels cannot be replayed.
+// older entries lack a group, use lower-case kinds, or hold crops in pixels
 const LEGACY_KINDS: Record<string, string> = { avatar: "AVATAR", banner: "BANNER" };
 
 export const readIndex = () => DataStore.get<Entry[]>(INDEX, store)
@@ -69,7 +67,6 @@ const fromDataUrl = (url: string) => fetch(url).then(r => r.blob());
 
 const newId = () => `${Date.now().toString(36)}${Math.random().toString(36).slice(2, 8)}`;
 
-// keeps the source aspect so the strip can crop it to a circle or a wide tile in CSS
 function thumbnail(source: Blob) {
     return new Promise<Blob>((resolve, reject) => {
         const url = URL.createObjectURL(source);
@@ -103,8 +100,7 @@ export async function add(file: File, kind: Kind, group: Group, limit: number, f
     const known = stored.find(entry => sameShelf(entry) && entry.sig === sig);
     if (known) return known.id;
 
-    // one cropped copy per source picture. a pinned copy is kept, since pinning is what you
-    // do to a framing you want back later.
+    // one cropped copy per source, unless the old one is pinned
     const replaced = from ? stored.filter(entry => sameShelf(entry) && entry.from === from && !entry.pinned) : [];
     const entries = stored.filter(entry => !replaced.includes(entry));
 
@@ -169,7 +165,6 @@ export async function importAll(json: string, limit: number) {
         added++;
     }
 
-    // same rule add() uses: newest kept, oldest off the end of each shelf
     entries.sort((a, b) => b.added - a.added);
 
     const counts = new Map<string, number>();
@@ -204,7 +199,6 @@ export async function forgetCrops() {
     return framed.length;
 }
 
-// the shelf is most-recently-used: picking a picture sends it to the front
 export const byRecency = (entries: Entry[]) =>
     [...entries].sort((a, b) => (b.used ?? b.added) - (a.used ?? a.added));
 
@@ -226,8 +220,7 @@ export async function togglePin(id: string) {
     await writeIndex(entries);
 }
 
-// which pictures you have actually worn, newest first. recorded when Discord confirms the
-// profile saved, not when one is handed to the editor.
+// recorded when Discord confirms the save, not when a picture is handed to the editor
 const historyKey = (kind: Kind) => `history:${kind}`;
 
 export async function recordApplied(kind: Kind, id: string) {

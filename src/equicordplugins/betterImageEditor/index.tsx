@@ -103,14 +103,11 @@ const settings = definePluginSettings({
     }
 });
 
-// handoff marks a picture the picker already dealt with, so the editor does not file a
-// second copy of it. handedOver is what a confirmed profile save should be credited to.
 let handoff: { id: string | null; transform: CropState | null; } | null = null;
 let handedOver: { id: string; kind: Kind; } | null = null;
 
 const kindOf = (uploadType: string): Kind => uploadType || "AVATAR";
 
-// the cropper masks these to a square; everything else it crops wide
 const SQUARE = new Set(["AVATAR", "AVATAR_DECORATION", "GUILD_ICON", "PERSONAL_WIDGET_FIELD"]);
 
 const KIND_NAMES: Record<string, string> = {
@@ -246,8 +243,7 @@ function useForget(bump: () => void) {
     }, [bump]);
 }
 
-// the picker stays mounted under the cropper, so both surfaces listen at once. the
-// cropper is always the one on top, and takes the paste.
+// the picker stays mounted under the cropper, so only the topmost surface takes a paste
 let editorsOpen = 0;
 
 function usePasteAndDrop(accept: (file: File) => void, active: () => boolean) {
@@ -404,8 +400,7 @@ function PickerShelf({ kind, open, complete }: {
     const { group, setGroup, entries, thumbs, worn, bump } = useLibrary(kind);
     const onForget = useForget(bump);
 
-    // a data URI, not an object URL: Discord only ever hands the cropper the former, and an
-    // object URL dies with whichever surface made it
+    // a data URI, never an object URL: that dies with the surface that made it
     const hand = useCallback(async (id: string | null, file: File, crop: CropState | null) => {
         handoff = { id, transform: crop };
         if (id) handedOver = { id, kind };
@@ -428,7 +423,6 @@ function PickerShelf({ kind, open, complete }: {
         await touch(entry.id);
         bump();
 
-        // already framed, so it goes straight to the profile editor without the cropper
         if (entry.group === "cropped") {
             handedOver = { id: entry.id, kind };
             return complete({ imageUri: await toDataUrl(blob), file });
@@ -496,7 +490,6 @@ function EditorShelf({ Original, ownProps }: { Original: React.ComponentType<any
         if (captured.current) return;
         captured.current = true;
 
-        // the picker shelf already dealt with this one
         if (handoff) {
             incomingId.current = handoff.id;
             handoff = null;
@@ -518,8 +511,7 @@ function EditorShelf({ Original, ownProps }: { Original: React.ComponentType<any
         return () => { editorsOpen--; };
     }, []);
 
-    // the cropper already nudges by 4px on an arrow, 40 with shift, but the handler lives on
-    // two hidden range inputs that only Tab reaches. a click on the picture hands them focus.
+    // Discord's arrow-key nudging only listens on hidden inputs that Tab reaches, not a click
     useEffect(() => {
         const container = document.querySelector('[class*="editingContainer"]')?.parentElement;
         if (!container) return;
@@ -659,7 +651,7 @@ export default definePlugin({
             }
         },
         {
-            // grouped on purpose: rendering bieShelf without destructuring it throws
+            // grouped: rendering bieShelf without destructuring it throws
             find: '"SET_IMAGE_ZOOM_RATIO"',
             group: true,
             replacement: [
