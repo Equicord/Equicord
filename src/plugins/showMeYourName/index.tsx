@@ -352,7 +352,7 @@ interface messageProps {
 
 interface memberListProfileReactionProps {
     user: User | null | undefined;
-    type: "typingIndicator" | "membersList" | "profilesPopout" | "profilesTooltip" | "reactionsTooltip" | "reactionsPopout" | "voiceChannel";
+    type: "typingIndicator" | "membersList" | "profilesPopout" | "profilesTooltip" | "reactionsTooltip" | "reactionsPopout" | "voiceChannel" | "searchFilter";
     guildId?: string;
     tags?: any;
     isHovered?: boolean;
@@ -375,7 +375,7 @@ function getTypingMemberListProfilesReactionsVoiceName(
     const guildId = props.guildId || props.tags?.props?.displayProfile?.guildId || null;
     const member = guildId && user ? GuildMemberStore.getMember(guildId, user.id) : null;
     const author = user && member ? { ...user, ...member } : user || member || null;
-    const shouldHookless = ["typingIndicator", "reactionsTooltip", "profilesTooltip"].includes(type);
+    const shouldHookless = ["typingIndicator", "reactionsTooltip", "profilesTooltip", "searchFilter"].includes(type);
     return renderUsername(author, null, null, type, "", shouldHookless, !!guildId, undefined, undefined, props.isHovered);
 }
 
@@ -385,6 +385,10 @@ function getTypingMemberListProfilesReactionsVoiceNameText(props: memberListProf
 
 function getTypingMemberListProfilesReactionsVoiceNameElement(props: memberListProfileReactionProps): JSX.Element | null {
     return getTypingMemberListProfilesReactionsVoiceName(props)[1];
+}
+
+function getSearchFilterName(props: { user: User; guildId: string | null; }, fallback: string): string {
+    return getTypingMemberListProfilesReactionsVoiceNameText({ user: props.user, guildId: props.guildId ?? undefined, type: "searchFilter" }) ?? fallback;
 }
 
 function getActiveNowNameElement({ user, guildId, isHovered }: activeNowNameProps): JSX.Element | string | null {
@@ -576,7 +580,7 @@ function renderUsername(
     author: User | GuildMember | null,
     channelId: string | null,
     messageId: string | null,
-    type: "messages" | "replies" | "typingIndicator" | "mentions" | "membersList" | "profilesPopout" | "profilesTooltip" | "reactionsTooltip" | "reactionsPopout" | "voiceChannel",
+    type: "messages" | "replies" | "typingIndicator" | "mentions" | "membersList" | "profilesPopout" | "profilesTooltip" | "reactionsTooltip" | "reactionsPopout" | "voiceChannel" | "searchFilter",
     mentionSymbol: string,
     hookless: boolean,
     inGuild: boolean,
@@ -1509,6 +1513,14 @@ export default definePlugin({
             }
         },
         {
+            // Replace names in the from: and mentions: search filter suggestions.
+            find: "hasOtherSearchFiltersVisible",
+            replacement: {
+                match: /(\i)=(\i\.\i\.useName\((\i),\i,(\i)\))/,
+                replace: "$1=$self.getSearchFilterName({user:$4,guildId:$3},$2)"
+            }
+        },
+        {
             // Let the mention autocomplete match custom names too.
             find: "queryGuildMentionResults(",
             group: true,
@@ -1576,5 +1588,6 @@ export default definePlugin({
     shouldAnimateNameEffects,
     getTypingMemberListProfilesReactionsVoiceNameText,
     getTypingMemberListProfilesReactionsVoiceNameElement,
+    getSearchFilterName,
     matchableCustomName
 });
