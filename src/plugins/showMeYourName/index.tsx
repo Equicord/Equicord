@@ -1269,16 +1269,18 @@ interface SearchUserResult {
     user: User;
 }
 
-function addCustomNameResults(results: SearchUserResult[], props: { currentToken?: { getFullMatch(): string; } | null; }) {
+function addCustomNameResults(results: SearchUserResult[], props: { currentToken?: { getFullMatch(): string | undefined; } | null; }) {
     const query = props.currentToken?.getFullMatch()?.trim().toLocaleLowerCase();
     if (!query) return results;
 
     const guildId = getCurrentChannel()?.guild_id;
+    if (!guildId) return results;
+
     const extra: SearchUserResult[] = [];
     for (const id in customNicknames) {
         if (!matchableCustomName(id).includes(query)) continue;
-        if (guildId && !GuildMemberStore.getMember(guildId, id)) continue;
-        if (results.some(r => r.user?.id === id)) continue;
+        if (!GuildMemberStore.getMember(guildId, id)) continue;
+        if (results.some(r => r.user.id === id)) continue;
         const user = UserStore.getUser(id);
         if (user) extra.push({ text: UsernameUtils.getUserTag(user), user });
     }
