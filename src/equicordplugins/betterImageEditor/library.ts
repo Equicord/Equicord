@@ -174,22 +174,33 @@ export function importAll(json: string, limit: number) {
         const renamed = new Map<string, string>();
         const imported: Entry[] = [];
 
-        for (const { file, thumb, ...picture } of parsed.pictures) {
-            if (typeof picture.name !== "string" || typeof picture.added !== "number" || !isDataUrl(file) || !isDataUrl(thumb)) continue;
+        try {
+            for (const { file, thumb, ...picture } of parsed.pictures) {
+                if (typeof picture.id !== "string" || typeof picture.name !== "string" || typeof picture.kind !== "string"
+                    || typeof picture.sig !== "string" || typeof picture.added !== "number"
+                    || (picture.group !== "original" && picture.group !== "cropped")
+                    || !isDataUrl(file) || !isDataUrl(thumb)) continue;
 
-            const shelf = `${picture.kind}:${picture.group}:${picture.sig}`;
-            const existing = known.get(shelf);
-            if (existing) {
-                renamed.set(picture.id, existing);
-                continue;
+                const shelf = `${picture.kind}:${picture.group}:${picture.sig}`;
+                const existing = known.get(shelf);
+                if (existing) {
+                    renamed.set(picture.id, existing);
+                    continue;
+                }
+
+                const decoded = await Promise.all([fromDataUrl(file), fromDataUrl(thumb)]).catch(() => null);
+                if (!decoded) continue;
+
+                const id = nanoid();
+                known.set(shelf, id);
+                renamed.set(picture.id, id);
+                await DataStore.setMany([[fileKey(id), decoded[0]], [thumbKey(id), decoded[1]]], store);
+
+                imported.push({ ...picture, id });
             }
-
-            const id = nanoid();
-            known.set(shelf, id);
-            renamed.set(picture.id, id);
-            await DataStore.setMany([[fileKey(id), await fromDataUrl(file)], [thumbKey(id), await fromDataUrl(thumb)]], store);
-
-            imported.push({ ...picture, id });
+        } catch (err) {
+            await forgetBlobs(imported.map(entry => entry.id));
+            throw err;
         }
 
         const local = new Set(entries.map(entry => entry.id));
@@ -203,7 +214,7 @@ export function importAll(json: string, limit: number) {
         await writeIndex(kept);
         await forgetBlobs(dropped.map(entry => entry.id));
 
-        return imported.length;
+        return kept.filter(entry => imported.includes(entry)).length;
     });
 }
 
