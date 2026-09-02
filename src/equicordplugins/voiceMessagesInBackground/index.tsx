@@ -11,7 +11,7 @@ import { EquicordDevs } from "@utils/constants";
 import definePlugin from "@utils/types";
 
 import { handlePlaybackRateUpdate, stopPlayback, useBackgroundPlayback } from "./playback";
-import { VoiceMessageIcon,VoiceMessagesInBackgroundPlayer } from "./player";
+import { VoiceMessageIcon, VoiceMessagesInBackgroundPlayer } from "./player";
 
 interface PlaybackRateUpdate {
     playbackType: string;
@@ -30,8 +30,8 @@ export default definePlugin({
     patches: [{
         find: "#{intl::PAUSE_VOICE_MESSAGE_A11Y_LABEL}",
         replacement: {
-            match: /(\{src:(\i).{0,200}?playbackCacheKey:(\i)\}=\i,\i=\i\.useRef\(null\).{0,300}?\[(\i),(\i)\]=\i\.useState\(\i\),.{0,120}?)(\[\i,\i\]=)(\i\.useState\(!1\))(?=,\[\i,\i\]=\i\.useState\(!1\),\[\i,\i\]=\i\.useState\(!1\),\[\i,\i\]=\i\.useState\("none"\))/,
-            replace: "$1$6$self.useBackgroundPlayback($7,$4,$2,$3,$5)"
+            match: /(?<=\i>0\),\[(\i),(\i)\].{0,50}useState\(!1\).{0,10})(\[\i,\i\]=)(\i\.useState\(!1\))(?=.{0,100}\("none"\))/,
+            replace: "$3$self.useBackgroundPlayback($4,$1,arguments[0]?.src,arguments[0]?.playbackCacheKey,$2)"
         }
     }],
 
