@@ -12,10 +12,10 @@ import { EquicordDevs } from "@utils/constants";
 import { Logger } from "@utils/Logger";
 import definePlugin, { OptionType } from "@utils/types";
 import { chooseFile, saveFile } from "@utils/web";
-import { Alerts, Button, React, Toasts, useCallback, useEffect, useRef, useState } from "@webpack/common";
+import { Alerts, Button, React, showToast, Toasts, useCallback, useEffect, useRef, useState } from "@webpack/common";
 
 import { cl, croppedLabel, Shelf } from "./components/Shelf";
-import { add, byRecency, clear, CropState, currentApplied, Entry, exportAll, forget, forgetCrops, getFile, getThumbs, Group, importAll, Kind, previousApplied, readIndex, recordApplied, saveCrop, toDataUrl, togglePin, touch } from "./library";
+import { add, clear, CropState, currentApplied, Entry, exportAll, forget, forgetCrops, getFile, getThumbs, Group, importAll, Kind, previousApplied, readIndex, recordApplied, saveCrop, toDataUrl, togglePin, touch } from "./library";
 
 interface PickResult {
     imageUri: string;
@@ -23,7 +23,19 @@ interface PickResult {
 }
 
 interface CropResult extends PickResult {
+    staticImageUri?: string;
     transform: CropState;
+}
+
+interface PickerProps {
+    allowRecentAvatarsSelection?: boolean;
+    maxFileSizeBytes?: number;
+}
+
+interface PendingChanges {
+    guildId?: string;
+    pendingAvatar?: { imageUri: string; } | null;
+    pendingBanner?: { imageUri: string; } | null;
 }
 
 interface EditorProps {
@@ -48,19 +60,19 @@ const logger = new Logger("BetterImageEditor");
 const settings = definePluginSettings({
     librarySize: {
         type: OptionType.SLIDER,
-        description: "How many pictures to keep on each shelf",
+        description: "How many pictures to keep on each shelf.",
         markers: [6, 12, 24, 48],
         default: 24,
         stickToMarkers: true
     },
     rememberCrop: {
         type: OptionType.BOOLEAN,
-        description: "Restore the zoom and position you last used for a picture",
+        description: "Restore the zoom and position you last used for a picture.",
         default: true
     },
     forgetFraming: {
         type: OptionType.COMPONENT,
-        description: "Drop every remembered crop and open each picture the way Discord would",
+        description: "Drop every remembered crop and open each picture the way Discord would.",
         component: () => (
             <Button
                 color={Button.Colors.PRIMARY}
@@ -71,10 +83,10 @@ const settings = definePluginSettings({
                     confirmText: "Forget",
                     cancelText: "Cancel",
                     onConfirm: () => forgetCrops()
-                        .then(count => Toasts.show(Toasts.create(
+                        .then(count => showToast(
                             count ? `Forgot the framing on ${count} picture${count === 1 ? "" : "s"}` : "Nothing was framed",
                             Toasts.Type.SUCCESS
-                        )))
+                        ))
                         .catch(err => logger.error("could not forget the remembered crops", err))
                 })}
             >
@@ -84,17 +96,17 @@ const settings = definePluginSettings({
     },
     saveCropped: {
         type: OptionType.BOOLEAN,
-        description: "Keep a copy of each picture after you crop it",
+        description: "Keep a copy of each picture after you crop it.",
         default: true
     },
     askBeforeSavingCropped: {
         type: OptionType.BOOLEAN,
-        description: "Ask first, instead of keeping the cropped copy automatically",
+        description: "Ask first, instead of keeping the cropped copy automatically.",
         default: false
     },
     transfer: {
         type: OptionType.COMPONENT,
-        description: "Carry your pictures, and how each one is framed, to another device",
+        description: "Carry your pictures, and how each one is framed, to another device.",
         component: () => (
             <div className={cl("buttons")}>
                 <Button color={Button.Colors.PRIMARY} onClick={exportLibrary}>Export to a file</Button>
@@ -104,7 +116,7 @@ const settings = definePluginSettings({
     },
     clearLibrary: {
         type: OptionType.COMPONENT,
-        description: "Throw away every picture you have saved",
+        description: "Throw away every picture you have saved.",
         component: () => (
             <Button
                 color={Button.Colors.PRIMARY}
@@ -123,13 +135,15 @@ const settings = definePluginSettings({
     }
 });
 
-let handoff: { id: string | null; transform: CropState | null; } | null = null;
-let handedOver: { id: string; kind: Kind; } | null = null;
+let handoff: { id: string; transform: CropState | null; file: File; } | null = null;
+let offered: { kind: Kind; id: string; uris: (string | undefined)[]; } | null = null;
+const handedOver = new Map<string, string | null>();
+let editorAllowed = true;
 
-const PROFILE_KINDS = new Set(["AVATAR", "BANNER"]);
+const PENDING = [["AVATAR", "pendingAvatar"], ["BANNER", "pendingBanner"]] as const;
 
-function noteHanded(kind: Kind, id: string) {
-    if (PROFILE_KINDS.has(kind)) handedOver = { id, kind };
+function offer(kind: Kind, id: string, uris: (string | undefined)[]) {
+    offered = { kind, id, uris };
 }
 
 const kindOf = (uploadType?: string): Kind => uploadType || "AVATAR";
@@ -151,7 +165,7 @@ async function exportLibrary() {
         else saveFile(new File([data], FILENAME, { type: "application/json" }));
     } catch (err) {
         logger.error("could not export the library", err);
-        Toasts.show(Toasts.create("Could not export your pictures", Toasts.Type.FAILURE));
+        showToast("Could not export your pictures", Toasts.Type.FAILURE);
     }
 }
 
@@ -170,13 +184,13 @@ async function importLibrary() {
         if (!json) return;
 
         const added = await importAll(json, settings.store.librarySize);
-        Toasts.show(Toasts.create(
+        showToast(
             added ? `Added ${added} picture${added === 1 ? "" : "s"}` : "Nothing new in that file",
             Toasts.Type.SUCCESS
-        ));
+        );
     } catch (err) {
         logger.error("could not import the library", err);
-        Toasts.show(Toasts.create("Could not read that file", Toasts.Type.FAILURE));
+        showToast("Could not read that file", Toasts.Type.FAILURE);
     }
 }
 
@@ -187,25 +201,24 @@ function useLibrary(kind: Kind) {
     const [thumbs, setThumbs] = useState<Record<string, string>>({});
     const [worn, setWorn] = useState<string | null>(null);
 
-    const urls = useRef<string[]>([]);
     const bump = useCallback(() => setVersion(v => v + 1), []);
-    const track = useCallback((url: string) => { urls.current.push(url); return url; }, []);
 
-    useEffect(() => () => urls.current.forEach(URL.revokeObjectURL), []);
+    useEffect(() => () => Object.values(thumbs).forEach(URL.revokeObjectURL), [thumbs]);
 
     useEffect(() => {
         let live = true;
 
         (async () => {
-            const mine = byRecency((await readIndex()).filter(entry => entry.kind === kind && entry.group === group))
-                .sort((a, b) => Number(!!b.pinned) - Number(!!a.pinned));
+            const mine = (await readIndex())
+                .filter(entry => entry.kind === kind && entry.group === group)
+                .sort((a, b) => Number(!!b.pinned) - Number(!!a.pinned) || (b.used ?? b.added) - (a.used ?? a.added));
             const blobs = await getThumbs(mine.map(entry => entry.id));
             if (!live) return;
 
             const next: Record<string, string> = {};
             mine.forEach((entry, index) => {
                 const blob = blobs[index];
-                if (blob) next[entry.id] = track(URL.createObjectURL(blob));
+                if (blob) next[entry.id] = URL.createObjectURL(blob);
             });
 
             setThumbs(next);
@@ -221,7 +234,7 @@ function useLibrary(kind: Kind) {
             .catch(err => logger.error("could not read what you are wearing", err));
     }, [kind, version]);
 
-    return { group, setGroup, entries, thumbs, worn, bump, track };
+    return { group, setGroup, entries, thumbs, worn, bump };
 }
 
 function useForget(bump: () => void) {
@@ -277,16 +290,26 @@ function usePasteAndDrop(accept: (file: File) => void, active: () => boolean) {
     }, [accept, active]);
 }
 
-function PickerShelf({ kind, open, complete }: {
+function EditorGate() {
+    useEffect(() => {
+        editorAllowed = false;
+        return () => { editorAllowed = true; };
+    }, []);
+
+    return null;
+}
+
+function PickerShelf({ kind, open, complete, maxSize }: {
     kind: Kind;
     open(imageUri: string, file: File): void;
     complete(result: PickResult): void;
+    maxSize?: number;
 }) {
     const { group, setGroup, entries, thumbs, worn, bump } = useLibrary(kind);
     const onForget = useForget(bump);
 
-    const hand = useCallback(async (id: string | null, file: File, crop: CropState | null) => {
-        handoff = { id, transform: crop };
+    const hand = useCallback(async (id: string, file: File, crop: CropState | null) => {
+        handoff = { id, transform: crop, file };
         open(await toDataUrl(file), file);
     }, [open]);
 
@@ -307,8 +330,9 @@ function PickerShelf({ kind, open, complete }: {
         bump();
 
         if (entry.group === "cropped") {
-            noteHanded(kind, entry.id);
-            return complete({ imageUri: await toDataUrl(blob), file });
+            const uri = await toDataUrl(blob);
+            offer(kind, entry.id, [uri]);
+            return complete({ imageUri: uri, file });
         }
 
         await hand(entry.id, file, settings.store.rememberCrop ? entry.crop ?? null : null);
@@ -319,14 +343,16 @@ function PickerShelf({ kind, open, complete }: {
     }, [bump]);
 
     const accept = useCallback(async (file: File) => {
+        if (maxSize && file.size > maxSize) return showToast("That picture is too big for Discord", Toasts.Type.FAILURE);
+
         try {
-            const id = await add(file, kind, "original", settings.store.librarySize);
+            const entry = await add(file, kind, "original", settings.store.librarySize);
             bump();
-            await hand(id, file, null);
+            await hand(entry.id, file, settings.store.rememberCrop ? entry.crop ?? null : null);
         } catch (err) {
             logger.error("could not take that picture", err);
         }
-    }, [kind, hand, bump]);
+    }, [kind, hand, bump, maxSize]);
 
     usePasteAndDrop(accept, useCallback(() => editorsOpen === 0, []));
 
@@ -354,13 +380,12 @@ function EditorShelf({ Original, ownProps }: { Original: React.ComponentType<Edi
     const onForget = useForget(bump);
 
     const [picked, setPicked] = useState<Picked | null>(null);
-    const [transform, setTransform] = useState<CropState | null>(() => handoff?.transform ?? null);
+    const [transform, setTransform] = useState<CropState | null>(() => handoff && handoff.file === ownProps.file ? handoff.transform : null);
 
     const incomingId = useRef<string | null>(null);
     const pickedId = useRef<string | null>(null);
     const pickedName = useRef<string | null>(null);
     const pickedGroup = useRef<Group>("original");
-    const captured = useRef(false);
     const anchor = useRef<HTMLDivElement>(null);
 
     pickedId.current = picked?.id ?? null;
@@ -373,21 +398,22 @@ function EditorShelf({ Original, ownProps }: { Original: React.ComponentType<Edi
     }, []);
 
     useEffect(() => {
-        if (captured.current) return;
-        captured.current = true;
+        const incoming = handoff;
+        handoff = null;
 
-        if (handoff) {
-            incomingId.current = handoff.id;
-            handoff = null;
+        if (incoming && incoming.file === ownProps.file) {
+            incomingId.current = incoming.id;
             return;
         }
 
-        if (!(ownProps.file instanceof File)) return;
+        const { file } = ownProps;
+        if (!(file instanceof File) || !file.type.startsWith("image/")) return;
 
-        add(ownProps.file, kind, "original", settings.store.librarySize)
-            .then(id => {
-                incomingId.current = id;
+        add(file, kind, "original", settings.store.librarySize)
+            .then(entry => {
+                incomingId.current = entry.id;
                 bump();
+                if (entry.crop && settings.store.rememberCrop) return show(entry.id, file, entry.crop);
             })
             .catch(err => logger.error("could not save that picture", err));
     }, []);
@@ -398,28 +424,31 @@ function EditorShelf({ Original, ownProps }: { Original: React.ComponentType<Edi
     }, []);
 
     useEffect(() => {
+        let scope = anchor.current?.parentElement ?? null;
+        let pan: HTMLInputElement | null = null;
+
+        while (scope && !pan) {
+            pan = scope.querySelector('input[type="range"][aria-orientation="horizontal"]');
+            if (!pan) scope = scope.parentElement;
+        }
+        if (!scope || !pan) return;
+
+        const container = scope;
+        const slider = pan;
         function focusPan({ target }: MouseEvent) {
-            let scope = anchor.current?.parentElement ?? null;
-            let pan: HTMLInputElement | null = null;
-
-            while (scope && !pan) {
-                pan = scope.querySelector('input[type="range"][aria-orientation="horizontal"]');
-                if (!pan) scope = scope.parentElement;
-            }
-
-            if (pan && scope?.contains(target as Node)) pan.focus({ preventScroll: true });
+            if (!anchor.current?.contains(target as Node)) slider.focus({ preventScroll: true });
         }
 
-        document.addEventListener("mouseup", focusPan);
-        return () => document.removeEventListener("mouseup", focusPan);
-    }, []);
+        container.addEventListener("mouseup", focusPan);
+        return () => container.removeEventListener("mouseup", focusPan);
+    }, [picked?.id]);
 
     const accept = useCallback(async (file: File) => {
         try {
-            const id = await add(file, kind, "original", settings.store.librarySize);
+            const entry = await add(file, kind, "original", settings.store.librarySize);
             setGroup("original");
             bump();
-            await show(id, file, null);
+            await show(entry.id, file, settings.store.rememberCrop ? entry.crop ?? null : null);
         } catch (err) {
             logger.error("could not take that picture", err);
         }
@@ -467,7 +496,7 @@ function EditorShelf({ Original, ownProps }: { Original: React.ComponentType<Edi
     const onCrop = useCallback((result: CropResult) => {
         const id = pickedId.current ?? incomingId.current;
 
-        if (id) noteHanded(kind, id);
+        if (id) offer(kind, id, [result.imageUri, result.staticImageUri]);
         if (id && result.transform && settings.store.rememberCrop) {
             saveCrop(id, result.transform).catch(err => logger.error("could not remember that crop", err));
         }
@@ -507,29 +536,42 @@ function EditorShelf({ Original, ownProps }: { Original: React.ComponentType<Edi
     );
 }
 
+function onPendingChanged({ guildId, ...changes }: PendingChanges) {
+    for (const [kind, field] of PENDING) {
+        if (!(field in changes)) continue;
+
+        const key = `${kind}:${guildId ?? ""}`;
+        const pending = changes[field];
+        if (pending === undefined) handedOver.delete(key);
+        else if (pending && offered?.kind === kind && offered.uris.includes(pending.imageUri)) handedOver.set(key, offered.id);
+        else handedOver.set(key, null);
+    }
+}
+
 function onProfileSaved({ guildId }: { guildId?: string; }) {
-    if (!handedOver) return;
+    for (const [key, id] of handedOver) {
+        const [kind, guild] = key.split(":");
+        if (guild !== (guildId ?? "")) continue;
 
-    const { id, kind } = handedOver;
-    handedOver = null;
-    if (guildId) return;
-
-    recordApplied(kind, id).catch(err => logger.error("could not note what you put on", err));
+        handedOver.delete(key);
+        if (!guildId) recordApplied(kind, id).catch(err => logger.error("could not note what you put on", err));
+    }
 }
 
 function onProfileDiscarded() {
-    handedOver = null;
+    handedOver.clear();
 }
 
 let wrapped: React.ComponentType<EditorProps> | null = null;
 
 export default definePlugin({
     name: "BetterImageEditor",
-    description: "Keeps your own pictures on the image picker and under the crop window, on an uncropped shelf and a cropped one, for avatars, banners, server icons, server banners, event covers, home headers, widget covers, widget images and video backgrounds. Remembers how you framed each picture, and takes a paste or a dropped file straight in.",
+    description: "Keeps your own pictures on the image picker and under the crop window, on an uncropped shelf and a cropped one, for avatars, banners, server icons, server banners, event covers, home headers, widget covers and widget images. Remembers how you framed each picture, and takes a paste or a dropped file straight in.",
     authors: [EquicordDevs.heart_menace],
     settings,
 
     flux: {
+        USER_PROFILE_SETTINGS_SET_PENDING_CHANGES: onPendingChanged,
         USER_PROFILE_SETTINGS_SUBMIT_SUCCESS: onProfileSaved,
         USER_PROFILE_SETTINGS_RESET_PENDING_CHANGES: onProfileDiscarded,
         USER_PROFILE_SETTINGS_RESET_PENDING_PROFILE_CHANGES: onProfileDiscarded,
@@ -562,20 +604,30 @@ export default definePlugin({
             find: 'displayName="RecentAvatarsStore"',
             replacement: {
                 match: /(uploadType:(\i),guild:\i,handleOpenImageEditingModal:(\i),[\s\S]{0,500}?)\i&&\(0,\i\.jsx\)\(\i,\{onComplete:(\i),returnRef:\i\}\)/,
-                replace: "$1$self.pickerRow($2,$3,$4)"
+                replace: "$1$self.pickerRow($2,$3,$4,arguments[0])"
             }
         }
     ],
 
     wrapEditor(Original: React.ComponentType<EditorProps>) {
-        wrapped ??= (props: EditorProps) => <EditorShelf Original={Original} ownProps={props} />;
+        if (!wrapped) {
+            const Safe = ErrorBoundary.wrap(EditorShelf, {
+                fallback: ({ wrappedProps }) => <Original {...wrappedProps.ownProps} />
+            });
+            wrapped = (props: EditorProps) => editorAllowed
+                ? <Safe Original={Original} ownProps={props} />
+                : <Original {...props} />;
+        }
+
         return wrapped;
     },
 
-    pickerRow(uploadType: string, open: (imageUri: string, file: File) => void, complete: (result: PickResult) => void) {
+    pickerRow(uploadType: string, open: (imageUri: string, file: File) => void, complete: (result: PickResult) => void, picker: PickerProps) {
+        if (picker.allowRecentAvatarsSelection === false) return <EditorGate key="bie-picker" />;
+
         return (
             <ErrorBoundary noop key="bie-picker">
-                <PickerShelf kind={kindOf(uploadType)} open={open} complete={complete} />
+                <PickerShelf kind={kindOf(uploadType)} open={open} complete={complete} maxSize={picker.maxFileSizeBytes} />
             </ErrorBoundary>
         );
     }

@@ -5,14 +5,13 @@
  */
 
 import * as DataStore from "@api/DataStore";
+import { nanoid } from "nanoid";
 
 const store = DataStore.createStore("BetterImageEditor", "library");
 
-// Discord's uploadType, such as AVATAR or GUILD_BANNER
 export type Kind = string;
 export type Group = "original" | "cropped";
 
-// the cropper's initialTransform prop. offsetRatio is a fraction of the drag range, not pixels
 export interface CropState {
     zoomRatio: number;
     imageRotation: number;
@@ -39,16 +38,7 @@ const thumbKey = (id: string) => `thumb:${id}`;
 
 const THUMB_MAX = 160;
 
-// older entries lack a group, use lower-case kinds, or hold crops in pixels
-const LEGACY_KINDS: Record<string, string> = { avatar: "AVATAR", banner: "BANNER" };
-
-export const readIndex = () => DataStore.get<Entry[]>(INDEX, store)
-    .then(entries => (entries ?? []).map(({ crop, ...entry }) => ({
-        ...entry,
-        kind: LEGACY_KINDS[entry.kind] ?? entry.kind,
-        group: entry.group ?? "original" as Group,
-        ...(crop?.offsetRatio ? { crop } : {})
-    })));
+export const readIndex = () => DataStore.get<Entry[]>(INDEX, store).then(entries => entries ?? []);
 const writeIndex = (entries: Entry[]) => DataStore.set(INDEX, entries, store);
 
 let turn: Promise<unknown> = Promise.resolve();
@@ -72,8 +62,32 @@ export const toDataUrl = (blob: Blob) => new Promise<string>((resolve, reject) =
 });
 
 const fromDataUrl = (url: string) => fetch(url).then(r => r.blob());
+const isDataUrl = (value: unknown) => typeof value === "string" && value.startsWith("data:");
 
-const newId = () => `${Date.now().toString(36)}${Math.random().toString(36).slice(2, 8)}`;
+async function signature(file: Blob) {
+    const digest = await crypto.subtle.digest("SHA-256", await file.arrayBuffer());
+    return `${file.size}:${[...new Uint8Array(digest)].map(byte => byte.toString(16).padStart(2, "0")).join("")}`;
+}
+
+function trim(entries: Entry[], limit: number) {
+    const counts = new Map<string, number>();
+    const kept: Entry[] = [];
+    const dropped: Entry[] = [];
+
+    for (const entry of byRecency(entries)) {
+        if (entry.pinned) {
+            kept.push(entry);
+            continue;
+        }
+
+        const shelf = `${entry.kind}:${entry.group}`;
+        const nth = (counts.get(shelf) ?? 0) + 1;
+        counts.set(shelf, nth);
+        (nth <= limit ? kept : dropped).push(entry);
+    }
+
+    return { kept, dropped };
+}
 
 function thumbnail(source: Blob) {
     return new Promise<Blob>((resolve, reject) => {
@@ -104,42 +118,34 @@ function thumbnail(source: Blob) {
 
 export function add(file: File, kind: Kind, group: Group, limit: number, from?: string) {
     return queued(async () => {
-        const sig = `${file.name}:${file.size}:${file.lastModified}`;
+        const sig = await signature(file);
         const stored = await readIndex();
         const sameShelf = (entry: Entry) => entry.kind === kind && entry.group === group;
 
         const known = stored.find(entry => sameShelf(entry) && entry.sig === sig);
-        if (known) return known.id;
+        if (known) return known;
 
-        // one cropped copy per source, unless the old one is pinned
         const replaced = from ? stored.filter(entry => sameShelf(entry) && entry.from === from && !entry.pinned) : [];
-        const entries = stored.filter(entry => !replaced.includes(entry));
-
-        const id = newId();
+        const id = nanoid();
         const thumb = await thumbnail(file);
+        await DataStore.setMany([[fileKey(id), file], [thumbKey(id), thumb]], store);
 
-        await DataStore.set(fileKey(id), file, store);
-        await DataStore.set(thumbKey(id), thumb, store);
+        const entry: Entry = { id, name: file.name, type: file.type, kind, group, sig, added: Date.now(), from };
+        const { kept, dropped } = trim([entry, ...stored.filter(other => !replaced.includes(other))], limit);
 
-        const next = byRecency([{ id, name: file.name, type: file.type, kind, group, sig, added: Date.now(), from }, ...entries]);
-        const dropped = next.filter(entry => sameShelf(entry) && !entry.pinned).slice(limit);
+        await writeIndex(kept);
+        await forgetBlobs([...dropped, ...replaced].map(other => other.id));
 
-        await writeIndex(next.filter(entry => !dropped.includes(entry)));
-        for (const entry of [...dropped, ...replaced]) await forgetBlobs(entry.id);
-
-        return id;
+        return entry;
     });
 }
 
-async function forgetBlobs(id: string) {
-    await DataStore.del(fileKey(id), store);
-    await DataStore.del(thumbKey(id), store);
-}
+const forgetBlobs = (ids: string[]) => DataStore.delMany(ids.flatMap(id => [fileKey(id), thumbKey(id)]), store);
 
 export function forget(id: string) {
     return queued(async () => {
         await writeIndex((await readIndex()).filter(entry => entry.id !== id));
-        await forgetBlobs(id);
+        await forgetBlobs([id]);
     });
 }
 
@@ -168,7 +174,9 @@ export function importAll(json: string, limit: number) {
         const renamed = new Map<string, string>();
         const imported: Entry[] = [];
 
-        for (const picture of parsed.pictures) {
+        for (const { file, thumb, ...picture } of parsed.pictures) {
+            if (typeof picture.name !== "string" || typeof picture.added !== "number" || !isDataUrl(file) || !isDataUrl(thumb)) continue;
+
             const shelf = `${picture.kind}:${picture.group}:${picture.sig}`;
             const existing = known.get(shelf);
             if (existing) {
@@ -176,42 +184,21 @@ export function importAll(json: string, limit: number) {
                 continue;
             }
 
-            const { file, thumb, ...rest } = picture;
-            const id = newId();
+            const id = nanoid();
             known.set(shelf, id);
             renamed.set(picture.id, id);
+            await DataStore.setMany([[fileKey(id), await fromDataUrl(file)], [thumbKey(id), await fromDataUrl(thumb)]], store);
 
-            await DataStore.set(fileKey(id), await fromDataUrl(file), store);
-            await DataStore.set(thumbKey(id), await fromDataUrl(thumb), store);
-
-            imported.push({ ...rest, id });
+            imported.push({ ...picture, id });
         }
 
         for (const entry of imported) {
             if (entry.from) entry.from = renamed.get(entry.from) ?? entry.from;
         }
 
-        entries.push(...imported);
-        entries.sort((a, b) => b.added - a.added);
-
-        const counts = new Map<string, number>();
-        const kept: Entry[] = [];
-        const dropped: Entry[] = [];
-
-        for (const entry of entries) {
-            if (entry.pinned) {
-                kept.push(entry);
-                continue;
-            }
-
-            const shelf = `${entry.kind}:${entry.group}`;
-            const nth = (counts.get(shelf) ?? 0) + 1;
-            counts.set(shelf, nth);
-            (nth <= limit ? kept : dropped).push(entry);
-        }
-
+        const { kept, dropped } = trim([...entries, ...imported], limit);
         await writeIndex(kept);
-        for (const entry of dropped) await forgetBlobs(entry.id);
+        await forgetBlobs(dropped.map(entry => entry.id));
 
         return imported.length;
     });
@@ -254,23 +241,24 @@ export function togglePin(id: string) {
     });
 }
 
-// recorded when Discord confirms the save, not when a picture is handed to the editor
 const historyKey = (kind: Kind) => `history:${kind}`;
 
-export async function recordApplied(kind: Kind, id: string) {
-    const worn = await DataStore.get<string[]>(historyKey(kind), store) ?? [];
-    if (worn[0] === id) return;
+export function recordApplied(kind: Kind, id: string | null) {
+    return queued(async () => {
+        const worn = await DataStore.get<(string | null)[]>(historyKey(kind), store) ?? [];
+        if (worn[0] === id) return;
 
-    await DataStore.set(historyKey(kind), [id, ...worn.filter(seen => seen !== id)].slice(0, 5), store);
+        await DataStore.set(historyKey(kind), [id, ...worn.filter(seen => seen !== id)].slice(0, 5), store);
+    });
 }
 
 export async function previousApplied(kind: Kind) {
-    const worn = await DataStore.get<string[]>(historyKey(kind), store) ?? [];
+    const worn = await DataStore.get<(string | null)[]>(historyKey(kind), store) ?? [];
     return (await readIndex()).find(entry => entry.id === worn[1]) ?? null;
 }
 
 export const currentApplied = (kind: Kind) =>
-    DataStore.get<string[]>(historyKey(kind), store).then(worn => worn?.[0] ?? null);
+    DataStore.get<(string | null)[]>(historyKey(kind), store).then(worn => worn?.[0] ?? null);
 
 export function saveCrop(id: string, crop: CropState) {
     return queued(async () => {

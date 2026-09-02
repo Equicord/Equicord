@@ -29,7 +29,6 @@
     color: var(--interactive-hover);
 }
 
-/* literal white on purpose: themes redefine --white to near black */
 .vc-bie-tab.vc-bie-on {
     background: var(--brand-500, #5865f2);
     color: #fff;
@@ -54,7 +53,6 @@
     outline: 2px solid var(--focus-primary);
 }
 
-/* pushes the first action right; later ones sit beside it */
 .vc-bie-tab + .vc-bie-action {
     margin-left: auto;
 }

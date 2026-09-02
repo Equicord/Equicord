@@ -23,8 +23,7 @@ const KIND_NAMES: Record<string, string> = {
     HOME_HEADER: "home headers",
     AVATAR_DECORATION: "decorations",
     PERSONAL_WIDGET_COVER: "widget covers",
-    PERSONAL_WIDGET_FIELD: "widget images",
-    VIDEO_BACKGROUND: "video backgrounds"
+    PERSONAL_WIDGET_FIELD: "widget images"
 };
 
 const kindName = (kind: Kind) => KIND_NAMES[kind] ?? kind.toLowerCase().replace(/_/g, " ");
