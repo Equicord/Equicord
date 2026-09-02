@@ -8,17 +8,14 @@ import "./style.css";
 
 import { definePluginSettings } from "@api/Settings";
 import ErrorBoundary from "@components/ErrorBoundary";
-import { DeleteIcon } from "@components/Icons";
 import { EquicordDevs } from "@utils/constants";
-import { classNameFactory } from "@utils/css";
 import { Logger } from "@utils/Logger";
 import definePlugin, { OptionType } from "@utils/types";
 import { chooseFile, saveFile } from "@utils/web";
 import { Alerts, Button, React, Toasts, useCallback, useEffect, useRef, useState } from "@webpack/common";
 
+import { cl, croppedLabel, Shelf } from "./components/Shelf";
 import { add, byRecency, clear, CropState, currentApplied, Entry, exportAll, forget, forgetCrops, getFile, getThumbs, Group, importAll, Kind, previousApplied, readIndex, recordApplied, saveCrop, toDataUrl, togglePin, touch } from "./library";
-
-const cl = classNameFactory("vc-bie-");
 
 interface PickResult {
     imageUri: string;
@@ -137,38 +134,12 @@ function noteHanded(kind: Kind, id: string) {
 
 const kindOf = (uploadType?: string): Kind => uploadType || "AVATAR";
 
-const SQUARE = new Set(["AVATAR", "AVATAR_DECORATION", "GUILD_ICON", "PERSONAL_WIDGET_FIELD"]);
-
-const KIND_NAMES: Record<string, string> = {
-    AVATAR: "avatars",
-    BANNER: "banners",
-    GUILD_ICON: "server icons",
-    GUILD_BANNER: "server banners",
-    SCHEDULED_EVENT_IMAGE: "event covers",
-    HOME_HEADER: "home headers",
-    AVATAR_DECORATION: "decorations",
-    PERSONAL_WIDGET_COVER: "widget covers",
-    PERSONAL_WIDGET_FIELD: "widget images",
-    VIDEO_BACKGROUND: "video backgrounds"
-};
-
-const kindName = (kind: Kind) => KIND_NAMES[kind] ?? kind.toLowerCase().replace(/_/g, " ");
-
-const isAnimated = (entry: Entry) => entry.type === "image/gif" || entry.name.toLowerCase().endsWith(".gif");
-const croppedLabel = (kind: Kind) => `Cropped ${kindName(kind)}`;
-
 const EXTENSIONS: Record<string, string> = {
     "image/gif": "gif",
     "image/png": "png",
     "image/jpeg": "jpg",
     "image/webp": "webp"
 };
-
-const PinIcon = (props: React.SVGProps<SVGSVGElement>) => (
-    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden {...props}>
-        <path d="M15 4V9l3 3v2h-5v7l-1 1-1-1v-7H6v-2l3-3V4H8V2h8v2z" />
-    </svg>
-);
 
 const FILENAME = "better-image-editor.json";
 
@@ -272,7 +243,6 @@ function useForget(bump: () => void) {
     }, [bump]);
 }
 
-// the picker stays mounted under the cropper, so only the topmost surface takes a paste
 let editorsOpen = 0;
 
 function usePasteAndDrop(accept: (file: File) => void, active: () => boolean) {
@@ -307,120 +277,6 @@ function usePasteAndDrop(accept: (file: File) => void, active: () => boolean) {
     }, [accept, active]);
 }
 
-function Shelf({ kind, group, entries, thumbs, activeId, wornId, onGroup, onPick, onPin, onForget, onPutBack }: {
-    kind: Kind;
-    group: Group;
-    entries: Entry[];
-    thumbs: Record<string, string>;
-    activeId: string | null;
-    wornId: string | null;
-    onGroup(group: Group): void;
-    onPick(entry: Entry): void;
-    onPin(entry: Entry): void;
-    onForget(entry: Entry, immediate: boolean): void;
-    onPutBack?(): void;
-}) {
-    const shape = SQUARE.has(kind) ? "square" : "wide";
-
-    const [hovered, setHovered] = useState<string | null>(null);
-    const [playing, setPlaying] = useState<Record<string, string>>({});
-    const played = useRef<string[]>([]);
-
-    useEffect(() => () => played.current.forEach(URL.revokeObjectURL), []);
-
-    const play = useCallback(async (entry: Entry) => {
-        setHovered(entry.id);
-        if (!isAnimated(entry) || playing[entry.id]) return;
-
-        const blob = await getFile(entry.id);
-        if (!blob) return;
-
-        const url = URL.createObjectURL(blob);
-        played.current.push(url);
-        setPlaying(current => ({ ...current, [entry.id]: url }));
-    }, [playing]);
-
-    return (
-        <div className={cl("panel", shape)}>
-            <div className={cl("tabs")} role="tablist">
-                <button
-                    type="button"
-                    role="tab"
-                    aria-selected={group === "original"}
-                    className={cl("tab", { on: group === "original" })}
-                    onClick={() => onGroup("original")}
-                >Originals</button>
-                <button
-                    type="button"
-                    role="tab"
-                    aria-selected={group === "cropped"}
-                    className={cl("tab", { on: group === "cropped" })}
-                    onClick={() => onGroup("cropped")}
-                >{croppedLabel(kind)}</button>
-
-                {onPutBack && (
-                    <button type="button" className={cl("action")} onClick={onPutBack}>
-                        Put back the last one
-                    </button>
-                )}
-
-            </div>
-
-            <div className={cl("strip")} role="group" aria-label="Saved pictures">
-                {entries.map(entry => (
-                    <div
-                        key={entry.id}
-                        className={cl("item", { pinned: entry.pinned, worn: entry.id === wornId })}
-                        onMouseEnter={() => play(entry)}
-                        onMouseLeave={() => setHovered(null)}
-                    >
-                        <button
-                            type="button"
-                            aria-label={entry.name}
-                            title={entry.id === wornId ? `${entry.name}
-You are wearing this` : entry.name}
-                            className={cl("thumb", { active: activeId === entry.id })}
-                            style={{ backgroundImage: `url(${(hovered === entry.id && playing[entry.id]) || thumbs[entry.id]})` }}
-                            onClick={() => onPick(entry)}
-                            onContextMenu={event => {
-                                event.preventDefault();
-                                onForget(entry, event.shiftKey);
-                            }}
-                        />
-                        <button
-                            type="button"
-                            className={cl("remove")}
-                            aria-label={`Remove ${entry.name}`}
-                            title="Remove. Hold Shift to skip the confirmation"
-                            onClick={event => onForget(entry, event.shiftKey)}
-                        >
-                            <DeleteIcon width={10} height={10} />
-                        </button>
-                        <button
-                            type="button"
-                            aria-pressed={!!entry.pinned}
-                            className={cl("pin", { on: entry.pinned })}
-                            aria-label={entry.pinned ? `Unpin ${entry.name}` : `Pin ${entry.name}`}
-                            title={entry.pinned ? "Pinned, so it never drops off the shelf" : "Pin so it never drops off the shelf"}
-                            onClick={() => onPin(entry)}
-                        >
-                            <PinIcon width={10} height={10} />
-                        </button>
-                    </div>
-                ))}
-
-                {!entries.length && (
-                    <span className={cl("empty")}>
-                        {group === "original"
-                            ? "Pictures you pick, paste or drop land here"
-                            : "Pictures you crop land here"}
-                    </span>
-                )}
-            </div>
-        </div>
-    );
-}
-
 function PickerShelf({ kind, open, complete }: {
     kind: Kind;
     open(imageUri: string, file: File): void;
@@ -429,7 +285,6 @@ function PickerShelf({ kind, open, complete }: {
     const { group, setGroup, entries, thumbs, worn, bump } = useLibrary(kind);
     const onForget = useForget(bump);
 
-    // a data URI, never an object URL: that dies with the surface that made it
     const hand = useCallback(async (id: string | null, file: File, crop: CropState | null) => {
         handoff = { id, transform: crop };
         open(await toDataUrl(file), file);
@@ -542,7 +397,6 @@ function EditorShelf({ Original, ownProps }: { Original: React.ComponentType<Edi
         return () => { editorsOpen--; };
     }, []);
 
-    // Discord's arrow-key nudging only listens on hidden inputs that Tab reaches, not a click
     useEffect(() => {
         function focusPan({ target }: MouseEvent) {
             let scope = anchor.current?.parentElement ?? null;
@@ -691,7 +545,6 @@ export default definePlugin({
             }
         },
         {
-            // grouped: rendering bieShelf without destructuring it throws
             find: '"SET_IMAGE_ZOOM_RATIO"',
             group: true,
             replacement: [
@@ -708,7 +561,6 @@ export default definePlugin({
         {
             find: 'displayName="RecentAvatarsStore"',
             replacement: {
-                // takes over the slot Discord renders its own recent avatars into
                 match: /(uploadType:(\i),guild:\i,handleOpenImageEditingModal:(\i),[\s\S]{0,500}?)\i&&\(0,\i\.jsx\)\(\i,\{onComplete:(\i),returnRef:\i\}\)/,
                 replace: "$1$self.pickerRow($2,$3,$4)"
             }
