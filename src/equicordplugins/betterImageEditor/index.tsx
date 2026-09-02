@@ -539,6 +539,7 @@ function onProfileSaved({ guildId }: { guildId?: string; }) {
 
 function onProfileDiscarded() {
     handedOver.clear();
+    offered = null;
 }
 
 let wrapped: React.ComponentType<EditorProps> | null = null;
