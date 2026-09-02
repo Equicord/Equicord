@@ -386,7 +386,6 @@ function EditorShelf({ Original, ownProps }: { Original: React.ComponentType<Edi
     const pickedId = useRef<string | null>(null);
     const pickedName = useRef<string | null>(null);
     const pickedGroup = useRef<Group>("original");
-    const anchor = useRef<HTMLDivElement>(null);
 
     pickedId.current = picked?.id ?? null;
     pickedGroup.current = picked?.group ?? "original";
@@ -422,26 +421,6 @@ function EditorShelf({ Original, ownProps }: { Original: React.ComponentType<Edi
         editorsOpen++;
         return () => { editorsOpen--; };
     }, []);
-
-    useEffect(() => {
-        let scope = anchor.current?.parentElement ?? null;
-        let pan: HTMLInputElement | null = null;
-
-        while (scope && !pan) {
-            pan = scope.querySelector('input[type="range"][aria-orientation="horizontal"]');
-            if (!pan) scope = scope.parentElement;
-        }
-        if (!scope || !pan) return;
-
-        const container = scope;
-        const slider = pan;
-        function focusPan({ target }: MouseEvent) {
-            if (!anchor.current?.contains(target as Node)) slider.focus({ preventScroll: true });
-        }
-
-        container.addEventListener("mouseup", focusPan);
-        return () => container.removeEventListener("mouseup", focusPan);
-    }, [picked?.id]);
 
     const accept = useCallback(async (file: File) => {
         try {
@@ -516,7 +495,7 @@ function EditorShelf({ Original, ownProps }: { Original: React.ComponentType<Edi
             {...props}
             bieShelf={
                 <ErrorBoundary noop>
-                    <div ref={anchor}>
+                    <div>
                         <Shelf
                             kind={kind}
                             group={group}
