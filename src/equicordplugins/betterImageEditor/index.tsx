@@ -21,6 +21,7 @@ interface Picked {
     id: string;
     uri: string;
     file: File;
+    group: Group;
 }
 
 const logger = new Logger("BetterImageEditor");
@@ -476,14 +477,16 @@ function EditorShelf({ Original, ownProps }: { Original: React.ComponentType<any
     const incomingId = useRef<string | null>(null);
     const pickedId = useRef<string | null>(null);
     const pickedName = useRef<string | null>(null);
+    const pickedGroup = useRef<Group>("original");
     const captured = useRef(false);
 
     pickedId.current = picked?.id ?? null;
+    pickedGroup.current = picked?.group ?? "original";
     pickedName.current = picked?.file.name ?? ownProps.file?.name ?? null;
 
-    const show = useCallback(async (id: string, file: File, crop: CropState | null) => {
+    const show = useCallback(async (id: string, file: File, crop: CropState | null, group: Group = "original") => {
         setTransform(crop);
-        setPicked({ id, uri: await toDataUrl(file), file });
+        setPicked({ id, uri: await toDataUrl(file), file, group });
     }, []);
 
     useEffect(() => {
@@ -543,7 +546,7 @@ function EditorShelf({ Original, ownProps }: { Original: React.ComponentType<any
 
         await touch(entry.id);
         bump();
-        await show(entry.id, new File([blob], entry.name, { type: blob.type }), settings.store.rememberCrop ? entry.crop ?? null : null);
+        await show(entry.id, new File([blob], entry.name, { type: blob.type }), settings.store.rememberCrop ? entry.crop ?? null : null, entry.group);
     }, [show, bump]);
 
     const onPin = useCallback((entry: Entry) => {
@@ -585,7 +588,7 @@ function EditorShelf({ Original, ownProps }: { Original: React.ComponentType<any
             saveCrop(id, transform).catch(err => logger.error("could not remember that crop", err));
         }
 
-        if (settings.store.saveCropped) keepCropped(args[0]);
+        if (settings.store.saveCropped && pickedGroup.current !== "cropped") keepCropped(args[0]);
 
         return ownProps.onCrop?.(...args);
     }, [ownProps.onCrop, keepCropped]);
