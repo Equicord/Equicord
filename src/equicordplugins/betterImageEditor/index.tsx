@@ -14,7 +14,7 @@ import { classNameFactory } from "@utils/css";
 import { Logger } from "@utils/Logger";
 import definePlugin, { OptionType } from "@utils/types";
 import { chooseFile, saveFile } from "@utils/web";
-import { Alerts, Button, FluxDispatcher, React, Toasts, useCallback, useEffect, useRef, useState } from "@webpack/common";
+import { Alerts, Button, React, Toasts, useCallback, useEffect, useRef, useState } from "@webpack/common";
 
 import { add, byRecency, clear, CropState, currentApplied, Entry, exportAll, forget, forgetCrops, getFile, getThumbs, Group, importAll, Kind, previousApplied, readIndex, recordApplied, saveCrop, toDataUrl, togglePin, touch } from "./library";
 
@@ -667,12 +667,6 @@ function onProfileDiscarded() {
     handedOver = null;
 }
 
-const DISCARD_EVENTS = [
-    "USER_PROFILE_SETTINGS_RESET_PENDING_CHANGES",
-    "USER_PROFILE_SETTINGS_RESET_PENDING_PROFILE_CHANGES",
-    "USER_PROFILE_SETTINGS_RESET_AND_CLOSE_FORM"
-];
-
 let wrapped: React.ComponentType<EditorProps> | null = null;
 
 export default definePlugin({
@@ -681,14 +675,11 @@ export default definePlugin({
     authors: [EquicordDevs.heart_menace],
     settings,
 
-    start() {
-        FluxDispatcher.subscribe("USER_PROFILE_SETTINGS_SUBMIT_SUCCESS", onProfileSaved);
-        for (const event of DISCARD_EVENTS) FluxDispatcher.subscribe(event, onProfileDiscarded);
-    },
-
-    stop() {
-        FluxDispatcher.unsubscribe("USER_PROFILE_SETTINGS_SUBMIT_SUCCESS", onProfileSaved);
-        for (const event of DISCARD_EVENTS) FluxDispatcher.unsubscribe(event, onProfileDiscarded);
+    flux: {
+        USER_PROFILE_SETTINGS_SUBMIT_SUCCESS: onProfileSaved,
+        USER_PROFILE_SETTINGS_RESET_PENDING_CHANGES: onProfileDiscarded,
+        USER_PROFILE_SETTINGS_RESET_PENDING_PROFILE_CHANGES: onProfileDiscarded,
+        USER_PROFILE_SETTINGS_RESET_AND_CLOSE_FORM: onProfileDiscarded
     },
 
     patches: [
