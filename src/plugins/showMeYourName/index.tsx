@@ -1290,7 +1290,7 @@ function addCustomNameResults(results: SearchUserResult[], props: { currentToken
 export default definePlugin({
     name: "ShowMeYourName",
     description: "Display any permutation of custom nicknames, friend nicknames, server nicknames, display names, and usernames in chat.",
-    authors: [EquicordDevs.Etorix, Devs.Rini, Devs.TheKodeToad, Devs.sadan, Devs.prism],
+    authors: [EquicordDevs.Etorix, Devs.Rini, Devs.TheKodeToad, Devs.sadan, Devs.prism, EquicordDevs.penguinwokrs],
     tags: ["Appearance", "Customisation"],
     searchTerms: ["SMYN", "Nicknames", "Custom Nicknames"],
     isModified: true,
