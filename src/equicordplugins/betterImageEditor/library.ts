@@ -192,8 +192,11 @@ export function importAll(json: string, limit: number) {
             imported.push({ ...picture, id });
         }
 
+        const local = new Set(entries.map(entry => entry.id));
+        const source = (from: string) => renamed.get(from) ?? (local.has(from) ? from : undefined);
+
         for (const entry of imported) {
-            if (entry.from) entry.from = renamed.get(entry.from) ?? entry.from;
+            if (entry.from) entry.from = source(entry.from);
         }
 
         const { kept, dropped } = trim([...entries, ...imported], limit);
