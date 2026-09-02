@@ -42,6 +42,11 @@ interface UserNameWithEffectsProps {
     shouldWrap?: boolean;
 }
 
+interface SearchUserResult {
+    text: string;
+    user: User;
+}
+
 const UserNameWithEffects = findComponentByCodeLazy<UserNameWithEffectsProps>(
     "UserNameWithEffects",
     "--custom-display-name-styles-prism-cycle"
@@ -1264,13 +1269,8 @@ function matchableCustomName(userId: string) {
     return custom.toLocaleLowerCase();
 }
 
-interface SearchUserResult {
-    text: string;
-    user: User;
-}
-
 function addCustomNameResults(results: SearchUserResult[], props: { currentToken?: { getFullMatch(): string | undefined; } | null; }) {
-    const query = props.currentToken?.getFullMatch()?.trim().toLocaleLowerCase();
+    const query = props.currentToken?.getFullMatch()?.trim()?.toLocaleLowerCase();
     if (!query) return results;
 
     const guildId = getCurrentChannel()?.guild_id;
