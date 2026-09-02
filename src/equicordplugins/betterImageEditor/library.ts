@@ -63,6 +63,7 @@ export const toDataUrl = (blob: Blob) => new Promise<string>((resolve, reject) =
 
 const fromDataUrl = (url: string) => fetch(url).then(r => r.blob());
 const isDataUrl = (value: unknown) => typeof value === "string" && value.startsWith("data:");
+const isSig = (value: unknown) => typeof value === "string" && /^\d+:[0-9a-f]{64}$/.test(value);
 
 async function signature(file: Blob) {
     const digest = await crypto.subtle.digest("SHA-256", await file.arrayBuffer());
@@ -194,7 +195,7 @@ export function importAll(json: string, limit: number) {
                 known.add(shelf);
                 await DataStore.setMany([[fileKey(id), decoded[0]], [thumbKey(id), decoded[1]]], store);
 
-                imported.push({ ...picture, id, from: sigById.get(picture.from) ?? picture.from });
+                imported.push({ ...picture, id, from: isSig(picture.from) ? picture.from : sigById.get(picture.from) });
             }
         } catch (err) {
             await forgetBlobs(imported.map(entry => entry.id));
