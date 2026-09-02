@@ -566,7 +566,7 @@ let wrapped: React.ComponentType<EditorProps> | null = null;
 
 export default definePlugin({
     name: "BetterImageEditor",
-    description: "Keeps your own pictures on the image picker and under the crop window, on an uncropped shelf and a cropped one, for avatars, banners, server icons, server banners, event covers, home headers, widget covers and widget images. Remembers how you framed each picture, and takes a paste or a dropped file straight in.",
+    description: "Image Editor with shelving for older images and allowing cropping",
     authors: [EquicordDevs.heart_menace],
     settings,
 
