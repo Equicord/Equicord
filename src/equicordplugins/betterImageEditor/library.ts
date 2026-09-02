@@ -126,7 +126,8 @@ export function add(file: File, kind: Kind, group: Group, limit: number, from?: 
         if (known) return known;
 
         const source = from ? stored.find(entry => entry.id === from)?.sig : undefined;
-        const replaced = source ? stored.filter(entry => sameShelf(entry) && entry.from === source && !entry.pinned) : [];
+        const cropOf = (entry: Entry) => entry.from === source || entry.from === from;
+        const replaced = source ? stored.filter(entry => sameShelf(entry) && cropOf(entry) && !entry.pinned) : [];
         const id = nanoid();
         const thumb = await thumbnail(file);
         await DataStore.setMany([[fileKey(id), file], [thumbKey(id), thumb]], store);
@@ -160,7 +161,7 @@ export async function exportAll() {
         pictures.push({ ...entry, file: await toDataUrl(file), thumb: await toDataUrl(thumb) });
     }
 
-    return JSON.stringify({ format: "BetterImageEditor", version: 1, pictures }, null, 4);
+    return JSON.stringify({ format: "BetterImageEditor", version: 2, pictures }, null, 4);
 }
 
 export function importAll(json: string, limit: number) {
@@ -168,6 +169,8 @@ export function importAll(json: string, limit: number) {
     if (parsed?.format !== "BetterImageEditor" || !Array.isArray(parsed.pictures)) {
         throw new Error("that file is not a picture library");
     }
+
+    const sigById = new Map<string, string>(parsed.pictures.map((picture: Entry) => [picture.id, picture.sig]));
 
     return queued(async () => {
         const entries = await readIndex();
@@ -191,7 +194,7 @@ export function importAll(json: string, limit: number) {
                 known.add(shelf);
                 await DataStore.setMany([[fileKey(id), decoded[0]], [thumbKey(id), decoded[1]]], store);
 
-                imported.push({ ...picture, id });
+                imported.push({ ...picture, id, from: sigById.get(picture.from) ?? picture.from });
             }
         } catch (err) {
             await forgetBlobs(imported.map(entry => entry.id));
