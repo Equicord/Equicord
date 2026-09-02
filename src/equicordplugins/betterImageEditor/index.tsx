@@ -566,7 +566,7 @@ let wrapped: React.ComponentType<EditorProps> | null = null;
 
 export default definePlugin({
     name: "BetterImageEditor",
-    description: "Image Editor with shelving for older images and allowing cropping",
+    description: "Image editor with shelving for older images and allowing cropping",
     authors: [EquicordDevs.heart_menace],
     settings,
 
