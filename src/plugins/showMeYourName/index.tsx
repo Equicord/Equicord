@@ -21,7 +21,7 @@ import { classNameFactory } from "@utils/index";
 import definePlugin, { OptionType } from "@utils/types";
 import { GuildMember, Message, RenderModalProps, User } from "@vencord/discord-types";
 import { findByCodeLazy, findByPropsLazy, findComponentByCodeLazy } from "@webpack";
-import { AccessibilityStore, ChannelStore, GuildMemberStore, GuildStore, Menu, MessageStore, Modal, openModal, RelationshipStore, StreamerModeStore, TextInput, useEffect, UserStore, useState } from "@webpack/common";
+import { AccessibilityStore, ChannelStore, GuildMemberStore, GuildStore, Menu, MessageStore, Modal, openModal, RelationshipStore, StreamerModeStore, TextInput, useEffect, UsernameUtils, UserStore, useState } from "@webpack/common";
 import { JSX } from "react";
 
 const SMYNC = classNameFactory();
@@ -1264,6 +1264,27 @@ function matchableCustomName(userId: string) {
     return custom.toLocaleLowerCase();
 }
 
+interface SearchUserResult {
+    text: string;
+    user: User;
+}
+
+function addCustomNameResults(results: SearchUserResult[], props: { currentToken?: { getFullMatch(): string; } | null; }) {
+    const query = props.currentToken?.getFullMatch()?.trim().toLocaleLowerCase();
+    if (!query) return results;
+
+    const guildId = getCurrentChannel()?.guild_id;
+    const extra: SearchUserResult[] = [];
+    for (const id in customNicknames) {
+        if (!matchableCustomName(id).includes(query)) continue;
+        if (guildId && !GuildMemberStore.getMember(guildId, id)) continue;
+        if (results.some(r => r.user?.id === id)) continue;
+        const user = UserStore.getUser(id);
+        if (user) extra.push({ text: UsernameUtils.getUserTag(user), user });
+    }
+    return extra.length ? [...results, ...extra] : results;
+}
+
 export default definePlugin({
     name: "ShowMeYourName",
     description: "Display any permutation of custom nicknames, friend nicknames, server nicknames, display names, and usernames in chat.",
@@ -1513,6 +1534,14 @@ export default definePlugin({
             }
         },
         {
+            // Add custom name matches to the server side results behind the from: and mentions: filters.
+            find: '="SearchAutocompleteStore"',
+            replacement: {
+                match: /(?<=&&!\i\)\i=)\i\(\i\)\.results/,
+                replace: "$self.addCustomNameResults($&,arguments[0])"
+            }
+        },
+        {
             // Replace names in the from: and mentions: search filter suggestions.
             find: "hasOtherSearchFiltersVisible",
             replacement: {
@@ -1589,5 +1618,6 @@ export default definePlugin({
     getTypingMemberListProfilesReactionsVoiceNameText,
     getTypingMemberListProfilesReactionsVoiceNameElement,
     getSearchFilterName,
-    matchableCustomName
+    matchableCustomName,
+    addCustomNameResults
 });
