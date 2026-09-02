@@ -10,12 +10,34 @@ import { definePluginSettings } from "@api/Settings";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { DeleteIcon } from "@components/Icons";
 import { EquicordDevs } from "@utils/constants";
+import { classNameFactory } from "@utils/css";
 import { Logger } from "@utils/Logger";
 import definePlugin, { OptionType } from "@utils/types";
 import { chooseFile, saveFile } from "@utils/web";
 import { Alerts, Button, FluxDispatcher, React, Toasts, useCallback, useEffect, useRef, useState } from "@webpack/common";
 
 import { add, byRecency, clear, CropState, currentApplied, Entry, exportAll, forget, forgetCrops, getFile, getThumbs, Group, importAll, Kind, previousApplied, readIndex, recordApplied, saveCrop, toDataUrl, togglePin, touch } from "./library";
+
+const cl = classNameFactory("vc-bie-");
+
+interface PickResult {
+    imageUri: string;
+    file: File;
+}
+
+interface CropResult extends PickResult {
+    transform: CropState;
+}
+
+interface EditorProps {
+    file?: File;
+    imageUri?: string;
+    originalAsset?: unknown;
+    uploadType?: string;
+    initialTransform?: CropState | null;
+    onCrop?(result: CropResult): unknown;
+    bieShelf?: React.ReactNode;
+}
 
 interface Picked {
     id: string;
@@ -77,7 +99,7 @@ const settings = definePluginSettings({
         type: OptionType.COMPONENT,
         description: "Carry your pictures, and how each one is framed, to another device",
         component: () => (
-            <div className="bie-buttons">
+            <div className={cl("buttons")}>
                 <Button color={Button.Colors.PRIMARY} onClick={exportLibrary}>Export to a file</Button>
                 <Button color={Button.Colors.PRIMARY} onClick={importLibrary}>Import from a file</Button>
             </div>
@@ -107,7 +129,13 @@ const settings = definePluginSettings({
 let handoff: { id: string | null; transform: CropState | null; } | null = null;
 let handedOver: { id: string; kind: Kind; } | null = null;
 
-const kindOf = (uploadType: string): Kind => uploadType || "AVATAR";
+const PROFILE_KINDS = new Set(["AVATAR", "BANNER"]);
+
+function noteHanded(kind: Kind, id: string) {
+    if (PROFILE_KINDS.has(kind)) handedOver = { id, kind };
+}
+
+const kindOf = (uploadType?: string): Kind => uploadType || "AVATAR";
 
 const SQUARE = new Set(["AVATAR", "AVATAR_DECORATION", "GUILD_ICON", "PERSONAL_WIDGET_FIELD"]);
 
@@ -136,7 +164,7 @@ const EXTENSIONS: Record<string, string> = {
     "image/webp": "webp"
 };
 
-const PinIcon = (props: any) => (
+const PinIcon = (props: React.SVGProps<SVGSVGElement>) => (
     <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden {...props}>
         <path d="M15 4V9l3 3v2h-5v7l-1 1-1-1v-7H6v-2l3-3V4H8V2h8v2z" />
     </svg>
@@ -292,7 +320,7 @@ function Shelf({ kind, group, entries, thumbs, activeId, wornId, onGroup, onPick
     onForget(entry: Entry, immediate: boolean): void;
     onPutBack?(): void;
 }) {
-    const shape = SQUARE.has(kind) ? "bie-square" : "bie-wide";
+    const shape = SQUARE.has(kind) ? "square" : "wide";
 
     const [hovered, setHovered] = useState<string | null>(null);
     const [playing, setPlaying] = useState<Record<string, string>>({});
@@ -313,36 +341,36 @@ function Shelf({ kind, group, entries, thumbs, activeId, wornId, onGroup, onPick
     }, [playing]);
 
     return (
-        <div className={`bie-panel ${shape}`}>
-            <div className="bie-tabs" role="tablist">
+        <div className={cl("panel", shape)}>
+            <div className={cl("tabs")} role="tablist">
                 <button
                     type="button"
                     role="tab"
                     aria-selected={group === "original"}
-                    className={`bie-tab${group === "original" ? " bie-on" : ""}`}
+                    className={cl("tab", { on: group === "original" })}
                     onClick={() => onGroup("original")}
                 >Originals</button>
                 <button
                     type="button"
                     role="tab"
                     aria-selected={group === "cropped"}
-                    className={`bie-tab${group === "cropped" ? " bie-on" : ""}`}
+                    className={cl("tab", { on: group === "cropped" })}
                     onClick={() => onGroup("cropped")}
                 >{croppedLabel(kind)}</button>
 
                 {onPutBack && (
-                    <button type="button" className="bie-action" onClick={onPutBack}>
+                    <button type="button" className={cl("action")} onClick={onPutBack}>
                         Put back the last one
                     </button>
                 )}
 
             </div>
 
-            <div className="bie-strip" role="group" aria-label="Saved pictures">
+            <div className={cl("strip")} role="group" aria-label="Saved pictures">
                 {entries.map(entry => (
                     <div
                         key={entry.id}
-                        className={`bie-item${entry.pinned ? " bie-pinned" : ""}${entry.id === wornId ? " bie-worn" : ""}`}
+                        className={cl("item", { pinned: entry.pinned, worn: entry.id === wornId })}
                         onMouseEnter={() => play(entry)}
                         onMouseLeave={() => setHovered(null)}
                     >
@@ -351,7 +379,7 @@ function Shelf({ kind, group, entries, thumbs, activeId, wornId, onGroup, onPick
                             aria-label={entry.name}
                             title={entry.id === wornId ? `${entry.name}
 You are wearing this` : entry.name}
-                            className={`bie-thumb${activeId === entry.id ? " bie-active" : ""}`}
+                            className={cl("thumb", { active: activeId === entry.id })}
                             style={{ backgroundImage: `url(${(hovered === entry.id && playing[entry.id]) || thumbs[entry.id]})` }}
                             onClick={() => onPick(entry)}
                             onContextMenu={event => {
@@ -361,7 +389,7 @@ You are wearing this` : entry.name}
                         />
                         <button
                             type="button"
-                            className="bie-remove"
+                            className={cl("remove")}
                             aria-label={`Remove ${entry.name}`}
                             title="Remove. Hold Shift to skip the confirmation"
                             onClick={event => onForget(entry, event.shiftKey)}
@@ -371,7 +399,7 @@ You are wearing this` : entry.name}
                         <button
                             type="button"
                             aria-pressed={!!entry.pinned}
-                            className={`bie-pin${entry.pinned ? " bie-on" : ""}`}
+                            className={cl("pin", { on: entry.pinned })}
                             aria-label={entry.pinned ? `Unpin ${entry.name}` : `Pin ${entry.name}`}
                             title={entry.pinned ? "Pinned, so it never drops off the shelf" : "Pin so it never drops off the shelf"}
                             onClick={() => onPin(entry)}
@@ -382,7 +410,7 @@ You are wearing this` : entry.name}
                 ))}
 
                 {!entries.length && (
-                    <span className="bie-empty">
+                    <span className={cl("empty")}>
                         {group === "original"
                             ? "Pictures you pick, paste or drop land here"
                             : "Pictures you crop land here"}
@@ -396,7 +424,7 @@ You are wearing this` : entry.name}
 function PickerShelf({ kind, open, complete }: {
     kind: Kind;
     open(imageUri: string, file: File): void;
-    complete(result: { imageUri: string; file: File; }): void;
+    complete(result: PickResult): void;
 }) {
     const { group, setGroup, entries, thumbs, worn, bump } = useLibrary(kind);
     const onForget = useForget(bump);
@@ -404,7 +432,6 @@ function PickerShelf({ kind, open, complete }: {
     // a data URI, never an object URL: that dies with the surface that made it
     const hand = useCallback(async (id: string | null, file: File, crop: CropState | null) => {
         handoff = { id, transform: crop };
-        if (id) handedOver = { id, kind };
         open(await toDataUrl(file), file);
     }, [open]);
 
@@ -425,7 +452,7 @@ function PickerShelf({ kind, open, complete }: {
         bump();
 
         if (entry.group === "cropped") {
-            handedOver = { id: entry.id, kind };
+            noteHanded(kind, entry.id);
             return complete({ imageUri: await toDataUrl(blob), file });
         }
 
@@ -465,7 +492,7 @@ function PickerShelf({ kind, open, complete }: {
     );
 }
 
-function EditorShelf({ Original, ownProps }: { Original: React.ComponentType<any>; ownProps: any; }) {
+function EditorShelf({ Original, ownProps }: { Original: React.ComponentType<EditorProps>; ownProps: EditorProps; }) {
     const kind = kindOf(ownProps.uploadType);
 
     const { group, setGroup, entries, thumbs, worn, bump } = useLibrary(kind);
@@ -479,6 +506,7 @@ function EditorShelf({ Original, ownProps }: { Original: React.ComponentType<any
     const pickedName = useRef<string | null>(null);
     const pickedGroup = useRef<Group>("original");
     const captured = useRef(false);
+    const anchor = useRef<HTMLDivElement>(null);
 
     pickedId.current = picked?.id ?? null;
     pickedGroup.current = picked?.group ?? "original";
@@ -516,16 +544,21 @@ function EditorShelf({ Original, ownProps }: { Original: React.ComponentType<any
 
     // Discord's arrow-key nudging only listens on hidden inputs that Tab reaches, not a click
     useEffect(() => {
-        const container = document.querySelector('[class*="editingContainer"]')?.parentElement;
-        if (!container) return;
+        function focusPan({ target }: MouseEvent) {
+            let scope = anchor.current?.parentElement ?? null;
+            let pan: HTMLInputElement | null = null;
 
-        const focusPan = () => container
-            .querySelector<HTMLInputElement>('input[type="range"][aria-orientation="horizontal"]')
-            ?.focus({ preventScroll: true });
+            while (scope && !pan) {
+                pan = scope.querySelector('input[type="range"][aria-orientation="horizontal"]');
+                if (!pan) scope = scope.parentElement;
+            }
 
-        container.addEventListener("mouseup", focusPan);
-        return () => container.removeEventListener("mouseup", focusPan);
-    }, [picked?.id]);
+            if (pan && scope?.contains(target as Node)) pan.focus({ preventScroll: true });
+        }
+
+        document.addEventListener("mouseup", focusPan);
+        return () => document.removeEventListener("mouseup", focusPan);
+    }, []);
 
     const accept = useCallback(async (file: File) => {
         try {
@@ -553,10 +586,8 @@ function EditorShelf({ Original, ownProps }: { Original: React.ComponentType<any
         togglePin(entry.id).then(bump).catch(err => logger.error("could not pin that picture", err));
     }, [bump]);
 
-    const keepCropped = useCallback((result: any) => {
-        const uri = result?.imageUri;
-        if (typeof uri !== "string") return logger.warn("the cropper returned something that cannot be saved", result);
-
+    const keepCropped = useCallback((result: CropResult) => {
+        const uri = result.imageUri;
         const source = pickedId.current ?? incomingId.current ?? undefined;
         const save = async () => {
             const stem = (pickedName.current ?? "picture").replace(/\.[^.]+$/, "");
@@ -579,19 +610,18 @@ function EditorShelf({ Original, ownProps }: { Original: React.ComponentType<any
         });
     }, [kind, bump]);
 
-    const onCrop = useCallback((...args: any[]) => {
+    const onCrop = useCallback((result: CropResult) => {
         const id = pickedId.current ?? incomingId.current;
-        const transform = args[0]?.transform;
 
-        if (id) handedOver = { id, kind };
-        if (id && transform && settings.store.rememberCrop) {
-            saveCrop(id, transform).catch(err => logger.error("could not remember that crop", err));
+        if (id) noteHanded(kind, id);
+        if (id && result.transform && settings.store.rememberCrop) {
+            saveCrop(id, result.transform).catch(err => logger.error("could not remember that crop", err));
         }
 
-        if (settings.store.saveCropped && pickedGroup.current !== "cropped") keepCropped(args[0]);
+        if (settings.store.saveCropped && pickedGroup.current !== "cropped") keepCropped(result);
 
-        return ownProps.onCrop?.(...args);
-    }, [ownProps.onCrop, keepCropped]);
+        return ownProps.onCrop?.(result);
+    }, [ownProps.onCrop, keepCropped, kind]);
 
     const props = picked
         ? { ...ownProps, imageUri: picked.uri, file: picked.file, originalAsset: null, onCrop, initialTransform: transform }
@@ -603,33 +633,47 @@ function EditorShelf({ Original, ownProps }: { Original: React.ComponentType<any
             {...props}
             bieShelf={
                 <ErrorBoundary noop>
-                    <Shelf
-                        kind={kind}
-                        group={group}
-                        entries={entries}
-                        thumbs={thumbs}
-                        activeId={picked?.id ?? null}
-                        wornId={worn}
-                        onGroup={setGroup}
-                        onPick={onPick}
-                        onPin={onPin}
-                        onForget={onForget}
-                    />
+                    <div ref={anchor}>
+                        <Shelf
+                            kind={kind}
+                            group={group}
+                            entries={entries}
+                            thumbs={thumbs}
+                            activeId={picked?.id ?? null}
+                            wornId={worn}
+                            onGroup={setGroup}
+                            onPick={onPick}
+                            onPin={onPin}
+                            onForget={onForget}
+                        />
+                    </div>
                 </ErrorBoundary>
             }
         />
     );
 }
 
-function onProfileSaved() {
+function onProfileSaved({ guildId }: { guildId?: string; }) {
     if (!handedOver) return;
 
     const { id, kind } = handedOver;
     handedOver = null;
+    if (guildId) return;
+
     recordApplied(kind, id).catch(err => logger.error("could not note what you put on", err));
 }
 
-let wrapped: React.ComponentType<any> | null = null;
+function onProfileDiscarded() {
+    handedOver = null;
+}
+
+const DISCARD_EVENTS = [
+    "USER_PROFILE_SETTINGS_RESET_PENDING_CHANGES",
+    "USER_PROFILE_SETTINGS_RESET_PENDING_PROFILE_CHANGES",
+    "USER_PROFILE_SETTINGS_RESET_AND_CLOSE_FORM"
+];
+
+let wrapped: React.ComponentType<EditorProps> | null = null;
 
 export default definePlugin({
     name: "BetterImageEditor",
@@ -639,10 +683,12 @@ export default definePlugin({
 
     start() {
         FluxDispatcher.subscribe("USER_PROFILE_SETTINGS_SUBMIT_SUCCESS", onProfileSaved);
+        for (const event of DISCARD_EVENTS) FluxDispatcher.subscribe(event, onProfileDiscarded);
     },
 
     stop() {
         FluxDispatcher.unsubscribe("USER_PROFILE_SETTINGS_SUBMIT_SUCCESS", onProfileSaved);
+        for (const event of DISCARD_EVENTS) FluxDispatcher.unsubscribe(event, onProfileDiscarded);
     },
 
     patches: [
@@ -678,12 +724,12 @@ export default definePlugin({
         }
     ],
 
-    wrapEditor(Original: React.ComponentType<any>) {
-        wrapped ??= (props: any) => <EditorShelf Original={Original} ownProps={props} />;
+    wrapEditor(Original: React.ComponentType<EditorProps>) {
+        wrapped ??= (props: EditorProps) => <EditorShelf Original={Original} ownProps={props} />;
         return wrapped;
     },
 
-    pickerRow(uploadType: string, open: (imageUri: string, file: File) => void, complete: (result: any) => void) {
+    pickerRow(uploadType: string, open: (imageUri: string, file: File) => void, complete: (result: PickResult) => void) {
         return (
             <ErrorBoundary noop key="bie-picker">
                 <PickerShelf kind={kindOf(uploadType)} open={open} complete={complete} />

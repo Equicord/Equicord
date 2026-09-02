@@ -1,14 +1,14 @@
-.bie-panel {
+.vc-bie-panel {
     padding-top: 8px;
 }
 
-.bie-tabs {
+.vc-bie-tabs {
     display: flex;
     align-items: center;
     gap: 4px;
 }
 
-.bie-tab {
+.vc-bie-tab {
     padding: 4px 10px;
     border: none;
     border-radius: 4px;
@@ -20,22 +20,22 @@
     transition: background-color .1s ease-out, color .1s ease-out;
 }
 
-.bie-tab:focus-visible {
+.vc-bie-tab:focus-visible {
     outline: 2px solid var(--focus-primary);
 }
 
-.bie-tab:hover:not(.bie-on) {
+.vc-bie-tab:hover:not(.vc-bie-on) {
     background: var(--background-modifier-hover);
     color: var(--interactive-hover);
 }
 
 /* literal white on purpose: themes redefine --white to near black */
-.bie-tab.bie-on {
+.vc-bie-tab.vc-bie-on {
     background: var(--brand-500, #5865f2);
     color: #fff;
 }
 
-.bie-action {
+.vc-bie-action {
     padding: 4px 10px;
     border: none;
     border-radius: 4px;
@@ -45,26 +45,26 @@
     cursor: pointer;
 }
 
-.bie-action:hover {
+.vc-bie-action:hover {
     background: var(--background-modifier-hover);
     color: var(--interactive-hover);
 }
 
-.bie-action:focus-visible {
+.vc-bie-action:focus-visible {
     outline: 2px solid var(--focus-primary);
 }
 
 /* pushes the first action right; later ones sit beside it */
-.bie-tab + .bie-action {
+.vc-bie-tab + .vc-bie-action {
     margin-left: auto;
 }
 
-.bie-empty {
+.vc-bie-empty {
     color: var(--text-muted);
     font-size: 12px;
 }
 
-.bie-strip {
+.vc-bie-strip {
     display: flex;
     align-items: center;
     flex-wrap: nowrap;
@@ -74,34 +74,34 @@
     overflow: auto hidden;
 }
 
-.bie-wide .bie-strip {
+.vc-bie-wide .vc-bie-strip {
     gap: 8px;
 }
 
-.bie-strip::-webkit-scrollbar {
+.vc-bie-strip::-webkit-scrollbar {
     height: 6px;
 }
 
-.bie-strip::-webkit-scrollbar-track {
+.vc-bie-strip::-webkit-scrollbar-track {
     background: transparent;
 }
 
-.bie-strip::-webkit-scrollbar-thumb {
+.vc-bie-strip::-webkit-scrollbar-thumb {
     background: transparent;
     border-radius: 3px;
 }
 
-.bie-strip:hover::-webkit-scrollbar-thumb {
+.vc-bie-strip:hover::-webkit-scrollbar-thumb {
     background: var(--background-modifier-accent);
 }
 
-.bie-item {
+.vc-bie-item {
     position: relative;
     flex: 0 0 auto;
     line-height: 0;
 }
 
-.bie-thumb {
+.vc-bie-thumb {
     width: 44px;
     height: 44px;
     border-radius: 50%;
@@ -114,31 +114,31 @@
     transition: border-color .1s ease-out, transform .1s ease-out;
 }
 
-.bie-thumb:focus-visible {
+.vc-bie-thumb:focus-visible {
     outline: 2px solid var(--focus-primary);
     outline-offset: 2px;
 }
 
-.bie-thumb.bie-active {
+.vc-bie-thumb.vc-bie-active {
     border-color: var(--brand-500, #5865f2);
 }
 
-.bie-wide .bie-thumb {
+.vc-bie-wide .vc-bie-thumb {
     width: 96px;
     height: 40px;
     border-radius: 6px;
 }
 
-.bie-worn .bie-thumb {
+.vc-bie-worn .vc-bie-thumb {
     box-shadow: 0 0 0 2px var(--status-positive, #23a55a);
 }
 
-.bie-item:hover .bie-thumb {
+.vc-bie-item:hover .vc-bie-thumb {
     transform: scale(1.06);
 }
 
-.bie-remove,
-.bie-pin {
+.vc-bie-remove,
+.vc-bie-pin {
     position: absolute;
     top: -2px;
     width: 16px;
@@ -153,39 +153,39 @@
     cursor: pointer;
 }
 
-.bie-remove {
+.vc-bie-remove {
     right: -2px;
 }
 
-.bie-pin {
+.vc-bie-pin {
     left: -2px;
 }
 
-.bie-remove:hover {
+.vc-bie-remove:hover {
     color: var(--status-danger);
 }
 
-.bie-pin:hover {
+.vc-bie-pin:hover {
     color: var(--interactive-active);
 }
 
-.bie-remove:focus-visible,
-.bie-pin:focus-visible {
+.vc-bie-remove:focus-visible,
+.vc-bie-pin:focus-visible {
     outline: 2px solid var(--focus-primary);
 }
 
-.bie-pin.bie-on {
+.vc-bie-pin.vc-bie-on {
     color: var(--brand-500, #5865f2);
 }
 
-.bie-item:hover .bie-remove,
-.bie-item:focus-within .bie-remove,
-.bie-item:hover .bie-pin,
-.bie-item:focus-within .bie-pin {
+.vc-bie-item:hover .vc-bie-remove,
+.vc-bie-item:focus-within .vc-bie-remove,
+.vc-bie-item:hover .vc-bie-pin,
+.vc-bie-item:focus-within .vc-bie-pin {
     display: grid;
 }
 
-.bie-pinned::before {
+.vc-bie-pinned::before {
     content: "";
     position: absolute;
     top: 1px;
@@ -197,23 +197,23 @@
     pointer-events: none;
 }
 
-.bie-pinned:hover::before,
-.bie-pinned:focus-within::before {
+.vc-bie-pinned:hover::before,
+.vc-bie-pinned:focus-within::before {
     display: none;
 }
 
-.bie-buttons {
+.vc-bie-buttons {
     display: flex;
     gap: 8px;
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .bie-tab,
-    .bie-thumb {
+    .vc-bie-tab,
+    .vc-bie-thumb {
         transition: none;
     }
 
-    .bie-item:hover .bie-thumb {
+    .vc-bie-item:hover .vc-bie-thumb {
         transform: none;
     }
 }
