@@ -125,12 +125,13 @@ export function add(file: File, kind: Kind, group: Group, limit: number, from?: 
         const known = stored.find(entry => sameShelf(entry) && entry.sig === sig);
         if (known) return known;
 
-        const replaced = from ? stored.filter(entry => sameShelf(entry) && entry.from === from && !entry.pinned) : [];
+        const source = from ? stored.find(entry => entry.id === from)?.sig : undefined;
+        const replaced = source ? stored.filter(entry => sameShelf(entry) && entry.from === source && !entry.pinned) : [];
         const id = nanoid();
         const thumb = await thumbnail(file);
         await DataStore.setMany([[fileKey(id), file], [thumbKey(id), thumb]], store);
 
-        const entry: Entry = { id, name: file.name, type: file.type, kind, group, sig, added: Date.now(), from };
+        const entry: Entry = { id, name: file.name, type: file.type, kind, group, sig, added: Date.now(), from: source };
         const { kept, dropped } = trim([entry, ...stored.filter(other => !replaced.includes(other))], limit);
 
         await writeIndex(kept);
@@ -170,30 +171,24 @@ export function importAll(json: string, limit: number) {
 
     return queued(async () => {
         const entries = await readIndex();
-        const known = new Map(entries.map(entry => [`${entry.kind}:${entry.group}:${entry.sig}`, entry.id]));
-        const renamed = new Map<string, string>();
+        const known = new Set(entries.map(entry => `${entry.kind}:${entry.group}:${entry.sig}`));
         const imported: Entry[] = [];
 
         try {
             for (const { file, thumb, ...picture } of parsed.pictures) {
-                if (typeof picture.id !== "string" || typeof picture.name !== "string" || typeof picture.kind !== "string"
+                if (typeof picture.name !== "string" || typeof picture.kind !== "string"
                     || typeof picture.sig !== "string" || typeof picture.added !== "number"
                     || (picture.group !== "original" && picture.group !== "cropped")
                     || !isDataUrl(file) || !isDataUrl(thumb)) continue;
 
                 const shelf = `${picture.kind}:${picture.group}:${picture.sig}`;
-                const existing = known.get(shelf);
-                if (existing) {
-                    renamed.set(picture.id, existing);
-                    continue;
-                }
+                if (known.has(shelf)) continue;
 
                 const decoded = await Promise.all([fromDataUrl(file), fromDataUrl(thumb)]).catch(() => null);
                 if (!decoded) continue;
 
                 const id = nanoid();
-                known.set(shelf, id);
-                renamed.set(picture.id, id);
+                known.add(shelf);
                 await DataStore.setMany([[fileKey(id), decoded[0]], [thumbKey(id), decoded[1]]], store);
 
                 imported.push({ ...picture, id });
@@ -201,13 +196,6 @@ export function importAll(json: string, limit: number) {
         } catch (err) {
             await forgetBlobs(imported.map(entry => entry.id));
             throw err;
-        }
-
-        const local = new Set(entries.map(entry => entry.id));
-        const source = (from: string) => renamed.get(from) ?? (local.has(from) ? from : undefined);
-
-        for (const entry of imported) {
-            if (entry.from) entry.from = source(entry.from);
         }
 
         const { kept, dropped } = trim([...entries, ...imported], limit);
