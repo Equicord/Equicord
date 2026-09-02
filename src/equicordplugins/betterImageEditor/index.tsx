@@ -676,9 +676,9 @@ export default definePlugin({
         {
             find: 'displayName="RecentAvatarsStore"',
             replacement: {
-                // our shelf goes in above Discord's own list of archived avatars
-                match: /(uploadType:(\i),guild:\i,handleOpenImageEditingModal:(\i),[\s\S]{0,500}?)(\i&&\(0,\i\.jsx\)\(\i,\{onComplete:(\i),returnRef:\i\}\))/,
-                replace: "$1$self.pickerRow($2,$3,$5),$4"
+                // takes over the slot Discord renders its own recent avatars into
+                match: /(uploadType:(\i),guild:\i,handleOpenImageEditingModal:(\i),[\s\S]{0,500}?)\i&&\(0,\i\.jsx\)\(\i,\{onComplete:(\i),returnRef:\i\}\)/,
+                replace: "$1$self.pickerRow($2,$3,$4)"
             }
         }
     ],
