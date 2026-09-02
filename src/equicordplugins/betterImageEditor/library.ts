@@ -62,7 +62,7 @@ function queued<T>(work: () => Promise<T>) {
 export const getFile = (id: string) => DataStore.get<Blob>(fileKey(id), store);
 export const getThumb = (id: string) => DataStore.get<Blob>(thumbKey(id), store);
 export const getThumbs = (ids: string[]) => DataStore.getMany<Blob>(ids.map(thumbKey), store);
-export const clear = () => DataStore.clear(store);
+export const clear = () => queued(() => DataStore.clear(store));
 
 export const toDataUrl = (blob: Blob) => new Promise<string>((resolve, reject) => {
     const reader = new FileReader();
