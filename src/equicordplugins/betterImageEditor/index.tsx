@@ -78,7 +78,7 @@ const settings = definePluginSettings({
                 color={Button.Colors.PRIMARY}
                 onClick={() => Alerts.show({
                     title: "Forget every remembered crop?",
-                    body: <p>Your pictures stay. Each one opens unframed from now on, until you crop it again.</p>,
+                    body: "Your pictures stay. Each one opens unframed from now on, until you crop it again.",
                     confirmColor: Button.Colors.RED,
                     confirmText: "Forget",
                     cancelText: "Cancel",
@@ -122,7 +122,7 @@ const settings = definePluginSettings({
                 color={Button.Colors.PRIMARY}
                 onClick={() => Alerts.show({
                     title: "Clear saved pictures?",
-                    body: <p>Every picture you have saved here goes, along with the crop remembered for each one. Discord's own archive and your current avatar and banner are not touched.</p>,
+                    body: "Every picture you have saved here goes, along with the crop remembered for each one. Discord's own archive and your current avatar and banner are not touched.",
                     confirmColor: Button.Colors.RED,
                     confirmText: "Clear",
                     cancelText: "Cancel",
@@ -247,7 +247,7 @@ function useForget(bump: () => void) {
 
         Alerts.show({
             title: "Remove this picture?",
-            body: <p>{entry.name} goes from your saved pictures, along with the crop remembered for it.</p>,
+            body: `${entry.name} goes from your saved pictures, along with the crop remembered for it.`,
             confirmColor: Button.Colors.RED,
             confirmText: "Remove",
             cancelText: "Cancel",
@@ -486,7 +486,7 @@ function EditorShelf({ Original, ownProps }: { Original: React.ComponentType<Edi
 
         Alerts.show({
             title: "Keep the cropped copy?",
-            body: <p>It goes on the {croppedLabel(kind).toLowerCase()} shelf, next to your originals.</p>,
+            body: `It goes on the ${croppedLabel(kind).toLowerCase()} shelf, next to your originals.`,
             confirmText: "Keep",
             cancelText: "No thanks",
             onConfirm: run
