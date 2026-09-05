@@ -65,8 +65,14 @@ export default definePlugin({
             find: '"AppView"',
             replacement: [
                 {
+                    match: /(?<=(\i\?\.params).{0,150}"data-fullscreen".{0,100})\i\.\i\?null:.{0,20}(?=,\(0)/,
+                    replace: "Vencord.Webpack.Common.React.createElement($self.render,{currentChannel:$1,children:[$&]})",
+                    predicate: () => settings.store.tabBarPosition === "top"
+                },
+                {
                     match: /"div",{(?=.{0,80}(\i\?\.params))/,
                     replace: "$self.render,{currentChannel:$1,",
+                    predicate: () => settings.store.tabBarPosition === "bottom"
                 }
             ]
         },
@@ -82,7 +88,7 @@ export default definePlugin({
         {
             find: ".deleteRecentMention(",
             replacement: {
-                match: /(?<=className:\i.\i,onJump:)(\i)=>(\i\(\i,\i\.id\))(?=.{0,40}message:(\i))/,
+                match: /(\i)=>(\(0,\i\.\i\)\((\i),\i,\(\)=>.{0,5}\))/g,
                 replace: "$1 => { if ($1?.ctrlKey) $self.open($3); else $2 }"
             }
         },
