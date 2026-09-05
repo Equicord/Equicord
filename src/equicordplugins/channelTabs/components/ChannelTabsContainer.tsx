@@ -11,7 +11,7 @@ import { BasicChannelTabsProps, ChannelTabsProps, clearStaleNavigationContext, c
 import { classNameFactory } from "@utils/css";
 import { classes } from "@utils/misc";
 import { useForceUpdater } from "@utils/react";
-import { findComponentByCodeLazy } from "@webpack";
+import { findComponentByCodeLazy, findStoreLazy } from "@webpack";
 import { Button, ChannelRTCStore, ContextMenuApi, FluxDispatcher, useCallback, useEffect, useRef, UserStore, useState, useStateFromStores } from "@webpack/common";
 
 import channelTabs from "..";
@@ -22,6 +22,7 @@ import { BasicContextMenu } from "./ContextMenus";
 type TabSet = Record<string, ChannelTabsProps[]>;
 
 const PlusSmallIcon = findComponentByCodeLazy("0v-5h5a1");
+const NoticeStore = findStoreLazy("NoticeStore");
 
 const cl = classNameFactory("vc-channeltabs-");
 
@@ -97,6 +98,7 @@ export default function ChannelsTabsContainer(props: BasicChannelTabsProps) {
     ]);
     const GhostTabs = useGhostTabs();
     const isFullscreen = useStateFromStores([], () => ChannelRTCStore.isFullscreenInContext() ?? false);
+    const hasNotice = useStateFromStores([NoticeStore], () => NoticeStore.hasNotice());
 
     const _update = useForceUpdater();
     const update = useCallback((save = true) => {
@@ -310,6 +312,7 @@ export default function ChannelsTabsContainer(props: BasicChannelTabsProps) {
             className={classes(
                 cl("container"),
                 tabBarPosition === "top" && cl("container-top"),
+                tabBarPosition === "top" && hasNotice && cl("container-hide-for-notice"),
                 !animationHover && cl("no-hover-animation"),
                 !animationSelection && cl("no-selection-animation"),
                 !animationDragDrop && cl("no-drag-animation"),
