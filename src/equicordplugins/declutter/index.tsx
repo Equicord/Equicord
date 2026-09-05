@@ -32,7 +32,8 @@ export const settings = definePluginSettings({
     },
     removeAvatarDecoration: {
         type: OptionType.BOOLEAN,
-        description: "Remove avatar decorations. This is/will be disabled if Decor is enabled.",
+        description:
+            "Remove avatar decorations. This is/will be disabled if Decor is enabled.",
         default: false,
         disabled: () => isPluginEnabled("Decor"),
         restartNeeded: true,
@@ -58,6 +59,12 @@ export const settings = definePluginSettings({
     removeClanTag: {
         type: OptionType.BOOLEAN,
         description: "Remove clan tags.",
+        default: true,
+        restartNeeded: true,
+    },
+    removeDisplayNameStyles: {
+        type: OptionType.BOOLEAN,
+        description: "Remove animated/styled display names in the member list.",
         default: true,
         restartNeeded: true,
     },
@@ -164,7 +171,8 @@ export default definePlugin({
     tags: ["Appearance", "Customisation"],
     authors: [EquicordDevs.Leon135, Devs.prism, Devs.Kyuuhachi, Devs.SomeAspy],
     start() {
-        if (isPluginEnabled("Decor") && settings.store.removeAvatarDecoration) settings.store.removeAvatarDecoration = false;
+        if (isPluginEnabled("Decor") && settings.store.removeAvatarDecoration)
+            settings.store.removeAvatarDecoration = false;
     },
     settings,
     patches: [
@@ -184,7 +192,9 @@ export default definePlugin({
                 match: /(?<=\{avatarDecoration:.{0,40}?)(void 0!==\i\?\i:)\i(?=\)?,canAnimate:)/,
                 replace: "$1null",
             },
-            predicate: () => settings.store.removeAvatarDecoration && !isPluginEnabled(decor.name),
+            predicate: () =>
+                settings.store.removeAvatarDecoration &&
+                !isPluginEnabled(decor.name),
         },
         {
             // Avatar decoration on dms list
@@ -193,7 +203,9 @@ export default definePlugin({
                 match: /null==\i\|\|\i\?null:\(0,\i\.jsxs?\)\("img",\{className:\i\.\i,src:\i,alt:" ","aria-hidden":!0\}\)/,
                 replace: "null",
             },
-            predicate: () => settings.store.removeAvatarDecoration && !isPluginEnabled(decor.name),
+            predicate: () =>
+                settings.store.removeAvatarDecoration &&
+                !isPluginEnabled(decor.name),
         },
         // User Area
         {
@@ -202,7 +214,9 @@ export default definePlugin({
                 {
                     match: /((\i)=\i\?\.avatarDecoration,\i=)\(0,\i\.\i\)\(\2\)/,
                     replace: "$1null",
-                    predicate: () => settings.store.removeAvatarDecoration && !isPluginEnabled(decor.name),
+                    predicate: () =>
+                        settings.store.removeAvatarDecoration &&
+                        !isPluginEnabled(decor.name),
                 },
                 {
                     match: /(iconForeground:null!=\i\?\i\.\i:void 0,nameplate:)\i/g,
@@ -243,6 +257,25 @@ export default definePlugin({
                 replace: "return false;",
             },
             predicate: () => settings.store.removeClanTag,
+        },
+        {
+            // Display name styles in member list
+            find: "#{intl::GUILD_OWNER}),children:",
+            replacement: [
+                {
+                    match: /(\i)=\(0,\i\.\i\)\(\{userId:\i\?\.id,guildId:\i\}\)/,
+                    replace: "$1=null",
+                },
+                {
+                    match: /animateRoleGradient:\i/,
+                    replace: "animateRoleGradient:false",
+                },
+                {
+                    match: /colorStrings:\i,/,
+                    replace: "",
+                },
+            ],
+            predicate: () => settings.store.removeDisplayNameStyles,
         },
         {
             // Always show username
