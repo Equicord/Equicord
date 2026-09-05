@@ -78,7 +78,7 @@
 
 /* as its in the same region as notices, it needs to hide itself when a notice is shown
    there's no permanent notices, right? */
-[class*="notice"] + .vc-channeltabs-container-top {
+.vc-channeltabs-container-top:has(+ [class*="notice"]) {
     z-index: 1;
     height: 32px;
     overflow: hidden;
