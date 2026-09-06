@@ -10,6 +10,7 @@ import { definePluginSettings } from "@api/Settings";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { EquicordDevs } from "@utils/constants";
 import { Logger } from "@utils/Logger";
+import { pluralise } from "@utils/misc";
 import definePlugin, { OptionType } from "@utils/types";
 import { chooseFile, saveFile } from "@utils/web";
 import { Alerts, Button, React, showToast, Toasts, useCallback, useEffect, useRef, useState } from "@webpack/common";
@@ -84,7 +85,7 @@ const settings = definePluginSettings({
                     cancelText: "Cancel",
                     onConfirm: () => forgetCrops()
                         .then(count => showToast(
-                            count ? `Forgot the framing on ${count} picture${count === 1 ? "" : "s"}` : "Nothing was framed",
+                            count ? `Forgot the framing on ${pluralise(count, "picture")}` : "Nothing was framed",
                             Toasts.Type.SUCCESS
                         ))
                         .catch(err => logger.error("could not forget the remembered crops", err))
@@ -185,7 +186,7 @@ async function importLibrary() {
 
         const added = await importAll(json, settings.store.librarySize);
         showToast(
-            added ? `Added ${added} picture${added === 1 ? "" : "s"}` : "Nothing new in that file",
+            added ? `Added ${pluralise(added, "picture")}` : "Nothing new in that file",
             Toasts.Type.SUCCESS
         );
     } catch (err) {
