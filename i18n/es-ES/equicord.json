@@ -556,6 +556,7 @@
     },
     "equicordDonor": {
         "description": "Esta insignia es una ventaja especial para los donantes de Equicord (no de Vencord)",
+        "description2": "Por favor, considera apoyar el desarrollo de Equicord convirtiéndote en un donador. Significaría mucho!!",
         "title": "Donante de Equicord"
     },
     "equicordHelper": {
@@ -605,6 +606,10 @@
             "themes": "Temas",
             "tooltip": "Caja de herramientas de Equicord"
         }
+    },
+    "equicordTranslator": {
+        "description": "Dado a los contribuidores que expandieron el soporte de lenguaje de Equicord traduciendo el contenido para la comunidad.",
+        "title": "Traductor De Equicord"
     },
     "equissant": {
         "description": "Cruce cada cantidad especificada de clics:trolley:",
@@ -941,6 +946,9 @@
             "disableAdoptTagPrompt": "Deshabilitar el mensaje para adoptar etiquetas",
             "hideTags": "Ocultar etiquetas"
         }
+    },
+    "headerBarAPI": {
+        "description": "API para añadir botones a la barra de encabezamiento y el canal de barra de herramientas"
     },
     "hideChatButtons": {
         "description": "Capaz de ocultar los botones de chat.",
@@ -2163,6 +2171,9 @@
             "patternPlaceholder": "*.ejemplo.com",
             "urlPatterns": "Patrones de URL"
         }
+    },
+    "userAreaAPI": {
+        "description": "API para añadir botones a la area del panel de usuario"
     },
     "userpfp": {
         "avatarOptions": {
