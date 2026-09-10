@@ -18,6 +18,7 @@ import { Paragraph } from "@components/Paragraph";
 import { openContributorModal, openPluginModal, SettingsTab, wrapTab } from "@components/settings";
 import { QuickAction, QuickActionCard } from "@components/settings/QuickAction";
 import { SpecialCard } from "@components/settings/SpecialCard";
+import type { SettingsChannelInfo } from "@main/settings";
 import BadgeAPI from "@plugins/_api/badges";
 import SettingsPlugin from "@plugins/_core/settings";
 import { gitRemote } from "@shared/vencordUserAgent";
@@ -26,7 +27,7 @@ import { classNameFactory } from "@utils/css";
 import { Margins } from "@utils/margins";
 import { isAnyPluginDev } from "@utils/misc";
 import { relaunch } from "@utils/native";
-import { Alerts, GuildMemberStore, React, useMemo, UserStore } from "@webpack/common";
+import { Alerts, GuildMemberStore, React, useEffect, useMemo, UserStore, useState } from "@webpack/common";
 
 import { DonateButtonComponent } from "./DonateButton";
 import { MacOSVibrancySettings } from "./MacVibrancySettings";
@@ -43,6 +44,8 @@ const DONOR_BACKGROUND_IMAGE = "https://media.discordapp.net/stickers/1311070116
 const CONTRIB_BACKGROUND_IMAGE = "https://media.discordapp.net/stickers/1311070166481895484.png?size=2048";
 
 const cl = classNameFactory("vc-vencord-tab-");
+
+const CHANNEL_NAMES: Record<string, string> = { canary: "Canary", ptb: "PTB", development: "Development" };
 
 type KeysOfType<Object, Type> = {
     [K in keyof Object]: Object[K] extends Type ? K : never;
@@ -153,6 +156,50 @@ function Switches() {
             />
         );
     });
+}
+
+function ChannelSettingsSwitch() {
+    const [info, setInfo] = useState<SettingsChannelInfo | null>(null);
+
+    useEffect(() => {
+        VencordNative.settings.getChannelInfo().then(setInfo);
+    }, []);
+
+    if (!info || info.channel === "stable") return null;
+
+    const channelName = CHANNEL_NAMES[info.channel] ?? info.channel;
+
+    return (
+        <FormSwitch
+            title={`Keep separate settings for Discord ${channelName}`}
+            description={
+                <>
+                    Store plugin settings for Discord {channelName} in their own file instead of sharing them with Discord Stable. Useful when both clients run at the same time, since each one otherwise overwrites the other's settings. Themes and QuickCSS stay shared.
+                    {info.restartNeeded && (
+                        <Notice.Warning className={Margins.top8} style={{ width: "100%" }}>
+                            Restart to go back to the shared settings.
+                        </Notice.Warning>
+                    )}
+                </>
+            }
+            value={info.separate}
+            hideBorder
+            onChange={async v => {
+                await VencordNative.settings.setSeparateChannelSettings(v);
+                setInfo(await VencordNative.settings.getChannelInfo());
+
+                if (!v) {
+                    Alerts.show({
+                        title: "Restart Required",
+                        body: "A restart is required to go back to the shared settings.",
+                        confirmText: "Restart now",
+                        cancelText: "Later!",
+                        onConfirm: relaunch
+                    });
+                }
+            }}
+        />
+    );
 }
 
 function EquicordSettings() {
@@ -274,6 +321,7 @@ function EquicordSettings() {
             </Notice.Info>
 
             <Switches />
+            {IS_DISCORD_DESKTOP && <ChannelSettingsSwitch />}
 
             <MacOSVibrancySettings />
             <WindowsMaterialSettings />

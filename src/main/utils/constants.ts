@@ -48,6 +48,17 @@ export const ALLOWED_PROTOCOLS = [
 
 export const IS_VANILLA = /* @__PURE__ */ process.argv.includes("--vanilla");
 
+export const RELEASE_CHANNEL = /* @__PURE__ */ readReleaseChannel();
+
+function readReleaseChannel() {
+    try {
+        const { releaseChannel } = JSON.parse(readFileSync(join(process.resourcesPath, "build_info.json"), "utf-8"));
+        return typeof releaseChannel === "string" && /^[a-z]+$/.test(releaseChannel) ? releaseChannel : "stable";
+    } catch {
+        return "stable";
+    }
+}
+
 if (IS_DEV) {
     const prodDir = join(DATA_DIR, "..");
     const settings = join(prodDir, "settings", "settings.json");

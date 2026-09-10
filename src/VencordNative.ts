@@ -7,6 +7,7 @@
 import type { Settings } from "@api/Settings";
 import type { CspRequestResult } from "@main/csp/manager";
 import type { PluginIpcMappings } from "@main/ipcPlugins";
+import type { SettingsChannelInfo } from "@main/settings";
 import { UserThemeHeader } from "@main/themes";
 import { IpcEvents } from "@shared/IpcEvents";
 import type { IpcRes } from "@utils/types";
@@ -56,6 +57,8 @@ export default {
         get: () => sendSync<Settings>(IpcEvents.GET_SETTINGS),
         set: (settings: Settings, pathToNotify?: string) => invoke<void>(IpcEvents.SET_SETTINGS, settings, pathToNotify),
         getSettingsDir: () => invoke<string>(IpcEvents.GET_SETTINGS_DIR),
+        getChannelInfo: () => invoke<SettingsChannelInfo>(IpcEvents.GET_SETTINGS_CHANNEL),
+        setSeparateChannelSettings: (enabled: boolean) => invoke<void>(IpcEvents.SET_SEPARATE_CHANNEL_SETTINGS, enabled),
 
         openFolder: () => invoke<void>(IpcEvents.OPEN_SETTINGS_FOLDER),
     },

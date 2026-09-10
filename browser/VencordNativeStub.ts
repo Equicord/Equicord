@@ -131,6 +131,8 @@ window.VencordNative = {
         },
         set: async (s: Settings) => localStorage.setItem("EquicordSettings", JSON.stringify(s)),
         getSettingsDir: async () => "LocalStorage",
+        getChannelInfo: async () => ({ channel: "stable", separate: false, restartNeeded: false }),
+        setSeparateChannelSettings: NOOP_ASYNC,
         openFolder: async () => Promise.reject("settings:openFolder is not supported on web"),
     },
 
