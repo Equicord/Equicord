@@ -13,7 +13,6 @@ import { getUserAvatarUrl } from "@utils/misc";
 import { BasicGuild, Channel, Guild, GuildProfile, Message, MessageAttachment } from "@vencord/discord-types";
 import { findByCodeLazy, findComponentByCodeLazy } from "@webpack";
 import { BasicGuildStore, ChannelActionCreators, ChannelStore, DateUtils, GuildProfileStore, GuildStore, IconUtils, Popout, React, RelationshipStore, RestAPI, SnowflakeUtils, useCallback, useEffect, useMemo, useRef, UserStore, useState, useStateFromStores } from "@webpack/common";
-import { ComponentType, ReactNode } from "react";
 
 import { cl, ForwardOptionsContext, ForwardOptionsState } from ".";
 
@@ -117,38 +116,33 @@ function GuildName({ guildId }: { guildId: string; }) {
     );
 }
 
-function ChannelIcon({ channel }: { channel: Channel; }) {
-    const Icon: string | ComponentType<{ size: string, color: string; }> = useStateFromStores([UserStore], () => {
+function ChannelIcon({ channel, name }: { channel: Channel; name: string; }) {
+    return useStateFromStores([UserStore], () => {
         if (channel.isDM()) {
             const user = channel.recipients.values().map(UserStore.getUser).find(Boolean);
-            return user ? getUserAvatarUrl(user, channel.getGuildId(), true, DiscordIconSizes.xs) : null;
+            const src = user && getUserAvatarUrl(user, channel.getGuildId(), true, DiscordIconSizes.xs);
+            return src && <img src={src} alt={`DM icon for ${name}`} className={cl("user-icon")} />;
         }
 
         if (channel.isGroupDM()) {
-            return IconUtils.getChannelIconURL({ ...channel, applicationId: channel.getApplicationId(), size: DiscordIconSizes.xs });
+            const src = IconUtils.getChannelIconURL({ ...channel, applicationId: channel.getApplicationId(), size: DiscordIconSizes.xs });
+            return src && <img src={src} alt={`Group DM icon for ${name}`} className={cl("user-icon")} />;
         }
 
-        return getChannelIcon(channel);
+        const Icon = getChannelIcon(channel);
+        return Icon && <Icon size="xs" color="currentColor" />;
     }, [channel]);
-
-    return typeof Icon === "string" ? (
-        <img src={Icon} alt={`Channel icon for ${channel.name}`} className={cl("user-icon")} />
-    ) : (
-        Icon && <Icon size="xs" color="currentColor" />
-    );
 }
 
 function ChannelName({ guildId, channelId, messageId }: { guildId?: string; channelId: string; messageId: string; }) {
     const channel = useStateFromStores([ChannelStore], () => ChannelStore.getChannel(channelId), [channelId]);
-    const name: ReactNode = useStateFromStores(
+    const name = useStateFromStores(
         [UserStore, RelationshipStore],
-        () =>
-            channel ? (
-                formatChannelName(channel, UserStore, RelationshipStore, false, false)
-            ) : (
-                <i>{guildId ? getIntlMessage("UNKNOWN_CHANNEL").toLowerCase() : getIntlMessage("UNKNOWN_USER")}</i>
-            ),
-        [channel, guildId]
+        () => {
+            if (channel) return formatChannelName(channel, UserStore, RelationshipStore, false, false);
+            return guildId ? getIntlMessage("UNKNOWN_CHANNEL").toLowerCase() : getIntlMessage("UNKNOWN_USER");
+        },
+        [channel, guildId],
     );
 
     const prefetch = useCallback(() => ChannelActionCreators.preload(guildId ?? "@me", channelId), [guildId, channelId]);
@@ -157,9 +151,9 @@ function ChannelName({ guildId, channelId, messageId }: { guildId?: string; chan
 
     return (
         <div className={cl("footer-element")} onClick={navigate} onMouseEnter={prefetch}>
-            {channel ? <ChannelIcon channel={channel} /> : <FallbackIcon width={DiscordIconSizes.xs} height={DiscordIconSizes.xs} />}
+            {channel ? <ChannelIcon channel={channel} name={name} /> : <FallbackIcon width={DiscordIconSizes.xs} height={DiscordIconSizes.xs} />}
             <BaseText size="sm" weight="medium" className={cl("footer-text")}>
-                {name}
+                {channel ? name : <i>{name}</i>}
             </BaseText>
             <RightArrow width={DiscordIconSizes.xxs} height={DiscordIconSizes.xxs} fill="currentColor" />
         </div>
