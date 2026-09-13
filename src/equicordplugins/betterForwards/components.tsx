@@ -19,7 +19,7 @@ import { cl, ForwardOptionsContext, ForwardOptionsState } from ".";
 
 type AttachmentType = "IMAGE" | "VIDEO" | "CLIP" | "AUDIO" | "VISUAL_PLACEHOLDER" | "PLAINTEXT_PREVIEW" | "OTHER" | "INVALID";
 
-const TagGroup = findComponentByCodeLazy("disallowEmptySelection:", "onSelectionChange:", "accessibilityHint:");
+const TagGroup = findComponentByCodeLazy('"filter-tag-group"', '"tag-group"');
 const ServerProfileComponent = findComponentByCodeLazy("{guildProfile:", "GUILD_PROFILE");
 const getAttachmentType = findByCodeLazy('"PLAINTEXT_PREVIEW":"OTHER"');
 const formatChannelName = findByCodeLazy("#{intl::NO_ACCESS}", "isObfuscated()");
@@ -262,7 +262,7 @@ function SubEmbedPicker({ title, subEmbeds, opts, setOpts, hasOpts, defaultOpts 
             <TagGroup
                 label={title}
                 selectionMode="multiple"
-                layout="inline"
+                size="sm"
                 items={items}
                 selectedKeys={selectedKeys}
                 onSelectionChange={onSelectionChange}
@@ -291,7 +291,7 @@ export function AttachmentPicker({ message, opts, setOpts, hasOpts, defaultOpts 
         <TagGroup
             label="Message attachments"
             selectionMode="multiple"
-            layout="inline"
+            size="sm"
             items={items}
             selectedKeys={selectedKeys}
             onSelectionChange={onSelectionChange}
