@@ -9,10 +9,10 @@ import { Flex } from "@components/Flex";
 import { AtIcon, DiscordIconSizes, RightArrow, TextIcon } from "@components/Icons";
 import { iconsModule } from "@equicordplugins/_core/concatenatedModules";
 import { getGuildAcronym, getIntlMessage } from "@utils/discord";
-import { getUserAvatarUrl } from "@utils/misc";
+import { getUserAvatarUrl, identity } from "@utils/misc";
 import { BasicGuild, Channel, Guild, GuildProfile, Message, MessageAttachment } from "@vencord/discord-types";
 import { findByCodeLazy, findComponentByCodeLazy } from "@webpack";
-import { BasicGuildStore, ChannelActionCreators, ChannelStore, DateUtils, GuildProfileStore, GuildStore, IconUtils, Popout, React, RelationshipStore, RestAPI, SnowflakeUtils, useCallback, useEffect, useMemo, useRef, UserStore, useState, useStateFromStores } from "@webpack/common";
+import { BasicGuildStore, ChannelActionCreators, ChannelStore, DateUtils, GuildProfileStore, GuildStore, IconUtils, InviteActions, Popout, React, RelationshipStore, RestAPI, SnowflakeUtils, useCallback, useEffect, useMemo, useRef, UserStore, useState, useStateFromStores } from "@webpack/common";
 
 import { cl, ForwardOptionsContext, ForwardOptionsState } from ".";
 
@@ -80,7 +80,7 @@ function WidgetIcon({ guildId, name }: { guildId: string; name: string; }) {
 }
 
 function GuildName({ guildId }: { guildId: string; }) {
-    const [widget, setWidget] = useState<{ name?: string, ok: boolean; } | null>(null);
+    const [widget, setWidget] = useState<{ name: string | null, ok: boolean; } | null>(null);
     const guild: Guild | BasicGuild | GuildProfile | null = useStateFromStores(
         [GuildStore, BasicGuildStore, GuildProfileStore],
         () => GuildStore.getGuild(guildId) ?? BasicGuildStore.getGuild(guildId) ?? GuildProfileStore.getProfile(guildId) ?? null,
@@ -93,10 +93,13 @@ function GuildName({ guildId }: { guildId: string; }) {
         if (profile || GuildProfileStore.getFetchStatus(guildId) === "FETCHING" || widget) return;
 
         // Not the same as the .GUILD_WIDGET endpoint, which only server admins have access to
-        await RestAPI.get({ url: `/guilds/${guildId}/widget.json` })
-            .then(res => ({ ok: true, name: res.body.name as string }))
-            .catch(() => ({ ok: false }))
-            .then(setWidget);
+        const { ok, body } = await RestAPI.get({ url: `/guilds/${guildId}/widget.json` }).catch(identity);
+
+        // Wait until the invite is resolved, in case it has additional info
+        const invite = ok ? URL.parse(body.instant_invite)?.pathname.split("/").at(-1) : null;
+        if (invite) await InviteActions.resolveInvite(invite);
+
+        setWidget({ ok, name: ok ? body.name : null });
     }, [guildId, widget]);
 
     const guildDivRef = useRef(null);
