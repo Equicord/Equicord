@@ -102,12 +102,13 @@ function GuildName({ guildId }: { guildId: string; }) {
         setWidget({ ok, name: ok ? body.name : null });
     }, [guildId, widget]);
 
-    const guildDivRef = useRef(null);
+    const ref = useRef(null);
+    const preload = !guild ? prefetch : undefined;
 
     return (
-        <Popout position="top" renderPopout={() => <ServerProfileComponent guildId={guildId} />} targetElementRef={guildDivRef}>
+        <Popout position="top" renderPopout={() => <ServerProfileComponent guildId={guildId} />} targetElementRef={ref} preload={preload}>
             {popoutProps => (
-                <div ref={guildDivRef} className={cl("footer-element")} onMouseEnter={!guild ? prefetch : undefined} {...popoutProps}>
+                <div ref={ref} className={cl("footer-element")} onMouseEnter={preload} {...popoutProps}>
                     {guild ? <GuildIcon guild={guild} /> : widget?.ok ? <WidgetIcon guildId={guildId} name={widget.name!} /> : null}
                     <BaseText size="sm" weight="medium" className={cl("footer-text")}>
                         {guild?.name ?? widget?.name ?? "View server"}
