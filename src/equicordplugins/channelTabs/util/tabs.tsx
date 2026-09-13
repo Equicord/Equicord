@@ -11,6 +11,7 @@ import { NavigationRouter, SelectedChannelStore, SelectedGuildStore, showToast, 
 import { JSX } from "react";
 
 import { logger, settings } from "./constants";
+import { cacheCurrentTabState, clearTabState, restoreTabState, tabStateCache } from "./scroll";
 import { BasicChannelTabsProps, ChannelTabsProps, PersistedTabs } from "./types";
 
 const cl = classNameFactory("vc-channeltabs-");
@@ -97,15 +98,6 @@ const openTabHistory: number[] = [];
 let hydratedUserId: string | undefined;
 let hydrationGeneration = 0;
 let saveQueue = Promise.resolve();
-
-// cache for the tab state (so like scroll pos etc)
-interface TabStateCache {
-    scrollPosition: number;
-    timestamp: number;
-}
-const tabStateCache = new Map<number, TabStateCache>();
-const MAX_CACHE_SIZE = 50;
-const CACHE_TTL_MS = 30 * 60 * 1000; // 30 minutes
 
 // horror
 const _ = {
@@ -338,62 +330,6 @@ export function moveDraggedTabs(index1: number, index2: number) {
     update();
 }
 
-function getScrollContainer(): HTMLElement | null {
-    // discord's main chat scroller
-    return document.querySelector('[class*="scrollerInner"]') as HTMLElement;
-}
-
-function evictStaleCache() {
-    const now = Date.now();
-
-    for (const [tabId, cache] of tabStateCache.entries()) {
-        if (now - cache.timestamp > CACHE_TTL_MS) {
-            tabStateCache.delete(tabId);
-        }
-    }
-
-    if (tabStateCache.size > MAX_CACHE_SIZE) {
-        const entries = Array.from(tabStateCache.entries())
-            .sort((a, b) => a[1].timestamp - b[1].timestamp);
-
-        const entriesToRemove = entries.slice(0, tabStateCache.size - MAX_CACHE_SIZE);
-        for (const [tabId] of entriesToRemove) {
-            tabStateCache.delete(tabId);
-        }
-    }
-}
-
-function cacheCurrentTabState() {
-    if (!settings.store.renderAllTabs) return;
-
-    const scrollContainer = getScrollContainer();
-    if (scrollContainer && currentlyOpenTab !== undefined) {
-        evictStaleCache();
-
-        tabStateCache.set(currentlyOpenTab, {
-            scrollPosition: scrollContainer.scrollTop,
-            timestamp: Date.now()
-        });
-    }
-}
-
-function restoreTabState(tabId: number) {
-    if (!settings.store.renderAllTabs) return;
-
-    const cached = tabStateCache.get(tabId);
-    if (!cached) return;
-
-    // restore scroll pos after delay to make sure content loaded
-    requestAnimationFrame(() => {
-        setTimeout(() => {
-            const scrollContainer = getScrollContainer();
-            if (scrollContainer) {
-                scrollContainer.scrollTop = cached.scrollPosition;
-            }
-        }, 50);
-    });
-}
-
 export function moveToTab(id: number) {
     const tab = openTabs.find(v => v.id === id);
     if (tab === undefined) return logger.error("Couldn't find channel tab with ID " + id, openTabs);
@@ -402,7 +338,8 @@ export function moveToTab(id: number) {
     isViewingViaBookmark = false;
 
     // cache current tab state before switching to it
-    cacheCurrentTabState();
+    const changingTabs = id !== currentlyOpenTab;
+    if (changingTabs) cacheCurrentTabState(openTabs.find(t => t.id === currentlyOpenTab), openTabs);
 
     setOpenTab(id);
 
@@ -437,18 +374,20 @@ export function moveToTab(id: number) {
     }
 
     // regular channel nav
-    if (tab.messageId) {
+    const { messageId } = tab;
+    if (messageId) {
         setNavigationSource(tab.guildId, tab.channelId, "tab");
-        NavigationRouter.transitionTo(`/channels/${tab.guildId}/${tab.channelId}/${tab.messageId}`);
+        NavigationRouter.transitionTo(`/channels/${tab.guildId}/${tab.channelId}/${messageId}`);
         delete openTabs[openTabs.indexOf(tab)].messageId;
     }
-    else if (tab.channelId !== SelectedChannelStore.getChannelId() || tab.guildId !== SelectedGuildStore.getGuildId()) {
+    else if (tab.channelId !== SelectedChannelStore.getChannelId() || (tab.guildId || "@me") !== (SelectedGuildStore.getGuildId() || "@me")) {
         setNavigationSource(tab.guildId, tab.channelId, "tab");
         NavigationRouter.transitionToGuild(tab.guildId, tab.channelId);
-        // restore cached state for the new tab
-        restoreTabState(id);
     }
     else update();
+
+    // restore cached state for the new tab
+    if (changingTabs && !messageId) restoreTabState(id, tab.channelId);
 
     // Clear flag after navigation with safety timeout
     navigationTimeoutId = setTimeout(() => {
@@ -486,7 +425,7 @@ export async function openStartupTabs(props: BasicChannelTabsProps & { userId: s
     replaceArray(openTabs);
     replaceArray(closedTabs);
     replaceArray(openTabHistory);
-    tabStateCache.clear();
+    clearTabState();
     highestIdIndex = 0;
 
     if (keepCurrentChannel) {
