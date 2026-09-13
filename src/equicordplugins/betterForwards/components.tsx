@@ -10,10 +10,10 @@ import { AtIcon, DiscordIconSizes, RightArrow, TextIcon } from "@components/Icon
 import { iconsModule } from "@equicordplugins/_core/concatenatedModules";
 import { getGuildAcronym, getIntlMessage } from "@utils/discord";
 import { getUserAvatarUrl } from "@utils/misc";
-import { BasicGuild, Guild, MessageAttachment } from "@vencord/discord-types";
+import { BasicGuild, Channel, Guild, GuildProfile, Message, MessageAttachment } from "@vencord/discord-types";
 import { findByCodeLazy, findComponentByCodeLazy } from "@webpack";
-import { BasicGuildStore, ChannelActionCreators, ChannelStore, DateUtils, GuildStore, IconUtils, Popout, React, RelationshipStore, SelectedGuildStore, SnowflakeUtils, useCallback, useEffect, useMemo, useRef, UserStore, useStateFromStores } from "@webpack/common";
-import { ReactNode } from "react";
+import { BasicGuildStore, ChannelActionCreators, ChannelStore, DateUtils, GuildProfileStore, GuildStore, IconUtils, Popout, React, RelationshipStore, RestAPI, SnowflakeUtils, useCallback, useEffect, useMemo, useRef, UserStore, useState, useStateFromStores } from "@webpack/common";
+import { ComponentType, ReactNode } from "react";
 
 import { cl, ForwardOptionsContext, ForwardOptionsState } from ".";
 
@@ -26,55 +26,132 @@ const formatChannelName = findByCodeLazy("#{intl::NO_ACCESS}", "isObfuscated()")
 const getChannelIcon = findByCodeLazy("textFocused:", "isGameInvitesChannel()");
 const navigateTo = findByCodeLazy('getConfig({location:"channel_mention"})');
 const fetchBasicGuild = findByCodeLazy('type:"BASIC_GUILD_FETCH_SUCCESS"');
+const fetchGuildProfile = findByCodeLazy('type:"GUILD_PROFILE_FETCH_SUCCESS"');
 
-export function GuildName({ guildId }: { guildId: string; }) {
-    const currentGuildId = useStateFromStores([SelectedGuildStore], () => SelectedGuildStore.getGuildId(), []);
-    const guild: Guild | BasicGuild | undefined = useStateFromStores(
-        [GuildStore, BasicGuildStore],
-        () => GuildStore.getGuild(guildId) ?? BasicGuildStore.getGuild(guildId),
-        [guildId]
+export function ForwardFooter({ message }: { message: Message; }) {
+    const targetChannelId = message.getChannelId();
+    const targetGuildId = useStateFromStores([ChannelStore],
+        () => ChannelStore.getChannel(targetChannelId).getGuildId(),
+        [targetChannelId]
     );
 
-    const icon = useMemo(() => {
-        if (!guild) return null;
+    if (!message.messageReference) return null;
 
-        return guild.icon ? (
-            <img
-                src={IconUtils.getGuildIconURL({ ...guild, canAnimate: true, size: 16 })}
-                alt={`Server icon for ${guild.name}`}
-                className={cl("guild-icon")}
-            />
-        ) : (
-            <div className={cl("guild-acronym")}>{getGuildAcronym(guild)}</div>
-        );
-    }, [guild]);
-
-    const guildDivRef = useRef(null);
-
-    useEffect(() => void fetchBasicGuild(guildId), [guildId]);
+    const { channel_id, guild_id, message_id } = message.messageReference;
 
     return (
-        currentGuildId !== guildId && (
-            <Popout
-                position="top"
-                renderPopout={() => <ServerProfileComponent guildId={guildId} />}
-                targetElementRef={guildDivRef}
-            >
-                {popoutProps => (
-                    <div ref={guildDivRef} className={cl("footer-element")} {...popoutProps}>
-                        {icon}
-                        <BaseText size="sm" weight="medium" className={cl("footer-text")}>
-                            {guild ? guild.name : "View server"}
-                        </BaseText>
-                        <RightArrow width={12} height={12} fill="currentColor" />
-                    </div>
-                )}
-            </Popout>
-        )
+        <div className={cl("footer")}>
+            {guild_id && targetGuildId !== guild_id && <GuildName guildId={guild_id} />}
+            <ChannelName messageId={message_id} channelId={channel_id} guildId={guild_id} />
+            <Timestamp snowflake={message_id} />
+        </div>
     );
 }
 
-export function ChannelName({ guildId, channelId, messageId }: { guildId?: string; channelId: string; messageId: string; }) {
+function GuildIcon({ guild }: { guild: Guild | BasicGuild | GuildProfile; }) {
+    const { id, icon, name } = guild;
+    const src = useMemo(
+        () => IconUtils.getGuildIconURL({ id, icon, canAnimate: true, size: DiscordIconSizes.xs }),
+        [id, icon],
+    );
+
+    return icon ? (
+        <img src={src} alt={`Server icon for ${name}`} className={cl("guild-icon")} />
+    ) : (
+        <div className={cl("guild-acronym")}>{getGuildAcronym(guild)}</div>
+    );
+}
+
+function WidgetIcon({ guildId, name }: { guildId: string; name: string; }) {
+    const src = useMemo(() => `https://${window.GLOBAL_ENV.API_ENDPOINT}/guilds/${guildId}/widget.png?style=banner1`, [guildId]);
+
+    return (
+        <svg
+            viewBox="20 27 50 50"
+            preserveAspectRatio="xMidYMid slice"
+            width={DiscordIconSizes.xs}
+            height={DiscordIconSizes.xs}
+            role="img"
+            aria-label={`Server icon for ${name}`}
+            className={cl("widget-guild-icon")}
+        >
+            <image href={src} width={300} height={160} x={0} y={0} />
+        </svg>
+    );
+}
+
+function GuildName({ guildId }: { guildId: string; }) {
+    const [widget, setWidget] = useState<{ name?: string, ok: boolean; } | null>(null);
+    const guild: Guild | BasicGuild | GuildProfile | null = useStateFromStores(
+        [GuildStore, BasicGuildStore, GuildProfileStore],
+        () => GuildStore.getGuild(guildId) ?? BasicGuildStore.getGuild(guildId) ?? GuildProfileStore.getProfile(guildId) ?? null,
+        [guildId]
+    );
+
+    useEffect(() => void fetchBasicGuild(guildId), [guildId]);
+    const prefetch = useCallback(async () => {
+        await fetchGuildProfile(guildId, false, { respectBackoff: true });
+
+        // Flux event dispatches are async, and fetchGuildProfile doesn't await them
+        const res = await new Promise<boolean>(res => GuildProfileStore.addConditionalChangeListener(() => {
+            const status = GuildProfileStore.getFetchStatus(guildId);
+            if (status === "FETCHED") res(GuildProfileStore.getProfile(guildId) != null);
+            return status === "FETCHING";
+        }));
+
+        if (res || widget) return;
+
+        // Not the same as the .GUILD_WIDGET endpoint, which only server admins have access to
+        const widgetJson = await RestAPI.get({ url: `/guilds/${guildId}/widget.json` })
+            .then(res => ({ ok: true, name: res.body.name as string }))
+            .catch(() => ({ ok: false }));
+
+        setWidget(widgetJson);
+    }, [guildId, widget]);
+
+    const guildDivRef = useRef(null);
+
+    return (
+        <Popout
+            position="top"
+            renderPopout={() => <ServerProfileComponent guildId={guildId} />}
+            targetElementRef={guildDivRef}
+        >
+            {popoutProps => (
+                <div ref={guildDivRef} className={cl("footer-element")} onMouseEnter={!guild ? prefetch : undefined} {...popoutProps}>
+                    {guild ? <GuildIcon guild={guild} /> : widget?.ok ? <WidgetIcon guildId={guildId} name={widget.name!} /> : null}
+                    <BaseText size="sm" weight="medium" className={cl("footer-text")}>
+                        {guild?.name ?? widget?.name ?? "View server"}
+                    </BaseText>
+                    <RightArrow width={DiscordIconSizes.xxs} height={DiscordIconSizes.xxs} fill="currentColor" />
+                </div>
+            )}
+        </Popout>
+    );
+}
+
+function ChannelIcon({ channel }: { channel: Channel; }) {
+    const Icon: string | ComponentType<{ size: string, color: string; }> = useStateFromStores([UserStore], () => {
+        if (channel.isDM()) {
+            const user = channel.recipients.values().map(UserStore.getUser).find(Boolean);
+            return user ? getUserAvatarUrl(user, channel.getGuildId(), true, DiscordIconSizes.xs) : null;
+        }
+
+        if (channel.isGroupDM()) {
+            return IconUtils.getChannelIconURL({ ...channel, applicationId: channel.getApplicationId(), size: DiscordIconSizes.xs });
+        }
+
+        return getChannelIcon(channel);
+    }, [channel]);
+
+    return typeof Icon === "string" ? (
+        <img src={Icon} alt={`Channel icon for ${channel.name}`} className={cl("user-icon")} />
+    ) : (
+        Icon && <Icon size="xs" color="currentColor" />
+    );
+}
+
+function ChannelName({ guildId, channelId, messageId }: { guildId?: string; channelId: string; messageId: string; }) {
     const channel = useStateFromStores([ChannelStore], () => ChannelStore.getChannel(channelId), [channelId]);
     const name: ReactNode = useStateFromStores(
         [UserStore, RelationshipStore],
@@ -87,56 +164,22 @@ export function ChannelName({ guildId, channelId, messageId }: { guildId?: strin
         [channel, guildId]
     );
 
-    const icon = useMemo(() => {
-        if (channel?.isDM()) {
-            const [user] = channel.recipients.map(UserStore.getUser).filter(Boolean);
-            if (user)
-                return (
-                    <img
-                        src={getUserAvatarUrl(user, guildId, true, 16)}
-                        alt={`DM icon for ${name}`}
-                        className={cl("user-icon")}
-                    />
-                );
-        }
-
-        if (channel?.isGroupDM()) {
-            return (
-                <img
-                    src={IconUtils.getChannelIconURL({
-                        ...channel,
-                        applicationId: channel.getApplicationId(),
-                        size: 16
-                    })}
-                    alt={`Group DM icon for ${name}`}
-                    className={cl("user-icon")}
-                />
-            );
-        }
-
-        const ChannelIcon = channel && getChannelIcon(channel);
-        if (ChannelIcon) return <ChannelIcon size="xs" color="currentColor" />;
-
-        const FallbackIcon = guildId ? TextIcon : AtIcon;
-        return <FallbackIcon width={DiscordIconSizes.xs} height={DiscordIconSizes.xs} />;
-    }, [channel, guildId, name]);
+    const prefetch = useCallback(() => ChannelActionCreators.preload(guildId ?? "@me", channelId), [guildId, channelId]);
+    const navigate = useCallback(() => navigateTo(guildId ?? "@me", channelId, messageId), [guildId, channelId, messageId]);
+    const FallbackIcon = guildId ? TextIcon : AtIcon;
 
     return (
-        <div
-            className={cl("footer-element")}
-            onClick={() => navigateTo(guildId ?? "@me", channelId, messageId)}
-            onMouseEnter={() => ChannelActionCreators.preload(guildId ?? "@me", channelId)}
-        >
-            {icon}
+        <div className={cl("footer-element")} onClick={navigate} onMouseEnter={prefetch}>
+            {channel ? <ChannelIcon channel={channel} /> : <FallbackIcon width={DiscordIconSizes.xs} height={DiscordIconSizes.xs} />}
             <BaseText size="sm" weight="medium" className={cl("footer-text")}>
                 {name}
             </BaseText>
-            <RightArrow width={12} height={12} fill="currentColor" />
+            <RightArrow width={DiscordIconSizes.xxs} height={DiscordIconSizes.xxs} fill="currentColor" />
         </div>
     );
 }
 
-export function Timestamp({ snowflake }: { snowflake: string; }) {
+function Timestamp({ snowflake }: { snowflake: string; }) {
     const formatted = useMemo(
         () => DateUtils.calendarFormat(new Date(SnowflakeUtils.extractTimestamp(snowflake))),
         [snowflake]
@@ -165,7 +208,7 @@ export function ForwardPicker() {
     );
 }
 
-export function EmbedPicker(props: Required<ForwardOptionsState>) {
+function EmbedPicker(props: Required<ForwardOptionsState>) {
     const embeds = useMemo(() => {
         let id = 0;
         return props.message.embeds.map(({ rawTitle, rawDescription, image, images = image ? [image] : [], video }, i) => {
@@ -200,7 +243,7 @@ interface SubEmbedPickerProps extends Required<ForwardOptionsState> {
     subEmbeds: { id: number; name: string; isMainEmbed: boolean; }[];
 }
 
-export function SubEmbedPicker({ title, subEmbeds, opts, setOpts, hasOpts, defaultOpts }: SubEmbedPickerProps) {
+function SubEmbedPicker({ title, subEmbeds, opts, setOpts, hasOpts, defaultOpts }: SubEmbedPickerProps) {
     const { EmbedIcon, ImageIcon } = iconsModule;
     const items = useMemo(() => subEmbeds.map(({ id, name, isMainEmbed }) => ({
         id,
@@ -219,24 +262,26 @@ export function SubEmbedPicker({ title, subEmbeds, opts, setOpts, hasOpts, defau
         }), [setOpts, validItems],
     );
 
-    return <Flex gap={4} flexDirection="column">
-        <BaseText
-            size="sm"
-            color="text-subtle"
-            className={cl("embed-name")}
-            style={{ opacity: !hasOpts ? 0.5 : undefined }}
-        >
-            {title}
-        </BaseText>
-        <TagGroup
-            label={title}
-            selectionMode="multiple"
-            layout="inline"
-            items={items}
-            selectedKeys={selectedKeys}
-            onSelectionChange={onSelectionChange}
-        />
-    </Flex>;
+    return (
+        <Flex gap={4} flexDirection="column">
+            <BaseText
+                size="sm"
+                color="text-subtle"
+                className={cl("embed-name")}
+                style={{ opacity: !hasOpts ? 0.5 : undefined }}
+            >
+                {title}
+            </BaseText>
+            <TagGroup
+                label={title}
+                selectionMode="multiple"
+                layout="inline"
+                items={items}
+                selectedKeys={selectedKeys}
+                onSelectionChange={onSelectionChange}
+            />
+        </Flex>
+    );
 }
 
 export function AttachmentPicker({ message, opts, setOpts, hasOpts, defaultOpts }: Required<ForwardOptionsState>) {
