@@ -90,7 +90,8 @@ function GuildName({ guildId }: { guildId: string; }) {
     useEffect(() => void fetchBasicGuild(guildId), [guildId]);
     const prefetch = useCallback(async () => {
         const profile = await fetchGuildProfile(guildId, false, { respectBackoff: true });
-        if (profile || GuildProfileStore.getFetchStatus(guildId) === "FETCHING" || widget) return;
+        if (profile || GuildProfileStore.getFetchStatus(guildId) === "FETCHING") return;
+        if (GuildProfileStore.getErrorCode(guildId) === 10004 /* Unknown guild, 404 */ || widget) return;
 
         // Not the same as the .GUILD_WIDGET endpoint, which only server admins have access to
         const { ok, body } = await RestAPI.get({ url: `/guilds/${guildId}/widget.json` }).catch(identity);
