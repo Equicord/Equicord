@@ -90,33 +90,20 @@ function GuildName({ guildId }: { guildId: string; }) {
 
     useEffect(() => void fetchBasicGuild(guildId), [guildId]);
     const prefetch = useCallback(async () => {
-        await fetchGuildProfile(guildId, false, { respectBackoff: true });
-
-        // Flux event dispatches are async, and fetchGuildProfile doesn't await them
-        const res = await new Promise<boolean>(res => GuildProfileStore.addConditionalChangeListener(() => {
-            const status = GuildProfileStore.getFetchStatus(guildId);
-            if (status === "FETCHED") res(GuildProfileStore.getProfile(guildId) != null);
-            return status === "FETCHING";
-        }));
-
-        if (res || widget) return;
+        const profile = await fetchGuildProfile(guildId, false, { respectBackoff: true });
+        if (profile || GuildProfileStore.getFetchStatus(guildId) === "FETCHING" || widget) return;
 
         // Not the same as the .GUILD_WIDGET endpoint, which only server admins have access to
-        const widgetJson = await RestAPI.get({ url: `/guilds/${guildId}/widget.json` })
+        await RestAPI.get({ url: `/guilds/${guildId}/widget.json` })
             .then(res => ({ ok: true, name: res.body.name as string }))
-            .catch(() => ({ ok: false }));
-
-        setWidget(widgetJson);
+            .catch(() => ({ ok: false }))
+            .then(setWidget);
     }, [guildId, widget]);
 
     const guildDivRef = useRef(null);
 
     return (
-        <Popout
-            position="top"
-            renderPopout={() => <ServerProfileComponent guildId={guildId} />}
-            targetElementRef={guildDivRef}
-        >
+        <Popout position="top" renderPopout={() => <ServerProfileComponent guildId={guildId} />} targetElementRef={guildDivRef}>
             {popoutProps => (
                 <div ref={guildDivRef} className={cl("footer-element")} onMouseEnter={!guild ? prefetch : undefined} {...popoutProps}>
                     {guild ? <GuildIcon guild={guild} /> : widget?.ok ? <WidgetIcon guildId={guildId} name={widget.name!} /> : null}
