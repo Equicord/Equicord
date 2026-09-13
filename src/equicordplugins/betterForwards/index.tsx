@@ -152,8 +152,8 @@ export default definePlugin({
             find: ".getChannelHistory(),",
             predicate: () => settings.store.selfForward,
             replacement: {
-                match: /\i.id\]/,
-                replace: "]"
+                match: /\[\i\.id\]/,
+                replace: "[]"
             }
         }
     ],
