@@ -74,7 +74,6 @@ async function addAttachments(channelId: string, messageId: string, existingAtta
         )
     );
 
-
     const msg = MessageStore.getMessage(channelId, messageId);
 
     await RestAPI.patch({
