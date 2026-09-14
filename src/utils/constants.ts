@@ -697,6 +697,10 @@ export const EquicordDevs = Object.freeze({
         name: "nobody",
         id: 0n
     },
+    DimaBroZY: {
+        name: "dimabrozy",
+        id: 550314591448727552n
+    },
     heart_menace: {
         name: "heart_menace",
         id: 281162701303185408n

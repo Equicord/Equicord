@@ -6,6 +6,7 @@
 
 import { addMessagePreSendListener, removeMessagePreSendListener } from "@api/MessageEvents";
 import { definePluginSettings } from "@api/Settings";
+import { EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 import { ChannelStore } from "@webpack/common";
 
@@ -341,7 +342,7 @@ let preSendListener: any;
 export default definePlugin({
     name: "CuteMessages",
     description: "Makes your messages cute and adorable with tons of customization options!",
-    authors: [{ name: "dimabrozy", id: 550314591448727552n }],
+    authors: [EquicordDevs.DimaBroZY],
     dependencies: ["MessageEventsAPI"],
     settings,
 
