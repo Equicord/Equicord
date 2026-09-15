@@ -9,6 +9,7 @@
     }
 
     .vc-betterforwards-guild-icon,
+    .vc-betterforwards-widget-guild-icon,
     .vc-betterforwards-user-icon,
     .vc-betterforwards-guild-acronym {
         margin-right: 2px;
@@ -21,7 +22,8 @@
         border-radius: 4px;
     }
 
-    .vc-betterforwards-user-icon {
+    .vc-betterforwards-user-icon,
+    .vc-betterforwards-widget-guild-icon {
         border-radius: 9999px;
     }
 
@@ -88,11 +90,10 @@
             flex-shrink: 0;
         }
 
-        [class^="tagGroup"] > [class^="tag"] {
-            text-wrap: nowrap !important;
+        [class^="tagList"] > [class^="tag"] {
             min-width: 0;
 
-            .vc-text-base {
+            [data-text-variant] {
                 text-overflow: ellipsis;
                 overflow: hidden;
             }

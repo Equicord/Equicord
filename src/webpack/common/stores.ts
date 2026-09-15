@@ -108,6 +108,7 @@ export let SessionsStore: t.SessionsStore;
 export let GuildAvailabilityStore: t.GuildAvailabilityStore;
 export let UserGuildJoinRequestStore: t.UserGuildJoinRequestStore;
 export let BasicGuildStore: t.BasicGuildStore;
+export let GuildProfileStore: t.GuildProfileStore;
 
 /**
  * @see jsdoc of {@link t.useStateFromStores}
@@ -187,6 +188,7 @@ waitForStore("SessionsStore", m => SessionsStore = m);
 waitForStore("GuildAvailabilityStore", m => GuildAvailabilityStore = m);
 waitForStore("UserGuildJoinRequestStore", m => UserGuildJoinRequestStore = m);
 waitForStore("BasicGuildStore", m => BasicGuildStore = m);
+waitForStore("GuildProfileStore", m => GuildProfileStore = m);
 waitForStore("ThemeStore", m => {
     ThemeStore = m;
     // Importing this directly causes all webpack commons to be imported, which can easily cause circular dependencies.

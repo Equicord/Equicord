@@ -19,7 +19,7 @@ import { proxyLazyWebpack } from "@webpack";
 import { ChannelActionCreators, ChannelStore, Checkbox, React, Tooltip, useMemo, useState } from "@webpack/common";
 import { Dispatch, MouseEvent, ReactNode, SetStateAction } from "react";
 
-import { ChannelName, ForwardPicker, GuildName, Timestamp } from "./components";
+import { ForwardFooter, ForwardPicker } from "./components";
 import managedStyle from "./style.css?managed";
 
 export const cl = classNameFactory("vc-betterforwards-");
@@ -124,7 +124,7 @@ export default definePlugin({
                 },
                 {
                     match: /(?<=#{intl::CHECKPOINT_2025}.{50,100}?)\i>0&&\(.{200,250}?\}\)\]\}\)/,
-                    replace: "$self.renderForwardPicker()"
+                    replace: "$self.ForwardPicker()"
                 },
                 {
                     match: /(?<=transitionToDestination:)(1===\i\.length)(?=,|\})/,
@@ -144,16 +144,16 @@ export default definePlugin({
         {
             find: 'location:"ForwardFooter"',
             replacement: {
-                match: /let{message:\i,snapshot:\i,index:\i}=(\i)/,
-                replace: "return $self.renderForwardFooter($1);$&"
+                match: /(disableComponentInteractivity:\i\}\),!\i&&\(0,\i\.jsx\)\()\i/,
+                replace: "$1$self.ForwardFooter"
             }
         },
         {
             find: ".getChannelHistory(),",
             predicate: () => settings.store.selfForward,
             replacement: {
-                match: /\i.id\]/,
-                replace: "]"
+                match: /\[\i\.id\]/,
+                replace: "[]"
             }
         }
     ],
@@ -198,21 +198,9 @@ export default definePlugin({
         ignore = !!event?.shiftKey;
     },
 
-    renderForwardFooter({ message }: { message: Message; }) {
-        if (!message.messageReference) return null;
+    ForwardFooter: ErrorBoundary.wrap(ForwardFooter, { noop: true }),
 
-        const { guild_id, channel_id, message_id } = message.messageReference;
-
-        return (
-            <ErrorBoundary noop>
-                <div className={cl("footer")}>
-                    {guild_id && <GuildName guildId={guild_id} />}
-                    <ChannelName messageId={message_id} channelId={channel_id} guildId={guild_id} />
-                    <Timestamp snowflake={message_id} />
-                </div>
-            </ErrorBoundary>
-        );
-    },
+    ForwardPicker: ErrorBoundary.wrap(ForwardPicker, { noop: true }),
 
     useProps(props: { message?: Message; forwardOptions?: ForwardOptions; }) {
         // Message is undefined in certain forward contexts (e.g. forwarding an item from the shop)
@@ -283,14 +271,6 @@ export default definePlugin({
                         </Flex>
                     )}
                 </ForwardOptionsContext.Provider>
-            </ErrorBoundary>
-        );
-    },
-
-    renderForwardPicker() {
-        return (
-            <ErrorBoundary noop>
-                <ForwardPicker />
             </ErrorBoundary>
         );
     }

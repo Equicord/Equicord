@@ -17,7 +17,7 @@
 */
 
 import type { MessageObject } from "@api/MessageEvents";
-import type { Channel, CloudUpload, Guild, GuildFeatures, MediaModalItem, MediaModalProps, Message, User } from "@vencord/discord-types";
+import type { BasicGuild, Channel, CloudUpload, Guild, GuildFeatures, GuildProfile, MediaModalItem, MediaModalProps, Message, User } from "@vencord/discord-types";
 import { ChannelActionCreators, ChannelStore, ComponentDispatch, Constants, FluxDispatcher, GuildStore, i18n, InviteActions, MessageActions, openMediaModal, RestAPI, SelectedChannelStore, SelectedGuildStore, Toasts, UserProfileActions, UserProfileStore, UserSettingsActionCreators, UserUtils } from "@webpack/common";
 import { Except } from "type-fest";
 
@@ -236,7 +236,7 @@ export function getUniqueUsername(user: User) {
 }
 
 // Discord has a similar function in their code
-export function getGuildAcronym(guild: Guild): string {
+export function getGuildAcronym(guild: Guild | BasicGuild | GuildProfile): string {
     return guild.name
         .replaceAll("'s ", " ")
         .replace(/\w+/g, m => m[0])
