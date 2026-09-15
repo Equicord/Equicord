@@ -137,6 +137,12 @@ const settings = definePluginSettings({
         description: "Hide voice indicator in server list when only active channels are muted",
         restartNeeded: true,
         default: false,
+    },
+    noOnboarding: {
+        type: OptionType.BOOLEAN,
+        description: "Skips the server onboarding by gaslighting it",
+        restartNeeded: true,
+        default: false,
     }
 });
 
@@ -155,7 +161,8 @@ export default definePlugin({
         EquicordDevs.omaw,
         Devs.Samwich,
         Devs.AutumnVN,
-        EquicordDevs.auggeeo
+        EquicordDevs.auggeeo,
+        EquicordDevs.secp192k1
     ],
     required: true,
     settings,
@@ -348,6 +355,14 @@ export default definePlugin({
                 }
             ],
             predicate: () => settings.store.hideVoiceIndicatorForMutedChannels,
+        },
+        {
+            find: 'type:"GUILD_ONBOARDING_PROMPTS_FETCH_START"',
+            replacement: {
+                match: /(?<="GUILD_ONBOARDING_PROMPTS_FETCH_SUCCESS",guildId:\i,\.\.\.\i)(?=\})/,
+                replace: ",enabled:!1"
+            },
+            predicate: () => settings.store.noOnboarding
         },
         // Add opening profile functionality to some connections
         {
