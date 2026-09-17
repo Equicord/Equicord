@@ -359,6 +359,14 @@ export default definePlugin({
                 }
             ]
         },
+        // gif-picker context menu doesnt get full context so give it
+        {
+            find: "renderEmptyFavorite",
+            replacement: {
+                match: /(?<=handleContextMenu.{0,150})(?=link:(\i)\.url)/,
+                replace: "...$1,"
+            }
+        }
     ],
     renderMessageAccessory(props) {
         return (

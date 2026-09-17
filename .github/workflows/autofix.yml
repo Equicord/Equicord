@@ -13,16 +13,11 @@ jobs:
         steps:
             - uses: actions/checkout@v6
 
-            - uses: pnpm/action-setup@v6
-
-            - name: Use Node.js 24
-              uses: actions/setup-node@v6
+            - name: Setup PNPM
+              uses: pnpm/setup@v2.1.0
               with:
-                  node-version: 24
-                  cache: "pnpm"
-
-            - name: Install dependencies
-              run: pnpm install --frozen-lockfile
+                  runtime: node@v24
+                  require-lockfile: true
 
             - name: Run lint fix
               run: pnpm lint:fix

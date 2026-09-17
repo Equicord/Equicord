@@ -90,7 +90,7 @@ export default definePlugin({
                 match: /(\i)\.name\),renderExtras:this\.renderCategoryExtras,/,
                 replace: "$&onContextMenu:(e)=>$self.openCategoryContextMenu(e,$1),"
             }
-        },
+        }
     ],
 
     start() {

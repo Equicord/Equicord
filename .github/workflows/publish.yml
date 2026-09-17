@@ -52,7 +52,7 @@ jobs:
 
             - name: Create Tag
               if: steps.check.outputs.release == 'true'
-              uses: butlerlogic/action-autotag@1.1.2
+              uses: thororen1234/action-autotag@v1.1.5
               env:
                   GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
               with:
@@ -60,18 +60,10 @@ jobs:
 
             - name: Setup PNPM
               if: steps.check.outputs.release == 'true'
-              uses: pnpm/action-setup@v6
-
-            - name: Use Node.js 24
-              if: steps.check.outputs.release == 'true'
-              uses: actions/setup-node@v6
+              uses: pnpm/setup@v2.1.0
               with:
-                  node-version: 24
-                  cache: "pnpm"
-
-            - name: Install dependencies
-              if: steps.check.outputs.release == 'true'
-              run: pnpm install --frozen-lockfile
+                  runtime: node@v24
+                  require-lockfile: true
 
             - name: Build web
               if: steps.check.outputs.release == 'true'
@@ -85,20 +77,25 @@ jobs:
 
             - name: Publish extension
               if: steps.check.outputs.release == 'true' && vars.ACT == 'false'
-              run: pnpx @equicord/publish-browser-extension@latest --chrome-zip
-                  dist/extension-chrome.zip --firefox-zip
-                  dist/extension-firefox.zip --firefox-sources-zip
-                  dist/extension-sources.zip --edge-zip
-                  dist/extension-chrome.zip
+              run:
+                  pnpx @equicord/publish-browser-extension@latest
+                  --chrome-zip dist/extension-chrome.zip
+                  --firefox-zip dist/extension-firefox.zip
+                  --firefox-sources-zip dist/extension-sources.zip
+                  --edge-zip dist/extension-chrome.zip
+                  #--opera-zip dist/extension-chrome.zip
               env:
+                  CHROME_API_VERSION: ${{ secrets.CHROME_API_VERSION }}
                   CHROME_EXTENSION_ID: ${{ secrets.CHROME_EXTENSION_ID }}
                   CHROME_PUBLISHER_ID: ${{ secrets.CHROME_PUBLISHER_ID }}
-                  CHROME_CLIENT_ID: ${{ secrets.CHROME_CLIENT_ID }}
-                  CHROME_CLIENT_SECRET: ${{ secrets.CHROME_CLIENT_SECRET }}
-                  CHROME_REFRESH_TOKEN: ${{ secrets.CHROME_REFRESH_TOKEN }}
+                  CHROME_SERVICE_ACCOUNT_CLIENT_EMAIL: ${{ secrets.CHROME_SERVICE_ACCOUNT_CLIENT_EMAIL }}
+                  CHROME_SERVICE_ACCOUNT_PRIVATE_KEY: ${{ secrets.CHROME_SERVICE_ACCOUNT_PRIVATE_KEY }}
+                  EDGE_API_KEY: ${{ secrets.EDGE_API_KEY }}
+                  EDGE_PRODUCT_ID: ${{ secrets.EDGE_PRODUCT_ID }}
+                  EDGE_CLIENT_ID: ${{ secrets.EDGE_CLIENT_ID }}
+                  FIREFOX_COMPATIBILITY: ${{ secrets.FIREFOX_COMPATIBILITY }}
                   FIREFOX_EXTENSION_ID: ${{ secrets.FIREFOX_EXTENSION_ID }}
                   FIREFOX_JWT_ISSUER: ${{ secrets.FIREFOX_JWT_ISSUER }}
                   FIREFOX_JWT_SECRET: ${{ secrets.FIREFOX_JWT_SECRET }}
-                  EDGE_PRODUCT_ID: ${{ secrets.EDGE_PRODUCT_ID }}
-                  EDGE_CLIENT_ID: ${{ secrets.EDGE_CLIENT_ID }}
-                  EDGE_API_KEY: ${{ secrets.EDGE_API_KEY }}
+                  #OPERA_PACKAGE_ID: ${{ secrets.OPERA_PACKAGE_ID }}
+                  #OPERA_SESSION_ID: ${{ secrets.OPERA_SESSION_ID }}

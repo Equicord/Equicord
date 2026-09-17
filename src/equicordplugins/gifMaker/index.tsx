@@ -7,6 +7,7 @@
 import { NavContextMenuPatchCallback } from "@api/ContextMenu";
 import { definePluginSettings, migratePluginSettings } from "@api/Settings";
 import { Button } from "@components/Button";
+import { RemixIcon } from "@components/Icons";
 import { EquicordDevs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
 import { getCurrentChannel } from "@utils/discord";
@@ -129,6 +130,8 @@ const gifPickerContextMenuPatch: NavContextMenuPatchCallback = (children, props)
             id="gif-maker-edit"
             key="gif-maker-edit"
             label="Edit GIF"
+            icon={RemixIcon}
+            leadingAccessory={{ type: "icon", icon: RemixIcon }}
             action={() => openGifMakerFromItem(props)}
         />
     );

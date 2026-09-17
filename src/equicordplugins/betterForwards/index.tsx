@@ -142,7 +142,7 @@ export default definePlugin({
             ]
         },
         {
-            find: 'location:"ForwardFooter"',
+            find: ".FORWARD_BREADCRUMB_CLICKED,{",
             replacement: {
                 match: /(disableComponentInteractivity:\i\}\),!\i&&\(0,\i\.jsx\)\()\i/,
                 replace: "$1$self.ForwardFooter"

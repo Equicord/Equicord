@@ -103,7 +103,7 @@ function ReactionUsers({ message, users }: { message: Message, users: User[]; })
             <div
                 onClick={handleClickAvatar}
                 onKeyDown={handleClickAvatar}
-                style={settings.store.avatarClick ? {} : { pointerEvents: "none" }}
+                style={!settings.store.clickableAvatars ? { pointerEvents: "none" } : {}}
             >
                 <UserSummaryItem
                     users={users}
@@ -119,10 +119,10 @@ function ReactionUsers({ message, users }: { message: Message, users: User[]; })
 }
 
 const settings = definePluginSettings({
-    avatarClick: {
-        description: "Toggle clicking avatars in reactions",
+    clickableAvatars: {
+        description: "While this is enabled, clicking a reacting user's avatar will open their profile instead of adding the reaction",
         type: OptionType.BOOLEAN,
-        default: false,
+        default: true,
         restartNeeded: true
     }
 });
@@ -132,7 +132,6 @@ export default definePlugin({
     description: "Renders the avatars of users who reacted to a message",
     tags: ["Reactions", "Chat", "Appearance"],
     authors: [Devs.Ven, Devs.KannaDev, Devs.newwares, Devs.paige],
-    isModified: true,
     settings,
     patches: [
         {

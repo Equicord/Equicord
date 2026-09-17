@@ -18,6 +18,7 @@ import {
     findByPropsLazy,
     findComponentByCodeLazy,
     findCssClassesLazy,
+    mapMangledModuleLazy,
 } from "@webpack";
 import {
     ChannelActionCreators,
@@ -69,7 +70,9 @@ const ArrowsLeftRightIcon = ({ color, ...rest }) => {
 const WindowLaunchIcon = findComponentByCodeLazy("1-1h6a1 1 0 1 0 0-2H5Z");
 const XSmallIcon = findComponentByCodeLazy("1.4L12 13.42l5.3 5.3Z");
 const Chat = findComponentByCodeLazy("filterAfterTimestamp:", "chatInputType");
-const Resize = findComponentByCodeLazy("sidebarType:", "RESIZE_HANDLE_WIDTH)");
+const SidebarComponents = mapMangledModuleLazy("ChannelChatResizableSidebar", {
+    Resize: (value: unknown) => typeof value === "function"
+});
 const ChannelHeader = findComponentByCodeLazy("`channel-${");
 const PopoutWindow = findComponentByCodeLazy("Missing guestWindow reference");
 const FullChannelView = findComponentByCodeLazy("showFollowButton:");
@@ -104,7 +107,15 @@ function getChannelTitle(channel: Channel | null | undefined) {
 
 function canOpenPopout(channel: Channel) {
     if (channel.isPrivate()) return true;
-    return !channel.isCategory() && !channel.isDirectory() && !channel.isVocal();
+    return !channel.isCategory() && !channel.isDirectory();
+}
+
+function getMainChatChannelId() {
+    const channelId = SelectedChannelStore.getChannelId();
+    const sidebar = ChannelSectionStore.getSidebarState(channelId);
+    return sidebar && typeof sidebar === "object" && "channelId" in sidebar && typeof sidebar.channelId === "string"
+        ? sidebar.channelId
+        : channelId;
 }
 
 function getPopoutMenuLabel(channelId: string) {
@@ -315,10 +326,24 @@ export default definePlugin({
                     replace: "$&vc_SidebarChat=$self.renderSidebar(),"
                 },
                 {
-                    match: /:(\(0,\i\.jsxs?\)\(\i,{}\))}(?<=default:.{0,300})/,
-                    replace: ":[$1, vc_SidebarChat]}"
+                    match: /(?<=return )null!=\i&&\i\?\(0,\i\.jsx\)\(\i,\{channel:\i\},\i\.id\):\(0,\i\.jsx\)\(\i,\{\}\)(?=\},)/,
+                    replace: "[$&,vc_SidebarChat]"
                 },
             ],
+        },
+        {
+            find: "loadComplete: resetting state for channelId=",
+            group: true,
+            replacement: [
+                {
+                    match: /truncateTop\(\i\)\{(?=.{0,100}?this\._array\.length-\i;return)/,
+                    replace: "$&if($self.hasMultipleChatViews(this.channelId))return this;"
+                },
+                {
+                    match: /truncateBottom\(\i\)\{(?=.{0,100}?return this\._array\.length<=\i\?this:this\.mutate\()/,
+                    replace: "$&if($self.hasMultipleChatViews(this.channelId))return this;"
+                }
+            ]
         },
     ],
     managedStyle: style,
@@ -359,6 +384,16 @@ export default definePlugin({
 
     async start() {
         restorePersistedPopouts();
+    },
+
+    hasMultipleChatViews(channelId: string) {
+        const mainChannelId = SelectedChannelStore.getChannelId();
+        const sidebarHidden = ChannelSectionStore.getSidebarState(mainChannelId)
+            || ChannelSectionStore.getGuildSidebarState(SelectedGuildStore.getGuildId() ?? undefined);
+        const views = Number(channelId === mainChannelId || channelId === getMainChatChannelId())
+            + Number(!sidebarHidden && channelId === SidebarStore.getState().channelId)
+            + Number(isPopoutWindowOpen(channelId));
+        return views > 1;
     },
 
     renderSidebar() {
@@ -436,13 +471,13 @@ export default definePlugin({
 
         return (
             <ErrorBoundary noop>
-                <Resize
+                <SidebarComponents.Resize
                     sidebarType={Sidebars.MessageRequestSidebar}
                     maxWidth={~~(width * 0.31)/* width - 690*/}
                 >
                     <Header channel={channel} guild={guild} />
                     {View}
-                </Resize>
+                </SidebarComponents.Resize>
             </ErrorBoundary>
         );
     },
@@ -524,7 +559,9 @@ const RenderPopout = ErrorBoundary.wrap(({ channel, name, windowKey }: { channel
             channelId={channel.id}
         >
             <div className={cl("window")}>
-                <FullChannelView providedChannel={channel} />
+                {channel.isGuildVocal()
+                    ? <Chat channel={channel} guild={GuildStore.getGuild(channel.guild_id)} chatInputType={ChatInputTypes.NORMAL} />
+                    : <FullChannelView providedChannel={channel} />}
             </div>
         </PopoutWindow>
     );
@@ -532,9 +569,9 @@ const RenderPopout = ErrorBoundary.wrap(({ channel, name, windowKey }: { channel
 
 function PopoutHeaderButton() {
     const channelState = useStateFromStores(
-        [SelectedChannelStore, ChannelStore, PopoutWindowStore],
+        [SelectedChannelStore, ChannelSectionStore, ChannelStore, PopoutWindowStore],
         () => {
-            const channelId = SelectedChannelStore.getChannelId();
+            const channelId = getMainChatChannelId();
             const channel = channelId ? ChannelStore.getChannel(channelId) : null;
 
             return {

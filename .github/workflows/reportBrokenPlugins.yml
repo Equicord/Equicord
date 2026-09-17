@@ -43,13 +43,11 @@ jobs:
                   repository: ${{ inputs.pr_repo || github.repository }}
                   ref: ${{ inputs.ref || (github.event_name == 'schedule' && 'dev' || github.ref) }}
 
-            - uses: pnpm/action-setup@v6
-
-            - name: Use Node.js 24
-              uses: actions/setup-node@v6
+            - name: Setup PNPM
+              uses: pnpm/setup@v2.1.0
               with:
-                  node-version: 24
-                  cache: "pnpm"
+                  runtime: node@v24
+                  require-lockfile: true
 
             - name: Install dependencies
               run: |

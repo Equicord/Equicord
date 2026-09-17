@@ -436,7 +436,7 @@ Deprecated: `@api/Themes`. `classNameFactory` re-export from `@api/Styles`.
 
 - `Logger`. `new Logger(name)`.
 - `css`. `classNameFactory`, `classNameToSelector`.
-- `misc`. `classes`, `sleep`, `isObject`, `isObjectEmpty`, `pluralise`, `parseUrl`, `identity`, `interpolateIfDefined`, `tryOrElse`, `isPluginDev`, `removeFromArray`.
+- `misc`. `classes`, `sleep`, `isObject`, `isObjectEmpty`, `pluralize`, `parseUrl`, `identity`, `interpolateIfDefined`, `tryOrElse`, `isPluginDev`, `removeFromArray`.
 - `text`. `formatDuration`, `formatDurationMs`, `humanFriendlyJoin`, `makeCodeblock`, `toInlineCode`, `escapeRegExp`, `stripIndent`, `ZWSP`.
 - `react`. `useAwaiter`, `useForceUpdater`, `useIntersection`, `useTimer`, `useFixedTimer`, `useCleanupEffect`, `NoopComponent`, `isPrimitiveReactNode`. Re-exports `LazyComponent` from `lazyReact`.
 - `lazy`. `makeLazy`, `proxyLazy`.

@@ -1,0 +1,217 @@
+.vc-bie-panel {
+    padding-top: 8px;
+}
+
+.vc-bie-tabs {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.vc-bie-tab {
+    padding: 4px 10px;
+    border: none;
+    border-radius: 4px;
+    background: none;
+    color: var(--interactive-normal);
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color .1s ease-out, color .1s ease-out;
+}
+
+.vc-bie-tab:focus-visible {
+    outline: 2px solid var(--focus-primary);
+}
+
+.vc-bie-tab:hover:not(.vc-bie-on) {
+    background: var(--background-modifier-hover);
+    color: var(--interactive-hover);
+}
+
+.vc-bie-tab.vc-bie-on {
+    background: var(--brand-500, #5865f2);
+    color: #fff;
+}
+
+.vc-bie-action {
+    padding: 4px 10px;
+    border: none;
+    border-radius: 4px;
+    background: none;
+    color: var(--text-muted);
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.vc-bie-action:hover {
+    background: var(--background-modifier-hover);
+    color: var(--interactive-hover);
+}
+
+.vc-bie-action:focus-visible {
+    outline: 2px solid var(--focus-primary);
+}
+
+.vc-bie-tab + .vc-bie-action {
+    margin-left: auto;
+}
+
+.vc-bie-empty {
+    color: var(--text-muted);
+    font-size: 12px;
+}
+
+.vc-bie-strip {
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 6px;
+    padding: 8px 4px 6px;
+    min-height: 38px;
+    overflow: auto hidden;
+}
+
+.vc-bie-wide .vc-bie-strip {
+    gap: 8px;
+}
+
+.vc-bie-strip::-webkit-scrollbar {
+    height: 6px;
+}
+
+.vc-bie-strip::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.vc-bie-strip::-webkit-scrollbar-thumb {
+    background: transparent;
+    border-radius: 3px;
+}
+
+.vc-bie-strip:hover::-webkit-scrollbar-thumb {
+    background: var(--background-modifier-accent);
+}
+
+.vc-bie-item {
+    position: relative;
+    flex: 0 0 auto;
+    line-height: 0;
+}
+
+.vc-bie-thumb {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    padding: 0;
+    border: 2px solid transparent;
+    background: var(--background-modifier-hover);
+    background-size: cover;
+    background-position: center;
+    cursor: pointer;
+    transition: border-color .1s ease-out, transform .1s ease-out;
+}
+
+.vc-bie-thumb:focus-visible {
+    outline: 2px solid var(--focus-primary);
+    outline-offset: 2px;
+}
+
+.vc-bie-thumb.vc-bie-active {
+    border-color: var(--brand-500, #5865f2);
+}
+
+.vc-bie-wide .vc-bie-thumb {
+    width: 96px;
+    height: 40px;
+    border-radius: 6px;
+}
+
+.vc-bie-worn .vc-bie-thumb {
+    box-shadow: 0 0 0 2px var(--status-positive, #23a55a);
+}
+
+.vc-bie-item:hover .vc-bie-thumb {
+    transform: scale(1.06);
+}
+
+.vc-bie-remove,
+.vc-bie-pin {
+    position: absolute;
+    top: -2px;
+    width: 16px;
+    height: 16px;
+    padding: 0;
+    display: none;
+    place-items: center;
+    border: none;
+    border-radius: 50%;
+    background: var(--background-tertiary);
+    color: var(--interactive-normal);
+    cursor: pointer;
+}
+
+.vc-bie-remove {
+    right: -2px;
+}
+
+.vc-bie-pin {
+    left: -2px;
+}
+
+.vc-bie-remove:hover {
+    color: var(--status-danger);
+}
+
+.vc-bie-pin:hover {
+    color: var(--interactive-active);
+}
+
+.vc-bie-remove:focus-visible,
+.vc-bie-pin:focus-visible {
+    outline: 2px solid var(--focus-primary);
+}
+
+.vc-bie-pin.vc-bie-on {
+    color: var(--brand-500, #5865f2);
+}
+
+.vc-bie-item:hover .vc-bie-remove,
+.vc-bie-item:focus-within .vc-bie-remove,
+.vc-bie-item:hover .vc-bie-pin,
+.vc-bie-item:focus-within .vc-bie-pin {
+    display: grid;
+}
+
+.vc-bie-pinned::before {
+    content: "";
+    position: absolute;
+    top: 1px;
+    left: 1px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--brand-500, #5865f2);
+    pointer-events: none;
+}
+
+.vc-bie-pinned:hover::before,
+.vc-bie-pinned:focus-within::before {
+    display: none;
+}
+
+.vc-bie-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .vc-bie-tab,
+    .vc-bie-thumb {
+        transition: none;
+    }
+
+    .vc-bie-item:hover .vc-bie-thumb {
+        transform: none;
+    }
+}

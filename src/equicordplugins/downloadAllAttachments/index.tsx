@@ -7,7 +7,7 @@
 import { CloudDownloadIcon } from "@components/Icons";
 import { EquicordDevs } from "@utils/constants";
 import { Logger } from "@utils/Logger";
-import { pluralise } from "@utils/misc";
+import { pluralize } from "@utils/misc";
 import definePlugin from "@utils/types";
 import { Message, MessageAttachment } from "@vencord/discord-types";
 import { ChannelStore, showToast, Toasts } from "@webpack/common";
@@ -55,7 +55,7 @@ async function downloadAll(attachments: MessageAttachment[]) {
     const succeeded = attachments.length - failed;
 
     if (failed === 0)
-        showToast(`Downloaded ${pluralise(succeeded, "attachment")}.`, Toasts.Type.SUCCESS);
+        showToast(`Downloaded ${pluralize(succeeded, "attachment")}.`, Toasts.Type.SUCCESS);
     else
         showToast(`Downloaded ${succeeded} of ${attachments.length} attachments. ${failed} failed.`, Toasts.Type.FAILURE);
 }
