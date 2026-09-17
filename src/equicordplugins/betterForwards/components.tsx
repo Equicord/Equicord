@@ -79,6 +79,8 @@ function WidgetIcon({ guildId, name }: { guildId: string; name: string; }) {
     );
 }
 
+const UNKNOWN_GUILD = 10004;
+
 function GuildName({ guildId }: { guildId: string; }) {
     const [widget, setWidget] = useState<{ name: string | null, ok: boolean; } | null>(null);
     const guild: Guild | BasicGuild | GuildProfile | null = useStateFromStores(
@@ -91,7 +93,7 @@ function GuildName({ guildId }: { guildId: string; }) {
     const prefetch = useCallback(async () => {
         const profile = await fetchGuildProfile(guildId, false, { respectBackoff: true });
         if (profile || GuildProfileStore.getFetchStatus(guildId) === "FETCHING") return;
-        if (GuildProfileStore.getErrorCode(guildId) === 10004 /* Unknown guild, 404 */ || widget) return;
+        if (GuildProfileStore.getErrorCode(guildId) === UNKNOWN_GUILD || widget) return;
 
         // Not the same as the .GUILD_WIDGET endpoint, which only server admins have access to
         const { ok, body } = await RestAPI.get({ url: `/guilds/${guildId}/widget.json` }).catch(identity);
@@ -136,7 +138,7 @@ function ChannelIcon({ channel, name }: { channel: Channel; name: string; }) {
 
         const Icon = getChannelIcon(channel);
         return Icon && <Icon size="xs" color="currentColor" />;
-    }, [channel]);
+    }, [channel, name]);
 }
 
 function ChannelName({ guildId, channelId, messageId }: { guildId?: string; channelId: string; messageId: string; }) {
