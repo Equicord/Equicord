@@ -9,7 +9,7 @@ import { Flex } from "@components/Flex";
 import { Heading } from "@components/Heading";
 import { Paragraph } from "@components/Paragraph";
 import type { RenderModalProps } from "@vencord/discord-types";
-import { Checkbox, Modal, openModal, showToast, Toasts, useEffect, useState } from "@webpack/common";
+import { Checkbox, FluxDispatcher, MessageActions, Modal, openModal, PendingReplyStore, showToast, Toasts, useEffect, useState } from "@webpack/common";
 
 import { ApplicationField, BooleanField, DateTimeField, getDateTimeLocalValue, ParticipantField, TextField } from "./fields";
 import { abortActiveClipUploads, type ClipMetadata, getClipCreatedAt, getClipTitleFromName, getDefaultClipTitle, getDefaultFileName, getErrorMessage, getParticipantIds, getString, isValidDate, pickClipFile, uploadClipFile } from "./upload";
@@ -76,6 +76,9 @@ function UploadClipFileModal({ modalProps, channelId, clip }: { modalProps: Rend
 
         setUploading(true);
 
+        const reply = PendingReplyStore.getPendingReply(channelId);
+        if (reply) FluxDispatcher.dispatch({ type: "DELETE_PENDING_REPLY", channelId });
+
         const success = await uploadClipFile(file, {
             fileName: fileName.trim(),
             participants,
@@ -88,7 +91,8 @@ function UploadClipFileModal({ modalProps, channelId, clip }: { modalProps: Rend
             channelId,
             applicationId: applicationId.trim() || undefined,
             remoteClipId: getString(clip?.remoteClipId),
-            eventsTimeline: clip?.eventsTimeline
+            eventsTimeline: clip?.eventsTimeline,
+            messageReference: reply ? MessageActions.getSendMessageOptionsForReply(reply)?.messageReference : null,
         });
 
         if (success) {

@@ -41,6 +41,11 @@ export interface ClipUploadOptions {
     applicationId?: string;
     remoteClipId?: string;
     eventsTimeline?: unknown;
+    messageReference?: {
+        message_id: string;
+        channel_id: string;
+        guild_id?: string;
+    };
 }
 
 interface AttachmentUploadResponse {
@@ -285,7 +290,8 @@ async function sendClipUpload(uploadFile: File, options: ClipUploadOptions) {
                 clip_participant_ids: options.participants,
                 clip_remote_id: options.remoteClipId,
                 clip_events_timeline: options.eventsTimeline
-            }]
+            }],
+            message_reference: options.messageReference,
         }
     }) as RestResponse;
 
