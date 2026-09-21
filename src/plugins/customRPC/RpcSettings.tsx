@@ -6,7 +6,7 @@
 
 import "./settings.css";
 
-import { DataStore } from "@api/index";
+import * as DataStore from "@api/DataStore";
 import { isPluginEnabled } from "@api/PluginManager";
 import { Divider } from "@components/Divider";
 import { Heading } from "@components/Heading";
@@ -17,17 +17,11 @@ import { useAwaiter } from "@utils/react";
 import { ActivityType } from "@vencord/discord-types/enums";
 import { Button, Select, showToast, Text, TextInput, Toasts, useState } from "@webpack/common";
 
-import CustomRPCPlugin, { RpcConfig, setRpc, settings, TimestampMode } from ".";
+import CustomRPCPlugin, { getCurrentConfig, loadPresetByName, PRESETS_KEY, refreshPresetCommand, restartTimestampLoop, type RpcPreset, setRpc, settings, TimestampMode } from ".";
 
 const cl = classNameFactory("vc-customRPC-settings-");
-const PRESETS_KEY = "CustomRPC_presets";
 
 type SettingsKey = keyof typeof settings.store;
-
-interface RpcPreset {
-    name: string;
-    config: RpcConfig;
-}
 
 interface TextOption<T> {
     settingsKey: SettingsKey;
@@ -58,7 +52,8 @@ function isAppIdValid(value: string) {
 }
 
 const updateRPC = debounce(() => {
-    setRpc(true);
+    restartTimestampLoop();
+    // One dispatch only: clearing first and re-applying can race and wipe the presence
     if (isPluginEnabled(CustomRPCPlugin.name)) setRpc();
 });
 
@@ -159,11 +154,6 @@ function SelectSetting<T>({ settingsKey, label, options, disabled }: SelectOptio
     );
 }
 
-function getCurrentConfig(): RpcConfig {
-    const { config, ...rpcConfig } = settings.store;
-    return rpcConfig;
-}
-
 function PresetSettings({ onLoad }: { onLoad(): void; }) {
     const [storedPresets] = useAwaiter(async () => await DataStore.get<RpcPreset[]>(PRESETS_KEY) ?? [], { fallbackValue: [] });
     const [changedPresets, setChangedPresets] = useState<RpcPreset[] | null>(null);
@@ -183,17 +173,16 @@ function PresetSettings({ onLoad }: { onLoad(): void; }) {
         await DataStore.set(PRESETS_KEY, nextPresets);
         setChangedPresets(nextPresets);
         setSelectedPreset(name);
+        refreshPresetCommand();
         showToast(`Saved preset ${name}.`, Toasts.Type.SUCCESS);
     }
 
-    function loadPreset() {
-        const preset = presets.find(preset => preset.name === selectedPreset);
-        if (!preset) return;
+    async function loadPreset() {
+        if (!selectedPreset) return;
 
-        Object.assign(settings.store, preset.config);
+        const res = await loadPresetByName(selectedPreset);
         onLoad();
-        updateRPC();
-        showToast(`Loaded preset ${preset.name}.`, Toasts.Type.SUCCESS);
+        showToast(res.message, res.ok ? Toasts.Type.SUCCESS : Toasts.Type.FAILURE);
     }
 
     async function deletePreset() {
@@ -203,6 +192,7 @@ function PresetSettings({ onLoad }: { onLoad(): void; }) {
         await DataStore.set(PRESETS_KEY, nextPresets);
         setChangedPresets(nextPresets);
         setSelectedPreset("");
+        refreshPresetCommand();
         showToast(`Deleted preset ${selectedPreset}.`, Toasts.Type.SUCCESS);
     }
 
