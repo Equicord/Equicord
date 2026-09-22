@@ -1199,6 +1199,10 @@ export const EquicordDevs = Object.freeze({
         name: "Suffocate",
         id: 772601756776923187n
     },
+    n6n: {
+        id: 1137517987264483419n,
+        name: "n6n"
+    },
     veygax: {
         name: "veygax",
         id: 1119938236245094521n
