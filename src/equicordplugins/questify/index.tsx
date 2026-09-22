@@ -239,7 +239,7 @@ export default definePlugin({
             find: "collapsed-with-rewards\":\"collapsed-without-rewards",
             predicate: () => getQuestifySettings().disableAccountPanelPromo || !getQuestifySettings().disableAccountPanelQuestProgress,
             replacement: {
-                match: /(?<=function\(\)\{)(let (\i)=\(0,\i\.\i\)\(\)(?:,\i=\(0,\i\.\i\)\(\))?;)(?=return null==\2(?:&&null!=\i)?\?)/,
+                match: /(?<=function\(\)\{)(let (\i)=\(0,\i\.\i\)\(\)(?:,\i=\(0,\i\.\i\)\(.{0,55}?\))?;)(?=return null==\2(?:&&null!=\i)?\?)/,
                 replace: "void $self.useQuestRerender();$1$2=$self.getQuestPanelOverride($2);"
             }
         },
