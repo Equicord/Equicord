@@ -4,6 +4,7 @@
 
 .vc-bie-tabs {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     gap: 4px;
 }
@@ -62,22 +63,99 @@
     font-size: 12px;
 }
 
-.vc-bie-strip {
+.vc-bie-bar {
     display: flex;
     align-items: center;
-    flex-wrap: nowrap;
+    gap: 8px;
+    padding: 8px 4px 0;
+}
+
+.vc-bie-count {
+    color: var(--text-muted);
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+.vc-bie-find {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-left: auto;
+    padding: 0 6px;
+    height: 22px;
+    width: 116px;
+    border-radius: 11px;
+    background: var(--background-modifier-hover);
+    color: var(--text-muted);
+    transition: width .12s ease-out, background-color .12s ease-out;
+}
+
+.vc-bie-find:focus-within {
+    width: 168px;
+    background: var(--background-modifier-selected);
+    color: var(--interactive-active);
+}
+
+.vc-bie-find input {
+    flex: 1 1 auto;
+    min-width: 0;
+    height: 100%;
+    padding: 0;
+    border: none;
+    background: none;
+    color: var(--text-default);
+    font-size: 12px;
+}
+
+.vc-bie-find input:focus {
+    outline: none;
+}
+
+.vc-bie-find input::placeholder {
+    color: var(--text-muted);
+}
+
+.vc-bie-find button {
+    flex: 0 0 auto;
+    padding: 0 2px;
+    border: none;
+    background: none;
+    color: var(--text-muted);
+    font-size: 15px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.vc-bie-find button:hover {
+    color: var(--interactive-active);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .vc-bie-find {
+        transition: none;
+    }
+}
+
+.vc-bie-strip {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(44px, 1fr));
+    align-content: start;
     gap: 6px;
     padding: 8px 4px 6px;
     min-height: 38px;
-    overflow: auto hidden;
+    max-height: 168px;
+    overflow: hidden auto;
+    overscroll-behavior: contain;
 }
 
 .vc-bie-wide .vc-bie-strip {
+    grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
     gap: 8px;
+    max-height: 200px;
 }
 
 .vc-bie-strip::-webkit-scrollbar {
-    height: 6px;
+    width: 8px;
 }
 
 .vc-bie-strip::-webkit-scrollbar-track {
@@ -85,23 +163,24 @@
 }
 
 .vc-bie-strip::-webkit-scrollbar-thumb {
-    background: transparent;
-    border-radius: 3px;
+    background: var(--background-modifier-accent);
+    border-radius: 4px;
 }
 
 .vc-bie-strip:hover::-webkit-scrollbar-thumb {
-    background: var(--background-modifier-accent);
+    background: var(--background-modifier-selected);
 }
 
 .vc-bie-item {
     position: relative;
-    flex: 0 0 auto;
+    justify-self: center;
     line-height: 0;
 }
 
 .vc-bie-thumb {
     width: 44px;
     height: 44px;
+    display: block;
     border-radius: 50%;
     padding: 0;
     border: 2px solid transparent;
@@ -214,4 +293,65 @@
     .vc-bie-item:hover .vc-bie-thumb {
         transform: none;
     }
+}
+
+.vc-bie-split {
+    position: relative;
+    padding-right: 260px;
+}
+
+.vc-bie-picker {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 248px;
+    grid-template-rows: 360px;
+    column-gap: 12px;
+}
+
+.vc-bie-picker > :first-child {
+    min-height: 0;
+}
+
+.vc-bie-picker > :first-child > ul {
+    flex: 1 1 0;
+    min-height: 0;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: repeat(2, minmax(0, 1fr));
+}
+
+.vc-bie-picker > :first-child > ul > li > :last-child {
+    box-sizing: border-box;
+    height: 100%;
+    aspect-ratio: auto;
+}
+
+.vc-bie-split > .vc-bie-drawer,
+.vc-bie-picker > .vc-bie-drawer {
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    width: 248px;
+    padding: 8px;
+    border-radius: var(--radius-md, 8px);
+    background: var(--background-surface-higher, var(--background-secondary));
+    overflow: hidden;
+}
+
+.vc-bie-split > .vc-bie-drawer {
+    position: absolute;
+    inset: 0 0 0 auto;
+}
+
+.vc-bie-drawer > .vc-bie-panel {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-height: 0;
+    padding-top: 0;
+}
+
+.vc-bie-split > .vc-bie-drawer .vc-bie-strip,
+.vc-bie-picker > .vc-bie-drawer .vc-bie-strip {
+    flex: 1 1 auto;
+    min-height: 0;
+    max-height: none;
 }

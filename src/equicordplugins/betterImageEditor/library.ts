@@ -127,7 +127,7 @@ export function add(file: File, kind: Kind, group: Group, limit: number, from?: 
         if (known) return known;
 
         const source = from ? stored.find(entry => entry.id === from)?.sig : undefined;
-        const cropOf = (entry: Entry) => entry.from === source || entry.from === from;
+        const cropOf = (entry: Entry) => entry.from === source;
         const replaced = source ? stored.filter(entry => sameShelf(entry) && cropOf(entry) && !entry.pinned) : [];
         const id = nanoid();
         const thumb = await thumbnail(file);

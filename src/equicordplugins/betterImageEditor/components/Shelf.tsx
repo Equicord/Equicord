@@ -31,6 +31,13 @@ const kindName = (kind: Kind) => KIND_NAMES[kind] ?? kind.toLowerCase().replace(
 const isAnimated = (entry: Entry) => entry.type === "image/gif" || entry.name.toLowerCase().endsWith(".gif");
 export const croppedLabel = (kind: Kind) => `Cropped ${kindName(kind)}`;
 
+const SearchIcon = (props: React.SVGProps<SVGSVGElement>) => (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" {...props}>
+        <circle cx="10.5" cy="10.5" r="6.5" />
+        <path d="M15.5 15.5 21 21" />
+    </svg>
+);
+
 const PinIcon = (props: React.SVGProps<SVGSVGElement>) => (
     <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden {...props}>
         <path d="M15 4V9l3 3v2h-5v7l-1 1-1-1v-7H6v-2l3-3V4H8V2h8v2z" />
@@ -53,22 +60,30 @@ export function Shelf({ kind, group, entries, thumbs, activeId, wornId, onGroup,
     const shape = SQUARE.has(kind) ? "square" : "wide";
 
     const [hovered, setHovered] = useState<string | null>(null);
+    const [filter, setFilter] = useState("");
     const [playing, setPlaying] = useState<Record<string, string>>({});
     const played = useRef<string[]>([]);
+    const live = useRef(true);
 
-    useEffect(() => () => played.current.forEach(URL.revokeObjectURL), []);
+    useEffect(() => () => {
+        live.current = false;
+        played.current.forEach(URL.revokeObjectURL);
+    }, []);
 
     const play = useCallback(async (entry: Entry) => {
         setHovered(entry.id);
         if (!isAnimated(entry) || playing[entry.id]) return;
 
         const blob = await getFile(entry.id);
-        if (!blob) return;
+        if (!blob || !live.current) return;
 
         const url = URL.createObjectURL(blob);
         played.current.push(url);
         setPlaying(current => ({ ...current, [entry.id]: url }));
     }, [playing]);
+
+    const wanted = filter.trim().toLowerCase();
+    const shown = wanted ? entries.filter(entry => entry.name.toLowerCase().includes(wanted)) : entries;
 
     return (
         <div className={cl("panel", shape)}>
@@ -96,9 +111,36 @@ export function Shelf({ kind, group, entries, thumbs, activeId, wornId, onGroup,
 
             </div>
 
+            <div className={cl("bar")}>
+                <span className={cl("count")}>
+                    {wanted ? `${shown.length} of ${entries.length}` : `${entries.length} kept`}
+                </span>
+                {entries.length > 12 && (
+                    <div className={cl("find")}>
+                        <SearchIcon width={12} height={12} aria-hidden />
+                        <input
+                            type="text"
+                            value={filter}
+                            placeholder="Search"
+                            aria-label="Search saved pictures"
+                            onChange={event => setFilter(event.currentTarget.value)}
+                        />
+                        {filter && (
+                            <button
+                                type="button"
+                                aria-label="Clear the search"
+                                onClick={() => setFilter("")}
+                            >&times;</button>
+                        )}
+                    </div>
+                )}
+            </div>
+
             <div className={cl("strip")} role="group" aria-label="Saved pictures">
-                {entries.map(entry => (
-                    <div
+                {shown.map(entry => {
+                    const picture = (hovered === entry.id && playing[entry.id]) || thumbs[entry.id];
+
+                    return <div
                         key={entry.id}
                         className={cl("item", { pinned: entry.pinned, worn: entry.id === wornId })}
                         onMouseEnter={() => play(entry)}
@@ -110,7 +152,7 @@ export function Shelf({ kind, group, entries, thumbs, activeId, wornId, onGroup,
                             title={entry.id === wornId ? `${entry.name}
 You are wearing this` : entry.name}
                             className={cl("thumb", { active: activeId === entry.id })}
-                            style={{ backgroundImage: `url(${(hovered === entry.id && playing[entry.id]) || thumbs[entry.id]})` }}
+                            style={picture ? { backgroundImage: `url(${picture})` } : undefined}
                             onClick={() => onPick(entry)}
                             onContextMenu={event => {
                                 event.preventDefault();
@@ -136,14 +178,16 @@ You are wearing this` : entry.name}
                         >
                             <PinIcon width={10} height={10} />
                         </button>
-                    </div>
-                ))}
+                    </div>;
+                })}
 
-                {!entries.length && (
+                {!shown.length && (
                     <span className={cl("empty")}>
-                        {group === "original"
-                            ? "Pictures you pick, paste or drop land here"
-                            : "Pictures you crop land here"}
+                        {entries.length
+                            ? "Nothing here matches that"
+                            : group === "original"
+                                ? "Pictures you pick, paste or drop land here"
+                                : "Pictures you crop land here"}
                     </span>
                 )}
             </div>

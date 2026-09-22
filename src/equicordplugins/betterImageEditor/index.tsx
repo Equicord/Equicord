@@ -10,7 +10,7 @@ import { definePluginSettings } from "@api/Settings";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { EquicordDevs } from "@utils/constants";
 import { Logger } from "@utils/Logger";
-import { pluralise } from "@utils/misc";
+import { classes, pluralise } from "@utils/misc";
 import definePlugin, { OptionType } from "@utils/types";
 import { chooseFile, saveFile } from "@utils/web";
 import { Alerts, Button, React, showToast, Toasts, useCallback, useEffect, useRef, useState } from "@webpack/common";
@@ -62,7 +62,7 @@ const settings = definePluginSettings({
     librarySize: {
         type: OptionType.SLIDER,
         description: "How many pictures to keep on each shelf.",
-        markers: [6, 12, 24, 48],
+        markers: [6, 12, 24, 48, 100],
         default: 24,
         stickToMarkers: true
     },
@@ -139,7 +139,6 @@ const settings = definePluginSettings({
 let handoff: { id: string; transform: CropState | null; file: File; } | null = null;
 let offered: { kind: Kind; id: string; uris: (string | undefined)[]; } | null = null;
 const handedOver = new Map<string, string | null>();
-let editorAllowed = true;
 
 const PENDING = [["AVATAR", "pendingAvatar"], ["BANNER", "pendingBanner"]] as const;
 
@@ -235,7 +234,7 @@ function useLibrary(kind: Kind) {
             .catch(err => logger.error("could not read what you are wearing", err));
     }, [kind, version]);
 
-    return { group, setGroup, entries, thumbs, worn, bump };
+    return { group, setGroup, entries, thumbs, worn, version, bump };
 }
 
 function useForget(bump: () => void) {
@@ -258,6 +257,11 @@ function useForget(bump: () => void) {
 }
 
 let editorsOpen = 0;
+let gatedPickers = 0;
+
+function keepFocus(event: React.MouseEvent) {
+    if (!(event.target instanceof HTMLInputElement)) event.preventDefault();
+}
 
 function usePasteAndDrop(accept: (file: File) => void, active: () => boolean) {
     useEffect(() => {
@@ -274,7 +278,7 @@ function usePasteAndDrop(accept: (file: File) => void, active: () => boolean) {
         const onPaste = (event: ClipboardEvent) => take(imageIn(event.clipboardData?.files), event);
         const onDrop = (event: DragEvent) => take(imageIn(event.dataTransfer?.files), event);
         const onDragOver = (event: DragEvent) => {
-            if (!event.dataTransfer?.types.includes("Files")) return;
+            if (!active() || !event.dataTransfer?.types.includes("Files")) return;
             event.preventDefault();
             event.stopPropagation();
         };
@@ -293,8 +297,8 @@ function usePasteAndDrop(accept: (file: File) => void, active: () => boolean) {
 
 function EditorGate() {
     useEffect(() => {
-        editorAllowed = false;
-        return () => { editorAllowed = true; };
+        gatedPickers++;
+        return () => { gatedPickers--; };
     }, []);
 
     return null;
@@ -306,7 +310,7 @@ function PickerShelf({ kind, open, complete, maxSize }: {
     complete(result: PickResult): void;
     maxSize?: number;
 }) {
-    const { group, setGroup, entries, thumbs, worn, bump } = useLibrary(kind);
+    const { group, setGroup, entries, thumbs, worn, version, bump } = useLibrary(kind);
     const onForget = useForget(bump);
 
     const hand = useCallback(async (id: string, file: File, crop: CropState | null) => {
@@ -320,11 +324,11 @@ function PickerShelf({ kind, open, complete, maxSize }: {
         previousApplied(kind)
             .then(setPutBack)
             .catch(err => logger.error("could not read what you wore before", err));
-    }, [kind]);
+    }, [kind, version]);
 
     const onPick = useCallback(async (entry: Entry) => {
         const blob = await getFile(entry.id);
-        if (!blob) return;
+        if (!blob) return showToast("That picture is missing", Toasts.Type.FAILURE);
 
         const file = new File([blob], entry.name, { type: blob.type });
         await touch(entry.id);
@@ -352,6 +356,7 @@ function PickerShelf({ kind, open, complete, maxSize }: {
             await hand(entry.id, file, settings.store.rememberCrop ? entry.crop ?? null : null);
         } catch (err) {
             logger.error("could not take that picture", err);
+            showToast("Could not use that picture", Toasts.Type.FAILURE);
         }
     }, [kind, hand, bump, maxSize]);
 
@@ -431,6 +436,7 @@ function EditorShelf({ Original, ownProps }: { Original: React.ComponentType<Edi
             await show(entry.id, file, settings.store.rememberCrop ? entry.crop ?? null : null);
         } catch (err) {
             logger.error("could not take that picture", err);
+            showToast("Could not use that picture", Toasts.Type.FAILURE);
         }
     }, [kind, show, bump, setGroup]);
 
@@ -438,7 +444,7 @@ function EditorShelf({ Original, ownProps }: { Original: React.ComponentType<Edi
 
     const onPick = useCallback(async (entry: Entry) => {
         const blob = await getFile(entry.id);
-        if (!blob) return;
+        if (!blob) return showToast("That picture is missing", Toasts.Type.FAILURE);
 
         await touch(entry.id);
         bump();
@@ -460,7 +466,10 @@ function EditorShelf({ Original, ownProps }: { Original: React.ComponentType<Edi
             await add(new File([blob], name, { type: blob.type }), kind, "cropped", settings.store.librarySize, source);
             bump();
         };
-        const run = () => save().catch(err => logger.error("could not keep the cropped copy", err));
+        const run = () => save().catch(err => {
+            logger.error("could not keep the cropped copy", err);
+            showToast("Could not keep the cropped copy", Toasts.Type.FAILURE);
+        });
 
         if (!settings.store.askBeforeSavingCropped) return void run();
 
@@ -496,7 +505,7 @@ function EditorShelf({ Original, ownProps }: { Original: React.ComponentType<Edi
             {...props}
             bieShelf={
                 <ErrorBoundary noop>
-                    <div>
+                    <div className={cl("drawer")} onMouseDown={keepFocus}>
                         <Shelf
                             kind={kind}
                             group={group}
@@ -545,9 +554,16 @@ function onProfileDiscarded() {
 
 let wrapped: React.ComponentType<EditorProps> | null = null;
 
+interface Size {
+    width: number;
+    height: number;
+}
+
+let area: Size | null = null;
+
 export default definePlugin({
     name: "BetterImageEditor",
-    description: "Image editor with shelving for older images and allowing cropping",
+    description: "Keeps a shelf of your pictures in the avatar and banner editor, and remembers how you cropped each one.",
     authors: [EquicordDevs.heart_menace],
     settings,
 
@@ -578,6 +594,35 @@ export default definePlugin({
                 {
                     match: /(\(0,\i\.jsx\)\(\i\.A,\{id:\i,children:)/,
                     replace: "bieShelf,$1"
+                },
+                {
+                    match: /\("div",\{role:"group","aria-label":/,
+                    replace: '("div",{className:"vc-bie-split",role:"group","aria-label":'
+                }
+            ]
+        },
+        {
+            find: '"SET_IMAGE_ZOOM_RATIO"',
+            replacement: {
+                match: /size:"md",actionBarInput:/,
+                replace: 'size:"lg",actionBarInput:'
+            }
+        },
+        {
+            find: '"SET_IMAGE_ZOOM_RATIO"',
+            group: true,
+            replacement: [
+                {
+                    match: /(?<==(\i)\.current\.getBoundingClientRect\(\),)\{width:(\i),height:(\i)\}=(\(0,\i\.\i\)\(\i,\i,\i,\i\))(?=,\i=(\(0,\i\.\i\))\((\i),\2,\3,(\i),(\i)\))/,
+                    replace: "{width:$2,height:$3}=$self.fill($4,(bieW,bieH)=>$5($6,bieW,bieH,$7,$8),$1.current)"
+                },
+                {
+                    match: /(\i)=(\(0,\i\.\i\)\(\i,\i,\i,\i\))(?=,\i=(\(0,\i\.\i\))\((\i),\1\.width,\1\.height,(\i),(\i)\))/,
+                    replace: "$1=$self.fill($2,(bieW,bieH)=>$3($4,bieW,bieH,$5,$6))"
+                },
+                {
+                    match: /\{width:(\i),height:(\i)\}=(\(0,\i\.\i\)\(\i,\i,\i,\i\))(?=,\i=(\(0,\i\.\i\))\((\i),\1,\2,(\i),(\i)\))/,
+                    replace: "{width:$1,height:$2}=$self.fill($3,(bieW,bieH)=>$4($5,bieW,bieH,$6,$7))"
                 }
             ]
         },
@@ -587,15 +632,36 @@ export default definePlugin({
                 match: /(uploadType:(\i),guild:\i,handleOpenImageEditingModal:(\i),[\s\S]{0,500}?)\i&&\(0,\i\.jsx\)\(\i,\{onComplete:(\i),returnRef:\i\}\)/,
                 replace: "$1$self.pickerRow($2,$3,$4,arguments[0])"
             }
+        },
+        {
+            find: 'displayName="RecentAvatarsStore"',
+            replacement: {
+                match: /size:"md"(,title:\i,actions:\[\],returnRef:\i,children:\(0,\i\.jsxs\)\("div",\{className:)(\i\.\i)/,
+                replace: 'size:"lg"$1$self.pickerClass($2)'
+            }
         }
     ],
+
+    pickerClass(base: string) {
+        return classes(base, cl("picker"));
+    },
+
+    fill(size: Size, cropOf: (width: number, height: number) => Size, image?: HTMLImageElement) {
+        const box = image?.parentElement;
+        if (box) area = { width: box.clientWidth, height: box.clientHeight };
+        if (!area) return size;
+
+        const crop = cropOf(size.width, size.height);
+        const scale = Math.min(area.width / crop.width, area.height / crop.height);
+        return { width: size.width * scale, height: size.height * scale };
+    },
 
     wrapEditor(Original: React.ComponentType<EditorProps>) {
         if (!wrapped) {
             const Safe = ErrorBoundary.wrap(EditorShelf, {
                 fallback: ({ wrappedProps }) => <Original {...wrappedProps.ownProps} />
             });
-            wrapped = (props: EditorProps) => editorAllowed
+            wrapped = (props: EditorProps) => gatedPickers === 0
                 ? <Safe Original={Original} ownProps={props} />
                 : <Original {...props} />;
         }
@@ -608,7 +674,9 @@ export default definePlugin({
 
         return (
             <ErrorBoundary noop key="bie-picker">
-                <PickerShelf kind={kindOf(uploadType)} open={open} complete={complete} maxSize={picker.maxFileSizeBytes} />
+                <div className={cl("drawer")}>
+                    <PickerShelf kind={kindOf(uploadType)} open={open} complete={complete} maxSize={picker.maxFileSizeBytes} />
+                </div>
             </ErrorBoundary>
         );
     }
