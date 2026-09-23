@@ -259,10 +259,6 @@ function useForget(bump: () => void) {
 let editorsOpen = 0;
 let gatedPickers = 0;
 
-function keepFocus(event: React.MouseEvent) {
-    if (!(event.target instanceof HTMLInputElement)) event.preventDefault();
-}
-
 function usePasteAndDrop(accept: (file: File) => void, active: () => boolean) {
     useEffect(() => {
         const imageIn = (list: FileList | undefined) =>
@@ -505,7 +501,9 @@ function EditorShelf({ Original, ownProps }: { Original: React.ComponentType<Edi
             {...props}
             bieShelf={
                 <ErrorBoundary noop>
-                    <div className={cl("drawer")} onMouseDown={keepFocus}>
+                    <div className={cl("drawer")} onMouseDown={event => {
+                        if (!(event.target instanceof HTMLInputElement)) event.preventDefault();
+                    }}>
                         <Shelf
                             kind={kind}
                             group={group}

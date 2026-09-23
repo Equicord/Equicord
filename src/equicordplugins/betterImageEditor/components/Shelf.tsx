@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { DeleteIcon } from "@components/Icons";
+import { DeleteIcon, SearchIcon } from "@components/Icons";
 import { classNameFactory } from "@utils/css";
 import { React, useCallback, useEffect, useRef, useState } from "@webpack/common";
 
@@ -30,13 +30,6 @@ const kindName = (kind: Kind) => KIND_NAMES[kind] ?? kind.toLowerCase().replace(
 
 const isAnimated = (entry: Entry) => entry.type === "image/gif" || entry.name.toLowerCase().endsWith(".gif");
 export const croppedLabel = (kind: Kind) => `Cropped ${kindName(kind)}`;
-
-const SearchIcon = (props: React.SVGProps<SVGSVGElement>) => (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" {...props}>
-        <circle cx="10.5" cy="10.5" r="6.5" />
-        <path d="M15.5 15.5 21 21" />
-    </svg>
-);
 
 const PinIcon = (props: React.SVGProps<SVGSVGElement>) => (
     <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden {...props}>
