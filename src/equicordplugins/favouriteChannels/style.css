@@ -1,0 +1,99 @@
+.vc-favourites-sidebar {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+
+.vc-favourites-scroller,
+.vc-favourites-empty-scroller {
+    flex: 1 1 auto;
+    min-height: 0;
+    overscroll-behavior: contain;
+}
+
+.vc-favourites-empty-scroller {
+    overflow-y: auto;
+}
+
+.vc-favourites-list {
+    padding-bottom: 16px;
+}
+
+.vc-favourites-row,
+.vc-favourites-category {
+    position: relative;
+}
+
+.vc-favourites-category-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.vc-favourites-drop-before::before,
+.vc-favourites-drop-after::after {
+    content: "";
+    position: absolute;
+    left: 8px;
+    right: 8px;
+    height: 2px;
+    border-radius: 1px;
+    background: var(--brand-500);
+    pointer-events: none;
+}
+
+.vc-favourites-drop-before::before {
+    top: -1px;
+}
+
+.vc-favourites-drop-after::after {
+    bottom: -1px;
+}
+
+.vc-favourites-empty {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.vc-favourites-empty-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 16px 16px 0;
+    text-wrap: pretty;
+}
+
+.vc-favourites-empty-link {
+    display: inline;
+    padding: 0;
+    font: inherit;
+}
+
+.vc-favourites-picker-action,
+.vc-favourites-picker-submit {
+    width: 100%;
+}
+
+.vc-favourites-picker-empty {
+    padding: 16px;
+    text-align: center;
+}
+
+.vc-favourites-modal-description {
+    margin-top: 8px;
+}
+
+.vc-favourites-row :has(> .vc-favourites-guild-icon),
+.vc-favourites-guild-icon {
+    width: 32px;
+    height: 24px;
+}
+
+.vc-favourites-guild-row a > div + div {
+    margin-left: 40px;
+}
+
+.vc-favourites-header-backdrop {
+    opacity: 0.5;
+}
