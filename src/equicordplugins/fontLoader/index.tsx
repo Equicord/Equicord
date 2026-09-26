@@ -12,10 +12,13 @@ import { HeadingSecondary, HeadingTertiary } from "@components/Heading";
 import { Paragraph } from "@components/Paragraph";
 import { debounce } from "@shared/debounce";
 import { EquicordDevs } from "@utils/constants";
+import { Logger } from "@utils/Logger";
 import { Margins } from "@utils/margins";
 import { classes } from "@utils/misc";
 import definePlugin, { OptionType } from "@utils/types";
 import { React, TextInput } from "@webpack/common";
+
+const logger = new Logger("FontLoader");
 
 interface GoogleFontMetadata {
     family: string;
@@ -33,14 +36,26 @@ interface GoogleFontMetadata {
 }
 
 const createGoogleFontUrl = (family: string, options = "") =>
-    `https://fonts.googleapis.com/css2?family=${encodeURIComponent(family)}${options}&display=swap`;
+    `https://fonts.googleapis.com/css2?family=${encodeURIComponent(family).replace(/%20/g, "+")}${options}&display=swap`;
 
-const loadFontStyle = (url: string) => {
-    document.head.insertAdjacentHTML("beforeend", `<link rel="stylesheet" href="${url}">`);
-    return document.createElement("style");
-};
+const appliedLinks: HTMLLinkElement[] = [];
+const previewLinks: HTMLLinkElement[] = [];
+let searchAbort: AbortController | null = null;
 
-async function searchGoogleFonts(query: string) {
+function addFontLink(url: string, bucket: HTMLLinkElement[]) {
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href = url;
+    document.head.appendChild(link);
+    bucket.push(link);
+    return link;
+}
+
+function clearLinks(bucket: HTMLLinkElement[]) {
+    for (const el of bucket.splice(0)) el.remove();
+}
+
+async function searchGoogleFonts(query: string, signal?: AbortSignal) {
     try {
         const response = await fetch("https://fonts.google.com/$rpc/fonts.fe.catalog.actions.metadata.MetadataService/FontSearch", {
             method: "POST",
@@ -48,57 +63,81 @@ async function searchGoogleFonts(query: string) {
                 "content-type": "application/json+protobuf",
                 "x-user-agent": "grpc-web-javascript/0.1"
             },
-            body: JSON.stringify([[query, null, null, null, null, null, 1], [5], null, 16])
+            body: JSON.stringify([[query, null, null, null, null, null, 1], [5], null, 16]),
+            signal
         });
 
-        const data = await response.json();
-        if (!data?.[1]) return [];
-        return data[1].map(([_, fontData]: [string, any[]]) => ({
-            family: fontData[0],
-            displayName: fontData[1],
-            authors: fontData[2],
-            category: fontData[3],
-            variants: fontData[6].map((variant: any[]) => ({
-                axes: variant[0].map(([tag, min, max]: [string, number, number]) => ({
-                    tag, min, max
-                }))
-            }))
-        }));
+        if (!response.ok) return [];
+        const data: unknown = await response.json();
+        const rows = Array.isArray((data as unknown[])?.[1]) ? (data as unknown[][])[1] as unknown[] : [];
+        const fonts: GoogleFontMetadata[] = [];
+
+        for (const row of rows) {
+            if (!Array.isArray(row) || !Array.isArray((row as unknown[])[1])) continue;
+            const fontData = (row as unknown[])[1] as unknown[];
+            const family = typeof fontData[0] === "string" ? fontData[0] : "";
+            if (!family) continue;
+            const displayName = typeof fontData[1] === "string" ? fontData[1] : family;
+            const authors = Array.isArray(fontData[2])
+                ? (fontData[2] as unknown[]).filter((a): a is string => typeof a === "string")
+                : [];
+            const category = typeof fontData[3] === "number" ? fontData[3] : undefined;
+            const variants = Array.isArray(fontData[6])
+                ? (fontData[6] as unknown[])
+                    .filter((v): v is unknown[] => Array.isArray(v))
+                    .map(v => ({
+                        axes: (Array.isArray(v[0]) ? v[0] as unknown[] : [])
+                            .filter((a): a is unknown[] => Array.isArray(a))
+                            .map(a => (typeof a[0] === "string" && typeof a[1] === "number" && typeof a[2] === "number"
+                                ? { tag: a[0], min: a[1], max: a[2] }
+                                : null))
+                            .filter((a): a is NonNullable<typeof a> => a !== null)
+                    }))
+                : [];
+            fonts.push({ family, displayName, authors, category, variants });
+        }
+
+        return fonts;
     } catch (err) {
-        console.error("Failed to fetch fonts:", err);
+        if ((err as Error)?.name === "AbortError") return [];
+        logger.error("Failed to fetch fonts:", err);
         return [];
     }
 }
 
 const preloadFont = (family: string) =>
-    loadFontStyle(createGoogleFontUrl(family, ":wght@400;700"));
+    addFontLink(createGoogleFontUrl(family, ":wght@400;700"), previewLinks);
 
 let styleElement: HTMLStyleElement | null = null;
 
-const applyFont = async (fontFamily: string) => {
+const applyFont = (fontFamily: string) => {
     if (!fontFamily) {
         styleElement?.remove();
         styleElement = null;
+        clearLinks(appliedLinks);
         return;
     }
 
     try {
+        clearLinks(appliedLinks);
+
         if (!styleElement) {
             styleElement = document.createElement("style");
             document.head.appendChild(styleElement);
         }
 
-        loadFontStyle(createGoogleFontUrl(fontFamily, ":wght@300;400;500;600;700"));
+        const escaped = fontFamily.replace(/'/g, "\\'");
+        addFontLink(createGoogleFontUrl(fontFamily, ":wght@300;400;500;600;700"), appliedLinks);
         styleElement.textContent = `
-            * {
-                --font-primary: '${fontFamily}', sans-serif !important;
-                --font-display: '${fontFamily}', sans-serif !important;
-                --font-headline: '${fontFamily}', sans-serif !important;
-                ${settings.store.applyOnCodeBlocks ? "--font-code: '${fontFamily}', monospace !important;" : ""}
+            :root {
+                --font-primary: '${escaped}', sans-serif !important;
+                --font-display: '${escaped}', sans-serif !important;
+                --font-headline: '${escaped}', sans-serif !important;
+                ${settings.store.applyOnCodeBlocks ? `--font-code: '${escaped}', monospace !important;` : ""}
             }
         `;
     } catch (err) {
-        console.error("Failed to load font:", err);
+        logger.error("Failed to load font:", err);
     }
 };
 
@@ -106,30 +145,36 @@ function GoogleFontSearch({ onSelect }: { onSelect: (font: GoogleFontMetadata) =
     const [query, setQuery] = React.useState("");
     const [results, setResults] = React.useState<GoogleFontMetadata[]>([]);
     const [loading, setLoading] = React.useState(false);
-    const previewStyles = React.useRef<HTMLStyleElement[]>([]);
+    const requestId = React.useRef(0);
 
     React.useEffect(() => () => {
-        previewStyles.current.forEach(style => style.remove());
+        clearLinks(previewLinks);
     }, []);
 
-    const debouncedSearch = debounce(async (value: string) => {
-        setLoading(true);
+    const debouncedSearch = React.useMemo(() => debounce(async (value: string, id: number) => {
         if (!value) {
-            setResults([]);
-            setLoading(false);
+            if (requestId.current === id) {
+                clearLinks(previewLinks);
+                setResults([]);
+                setLoading(false);
+            }
             return;
         }
 
-        const fonts = await searchGoogleFonts(value);
-        previewStyles.current.forEach(style => style.remove());
-        previewStyles.current = await Promise.all(fonts.map(f => preloadFont(f.family)));
+        searchAbort?.abort();
+        searchAbort = new AbortController();
+        const fonts = await searchGoogleFonts(value, searchAbort.signal);
+        if (requestId.current !== id) return;
+        clearLinks(previewLinks);
+        for (const f of fonts.slice(0, 8)) preloadFont(f.family);
         setResults(fonts);
         setLoading(false);
-    }, 300);
+    }, 300), []);
 
-    const handleSearch = (e: string) => {
-        setQuery(e);
-        debouncedSearch(e);
+    const handleSearch = (value: string) => {
+        setQuery(value);
+        setLoading(true);
+        debouncedSearch(value, ++requestId.current);
     };
 
     return (
@@ -139,12 +184,12 @@ function GoogleFontSearch({ onSelect }: { onSelect: (font: GoogleFontMetadata) =
 
             <TextInput
                 value={query}
-                onChange={e => handleSearch(e)}
+                onChange={handleSearch}
                 placeholder="Search fonts..."
-                disabled={loading}
             />
+            {loading ? <Paragraph className={Margins.top8} style={{ opacity: 0.7 }}>Loading...</Paragraph> : null}
 
-            {results.length > 0 && (
+            {results.length ? (
                 <div className={classes(Margins.top8, "eq-googlefonts-results")}>
                     {results.map(font => (
                         <Card
@@ -156,16 +201,30 @@ function GoogleFontSearch({ onSelect }: { onSelect: (font: GoogleFontMetadata) =
                                 <HeadingTertiary>{font.displayName}</HeadingTertiary>
                                 <Paragraph>The quick brown fox jumps over the lazy dog</Paragraph>
                             </div>
-                            {font.authors?.length && (
+                            {font.authors?.length ? (
                                 <Paragraph className={Margins.top8} style={{ opacity: 0.7 }}>
                                     by {font.authors.join(", ")}
                                 </Paragraph>
-                            )}
+                            ) : null}
                         </Card>
                     ))}
                 </div>
-            )}
+            ) : null}
+            {!loading && query && !results.length ? (
+                <Paragraph className={Margins.top8} style={{ opacity: 0.7 }}>No fonts found.</Paragraph>
+            ) : null}
         </section>
+    );
+}
+
+function FontSearchSetting() {
+    return (
+        <GoogleFontSearch
+            onSelect={font => {
+                settings.store.selectedFont = font.family;
+                applyFont(font.family);
+            }}
+        />
     );
 }
 
@@ -173,44 +232,45 @@ migratePluginSetting("FontLoader", "applyOnCodeBlocks", "applyOnClodeBlocks");
 const settings = definePluginSettings({
     selectedFont: {
         type: OptionType.STRING,
-        description: "Currently selected font",
+        description: "Currently selected font.",
         default: "",
         hidden: true
     },
     fontSearch: {
         type: OptionType.COMPONENT,
-        description: "Search and select Google Fonts",
-        component: () => (
-            <GoogleFontSearch
-                onSelect={font => {
-                    settings.store.selectedFont = font.family;
-                    applyFont(font.family);
-                }}
-            />
-        )
+        description: "Search and select Google Fonts.",
+        component: FontSearchSetting
     },
     applyOnCodeBlocks: {
         type: OptionType.BOOLEAN,
-        description: "Apply the font to code blocks",
-        default: false
+        description: "Apply the font to code blocks.",
+        default: false,
+        onChange: () => {
+            const font = settings.store.selectedFont;
+            if (font) applyFont(font);
+        }
     }
 });
 
 export default definePlugin({
     name: "FontLoader",
-    description: "Loads any font from Google Fonts",
+    description: "Loads any font from Google Fonts.",
     tags: ["Appearance", "Customisation"],
     authors: [EquicordDevs.vmohammad],
     settings,
 
-    async start() {
+    start() {
         const savedFont = settings.store.selectedFont;
         if (savedFont) {
-            await applyFont(savedFont);
+            applyFont(savedFont);
         }
     },
 
     stop() {
+        searchAbort?.abort();
+        searchAbort = null;
+        clearLinks(appliedLinks);
+        clearLinks(previewLinks);
         if (styleElement) {
             styleElement.remove();
             styleElement = null;
