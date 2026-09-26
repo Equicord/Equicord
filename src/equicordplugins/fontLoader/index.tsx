@@ -14,7 +14,7 @@ import { debounce } from "@shared/debounce";
 import { EquicordDevs } from "@utils/constants";
 import { Logger } from "@utils/Logger";
 import { Margins } from "@utils/margins";
-import { classes, sleep } from "@utils/misc";
+import { classes } from "@utils/misc";
 import definePlugin, { OptionType } from "@utils/types";
 import { React, TextInput } from "@webpack/common";
 
@@ -110,7 +110,7 @@ const preloadFont = (family: string) =>
 
 let styleElement: HTMLStyleElement | null = null;
 
-const applyFont = async (fontFamily: string) => {
+const applyFont = (fontFamily: string) => {
     if (!fontFamily) {
         styleElement?.remove();
         styleElement = null;
@@ -136,13 +136,6 @@ const applyFont = async (fontFamily: string) => {
                 ${settings.store.applyOnCodeBlocks ? `--font-code: '${escaped}', monospace !important;` : ""}
             }
         `;
-
-        try {
-            await Promise.race([
-                document.fonts.load(`400 16px '${escaped}'`),
-                sleep(3000)
-            ]);
-        } catch { /* apply proceeds even if the font is not ready yet */ }
     } catch (err) {
         logger.error("Failed to load font:", err);
     }
@@ -266,10 +259,10 @@ export default definePlugin({
     authors: [EquicordDevs.vmohammad],
     settings,
 
-    async start() {
+    start() {
         const savedFont = settings.store.selectedFont;
         if (savedFont) {
-            await applyFont(savedFont);
+            applyFont(savedFont);
         }
     },
 
