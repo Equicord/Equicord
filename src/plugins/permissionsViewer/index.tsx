@@ -151,7 +151,6 @@ function makeContextMenuPatch(childId: string | string[], type?: MenuItemParentT
             return group.push(item);
         }
 
-        // "roles" may not be present due to the member not having any roles. In that case, add it above "Copy ID"
         if (childId === "roles" && props.guildId) {
             children.splice(-1, 0, <Menu.MenuGroup>{item}</Menu.MenuGroup>);
         }
@@ -162,7 +161,7 @@ export default definePlugin({
     name: "PermissionsViewer",
     description: "View the permissions a user or channel has, and the roles of a server",
     tags: ["Servers", "Roles", "Utility"],
-    authors: [Devs.Nuckyz, Devs.Ven],
+    authors: [Devs.Nuckyz, Devs.Ven, Devs.n6n],
     settings,
 
     patches: [
