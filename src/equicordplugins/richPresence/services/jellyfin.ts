@@ -40,7 +40,13 @@ async function fetchMediaData(): Promise<JfMediaData | null> {
 
     try {
         const baseUrl = (jf_serverUrl.startsWith("http") ? jf_serverUrl : `https://${jf_serverUrl}`).replace(/\/$/, "");
-        const res = await fetch(`${baseUrl}/Sessions?api_key=${jf_apiKey}`);
+        const res = await fetch(`${baseUrl}/Sessions`, {
+            method: "GET",
+            headers: {
+                "Accept": "application/json",
+                "Authorization": `MediaBrowser Token="${jf_apiKey}"`
+            }
+        });
         if (!res.ok) throw `${res.status} ${res.statusText}`;
 
         const contentType = res.headers.get("content-type") ?? "";
