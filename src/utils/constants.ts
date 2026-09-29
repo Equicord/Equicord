@@ -68,6 +68,10 @@ export interface Dev {
  * If you are fine with attribution but don't want the badge, add badge: false
  */
 export const Devs = /* #__PURE__*/ Object.freeze({
+    rico: {
+        name: "rico",
+        id: 1361736124858630274n
+    },
     Ven: {
         name: "V",
         id: 343383572805058560n
