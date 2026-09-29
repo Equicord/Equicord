@@ -20,6 +20,7 @@
 // @ts-check
 
 import { createPackage } from "@electron/asar";
+import ffmpegPath from "ffmpeg-static";
 import { readdir, writeFile } from "fs/promises";
 import { dirname, join, resolve } from "path";
 import { fileURLToPath } from "url";
@@ -37,7 +38,8 @@ const defines = stringifyValues({
     IS_EXTENSION: false,
     IS_USERSCRIPT: false,
     VERSION,
-    BUILD_TIMESTAMP
+    BUILD_TIMESTAMP,
+    FFMPEG_PATH: ffmpegPath
 });
 
 if (defines.IS_STANDALONE === "false") {

@@ -50,6 +50,7 @@
         "@vap/core": "0.0.12",
         "@vap/shiki": "0.10.5",
         "fflate": "^0.8.3",
+        "ffmpeg-static": "5.3.0",
         "gifenc": "github:mattdesl/gifenc#64842fca317b112a8590f8fef2bf3825da8f6fe3",
         "gifuct-js": "^2.1.2",
         "idb": "8.0.3",

@@ -13,6 +13,7 @@ allowedDeprecatedVersions:
 strictPeerDependencies: false
 allowBuilds:
     esbuild: true
+    ffmpeg-static: true
 pmOnFail: warn
 verifyDepsBeforeRun: prompt
 minimumReleaseAge: 7
