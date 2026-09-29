@@ -34,7 +34,6 @@ interface RunResult {
     stderr: string;
 }
 
-/** Runs ffmpeg with argv (never a shell) and kills it when it takes too long. */
 function runFFmpeg(binary: string, args: string[], timeoutMs: number): Promise<RunResult> {
     return new Promise((resolve, reject) => {
         const ffmpeg = spawn(binary, args, { windowsHide: true });
@@ -60,7 +59,6 @@ function runFFmpeg(binary: string, args: string[], timeoutMs: number): Promise<R
     });
 }
 
-/** Only an absolute path to a real file is accepted, so the renderer can't make us run arbitrary binaries. */
 async function resolveFFmpeg(configured: string | undefined) {
     const binary = configured?.trim();
     if (!binary) return "ffmpeg";
@@ -74,7 +72,6 @@ async function resolveFFmpeg(configured: string | undefined) {
     return path;
 }
 
-/** Reads the duration in seconds by parsing ffmpeg's info output. */
 async function probeDuration(ffmpegPath: string, input: string): Promise<number | null> {
     try {
         // ffmpeg exits with an error when no output is given, but still prints the input info to stderr
@@ -89,7 +86,6 @@ async function probeDuration(ffmpegPath: string, input: string): Promise<number 
     }
 }
 
-/** Rough resolution ladder so low bitrates get a smaller frame instead of blocky 1080p. */
 function heightForBitrate(kbps: number): number {
     if (kbps >= 2500) return Infinity;
     if (kbps >= 1200) return 720;
@@ -125,9 +121,6 @@ export async function compressVideo(_: IpcMainInvokeEvent, data: Uint8Array, opt
 
         const ffmpegPath = await resolveFFmpeg(opts.ffmpegPath);
 
-        // With the duration known we can cap the bitrate so the size limit is met in a single encode
-        // (constrained CRF: quality stays at the CRF level unless that would exceed the size budget).
-        // Without it we fall back to stepping the CRF/resolution and re-encoding.
         const duration = targetSize ? await probeDuration(ffmpegPath, input) : null;
 
         let encodeCrf = crf;

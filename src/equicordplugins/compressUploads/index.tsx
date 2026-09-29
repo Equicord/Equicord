@@ -143,7 +143,6 @@ async function compressVideo(file: File): Promise<File> {
 const compressionCache = new Map<string, Promise<File>>();
 const MAX_CACHE_ENTRIES = 8;
 
-// Re-dropping or retrying the same file would otherwise re-encode it from scratch.
 function compressCached(file: File, isVideo: boolean): Promise<File> {
     const s = settings.store;
     const key = [
@@ -240,10 +239,6 @@ export default definePlugin({
         });
     },
 
-    /**
-     * Compresses the upload's file, then checks it against the user's upload limit.
-     * Resolves to true if the upload was cancelled because it is still too large.
-     */
     processUpload(upload: any): Promise<boolean> {
         if (!settings.store.enabled) return Promise.resolve(false);
 

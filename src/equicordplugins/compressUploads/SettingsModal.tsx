@@ -25,10 +25,6 @@ const cl = classNameFactory("vc-compress-uploads-");
 type BoolKey = "enabled" | "compressOversized" | "enableImages" | "enableVideos" | "losslessImages" | "h265" | "notifyOnError";
 type NumberKey = "minSizeKB" | "minSavingsPercent" | "imageQuality" | "videoCrf" | "videoMaxHeight" | "audioKbps";
 
-// ---------------------------------------------------------------------------
-// Chat bar button
-// ---------------------------------------------------------------------------
-
 export function CompressIcon({ className, enabled = true }: { className?: string; enabled?: boolean; }) {
     return (
         <svg
@@ -89,10 +85,6 @@ export const CompressChatBarIcon: ChatBarButtonFactory = ({ isMainChat }) => {
         </ChatBarButton>
     );
 };
-
-// ---------------------------------------------------------------------------
-// Modal building blocks
-// ---------------------------------------------------------------------------
 
 function Section({ title }: { title: string; }) {
     return (
@@ -191,10 +183,6 @@ function SelectRow({ settingKey, disabled }: { settingKey: "videoPreset"; disabl
         </Flex>
     );
 }
-
-// ---------------------------------------------------------------------------
-// Modal
-// ---------------------------------------------------------------------------
 
 export function CompressUploadsModal({ modalProps }: { modalProps: RenderModalProps; }) {
     const { enabled } = settings.use(["enabled"]);
