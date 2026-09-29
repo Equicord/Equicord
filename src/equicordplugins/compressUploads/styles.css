@@ -1,0 +1,23 @@
+.vc-compress-uploads-disabled {
+    opacity: 0.6;
+}
+
+.vc-compress-uploads-busy {
+    transform-origin: center;
+    animation: vc-compress-uploads-squeeze 0.9s ease-in-out infinite alternate;
+}
+
+.vc-compress-uploads-section-title {
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+}
+
+@keyframes vc-compress-uploads-squeeze {
+    from {
+        transform: scale(1);
+    }
+
+    to {
+        transform: scale(0.78);
+    }
+}
