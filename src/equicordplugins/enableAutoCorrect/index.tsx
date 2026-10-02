@@ -11,8 +11,7 @@ import definePlugin, { OptionType } from "@utils/types";
 import { findCssClassesLazy } from "@webpack";
 import { Menu } from "@webpack/common";
 
-const TextAreaClasses = findCssClassesLazy("slateTextArea");
-const SETTING_KEYS: Array<"isEnabled"> = ["isEnabled"];
+const TextAreaClasses = findCssClassesLazy("slateTextArea", "slateContainer");
 
 const settings = definePluginSettings({
     isEnabled: {
@@ -23,14 +22,13 @@ const settings = definePluginSettings({
 });
 
 const addAutoCorrectMenuItem: NavContextMenuPatchCallback = children => {
-    const { isEnabled } = settings.use(SETTING_KEYS);
+    const { isEnabled } = settings.use(["isEnabled"]);
     if (!findGroupChildrenByChildId("submit-button", children)) return;
 
     const options = findGroupChildrenByChildId("spellcheck-enabled", children, true);
     if (!options) return;
-    if (options.some(item => item?.props.id === "vc-enable-autocorrect")) return;
 
-    const spellcheckIndex = options.findIndex(item => item?.props.id?.endsWith("spellcheck-enabled"));
+    const spellcheckIndex = options.findIndex(item => item?.props?.id?.includes("spellcheck-enabled"));
     options.splice(spellcheckIndex + 1, 0,
         <Menu.MenuCheckboxItem
             id="vc-enable-autocorrect"
@@ -43,25 +41,25 @@ const addAutoCorrectMenuItem: NavContextMenuPatchCallback = children => {
 
 export default definePlugin({
     name: "EnableAutoCorrect",
-    description: "Enables native autocorrection and text replacements in the message composer.",
+    description: "Adds a chat box toggle for your system's autocorrect",
     tags: ["Chat", "Utility"],
     authors: [EquicordDevs.tie],
     settings,
     contextMenus: {
         "textarea-context": addAutoCorrectMenuItem
     },
-    patches: [{
-        find: "onPasteCapture:this.handlePasteCapture",
-        replacement: {
-            match: /autoCorrect:"off"/,
-            replace: "autoCorrect:$self.autoCorrectForEditor(this.props)"
+    patches: [
+        {
+            find: "onPasteCapture:this.handlePasteCapture",
+            replacement: {
+                match: /autoCorrect:"off"(?=,"data-can-focus":)/,
+                replace: "autoCorrect:$self.autoCorrectForEditor(this.props)"
+            }
         }
-    }],
+    ],
 
-    autoCorrectForEditor(props: { channelId?: string; className?: string; }) {
-        const composerClass = TextAreaClasses.slateTextArea;
-        return settings.store.isEnabled && props.channelId && composerClass && props.className?.split(/\s+/).includes(composerClass)
-            ? "on"
-            : "off";
+    autoCorrectForEditor({ channelId, className }: { channelId?: string; className?: string; }) {
+        if (!settings.store.isEnabled || !channelId) return "off";
+        return className?.split(" ").includes(TextAreaClasses.slateTextArea) ? "on" : "off";
     }
 });
