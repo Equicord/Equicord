@@ -5,6 +5,7 @@
  */
 
 import { definePluginSettings } from "@api/Settings";
+import { EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 import { React, showToast, useMemo } from "@webpack/common";
 
@@ -22,7 +23,7 @@ export default definePlugin({
     name: "MoreFavouriteGifs",
     description: "Favourite more GIFs than Discord allows by saving the extra ones on this device",
     tags: ["Media", "Utility"],
-    authors: [{ name: "Stormanzanii", id: 0n }],
+    authors: [EquicordDevs.stormanzanii],
     searchTerms: ["favorite", "gif", "limit"],
     settings,
 
