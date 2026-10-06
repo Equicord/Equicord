@@ -1,0 +1,113 @@
+/*
+ * Vencord, a Discord client mod
+ * Copyright (c) 2026 Vendicated and contributors
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+import * as DataStore from "@api/DataStore";
+import definePlugin from "@utils/types";
+import { React, showToast, useMemo } from "@webpack/common";
+
+const STORE_KEY = "MoreFavouriteGifs_gifs";
+
+interface FavouriteGif {
+    format: number;
+    src: string;
+    width: number;
+    height: number;
+    order: number;
+}
+
+type GifMap = Record<string, FavouriteGif>;
+
+// Replaced (never mutated) on every change so it works as a useSyncExternalStore snapshot
+let localGifs: GifMap = {};
+const listeners = new Set<() => void>();
+
+function subscribe(listener: () => void) {
+    listeners.add(listener);
+    return () => void listeners.delete(listener);
+}
+
+const getSnapshot = () => localGifs;
+
+function setLocalGifs(next: GifMap) {
+    localGifs = next;
+    listeners.forEach(l => l());
+    DataStore.set(STORE_KEY, next).catch(e => console.error("[MoreFavouriteGifs] Failed to save", e));
+}
+
+function maxOrder(...maps: GifMap[]) {
+    let max = 0;
+    for (const map of maps)
+        for (const gif of Object.values(map))
+            if (gif.order > max) max = gif.order;
+    return max;
+}
+
+export default definePlugin({
+    name: "MoreFavouriteGifs",
+    description: "Lets you favourite GIFs past Discord's limit by storing the extra ones locally",
+    authors: [{ name: "Stormanzanii", id: 0n }],
+    tags: ["Media", "Utility"],
+    searchTerms: ["favorite", "gif", "limit"],
+
+    patches: [
+        {
+            // Adding a favourite: when the settings proto would exceed the size limit, save locally instead of showing the limit alert
+            find: "#{intl::FAVORITE_GIFS_LIMIT_REACHED_BODY}",
+            replacement: [
+                {
+                    match: /if\((\i)\.gifs\[(\i\(\i\.url\))\]=(\{[^}]+\}),(\i\.\i\.toBinary\(\1\)\.length>\d+)\)return/,
+                    replace: "if($1.gifs[$2]=$3,$4)return $self.addLocal($2,$1.gifs[$2],$1.gifs),!1;if(0)return"
+                },
+                {
+                    // Removing a favourite: also drop it from the local store
+                    match: /(\i) in (\i)\.gifs\?delete \2\.gifs\[\1\]:delete \2\.gifs\[(\i)\(\1\)\]/,
+                    replace: "$self.removeLocal($1,$3($1)),$&"
+                }
+            ]
+        },
+        {
+            // Hook every favourites consumer (picker list, favourite star state) reads from; merge local GIFs in
+            find: '.sortBy("order").reverse().value()',
+            replacement: {
+                match: /return (\i)\.favoriteGifs\?\.gifs\?\?(\i)\}/,
+                replace: "return $self.useMergedGifs($1.favoriteGifs?.gifs??$2)}"
+            }
+        }
+    ],
+
+    async start() {
+        const saved = await DataStore.get<GifMap>(STORE_KEY);
+        if (saved) {
+            localGifs = saved;
+            listeners.forEach(l => l());
+        }
+    },
+
+    addLocal(key: string, gif: FavouriteGif, protoGifs: GifMap) {
+        const { format, src, width, height } = gif;
+        const order = maxOrder(protoGifs, localGifs) + 1;
+
+        setLocalGifs({ ...localGifs, [key]: { format, src, width, height, order } });
+        showToast(`Favourite limit reached, saved locally (${Object.keys(localGifs).length} local)`, "success");
+    },
+
+    removeLocal(url: string, normalisedUrl: string) {
+        if (!(url in localGifs) && !(normalisedUrl in localGifs)) return;
+
+        const next = { ...localGifs };
+        delete next[url];
+        delete next[normalisedUrl];
+        setLocalGifs(next);
+    },
+
+    useMergedGifs(protoGifs: GifMap) {
+        const local = React.useSyncExternalStore(subscribe, getSnapshot);
+        return useMemo(
+            () => Object.keys(local).length ? { ...local, ...protoGifs } : protoGifs,
+            [protoGifs, local]
+        );
+    }
+});
