@@ -103,7 +103,7 @@ export default definePlugin({
 
         setLocalGifs({ ...localGifs, [key]: { format, src, width, height, order } });
 
-        if (settings.store.showPopup) showToast(`Favourite limit reached, saved locally (${Object.keys(localGifs).length} local)`, "message");
+        if (settings.store.showPopup) showToast(`Limit reached, saved locally (${Object.keys(localGifs).length})`, "message");
     },
 
     removeLocal(url: string, normalisedUrl: string) {
