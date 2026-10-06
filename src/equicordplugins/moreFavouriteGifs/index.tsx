@@ -5,8 +5,18 @@
  */
 
 import * as DataStore from "@api/DataStore";
-import definePlugin from "@utils/types";
-import { React, showToast, useMemo } from "@webpack/common";
+import { definePluginSettings } from "@api/Settings";
+import { BaseText } from "@components/BaseText";
+import definePlugin, { OptionType } from "@utils/types";
+import { closeModal, Modal, openModal, React, useMemo } from "@webpack/common";
+
+const settings = definePluginSettings({
+    showPopup: {
+        type: OptionType.BOOLEAN,
+        description: "Show a popup when a favourite is saved locally because Discord's limit was reached",
+        default: true
+    }
+});
 
 const STORE_KEY = "MoreFavouriteGifs_gifs";
 
@@ -37,6 +47,26 @@ function setLocalGifs(next: GifMap) {
     DataStore.set(STORE_KEY, next).catch(e => console.error("[MoreFavouriteGifs] Failed to save", e));
 }
 
+let popupKey: string | undefined;
+
+// Auto-closing modal without buttons, so repeated favourites don't need dismissing
+function showSavedPopup(count: number) {
+    if (popupKey) closeModal(popupKey);
+
+    const key = popupKey = openModal(props => (
+        <Modal {...props} size="sm" title="Favourite Limit Reached">
+            <BaseText size="md" style={{ paddingBottom: 16 }}>
+                {`Discord's favourite GIF limit was reached, so this GIF was saved locally (${count} local).`}
+            </BaseText>
+        </Modal>
+    ));
+
+    setTimeout(() => {
+        closeModal(key);
+        if (popupKey === key) popupKey = undefined;
+    }, 3500);
+}
+
 function maxOrder(...maps: GifMap[]) {
     let max = 0;
     for (const map of maps)
@@ -51,6 +81,8 @@ export default definePlugin({
     authors: [{ name: "Stormanzanii", id: 0n }],
     tags: ["Media", "Utility"],
     searchTerms: ["favorite", "gif", "limit"],
+
+    settings,
 
     patches: [
         {
@@ -91,7 +123,8 @@ export default definePlugin({
         const order = maxOrder(protoGifs, localGifs) + 1;
 
         setLocalGifs({ ...localGifs, [key]: { format, src, width, height, order } });
-        showToast(`Favourite limit reached, saved locally (${Object.keys(localGifs).length} local)`, "success");
+
+        if (settings.store.showPopup) showSavedPopup(Object.keys(localGifs).length);
     },
 
     removeLocal(url: string, normalisedUrl: string) {
