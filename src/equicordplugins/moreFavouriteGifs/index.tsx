@@ -4,24 +4,19 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { definePluginSettings } from "@api/Settings";
 import { EquicordDevs } from "@utils/constants";
-import definePlugin, { OptionType } from "@utils/types";
+import definePlugin from "@utils/types";
 import { React, showToast, useMemo } from "@webpack/common";
 
-import { addGif, FavouriteGif, getGifs, GifMap, loadGifs, removeGif, subscribe } from "./store";
+import { queueCloudSync } from "./cloud";
+import { settings } from "./settings";
+import { addGif, FavouriteGif, getGifs, GifMap, loadGifs, onSave, removeGif, subscribe } from "./store";
 
-const settings = definePluginSettings({
-    showPopup: {
-        type: OptionType.BOOLEAN,
-        description: "Show a popup when a GIF is saved locally because Discord's limit was reached",
-        default: true
-    }
-});
+let stopCloudSync: (() => void) | undefined;
 
 export default definePlugin({
     name: "MoreFavouriteGifs",
-    description: "Favourite more GIFs than Discord allows by saving the extra ones on this device",
+    description: "Favourite more GIFs than Discord allows by saving the extra ones locally",
     tags: ["Media", "Utility"],
     authors: [EquicordDevs.stormanzanii],
     searchTerms: ["favorite", "gif", "limit"],
@@ -53,7 +48,17 @@ export default definePlugin({
         }
     ],
 
-    start: loadGifs,
+    async start() {
+        stopCloudSync = onSave(() => {
+            if (settings.store.cloudSync) queueCloudSync();
+        });
+
+        await loadGifs();
+    },
+
+    stop() {
+        stopCloudSync?.();
+    },
 
     saveGif(url: string, gif: FavouriteGif, discordGifs: GifMap) {
         const total = addGif(url, gif, discordGifs);
