@@ -212,6 +212,17 @@ function VoiceMessageModal({ modalProps }: { modalProps: RenderModalProps; }) {
 
     const VoiceRecorder = IS_DISCORD_DESKTOP ? VoiceRecorderDesktop : VoiceRecorderWeb;
 
+    const setAudioBlob = (file: Blob) => {
+        setBlob(file);
+        setBlobUrl(file);
+    };
+
+    const handleDrop: React.DragEventHandler = e => {
+        e.preventDefault();
+        const file = e.dataTransfer.files[0];
+        if (file) setAudioBlob(file);
+    };
+
     useEffect(() => () => {
         if (blobUrl)
             URL.revokeObjectURL(blobUrl);
@@ -249,22 +260,20 @@ function VoiceMessageModal({ modalProps }: { modalProps: RenderModalProps; }) {
                 disabled: !blob
             }]}
         >
-            <div className={cl("buttons")}>
+            <div
+                className={cl("buttons")}
+                onDrop={handleDrop}
+                onDragOver={e => e.preventDefault()}
+            >
                 <VoiceRecorder
-                    setAudioBlob={blob => {
-                        setBlob(blob);
-                        setBlobUrl(blob);
-                    }}
+                    setAudioBlob={setAudioBlob}
                     onRecordingChange={setRecording}
                 />
 
                 <Button
                     onClick={async () => {
                         const file = await chooseFile("audio/*");
-                        if (file) {
-                            setBlob(file);
-                            setBlobUrl(file);
-                        }
+                        if (file) setAudioBlob(file);
                     }}
                 >
                     Upload File
