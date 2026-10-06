@@ -33,7 +33,3 @@ export function writeGifs(_: unknown, gifs: Record<string, unknown>) {
     queue = job.catch(() => { });
     return job;
 }
-
-export function getGifsPath() {
-    return FILE;
-}
