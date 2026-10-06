@@ -7,7 +7,7 @@
 import * as DataStore from "@api/DataStore";
 import { definePluginSettings } from "@api/Settings";
 import definePlugin, { OptionType } from "@utils/types";
-import { React, useMemo } from "@webpack/common";
+import { React, showToast, useMemo } from "@webpack/common";
 
 const settings = definePluginSettings({
     showPopup: {
@@ -44,66 +44,6 @@ function setLocalGifs(next: GifMap) {
     localGifs = next;
     listeners.forEach(l => l());
     DataStore.set(STORE_KEY, next).catch(e => console.error("[MoreFavouriteGifs] Failed to save", e));
-}
-
-let popupEl: HTMLElement | undefined;
-let popupTimeout: ReturnType<typeof setTimeout> | undefined;
-
-const CHECK_ICON = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="currentColor"/><path d="M8 12.5l2.5 2.5L16 9.5" stroke="var(--background-base-lower, #111)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-
-function removePopup() {
-    clearTimeout(popupTimeout);
-    popupEl?.remove();
-    popupEl = undefined;
-}
-
-// Non-interactive popup at the top of the window: no backdrop, ignores clicks, closes itself
-function showSavedPopup(count: number) {
-    removePopup();
-
-    const el = popupEl = document.createElement("div");
-    el.setAttribute("role", "status");
-    Object.assign(el.style, {
-        position: "fixed",
-        top: "44px",
-        left: "50%",
-        transform: "translateX(-50%)",
-        zIndex: "9999",
-        display: "flex",
-        alignItems: "center",
-        gap: "10px",
-        padding: "12px 16px",
-        maxWidth: "calc(100vw - 32px)",
-        background: "var(--background-surface-high, var(--background-base-low))",
-        border: "1px solid var(--border-subtle, rgba(255, 255, 255, 0.08))",
-        borderRadius: "var(--radius-md, 8px)",
-        boxShadow: "0 8px 16px rgba(0, 0, 0, 0.24)",
-        color: "var(--text-default)",
-        font: "500 14px/18px var(--font-primary, sans-serif)",
-        whiteSpace: "nowrap",
-        pointerEvents: "none",
-        userSelect: "none"
-    });
-
-    const icon = document.createElement("span");
-    icon.style.cssText = "display:flex;color:var(--status-positive,#23a55a)";
-    icon.innerHTML = CHECK_ICON;
-
-    const text = document.createElement("span");
-    text.textContent = `Favourite limit reached, saved locally (${count} local)`;
-
-    el.append(icon, text);
-    document.body.append(el);
-
-    el.animate(
-        [{ opacity: 0, transform: "translate(-50%, -8px)" }, { opacity: 1, transform: "translate(-50%, 0)" }],
-        { duration: 150, easing: "ease-out" }
-    );
-
-    popupTimeout = setTimeout(() => {
-        const anim = el.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 200, fill: "forwards" });
-        anim.onfinish = () => { if (popupEl === el) removePopup(); else el.remove(); };
-    }, 3000);
 }
 
 function maxOrder(...maps: GifMap[]) {
@@ -157,17 +97,13 @@ export default definePlugin({
         }
     },
 
-    stop() {
-        removePopup();
-    },
-
     addLocal(key: string, gif: FavouriteGif, protoGifs: GifMap) {
         const { format, src, width, height } = gif;
         const order = maxOrder(protoGifs, localGifs) + 1;
 
         setLocalGifs({ ...localGifs, [key]: { format, src, width, height, order } });
 
-        if (settings.store.showPopup) showSavedPopup(Object.keys(localGifs).length);
+        if (settings.store.showPopup) showToast(`Favourite limit reached, saved locally (${Object.keys(localGifs).length} local)`, "message");
     },
 
     removeLocal(url: string, normalisedUrl: string) {
