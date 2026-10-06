@@ -6,7 +6,7 @@
 
 import * as DataStore from "@api/DataStore";
 import { definePluginSettings } from "@api/Settings";
-import definePlugin, { OptionType } from "@utils/types";
+import definePlugin, { OptionType, PluginNative } from "@utils/types";
 import { React, showToast, useMemo } from "@webpack/common";
 
 const settings = definePluginSettings({
@@ -17,7 +17,11 @@ const settings = definePluginSettings({
     }
 });
 
-const STORE_KEY = "MoreFavouriteGifs_gifs";
+// Saved as MoreFavouriteGifs.json in the Equicord data folder
+const Native = VencordNative.pluginHelpers.MoreFavouriteGifs as PluginNative<typeof import("./native")>;
+
+// Old versions kept the GIFs in IndexedDB; migrated to the JSON file on first start
+const LEGACY_STORE_KEY = "MoreFavouriteGifs_gifs";
 
 interface FavouriteGif {
     format: number;
@@ -43,7 +47,7 @@ const getSnapshot = () => localGifs;
 function setLocalGifs(next: GifMap) {
     localGifs = next;
     listeners.forEach(l => l());
-    DataStore.set(STORE_KEY, next).catch(e => console.error("[MoreFavouriteGifs] Failed to save", e));
+    Native.writeGifs(next).catch(e => console.error("[MoreFavouriteGifs] Failed to save", e));
 }
 
 function maxOrder(...maps: GifMap[]) {
@@ -90,10 +94,25 @@ export default definePlugin({
     ],
 
     async start() {
-        const saved = await DataStore.get<GifMap>(STORE_KEY);
-        if (saved) {
-            localGifs = saved;
-            listeners.forEach(l => l());
+        try {
+            let saved = await Native.readGifs() as GifMap | null;
+
+            if (!saved) {
+                // First run on the file store: pull over anything saved by the old IndexedDB version
+                const legacy = await DataStore.get<GifMap>(LEGACY_STORE_KEY);
+                if (legacy && Object.keys(legacy).length) {
+                    await Native.writeGifs(legacy);
+                    await DataStore.del(LEGACY_STORE_KEY);
+                    saved = legacy;
+                }
+            }
+
+            if (saved) {
+                localGifs = { ...saved, ...localGifs };
+                listeners.forEach(l => l());
+            }
+        } catch (e) {
+            console.error("[MoreFavouriteGifs] Failed to load saved GIFs", e);
         }
     },
 
