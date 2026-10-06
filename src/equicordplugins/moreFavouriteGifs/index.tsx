@@ -152,12 +152,12 @@ export default definePlugin({
             find: "#{intl::FAVORITE_GIFS_LIMIT_REACHED_BODY}",
             replacement: [
                 {
-                    match: /(?<=(\i)\.gifs\[(\i\(\i\.url\))\]=\{.{0,100}?\},\i\.\i\.toBinary\(\i\)\.length>\d+\))return \i\.\i\.show\(\{.{0,150}?\}\),!1/,
-                    replace: "return $self.saveGif($2,$1.gifs[$2],$1.gifs),!1"
+                    match: /(?<=\.toBinary\((\i)\)\.length>\d+\)return )\i\.\i\.show\(\{.{0,100}?#{intl::FAVORITE_GIFS_LIMIT_REACHED_BODY}\)\}\)/,
+                    replace: "$self.saveGif($1.gifs)"
                 },
                 {
-                    match: /(\i) in (\i)\.gifs\?delete \2\.gifs\[\1\]:delete \2\.gifs\[(\i)\(\1\)\]/,
-                    replace: "$self.deleteGif($1,$3($1)),$&"
+                    match: /(?=(\i) in \i\.gifs\?delete \i\.gifs\[\i\]:delete \i\.gifs\[(\i)\(\i\)\])/,
+                    replace: "$self.deleteGif($1,$2($1)),"
                 }
             ]
         },
@@ -179,9 +179,12 @@ export default definePlugin({
             .catch(e => logger.error("Failed to load favourites", e));
     },
 
-    saveGif(url: string, { format, src, width, height }: FavouriteGif, discordGifs: GifMap) {
-        const orders = [discordGifs, localGifs].flatMap(gifs => Object.values(gifs).map(gif => gif.order));
-        setLocalGifs({ ...localGifs, [url]: { format, src, width, height, order: Math.max(0, ...orders) + 1 } });
+    saveGif(discordGifs: GifMap) {
+        const [url, { format, src, width, height, order }] = Object.entries(discordGifs)
+            .reduce((newest, entry) => entry[1].order > newest[1].order ? entry : newest);
+        const localOrders = Object.values(localGifs).map(gif => gif.order + 1);
+
+        setLocalGifs({ ...localGifs, [url]: { format, src, width, height, order: Math.max(order, ...localOrders) } });
 
         if (settings.store.showPopup) {
             showToast(`Limit reached, saved locally (${Object.keys(localGifs).length})`, "message");
