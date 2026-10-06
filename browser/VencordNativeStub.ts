@@ -123,7 +123,8 @@ window.VencordNative = {
     settings: {
         get: () => {
             try {
-                return JSON.parse(localStorage.getItem("EquicordSettings") || "{}");
+                const settings = JSON.parse(localStorage.getItem("EquicordSettings") || "{}");
+                return typeof settings === "string" ? JSON.parse(settings) : settings;
             } catch (e) {
                 console.error("Failed to parse settings from localStorage: ", e);
                 return {};
