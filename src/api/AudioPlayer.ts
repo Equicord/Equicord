@@ -4,10 +4,15 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { findByCodeLazy, findLazy } from "@webpack";
+import { findByCodeLazy, findModuleId, proxyLazyWebpack, wreq } from "@webpack";
 
 let defaultSounds: null | string[] = null;
-const findDefaultSounds = findLazy(module => module.resolve && module.id && module.keys().some(key => key.endsWith(".mp3")), false);
+const findDefaultSounds = proxyLazyWebpack(() => {
+    const moduleId = findModuleId("./discodo.mp3");
+    if (moduleId == null) throw new Error("Discord sound module not found");
+
+    return wreq(moduleId);
+});
 const AudioPlayerConstructor = findByCodeLazy("could not play audio");
 
 export type AudioProcessor = (data: PreprocessAudioData) => void;
@@ -251,7 +256,7 @@ export function removeAudioProcessor(key: string): void {
 
 /** Returns an array of all internal Discord audio filenames. */
 export function defaultAudioNames(): string[] {
-    defaultSounds ??= (findDefaultSounds.keys() || []).map(key => {
+    defaultSounds ??= findDefaultSounds.keys().map((key: string) => {
         const match = key.match(/((?:\w|-)+)\.mp3$/);
         return match ? match[1] : null;
     }).filter(Boolean) as string[];

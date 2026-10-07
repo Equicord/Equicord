@@ -1,117 +1,29 @@
 /* Settings */
 
-.questify-setting {
-    border-radius: 3px;
-    border-left: 3px solid var(--text-strong);
-    padding: 8px;
-    user-select: text;
-}
-
-.questify-settings-divider-small {
-    margin: 10px 0;
-}
-
-.questify-settings-divider-medium {
-    margin: 15px 0;
-}
-
-.questify-settings-divider-large {
-    margin: 20px 0;
-}
-
 .questify-dimmed-settings-item {
     filter: brightness(0.5);
-}
-
-.questify-setting-header {
-    font-size: 19px;
-    font-weight: 600;
-    margin-bottom: 10px;
-}
-
-.questify-setting-subheader {
-    font-size: 16px;
-    font-weight: 500;
-    margin: 15px 0 5px;
 }
 
 .questify-setting-paragraph {
     font-size: 14px;
     font-weight: 400;
     margin: 5px 0;
-    line-height: normal;
+    line-height: 1.5;
 }
 
 .questify-setting-description {
-    margin-bottom: 15px;
-    line-height: normal;
+    margin: 0 0 8px;
+    color: var(--text-muted);
+    line-height: 1.5;
 }
 
-.questify-setting-description-multi-paragraph {
-    line-height: 0.2em;
+.questify-setting-subtle-switch {
+    padding: 6px 0;
 }
 
-[class*="clickTrapContainer"] > div > .questify-settings-tooltip {
-    margin-right: 4px;
-}
-
-.questify-settings-tooltip-content {
-    text-align: justify;
-    white-space: pre-line;
-}
-
-.questify-setting-switch {
-    margin-bottom: 5px;
-}
-
-.questify-setting-switch [class*="container_"] [class*="labelContainer_"] label {
-    font-size: 16px;
-    font-weight: 500;
-}
-
-.questify-setting-subtle-switch [class*="container_"] [class*="labelContainer_"] label,
-.questify-setting-switch [class*="container_"] [class*="labelContainer_"] div {
-    font-size: 14px;
-    font-weight: 400;
-}
-
-.questify-notice-card {
-    margin: 12px 0;
-    padding: 12px;
-    border-radius: 4px;
-    line-height: 0.2em;
-}
-
-.questify-notice-card-red {
-    border-left: 3px solid var(--status-danger);
-    background-color: color-mix(in srgb, var(--status-danger) 12%, transparent);
-}
-
-.questify-notice-card-blue {
-    border-left: 3px solid var(--background-brand);
-    background-color: color-mix(in srgb, var(--background-brand) 12%, transparent);
-}
-
-.questify-notice-card-solo {
-    margin: 12px 0 0;
-}
-
-.questify-settings-button > button[data-mana-component="button"] {
-    border-radius: 3px;
-}
-
-.questify-settings-button > button[data-mana-component="button"] span {
-    font-size: 14px;
-}
-
-.questify-setting [data-floating-ui-focusable][class*="selectDropdown"],
-.questify-setting [data-mana-component="select-input-field"] > [class*="selectField"],
-.questify-setting [data-mana-component="select-input-field"] [class*="tagList"] > div {
-    border-radius: 3px;
-}
-
-.questify-inline-volume-slider {
-    margin-top: 0;
+.questify-settings-fields {
+    display: grid;
+    gap: 8px;
 }
 
 .questify-sound-preview-button {
@@ -146,144 +58,10 @@
     cursor: default;
 }
 
-.questify-sound-select [class*="selectedIcon"] {
-    display: none;
-}
-
-.questify-no-top-margin,
-.questify-margin-top-0 {
-    margin-top: 0;
-}
-
-.questify-margin-top-1 {
-    margin-top: 1px;
-}
-
-.questify-margin-top-2 {
-    margin-top: 2px;
-}
-
-.questify-margin-top-3 {
-    margin-top: 3px;
-}
-
-.questify-margin-top-4 {
-    margin-top: 4px;
-}
-
-.questify-margin-top-5 {
-    margin-top: 5px;
-}
-
-.questify-margin-top-6 {
-    margin-top: 6px;
-}
-
-.questify-margin-top-7 {
-    margin-top: 7px;
-}
-
-.questify-margin-top-8 {
-    margin-top: 8px;
-}
-
-.questify-margin-top-9 {
-    margin-top: 9px;
-}
-
-.questify-margin-top-10 {
-    margin-top: 10px;
-}
-
-.questify-margin-top-11 {
-    margin-top: 11px;
-}
-
-.questify-margin-top-12 {
-    margin-top: 12px;
-}
-
-.questify-margin-top-13 {
-    margin-top: 13px;
-}
-
-.questify-margin-top-14 {
-    margin-top: 14px;
-}
-
-.questify-margin-top-15 {
-    margin-top: 15px;
-}
-
-.questify-no-bottom-margin,
-.questify-margin-bottom-0 {
-    margin-bottom: 0;
-}
-
-.questify-margin-bottom-1 {
-    margin-bottom: 1px;
-}
-
-.questify-margin-bottom-2 {
-    margin-bottom: 2px;
-}
-
-.questify-margin-bottom-3 {
-    margin-bottom: 3px;
-}
-
-.questify-margin-bottom-4 {
-    margin-bottom: 4px;
-}
-
-.questify-margin-bottom-5 {
-    margin-bottom: 5px;
-}
-
-.questify-margin-bottom-6 {
-    margin-bottom: 6px;
-}
-
-.questify-margin-bottom-7 {
-    margin-bottom: 7px;
-}
-
-.questify-margin-bottom-8 {
-    margin-bottom: 8px;
-}
-
-.questify-margin-bottom-9 {
-    margin-bottom: 9px;
-}
-
-.questify-margin-bottom-10 {
-    margin-bottom: 10px;
-}
-
-.questify-margin-bottom-11 {
-    margin-bottom: 11px;
-}
-
-.questify-margin-bottom-12 {
-    margin-bottom: 12px;
-}
-
-.questify-margin-bottom-13 {
-    margin-bottom: 13px;
-}
-
-.questify-margin-bottom-14 {
-    margin-bottom: 14px;
-}
-
-.questify-margin-bottom-15 {
-    margin-bottom: 15px;
-}
-
 .questify-settings-row {
-    margin-top: 4px;
+    margin-top: 8px;
     display: flex;
-    gap: 4px;
+    gap: 8px;
     align-items: flex-start;
 }
 
@@ -292,47 +70,14 @@
     min-width: 0;
 }
 
-.questify-settings-row-item-content {
-    flex: 0 0 auto;
-}
-
-.questify-settings-slider-control-container {
-    margin: 4px 0 0;
-    background-color: var(--input-background-default, var(--input-background));
-    padding: 0 12px 0 4px;
-    border-radius: 3px;
-    border: 1px solid var(--border-normal);
-    min-height: 40px;
-    box-sizing: border-box;
-    display: flex;
-    align-items: center;
-}
-
-.questify-settings-slider-control {
-    margin: 0 4px;
-    width: 100%;
-}
-
-.questify-sound-select-row-item {
-    flex: 0 1 67%;
-}
-
-.questify-volume-slider-row-item {
-    flex: 0 1 33%;
-}
-
 /* Quest Tiles */
-
-.questify-quest-tile-gradient-row-item {
-    flex: 0 1 42%;
-}
-
-.questify-quest-tile-preload-row-item {
-    flex: 0 1 58%;
-}
 
 .questify-quest-tile-color-row {
     align-items: stretch;
+}
+
+.questify-quest-tile-color-row .questify-setting-paragraph {
+    text-align: center;
 }
 
 .questify-quest-tile-color-row-item {
@@ -340,7 +85,7 @@
     flex-direction: column;
 }
 
-.questify-settings-color-picker.questify-quest-tile-color-picker {
+.questify-settings-color-picker:is(.questify-quest-tile-color-picker, .questify-quest-button-color-picker) {
     display: flex;
     height: 38px;
     min-height: 38px;
@@ -348,19 +93,31 @@
     margin-top: 5px;
 }
 
-.questify-settings-color-picker.questify-quest-tile-color-picker > [class*="colorSwatch"] {
+.questify-settings-color-picker:is(.questify-quest-tile-color-picker, .questify-quest-button-color-picker) > [class*="colorSwatch"] {
     display: flex;
     width: 100%;
     height: 100%;
     min-height: 38px;
 }
 
-.questify-settings-color-picker.questify-quest-tile-color-picker [class*="swatch"],
-.questify-settings-color-picker.questify-quest-tile-color-picker [class*="Swatch"] {
+.questify-settings-color-picker:is(.questify-quest-tile-color-picker, .questify-quest-button-color-picker) [class*="swatch"],
+.questify-settings-color-picker:is(.questify-quest-tile-color-picker, .questify-quest-button-color-picker) [class*="Swatch"] {
     width: 100%;
     height: 100%;
     min-height: 38px;
-    border-radius: 3px;
+    border-radius: var(--radius-sm, 8px);
+}
+
+.questify-quest-button-color-label {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 20px;
+    margin: 0 0 8px;
+}
+
+.questify-settings-color-picker.questify-quest-button-color-picker {
+    height: 40px;
+    margin-top: 0;
 }
 
 .questify-settings-color-picker.questify-disabled-color-picker {
@@ -372,27 +129,224 @@
     margin-top: 6px;
 }
 
-/* Quest Button Settings */
-
-.questify-settings-color-picker.questify-quest-button-color-picker {
-    display: flex;
-    height: 38px;
-    min-height: 38px;
-    min-width: 0;
-    margin-top: 5px;
+.questify-settings {
+    display: grid;
+    gap: 12px;
 }
 
-.questify-settings-color-picker.questify-quest-button-color-picker > [class*="colorSwatch"] {
-    display: flex;
-    width: 100%;
-    height: 100%;
-    min-height: 38px;
+.questify-settings-tabs {
+    margin-bottom: 0;
 }
 
-.questify-settings-color-picker.questify-quest-button-color-picker [class*="swatch"],
-.questify-settings-color-picker.questify-quest-button-color-picker [class*="Swatch"] {
+.questify-settings-section {
+    padding: 12px;
+}
+
+.questify-settings-section + .questify-settings-section {
+    margin-top: 12px;
+}
+
+.questify-settings-section-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0 0 8px;
+}
+
+.questify-settings-section-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.questify-specific-features {
+    margin-top: 8px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border-subtle);
+}
+
+.questify-quest-fetch-interval {
+    margin-top: 12px;
+}
+
+.questify-sorting-order {
+    padding: 0;
+    margin: 0 0 12px;
+    list-style: none;
+}
+
+.questify-sorting-order > li {
+    display: grid;
+    grid-template-columns: 24px minmax(0, 1fr);
+    align-items: center;
+    gap: 8px;
+    padding: 4px 0;
+}
+
+.questify-sorting-position {
+    color: var(--text-muted);
+    font-size: 12px;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+}
+
+.questify-sorting-order > li + li {
+    border-top: 1px solid var(--border-subtle);
+}
+
+.questify-sorting-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+    align-items: center;
+    gap: 12px;
+}
+
+.questify-sorting-row .questify-sorting-handle {
     width: 100%;
-    height: 100%;
-    min-height: 38px;
-    border-radius: 3px;
+    justify-content: flex-start;
+    gap: 8px;
+    height: 40px;
+    padding: 8px;
+    border-radius: 8px;
+    font-weight: 400;
+    cursor: grab;
+}
+
+.questify-sorting-handle:disabled {
+    cursor: default;
+}
+
+.questify-sorting-handle:hover:not(:disabled) {
+    background: var(--background-modifier-hover);
+}
+
+.questify-sorting-grip {
+    color: var(--text-muted);
+}
+
+.questify-sorting-handle:active:not(:disabled) {
+    cursor: grabbing;
+}
+
+.questify-sorting-dragging {
+    opacity: 0.5;
+}
+
+.questify-sorting-drop-before {
+    box-shadow: inset 0 2px var(--brand-500);
+}
+
+.questify-sorting-drop-after {
+    box-shadow: inset 0 -2px var(--brand-500);
+}
+
+.questify-settings-section.questify-notifications-section {
+    padding-block: 4px;
+}
+
+.questify-notification-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+    font-size: 14px;
+    line-height: 20px;
+}
+
+.questify-notification-table :where(th, td) {
+    box-sizing: border-box;
+    padding: 8px 6px;
+    text-align: left;
+    vertical-align: middle;
+}
+
+.questify-notification-table :where(th) {
+    font-weight: 500;
+}
+
+.questify-notification-table :where(thead) {
+    color: var(--text-muted);
+    white-space: nowrap;
+}
+
+.questify-notification-table :where(tbody tr) {
+    border-top: 1px solid var(--border-subtle);
+}
+
+.questify-notification-table :where(th:first-child) {
+    width: 16%;
+    padding-left: 0;
+}
+
+.questify-notification-table :where(th:last-child),
+.questify-notification-table :where(td:last-child) {
+    padding-right: 0;
+}
+
+.questify-notification-table :where(thead th:nth-child(2)) {
+    width: 104px;
+    text-align: center;
+}
+
+.questify-notification-table :where(thead th:nth-child(3)) {
+    width: 44%;
+    text-align: center;
+}
+
+.questify-notification-table :where(thead th:last-child),
+.questify-notification-table .questify-notification-toggle {
+    text-align: center;
+}
+
+.questify-notification-toggle label {
+    display: inline-flex;
+}
+
+.questify-notification-volume {
+    display: flex;
+    align-items: center;
+    height: 40px;
+    padding: 0 8px;
+}
+
+.questify-notification-volume-slider {
+    width: 100%;
+    margin: 0;
+}
+
+.questify-settings-section.questify-completion-section {
+    background-color: color-mix(in srgb, var(--status-danger) 12%, var(--card-background-default));
+}
+
+.questify-completion-section > .questify-setting-paragraph {
+    line-height: normal;
+}
+
+.questify-completion-controls {
+    margin-top: 10px;
+}
+
+.questify-compact-switches > .questify-setting-subtle-switch {
+    margin-bottom: 5px;
+    padding: 0;
+}
+
+.questify-compact-switches label {
+    font-size: 14px;
+    font-weight: 400;
+}
+
+.questify-completion-controls > .questify-settings-select {
+    margin-top: 9px;
+}
+
+.questify-settings-tooltip {
+    max-width: 350px;
+}
+
+.questify-settings-tooltip-wide {
+    max-width: 602px;
+}
+
+.questify-settings-tooltip-content {
+    white-space: pre-line;
 }

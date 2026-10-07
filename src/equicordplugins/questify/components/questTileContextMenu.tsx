@@ -64,7 +64,6 @@ export function QuestTileContextMenu(
                     label="Start Auto-Complete"
                     action={() => {
                         processQuestForAutoComplete(quest, {
-                            force: true,
                             source: "manual",
                         });
                         rerenderQuests();

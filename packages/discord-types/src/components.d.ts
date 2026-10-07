@@ -49,6 +49,7 @@ export interface TooltipChildrenProps {
 export interface TooltipProps {
     text: ReactNode | ComponentType;
     children: FunctionComponent<TooltipChildrenProps>;
+    targetElementRef?: RefObject<Element | null>;
     "aria-label"?: string;
 
     allowOverflow?: boolean;

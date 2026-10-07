@@ -155,13 +155,13 @@ export default definePlugin({
         options: AudioPlayerOptions = {},
         audio: string,
         unused: any,
-        internalVolume: number,
+        internalVolume: number | null | undefined,
         channel: string
     ) {
         player.preprocessDataOriginal = {
             audio: audio,
             type: identifyAudioType(audio),
-            volume: Math.max(0, Math.min(1, (internalVolume || (options.volume ? options.volume / 100 : 1)))),
+            volume: Math.max(0, Math.min(1, internalVolume ?? (options.volume ?? 100) / 100)),
             speed: Math.max(0.0625, Math.min(16, options.speed ?? 1)),
         };
 

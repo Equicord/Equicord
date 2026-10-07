@@ -8,12 +8,12 @@ import { definePluginSettings, PlainSettings, SettingsStore } from "@api/Setting
 import ErrorBoundary from "@components/ErrorBoundary";
 import { OptionType } from "@utils/types";
 
-import { QuestButtonSetting } from "../components/questButtonSettings";
 import { QuestFeaturesSetting } from "../components/questFeaturesSetting";
-import { QuestNotificationsSetting } from "../components/questNotificationsSetting";
-import { QuestTilesSetting } from "../components/questTilesSetting";
-import { ReorderQuestsSetting } from "../components/reorderQuestsSetting";
-import { defaultAcknowledgedNotices, defaultAllowChangingDangerousSettings, defaultAutoCompleteQuestsSimultaneously, defaultAutoCompleteQuestTypes, defaultClaimedSubsort, defaultCompleteVideoQuestsQuicker, defaultDisableAccountPanelPromo, defaultDisableAccountPanelQuestProgress, defaultDisableFriendsListPromo, defaultDisableMembersListPromo, defaultDisableOrbsAndQuestsBadges, defaultDisableQuestsEverything, defaultDisableRelocationNotices, defaultDisableSponsoredBanner, defaultExpiredSubsort, defaultIgnoredQuestIDs, defaultIgnoredSubsort, defaultIsOnQuestsPage, defaultLastQuestPageFilters, defaultLastQuestPageSort, defaultLeftClickAction, defaultMakeMobileVideoQuestsDesktopCompatible, defaultMiddleClickAction, defaultNewExcludedQuestAlertSound, defaultNewExcludedQuestAlertVolume, defaultNewQuestAlertSound, defaultNewQuestAlertVolume, defaultNotifyOnNewExcludedQuests, defaultNotifyOnNewQuests, defaultNotifyOnQuestComplete, defaultPreventVideoQuestsPausing, defaultQuestButtonBadgeColor, defaultQuestButtonBadgeCount, defaultQuestButtonDisplay, defaultQuestButtonIncludedTypes, defaultQuestButtonIndicator, defaultQuestCompletedAlertSound, defaultQuestCompletedAlertVolume, defaultQuestFetchInterval, defaultQuestOrder, defaultQuestTileClaimedColorSetting, defaultQuestTileExpiredColorSetting, defaultQuestTileGradient, defaultQuestTileIgnoredColorSetting, defaultQuestTilePreload, defaultQuestTileUnclaimedColorSetting, defaultRememberQuestPageFilters, defaultRememberQuestPageSort, defaultResumeInterruptedQuests, defaultResumeQuestIDs, defaultRightClickAction, defaultUnclaimedSubsort, type QuestButtonAction, type QuestButtonDisplayMode, type QuestButtonIncludedTypes, type QuestButtonIndicatorMode, type QuestOrderStatus } from "./def";
+import { startAutoFetchingQuests } from "../utils/fetching";
+import { defaultAcknowledgedNotices, defaultAllowChangingDangerousSettings, defaultAutoCompleteQuestsSimultaneously, defaultAutoCompleteQuestTypes, defaultClaimedSubsort, defaultCompleteVideoQuestsQuicker, defaultExpiredSubsort, defaultIgnoredQuestIDs, defaultIgnoredSubsort, defaultLastQuestPageFilters, defaultMakeMobileVideoQuestsDesktopCompatible, defaultPreventVideoQuestsPausing, defaultQuestButtonBadgeColor, defaultQuestButtonIncludedTypes, defaultQuestOrder, defaultQuestTileClaimedColorSetting, defaultQuestTileExpiredColorSetting, defaultQuestTileIgnoredColorSetting, defaultQuestTileUnclaimedColorSetting, defaultResumeInterruptedQuests, defaultResumeQuestIDs, defaultUnclaimedSubsort, type QuestButtonAction, type QuestButtonDisplayMode, type QuestButtonIncludedTypes, type QuestButtonIndicatorMode, type QuestOrderStatus } from "./def";
+import { rerenderQuests } from "./rerender";
+
+const refreshAutoFetchingQuests = () => startAutoFetchingQuests(true);
 
 const MIGRATION_TARGET = 1;
 const CURRENT_SETTINGS = PlainSettings.plugins.Questify;
@@ -48,61 +48,62 @@ export const settings = definePluginSettings({
     questFeatures: {
         type: OptionType.COMPONENT,
         component: ErrorBoundary.wrap(QuestFeaturesSetting) as any,
-        description: "Select which Quest features to disable.",
+        description: "Configure Questify.",
     },
     disableQuestsEverything: {
         type: OptionType.BOOLEAN,
         description: "Disable all Quest features.",
-        default: defaultDisableQuestsEverything,
+        default: false,
+        onChange: refreshAutoFetchingQuests,
         restartNeeded: true,
         hidden: true,
     },
     disableRelocationNotices: {
         type: OptionType.BOOLEAN,
         description: "Disable Quest relocation notices in the Discovery page.",
-        default: defaultDisableRelocationNotices,
+        default: true,
         restartNeeded: true,
         hidden: true,
     },
     disableSponsoredBanner: {
         type: OptionType.BOOLEAN,
         description: "Disable the sponsored banner on the Quest page.",
-        default: defaultDisableSponsoredBanner,
+        default: false,
         restartNeeded: true,
         hidden: true,
     },
     disableAccountPanelPromo: {
         type: OptionType.BOOLEAN,
         description: "Disable the promoted Quest popup above your account panel.",
-        default: defaultDisableAccountPanelPromo,
+        default: true,
         restartNeeded: true,
         hidden: true,
     },
     disableAccountPanelQuestProgress: {
         type: OptionType.BOOLEAN,
         description: "Disable active and completed Quest progress above your account panel.",
-        default: defaultDisableAccountPanelQuestProgress,
+        default: false,
         restartNeeded: true,
         hidden: true,
     },
     disableOrbsAndQuestsBadges: {
         type: OptionType.BOOLEAN,
         description: "Disable the Quest badge on user profiles.",
-        default: defaultDisableOrbsAndQuestsBadges,
+        default: false,
         restartNeeded: true,
         hidden: true,
     },
     disableFriendsListPromo: {
         type: OptionType.BOOLEAN,
         description: "Disable the promotion of Quests for games played by friends.",
-        default: defaultDisableFriendsListPromo,
+        default: true,
         restartNeeded: true,
         hidden: true,
     },
     disableMembersListPromo: {
         type: OptionType.BOOLEAN,
         description: "Disable the actively playing icon in members list items.",
-        default: defaultDisableMembersListPromo,
+        default: true,
         restartNeeded: true,
         hidden: true,
     },
@@ -154,34 +155,31 @@ export const settings = definePluginSettings({
         restartNeeded: true,
         hidden: true,
     },
-    questButton: {
-        type: OptionType.COMPONENT,
-        component: ErrorBoundary.wrap(QuestButtonSetting) as any,
-        description: "Customize the Quest button in the server list.",
-    },
     questButtonDisplay: {
         type: OptionType.CUSTOM,
         description: "Which display type to use for the Quest button in the server list.",
-        default: defaultQuestButtonDisplay as QuestButtonDisplayMode,
+        default: "always" as QuestButtonDisplayMode,
+        onChange: refreshAutoFetchingQuests,
         restartNeeded: true,
         hidden: true,
     },
     questButtonIncludedTypes: {
         type: OptionType.CUSTOM,
-        description: "Which reward types and Quest types to include when displaying Quest counts on the Quest button.",
+        description: "Reward and task types included in the Quest button, notifications, and optional page filtering.",
         default: defaultQuestButtonIncludedTypes as QuestButtonIncludedTypes,
         hidden: true,
     },
     questButtonIndicator: {
         type: OptionType.CUSTOM,
         description: "Which display type to use for the unclaimed indicator on the Quest button in the server list.",
-        default: defaultQuestButtonIndicator as QuestButtonIndicatorMode,
+        default: "both" as QuestButtonIndicatorMode,
+        onChange: refreshAutoFetchingQuests,
         hidden: true,
     },
     questButtonBadgeCount: {
         type: OptionType.NUMBER,
         description: "The current number of relevant unclaimed Quests.",
-        default: defaultQuestButtonBadgeCount,
+        default: 0,
         hidden: true,
     },
     questButtonBadgeColor: {
@@ -193,90 +191,101 @@ export const settings = definePluginSettings({
     questButtonLeftClickAction: {
         type: OptionType.CUSTOM,
         description: "The action to perform when left-clicking the Quest button in the server list.",
-        default: defaultLeftClickAction as QuestButtonAction,
+        default: "open-quests" as QuestButtonAction,
         hidden: true,
     },
     questButtonMiddleClickAction: {
         type: OptionType.CUSTOM,
         description: "The action to perform when middle-clicking the Quest button in the server list.",
-        default: defaultMiddleClickAction as QuestButtonAction,
+        default: "plugin-settings" as QuestButtonAction,
         hidden: true,
     },
     questButtonRightClickAction: {
         type: OptionType.CUSTOM,
         description: "The action to perform when right-clicking the Quest button in the server list.",
-        default: defaultRightClickAction as QuestButtonAction,
+        default: "context-menu" as QuestButtonAction,
         hidden: true,
-    },
-    questNotifications: {
-        type: OptionType.COMPONENT,
-        component: ErrorBoundary.wrap(QuestNotificationsSetting) as any,
-        description: "Configure Quest completed and new Quest detected notifications.",
     },
     notifyOnQuestComplete: {
         type: OptionType.BOOLEAN,
         description: "Show a notification when a Quest is completed.",
-        default: defaultNotifyOnQuestComplete,
+        default: true,
         hidden: true,
     },
     notifyOnNewQuests: {
         type: OptionType.BOOLEAN,
         description: "Show a notification when new Quests are detected.",
-        default: defaultNotifyOnNewQuests,
+        default: true,
+        onChange: refreshAutoFetchingQuests,
         hidden: true,
     },
     notifyOnNewExcludedQuests: {
         type: OptionType.BOOLEAN,
         description: "Show a notification when new excluded Quests are detected.",
-        default: defaultNotifyOnNewExcludedQuests,
+        default: false,
+        onChange: refreshAutoFetchingQuests,
         hidden: true,
     },
     questCompletedAlertSound: {
         type: OptionType.STRING | OptionType.CUSTOM,
         description: "The sound to play when a Quest is completed.",
-        default: defaultQuestCompletedAlertSound as string | null,
+        default: "bop_message1" as string | null,
         hidden: true,
     },
     questCompletedAlertVolume: {
         type: OptionType.NUMBER,
         description: "The volume for the Quest completed alert sound.",
-        default: defaultQuestCompletedAlertVolume,
+        default: 100,
         hidden: true,
     },
     questFetchInterval: {
         type: OptionType.NUMBER,
         description: "The interval in seconds to fetch Quests from Discord.",
-        default: defaultQuestFetchInterval,
+        default: 2700,
+        onChange: refreshAutoFetchingQuests,
         hidden: true,
     },
     newQuestAlertSound: {
         type: OptionType.STRING | OptionType.CUSTOM,
         description: "The sound to play when new Quests are detected.",
-        default: defaultNewQuestAlertSound as string | null,
+        default: "discodo" as string | null,
+        onChange: refreshAutoFetchingQuests,
         hidden: true,
     },
     newQuestAlertVolume: {
         type: OptionType.NUMBER,
         description: "The volume for the new Quest alert sound.",
-        default: defaultNewQuestAlertVolume,
+        default: 100,
         hidden: true,
     },
     newExcludedQuestAlertSound: {
         type: OptionType.STRING | OptionType.CUSTOM,
         description: "The sound to play when new excluded Quests are detected.",
-        default: defaultNewExcludedQuestAlertSound as string | null,
+        default: null as string | null,
+        onChange: refreshAutoFetchingQuests,
         hidden: true,
     },
     newExcludedQuestAlertVolume: {
         type: OptionType.NUMBER,
         description: "The volume for the new excluded Quest alert sound.",
-        default: defaultNewExcludedQuestAlertVolume,
+        default: 100,
         hidden: true,
     },
-    questTiles: {
-        type: OptionType.COMPONENT,
-        component: ErrorBoundary.wrap(QuestTilesSetting) as any,
-        description: "Customize the appearance of Quest tiles in the Quests page.",
+    filterQuestPage: {
+        type: OptionType.BOOLEAN,
+        description: "Hide ignored Quests and apply the Quest button's included reward and task types to the Quests page.",
+        default: false,
+        restartNeeded: false,
+        onChange: rerenderQuests,
+        hidden: true,
+    },
+    hideClaimedQuests: {
+        type: OptionType.BOOLEAN,
+        description: "Hide claimed Quests on the main Quests page while keeping them in the Claimed tab.",
+        default: false,
+        restartNeeded: false,
+        onChange: rerenderQuests,
+        hidden: true,
     },
     questTileUnclaimedColor: {
         type: OptionType.CUSTOM,
@@ -305,19 +314,14 @@ export const settings = definePluginSettings({
     questTileGradient: {
         type: OptionType.STRING,
         description: "Style of the gradient used in the Quest tiles.",
-        default: defaultQuestTileGradient,
+        default: "intense",
         hidden: true,
     },
     questTilePreload: {
         type: OptionType.BOOLEAN,
         description: "Attempt to preload the assets for the Quest tiles.",
-        default: defaultQuestTilePreload,
+        default: true,
         hidden: true,
-    },
-    reorderQuests: {
-        type: OptionType.COMPONENT,
-        description: "Sort Quests by their status.",
-        component: ErrorBoundary.wrap(ReorderQuestsSetting) as any,
     },
     questOrder: {
         type: OptionType.CUSTOM,
@@ -352,25 +356,25 @@ export const settings = definePluginSettings({
     isOnQuestsPage: {
         type: OptionType.BOOLEAN,
         description: "Whether the user is currently on the Quests page.",
-        default: defaultIsOnQuestsPage,
+        default: false,
         hidden: true,
     },
     rememberQuestPageSort: {
         type: OptionType.BOOLEAN,
         description: "Remember the last used sort on the Quests page.",
-        default: defaultRememberQuestPageSort,
+        default: true,
         hidden: true,
     },
     rememberQuestPageFilters: {
         type: OptionType.BOOLEAN,
         description: "Remember the last used filters on the Quests page.",
-        default: defaultRememberQuestPageFilters,
+        default: true,
         hidden: true,
     },
     lastQuestPageSort: {
         type: OptionType.STRING,
         description: "Remember the last used sort on the Quests page.",
-        default: defaultLastQuestPageSort,
+        default: "questify",
         hidden: true,
     },
     lastQuestPageFilters: {

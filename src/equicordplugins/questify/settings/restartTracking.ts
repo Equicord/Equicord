@@ -6,8 +6,7 @@
 
 import { SettingsStore } from "@api/Settings";
 import type { DefinedSettings, SettingsDefinition } from "@utils/types";
-
-import { Alerts } from "../utils/ui";
+import { Alerts } from "@webpack/common";
 
 type RestartTrackingSettings = Pick<DefinedSettings<SettingsDefinition>, "def" | "pluginName">;
 
@@ -16,40 +15,24 @@ interface RestartPromptOptions {
 }
 
 let restartDirty = false;
-let didAttachRestartListeners = false;
-const restartListenerCleanups: (() => void)[] = [];
-
-function getRestartSettingPaths(settings: RestartTrackingSettings): string[] {
-    return Object.entries(settings.def)
-        .filter(([, definition]) => definition.restartNeeded)
-        .map(([key]) => `plugins.${settings.pluginName}.${key}`);
-}
+let restartListenerCleanup: (() => void) | undefined;
 
 export function initializeRestartTracking(settings: RestartTrackingSettings): void {
-    if (didAttachRestartListeners) {
-        return;
+    if (restartListenerCleanup) return;
+
+    const prefix = `plugins.${settings.pluginName}`;
+    function markRestartDirty(_value: unknown, path: string): void {
+        const key = path.slice(prefix.length + 1).split(".")[0];
+        if (settings.def[key]?.restartNeeded) restartDirty = true;
     }
 
-    didAttachRestartListeners = true;
-
-    for (const path of getRestartSettingPaths(settings)) {
-        const markRestartDirty = () => { restartDirty = true; };
-
-        SettingsStore.addChangeListener(path, markRestartDirty);
-        restartListenerCleanups.push(() => SettingsStore.removeChangeListener(path, markRestartDirty));
-    }
+    SettingsStore.addPrefixChangeListener(prefix, markRestartDirty);
+    restartListenerCleanup = () => SettingsStore.removePrefixChangeListener(prefix, markRestartDirty);
 }
 
 export function disposeRestartTracking(): void {
-    for (const cleanup of restartListenerCleanups.splice(0)) {
-        cleanup();
-    }
-
-    didAttachRestartListeners = false;
-}
-
-export function isRestartDirty(): boolean {
-    return restartDirty;
+    restartListenerCleanup?.();
+    restartListenerCleanup = undefined;
 }
 
 export function setRestartDirty(dirty: boolean): void {

@@ -10,34 +10,32 @@ import { PlainSettings, Settings } from "@api/Settings";
 import { ErrorBoundary } from "@components/index";
 import { EquicordDevs } from "@utils/constants";
 import definePlugin, { StartAt } from "@utils/types";
-import type { Quest, QuestUserStatus } from "@vencord/discord-types";
+import type { Quest } from "@vencord/discord-types";
 import { findComponentByCodeLazy, onceReady } from "@webpack";
 import { QuestStore } from "@webpack/common";
 import type { JSX } from "react";
 
 import { disguiseHomeButton, QuestButton, showQuestButton } from "./components/questButton";
+import { getQuestPageFilterGroups, getQuestPageFilterLabel, useQuestPageFilters } from "./components/questPageFilters";
 import { QuestTileContextMenu } from "./components/questTileContextMenu";
 import { getQuestifySettings } from "./settings/access";
-import { resetQuestsToResume, startAutoFetchingQuests, stopAutoFetchingQuests } from "./settings/fetching";
 import { validateIgnoredQuests } from "./settings/ignoredQuests";
 import { showPendingQuestifyNotice } from "./settings/notices";
 import { rerenderQuests, useQuestRerender } from "./settings/rerender";
 import { disposeRestartTracking, initializeRestartTracking, promptToRestartIfDirty, setRestartDirty } from "./settings/restartTracking";
 import { settings } from "./settings/store";
-import { getSettingsModalOpen, initialQuestDataFetched, setInitialQuestDataFetched, setSettingsModalOpen } from "./state";
+import { enabledOnStartup, getSettingsModalOpen, initialQuestDataFetched, setInitialQuestDataFetched, setSettingsModalOpen } from "./state";
 import managedStyle from "./styles.css?managed";
 import { canAutoCompleteQuest, getActiveAutoCompletes, getQuestAutoCompleteProgress, getQuestButtonProps, getQuestPanelSubtitleText, hasEnabledAutoCompleteQuestTypes, processQuestForAutoComplete, resumeInterruptedAutoCompletes, setHeartbeatStackTracePatchSucceeded, setVideoProgressStackTracePatchSucceeded, stopAllAutoCompletes, stopAutoCompletesForRunningGames, stopQuestAutoComplete } from "./utils/completion";
-import { canOpenDevToolsWindow, fetchAndDispatchQuests, openDevToolsWindow, snakeToCamel } from "./utils/fetching";
-import { normalizeQuestName } from "./utils/filtering";
+import { canOpenDevToolsWindow, fetchAndDispatchQuests, openDevToolsWindow, parseQuestUserStatus, startAutoFetchingQuests, stopAutoFetchingQuests } from "./utils/fetching";
+import { filterQuestPage, normalizeQuestName } from "./utils/filtering";
 import { notifyQuestCompletion, QL } from "./utils/logging";
-import { getQuestEmbedProgress, getQuestPanelOverride, getQuestPanelPercentComplete, shouldForceQuestPanelVisible } from "./utils/questState";
+import { getQuestEmbedProgress, getQuestPanelOverride, getQuestPanelPercentComplete, shouldForceQuestPanelVisible } from "./utils/questPresentation";
 import { getLastFilterChoices, getLastSortChoice, getQuestTileClasses, getQuestTileStyle, setLastFilterChoices, setLastSortChoice, shouldPreloadQuestAssets, sortQuests } from "./utils/questTiles";
-import { formatLowerBadge, QUEST_PAGE } from "./utils/ui";
+import { QUEST_PAGE } from "./utils/ui";
 
-let isSwitchingAccount = false;
 let didAttemptAutoCompleteResume = false;
 const notifiedCompletedQuests = new Set<string>();
-export const enabledOnStartup = PlainSettings.plugins.Questify?.enabled;
 
 function setOnQuestsPage(force?: boolean): void {
     getQuestifySettings().isOnQuestsPage = force ?? (window.location.pathname === QUEST_PAGE);
@@ -96,7 +94,7 @@ function enrolledIncompleteButton(args: { quest: Quest, size: string; }): JSX.El
     );
 }
 
-function wrapOrbsBalance(balance: String): JSX.Element {
+function wrapOrbsBalance(balance: string): JSX.Element {
     return (<span style={{ fontSize: "90%" }}>{balance}</span>);
 }
 
@@ -104,7 +102,7 @@ export default definePlugin({
     name: "Questify",
     description: "Enhance specific Quest features, disable annoyances, or completely remove Quests.",
     tags: ["Appearance", "Customisation", "Privacy", "Utility"],
-    authors: [EquicordDevs.Etorix],
+    authors: [EquicordDevs.Etorix, EquicordDevs.greyxp1],
     dependencies: ["AudioPlayerAPI", "ServerListAPI"],
     startAt: StartAt.Init, // Needed in order to beat Read All Messages to inserting above the server list.
     managedStyle,
@@ -114,7 +112,7 @@ export default definePlugin({
     canAutoCompleteQuest,
     disguiseHomeButton,
     enrolledIncompleteButton,
-    formatLowerBadge,
+    filterQuestPage,
     getActiveAutoCompletes,
     getLastFilterChoices,
     getLastSortChoice,
@@ -124,6 +122,8 @@ export default definePlugin({
     getQuestPanelOverride,
     getQuestPanelPercentComplete,
     getQuestPanelSubtitleText,
+    getQuestPageFilterGroups,
+    getQuestPageFilterLabel,
     getQuestTileClasses,
     getQuestTileStyle,
     getSettingsModalOpen,
@@ -140,10 +140,38 @@ export default definePlugin({
     shouldPreloadQuestAssets,
     sortQuests,
     stopQuestAutoComplete,
+    useQuestPageFilters,
     useQuestRerender,
     wrapOrbsBalance,
 
     patches: [
+        {
+            find: "numSelectedFilters:",
+            group: true,
+            predicate: () => !getQuestifySettings().disableQuestsEverything,
+            replacement: [
+                {
+                    match: /let\{onChange:(\i),selectedFilters:(\i)\}=(\i),/,
+                    replace: "let[$2,$1]=$self.useQuestPageFilters($3.selectedFilters,$3.onChange),"
+                },
+                {
+                    match: /(\i=)(\(0,\i\.\i\)\(\))(?=,\i=\i\.useCallback\(\i=>\i=>\{let \i=\i\.filter)/,
+                    replace: "$1$self.getQuestPageFilterGroups($2)"
+                },
+                {
+                    match: /label:(\(0,\i\.\i\)\((\i)\.filter\))/,
+                    replace: "label:$self.getQuestPageFilterLabel($2.filter)??$1"
+                },
+                {
+                    match: /text:\(0,\i\.\i\)\(\i\)(?=,icon:\i\.\i,iconPosition:"end")/,
+                    replace: "text:\"Sort\""
+                },
+                {
+                    match: /,\(0,\i\.jsx\)\("hr",\{className:\i\.\i\}\),\(0,\i\.jsx\)\("div",\{className:\i\.\i,children:\(0,\i\.jsx\)\(\i\.\i,\{fullWidth:!0,onClick:\(\)=>\{\i\(\[\]\),\i\(\)\},.{0,150}?variant:"secondary"\}\)\}\)/,
+                    replace: ""
+                }
+            ]
+        },
         {
             // Prevent color picker modal and dummy Quest button context menu modal
             // from force scrolling back up to the top of the settings when closed.
@@ -529,6 +557,10 @@ export default definePlugin({
                     // Recomputes Discord's Quest list memo when Questify settings or rerenders change.
                     match: /(?=]\)\),\i=\(\i=\i.useMemo\(\(\)=>\i.filter)/,
                     replace: ",questRerenderTrigger,questifySorted"
+                },
+                {
+                    match: /(?<=return\{quests:)\i(?=,excludedQuests:)/,
+                    replace: "$self.filterQuestPage($&,arguments[0])"
                 }
             ]
         },
@@ -555,29 +587,6 @@ export default definePlugin({
                 replace: "true||"
             }
         },
-        {
-            // Adds a maxDigits prop to the LowerBadge component which allows for not truncating, or for truncating at a specific threshold.
-            find: ".BADGE_NOTIFICATION_BACKGROUND.css,disableColor",
-            group: true,
-            replacement: [
-                {
-                    // Extracts the custom maxDigits prop.
-                    match: /(\(\i\){let{count:\i,)/,
-                    replace: "$1maxDigits,"
-                },
-                {
-                    // Passes maxDigits to the rounding function.
-                    match: /(children:\i\(\i)/,
-                    replace: "$1,maxDigits"
-                },
-                {
-                    // Makes use of the custom prop if provided by using custom logic for negatives and
-                    // truncation. If the prop is not provided, assume default behavior for native badges.
-                    match: /(?<=function \i\((\i))(\){return )(\i<1e3.{0,60}?k\+`)/,
-                    replace: ",maxDigits$2maxDigits===undefined?($3):$self.formatLowerBadge($1,maxDigits)[0]"
-                }
-            ]
-        },
     ],
 
     flux: {
@@ -600,29 +609,29 @@ export default definePlugin({
             validateIgnoredQuests();
         },
 
-        QUESTS_USER_STATUS_UPDATE(data: any): void {
+        QUESTS_USER_STATUS_UPDATE(data: { user_status: unknown; }): void {
+            const settings = getQuestifySettings();
+            if (settings.disableQuestsEverything) return;
+
             QL.log("QUESTS_USER_STATUS_UPDATE", data);
 
-            const userStatus = snakeToCamel(data).userStatus as QuestUserStatus | undefined;
-            const claimedAt = !!userStatus?.claimedAt;
-            const completedRecently = userStatus?.completedAt
+            const userStatus = parseQuestUserStatus(data.user_status);
+            const claimedAt = !!userStatus.claimedAt;
+            const completedRecently = userStatus.completedAt
                 ? Date.now() - new Date(userStatus.completedAt).getTime() <= 5000
                 : false;
 
             validateIgnoredQuests();
 
-            if (completedRecently && !claimedAt && !notifiedCompletedQuests.has(userStatus!.questId)) {
-                notifiedCompletedQuests.add(userStatus!.questId);
+            if (completedRecently && !claimedAt && !notifiedCompletedQuests.has(userStatus.questId)) {
+                notifiedCompletedQuests.add(userStatus.questId);
 
-                if (getQuestifySettings().notifyOnQuestComplete) {
-                    notifyQuestCompletion(QuestStore.getQuest(userStatus!.questId));
+                if (settings.notifyOnQuestComplete) {
+                    notifyQuestCompletion(QuestStore.getQuest(userStatus.questId));
                 }
 
-                if (getQuestifySettings().questCompletedAlertSound) {
-                    playAudio(
-                        getQuestifySettings().questCompletedAlertSound,
-                        { volume: Math.max(0, Math.min(100, getQuestifySettings().questCompletedAlertVolume)) }
-                    );
+                if (settings.questCompletedAlertSound) {
+                    playAudio(settings.questCompletedAlertSound, { volume: settings.questCompletedAlertVolume });
                 }
             }
         },
@@ -637,24 +646,14 @@ export default definePlugin({
         },
 
         LOGIN_SUCCESS(): void {
-            if (!isSwitchingAccount || getQuestifySettings().disableQuestsEverything) {
-                return;
-            } else {
-                isSwitchingAccount = false;
-            }
+            if (getQuestifySettings().disableQuestsEverything) return;
 
             setInitialQuestDataFetched(false);
             didAttemptAutoCompleteResume = false;
             startPerAccountTasks("LOGIN_SUCCESS");
         },
 
-        LOGOUT(data: { isSwitchingAccount?: boolean; }): void {
-            if (!data.isSwitchingAccount) {
-                return;
-            } else {
-                isSwitchingAccount = true;
-            }
-
+        LOGOUT(): void {
             setInitialQuestDataFetched(false);
             stopPerAccountTasks("LOGOUT");
         },
@@ -682,6 +681,8 @@ export default definePlugin({
         }
 
         onceReady.then(() => {
+            if (!getQuestifySettings().enabled) return;
+
             showPendingQuestifyNotice();
 
             if (!getQuestifySettings().disableQuestsEverything) {
@@ -693,14 +694,10 @@ export default definePlugin({
     },
 
     stop() {
-        const pluginEnabled = Settings.plugins.Questify?.enabled;
+        const pluginEnabled = Boolean(Settings.plugins.Questify?.enabled);
 
         disposeRestartTracking();
         removeServerListElement(ServerListRenderPosition.Above, this.renderQuestifyButton);
         stopPerAccountTasks("PLUGIN_STOP", pluginEnabled);
-
-        if (!pluginEnabled) {
-            resetQuestsToResume();
-        }
     }
 });

@@ -7,23 +7,21 @@
 import { Settings, useSettings } from "@api/Settings";
 import { UserStore } from "@webpack/common";
 
+import type { settings } from "./store";
+
 export const QUESTIFY_PLUGIN_NAME = "Questify";
 
-interface QuestifySettingsOverrides {
-    ignoredQuestIDs: Record<string, string[]>;
-    resumeQuestIDs: Record<string, { timestamp: number, questIDs: string[]; }>;
-}
-
-type QuestifySettings = Settings["plugins"][typeof QUESTIFY_PLUGIN_NAME] & QuestifySettingsOverrides;
+type QuestifySettings = typeof settings.store & Pick<Settings["plugins"][string], "enabled" | "isFavorite">;
 
 export function getQuestifySettings(): QuestifySettings {
     return Settings.plugins[QUESTIFY_PLUGIN_NAME] as QuestifySettings;
 }
 
 export function useQuestifySettings<K extends keyof QuestifySettings & string>(keys: readonly K[]): Pick<QuestifySettings, K> {
-    return useSettings(keys.map(key => `plugins.${QUESTIFY_PLUGIN_NAME}.${key}`) as any).plugins[QUESTIFY_PLUGIN_NAME] as unknown as Pick<QuestifySettings, K>;
+    useSettings(keys.map(key => `plugins.${QUESTIFY_PLUGIN_NAME}.${key}`) as Parameters<typeof useSettings>[0]);
+    return getQuestifySettings();
 }
 
-export function getCurrentUserId(userId?: string): string | null {
-    return userId ?? UserStore.getCurrentUser()?.id ?? null;
+export function getCurrentUserId(): string | null {
+    return UserStore.getCurrentUser()?.id ?? null;
 }

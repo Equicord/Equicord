@@ -157,10 +157,10 @@ div[id^="quest-tile-"] div[class^="confetti__"] {
 /* Quest Button */
 
 #questify-dummy-quest-button {
-    margin-right: -12px;
+    flex-shrink: 0;
+    margin-right: 0;
     margin-left: 5px;
-    border-left: 5px solid var(--text-strong);
-    border-radius: 4px;
+    padding-left: 12px;
 }
 
 .questify-quest-button-pill {
@@ -171,19 +171,8 @@ div[id^="quest-tile-"] div[class^="confetti__"] {
     pointer-events: none;
 }
 
-.questify-quest-button-pill > [class*="item"] {
-    will-change: transform;
-    max-height: 8px;
-    min-height: 8px;
-    transition: max-height 0.2s ease-in-out;
-}
-
-.questify-quest-button-pill.hovered > [class*="item"] {
-    max-height: 20px;
-}
-
-.questify-quest-button-pill.selected > [class*="item"] {
-    max-height: 40px;
+.questify-quest-button-pill > :only-child {
+    transition: height 0.2s ease-in-out;
 }
 
 .questify-quest-button-server-list-button-container {

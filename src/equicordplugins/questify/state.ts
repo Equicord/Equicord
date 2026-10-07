@@ -4,6 +4,9 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { PlainSettings } from "@api/Settings";
+
+export const enabledOnStartup = PlainSettings.plugins.Questify?.enabled;
 export let initialQuestDataFetched = false;
 let settingsModalOpen = false;
 

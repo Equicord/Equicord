@@ -21,8 +21,6 @@ export const defaultQuestTileUnclaimedColor = 2842239;
 export const defaultQuestTileClaimedColor = 6105983;
 export const defaultQuestTileIgnoredColor = 8334124;
 export const defaultQuestTileExpiredColor = 2368553;
-export const defaultQuestTileGradient: QuestTileGradient = "intense";
-export const defaultQuestTilePreload = true;
 export const defaultQuestTileUnclaimedColorSetting: QuestTileColorSetting = { enabled: true, color: defaultQuestTileUnclaimedColor };
 export const defaultQuestTileClaimedColorSetting: QuestTileColorSetting = { enabled: true, color: defaultQuestTileClaimedColor };
 export const defaultQuestTileIgnoredColorSetting: QuestTileColorSetting = { enabled: true, color: defaultQuestTileIgnoredColor };
@@ -30,20 +28,7 @@ export const defaultQuestTileExpiredColorSetting: QuestTileColorSetting = { enab
 export const defaultQuestOrder = ["UNCLAIMED", "CLAIMED", "IGNORED", "EXPIRED"] as const satisfies readonly QuestOrderStatus[];
 
 export const defaultQuestButtonBadgeColor = defaultQuestTileUnclaimedColor;
-export const defaultQuestButtonDisplay: QuestButtonDisplayMode = "always";
-export const defaultQuestButtonIndicator: QuestButtonIndicatorMode = "both";
-export const defaultLeftClickAction: QuestButtonAction = "open-quests";
-export const defaultMiddleClickAction: QuestButtonAction = "plugin-settings";
-export const defaultRightClickAction: QuestButtonAction = "context-menu";
 
-export const defaultDisableQuestsEverything = false;
-export const defaultDisableRelocationNotices = true;
-export const defaultDisableSponsoredBanner = false;
-export const defaultDisableAccountPanelPromo = true;
-export const defaultDisableAccountPanelQuestProgress = false;
-export const defaultDisableOrbsAndQuestsBadges = false;
-export const defaultDisableFriendsListPromo = true;
-export const defaultDisableMembersListPromo = true;
 export const defaultResumeInterruptedQuests = false;
 export const defaultAllowChangingDangerousSettings = false; // true -> Risky
 export const defaultAcknowledgedNotices: Record<string, true> = {};
@@ -51,13 +36,21 @@ export const defaultMakeMobileVideoQuestsDesktopCompatible = false; // true -> R
 export const defaultCompleteVideoQuestsQuicker = false; // true -> Risky
 export const defaultPreventVideoQuestsPausing = false; // true -> Risky
 export const defaultAutoCompleteQuestsSimultaneously = false; // true -> Risky
-export const defaultNotifyOnQuestComplete = true;
-export const defaultNotifyOnNewQuests = true;
-export const defaultNotifyOnNewExcludedQuests = false;
-export const defaultQuestCompletedAlertSound = "bop_message1";
-export const defaultQuestCompletedAlertVolume = 100;
 
-const questTaskTypes = [
+export const questTaskLabels = {
+    [QuestTaskType.WATCH_VIDEO]: "Watch Video",
+    [QuestTaskType.WATCH_VIDEO_ON_MOBILE]: "Watch Video on Mobile",
+    [QuestTaskType.ACHIEVEMENT_IN_ACTIVITY]: "Achievement in Activity",
+    [QuestTaskType.ACHIEVEMENT_IN_GAME]: "Achievement in Game",
+    [QuestTaskType.PLAY_ACTIVITY]: "Play Activity",
+    [QuestTaskType.PLAY_ON_DESKTOP]: "Play on Desktop",
+    [QuestTaskType.PLAY_ON_DESKTOP_V2]: "Play on Desktop V2",
+    [QuestTaskType.STREAM_ON_DESKTOP]: "Stream on Desktop",
+    [QuestTaskType.PLAY_ON_PLAYSTATION]: "Play on PlayStation",
+    [QuestTaskType.PLAY_ON_XBOX]: "Play on Xbox",
+} as const satisfies Record<QuestTaskType, string>;
+
+export const questTaskTypes = [
     QuestTaskType.WATCH_VIDEO,
     QuestTaskType.WATCH_VIDEO_ON_MOBILE,
     QuestTaskType.ACHIEVEMENT_IN_ACTIVITY,
@@ -88,6 +81,10 @@ const desktopOnlyAutoCompleteQuestTypes = new Set<QuestTaskType>([
 ]);
 
 export function isDesktopCompatible(questType: QuestTaskType): boolean {
+    if (questType === QuestTaskType.ACHIEVEMENT_IN_ACTIVITY) {
+        return typeof VencordNative?.pluginHelpers?.Questify?.complete === "function";
+    }
+
     return IS_DISCORD_DESKTOP || !desktopOnlyAutoCompleteQuestTypes.has(questType);
 }
 
@@ -108,21 +105,10 @@ export const defaultQuestButtonIncludedTypes: QuestButtonIncludedTypes = {
     [QuestRewardType.FRACTIONAL_PREMIUM]: true,
 } as QuestButtonIncludedTypes;
 
-export const defaultQuestButtonBadgeCount = 0;
-export const defaultQuestFetchInterval = 2700;
-export const defaultNewQuestAlertSound = "discodo";
-export const defaultNewQuestAlertVolume = 100;
-export const defaultNewExcludedQuestAlertSound = null;
-export const defaultNewExcludedQuestAlertVolume = 100;
-
 export const defaultUnclaimedSubsort: QuestSubsort = "Expiring ASC";
 export const defaultClaimedSubsort: QuestSubsort = "Claimed DESC";
 export const defaultIgnoredSubsort: QuestSubsort = "Recent DESC";
 export const defaultExpiredSubsort: QuestSubsort = "Expiring DESC";
-export const defaultIsOnQuestsPage = false;
-export const defaultRememberQuestPageSort = true;
-export const defaultRememberQuestPageFilters = true;
-export const defaultLastQuestPageSort = "questify";
 export const defaultLastQuestPageFilters = {} as Record<string, { group: string, filter: string; }>;
 export const ignoredQuestIDsKey = "questIDs";
 export const defaultIgnoredQuestIDs = { [ignoredQuestIDsKey]: [] } as Record<typeof ignoredQuestIDsKey, string[]>;
