@@ -14,38 +14,142 @@ import { classNameFactory } from "@utils/css";
 import definePlugin from "@utils/types";
 import { CloudUpload } from "@vencord/discord-types";
 import { findByPropsLazy } from "@webpack";
-import { DraftType, FluxDispatcher, Menu, PermissionsBits, PermissionStore, React, showToast, UploadAttachmentStore, useEffect, UserStore, useState } from "@webpack/common";
+import { DraftType, ChannelStore, FluxDispatcher, GuildStore, Menu, PermissionsBits, PermissionStore, React, showToast, UploadAttachmentStore, useEffect, UserStore, useState } from "@webpack/common";
 
 import { settings } from "./settings";
 import { serviceLabels, ServiceType } from "./types";
 import { getMediaUrl } from "./utils/getMediaUrl";
 import { cancelCurrentUpload, getUploadState, isConfigured, isFileTypeAllowed, logger, subscribeUploadState, uploadFile, uploadPickedFile, uploadProvidedFiles } from "./utils/upload";
 const cl = classNameFactory("vc-file-upload-");
-const { getUserMaxFileSize } = findByPropsLazy("getUserMaxFileSize");
+const DiscordFileLimits = findByPropsLazy("getUserMaxFileSize");
 let uploadAddFilesInterceptor: ((event: unknown) => void) | null = null;
 let pasteEventListener: ((event: ClipboardEvent) => void) | null = null;
 
 type UploadAddFilesEvent = {
     type: string;
+    channelId?: unknown;
+    guildId?: unknown;
+    channel?: unknown;
+    guild?: unknown;
     files?: unknown;
     uploads?: unknown;
     items?: unknown;
     draftType?: unknown;
     maxFileSize?: unknown;
     fileSizeLimit?: unknown;
+    maxFileBytes?: unknown;
+    fileSizeBytes?: unknown;
     limits?: {
         fileSize?: unknown;
+        maxFileSize?: unknown;
     };
 };
+
+function toFiniteLimit(value: unknown): number | undefined {
+    if (typeof value === "number" && Number.isFinite(value)) return value;
+    if (typeof value === "string" && value.trim() !== "") {
+        const parsed = Number(value);
+        if (Number.isFinite(parsed)) return parsed;
+    }
+    return undefined;
+}
+
+function getPayloadChannelId(payload: UploadAddFilesEvent): string | undefined {
+    if (typeof payload.channelId === "string" && payload.channelId !== "") return payload.channelId;
+
+    const channel = payload.channel;
+    if (channel && typeof channel === "object" && "id" in channel && typeof channel.id === "string") return channel.id;
+
+    return undefined;
+}
+
+function getGuildIdForPayload(payload: UploadAddFilesEvent, channelId: string | undefined): string | undefined {
+    if (typeof payload.guildId === "string" && payload.guildId !== "") return payload.guildId;
+
+    const guild = payload.guild;
+    if (guild && typeof guild === "object" && "id" in guild && typeof guild.id === "string") return guild.id;
+
+    const channel = payload.channel;
+    if (channel && typeof channel === "object") {
+        if ("guild_id" in channel && typeof channel.guild_id === "string") return channel.guild_id;
+        if ("guildId" in channel && typeof channel.guildId === "string") return channel.guildId;
+    }
+
+    if (channelId) {
+        const guildId = ChannelStore.getChannel(channelId)?.guild_id;
+        if (typeof guildId === "string") return guildId;
+    }
+
+    return undefined;
+}
+
+function getDiscordChannelLimit(channelId: string | undefined): number | undefined {
+    if (!channelId) return undefined;
+
+    const channel = ChannelStore.getChannel(channelId);
+    if (!channel) return undefined;
+
+    const channelGetter = DiscordFileLimits.getChannelMaxFileSize;
+    if (typeof channelGetter !== "function") return undefined;
+
+    return toFiniteLimit(channelGetter(channel));
+}
+
+function getDiscordGuildLimit(guildId: string | undefined): number | undefined {
+    if (!guildId) return undefined;
+
+    const guild = GuildStore.getGuild(guildId);
+    if (!guild) return undefined;
+
+    const guildGetter = DiscordFileLimits.getGuildMaxFileSize;
+    if (typeof guildGetter === "function") {
+        const limit = toFiniteLimit(guildGetter(guild));
+        if (limit !== undefined) return limit;
+    }
+
+    const features: unknown = guild.features;
+    const hasFeature = (name: string): boolean => {
+        if (Array.isArray(features)) return features.includes(name);
+        if (features instanceof Set) return features.has(name);
+        return false;
+    };
+    if (hasFeature("MAX_FILE_SIZE_100_MB")) return 100 * 1024 * 1024;
+    if (hasFeature("MAX_FILE_SIZE_50_MB")) return 50 * 1024 * 1024;
+    return undefined;
+}
+
+function getManualLimitBytes(): number | undefined {
+    const manualMB = settings.store.customDiscordFileSizeLimitMB;
+    if (typeof manualMB !== "number" || !Number.isFinite(manualMB) || manualMB <= 0) return undefined;
+    return manualMB * 1024 * 1024;
+}
 
 function shouldInterceptUploadFiles(files: readonly File[], payload: UploadAddFilesEvent): boolean {
     if (!settings.store.bypassDiscordUploadOnlyOverLimit) return true;
 
-    const directLimit = [payload.maxFileSize, payload.fileSizeLimit, payload.limits?.fileSize].find(limit => Number.isFinite(limit)) as number | undefined;
-    const fallbackLimit = getUserMaxFileSize(UserStore.getCurrentUser());
-    const discordLimit = Math.max(0, directLimit ?? fallbackLimit);
+    const directLimit = [
+        payload.maxFileSize,
+        payload.fileSizeLimit,
+        payload.maxFileBytes,
+        payload.fileSizeBytes,
+        payload.limits?.fileSize,
+        payload.limits?.maxFileSize
+    ].map(toFiniteLimit).find(limit => limit !== undefined);
+    if (directLimit !== undefined) return files.some(file => file.size > directLimit);
 
-    return files.some(file => file.size > discordLimit);
+    const manualLimit = getManualLimitBytes();
+    if (manualLimit !== undefined) return files.some(file => file.size > manualLimit);
+
+    const channelId = getPayloadChannelId(payload);
+    const guildId = getGuildIdForPayload(payload, channelId);
+    const candidates = [
+        getDiscordChannelLimit(channelId),
+        getDiscordGuildLimit(guildId),
+        toFiniteLimit(DiscordFileLimits.getUserMaxFileSize(UserStore.getCurrentUser()))
+    ].filter((limit): limit is number => limit !== undefined);
+    if (!candidates.length) return false;
+
+    return files.some(file => file.size > Math.max(...candidates));
 }
 function extractFilesFromValue(value: unknown): File[] {
     if (value instanceof File) return [value];
