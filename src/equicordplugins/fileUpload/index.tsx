@@ -14,7 +14,7 @@ import { classNameFactory } from "@utils/css";
 import definePlugin from "@utils/types";
 import { CloudUpload } from "@vencord/discord-types";
 import { findByPropsLazy } from "@webpack";
-import { DraftType, FluxDispatcher, Menu, PermissionsBits, PermissionStore, React, showToast, Toasts, UploadAttachmentStore, useEffect, UserStore, useState } from "@webpack/common";
+import { DraftType, FluxDispatcher, Menu, PermissionsBits, PermissionStore, React, showToast, UploadAttachmentStore, useEffect, UserStore, useState } from "@webpack/common";
 
 import { settings } from "./settings";
 import { serviceLabels, ServiceType } from "./types";
@@ -233,12 +233,12 @@ async function handleUploadFileFromDraft(upload: CloudUpload) {
     if (!file) return;
 
     if (!isFileTypeAllowed(file)) {
-        showToast("File type not allowed by current filter", Toasts.Type.FAILURE);
+        showToast("File type not allowed by current filter", "failure");
         return;
     }
 
     if (!isConfigured()) {
-        showToast("Please configure FileUpload settings first", Toasts.Type.FAILURE);
+        showToast("Please configure FileUpload settings first", "failure");
         return;
     }
 

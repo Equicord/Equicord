@@ -5,7 +5,7 @@
  */
 
 import { Button } from "@components/Button";
-import { Alerts, Toasts, useState } from "@webpack/common";
+import { Alerts, showToast,useState } from "@webpack/common";
 
 import { clearMessagesIDB } from "../db";
 import { Flogger } from "../index";
@@ -33,18 +33,10 @@ export function ClearLogsButton({ label = "Clear Logs", onCleared }: ClearLogsBu
                     try {
                         await clearMessagesIDB();
                         onCleared?.();
-                        Toasts.show({
-                            id: Toasts.genId(),
-                            message: "Cleared Logs",
-                            type: Toasts.Type.SUCCESS
-                        });
+                        showToast("Cleared Logs", "success");
                     } catch (err) {
                         Flogger.error("Failed to clear logs", err);
-                        Toasts.show({
-                            id: Toasts.genId(),
-                            message: "Failed to clear logs",
-                            type: Toasts.Type.FAILURE
-                        });
+                        showToast("Failed to clear logs", "failure");
                     } finally {
                         setLoading(false);
                     }

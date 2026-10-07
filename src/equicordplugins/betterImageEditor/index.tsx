@@ -13,7 +13,7 @@ import { Logger } from "@utils/Logger";
 import { classes, pluralise } from "@utils/misc";
 import definePlugin, { OptionType } from "@utils/types";
 import { chooseFile, saveFile } from "@utils/web";
-import { Alerts, Button, React, showToast, Toasts, useCallback, useEffect, useRef, useState } from "@webpack/common";
+import { Alerts, Button, React, showToast, useCallback, useEffect, useRef, useState } from "@webpack/common";
 
 import { cl, croppedLabel, Shelf } from "./components/Shelf";
 import { add, clear, CropState, currentApplied, Entry, exportAll, forget, forgetCrops, getFile, getThumbs, Group, importAll, Kind, previousApplied, readIndex, recordApplied, saveCrop, toDataUrl, togglePin, touch } from "./library";
@@ -86,7 +86,7 @@ const settings = definePluginSettings({
                     onConfirm: () => forgetCrops()
                         .then(count => showToast(
                             count ? `Forgot the framing on ${pluralise(count, "picture")}` : "Nothing was framed",
-                            Toasts.Type.SUCCESS
+                            "success"
                         ))
                         .catch(err => logger.error("could not forget the remembered crops", err))
                 })}
@@ -165,7 +165,7 @@ async function exportLibrary() {
         else saveFile(new File([data], FILENAME, { type: "application/json" }));
     } catch (err) {
         logger.error("could not export the library", err);
-        showToast("Could not export your pictures", Toasts.Type.FAILURE);
+        showToast("Could not export your pictures", "failure");
     }
 }
 
@@ -186,11 +186,11 @@ async function importLibrary() {
         const added = await importAll(json, settings.store.librarySize);
         showToast(
             added ? `Added ${pluralise(added, "picture")}` : "Nothing new in that file",
-            Toasts.Type.SUCCESS
+            "success"
         );
     } catch (err) {
         logger.error("could not import the library", err);
-        showToast("Could not read that file", Toasts.Type.FAILURE);
+        showToast("Could not read that file", "failure");
     }
 }
 
@@ -324,7 +324,7 @@ function PickerShelf({ kind, open, complete, maxSize }: {
 
     const onPick = useCallback(async (entry: Entry) => {
         const blob = await getFile(entry.id);
-        if (!blob) return showToast("That picture is missing", Toasts.Type.FAILURE);
+        if (!blob) return showToast("That picture is missing", "failure");
 
         const file = new File([blob], entry.name, { type: blob.type });
         await touch(entry.id);
@@ -344,7 +344,7 @@ function PickerShelf({ kind, open, complete, maxSize }: {
     }, [bump]);
 
     const accept = useCallback(async (file: File) => {
-        if (maxSize && file.size > maxSize) return showToast("That picture is too big for Discord", Toasts.Type.FAILURE);
+        if (maxSize && file.size > maxSize) return showToast("That picture is too big for Discord", "failure");
 
         try {
             const entry = await add(file, kind, "original", settings.store.librarySize);
@@ -352,7 +352,7 @@ function PickerShelf({ kind, open, complete, maxSize }: {
             await hand(entry.id, file, settings.store.rememberCrop ? entry.crop ?? null : null);
         } catch (err) {
             logger.error("could not take that picture", err);
-            showToast("Could not use that picture", Toasts.Type.FAILURE);
+            showToast("Could not use that picture", "failure");
         }
     }, [kind, hand, bump, maxSize]);
 
@@ -432,7 +432,7 @@ function EditorShelf({ Original, ownProps }: { Original: React.ComponentType<Edi
             await show(entry.id, file, settings.store.rememberCrop ? entry.crop ?? null : null);
         } catch (err) {
             logger.error("could not take that picture", err);
-            showToast("Could not use that picture", Toasts.Type.FAILURE);
+            showToast("Could not use that picture", "failure");
         }
     }, [kind, show, bump, setGroup]);
 
@@ -440,7 +440,7 @@ function EditorShelf({ Original, ownProps }: { Original: React.ComponentType<Edi
 
     const onPick = useCallback(async (entry: Entry) => {
         const blob = await getFile(entry.id);
-        if (!blob) return showToast("That picture is missing", Toasts.Type.FAILURE);
+        if (!blob) return showToast("That picture is missing", "failure");
 
         await touch(entry.id);
         bump();
@@ -464,7 +464,7 @@ function EditorShelf({ Original, ownProps }: { Original: React.ComponentType<Edi
         };
         const run = () => save().catch(err => {
             logger.error("could not keep the cropped copy", err);
-            showToast("Could not keep the cropped copy", Toasts.Type.FAILURE);
+            showToast("Could not keep the cropped copy", "failure");
         });
 
         if (!settings.store.askBeforeSavingCropped) return void run();

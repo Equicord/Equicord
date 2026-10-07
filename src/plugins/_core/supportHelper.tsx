@@ -16,7 +16,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-import { sendBotMessage } from "@api/Commands";
 import { isPluginEnabled } from "@api/PluginManager";
 import { definePluginSettings } from "@api/Settings";
 import { getUserSettingLazy } from "@api/UserSettings";
@@ -34,7 +33,7 @@ import { CONTRIB_ROLE_ID, Devs, DONOR_ROLE_ID, EQUICORD_TEAM, GUILD_ID, SUPPORT_
 import { sendMessage } from "@utils/discord";
 import { Logger } from "@utils/Logger";
 import { Margins } from "@utils/margins";
-import { isAnyPluginDev, isEquicordGuild, isEquicordSupport, isKnownIssuesCategory, isSupportChannel, tryOrElse } from "@utils/misc";
+import { isAnyPluginDev, isEquicordGuild, isEquicordSupport, isSupportChannel, tryOrElse } from "@utils/misc";
 import { relaunch } from "@utils/native";
 import { onlyOnce } from "@utils/onlyOnce";
 import { makeCodeblock } from "@utils/text";
@@ -42,14 +41,12 @@ import definePlugin from "@utils/types";
 import { checkForUpdates, isOutdated, update } from "@utils/updater";
 import { RenderModalProps } from "@vencord/discord-types";
 import { CloudUploadPlatform } from "@vencord/discord-types/enums";
-import { Alerts, ChannelStore, CloudUploader, ConfirmModal, Constants, GuildMemberStore, openModal, Parser, PermissionsBits, PermissionStore, RelationshipStore, RestAPI, SelectedChannelStore, showToast, SnowflakeUtils, Text, Toasts, UserStore } from "@webpack/common";
+import { Alerts, ChannelStore, CloudUploader, ConfirmModal, Constants, GuildMemberStore, openModal, Parser, PermissionsBits, PermissionStore, RelationshipStore, RestAPI, SelectedChannelStore, showToast, SnowflakeUtils, Text, UserStore } from "@webpack/common";
 import { JSX } from "react";
 
 import plugins, { PluginMeta } from "~plugins";
 
 import SettingsPlugin from "./settings";
-
-const CodeBlockRe = /```snippet\n(.+?)```/s;
 
 const TrustedRolesIds = [
     VC_CONTRIB_ROLE_ID, // Vencord Contributor
@@ -60,8 +57,6 @@ const TrustedRolesIds = [
     CONTRIB_ROLE_ID, // Equicord Contributor
     VENCORD_CONTRIB_ROLE_ID, // Vencord Contributor
 ];
-
-const AsyncFunction = async function () { }.constructor;
 
 const ShowCurrentGame = getUserSettingLazy<boolean>("status", "showCurrentGame")!;
 const ShowEmbeds = getUserSettingLazy<boolean>("textAndImages", "renderEmbeds")!;
@@ -451,12 +446,12 @@ export default definePlugin({
                     onClick={async () => {
                         try {
                             if (await forceUpdate())
-                                showToast("Success! Restarting...", Toasts.Type.SUCCESS);
+                                showToast("Success! Restarting...", "success");
                             else
-                                showToast("Already up to date!", Toasts.Type.MESSAGE);
+                                showToast("Already up to date!");
                         } catch (e) {
                             new Logger(this.name).error("Error while updating:", e);
-                            showToast("Failed to update :(", Toasts.Type.FAILURE);
+                            showToast("Failed to update :(", "failure");
                         }
                     }}
                 >
@@ -485,43 +480,15 @@ export default definePlugin({
                             } else if (pluginList && typeof pluginList === "object" && pluginList.uploadFile) {
                                 try {
                                     await uploadPluginListFile(props.channel.id, pluginList.fileContent, pluginList.filename);
-                                    showToast("Plugin list uploaded successfully!", Toasts.Type.SUCCESS);
+                                    showToast("Plugin list uploaded successfully!", "success");
                                 } catch (e) {
                                     new Logger("SupportHelper").error("Failed to upload plugin list:", e);
-                                    showToast("Failed to upload plugin list", Toasts.Type.FAILURE);
+                                    showToast("Failed to upload plugin list", "failure");
                                 }
                             }
                         }}
                     >
                         Run /equicord-plugins
-                    </Button>
-                );
-            }
-        }
-        if (equicordSupport || isSupportChannel(props?.channel?.id, true) || isKnownIssuesCategory(props?.channel?.parent_id, true)) {
-            const match = CodeBlockRe.exec(props.message.content || props.message.embeds[0]?.rawDescription || "");
-            if (match) {
-                buttons.push(
-                    <Button
-                        key="vc-run-snippet"
-                        onClick={async () => {
-                            try {
-                                const result = await AsyncFunction(match[1])();
-                                const stringed = String(result);
-                                if (stringed) {
-                                    await sendBotMessage(SelectedChannelStore.getChannelId(), {
-                                        content: stringed
-                                    });
-                                }
-
-                                showToast("Success!", Toasts.Type.SUCCESS);
-                            } catch (e) {
-                                new Logger(this.name).error("Error while running snippet:", e);
-                                showToast("Failed to run snippet :(", Toasts.Type.FAILURE);
-                            }
-                        }}
-                    >
-                        Run Snippet
                     </Button>
                 );
             }

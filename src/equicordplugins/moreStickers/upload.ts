@@ -8,7 +8,7 @@ import { getMimeFromExtension } from "@equicordplugins/fileUpload/utils/getMedia
 import { FFmpeg } from "@ffmpeg/ffmpeg";
 import { insertTextIntoChatInputBox, MessageOptions } from "@utils/discord";
 import { CloudUploadPlatform } from "@vencord/discord-types/enums";
-import { ChannelStore, CloudUploader, Constants, DraftStore, FluxDispatcher, MessageActions, PendingReplyStore, RestAPI, showToast, SnowflakeUtils, Toasts, UploadHandler } from "@webpack/common";
+import { ChannelStore, CloudUploader, Constants, DraftStore, FluxDispatcher, MessageActions, PendingReplyStore, RestAPI, showToast, SnowflakeUtils, UploadHandler } from "@webpack/common";
 
 import { settings } from ".";
 import { FFmpegState, Sticker } from "./types";
@@ -169,7 +169,7 @@ export async function sendSticker({ channelId, sticker, ctrlKey, shiftKey, ffmpe
         });
     });
 
-    upload.on("error", () => showToast("Failed to upload sticker", Toasts.Type.FAILURE));
+    upload.on("error", () => showToast("Failed to upload sticker", "failure"));
 
     upload.upload();
 }

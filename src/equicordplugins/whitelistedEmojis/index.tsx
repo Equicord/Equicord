@@ -12,8 +12,9 @@ import { definePluginSettings } from "@api/Settings";
 import { EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 import { chooseFile, saveFile } from "@utils/web";
-import { CustomEmoji, UnicodeEmoji } from "@vencord/discord-types";
-import { Alerts, Button, EmojiStore, GuildStore, IconUtils, Menu, Toasts, useEffect, useState } from "@webpack/common";
+import { CustomEmoji, ToastType, UnicodeEmoji } from "@vencord/discord-types";
+import { ToastPosition } from "@vencord/discord-types/enums";
+import { Alerts, Button, EmojiStore, GuildStore, IconUtils, Menu, showToast as originalShowToast, useEffect, useState } from "@webpack/common";
 import { JSX } from "react";
 
 import { ContextMenuEmoji, SavedEmoji, Target } from "./types";
@@ -73,14 +74,9 @@ function buildSaveData(item: ContextMenuEmoji): SavedEmoji {
     return saveData;
 }
 
-function showToast(message: string, type = Toasts.Type.SUCCESS) {
+function showToast(message: string, type: ToastType = "success") {
     if (settings.store.disableToasts) return;
-    Toasts.show({
-        message,
-        type,
-        id: Toasts.genId(),
-        options: { duration: 3000, position: Toasts.Position.BOTTOM }
-    });
+    originalShowToast(message, type, { duration: 3000, position: ToastPosition.BOTTOM });
 }
 
 function addBulkToAllowedList(items: ContextMenuEmoji[]) {
@@ -104,7 +100,7 @@ function removeBulkFromAllowedList(items: ContextMenuEmoji[]) {
 function addToAllowedList(item: ContextMenuEmoji) {
     return withWriteLock(async () => {
         if (itemAlreadyInList(item)) {
-            showToast(`"${item.name}" is already in the list`, Toasts.Type.FAILURE);
+            showToast(`"${item.name}" is already in the list`, "failure");
             return;
         }
 
@@ -116,7 +112,7 @@ function addToAllowedList(item: ContextMenuEmoji) {
 function removeFromAllowedList(item: ContextMenuEmoji) {
     return withWriteLock(async () => {
         if (!itemAlreadyInList(item)) {
-            showToast(`"${item.name}" is not in the list`, Toasts.Type.FAILURE);
+            showToast(`"${item.name}" is not in the list`, "failure");
             return;
         }
 
@@ -323,10 +319,10 @@ const importEmojis = (data: string) => withWriteLock(async () => {
             await setAllowedList(parsed.emojis);
             showToast("Successfully imported emojis");
         } else {
-            showToast("Invalid JSON data", Toasts.Type.FAILURE);
+            showToast("Invalid JSON data", "failure");
         }
     } catch (err) {
-        showToast(`Failed to import emojis: ${err}`, Toasts.Type.FAILURE);
+        showToast(`Failed to import emojis: ${err}`, "failure");
     }
 });
 

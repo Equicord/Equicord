@@ -10,7 +10,7 @@ import { Heading } from "@components/Heading";
 import { classNameFactory } from "@utils/css";
 import { RenderModalProps } from "@vencord/discord-types";
 import { findByPropsLazy } from "@webpack";
-import { ChannelStore, closeModal, DraftType, Modal, openModal, showToast, TextInput, Toasts, UploadManager, useState } from "@webpack/common";
+import { ChannelStore, closeModal, DraftType, Modal, openModal, showToast, TextInput, UploadManager, useState } from "@webpack/common";
 
 import { ScheduledAttachment } from "../types";
 import { addScheduledMessage, getChannelDisplayInfo } from "../utils";
@@ -61,7 +61,7 @@ function ScheduleTimeModalInner({ channelId, content, attachments, rootProps, cl
         if (result.success) {
             ComponentDispatch.dispatchToLastSubscribed("CLEAR_TEXT");
             UploadManager.clearAll(channelId, DraftType.ChannelMessage);
-            showToast("Message scheduled!", Toasts.Type.SUCCESS);
+            showToast("Message scheduled!", "success");
             close();
         } else {
             setError(result.error ?? "Failed to schedule message");

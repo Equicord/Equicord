@@ -7,7 +7,7 @@
 import { definePluginSettings } from "@api/Settings";
 import { EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
-import { ChannelStore, FluxDispatcher, GuildMemberStore, StreamerModeStore, Toasts, UserStore, VoiceStateStore } from "@webpack/common";
+import { ChannelStore, FluxDispatcher, GuildMemberStore, showToast,StreamerModeStore, UserStore, VoiceStateStore } from "@webpack/common";
 
 interface ChannelState {
     userId: string;
@@ -211,11 +211,7 @@ const createWebsocket = () => {
 
     setTimeout(() => {
         if (ws?.readyState !== WebSocket.OPEN) {
-            Toasts.show({
-                message: "Orbolay websocket could not connect. Is it running?",
-                type: Toasts.Type.FAILURE,
-                id: Toasts.genId(),
-            });
+            showToast("Orbolay websocket could not connect. Is it running?", "failure");
             ws = null;
             return;
         }
@@ -235,11 +231,7 @@ const createWebsocket = () => {
         ws = null;
     };
     ws.onopen = async () => {
-        Toasts.show({
-            message: "Connected to Orbolay server",
-            type: Toasts.Type.SUCCESS,
-            id: Toasts.genId(),
-        });
+        showToast("Connected to Orbolay server", "success");
 
         const userId = await waitForPopulate(() => UserStore.getCurrentUser().id);
         if (!userId) return;

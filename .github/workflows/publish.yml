@@ -26,8 +26,9 @@ jobs:
             - name: Get latest Git tag
               id: tag
               run: |
-                  latest_tag=$(git tag --list 'v*' --sort=-v:refname | head -n 1 || echo "v0.0.0")
-                  echo "latest=$latest_tag" >> $GITHUB_OUTPUT
+                  latest_tag=$(git tag --list 'v*' --sort=-v:refname | head -n 1)
+                  [ -z "$latest_tag" ] && latest_tag="v0.0.0"
+                  echo "latest=$latest_tag" >> "$GITHUB_OUTPUT"
 
             - name: Check if package.json version is newer
               id: check
@@ -52,7 +53,7 @@ jobs:
 
             - name: Create Tag
               if: steps.check.outputs.release == 'true'
-              uses: thororen1234/action-autotag@v1.1.5
+              uses: thororen1234/action-autotag@v1.1.6
               env:
                   GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
               with:

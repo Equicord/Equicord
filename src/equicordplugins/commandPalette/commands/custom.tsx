@@ -6,7 +6,7 @@
 
 import { insertTextIntoChatInputBox } from "@utils/discord";
 import { parseUrl } from "@utils/misc";
-import { showToast, Toasts } from "@webpack/common";
+import { showToast } from "@webpack/common";
 
 import { registerCommands } from "../api/registry";
 import type { FormPageSpec, PageEntry, PaletteAction, PaletteCommand } from "../api/types";
@@ -109,7 +109,7 @@ function commandForm(existing: CustomCommandData | null): PageEntry {
                 : [...store.get(), next]);
             registerCustomCommands();
 
-            showToast(existing ? "Command saved." : "Command created.", Toasts.Type.SUCCESS);
+            showToast(existing ? "Command saved." : "Command created.", "success");
             ctx.pop();
         }
     };
@@ -138,7 +138,7 @@ function toCommand(data: CustomCommandData): PaletteCommand {
             run() {
                 store.set(store.get().filter(entry => entry.id !== data.id));
                 registerCustomCommands();
-                showToast("Command deleted.", Toasts.Type.SUCCESS);
+                showToast("Command deleted.", "success");
             }
         }
     ];

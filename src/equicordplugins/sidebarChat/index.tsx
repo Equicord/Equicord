@@ -326,7 +326,7 @@ export default definePlugin({
                     replace: "$&vc_SidebarChat=$self.renderSidebar(),"
                 },
                 {
-                    match: /(?<=return )null!=\i&&\i\?\(0,\i\.jsx\)\(\i,\{channel:\i\},\i\.id\):\(0,\i\.jsx\)\(\i,\{\}\)(?=\},)/,
+                    match: /(?<=return)\(0,\i\.jsx\)\(\i,\{\}\)(?=\},)/,
                     replace: "[$&,vc_SidebarChat]"
                 },
             ],

@@ -19,11 +19,11 @@ import { sid } from "@song-spotlight/api/util";
 import { classes } from "@utils/misc";
 import { User } from "@vencord/discord-types";
 import {
+    openUserProfileModal,
     SelectedChannelStore,
     SelectedGuildStore,
     useEffect,
     useMemo,
-    UserProfileActions,
     UserStore,
     useState,
 } from "@webpack/common";
@@ -70,14 +70,14 @@ export default function CollapsedProfileSongs({ data, user, isSideBar, isRedesig
                             if (!user) return;
 
                             const guildId = SelectedGuildStore.getGuildId();
-                            UserProfileActions.openUserProfileModal({
+                            openUserProfileModal({
                                 userId,
                                 guildId,
                                 channelId: SelectedChannelStore.getChannelId(),
-                                analyticsLocation: {
-                                    page: guildId ? "Guild Channel" : "DM Channel",
-                                    section: "Profile Popout",
-                                },
+                                sourceAnalyticsLocations: [
+                                    "username",
+                                    "user profile popout",
+                                ],
                                 tabSection: "SONG_SPOTLIGHT",
                             });
                         }}

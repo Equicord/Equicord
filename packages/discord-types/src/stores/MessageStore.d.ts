@@ -55,9 +55,7 @@ export class MessageStore extends FluxStore {
     getMessages(channelId: string): ChannelMessages;
     hasCurrentUserSentMessage(channelId: string): boolean;
     hasCurrentUserSentMessageSinceAppStart(channelId: string): boolean;
-    /** true if the current user sent any message other than a friend request accepted one */
     hasCurrentUserSentWaveBlockingMessage(channelId: string): boolean;
-    /** notice attached to a message removed by automod, keyed by message id */
     getAutomodRemovalNotice(messageId: string): unknown;
     hasPresent(channelId: string): boolean;
     isLoadingMessages(channelId: string): boolean;

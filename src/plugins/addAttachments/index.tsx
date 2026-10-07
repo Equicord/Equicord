@@ -7,12 +7,12 @@
 import { ChatBarButton } from "@api/ChatButtons";
 import { UploadIcon } from "@components/Icons";
 import { Devs } from "@utils/constants";
-import { pluralize } from "@utils/misc";
+import { pluralise } from "@utils/misc";
 import definePlugin from "@utils/types";
 import { Message } from "@vencord/discord-types";
 import { MessageFlags, MessageType } from "@vencord/discord-types/enums";
 import { findByPropsLazy } from "@webpack";
-import { AuthenticationStore, ChannelStore, EditMessageStore, MessageStore, PermissionsBits, PermissionStore, RestAPI, SelectedChannelStore, showToast, Toasts } from "@webpack/common";
+import { AuthenticationStore, ChannelStore, EditMessageStore, MessageStore, PermissionsBits, PermissionStore, RestAPI, SelectedChannelStore, showToast } from "@webpack/common";
 
 const { uniqueId } = findByPropsLazy("uniqueId");
 
@@ -39,15 +39,15 @@ async function addAttachments(channelId: string, messageId: string, existingAtta
     if (files.length + existingAttachmentCount > 10) {
         const remaining = 10 - existingAttachmentCount;
         if (remaining <= 0) {
-            showToast("You cannot add more attachments to this message.", Toasts.Type.FAILURE);
+            showToast("You cannot add more attachments to this message.", "failure");
             return;
         }
 
-        showToast(`You can only add ${pluralize(remaining, "more attachment")} to this message.`, Toasts.Type.FAILURE);
+        showToast(`You can only add ${pluralise(remaining, "more attachment")} to this message.`, "failure");
         return;
     }
 
-    showToast("Uploading, this can take a while...", Toasts.Type.CLOCK);
+    showToast("Uploading, this can take a while...", "clock");
 
     const { body: { attachments } } = await RestAPI.post({
         url: `/channels/${channelId}/attachments`,
@@ -86,7 +86,7 @@ async function addAttachments(channelId: string, messageId: string, existingAtta
         }
     });
 
-    showToast(`${files.length === 1 ? "Attachment" : "Attachments"} added successfully!`, Toasts.Type.SUCCESS);
+    showToast(`${files.length === 1 ? "Attachment" : "Attachments"} added successfully!`, "success");
 }
 
 function canAddAttachments(msg: Message) {

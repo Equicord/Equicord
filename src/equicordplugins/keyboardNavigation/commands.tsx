@@ -10,7 +10,8 @@ import { gitHashShort } from "@shared/vencordUserAgent";
 import { copyToClipboard } from "@utils/clipboard";
 import { relaunch, showItemInFolder } from "@utils/native";
 import { checkForUpdates, getRepo } from "@utils/updater";
-import { GuildStore, NavigationRouter, SettingsRouter, Toasts } from "@webpack/common";
+import { ToastPosition } from "@vencord/discord-types/enums";
+import { GuildStore, NavigationRouter, SettingsRouter, showToast } from "@webpack/common";
 
 import gitRemote from "~git-remote";
 import Plugins from "~plugins";
@@ -46,14 +47,9 @@ export const actions: ButtonAction[] = [
                 new URL(newUrl); // Throws if invalid
                 VencordNative.native.openExternal(newUrl);
             } catch {
-                Toasts.show({
-                    message: "Invalid URL",
-                    type: Toasts.Type.FAILURE,
-                    id: Toasts.genId(),
-                    options: {
-                        position: Toasts.Position.BOTTOM
-                    }
-                });
+                showToast("Invalid URL", "failure", {
+                        position: ToastPosition.BOTTOM
+                    });
             }
         }, registrar: "Equicord"
     },
@@ -92,24 +88,14 @@ export const actions: ButtonAction[] = [
                 const text = await res.text();
                 copyToClipboard(text);
 
-                Toasts.show({
-                    message: "Copied response to clipboard!",
-                    type: Toasts.Type.SUCCESS,
-                    id: Toasts.genId(),
-                    options: {
-                        position: Toasts.Position.BOTTOM
-                    }
-                });
+                showToast("Copied response to clipboard!", "success", {
+                        position: ToastPosition.BOTTOM
+                    });
 
             } catch (e) {
-                Toasts.show({
-                    message: "Issue fetching URL",
-                    type: Toasts.Type.FAILURE,
-                    id: Toasts.genId(),
-                    options: {
-                        position: Toasts.Position.BOTTOM
-                    }
-                });
+                showToast("Issue fetching URL", "failure", {
+                        position: ToastPosition.BOTTOM
+                    });
             }
         }, registrar: "Equicord"
     },
@@ -118,14 +104,9 @@ export const actions: ButtonAction[] = [
         id: "copyGitInfo", label: "Copy Git Info", callback: async () => {
             copyToClipboard(`gitHash: ${gitHashShort}\ngitRemote: ${gitRemote}`);
 
-            Toasts.show({
-                message: "Copied git info to clipboard!",
-                type: Toasts.Type.SUCCESS,
-                id: Toasts.genId(),
-                options: {
-                    position: Toasts.Position.BOTTOM
-                }
-            });
+            showToast("Copied git info to clipboard!", "success", {
+                    position: ToastPosition.BOTTOM
+                });
         }, registrar: "Equicord"
     },
 
@@ -144,14 +125,9 @@ export const actions: ButtonAction[] = [
                     }
                 }), 10_000);
             } else {
-                Toasts.show({
-                    message: "No updates available",
-                    type: Toasts.Type.MESSAGE,
-                    id: Toasts.genId(),
-                    options: {
-                        position: Toasts.Position.BOTTOM
-                    }
-                });
+                showToast("No updates available", "message", {
+                        position: ToastPosition.BOTTOM
+                    });
             }
         }, registrar: "Equicord"
     },
@@ -181,14 +157,9 @@ function togglePlugin(plugin: ButtonAction, enabled: boolean) {
 
     Settings.plugins[plugin.id].enabled = enabled;
 
-    Toasts.show({
-        message: `Successfully ${enabled ? "enabled" : "disabled"} ${plugin.id}`,
-        type: Toasts.Type.SUCCESS,
-        id: Toasts.genId(),
-        options: {
-            position: Toasts.Position.BOTTOM
-        }
-    });
+    showToast(`Successfully ${enabled ? "enabled" : "disabled"} ${plugin.id}`, "success", {
+            position: ToastPosition.BOTTOM
+        });
 }
 
 export function registerAction(action: ButtonAction) {

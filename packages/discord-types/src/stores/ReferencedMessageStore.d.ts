@@ -1,7 +1,6 @@
 import { FluxStore, Message } from "..";
 
 export interface ReferencedMessage {
-    /** 0 loaded, 1 not loaded, 2 deleted */
     state: number;
     message?: Message;
 }

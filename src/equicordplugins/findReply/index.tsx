@@ -22,7 +22,7 @@ import { Devs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 import { Message } from "@vencord/discord-types";
 import { findByPropsLazy } from "@webpack";
-import { ChannelStore, createRoot, MessageStore, Toasts } from "@webpack/common";
+import { ChannelStore, createRoot, MessageStore, showToast } from "@webpack/common";
 import { Root } from "react-dom/client";
 
 import ReplyNavigator from "./ReplyNavigator";
@@ -115,18 +115,10 @@ export default definePlugin({
                             jumpType: "INSTANT"
                         });
                         if (replies.length > 1) {
-                            Toasts.show({
-                                id: Toasts.genId(),
-                                message: "Use the bottom panel to navigate between replies.",
-                                type: Toasts.Type.MESSAGE
-                            });
+                            showToast("Use the bottom panel to navigate between replies.", "message");
                             const container = document.querySelector("[class*=channelBottomBarArea_]");
                             if (!container) {
-                                Toasts.show({
-                                    id: Toasts.genId(),
-                                    message: "Couldn't find the container element.",
-                                    type: Toasts.Type.FAILURE
-                                });
+                                showToast("Couldn't find the container element.", "failure");
                                 return;
                             }
 
@@ -139,11 +131,7 @@ export default definePlugin({
                             root!.render(<ReplyNavigator replies={replies} />);
                         }
                     } else {
-                        Toasts.show({
-                            id: Toasts.genId(),
-                            message: "Couldn't find a reply.",
-                            type: Toasts.Type.FAILURE
-                        });
+                        showToast("Couldn't find a reply.", "failure");
                     }
                 }
             };

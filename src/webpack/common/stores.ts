@@ -87,7 +87,6 @@ export let ExperimentStore: t.ExperimentStore;
 export let UserAffinitiesStore: t.UserAffinitiesStore;
 export let ApplicationStreamingStore: t.ApplicationStreamingStore;
 export let ApplicationStreamPreviewStore: t.ApplicationStreamPreviewStore;
-
 export let SortedGuildStore: t.SortedGuildStore;
 export let JoinedThreadsStore: t.JoinedThreadsStore;
 export let SafetyHubStore: t.SafetyHubStore;

@@ -8,7 +8,6 @@ import { Flex } from "@components/Flex";
 import { Heading } from "@components/Heading";
 import { Paragraph } from "@components/Paragraph";
 import { BasicChannelTabsProps, ChannelTabsProps, clearStaleNavigationContext, closeTab, createTab, handleChannelSwitch, isNavigationFromSource, isTabSelected, moveToTab, openedTabs, openStartupTabs, saveTabs, settings, setUpdaterFunction, useGhostTabs } from "@equicordplugins/channelTabs/util";
-import { IS_MAC } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
 import { classes } from "@utils/misc";
 import { useForceUpdater } from "@utils/react";
@@ -28,7 +27,6 @@ const cl = classNameFactory("vc-channeltabs-");
 
 export default function ChannelsTabsContainer(props: BasicChannelTabsProps) {
     const [userId, setUserId] = useState("");
-    const [tabsOverflow, setTabsOverflow] = useState(false);
     const {
         showBookmarkBar,
         widerTabsAndBookmarks,
@@ -107,7 +105,6 @@ export default function ChannelsTabsContainer(props: BasicChannelTabsProps) {
     }, []);
 
     const ref = useRef<HTMLDivElement>(null);
-    const scrollerRef = useRef<HTMLDivElement>(null);
     const currentChannelRef = useRef(props);
     currentChannelRef.current = props;
 
@@ -141,26 +138,6 @@ export default function ChannelsTabsContainer(props: BasicChannelTabsProps) {
     useEffect(() => {
         _update();
     }, [widerTabsAndBookmarks]);
-    useEffect(() => {
-        const scroller = scrollerRef.current;
-        if (!scroller) return;
-
-        const checkOverflow = () => {
-            if (!newTabButtonBehavior) {
-                setTabsOverflow(true);
-                return;
-            }
-            const overflow = scroller.scrollWidth > scroller.clientWidth;
-            setTabsOverflow(overflow);
-        };
-
-        checkOverflow();
-
-        const observer = new ResizeObserver(checkOverflow);
-        observer.observe(scroller);
-
-        return () => observer.disconnect();
-    }, [openedTabs.length, newTabButtonBehavior]);
 
     useEffect(() => {
         const matchesKeybind = (event: KeyboardEvent, keybindString: string): boolean => {
@@ -296,7 +273,7 @@ export default function ChannelsTabsContainer(props: BasicChannelTabsProps) {
 
     if (isFullscreen) return null;
 
-    const shouldFollowNewTabButton = newTabButtonBehavior && !tabsOverflow;
+    const shouldFollowNewTabButton = newTabButtonBehavior;
     const newTabButton = (
         <button
             onClick={() => createTab(props, true)}
@@ -311,7 +288,6 @@ export default function ChannelsTabsContainer(props: BasicChannelTabsProps) {
             className={classes(
                 cl("container"),
                 tabBarPosition === "top" && cl("container-top"),
-                IS_MAC && !IS_WEB && tabBarPosition === "top" && cl("container-top-macos"),
                 !animationHover && cl("no-hover-animation"),
                 !animationSelection && cl("no-selection-animation"),
                 !animationDragDrop && cl("no-drag-animation"),
@@ -340,7 +316,6 @@ export default function ChannelsTabsContainer(props: BasicChannelTabsProps) {
             </>}
             <div className={cl("tab-container")}>
                 <HorizontalScroller
-                    customRef={node => { scrollerRef.current = node; }}
                     className={cl("tab-scroller", shouldFollowNewTabButton && "tab-scroller-following")}
                 >
                     {openedTabs.filter(tab => tab != null).map((tab, i) =>

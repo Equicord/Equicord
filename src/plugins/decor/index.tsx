@@ -9,6 +9,7 @@ import "./ui/styles.css";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Devs } from "@utils/constants";
 import definePlugin from "@utils/types";
+import { User } from "@vencord/discord-types";
 import { UserStore } from "@webpack/common";
 
 import { CDN_URL, RAW_SKU_ID, setBaseUrl, SKU_ID } from "./lib/constants";
@@ -29,6 +30,7 @@ export default definePlugin({
     description: "Create and use your own custom avatar decorations, or pick your favorite from the presets.",
     tags: ["Appearance", "Customisation"],
     authors: [Devs.FieryFlames],
+    isModified: true,
     patches: [
         // Patch MediaResolver to return correct URL for Decor avatar decorations
         {
@@ -122,10 +124,17 @@ export default definePlugin({
             find: '("UserProfileModalV2EditingPanel")',
             replacement: [
                 {
-                    match: /"inline"===.{0,100}bannerErrorMessage:\i\}\)/,
-                    replace: "$self.ExperimentDecorSection(),$&"
+                    match: /disabled:(\i\|\|\i),avatarErrorMessage:\i,avatarDecorationErrorMessage:\i\}\),/,
+                    replace: "$&$self.ExperimentDecorSection({disabled:$1}),"
                 }
             ]
+        },
+        {
+            find: "isPreviewingMainProfileFallback:",
+            replacement: {
+                match: /(?<=avatarDecorationSrc:(\i),.{0,150}userId:(\i)\.id,.{0,100}avatarDecorationOverride:(\i\?\i:\i\?\i:void 0),animateOnHover:!\i\}\))/,
+                replace: ",vcDecorTileDecoration=($1=$self.useDiscordTileDecorationSrc($2,$1,$3))"
+            }
         }
     ],
     settings,
@@ -157,6 +166,11 @@ export default definePlugin({
     RAW_SKU_ID,
 
     useUserDecorAvatarDecoration,
+
+    useDiscordTileDecorationSrc(user: User, src: string | null, override: unknown) {
+        const hasDecorDecoration = useUsersDecorationsStore(state => state.getAsset(user.id) != null);
+        return override === undefined && hasDecorDecoration ? null : src;
+    },
 
     async start() {
         await setBaseUrl(settings.store.baseUrl);

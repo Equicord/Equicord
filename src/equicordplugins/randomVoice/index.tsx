@@ -15,9 +15,10 @@ import { debounce } from "@shared/debounce";
 import { Devs, EquicordDevs, IS_MAC } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
 import definePlugin, { makeRange, OptionType } from "@utils/types";
-import type { Channel, VoiceState } from "@vencord/discord-types";
+import type { Channel, ToastType, VoiceState } from "@vencord/discord-types";
+import { ToastPosition } from "@vencord/discord-types/enums";
 import { findByCodeLazy } from "@webpack";
-import { ChannelActions, ChannelRouter, ChannelStore, ContextMenuApi, FluxDispatcher, GuildStore, MediaEngineStore, Menu, PermissionsBits, PermissionStore, React, RelationshipStore, SelectedChannelStore, Toasts, useEffect, UserStore, useState, VoiceActions, VoiceStateStore } from "@webpack/common";
+import { ChannelActions, ChannelRouter, ChannelStore, ContextMenuApi, FluxDispatcher, GuildStore, MediaEngineStore, Menu, PermissionsBits, PermissionStore, React, RelationshipStore, SelectedChannelStore, showToast as originalShowToast, useEffect, UserStore, useState, VoiceActions, VoiceStateStore } from "@webpack/common";
 
 const startStream = findByCodeLazy('type:"STREAM_START"');
 const getDesktopSources = findByCodeLazy("desktop sources");
@@ -372,13 +373,8 @@ const settings = definePluginSettings({
     },
 });
 
-function showToast(message: string, type: (typeof Toasts.Type)[keyof typeof Toasts.Type]) {
-    Toasts.show({
-        message,
-        type,
-        id: Toasts.genId(),
-        options: { position: Toasts.Position.BOTTOM },
-    });
+function showToast(message: string, type: ToastType) {
+    originalShowToast(message, type, { position: ToastPosition.BOTTOM });
 }
 
 function RandomVoiceIcon({ className }: { className?: string; }) {
@@ -594,13 +590,13 @@ function runAfterVoiceJoin(channelId: string, callbacks: PostJoinAction[]) {
 async function joinRandomVoice() {
     const channelId = pickRandomChannel();
     if (!channelId) {
-        showToast("Failed to find a voice channel.", Toasts.Type.MESSAGE);
+        showToast("Failed to find a voice channel.", "message");
         return;
     }
 
     const channel = ChannelStore.getChannel(channelId);
     if (!channel) {
-        showToast("Voice channel is unavailable.", Toasts.Type.FAILURE);
+        showToast("Voice channel is unavailable.", "failure");
         return;
     }
 

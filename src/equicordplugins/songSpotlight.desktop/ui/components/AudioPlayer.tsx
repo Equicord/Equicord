@@ -7,7 +7,7 @@
 import { logger } from "@equicordplugins/songSpotlight.desktop/lib/utils";
 import settings from "@equicordplugins/songSpotlight.desktop/settings";
 import { RenderInfoEntry, RenderInfoEntryAudio } from "@song-spotlight/api/handlers";
-import { showToast, Toasts, useCallback, useEffect, useMemo, useRef } from "@webpack/common";
+import { showToast, useCallback, useEffect, useMemo, useRef } from "@webpack/common";
 import { RefObject } from "react";
 
 interface AudioItemProps {
@@ -103,7 +103,7 @@ export default function AudioPlayer({ audioRef, list, playing, setPlaying, setLo
                 node.currentTime = audio.previewStart ? audio.previewStart / 1000 : 0;
                 node.volume = BASE_VOLUME * (settings.store.previewVolume / 100);
                 node.play().catch(error => {
-                    showToast("Failed to play song preview!", Toasts.Type.FAILURE);
+                    showToast("Failed to play song preview!", "failure");
                     logger.error("Failed to play audio", error);
                     setPlaying(undefined);
                 });

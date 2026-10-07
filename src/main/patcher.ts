@@ -87,7 +87,7 @@ if (!IS_VANILLA) {
                 return;
             }
 
-            const { frameless, mainWindowFrameless, winNativeTitleBar, disableMinSize, transparent, macosVibrancyStyle, windowsMaterial } = settings;
+            const { frameless, mainWindowFrameless, nativeTitleBar, disableMinSize, transparent, macosVibrancyStyle, windowsMaterial } = settings;
 
             const original = options.webPreferences.preload;
             const isMainWindow = options.title === "Discord";
@@ -98,7 +98,7 @@ if (!IS_VANILLA) {
                 options.frame = false;
             } else if (frameless) {
                 options.frame = false;
-            } else if (process.platform === "win32" && winNativeTitleBar) {
+            } else if (process.platform === "win32" && nativeTitleBar) {
                 delete options.frame;
             }
 

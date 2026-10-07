@@ -19,7 +19,7 @@ import { Logger } from "@utils/Logger";
 import definePlugin, { OptionType } from "@utils/types";
 import { Emoji, Message } from "@vencord/discord-types";
 import { findByPropsLazy } from "@webpack";
-import { EmojiStore, Menu, openModal,TextInput, Toasts, useEffect, useState } from "@webpack/common";
+import { EmojiStore, Menu, openModal, showToast,TextInput, useEffect, useState } from "@webpack/common";
 
 import { ClearAliasesConfirmModal } from "./components/modals/ClearAliasesConfirmModal";
 import { SetAliasModal } from "./components/modals/SetAliasModal";
@@ -700,18 +700,10 @@ async function removeAlias(alias: string) {
 
     try {
         await persistAliases(nextMap);
-        Toasts.show({
-            id: Toasts.genId(),
-            message: `Removed alias :${alias}:`,
-            type: Toasts.Type.SUCCESS
-        });
+        showToast(`Removed alias :${alias}:`, "success");
     } catch (error) {
         logger.error("Failed to remove emoji alias.", error);
-        Toasts.show({
-            id: Toasts.genId(),
-            message: "Failed to remove alias.",
-            type: Toasts.Type.FAILURE
-        });
+        showToast("Failed to remove alias.", "failure");
     }
 }
 
@@ -720,18 +712,10 @@ async function clearAliases() {
 
     try {
         await persistAliases({});
-        Toasts.show({
-            id: Toasts.genId(),
-            message: "Deleted all emoji aliases.",
-            type: Toasts.Type.SUCCESS
-        });
+        showToast("Deleted all emoji aliases.", "success");
     } catch (error) {
         logger.error("Failed to clear emoji aliases.", error);
-        Toasts.show({
-            id: Toasts.genId(),
-            message: "Failed to delete aliases.",
-            type: Toasts.Type.FAILURE
-        });
+        showToast("Failed to delete aliases.", "failure");
     }
 }
 
@@ -750,11 +734,7 @@ function openSetAliasModal(ref: StoredEmojiRef) {
             onSave={async input => {
                 const result = await saveAlias(input, ref);
                 if (!result.ok) return result;
-                Toasts.show({
-                    id: Toasts.genId(),
-                    message: `Alias set for ${getEmojiDisplayName(ref)}.`,
-                    type: Toasts.Type.SUCCESS
-                });
+                showToast(`Alias set for ${getEmojiDisplayName(ref)}.`, "success");
                 return result;
             }}
         />

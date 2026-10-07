@@ -10,7 +10,7 @@ import { EquicordDevs } from "@utils/constants";
 import { Logger } from "@utils/Logger";
 import definePlugin from "@utils/types";
 import { User } from "@vencord/discord-types";
-import { Menu, SelectedGuildStore, Toasts, UserProfileStore } from "@webpack/common";
+import { Menu, SelectedGuildStore, showToast,UserProfileStore } from "@webpack/common";
 
 const logger = new Logger("CopyProfileColors");
 
@@ -38,11 +38,7 @@ function copyProfileColors(userId: string, guildId?: string) {
     const colors = getProfileColors(userId, guildId);
 
     if (!colors) {
-        Toasts.show({
-            type: Toasts.Type.FAILURE,
-            message: "No profile colors found!",
-            id: Toasts.genId()
-        });
+        showToast("No profile colors found!", "failure");
         return;
     }
 
@@ -53,18 +49,10 @@ function copyProfileColors(userId: string, guildId?: string) {
 
     try {
         copyToClipboard(formattedColors);
-        Toasts.show({
-            type: Toasts.Type.SUCCESS,
-            message: "Profile colors copied to clipboard!",
-            id: Toasts.genId()
-        });
+        showToast("Profile colors copied to clipboard!", "success");
     } catch (e) {
         logger.error("Failed to copy to clipboard:", e);
-        Toasts.show({
-            type: Toasts.Type.FAILURE,
-            message: "Error copying profile colors!",
-            id: Toasts.genId()
-        });
+        showToast("Error copying profile colors!", "failure");
     }
 }
 

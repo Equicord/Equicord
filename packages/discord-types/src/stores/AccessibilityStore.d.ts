@@ -74,9 +74,7 @@ export class AccessibilityStore extends FluxStore {
     get condensePickerWhenNarrow(): boolean;
     get youBarNameplateAnimation(): YouBarAnimationPreference;
     get youBarAvatarDecoAnimation(): YouBarAnimationPreference;
-    /** resolves youBarNameplateAnimation against useReducedMotion */
     get animateYouBarNameplate(): boolean;
-    /** resolves youBarAvatarDecoAnimation against useReducedMotion */
     get animateYouBarAvatarDeco(): boolean;
     get syncProfileThemeWithUserTheme(): boolean;
     get systemPrefersReducedMotion(): ReducedMotionPreference;

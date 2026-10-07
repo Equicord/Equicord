@@ -31,7 +31,6 @@ export interface ApplicationStreamingStore extends FluxStore {
     getAllApplicationStreamsForChannel: (channelId: string | bigint) => ApplicationStream[];
     getAllActiveStreamsForChannel: (channelId: string | bigint) => Stream[];
     getAnyStreamForUser: (userId: string | bigint) => Stream | ApplicationStream | null;
-    /** like getAnyStreamForUser, but skips streams with discoverable set to false */
     getAnyDiscoverableStreamForUser: (userId: string | bigint) => ApplicationStream | null;
     getStreamForUser: (userId: string | bigint, guildId?: string | bigint | null) => Stream | null;
     getCurrentUserActiveStream: () => Stream | null;

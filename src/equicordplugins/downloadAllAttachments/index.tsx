@@ -11,7 +11,7 @@ import { Logger } from "@utils/Logger";
 import { pluralize } from "@utils/misc";
 import definePlugin, { OptionType } from "@utils/types";
 import { Message, MessageAttachment } from "@vencord/discord-types";
-import { ChannelStore, showToast, Toasts } from "@webpack/common";
+import { ChannelStore, showToast } from "@webpack/common";
 
 const logger = new Logger("DownloadAllAttachments");
 
@@ -71,9 +71,9 @@ async function downloadAll(attachments: MessageAttachment[]) {
     const succeeded = attachments.length - failed;
 
     if (failed === 0)
-        showToast(`Downloaded ${pluralize(succeeded, "attachment")}.`, Toasts.Type.SUCCESS);
+        showToast(`Downloaded ${pluralize(succeeded, "attachment")}.`, "success");
     else
-        showToast(`Downloaded ${succeeded} of ${attachments.length} attachments. ${failed} failed.`, Toasts.Type.FAILURE);
+        showToast(`Downloaded ${succeeded} of ${attachments.length} attachments. ${failed} failed.`, "failure");
 }
 
 export default definePlugin({

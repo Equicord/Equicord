@@ -386,7 +386,7 @@ export default definePlugin({
                     replace: "$&&&!$self.isChannelMuted($1?.guildId,$1?.channelId)"
                 },
                 {
-                    match: /\.getEmbeddedActivitiesForGuild\((\i)\)(?=.flatMap\(\i=>)/,
+                    match: /\.getEmbeddedActivitiesForGuild\((\i)\)(?=.{0,100}\.flatMap\(\i=>)/,
                     replace: "$&.filter(e=>!$self.isChannelMuted($1?.guildId,e?.channelId))"
                 }
             ],

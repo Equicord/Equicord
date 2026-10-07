@@ -35,7 +35,6 @@ export class RunningGameStore extends FluxStore {
     getCurrentGameForAnalytics(): RunningGame | null;
     getCurrentNonGameForAnalytics(): RunningGame | null;
     getDebugRunningGame(): RunningGame | null;
-    /** last detection pass, null until the first scan */
     getDetectionDebug(): { timestamp: number; totalFromNative: number; entries: { game: RunningGame; outcome: { kind: string; }; }[]; } | null;
     canCollectExecutableFingerprintsForRunningGames(): boolean;
     getGameForName(name: string): RunningGame | null;

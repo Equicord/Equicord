@@ -15,7 +15,7 @@ import { openInviteModal } from "@utils/discord";
 import { Margins } from "@utils/margins";
 import type { PluginNative } from "@utils/types";
 import { findComponentByCodeLazy } from "@webpack";
-import { Button, Modal, openModal, Parser, React, showToast, Toasts } from "@webpack/common";
+import { Button, Modal, openModal, Parser, React, showToast } from "@webpack/common";
 
 import { logger } from "./ThemeTab";
 
@@ -25,10 +25,10 @@ const UserSummaryItem = findComponentByCodeLazy("defaultRenderUser", "showDefaul
 async function downloadTheme(theme: Theme) {
     try {
         await Native.downloadTheme(theme);
-        showToast(`Downloaded ${theme.name}!`, Toasts.Type.SUCCESS);
+        showToast(`Downloaded ${theme.name}!`, "success");
     } catch (err: unknown) {
         logger.error(err);
-        showToast(`Failed to download ${theme.name}! (check console)`, Toasts.Type.FAILURE);
+        showToast(`Failed to download ${theme.name}! (check console)`, "failure");
     }
 }
 
@@ -166,7 +166,7 @@ export const ThemeInfoModal: React.FC<ThemeInfoModalProps> = ({ author, theme, .
                                     onClick={async e => {
                                         e.preventDefault();
                                         const useInvite = guild ? guild.invite_link?.split("discord.gg/")[1] : invite;
-                                        useInvite != null && openInviteModal(useInvite).catch(() => showToast("Invalid or expired invite!", Toasts.Type.FAILURE));
+                                        useInvite != null && openInviteModal(useInvite).catch(() => showToast("Invalid or expired invite!", "failure"));
                                     }}
                                 >
                                     Join Discord Server
@@ -194,7 +194,7 @@ export const ThemeInfoModal: React.FC<ThemeInfoModalProps> = ({ author, theme, .
                                             variant: "primary",
                                             onClick: () => {
                                                 copyToClipboard(themeContent);
-                                                showToast("Copied to Clipboard", Toasts.Type.SUCCESS);
+                                                showToast("Copied to Clipboard", "success");
                                             }
                                         }
                                     ]}

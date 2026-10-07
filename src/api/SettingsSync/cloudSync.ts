@@ -144,6 +144,22 @@ function handleAuthFailure() {
     Settings.cloud.authenticated = false;
 }
 
+async function isV1Reachable() {
+    try {
+        const res = await fetch(new URL("/v1/settings", getCloudUrl()), {
+            method: "GET",
+            headers: {
+                Authorization: await getCloudAuth(),
+                Accept: "application/octet-stream",
+                "If-None-Match": Settings.cloud.settingsSyncVersion.toString(),
+            },
+        });
+        return res.ok || res.status === 304 || res.status === 404;
+    } catch {
+        return false;
+    }
+}
+
 async function doSyncV2(uploads: SyncRequest["uploads"], clientManifest: ManifestEntry[]): Promise<SyncResponse | null> {
     let res: Response;
     try {
@@ -156,7 +172,12 @@ async function doSyncV2(uploads: SyncRequest["uploads"], clientManifest: Manifes
             body: JSON.stringify({ client_manifest: clientManifest, uploads } satisfies SyncRequest),
         });
     } catch (e) {
-        logger.error("v2 sync network error, will retry next sync", e);
+        if (await isV1Reachable()) {
+            logger.info("v2 sync request failed but v1 is reachable, falling back to v1", e);
+            await setApiVersion("v1");
+        } else {
+            logger.error("v2 sync network error, will retry next sync", e);
+        }
         return null;
     }
 

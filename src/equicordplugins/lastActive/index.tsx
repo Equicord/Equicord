@@ -8,7 +8,7 @@ import { NavContextMenuPatchCallback } from "@api/ContextMenu";
 import { EquicordDevs } from "@utils/constants";
 import definePlugin from "@utils/types";
 import { Channel } from "@vencord/discord-types";
-import { Menu, NavigationRouter, RestAPI, Toasts, UserStore } from "@webpack/common";
+import { Menu, NavigationRouter, RestAPI, showToast,UserStore } from "@webpack/common";
 
 async function findLastMessageFromUser(guildId: string, channelId: string, userId: string) {
     try {
@@ -33,29 +33,17 @@ async function findLastMessageFromUser(guildId: string, channelId: string, userI
         if (messageId) return messageId;
     } catch (error) {
         console.error("Error finding last message:", error);
-        Toasts.show({
-            type: Toasts.Type.FAILURE,
-            message: "Failed to find messages. Check console for details.",
-            id: Toasts.genId()
-        });
+        showToast("Failed to find messages. Check console for details.", "failure");
         return null;
     }
 
-    Toasts.show({
-        type: Toasts.Type.FAILURE,
-        message: "Couldn't find any recent messages from this user.",
-        id: Toasts.genId()
-    });
+    showToast("Couldn't find any recent messages from this user.", "failure");
     return null;
 }
 
 async function jumpToLastActive(channel: Channel, targetUserId?: string) {
     if (!channel) {
-        Toasts.show({
-            type: Toasts.Type.FAILURE,
-            message: "Channel information not available.",
-            id: Toasts.genId()
-        });
+        showToast("Channel information not available.", "failure");
         return;
     }
 
@@ -69,11 +57,7 @@ async function jumpToLastActive(channel: Channel, targetUserId?: string) {
         }
     } catch (error) {
         console.error("Error in jumpToLastActive:", error);
-        Toasts.show({
-            type: Toasts.Type.FAILURE,
-            message: "Failed to jump to message. Check console for details.",
-            id: Toasts.genId()
-        });
+        showToast("Failed to jump to message. Check console for details.", "failure");
     }
 }
 

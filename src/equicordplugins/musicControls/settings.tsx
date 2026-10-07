@@ -11,7 +11,7 @@ import { HeadingSecondary } from "@components/Heading";
 import { Paragraph } from "@components/Paragraph";
 import { SettingsSection } from "@components/settings/tabs/plugins/components/Common";
 import { makeRange, OptionType } from "@utils/types";
-import { MaskedLink, Select, showToast, TextInput, Toasts } from "@webpack/common";
+import { MaskedLink, Select, showToast, TextInput } from "@webpack/common";
 
 import hoverOnlyStyle from "./hoverOnly.css?managed";
 import { clearLyricsCache, removeTranslations } from "./spotify/lyrics/api";
@@ -66,7 +66,7 @@ function LyricsProviderSettings() {
                         onChange={v => {
                             settings.store.spotifyLyricsApiUrl = v;
                             void clearLyricsCache();
-                            showToast("Lyrics cache purged", Toasts.Type.SUCCESS);
+                            showToast("Lyrics cache purged", "success");
                         }}
                         placeholder="https://spotify-lyrics-api-pi.vercel.app"
                         maxLength={null}
@@ -113,7 +113,7 @@ export const settings = definePluginSettings({
         default: "https://spotify-lyrics-api-pi.vercel.app",
         onChange: async () => {
             await clearLyricsCache();
-            showToast("Lyrics cache purged", Toasts.Type.SUCCESS);
+            showToast("Lyrics cache purged", "success");
         }
     },
     lyricsProviderSettings: {
@@ -126,7 +126,7 @@ export const settings = definePluginSettings({
         options: languages,
         onChange: async () => {
             await removeTranslations();
-            showToast("Translations cleared", Toasts.Type.SUCCESS);
+            showToast("Translations cleared", "success");
         }
     },
     lyricsConversion: {
@@ -162,7 +162,7 @@ export const settings = definePluginSettings({
                 color={ButtonCompat.Colors.RED}
                 onClick={() => {
                     clearLyricsCache();
-                    showToast("Lyrics cache purged", Toasts.Type.SUCCESS);
+                    showToast("Lyrics cache purged", "success");
                 }}
             >
                 Purge Cache

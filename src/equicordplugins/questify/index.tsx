@@ -239,8 +239,8 @@ export default definePlugin({
             find: "collapsed-with-rewards\":\"collapsed-without-rewards",
             predicate: () => getQuestifySettings().disableAccountPanelPromo || !getQuestifySettings().disableAccountPanelQuestProgress,
             replacement: {
-                match: /(?<=function\(\)\{)(let (\i)=\(0,\i\.\i\)\(\)(?:,\i=\(0,\i\.\i\)\(.{0,55}?\))?;)(?=return null==\2(?:&&null!=\i)?\?)/,
-                replace: "void $self.useQuestRerender();$1$2=$self.getQuestPanelOverride($2);"
+                match: /(?<=function\(\)\{)(let (\i)=\(0,\i\.\i\)\(\),\i=\(0,\i\.\i\)\(.{0,55}?\);)(?=switch\(\2\.type\)\{case (\i\.\i\.QUEST):)/,
+                replace: "void $self.useQuestRerender();$1$2=$self.getQuestPanelOverride($2,$3);if(null==$2)return null;"
             }
         },
         {
@@ -296,7 +296,7 @@ export default definePlugin({
         },
         {
             // Formats the Orbs balance in the balance popout on the Quests page with locale string formatting.
-            find: "PremiumTenureRewardsOrbsBalancePopover",
+            find: 'location:"BalanceWidgetMenu"',
             predicate: () => !getQuestifySettings().disableQuestsEverything,
             replacement: [
                 {
@@ -378,7 +378,7 @@ export default definePlugin({
                 },
                 {
                     // Overwrite button props for ENROLLED/INCOMPLETE Quests.
-                    match: /(case \i\.\i\.(?:ENROLLED|INCOMPLETE):return)(?=\(0,\i\.jsx\)\(\i,\{quest:(\i),taskType:\i\.type,size:(\i),)/g,
+                    match: /(case \i\.\i\.(?:ENROLLED|INCOMPLETE):return)(?=\(0,\i\.jsx\)\(\i,\{quest:(\i),taskType:\i(?:\.type)?,size:(\i),)/g,
                     replace: "$1 $self.enrolledIncompleteButton({quest:$2,size:$3})||"
                 }
             ]
@@ -484,7 +484,7 @@ export default definePlugin({
         },
         {
             // Adds the Questify sort option to Discord's Quest sort enum.
-            find: "SUGGESTED=\"suggested\",",
+            find: "EXPIRING_SOON=\"expiring_soon\"",
             predicate: () => !getQuestifySettings().disableQuestsEverything,
             replacement: {
                 match: /(?<=\(\((\i)=\{\}\))(?=\.SUGGESTED="suggested",)/,

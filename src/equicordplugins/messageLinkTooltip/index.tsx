@@ -97,17 +97,19 @@ export default definePlugin({
     ],
 
     MentionTooltip({ Component, vcProps, ...props }) {
-        return withTooltip(Component, props, vcProps.messageId, vcProps.channelId);
+        return withTooltip(Component, props, vcProps?.messageId, vcProps?.channelId);
     },
 
     ReplyTooltip({ Component, vcProps, ...props }) {
-        const mess = vcProps.baseMessage.messageReference;
-        return withTooltip(Component, props, mess?.message_id, mess?.channel_id);
+        const messageReference = vcProps?.baseMessage?.messageReference;
+        if (!messageReference) return <Component {...props} />;
+        return withTooltip(Component, props, messageReference?.message_id, messageReference?.channel_id);
     },
 
     ForwardTooltip({ Component, vcProps, ...props }) {
-        const mess = vcProps.message.messageReference;
-        return withTooltip(Component, props, mess?.message_id, mess?.channel_id);
+        const messageReference = vcProps?.message?.messageReference;
+        if (!messageReference) return <Component {...props} />;
+        return withTooltip(Component, props, messageReference?.message_id, messageReference?.channel_id);
     },
 });
 

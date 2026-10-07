@@ -9,7 +9,7 @@ import { Flex } from "@components/Flex";
 import { Heading } from "@components/Heading";
 import { Paragraph } from "@components/Paragraph";
 import type { RenderModalProps } from "@vencord/discord-types";
-import { Checkbox, FluxDispatcher, MessageActions, Modal, openModal, PendingReplyStore, showToast, Toasts, useEffect, useState } from "@webpack/common";
+import { Checkbox, FluxDispatcher, MessageActions, Modal, openModal, PendingReplyStore, showToast, useEffect, useState } from "@webpack/common";
 
 import { ApplicationField, BooleanField, DateTimeField, getDateTimeLocalValue, ParticipantField, TextField } from "./fields";
 import { abortActiveClipUploads, type ClipMetadata, getClipCreatedAt, getClipTitleFromName, getDefaultClipTitle, getDefaultFileName, getErrorMessage, getParticipantIds, getString, isValidDate, pickClipFile, uploadClipFile } from "./upload";
@@ -52,7 +52,7 @@ function UploadClipFileModal({ modalProps, channelId, clip }: { modalProps: Rend
             result = await pickClipFile(parseMetadata);
             if (!result) return;
         } catch (error) {
-            showToast(getErrorMessage(error), Toasts.Type.FAILURE);
+            showToast(getErrorMessage(error), "failure");
             return;
         }
 

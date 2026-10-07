@@ -26,7 +26,7 @@ import { proxyLazy } from "@utils/lazy";
 import { useForceUpdater } from "@utils/react";
 import definePlugin, { OptionType, StartAt } from "@utils/types";
 import { extractAndLoadChunksLazy, findComponentByCodeLazy, findModuleId, wreq } from "@webpack";
-import { Menu, openModalLazy, OverridePremiumTypeStore, Toasts } from "@webpack/common";
+import { Menu, openModalLazy, OverridePremiumTypeStore, showToast } from "@webpack/common";
 
 interface Emoji {
     animated: boolean;
@@ -141,7 +141,7 @@ export default definePlugin({
         {
             find: "#{intl::STATUS_MENU_LABEL}",
             replacement: {
-                match: /(popoutContainerRef:\i,forceOpen:\i.{0,25}\}\))(?=\])/,
+                match: /(popoutContainerRef:\i,scrollerRef:\i.{0,50}\}\))(?=\])/,
                 replace: "$1,$self.render()"
             }
         },
@@ -189,11 +189,7 @@ export default definePlugin({
             style: { marginLeft: "20px" },
             onClick: () => {
                 settings.store.StatusPresets[status.text] = status;
-                Toasts.show({
-                    message: "Successfully Saved Status",
-                    type: Toasts.Type.SUCCESS,
-                    id: Toasts.genId()
-                });
+                showToast("Successfully Saved Status", "success");
             }
         };
     },

@@ -15,7 +15,7 @@ import { debounce } from "@shared/debounce";
 import { classNameFactory } from "@utils/css";
 import { useAwaiter } from "@utils/react";
 import { ActivityType } from "@vencord/discord-types/enums";
-import { Button, Select, showToast, Text, TextInput, Toasts, useState } from "@webpack/common";
+import { Button, Select, showToast, Text, TextInput, useState } from "@webpack/common";
 
 import CustomRPCPlugin, { RpcConfig, setRpc, settings, TimestampMode } from ".";
 
@@ -183,7 +183,7 @@ function PresetSettings({ onLoad }: { onLoad(): void; }) {
         await DataStore.set(PRESETS_KEY, nextPresets);
         setChangedPresets(nextPresets);
         setSelectedPreset(name);
-        showToast(`Saved preset ${name}.`, Toasts.Type.SUCCESS);
+        showToast(`Saved preset ${name}.`, "success");
     }
 
     function loadPreset() {
@@ -193,7 +193,7 @@ function PresetSettings({ onLoad }: { onLoad(): void; }) {
         Object.assign(settings.store, preset.config);
         onLoad();
         updateRPC();
-        showToast(`Loaded preset ${preset.name}.`, Toasts.Type.SUCCESS);
+        showToast(`Loaded preset ${preset.name}.`, "success");
     }
 
     async function deletePreset() {
@@ -203,7 +203,7 @@ function PresetSettings({ onLoad }: { onLoad(): void; }) {
         await DataStore.set(PRESETS_KEY, nextPresets);
         setChangedPresets(nextPresets);
         setSelectedPreset("");
-        showToast(`Deleted preset ${selectedPreset}.`, Toasts.Type.SUCCESS);
+        showToast(`Deleted preset ${selectedPreset}.`, "success");
     }
 
     return (

@@ -6,23 +6,76 @@
 
 import { Button } from "@components/Button";
 import { Flex } from "@components/Flex";
+import { SKU_ID } from "@plugins/decor/lib/constants";
 import { useAuthorizationStore } from "@plugins/decor/lib/stores/AuthorizationStore";
 import { useCurrentUserDecorationsStore } from "@plugins/decor/lib/stores/CurrentUserDecorationsStore";
+import { useUsersDecorationsStore } from "@plugins/decor/lib/stores/UsersDecorationsStore";
 import { cl } from "@plugins/decor/ui";
 import { openChangeDecorationModal } from "@plugins/decor/ui/modals/ChangeDecorationModal";
-import { findComponentByCodeLazy } from "@webpack";
-import { NewCustomizationSection, useEffect } from "@webpack/common";
+import { classes } from "@utils/misc";
+import { findByCodeLazy, findComponentByCodeLazy, findCssClassesLazy } from "@webpack";
+import { Avatar, NewCustomizationSection, useEffect, UserStore } from "@webpack/common";
+import type { ComponentType } from "react";
 
 const CustomizationSection = findComponentByCodeLazy(".DESCRIPTION", "hasBackground:");
+const EditTile = findComponentByCodeLazy(".tileButton,", "affordance:");
+const useAvatarWithDecoration = findByCodeLazy("avatarOverride:", "avatarDecorationOverride:", "avatarPlaceholderSrc:");
+const TilePreviewClasses = findCssClassesLazy("emptyPreview", "fadeInAvatarImg");
+
+const AvatarWithDecoration = Avatar as ComponentType<any>;
 
 export interface DecorSectionProps {
     hideTitle?: boolean;
     hideDivider?: boolean;
     noMargin?: boolean;
     useNewSection?: boolean;
+    disabled?: boolean;
 }
 
-export default function DecorSection({ hideTitle = false, hideDivider = false, noMargin = false, useNewSection = false }: DecorSectionProps) {
+function DecorTilePreview({ asset, isInteracting }: { asset: string | null | undefined; isInteracting: boolean; }) {
+    const { avatarDecorationSrc, avatarSrc, avatarPlaceholderSrc } = useAvatarWithDecoration({
+        userId: UserStore.getCurrentUser().id,
+        size: "SIZE_72",
+        showPending: true,
+        avatarDecorationOverride: asset ? { asset, skuId: SKU_ID } : null,
+        animateOnHover: !isInteracting
+    });
+
+    const showAvatar = avatarDecorationSrc != null && isInteracting;
+
+    return (
+        <AvatarWithDecoration
+            className={classes(avatarDecorationSrc == null && TilePreviewClasses.emptyPreview)}
+            src={showAvatar ? avatarSrc : avatarPlaceholderSrc}
+            imageClassName={showAvatar ? TilePreviewClasses.fadeInAvatarImg : undefined}
+            avatarDecoration={avatarDecorationSrc}
+            size="SIZE_72"
+            aria-hidden
+        />
+    );
+}
+
+function DecorTile({ disabled, onClick, onRemove }: { disabled?: boolean; onClick(): void; onRemove?(): void; }) {
+    const asset = useUsersDecorationsStore(state => state.getAsset(UserStore.getCurrentUser().id));
+
+    return (
+        <EditTile
+            variant="square"
+            affordance={onRemove
+                ? { type: "remove", onClick: onRemove, accessibleLabel: "Remove Decor decoration" }
+                : asset ? undefined : "add"
+            }
+            onClick={onClick}
+            accessibleLabel="Decor"
+            accessibleValue={asset ? "Decor decoration" : "None"}
+            aria-haspopup="dialog"
+            disabled={disabled}
+            renderPreview={(isInteracting: boolean) => <DecorTilePreview asset={asset} isInteracting={isInteracting} />}
+        />
+    );
+}
+
+export default function DecorSection({ hideTitle = false, hideDivider = false, noMargin = false, useNewSection = false, disabled = false }: DecorSectionProps) {
     const authorization = useAuthorizationStore();
     const { selectedDecoration, select: selectDecoration, fetch: fetchDecorations } = useCurrentUserDecorationsStore();
 
@@ -30,49 +83,51 @@ export default function DecorSection({ hideTitle = false, hideDivider = false, n
         if (authorization.isAuthorized()) fetchDecorations();
     }, [authorization.token]);
 
-    const NewSection = useNewSection ? NewCustomizationSection : undefined;
+    const openModal = () => {
+        if (!authorization.isAuthorized()) {
+            authorization.authorize().then(openChangeDecorationModal).catch(() => { });
+        } else {
+            openChangeDecorationModal();
+        }
+    };
 
-    if (useNewSection && !NewSection) return null;
+    const canRemove = selectedDecoration != null && authorization.isAuthorized();
 
-    const Section = (useNewSection ? NewCustomizationSection : CustomizationSection);
-    const sectionProps = useNewSection
-        ? { heading: hideTitle ? undefined : "Decor" }
-        : {
-            title: hideTitle ? undefined : "Decor",
-            hasBackground: true,
-            hideDivider,
-            className: noMargin ? cl("section-remove-margin") : undefined
-        };
+    if (useNewSection) {
+        if (!NewCustomizationSection) return null;
 
-    const changeLabel = useNewSection ? "Change" : "Change Decoration";
-    const removeLabel = useNewSection ? "Remove" : "Remove Decoration";
+        return (
+            <NewCustomizationSection heading={hideTitle ? undefined : "Decor"} disabled={disabled}>
+                <DecorTile
+                    disabled={disabled}
+                    onClick={openModal}
+                    onRemove={canRemove ? () => selectDecoration(null) : undefined}
+                />
+            </NewCustomizationSection>
+        );
+    }
 
     return (
-        <Section {...sectionProps}>
+        <CustomizationSection
+            title={hideTitle ? undefined : "Decor"}
+            hasBackground
+            hideDivider={hideDivider}
+            className={noMargin ? cl("section-remove-margin") : undefined}
+        >
             <Flex gap="4px">
-                <Button
-                    onClick={() => {
-                        if (!authorization.isAuthorized()) {
-                            authorization.authorize().then(openChangeDecorationModal).catch(() => { });
-                        } else {
-                            openChangeDecorationModal();
-                        }
-                    }}
-                    variant="primary"
-                    size="small"
-                >
-                    {changeLabel}
+                <Button onClick={openModal} variant="primary" size="small">
+                    Change Decoration
                 </Button>
-                {selectedDecoration && authorization.isAuthorized() && (
+                {canRemove && (
                     <Button
                         onClick={() => selectDecoration(null)}
                         variant="secondary"
                         size="small"
                     >
-                        {removeLabel}
+                        Remove Decoration
                     </Button>
                 )}
             </Flex>
-        </Section>
+        </CustomizationSection>
     );
 }

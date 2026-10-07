@@ -13,8 +13,9 @@ import ErrorBoundary from "@components/ErrorBoundary";
 import { Devs, EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 import { Message, User } from "@vencord/discord-types";
+import { ToastPosition } from "@vencord/discord-types/enums";
 import { findByPropsLazy, findCssClassesLazy } from "@webpack";
-import { Button, ChannelStore, Menu, openModal, showToast, Toasts, Tooltip, useEffect, UserStore, useState } from "@webpack/common";
+import { Button, ChannelStore, Menu, openModal, showToast, Tooltip, useEffect, UserStore, useState } from "@webpack/common";
 
 import { deleteTimezone, getTimezone, loadDatabaseTimezones, setUserDatabaseTimezone } from "./database";
 import { SetTimezoneModal } from "./TimezoneModal";
@@ -127,7 +128,7 @@ export const settings = definePluginSettings({
                         await deleteTimezone();
                     } catch (error) {
                         console.error("Error resetting database timezone:", error);
-                        showToast("Failed to reset database timezone", Toasts.Type.FAILURE);
+                        showToast("Failed to reset database timezone", "failure");
                     }
                 }}
             >
@@ -312,14 +313,14 @@ export default definePlugin({
                 const good = await loadDatabaseTimezones();
 
                 if (good) {
-                    showToast("Timezones refreshed successfully!", Toasts.Type.SUCCESS);
+                    showToast("Timezones refreshed successfully!", "success");
                 } else {
-                    showToast("Timezones Failed to refresh!", Toasts.Type.FAILURE);
+                    showToast("Timezones Failed to refresh!", "failure");
                 }
             }
             catch (error) {
                 console.error("Failed to refresh timezone:", error);
-                showToast("Failed to refresh timezones.", Toasts.Type.FAILURE);
+                showToast("Failed to refresh timezones.", "failure");
             }
         }
     },
@@ -333,7 +334,7 @@ export default definePlugin({
             if (!settings.store.askedTimezone) {
                 showToast(
                     "",
-                    Toasts.Type.MESSAGE,
+                    "message",
                     {
                         duration: 10000,
                         component: (
@@ -346,7 +347,7 @@ export default definePlugin({
                                 Want to save your timezone to the database? Click here to set it.
                             </Button>
                         ),
-                        position: Toasts.Position.BOTTOM
+                        position: ToastPosition.BOTTOM
                     }
                 );
                 settings.store.askedTimezone = true;

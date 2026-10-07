@@ -172,79 +172,61 @@ function TableScrollFrame({
         direction: null,
     });
 
+    function updateMask(trackDirection = false) {
+        const element = scrollRef.current;
+        if (!element) return;
+
+        const maxScrollLeft = Math.max(0, element.scrollWidth - element.clientWidth);
+        const scrollLeft = Math.min(Math.max(element.scrollLeft, 0), maxScrollLeft);
+        let nextDirection: ScrollDirection = null;
+
+        if (trackDirection && scrollLeft > lastScrollLeftRef.current) {
+            nextDirection = "right";
+        } else if (trackDirection && scrollLeft < lastScrollLeftRef.current) {
+            nextDirection = "left";
+        }
+
+        lastScrollLeftRef.current = scrollLeft;
+
+        setMaskState(previousState => {
+            const nextState: ScrollMaskState = {
+                left: scrollLeft > 1,
+                right: maxScrollLeft - scrollLeft > 1,
+                direction: nextDirection ?? previousState.direction,
+            };
+
+            if (!nextState.left && !nextState.right) {
+                nextState.direction = null;
+            }
+
+            return previousState.left === nextState.left
+                && previousState.right === nextState.right
+                && previousState.direction === nextState.direction
+                ? previousState
+                : nextState;
+        });
+
+        if (nextDirection) {
+            window.clearTimeout(directionResetRef.current);
+            directionResetRef.current = window.setTimeout(() => {
+                setMaskState(previousState => {
+                    if (!previousState.direction) return previousState;
+
+                    return { ...previousState, direction: null };
+                });
+            }, 450);
+        }
+    }
+
+    function scheduleMaskUpdate(trackDirection = false) {
+        window.cancelAnimationFrame(frameRef.current);
+        frameRef.current = window.requestAnimationFrame(() => updateMask(trackDirection));
+    }
+
     useLayoutEffect(() => {
-        const scrollElement = scrollRef.current;
-        if (!scrollElement) return;
-        const observedElement: HTMLDivElement = scrollElement;
-
-        function updateMask(element: HTMLDivElement, trackDirection = false) {
-            const maxScrollLeft = Math.max(0, element.scrollWidth - element.clientWidth);
-            const scrollLeft = Math.min(Math.max(element.scrollLeft, 0), maxScrollLeft);
-            let nextDirection: ScrollDirection = null;
-
-            if (trackDirection && scrollLeft > lastScrollLeftRef.current) {
-                nextDirection = "right";
-            } else if (trackDirection && scrollLeft < lastScrollLeftRef.current) {
-                nextDirection = "left";
-            }
-
-            lastScrollLeftRef.current = scrollLeft;
-
-            setMaskState(previousState => {
-                const nextState: ScrollMaskState = {
-                    left: scrollLeft > 1,
-                    right: maxScrollLeft - scrollLeft > 1,
-                    direction: nextDirection ?? previousState.direction,
-                };
-
-                if (!nextState.left && !nextState.right) {
-                    nextState.direction = null;
-                }
-
-                return previousState.left === nextState.left
-                    && previousState.right === nextState.right
-                    && previousState.direction === nextState.direction
-                    ? previousState
-                    : nextState;
-            });
-
-            if (nextDirection) {
-                window.clearTimeout(directionResetRef.current);
-                directionResetRef.current = window.setTimeout(() => {
-                    setMaskState(previousState => {
-                        if (!previousState.direction) return previousState;
-
-                        return { ...previousState, direction: null };
-                    });
-                }, 450);
-            }
-        }
-
-        function scheduleMaskUpdate(trackDirection = false) {
-            window.cancelAnimationFrame(frameRef.current);
-            frameRef.current = window.requestAnimationFrame(() => updateMask(observedElement, trackDirection));
-        }
-
-        function handleScroll() {
-            scheduleMaskUpdate(true);
-        }
-
-        function handleResize() {
-            scheduleMaskUpdate();
-        }
-
-        const resizeObserver = new ResizeObserver(() => scheduleMaskUpdate());
-        resizeObserver.observe(observedElement);
-        if (observedElement.firstElementChild) resizeObserver.observe(observedElement.firstElementChild);
-
-        updateMask(observedElement);
-        observedElement.addEventListener("scroll", handleScroll, { passive: true });
-        window.addEventListener("resize", handleResize);
+        updateMask();
 
         return () => {
-            resizeObserver.disconnect();
-            observedElement.removeEventListener("scroll", handleScroll);
-            window.removeEventListener("resize", handleResize);
             window.cancelAnimationFrame(frameRef.current);
             window.clearTimeout(directionResetRef.current);
         };
@@ -262,7 +244,12 @@ function TableScrollFrame({
                 },
             )}
         >
-            <div className={cl("scroll")} ref={scrollRef}>
+            <div
+                className={cl("scroll")}
+                ref={scrollRef}
+                onScroll={() => scheduleMaskUpdate(true)}
+                onMouseEnter={() => scheduleMaskUpdate()}
+            >
                 <table className={cl("table")}>
                     {table.header.length > 0 && (
                         <thead>

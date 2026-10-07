@@ -76,10 +76,6 @@
     z-index: 102;
 }
 
-.vc-channeltabs-container-top-macos {
-    padding-left: 80px;
-}
-
 /* as its in the same region as notices, it needs to hide itself when a notice is shown
    there's no permanent notices, right? */
 [class*="notice"] + .vc-channeltabs-container-top {
@@ -440,6 +436,12 @@
     background-color: var(--background-base-low);
     transition: all 0.2s ease;
     flex-shrink: 0;
+}
+
+.vc-channeltabs-tab-scroller-following .vc-channeltabs-new-button {
+    position: sticky;
+    right: 0;
+    z-index: 1;
 }
 
 .vc-channeltabs-new-button:hover {

@@ -66,8 +66,14 @@ export default definePlugin({
             find: '"AppView"',
             replacement: [
                 {
+                    match: /((\i\?\.params)\.guildId===.{0,300}?)"div",{(?=className:\i\.\i,children:\[)/,
+                    replace: "$1$self.render,{currentChannel:$2,",
+                    predicate: () => settings.store.tabBarPosition === "top"
+                },
+                {
                     match: /"div",{(?=.{0,80}(\i\?\.params))/,
                     replace: "$self.render,{currentChannel:$1,",
+                    predicate: () => settings.store.tabBarPosition === "bottom"
                 }
             ]
         },

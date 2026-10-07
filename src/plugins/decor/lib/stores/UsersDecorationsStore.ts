@@ -104,8 +104,8 @@ export function useUserDecorAvatarDecoration(user?: User): AvatarDecoration | nu
                         state => {
                             if (!user) return;
                             const newDecorAvatarDecoration = state.getAsset(user.id);
-                            if (!newDecorAvatarDecoration) return;
-                            if (decorAvatarDecoration !== newDecorAvatarDecoration) setDecorAvatarDecoration(newDecorAvatarDecoration);
+                            if (newDecorAvatarDecoration === undefined) return;
+                            setDecorAvatarDecoration(newDecorAvatarDecoration);
                         }
                     );
                 } catch {

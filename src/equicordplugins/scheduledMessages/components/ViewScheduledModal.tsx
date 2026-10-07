@@ -8,7 +8,7 @@ import { Button } from "@components/Button";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { classNameFactory } from "@utils/css";
 import { RenderModalProps } from "@vencord/discord-types";
-import { ChannelStore, closeModal, Modal, openModal, showToast, Toasts, useState } from "@webpack/common";
+import { ChannelStore, closeModal, Modal, openModal, showToast, useState } from "@webpack/common";
 
 import { clearAllScheduledMessages, getChannelDisplayInfo, getScheduledMessages, removeScheduledMessage } from "../utils";
 import { CalendarIcon, TimerIcon } from "./Icons";
@@ -26,13 +26,13 @@ function ViewScheduledModalInner({ rootProps, close }: ViewScheduledModalProps) 
     const handleDelete = async (id: string) => {
         await removeScheduledMessage(id);
         setMessages(getScheduledMessages());
-        showToast("Scheduled message removed", Toasts.Type.SUCCESS);
+        showToast("Scheduled message removed", "success");
     };
 
     const handleClearAll = async () => {
         await clearAllScheduledMessages();
         setMessages([]);
-        showToast("All scheduled messages cleared", Toasts.Type.SUCCESS);
+        showToast("All scheduled messages cleared", "success");
     };
 
     const actions = [

@@ -2,7 +2,6 @@ import { ConnectedAccount, FluxStore } from "..";
 
 export class ConnectedAccountsStore extends FluxStore {
     getAccounts(): ConnectedAccount[];
-    /** accounts for platforms that are connected locally, like xbox or playstation */
     getLocalAccounts(): ConnectedAccount[];
     getAccount(accountId: string | null | undefined, type: string): ConnectedAccount | undefined;
     getLocalAccount(type: string): ConnectedAccount | undefined;

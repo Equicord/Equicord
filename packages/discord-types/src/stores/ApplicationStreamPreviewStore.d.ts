@@ -4,6 +4,5 @@ export interface ApplicationStreamPreviewStore extends FluxStore {
     getIsPreviewLoading: (guildId: string | bigint | null, channelId: string | bigint, ownerId: string | bigint) => boolean;
     getPreviewURL: (guildId: string | bigint | null, channelId: string | bigint, ownerId: string | bigint) => string | undefined;
     getPreviewURLForStreamKey: (streamKey: string) => ReturnType<ApplicationStreamPreviewStore["getPreviewURL"]>;
-    /** true if no preview exists and fewer than 5 fetches failed, or the preview expired, and none is loading */
     shouldFetchPreview: (guildId: string | bigint | null, channelId: string | bigint, ownerId: string | bigint) => boolean;
 }

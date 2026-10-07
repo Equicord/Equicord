@@ -113,12 +113,9 @@ export class ExperimentStore extends FluxStore {
     getUserExperimentDescriptor(experimentId: string): ExperimentAssignmentOverride;
     hasRegisteredExperiment(experimentId: string): boolean;
 
-    /** sends an experiment exposure event unless it was already tracked in the last 7 days */
     trackExposure: (options: TrackExposureOptions) => false | void;
-    /** returns [experimentId, time] pairs for exposures of the given type and experiment */
     getRecentExposures(type: "user" | "guild", experimentId: string): [string, number][];
     hasExperimentTrackedExposure(experimentId: string, descriptor: ExperimentExposureDescriptor, location?: string, triggerDebugging?: boolean): boolean;
-    /** loads experiments from the cache snapshot */
     loadCache(): void;
     takeSnapshot(): { version: number; data: Record<string, unknown>; };
 }

@@ -8,7 +8,7 @@ import { Logger } from "@utils/Logger";
 import { isObject } from "@utils/misc";
 import type { PluginNative } from "@utils/types";
 import type { User } from "@vencord/discord-types";
-import { Constants, MediaEngineStore, RestAPI, showToast, SnowflakeUtils, Toasts } from "@webpack/common";
+import { Constants, MediaEngineStore, RestAPI, showToast, SnowflakeUtils } from "@webpack/common";
 
 import { convertClipToMp4 } from "./ffmpeg";
 const logger = new Logger("ClipUpload");
@@ -329,7 +329,7 @@ function shouldRetryWithFFmpeg(error: unknown) {
 
 export async function uploadClipFile(file: File, options: ClipUploadOptions) {
     try {
-        showToast("Checking clip file.", Toasts.Type.MESSAGE);
+        showToast("Checking clip file.", "message");
 
         const uploadFile = await prepareClipFile(file, options.fileName);
 
@@ -338,15 +338,15 @@ export async function uploadClipFile(file: File, options: ClipUploadOptions) {
         } catch (error) {
             if (!shouldRetryWithFFmpeg(error)) throw error;
 
-            showToast("Converting clip file.", Toasts.Type.MESSAGE);
+            showToast("Converting clip file.", "message");
             await sendClipUpload(await stampVideoFile(await convertClipToMp4(file, options.fileName), options.fileName), options);
         }
 
-        showToast("Clip uploaded.", Toasts.Type.SUCCESS);
+        showToast("Clip uploaded.", "success");
         return true;
     } catch (error) {
         logger.error(error);
-        showToast(getErrorMessage(error), Toasts.Type.FAILURE);
+        showToast(getErrorMessage(error), "failure");
         return false;
     }
 }

@@ -14,7 +14,7 @@ import { Devs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
 import definePlugin, { OptionType } from "@utils/types";
 import { findComponentByCodeLazy } from "@webpack";
-import { Constants, GuildStore, IconUtils, MediaEngineStore, Menu, RestAPI, SearchableSelect, SelectedChannelStore, TextInput, Toasts } from "@webpack/common";
+import { Constants, GuildStore, IconUtils, MediaEngineStore, Menu, RestAPI, SearchableSelect, SelectedChannelStore, showToast,TextInput } from "@webpack/common";
 
 const cl = classNameFactory("vc-exitsounds-");
 
@@ -134,11 +134,7 @@ export default definePlugin({
                 }
             });
         } catch {
-            Toasts.show({
-                message: "Oops! Something went wrong.",
-                id: Toasts.genId(),
-                type: Toasts.Type.FAILURE
-            });
+            showToast("Oops! Something went wrong.", "failure");
         }
     }
 });

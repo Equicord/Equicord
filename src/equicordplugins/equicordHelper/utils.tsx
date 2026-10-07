@@ -7,17 +7,13 @@
 import { showNotice } from "@api/Notices";
 import { plugins, startDependenciesRecursive, startPlugin, stopPlugin } from "@api/PluginManager";
 import { Settings } from "@api/Settings";
-import { Alerts, Toasts } from "@webpack/common";
+import { ToastPosition } from "@vencord/discord-types/enums";
+import { Alerts, showToast } from "@webpack/common";
 
 function showErrorToast(message: string) {
-    Toasts.show({
-        message,
-        type: Toasts.Type.FAILURE,
-        id: Toasts.genId(),
-        options: {
-            position: Toasts.Position.BOTTOM
-        }
-    });
+    showToast(message, "failure", {
+            position: ToastPosition.BOTTOM
+        });
 }
 
 function restartPrompt(): Promise<boolean> {

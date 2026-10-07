@@ -25,19 +25,27 @@ export default definePlugin({
     authors: [Devs.KingFish, Devs.Ven, Devs.Nuckyz],
     patches: [
         {
-            find: "#{intl::MESSAGE_UTILITIES_A11Y_LABEL}",
-            replacement: {
-                match: /(?<=\]\}\)),(.{0,40}togglePopout:.+?\}\))\]\}\):null,(?<=\((\i),\{label:.+?:null,(\i)\?\(0,\i\.jsxs?\)\(\i\.Fragment.+?message:(\i).+?)/,
-                replace: (_, ReactButton, ButtonComponent, showReactButton, message) => "" +
-                    `]}):null,Vencord.Api.MessagePopover._buildPopoverElements(${ButtonComponent},${message}),${showReactButton}?${ReactButton}:null,`
-            }
-        },
-        {
-            find: "#{intl::MESSAGE_UTILITIES_A11Y_LABEL}",
-            replacement: {
-                match: /className:(\i\(\)\(\i\.className,.{0,80}?\)),(onClick:.{0,150}?children:\(0,\i\.jsxs?\)\(\i,\{className:)(\i\.innerClassName),children:(\[\i,\i\])/,
-                replace: 'className:"vc-message-popover "+$1,$2$3+" vc-message-popover-bar",children:Vencord.Api.MessagePopover._wrapPopoverBar($4)'
-            }
+            find: "#{intl::MESSAGE_UTILITIES_A11Y_LABEL}),children",
+            replacement: [
+                {
+                    // TODO: (\i\.\i|\i) is for stable compat
+                    match: /(?<=\]\}\)),(.{0,40}togglePopout:.+?\}\))\]\}\):null,(?<=\((\i\.\i|\i),\{label:.+?:null,(\i)\?\(0,\i\.jsxs?\)\(\i\.Fragment.+?message:(\i).+?)/,
+                    replace: (_, ReactButton, ButtonComponent, showReactButton, message) => "" +
+                        `]}):null,Vencord.Api.MessagePopover._buildPopoverElements(${ButtonComponent},${message}),${showReactButton}?${ReactButton}:null,`
+                },
+                {
+                    match: /className:(\i\(\)\(\i\.className,)(?=.{0,200}?#{intl::MESSAGE_UTILITIES_A11Y_LABEL})/,
+                    replace: 'className:"vc-message-popover "+$1'
+                },
+                {
+                    match: /(?<=#{intl::MESSAGE_UTILITIES_A11Y_LABEL}.{0,30})className:(\i\.innerClassName)/,
+                    replace: 'className:$1+" vc-message-popover-bar"'
+                },
+                {
+                    match: /(?<=#{intl::MESSAGE_UTILITIES_A11Y_LABEL}.{0,100})children:(\[\i,\i\])/,
+                    replace: "children:Vencord.Api.MessagePopover._wrapPopoverBar($1)"
+                }
+            ]
         },
         {
             find: 'role:"article",onMouseEnter',

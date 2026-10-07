@@ -7,7 +7,7 @@
 import { Logger } from "@utils/Logger";
 import type { Channel } from "@vencord/discord-types";
 import { ChannelType } from "@vencord/discord-types/enums";
-import { ChannelStore, GuildChannelStore, GuildStore, PermissionsBits, PermissionStore, RestAPI, showToast, Toasts } from "@webpack/common";
+import { ChannelStore, GuildChannelStore, GuildStore, PermissionsBits, PermissionStore, RestAPI, showToast } from "@webpack/common";
 
 const logger = new Logger("Dragify");
 
@@ -135,7 +135,7 @@ function getInviteUrl(code: string) {
 export async function createInvite(guildId: string, currentChannel: Channel, settings: InviteSettings): Promise<string | null> {
     const inviteChannel = resolveInviteChannel(guildId, currentChannel);
     if (!inviteChannel) {
-        showToast("No channel available for invites.", Toasts.Type.FAILURE);
+        showToast("No channel available for invites.", "failure");
         return null;
     }
 
@@ -147,7 +147,7 @@ export async function createInvite(guildId: string, currentChannel: Channel, set
             reused.reason === "missing"
                 ? "No reusable invite available."
                 : "Unable to reuse invite.",
-            Toasts.Type.FAILURE,
+            "failure",
         );
         return null;
     }
@@ -174,11 +174,11 @@ export async function createInvite(guildId: string, currentChannel: Channel, set
             maxUses: maxUses === 0 ? null : maxUses,
             uses: 0,
         });
-        showToast("Invite created.", Toasts.Type.SUCCESS);
+        showToast("Invite created.", "success");
         return getInviteUrl(code);
     } catch (error) {
         logger.error("Failed to create invite", error);
-        showToast("Unable to create invite.", Toasts.Type.FAILURE);
+        showToast("Unable to create invite.", "failure");
         return null;
     }
 }

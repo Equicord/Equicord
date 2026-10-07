@@ -7,7 +7,7 @@
 import { getUserSettingLazy } from "@api/UserSettings";
 import type { Theme } from "@vencord/discord-types";
 import { findByCodeLazy } from "@webpack";
-import { showToast, ThemeStore, Toasts, VoiceActions } from "@webpack/common";
+import { showToast, ThemeStore, VoiceActions } from "@webpack/common";
 
 import type { PaletteCommand } from "../api/types";
 import { CircleIcon, HeadphonesIcon, MicIcon, MoonIcon } from "../ui/icons";
@@ -78,7 +78,7 @@ export const discordCommands: PaletteCommand[] = [
                         label: `Set ${status.label}`,
                         run() {
                             StatusSetting?.updateSetting(status.value);
-                            showToast(`Status set to ${status.label}.`, Toasts.Type.SUCCESS);
+                            showToast(`Status set to ${status.label}.`, "success");
                         }
                     }]
                 }))
@@ -98,7 +98,7 @@ export const discordCommands: PaletteCommand[] = [
                 const currentIdx = THEMES.findIndex(theme => theme.value === ThemeStore.theme);
                 const next = THEMES[(currentIdx + 1) % THEMES.length];
                 updateDiscordTheme({ theme: next.value });
-                showToast(`Theme set to ${next.label}.`, Toasts.Type.SUCCESS);
+                showToast(`Theme set to ${next.label}.`, "success");
             }
         }]
     }

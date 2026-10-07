@@ -7,7 +7,8 @@
 import * as DataStore from "@api/DataStore";
 import { showNotification } from "@api/Notifications";
 import { logger, themeRequest } from "@equicordplugins/themeLibrary/components/ThemeTab";
-import { OAuth2AuthorizeModal, openModal,Toasts, UserStore } from "@webpack/common";
+import { ToastPosition } from "@vencord/discord-types/enums";
+import { OAuth2AuthorizeModal, openModal, showToast,UserStore } from "@webpack/common";
 
 export async function authorizeUser(triggerModal: boolean = true) {
     const isAuthorized = await getAuthorization();
@@ -64,15 +65,10 @@ export async function authorizeUser(triggerModal: boolean = true) {
 export async function deauthorizeUser() {
     const uniqueToken = await DataStore.get<Record<string, string>>("ThemeLibrary_uniqueToken");
 
-    if (!uniqueToken) return Toasts.show({
-        message: "No uniqueToken present, try authorizing first!",
-        id: Toasts.genId(),
-        type: Toasts.Type.FAILURE,
-        options: {
+    if (!uniqueToken) return showToast("No uniqueToken present, try authorizing first!", "failure", {
             duration: 2e3,
-            position: Toasts.Position.BOTTOM
-        }
-    });
+            position: ToastPosition.BOTTOM
+        });
 
     const res = await themeRequest("/user/revoke", {
         method: "DELETE",

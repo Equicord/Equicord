@@ -30,21 +30,7 @@ import { Song as SongType } from "@song-spotlight/api/structs";
 import { isListLayout, sid } from "@song-spotlight/api/util";
 import { copyWithToast } from "@utils/discord";
 import { classes } from "@utils/misc";
-import {
-    Clickable,
-    ContextMenuApi,
-    FluxDispatcher,
-    Menu,
-    React,
-    ScrollerThin,
-    showToast,
-    Toasts,
-    Tooltip,
-    useCallback,
-    useMemo,
-    useRef,
-    useState
-} from "@webpack/common";
+import { Clickable, ContextMenuApi, FluxDispatcher, Menu, React, ScrollerThin, showToast, Tooltip, useCallback, useMemo, useRef, useState } from "@webpack/common";
 
 interface SongEntryProps {
     entry: RenderInfoEntryBased;
@@ -88,7 +74,7 @@ function SongEntry({ entry, number, isLoaded, isPlaying, big, onClick }: SongEnt
 
                                 const song = await Native.parseLink(entry.link);
                                 if (!song) {
-                                    return showToast("Uh oh, this song doesn't exist!", Toasts.Type.FAILURE);
+                                    return showToast("Uh oh, this song doesn't exist!", "failure");
                                 }
 
                                 if (self.find(x => sid(x) === sid(song))) {

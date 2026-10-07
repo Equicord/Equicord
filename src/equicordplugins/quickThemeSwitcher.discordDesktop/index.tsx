@@ -10,7 +10,7 @@ import { Paragraph } from "@components/Paragraph";
 import { debounce } from "@shared/debounce";
 import { Devs, IS_MAC } from "@utils/constants";
 import definePlugin, { OptionType, StartAt } from "@utils/types";
-import { showToast, Toasts } from "@webpack/common";
+import { showToast } from "@webpack/common";
 
 const { VencordNative } = window;
 
@@ -51,7 +51,7 @@ const refreshThemeList = async (silent = false) => {
         const diff = themeList.length - oldCount;
         const action = diff > 0 ? "Added" : "Removed";
         const count = Math.abs(diff);
-        showToast(`${action} ${count} theme${count > 1 ? "s" : ""}`, Toasts.Type.SUCCESS);
+        showToast(`${action} ${count} theme${count > 1 ? "s" : ""}`, "success");
     }
 };
 
@@ -186,7 +186,7 @@ function toggleCurrentTheme(enable: boolean) {
 
 async function reloadThemes() {
     await refreshThemeList(true);
-    showToast(`Reloaded ${themeList.length} themes`, Toasts.Type.SUCCESS);
+    showToast(`Reloaded ${themeList.length} themes`, "success");
 }
 
 async function watchForLocalThemeChanges() {
@@ -204,7 +204,7 @@ async function watchForLocalThemeChanges() {
         if (settings.store.showNotifications) {
             const action = diff > 0 ? "Added" : "Removed";
             const count = Math.abs(diff);
-            showToast(`${action} ${count} local theme${count > 1 ? "s" : ""}`, Toasts.Type.SUCCESS);
+            showToast(`${action} ${count} local theme${count > 1 ? "s" : ""}`, "success");
         }
     }
 

@@ -23,7 +23,7 @@ import { DEFAULT_IMAGE_CACHE_DIR } from "@equicordplugins/messageLoggerEnhanced/
 import { copyWithToast } from "@utils/discord";
 import { classes } from "@utils/misc";
 import { findCssClassesLazy } from "@webpack";
-import { Toasts } from "@webpack/common";
+import { showToast } from "@webpack/common";
 
 const inputClasses = findCssClassesLazy("input", "inputWrapper", "editable") as Record<string, string>;
 
@@ -65,17 +65,9 @@ export function SelectFolderInput({ settingsKey, successMessage }: Props) {
             const res = await Native.chooseDir(settingsKey);
             settings.store[settingsKey] = res;
 
-            return Toasts.show({
-                id: Toasts.genId(),
-                type: Toasts.Type.SUCCESS,
-                message: successMessage
-            });
+            return showToast(successMessage, "success");
         } catch (err) {
-            Toasts.show({
-                id: Toasts.genId(),
-                type: Toasts.Type.FAILURE,
-                message: "Failed to update directory"
-            });
+            showToast("Failed to update directory", "failure");
         }
     }
 

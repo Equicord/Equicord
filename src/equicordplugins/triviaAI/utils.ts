@@ -8,7 +8,7 @@ import { sendBotMessage } from "@api/Commands";
 import { insertTextIntoChatInputBox, sendMessage } from "@utils/discord";
 import { Logger } from "@utils/Logger";
 import { Message } from "@vencord/discord-types";
-import { MessageStore, showToast, Toasts, UserStore } from "@webpack/common";
+import { MessageStore, showToast, UserStore } from "@webpack/common";
 
 import { settings } from "./settings";
 
@@ -225,7 +225,7 @@ function getSystemPrompt() {
 
 export async function getResponse(payload: ApiMessage[]): Promise<string> {
     if (!settings.store.apiKey || !settings.store.endpoint || !settings.store.model) {
-        showToast("TriviaAI: API settings are incomplete.", Toasts.Type.FAILURE);
+        showToast("TriviaAI: API settings are incomplete.", "failure");
         return "";
     }
 
@@ -258,7 +258,7 @@ export async function getResponse(payload: ApiMessage[]): Promise<string> {
         if (!req.ok || data.error) {
             const errorMsg = data.error?.message ?? rawBody ?? `Status ${req.status}`;
             logger.error(`API Error: ${errorMsg}`);
-            showToast(errorMsg, Toasts.Type.FAILURE);
+            showToast(errorMsg, "failure");
             return "";
         }
 
@@ -271,7 +271,7 @@ export async function getResponse(payload: ApiMessage[]): Promise<string> {
         return response;
     } catch (e) {
         logger.error("Error getting response from AI model", e);
-        showToast("Error getting response from AI model", Toasts.Type.FAILURE);
+        showToast("Error getting response from AI model", "failure");
         return "";
     }
 }

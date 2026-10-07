@@ -32,10 +32,12 @@ export const enum IpcEvents {
     SET_SETTINGS = "VencordSetSettings",
     THEME_UPDATE = "VencordThemeUpdate",
     OPEN_EXTERNAL = "VencordOpenExternal",
-    GET_UPDATES = "VencordGetUpdates",
-    GET_REPO = "VencordGetRepo",
-    UPDATE = "VencordUpdate",
-    BUILD = "VencordBuild",
+
+    UPDATER_LIST_UPDATES = "VencordListUpdates",
+    UPDATER_GET_REPO = "VencordGetRepo",
+    UPDATER_FETCH_UPDATE = "VencordFetchUpdate",
+    UPDATER_APPLY_UPDATE = "VencordApplyUpdate",
+
     OPEN_MONACO_EDITOR = "VencordOpenMonacoEditor",
     GET_MONACO_THEME = "VencordGetMonacoTheme",
 
@@ -51,9 +53,5 @@ export const enum IpcEvents {
     RENDERER_CSS_UPDATE = "VencordRendererCssUpdate",
     PRELOAD_GET_RENDERER_JS = "VencordPreloadGetRendererJs",
 
-    SET_TRAY_UPDATE_STATE = "VencordSetTrayUpdateState",
-    TRAY_REPAIR = "VencordTrayRepair",
-    TRAY_CHECK_UPDATES = "VencordTrayCheckUpdates",
-    TRAY_ABOUT = "VencordTrayAbout",
     SUPPORTS_WINDOWS_MATERIAL = "VencordSupportsWindowsMaterial",
 }

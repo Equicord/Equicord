@@ -12,7 +12,7 @@ import { BadgeContextMenu } from "@plugins/_api/badges";
 import { Devs, EquicordDevs } from "@utils/constants";
 import { openInviteModal } from "@utils/discord";
 import definePlugin from "@utils/types";
-import { ContextMenuApi, React, Toasts } from "@webpack/common";
+import { ContextMenuApi, React, showToast } from "@webpack/common";
 
 import { settings } from "./settings";
 import { cl, GlobalBadges, INVITE_LINK, loadBadges } from "./utils";
@@ -47,11 +47,7 @@ export default definePlugin({
     toolboxActions: {
         async "Refetch Global Badges"() {
             await loadBadges();
-            Toasts.show({
-                id: Toasts.genId(),
-                message: "Successfully refetched global badges!",
-                type: Toasts.Type.SUCCESS
-            });
+            showToast("Successfully refetched global badges!", "success");
         }
     },
     get GlobalBadges() {

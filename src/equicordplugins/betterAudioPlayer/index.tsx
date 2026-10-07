@@ -10,15 +10,22 @@ import { definePluginSettings } from "@api/Settings";
 import { EquicordDevs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
 import definePlugin, { OptionType } from "@utils/types";
-import { ColorUtils, React, showToast, Toasts } from "@webpack/common";
+import { ColorUtils, React, showToast } from "@webpack/common";
 
 const cl = classNameFactory("vc-better-audio-player-");
 const CORS_PROXY = "https://cors.keiran0.workers.dev?url=";
 const MAX_FILE_SIZE = 12e6;
 
 interface PlayerInstance {
-    mediaRef: React.RefObject<HTMLAudioElement>;
-    props: { src: string; type: string; };
+    mediaRef: React.RefObject<HTMLAudioElement | null>;
+    props: { type: string; };
+    state: { playing: boolean; };
+}
+
+interface AudioGraph {
+    ctx: AudioContext;
+    analyser: AnalyserNode;
+    blobUrl: string;
 }
 
 function validateColor(value: string, key: string, fallback: string) {
@@ -32,7 +39,7 @@ function validateColor(value: string, key: string, fallback: string) {
         }
     } catch { /* invalid hex */ }
 
-    showToast(`Invalid color format for ${key}, use "R, G, B" or "#RRGGBB"`, Toasts.Type.FAILURE);
+    showToast(`Invalid color format for ${key}, use "R, G, B" or "#RRGGBB"`, "failure");
     settings.store[key] = fallback;
 }
 
@@ -111,121 +118,88 @@ async function fetchAudioBlob(src: string): Promise<string | null> {
     return URL.createObjectURL(blob);
 }
 
-function Visualizer({ playerRef, src }: { playerRef: React.RefObject<HTMLAudioElement>; src: string; }) {
+async function createAudioGraph(audio: HTMLAudioElement): Promise<AudioGraph | null> {
+    const blobUrl = await fetchAudioBlob(audio.currentSrc || audio.src).catch(() => null);
+    if (!blobUrl) return null;
+
+    const wasPlaying = !audio.paused;
+    const { currentTime } = audio;
+    audio.src = blobUrl;
+    audio.currentTime = currentTime;
+    if (wasPlaying) audio.play().catch(() => { });
+
+    const ctx = new AudioContext();
+    const analyser = ctx.createAnalyser();
+    analyser.fftSize = 2048;
+    ctx.createMediaElementSource(audio).connect(analyser);
+    analyser.connect(ctx.destination);
+
+    return { ctx, analyser, blobUrl };
+}
+
+function Visualizer({ mediaRef, playing }: { mediaRef: PlayerInstance["mediaRef"]; playing: boolean; }) {
     const canvasRef = React.useRef<HTMLCanvasElement>(null);
-    const audioCtxRef = React.useRef<AudioContext | null>(null);
-    const analyserRef = React.useRef<AnalyserNode | null>(null);
-    const animFrameRef = React.useRef(0);
-    const setupDoneRef = React.useRef(false);
-    const blobUrlRef = React.useRef<string | null>(null);
+    const graphRef = React.useRef<Promise<AudioGraph | null> | null>(null);
 
     React.useEffect(() => {
-        const audio = playerRef.current;
-        const canvas = canvasRef.current;
-        if (!audio || !canvas) return () => { };
+        const audio = mediaRef.current;
+        const canvasCtx = canvasRef.current?.getContext("2d");
+        if (!playing || !audio || !canvasCtx) return;
 
-        let cancelled = false;
+        graphRef.current ??= createAudioGraph(audio);
 
-        const init = async () => {
-            const blobUrl = await fetchAudioBlob(src).catch(() => null);
-            if (cancelled || !blobUrl) return;
+        let frame = 0;
+        let stopped = false;
+        let graphCtx: AudioContext | null = null;
 
-            blobUrlRef.current = blobUrl;
+        graphRef.current.then(graph => {
+            if (stopped || !graph) return;
 
-            const wasPlaying = !audio.paused;
-            const { currentTime } = audio;
-            audio.src = blobUrl;
-            audio.currentTime = currentTime;
+            const { ctx, analyser } = graph;
+            graphCtx = ctx;
+            ctx.resume();
 
-            const audioCtx = new AudioContext();
-            const analyser = audioCtx.createAnalyser();
-            analyser.fftSize = 2048;
-            const source = audioCtx.createMediaElementSource(audio);
-            source.connect(analyser);
-            analyser.connect(audioCtx.destination);
-            audioCtxRef.current = audioCtx;
-            analyserRef.current = analyser;
-            setupDoneRef.current = true;
+            const dataArray = new Uint8Array(analyser.frequencyBinCount);
+            const frequencyData = new Uint8Array(analyser.frequencyBinCount);
 
-            if (wasPlaying) {
-                audio.play().catch(() => { });
-            }
-        };
+            const draw = () => {
+                frame = requestAnimationFrame(draw);
 
-        const canvasCtx = canvas.getContext("2d");
-        let dataArray: Uint8Array<ArrayBuffer> | null = null;
-        let frequencyData: Uint8Array<ArrayBuffer> | null = null;
+                analyser.getByteTimeDomainData(dataArray);
+                analyser.getByteFrequencyData(frequencyData);
 
-        const draw = () => {
-            const analyser = analyserRef.current;
-            if (!canvasCtx || !analyser) return;
+                const { canvas } = canvasCtx;
+                const width = canvas.clientWidth;
+                const height = canvas.clientHeight;
+                const dpr = window.devicePixelRatio;
+                const pixelWidth = Math.round(width * dpr);
+                const pixelHeight = Math.round(height * dpr);
+                if (canvas.width !== pixelWidth || canvas.height !== pixelHeight) {
+                    canvas.width = pixelWidth;
+                    canvas.height = pixelHeight;
+                    canvasCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+                }
 
-            if (!dataArray || !frequencyData) {
-                const bufferLength = analyser.frequencyBinCount;
-                dataArray = new Uint8Array(bufferLength);
-                frequencyData = new Uint8Array(bufferLength);
-            }
-
-            if (!audio.paused) animFrameRef.current = requestAnimationFrame(draw);
-
-            analyser.getByteTimeDomainData(dataArray);
-            analyser.getByteFrequencyData(frequencyData);
-
-            const { width, height } = canvas.getBoundingClientRect();
-            canvasCtx.clearRect(0, 0, width, height);
-            if (settings.store.oscilloscope) drawOscilloscope(canvasCtx, width, height, dataArray, dataArray.length);
-            if (settings.store.spectrograph) drawSpectrograph(canvasCtx, width, height, frequencyData, frequencyData.length);
-        };
-
-        const onPlay = () => {
-            if (!setupDoneRef.current) return;
-            if (audioCtxRef.current?.state === "suspended") {
-                audioCtxRef.current.resume();
-            }
+                canvasCtx.clearRect(0, 0, width, height);
+                if (settings.store.oscilloscope) drawOscilloscope(canvasCtx, width, height, dataArray, dataArray.length);
+                if (settings.store.spectrograph) drawSpectrograph(canvasCtx, width, height, frequencyData, frequencyData.length);
+            };
             draw();
-        };
-
-        const onPause = () => {
-            audioCtxRef.current?.suspend();
-            cancelAnimationFrame(animFrameRef.current);
-        };
-
-        audio.addEventListener("play", onPlay);
-        audio.addEventListener("pause", onPause);
-        init();
+        });
 
         return () => {
-            cancelled = true;
-            audio.removeEventListener("play", onPlay);
-            audio.removeEventListener("pause", onPause);
-            cancelAnimationFrame(animFrameRef.current);
-            audioCtxRef.current?.close();
-            audioCtxRef.current = null;
-            analyserRef.current = null;
-            setupDoneRef.current = false;
-            if (blobUrlRef.current) {
-                URL.revokeObjectURL(blobUrlRef.current);
-                blobUrlRef.current = null;
-            }
+            stopped = true;
+            cancelAnimationFrame(frame);
+            graphCtx?.suspend();
         };
-    }, [playerRef]);
+    }, [playing]);
 
-    React.useEffect(() => {
-        const canvas = canvasRef.current;
-        if (!canvas) return () => { };
-
-        const resize = () => {
-            const rect = canvas.getBoundingClientRect();
-            canvas.width = rect.width * window.devicePixelRatio;
-            canvas.height = rect.height * window.devicePixelRatio;
-            const ctx = canvas.getContext("2d");
-            ctx?.scale(window.devicePixelRatio, window.devicePixelRatio);
-        };
-
-        resize();
-        const observer = new ResizeObserver(resize);
-        observer.observe(canvas);
-        return () => observer.disconnect();
+    React.useEffect(() => () => {
+        graphRef.current?.then(graph => {
+            if (!graph) return;
+            graph.ctx.close();
+            URL.revokeObjectURL(graph.blobUrl);
+        });
     }, []);
 
     return (
@@ -281,15 +255,17 @@ export default definePlugin({
     patches: [
         {
             find: "}renderPlayIcon(){",
-            replacement: {
-                match: /this\.renderAudio\(\):this\.renderVideo\(\)/,
-                replace: "$&,$self.renderVisualizer(this)",
-            },
+            replacement: [
+                {
+                    match: /this\.renderAudio\(\):this\.renderVideo\(\)/,
+                    replace: "$&,$self.renderVisualizer(this)",
+                },
+            ],
         },
     ],
 
     renderVisualizer(player: PlayerInstance) {
         if (player.props.type !== "AUDIO") return null;
-        return <Visualizer playerRef={player.mediaRef} src={player.props.src} key={player.props.src} />;
+        return <Visualizer mediaRef={player.mediaRef} playing={player.state.playing} />;
     },
 });
