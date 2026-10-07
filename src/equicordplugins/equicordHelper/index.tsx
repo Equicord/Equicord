@@ -5,6 +5,7 @@
  */
 
 import { ApplicationCommandInputType, sendBotMessage } from "@api/Commands";
+import { findGroupChildrenByChildId, NavContextMenuPatchCallback } from "@api/ContextMenu";
 import { HeaderBarButton } from "@api/HeaderBar";
 import { addMessagePreSendListener, removeMessagePreSendListener } from "@api/MessageEvents";
 import { isPluginEnabled } from "@api/PluginManager";
@@ -15,8 +16,8 @@ import { Devs, EquicordDevs, GUILD_ID, SUPPORT_CHANNEL_ID, SUPPORT_CHANNEL_IDS, 
 import { isAnyPluginDev } from "@utils/misc";
 import definePlugin, { OptionType } from "@utils/types";
 import { StandingState } from "@vencord/discord-types/enums";
-import { findByCodeLazy } from "@webpack";
-import { Alerts, ApplicationCommandIndexStore, NavigationRouter, React, SafetyHubStore, SettingsRouter, UserGuildSettingsStore, UserStore, useStateFromStores, VoiceStateStore } from "@webpack/common";
+import { findByCodeLazy, findCssClassesLazy } from "@webpack";
+import { Alerts, ApplicationCommandIndexStore, Menu, NavigationRouter, React, SafetyHubStore, SettingsRouter, UserGuildSettingsStore, UserStore, useStateFromStores, VoiceStateStore } from "@webpack/common";
 import { ComponentType } from "react";
 
 import { PluginButtons } from "./pluginButtons";
@@ -29,6 +30,7 @@ migratePluginToSettings(true, "EquicordHelper", "GuildTagSettings", "disableAdop
 let clicked = false;
 
 const fetchSafetyHub: () => Promise<void> = findByCodeLazy("SAFETY_HUB_FETCH_START");
+const TextAreaClasses = findCssClassesLazy("slateTextArea", "slateContainer");
 
 const StandingConfig: Record<number, { label: string; hoverColor: string; Icon: ComponentType<any>; }> = {
     [StandingState.ALL_GOOD]: { label: "All good!", hoverColor: "var(--status-positive)", Icon: ShieldIcon },
@@ -60,6 +62,24 @@ function StandingButton() {
         </div>
     );
 }
+
+const addAutoCorrectMenuItem: NavContextMenuPatchCallback = children => {
+    const { enableAutoCorrect, autoCorrect } = settings.use(["enableAutoCorrect", "autoCorrect"]);
+    if (!enableAutoCorrect) return;
+
+    const group = findGroupChildrenByChildId("spellcheck-enabled", children, true);
+    if (!group) return;
+
+    const idx = group.findIndex(c => c?.props?.id?.includes("spellcheck-enabled"));
+    group.splice(idx + 1, 0,
+        <Menu.MenuCheckboxItem
+            id="vc-enable-autocorrect"
+            label="Enable Autocorrect"
+            checked={autoCorrect}
+            action={() => settings.store.autoCorrect = !settings.store.autoCorrect}
+        />
+    );
+};
 
 const listener = async (channelId, msg) => {
     if (!settings.store.noBulletPoints) return;
@@ -143,6 +163,18 @@ const settings = definePluginSettings({
         description: "Skips the server onboarding by gaslighting it",
         restartNeeded: true,
         default: false,
+    },
+    enableAutoCorrect: {
+        type: OptionType.BOOLEAN,
+        description: "Adds a chat box context menu toggle for native autocorrection and text replacements",
+        restartNeeded: true,
+        default: false
+    },
+    autoCorrect: {
+        type: OptionType.BOOLEAN,
+        description: "Use native autocorrection and text replacements in message editors",
+        hidden: true,
+        default: false
     }
 });
 
@@ -162,10 +194,14 @@ export default definePlugin({
         Devs.Samwich,
         Devs.AutumnVN,
         EquicordDevs.auggeeo,
-        EquicordDevs.secp192k1
+        EquicordDevs.secp192k1,
+        EquicordDevs.tie
     ],
     required: true,
     settings,
+    contextMenus: {
+        "textarea-context": addAutoCorrectMenuItem
+    },
     headerBarButton: {
         icon: ShieldIcon,
         render: () => (settings.store.accountStandingButton ? <StandingButton /> : null),
@@ -314,7 +350,7 @@ export default definePlugin({
                 match: /case \i\.\i\.WINDOWS:/,
                 replace: 'case "WEB":'
             },
-            predicate: () => Settings.winNativeTitleBar,
+            predicate: () => Settings.nativeTitleBar,
         },
         {
             find: '"refresh-title-bar-small"',
@@ -328,7 +364,7 @@ export default definePlugin({
                     replace: "true"
                 }
             ],
-            predicate: () => Settings.winNativeTitleBar,
+            predicate: () => Settings.nativeTitleBar,
         },
         {
             find: "DirectMessage: getSpringConfigs()",
@@ -381,6 +417,22 @@ export default definePlugin({
                 match: /(?<=handleContextMenu.{0,150})(?=link:(\i)\.url)/,
                 replace: "...$1,"
             }
+        },
+        {
+            find: "getSlateEditor:()=>",
+            replacement: {
+                match: /spellCheck:\i(?=,autoFocus:)/,
+                replace: "$&,autoCorrect:$self.useAutoCorrect()"
+            },
+            predicate: () => settings.store.enableAutoCorrect
+        },
+        {
+            find: "onPasteCapture:this.handlePasteCapture",
+            replacement: {
+                match: /autoCorrect:"off"(?=,"data-can-focus":)/,
+                replace: 'autoCorrect:this.props.autoCorrect??"off"'
+            },
+            predicate: () => settings.store.enableAutoCorrect
         }
     ],
     renderMessageAccessory(props) {
@@ -455,6 +507,10 @@ export default definePlugin({
             voiceState?.channelId === currentUserVoiceState?.channelId ||
             !UserGuildSettingsStore.isChannelMuted(guildId, voiceState?.channelId!)
         );
+    },
+    useAutoCorrect() {
+        const { autoCorrect } = settings.use(["autoCorrect"]);
+        return autoCorrect ? "on" : "off";
     },
     getPlatformUrl(platform, args) {
         switch (platform) {
