@@ -129,6 +129,6 @@ export const Timestamp = waitForComponent<t.Timestamp>("Timestamp", filters.comp
 export const OAuth2AuthorizeModal = waitForComponent("OAuth2AuthorizeModal", filters.componentByCode("hasContentBackground", "nextStep", "onClose?.()"));
 
 export const Animations = mapMangledModuleLazy(".assign({colorNames:", {
-    Transition: filters.componentByCode('["aaaaaaaaaaaaaa","bbbbbbbbbbbbbbbbb"]', ",cccccccccccccccc,"),
-    animated: filters.byProps("ttttttttttttttttttttttt", "hhhhhhhhhhhhhhhhhhh")
+    Transition: filters.componentByCode('["items","children"]', ",null,"),
+    animated: filters.byProps("div", "text")
 });
