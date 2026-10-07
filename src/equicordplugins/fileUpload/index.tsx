@@ -14,7 +14,7 @@ import { classNameFactory } from "@utils/css";
 import definePlugin from "@utils/types";
 import { CloudUpload } from "@vencord/discord-types";
 import { findByPropsLazy } from "@webpack";
-import { DraftType, ChannelStore, FluxDispatcher, GuildStore, Menu, PermissionsBits, PermissionStore, React, showToast, UploadAttachmentStore, useEffect, UserStore, useState } from "@webpack/common";
+import { ChannelStore, DraftType, FluxDispatcher, GuildStore, Menu, PermissionsBits, PermissionStore, React, showToast, UploadAttachmentStore, useEffect, UserStore, useState } from "@webpack/common";
 
 import { settings } from "./settings";
 import { serviceLabels, ServiceType } from "./types";
@@ -57,7 +57,7 @@ function toFiniteLimit(value: unknown): number | undefined {
 function getPayloadChannelId(payload: UploadAddFilesEvent): string | undefined {
     if (typeof payload.channelId === "string" && payload.channelId !== "") return payload.channelId;
 
-    const channel = payload.channel;
+    const { channel } = payload;
     if (channel && typeof channel === "object" && "id" in channel && typeof channel.id === "string") return channel.id;
 
     return undefined;
@@ -66,10 +66,10 @@ function getPayloadChannelId(payload: UploadAddFilesEvent): string | undefined {
 function getGuildIdForPayload(payload: UploadAddFilesEvent, channelId: string | undefined): string | undefined {
     if (typeof payload.guildId === "string" && payload.guildId !== "") return payload.guildId;
 
-    const guild = payload.guild;
+    const { guild } = payload;
     if (guild && typeof guild === "object" && "id" in guild && typeof guild.id === "string") return guild.id;
 
-    const channel = payload.channel;
+    const { channel } = payload;
     if (channel && typeof channel === "object") {
         if ("guild_id" in channel && typeof channel.guild_id === "string") return channel.guild_id;
         if ("guildId" in channel && typeof channel.guildId === "string") return channel.guildId;
@@ -107,7 +107,7 @@ function getDiscordGuildLimit(guildId: string | undefined): number | undefined {
         if (limit !== undefined) return limit;
     }
 
-    const features: unknown = guild.features;
+    const { features } = guild;
     const hasFeature = (name: string): boolean => {
         if (Array.isArray(features)) return features.includes(name);
         if (features instanceof Set) return features.has(name);
