@@ -108,13 +108,9 @@ function getDiscordGuildLimit(guildId: string | undefined): number | undefined {
     }
 
     const { features } = guild;
-    const hasFeature = (name: string): boolean => {
-        if (Array.isArray(features)) return features.includes(name);
-        if (features instanceof Set) return features.has(name);
-        return false;
-    };
-    if (hasFeature("MAX_FILE_SIZE_100_MB")) return 100 * 1024 * 1024;
-    if (hasFeature("MAX_FILE_SIZE_50_MB")) return 50 * 1024 * 1024;
+    const featureNames: string[] = features instanceof Set ? Array.from(features) : Array.isArray(features) ? [...features] : [];
+    if (featureNames.includes("MAX_FILE_SIZE_100_MB")) return 100 * 1024 * 1024;
+    if (featureNames.includes("MAX_FILE_SIZE_50_MB")) return 50 * 1024 * 1024;
     return undefined;
 }
 
