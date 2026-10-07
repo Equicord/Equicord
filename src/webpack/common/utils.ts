@@ -126,7 +126,7 @@ export const NavigationRouter: t.NavigationRouter = mapMangledModuleLazy("transi
     forward: filters.byCode("goForward()"),
 });
 export const ChannelRouter: t.ChannelRouter = mapMangledModuleLazy('"Thread must have a parent ID."', {
-    transitionToChannel: filters.byCode(".openTextInVoiceIfVoiceChannel"),
+    transitionToChannel: filters.byCode(".preload"),
     transitionToThread: filters.byCode('"Thread must have a parent ID."')
 });
 
