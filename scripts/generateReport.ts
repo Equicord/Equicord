@@ -45,6 +45,8 @@ const browser = await pup.launch({
     args: ['--no-sandbox', '--disable-setuid-sandbox']
 });
 
+const browserJs = readFileSync("./dist/browser/browser.js", "utf-8");
+
 const page = await browser.newPage();
 await page.setUserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36");
 await page.setBypassCSP(true);
@@ -72,7 +74,10 @@ const report = {
     }[],
     otherErrors: [] as string[],
     ignoredErrors: [] as string[],
-    badWebpackFinds: [] as string[]
+    badWebpackFinds: [] as {
+        find: string;
+        source: string;
+    }[]
 };
 
 const IGNORED_DISCORD_ERRORS = [
@@ -117,7 +122,10 @@ async function printReport() {
     console.log();
 
     console.log("## Bad Webpack Finds");
-    report.badWebpackFinds.forEach(p => console.log("- " + toCodeBlock(p, "- ".length)));
+    report.badWebpackFinds.forEach(p => {
+        console.log(`- \`${p.source}\``);
+        console.log(`  - Find: ${toCodeBlock(p.find, "  - Find: ".length)}`);
+    });
 
     console.log();
 
@@ -172,7 +180,7 @@ async function printReport() {
             report.slowPatches.length > 0 && patchesToEmbed("Slow Patches", report.slowPatches, 0xf0b232),
             report.badWebpackFinds.length > 0 && {
                 title: "Bad Webpack Finds",
-                description: report.badWebpackFinds.map(f => toCodeBlock(f, 0, true)).join("\n") || "None",
+                description: report.badWebpackFinds.map(f => `**__${f.source}:__**\n${toCodeBlock(f.find, 0, true)}`).join("\n\n") || "None",
                 color: 0xff0000
             },
             report.badStarts.length > 0 && {
@@ -267,7 +275,7 @@ page.on("console", async e => {
             break outer;
         }
 
-        const [, tag, message, otherMessage] = args as Array<string>;
+        const [, tag, message, otherMessage, stack] = args as Array<string>;
 
         switch (tag) {
             case "WebpackPatcher:":
@@ -321,7 +329,11 @@ page.on("console", async e => {
                         process.exit(1);
                     case "Webpack Find Fail:":
                         process.exitCode = 1;
-                        report.badWebpackFinds.push(otherMessage);
+
+                        const line = Number(stack?.match(/VencordWeb:(\d+)/)?.[1]) - 3;
+                        const source = browserJs.split("\n").slice(0, line).findLast(l => l.trimStart().startsWith("// src/"))?.trim().slice(3);
+
+                        report.badWebpackFinds.push({ find: otherMessage, source: source ?? "Unknown source" });
                         break;
                     case "Finished test":
                         await browser.close();
@@ -361,7 +373,7 @@ page.on("pageerror", (e: any) => {
 
 await page.evaluateOnNewDocument(`
     if (location.host.endsWith("discord.com")) {
-        ${readFileSync("./dist/browser/browser.js", "utf-8")};
+        ${browserJs};
     }
 `);
 
