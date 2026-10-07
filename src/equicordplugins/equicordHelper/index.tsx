@@ -16,7 +16,7 @@ import { Devs, EquicordDevs, GUILD_ID, SUPPORT_CHANNEL_ID, SUPPORT_CHANNEL_IDS, 
 import { isAnyPluginDev } from "@utils/misc";
 import definePlugin, { OptionType } from "@utils/types";
 import { StandingState } from "@vencord/discord-types/enums";
-import { findByCodeLazy, findCssClassesLazy } from "@webpack";
+import { findByCodeLazy } from "@webpack";
 import { Alerts, ApplicationCommandIndexStore, Menu, NavigationRouter, React, SafetyHubStore, SettingsRouter, UserGuildSettingsStore, UserStore, useStateFromStores, VoiceStateStore } from "@webpack/common";
 import { ComponentType } from "react";
 
@@ -30,7 +30,6 @@ migratePluginToSettings(true, "EquicordHelper", "GuildTagSettings", "disableAdop
 let clicked = false;
 
 const fetchSafetyHub: () => Promise<void> = findByCodeLazy("SAFETY_HUB_FETCH_START");
-const TextAreaClasses = findCssClassesLazy("slateTextArea", "slateContainer");
 
 const StandingConfig: Record<number, { label: string; hoverColor: string; Icon: ComponentType<any>; }> = {
     [StandingState.ALL_GOOD]: { label: "All good!", hoverColor: "var(--status-positive)", Icon: ShieldIcon },
