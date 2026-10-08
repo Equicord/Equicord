@@ -17,12 +17,16 @@ interface QuestPageFilterGroup {
 }
 
 const pageFilterOptions = [
-    { filter: "questify_included", setting: "filterQuestPage", label: "Hide excluded Quests" },
-    { filter: "questify_unclaimed", setting: "hideClaimedQuests", label: "Hide claimed Quests" },
+    { filter: "questify_hide_unclaimed", setting: "hideUnclaimedQuests", label: "Unclaimed" },
+    { filter: "questify_unclaimed", setting: "hideClaimedQuests", label: "Claimed" },
+    { filter: "questify_hide_ignored", setting: "hideIgnoredQuests", label: "Ignored" },
+    { filter: "questify_hide_expired", setting: "hideExpiredQuests", label: "Expired" },
+    { filter: "questify_included", setting: "filterQuestPage", label: "Excluded" },
+    { filter: "questify_auto_completable", setting: "hideNonAutoCompletableQuests", label: "Cannot auto-complete" },
 ] as const;
 const pageFilterSettingKeys = pageFilterOptions.map(option => option.setting);
 const questifyGroup: QuestPageFilterGroup = {
-    heading: "Visibility",
+    heading: "Hide Quests",
     options: pageFilterOptions.map(({ filter }) => ({ group: "questify", filter })),
 };
 

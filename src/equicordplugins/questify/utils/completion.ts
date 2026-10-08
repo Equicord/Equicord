@@ -15,7 +15,7 @@ import { autoCompleteQuestTaskTypes, isDesktopCompatible } from "../settings/def
 import { getIgnoredQuestIDs } from "../settings/ignoredQuests";
 import { rerenderQuests } from "../settings/rerender";
 import { parseQuestUserStatus } from "./fetching";
-import { getEffectiveQuestTaskType, normalizeQuestName, questMatchesIncludedTypes } from "./filtering";
+import { isAutoCompleteQuestTaskEnabled, normalizeQuestName, questMatchesIncludedTypes } from "./filtering";
 import { QL } from "./logging";
 import { getQuestStatus, getQuestStoredProgress, isVideoQuestTask, QuestStatus, QuestTask, refreshQuest } from "./questState";
 
@@ -315,14 +315,6 @@ function getQuestAutoCompleteKind(task: QuestTask): AutoCompleteQuestKind | null
         default:
             return null;
     }
-}
-
-function isAutoCompleteQuestTaskEnabled(task: QuestTask): boolean {
-    const taskType = getEffectiveQuestTaskType(task);
-    const compatible = isDesktopCompatible(taskType);
-    const enabled = getQuestifySettings().autoCompleteQuestTypes[taskType] === true;
-
-    return compatible && enabled && getQuestAutoCompleteKind(task) != null;
 }
 
 function resolveAutoCompleteQuest(quest: Quest): { task: QuestTask; kind: AutoCompleteQuestKind; } | null {

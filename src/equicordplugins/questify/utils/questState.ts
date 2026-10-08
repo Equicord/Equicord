@@ -8,9 +8,6 @@ import type { Quest } from "@vencord/discord-types";
 import { QuestTaskType } from "@vencord/discord-types/enums";
 import { QuestStore } from "@webpack/common";
 
-import type { QuestButtonIncludedTypes } from "../settings/def";
-import { questMatchesIncludedTypes } from "./filtering";
-
 export interface QuestTask {
     type: QuestTaskType;
     target: number;
@@ -78,22 +75,4 @@ export function getQuestStatus(
     }
 
     return QuestStatus.Expired;
-}
-
-export function countIncludedUnclaimedQuests(
-    quests: Quest[],
-    ignoredQuestIds: ReadonlyArray<string>,
-    includedTypes: QuestButtonIncludedTypes,
-): number {
-    let count = 0;
-
-    for (const quest of quests) {
-        const questStatus = getQuestStatus(quest, ignoredQuestIds);
-
-        if (questStatus === QuestStatus.Unclaimed && questMatchesIncludedTypes(quest, includedTypes)) {
-            count++;
-        }
-    }
-
-    return count;
 }

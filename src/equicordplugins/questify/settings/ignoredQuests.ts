@@ -7,7 +7,8 @@
 import type { Quest } from "@vencord/discord-types";
 import { QuestStore } from "@webpack/common";
 
-import { countIncludedUnclaimedQuests, getQuestStatus, QuestStatus } from "../utils/questState";
+import { countIncludedUnclaimedQuests } from "../utils/filtering";
+import { getQuestStatus, QuestStatus } from "../utils/questState";
 import { getQuestifySettings } from "./access";
 import { ignoredQuestIDsKey } from "./def";
 import { rerenderQuests } from "./rerender";
