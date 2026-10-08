@@ -15,34 +15,26 @@ import { useStateFromStores } from "@webpack/common";
 
 const cl = classNameFactory("vc-truelinks-");
 
-// Discord keeps the "Trust x links from now on" list here; there's no action to remove entries.
 const KEY = "MaskedLinkStore";
 const MaskedLinkStore = findStoreLazy(KEY);
 
-function read(): { trustedDomains?: string[]; trustedProtocols?: string[]; } {
-    try {
-        const value = JSON.parse(localStorage.getItem(KEY) ?? "{}");
-        return Array.isArray(value) ? { trustedDomains: value } : value ?? {};
-    } catch {
-        return {};
-    }
-}
+const read = (): { trustedDomains?: string[]; } => JSON.parse(localStorage.getItem(KEY) ?? "{}");
 
 function untrust(domain: string) {
     const data = read();
-    data.trustedDomains = (data.trustedDomains ?? []).filter(d => d !== domain);
+    data.trustedDomains = data.trustedDomains?.filter(d => d !== domain);
     localStorage.setItem(KEY, JSON.stringify(data));
     MaskedLinkStore.initialize();
     MaskedLinkStore.emitChange();
 }
 
 export function TrustedSites() {
-    const domains = useStateFromStores([MaskedLinkStore], () => [...(read().trustedDomains ?? [])].sort());
+    const domains = useStateFromStores([MaskedLinkStore], () => [...read().trustedDomains ?? []].sort());
 
     return (
         <section>
             <HeadingSecondary>Trusted sites</HeadingSecondary>
-            <Paragraph>Sites you ticked "Trust links from now on" for. They open without the Leaving Discord warning.</Paragraph>
+            <Paragraph>Links to these sites open without a warning.</Paragraph>
             {domains.length
                 ? domains.map(d => (
                     <Card key={d} className={cl("site")}>
