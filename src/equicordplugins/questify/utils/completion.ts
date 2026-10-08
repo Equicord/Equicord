@@ -496,7 +496,7 @@ export function getQuestButtonProps(args: QuestButtonPropsArgs): QuestButtonPatc
                 if (completionState === QuestCompletionState.Unenrolled) {
                     args.preClickCallback?.();
                     const userId = getCurrentUserId();
-                    if ((await ensureQuestEnrolledForAutoComplete(args.quest, { analytics: args, method: "native" })).type !== "success" || getCurrentUserId() !== userId) return;
+                    if ((await enrollQuest(args.quest, { analytics: args, method: "native" })).type !== "success" || getCurrentUserId() !== userId) return;
                 }
                 processQuestForAutoComplete(args.quest, { source: "manual" });
             }
@@ -647,21 +647,30 @@ async function enrollInQuestManually(quest: Quest): Promise<QuestManualEnrollRes
     }
 }
 
-async function ensureQuestEnrolledForAutoComplete(
+export async function enrollQuest(
     quest: Quest,
     options: { analytics?: QuestButtonAnalyticsArgs; method?: "manual" | "native"; } = {},
 ): Promise<QuestEnrollmentResult> {
     quest = refreshQuest(quest);
+    const userId = getCurrentUserId();
+
+    if (!userId) return { type: "cancelled" };
 
     if (quest.userStatus?.enrolledAt) {
         return { type: "success" };
     }
 
-    const result = options.method === "manual"
-        ? await enrollInQuestManually(quest)
-        : await enrollInQuestNative(quest.id, makeEnrollmentData(options.analytics ?? {}));
+    let result: QuestManualEnrollResult | QuestEnrollResult;
+    try {
+        result = options.method === "manual"
+            ? await enrollInQuestManually(quest)
+            : await enrollInQuestNative(quest.id, makeEnrollmentData(options.analytics ?? {}));
+    } catch (error) {
+        QL.error("QUEST_ENROLL_FAILED", { questId: quest.id, error });
+        result = { type: "unknown_error" };
+    }
 
-    if (result.type === "cancelled") {
+    if (getCurrentUserId() !== userId || result.type === "cancelled") {
         return { type: "cancelled" };
     }
 
@@ -1279,7 +1288,7 @@ export async function queueAllAutoCompleteQuests(): Promise<number> {
                 enrollmentAttempts++;
             }
 
-            const enrollment = await ensureQuestEnrolledForAutoComplete(refreshedQuest, { method: "manual" });
+            const enrollment = await enrollQuest(refreshedQuest, { method: "manual" });
 
             if (signal.aborted) {
                 break;

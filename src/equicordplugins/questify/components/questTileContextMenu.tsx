@@ -11,7 +11,8 @@ import type { ReactNode } from "react";
 
 import { addIgnoredQuest, questIsIgnored, removeIgnoredQuest } from "../settings/ignoredQuests";
 import { rerenderQuests } from "../settings/rerender";
-import { canAutoCompleteQuest, getQuestAutoCompleteEntry, processQuestForAutoComplete, stopQuestAutoComplete } from "../utils/completion";
+import { enrollQuest, getQuestAutoCompleteEntry, getQuestButtonProps, stopQuestAutoComplete } from "../utils/completion";
+import { getQuestStatus, QuestStatus } from "../utils/questState";
 import { q } from "../utils/ui";
 
 export function QuestTileContextMenu(
@@ -28,7 +29,9 @@ export function QuestTileContextMenu(
     const isIgnored = questIsIgnored(quest.id);
     const isEnrolled = Boolean(quest.userStatus?.enrolledAt);
     const isAutoCompleting = getQuestAutoCompleteEntry(quest) != null;
-    const canStartAutoComplete = !isClaimedMenu && isEnrolled && canAutoCompleteQuest(quest);
+    const autoCompleteProps = !isClaimedMenu ? getQuestButtonProps({ quest }) : null;
+    const canEnroll = !isClaimedMenu && !isEnrolled && !quest.userStatus?.completedAt
+        && getQuestStatus(quest, [], false) === QuestStatus.Unclaimed;
 
     children.unshift((
         <Menu.MenuGroup>
@@ -45,6 +48,16 @@ export function QuestTileContextMenu(
                     action={() => removeIgnoredQuest(quest.id)}
                 />
             ))}
+            {canEnroll && (
+                <Menu.MenuItem
+                    id={q("enroll-quest")}
+                    label="Enroll in Quest"
+                    action={async () => {
+                        await enrollQuest(quest);
+                        rerenderQuests();
+                    }}
+                />
+            )}
             {isAutoCompleting ? (
                 <Menu.MenuItem
                     id={q("stop-auto-complete")}
@@ -58,16 +71,11 @@ export function QuestTileContextMenu(
                         rerenderQuests();
                     }}
                 />
-            ) : canStartAutoComplete ? (
+            ) : autoCompleteProps ? (
                 <Menu.MenuItem
                     id={q("start-auto-complete")}
                     label="Start Auto-Complete"
-                    action={() => {
-                        processQuestForAutoComplete(quest, {
-                            source: "manual",
-                        });
-                        rerenderQuests();
-                    }}
+                    action={autoCompleteProps.onClick}
                 />
             ) : null}
             <Menu.MenuItem
