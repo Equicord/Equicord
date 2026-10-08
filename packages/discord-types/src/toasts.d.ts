@@ -27,7 +27,7 @@ export interface NewToastData {
 
 export type showToast = (data: NewToastData) => void;
 export type popToast = (context?: string) => void;
-export type createToast = (data: ToastData) => NewToastData;
+export type createToast = (message: string, type?: ToastType, options?: ToastData["options"]) => NewToastData;
 
 export interface Toasts {
     show: showToast;
