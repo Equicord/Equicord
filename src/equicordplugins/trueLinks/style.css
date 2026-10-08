@@ -1,0 +1,38 @@
+.vc-truelinks-host {
+    display: inline-block;
+    margin-left: 4px;
+    padding: 0 5px;
+    border-radius: 4px;
+    background: var(--background-mod-subtle, rgb(255 255 255 / 6%));
+    color: var(--text-muted, #949ba4);
+    font-size: 0.8em;
+    font-weight: 500;
+    line-height: 1.5;
+    vertical-align: 1px;
+}
+
+.vc-truelinks-lookalike {
+    background: var(--background-feedback-critical, rgb(242 63 67 / 15%));
+    color: var(--text-feedback-critical, #f23f43);
+}
+
+.vc-truelinks-icon {
+    width: 1.1em;
+    height: 1.1em;
+    margin-right: 4px;
+    vertical-align: -0.2em;
+}
+
+.vc-truelinks-favicon {
+    border-radius: 2px;
+    filter: grayscale(1);
+    opacity: 0.7;
+}
+
+.vc-truelinks-site {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 8px;
+    padding: 8px 12px;
+}
