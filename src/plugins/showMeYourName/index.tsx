@@ -1512,10 +1512,20 @@ export default definePlugin({
             // Track message hover to animate display name effects.
             // Attach the group ID so every name in a grouped message animates together.
             find: "CUSTOM_GIFT?\"\":",
+            group: true,
             replacement: [
                 {
-                    match: /(hasHovered:\i,isHovered:(\i).{0,2000})(let \i=\i.id===\i,\i=)/,
-                    replace: "$1arguments[0].message.showMeYourNameGroupId=!!arguments[0].groupId?`g-${arguments[0].groupId}`:null;$self.handleHoveringMessage(arguments[0].message,$2);$3",
+                    match: /(handleMouseEnter:(\i),handleMouseLeave:(\i),hasHovered:\i,isHovered:(\i).{0,2000})(let \i=\i.id===\i,\i=)/,
+                    replace: "$1const smynMessageHoverProps={onMouseMove:$2,onMouseLeave:$3};arguments[0].message.showMeYourNameGroupId=!!arguments[0].groupId?`g-${arguments[0].groupId}`:null;$self.handleHoveringMessage(arguments[0].message,$4);$5",
+                },
+                {
+                    // Include fractional message boundaries in the shared animation hover state.
+                    match: /("li",\{id:\i,)/,
+                    replace: "$1...smynMessageHoverProps,",
+                },
+                {
+                    match: /onMouseMove:\i,onMouseLeave:\i,(?=hasThread:)/,
+                    replace: "",
                 },
             ],
         },
