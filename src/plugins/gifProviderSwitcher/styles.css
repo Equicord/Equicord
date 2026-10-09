@@ -4,3 +4,11 @@
     gap: 0.5em;
     grid-template-columns: 1fr max-content;
 }
+
+.vc-gifProviderSwitcher-badge {
+    position: absolute;
+    bottom: 6px;
+    left: 6px;
+    z-index: 1;
+    pointer-events: none;
+}
