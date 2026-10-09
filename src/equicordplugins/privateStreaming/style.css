@@ -1,0 +1,16 @@
+/*
+ * Vencord, a Discord client mod
+ * Copyright (c) 2026 Vendicated and contributors
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+.vc-private-streaming-mask:not(.vc-private-streaming-revealed) {
+    filter: blur(var(--vc-private-streaming-blur, 16px)) !important; /* Overrides Discord's per-element filters while masking is active. */
+    transition: none !important; /* Prevents Discord's transitions from exposing content during a mask change. */
+    user-select: none;
+    -webkit-user-drag: none;
+}
+
+.vc-private-streaming-mask.vc-private-streaming-opaque:not(.vc-private-streaming-revealed) {
+    filter: opacity(0) !important; /* Overrides the ordinary blur when complete hiding is selected. */
+}
