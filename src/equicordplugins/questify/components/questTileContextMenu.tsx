@@ -11,7 +11,8 @@ import type { ReactNode } from "react";
 
 import { addIgnoredQuest, questIsIgnored, removeIgnoredQuest } from "../settings/ignoredQuests";
 import { rerenderQuests } from "../settings/rerender";
-import { canAutoCompleteQuest, getQuestAutoCompleteEntry, processQuestForAutoComplete, stopQuestAutoComplete } from "../utils/completion";
+import { canAutoCompleteQuest, enrollAndStartQuestAutoComplete, ensureQuestEnrolled, getQuestAutoCompleteEntry, stopQuestAutoComplete } from "../utils/completion";
+import { getQuestStatus, QuestStatus, refreshQuest } from "../utils/questState";
 import { q } from "../utils/ui";
 
 export function QuestTileContextMenu(
@@ -19,7 +20,7 @@ export function QuestTileContextMenu(
     props: { quest?: Quest; },
     isClaimedMenu: boolean = false,
 ): void {
-    const { quest } = props;
+    const quest = props.quest && refreshQuest(props.quest);
 
     if (!quest) {
         return;
@@ -28,23 +29,23 @@ export function QuestTileContextMenu(
     const isIgnored = questIsIgnored(quest.id);
     const isEnrolled = Boolean(quest.userStatus?.enrolledAt);
     const isAutoCompleting = getQuestAutoCompleteEntry(quest) != null;
-    const canStartAutoComplete = !isClaimedMenu && isEnrolled && canAutoCompleteQuest(quest);
+    const canStartAutoComplete = !isClaimedMenu && canAutoCompleteQuest(quest);
+    const canEnroll = !isClaimedMenu && !isEnrolled && !quest.userStatus?.completedAt && getQuestStatus(quest, []) === QuestStatus.Unclaimed;
+    const taskType = Object.values(quest.config.taskConfigV2?.tasks ?? {})[0]?.type;
 
     children.unshift((
         <Menu.MenuGroup>
-            {!isClaimedMenu && (!isIgnored ? (
+            {canEnroll && (
                 <Menu.MenuItem
-                    id={q("ignore-quest")}
-                    label="Mark as Ignored"
-                    action={() => addIgnoredQuest(quest.id)}
+                    id={q("enroll-in-quest")}
+                    label="Enroll in Quest"
+                    action={async () => {
+                        if ((await ensureQuestEnrolled(quest, { analytics: { taskType }, method: "native" })).type === "success") {
+                            rerenderQuests();
+                        }
+                    }}
                 />
-            ) : (
-                <Menu.MenuItem
-                    id={q("unignore-quest")}
-                    label="Unmark as Ignored"
-                    action={() => removeIgnoredQuest(quest.id)}
-                />
-            ))}
+            )}
             {isAutoCompleting ? (
                 <Menu.MenuItem
                     id={q("stop-auto-complete")}
@@ -62,15 +63,26 @@ export function QuestTileContextMenu(
                 <Menu.MenuItem
                     id={q("start-auto-complete")}
                     label="Start Auto-Complete"
-                    action={() => {
-                        processQuestForAutoComplete(quest, {
-                            force: true,
-                            source: "manual",
-                        });
-                        rerenderQuests();
+                    action={async () => {
+                        if (await enrollAndStartQuestAutoComplete(quest, { taskType })) {
+                            rerenderQuests();
+                        }
                     }}
                 />
             ) : null}
+            {!isClaimedMenu && (!isIgnored ? (
+                <Menu.MenuItem
+                    id={q("ignore-quest")}
+                    label="Mark as Ignored"
+                    action={() => addIgnoredQuest(quest.id)}
+                />
+            ) : (
+                <Menu.MenuItem
+                    id={q("unignore-quest")}
+                    label="Unmark as Ignored"
+                    action={() => removeIgnoredQuest(quest.id)}
+                />
+            ))}
             <Menu.MenuItem
                 id={q("copy-quest-id")}
                 label="Copy Quest ID"

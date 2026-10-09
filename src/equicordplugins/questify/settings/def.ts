@@ -28,6 +28,7 @@ export const defaultQuestTileClaimedColorSetting: QuestTileColorSetting = { enab
 export const defaultQuestTileIgnoredColorSetting: QuestTileColorSetting = { enabled: true, color: defaultQuestTileIgnoredColor };
 export const defaultQuestTileExpiredColorSetting: QuestTileColorSetting = { enabled: true, color: defaultQuestTileExpiredColor };
 export const defaultQuestOrder = ["UNCLAIMED", "CLAIMED", "IGNORED", "EXPIRED"] as const satisfies readonly QuestOrderStatus[];
+export const defaultHiddenQuestStatuses: QuestOrderStatus[] = [];
 
 export const defaultQuestButtonBadgeColor = defaultQuestTileUnclaimedColor;
 export const defaultQuestButtonDisplay: QuestButtonDisplayMode = "always";
@@ -51,6 +52,7 @@ export const defaultMakeMobileVideoQuestsDesktopCompatible = false; // true -> R
 export const defaultCompleteVideoQuestsQuicker = false; // true -> Risky
 export const defaultPreventVideoQuestsPausing = false; // true -> Risky
 export const defaultAutoCompleteQuestsSimultaneously = false; // true -> Risky
+export const defaultHideNonAutoCompletableQuests = false;
 export const defaultNotifyOnQuestComplete = true;
 export const defaultNotifyOnNewQuests = true;
 export const defaultNotifyOnNewExcludedQuests = false;

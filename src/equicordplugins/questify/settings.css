@@ -1,5 +1,19 @@
 /* Settings */
 
+.vc-plugins-settings:has(> .questify-settings-search) {
+    reading-flow: flex-visual;
+}
+
+.questify-settings-search {
+    order: -1;
+    margin-top: 5px;
+}
+
+.questify-settings-search-empty {
+    margin-top: 12px;
+    color: var(--text-muted);
+}
+
 .questify-setting {
     border-radius: 3px;
     border-left: 3px solid var(--text-strong);

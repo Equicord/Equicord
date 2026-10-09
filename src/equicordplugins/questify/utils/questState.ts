@@ -10,7 +10,7 @@ import { QuestStore } from "@webpack/common";
 
 import { getQuestifySettings, useQuestifySettings } from "../settings/access";
 import { ignoredQuestIDsKey } from "../settings/def";
-import { getActiveAutoCompletes, getAutoCompleteQuestTarget, getQuestAutoCompleteEntry } from "./completion";
+import { getActiveAutoCompletes, getAutoCompleteQuestTarget, getQuestAutoCompleteEntry, hasEnabledAutoCompleteQuestTask } from "./completion";
 import { type QuestIncludedTypes, questMatchesIncludedTypes } from "./filtering";
 
 export interface QuestTask {
@@ -329,6 +329,22 @@ export function getQuestStatus(
     return QuestStatus.Unknown;
 }
 
+export function isQuestHidden(quest: Quest, ignoredQuestIds: ReadonlyArray<string>): boolean {
+    const settings = getQuestifySettings();
+
+    if (settings.disableQuestsEverything) {
+        return false;
+    }
+
+    const questStatus = getQuestStatus(quest, ignoredQuestIds);
+    const autoCompleteExempt = Boolean(quest.userStatus?.completedAt)
+        || questStatus === QuestStatus.Claimed
+        || questStatus === QuestStatus.Expired;
+
+    return settings.hiddenQuestStatuses.some(status => status === questStatus)
+        || (settings.hideNonAutoCompletableQuests && !autoCompleteExempt && !hasEnabledAutoCompleteQuestTask(quest));
+}
+
 export function countIncludedUnclaimedQuests(
     quests: Quest[],
     ignoredQuestIds: ReadonlyArray<string>,
@@ -339,7 +355,7 @@ export function countIncludedUnclaimedQuests(
     for (const quest of quests) {
         const questStatus = getQuestStatus(quest, ignoredQuestIds);
 
-        if (questMatchesIncludedTypes(quest, includedTypes) && questStatus === QuestStatus.Unclaimed) {
+        if (questMatchesIncludedTypes(quest, includedTypes) && questStatus === QuestStatus.Unclaimed && !isQuestHidden(quest, ignoredQuestIds)) {
             count++;
         }
     }
