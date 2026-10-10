@@ -27,7 +27,7 @@ export default definePlugin({
     patches: [{
         find: "setDevtoolsCallbacks",
         replacement: {
-            match: /if\(null==\i\|\|"0.0.0"!==\i\.app\.getVersion\(\)\)/,
+            match: /if\(null==\i\|\|"0\.0\.0"!==\i\.app\.getVersion\(\)\)/,
             replace: "if(false)"
         }
     }]
