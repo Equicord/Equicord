@@ -74,6 +74,7 @@ export const CspPolicies: PolicyMap = {
     "*.tenor.com": ImageAndMediaSrc,
     "*.tenor.co": ImageAndMediaSrc,
     "*.giphy.com": ImageAndMediaSrc,
+    "*.klipy.com": ImageAndMediaSrc, // Klipy, used by GifMaker plugin
 };
 
 const findHeader = (headers: PolicyMap, headerName: Lowercase<string>) => {
