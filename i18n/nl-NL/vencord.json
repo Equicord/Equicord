@@ -284,7 +284,7 @@
             "syncedCloud": "Cloudgegevens gesynchroniseerd.",
             "upToDate": "Uw instellingen zijn up-to-date.",
             "updated": "Je instellingen zijn bijgewerkt! Klik hier om opnieuw te starten en de wijzigingen volledig toe te passen!",
-            "updatedRemote": "Je instellingen zijn bijgewerkt! Klik hier om opnieuw te starten en de wijzigingen volledig toe te passen!"
+            "updatedRemote": "Instellingen gesynchroniseerd met de cloud!"
         }
     },
     "colorSighted": {
@@ -1666,7 +1666,7 @@
         },
         "frameless": {
             "description": "Verwijder het oorspronkelijke raamkozijn voor een netter uiterlijk. U kunt het venster nog steeds verplaatsen door het titelbalkgebied te slepen.",
-            "title": "Schakel het raamkozijn uit"
+            "title": "Schakel alle vensterkaders uit"
         },
         "hint": "Tip: je kunt de positie van dit instellingengedeelte wijzigen in de <0>instellingen van de plug-in Instellingen</0>!",
         "macosVibrancyStyle": {
@@ -2013,8 +2013,8 @@
         "testMessage": "Type a message to test rules on",
         "testRules": "Testregels",
         "typeMessage": "Typ een bericht",
-        "usingRegex": "Regex gebruiken",
-        "usingString": "Met behulp van String"
+        "usingRegex": "Regex-vervangingen",
+        "usingString": "Eenvoudige vervangingen"
     },
     "themeAttributes": {
         "description": "Voegt gegevensattributen toe aan verschillende elementen voor thematische doeleinden"
