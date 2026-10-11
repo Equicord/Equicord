@@ -149,7 +149,7 @@
                 "userOption": "specifieke gebruiker om te proberen en te vernieuwen"
             }
         },
-        "description": "Verbetert het commandosysteem met diverse verbeteringen.",
+        "description": "Ververst de opgegeven applicatiecommando's lokaal.",
         "settings": {
             "allowNewlinesInCommands": "Nieuwe regels toestaan in opdrachtinvoer (CTRL + Shift + Enter)",
             "autoFillArguments": "Vul de opdracht automatisch in met alle argumenten in plaats van alleen de vereiste argumenten"
@@ -995,7 +995,7 @@
         "description": "Verandert de homeknop in een type-indicator als iemand in je dms aan het typen is"
     },
     "hopOn": {
-        "description": "Spring op Fortnite of spring op bloons: 3",
+        "description": "Spring erin! Opent een configureerbare URL wanneer een bericht overeenkomt met een aangepaste regex in het huidige kanaal.",
         "settings": {
             "regex": "Regex om te activeren",
             "url": "URL om te openen"
@@ -1519,7 +1519,7 @@
         }
     },
     "moyai": {
-        "description": "Speel het moyai-geluidseffect wanneer 🗿 emoji wordt gebruikt",
+        "description": "Speelt een 🗿 geluidseffect af wanneer een moyai-emoji wordt verzonden, als reactie wordt gebruikt of als stemeffect wordt gebruikt in je huidige kanaal.",
         "settings": {
             "ignoreBlocked": "Negeer berichten van geblokkeerde gebruikers",
             "ignoreBots": "Negeer berichten van bots",
@@ -2115,7 +2115,7 @@
         "settings": {
             "apiKey": "API Toets.",
             "autoReply": "Automatisch antwoorden",
-            "autoRespond": "Automatisch reageren op berichten wanneer u een reactie ontvangt.",
+            "autoRespond": "Hoe moeten antwoorden worden verwerkt?",
             "bot": "Clyde",
             "chatbar": "Chatbortekst vervangen",
             "endpoint": "OpenAI-compatibel AI-eindpunt.",
