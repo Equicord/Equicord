@@ -94,19 +94,18 @@ export const Toasts: t.Toasts = mapMangledModuleLazy(".currentToastMap.has(", {
     pop: filters.byCode(".delete(")
 });
 
-export const createToast: t.createToast = findByCodeLazy('variant:"default",icon:', ".duration");
+export const createToast: t.createToast = (message, type = "message", options) => ({
+    text: message,
+    variant: type === "success" ? "success" : type === "failure" ? "critical" : "default",
+    position: options?.position == null ? undefined : options.position === 0 ? "top" : "bottom",
+    duration: options?.duration
+});
 
 /**
  * Show a simple toast. If you need more options, use Toasts.show manually
  */
 export function showToast(message: string, type: t.ToastType = "message", options?: ToastOptions) {
-    // FIXME once Discord makes up their mind and stops changing this API every update
-    try {
-        Toasts.show(createToast(message, type, options));
-    } catch {
-        // @ts-ignore
-        Toasts.show({ text: message, variant: type });
-    }
+    Toasts.show(createToast(message, type, options));
 }
 
 export const UserUtils = {
