@@ -96,12 +96,26 @@ export async function removeKeywordEntry(idx: number, forceUpdate: () => void) {
     forceUpdate();
 }
 
-function safeMatchesRegex(str: string, regex: string, flags: string) {
+function safeMatchesRegex(str: string | null | undefined, regex: string, flags: string) {
+    if (!str) return false;
     try {
         return str.match(new RegExp(regex, flags));
     } catch {
         return false;
     }
+}
+
+function parseLogEntries(log: unknown): Message[] {
+    if (!Array.isArray(log)) return [];
+    const parsed: Message[] = [];
+    for (const entry of log) {
+        if (typeof entry !== "string") continue;
+        try {
+            const msg = JSON.parse(entry);
+            if (msg && typeof msg === "object") parsed.push(msg);
+        } catch { }
+    }
+    return parsed;
 }
 
 export enum ListType {
@@ -217,7 +231,7 @@ export default definePlugin({
         });
         await DataStore.set(KEYWORD_ENTRIES_KEY, keywordEntries);
 
-        (await DataStore.get(KEYWORD_LOG_KEY) ?? []).map(e => JSON.parse(e)).forEach(e => {
+        parseLogEntries(await DataStore.get(KEYWORD_LOG_KEY)).forEach(e => {
             try {
                 this.addToLog(e);
             } catch (err) {
@@ -238,6 +252,7 @@ export default definePlugin({
     },
 
     applyKeywordEntries(m: Message) {
+        if (!m?.author) return;
         let matches = false;
 
         for (const entry of keywordEntries) {
@@ -290,7 +305,7 @@ export default definePlugin({
             const flags = entry.ignoreCase ? "i" : "";
             if (safeMatchesRegex(m.content, entry.regex, flags)) {
                 matches = true;
-            } else {
+            } else if (Array.isArray(m.embeds)) {
                 for (const embed of m.embeds as any) {
                     if (safeMatchesRegex(embed.description, entry.regex, flags) || safeMatchesRegex(embed.title, entry.regex, flags)) {
                         matches = true;
@@ -309,7 +324,7 @@ export default definePlugin({
 
         if (matches) {
             const id = UserStore.getCurrentUser()?.id;
-            if (id != null) {
+            if (id != null && Array.isArray(m.mentions)) {
                 // @ts-ignore
                 m.mentions.push({ id: id });
             }
@@ -325,23 +340,21 @@ export default definePlugin({
             return;
 
         DataStore.get(KEYWORD_LOG_KEY).then(log => {
-            log = log ? log.map((e: string) => JSON.parse(e)) : [];
+            let parsedLogs = parseLogEntries(log);
 
-            log.push(m);
-            if (log.length > settings.store.amountToKeep) {
-                log = log.slice(-settings.store.amountToKeep);
+            parsedLogs.push(m);
+            if (parsedLogs.length > settings.store.amountToKeep) {
+                parsedLogs = parsedLogs.slice(-settings.store.amountToKeep);
             }
 
-            DataStore.set(KEYWORD_LOG_KEY, log.map(e => JSON.stringify(e)));
+            DataStore.set(KEYWORD_LOG_KEY, parsedLogs.map(e => JSON.stringify(e)));
         });
     },
     discardMessage(id: string) {
         DataStore.get(KEYWORD_LOG_KEY).then((log: string[]) => {
-            let parsed_logs: Message[] = log ? log.map(e => JSON.parse(e)) : [];
+            const parsedLogs = parseLogEntries(log).filter(msg => msg.id !== id);
 
-            parsed_logs = parsed_logs.filter(msg => msg.id !== id);
-
-            DataStore.set(KEYWORD_LOG_KEY, parsed_logs.map(e => JSON.stringify(e)));
+            DataStore.set(KEYWORD_LOG_KEY, parsedLogs.map(e => JSON.stringify(e)));
         });
     },
     addToLog(m: Message) {
@@ -368,6 +381,7 @@ export default definePlugin({
 
     deleteKeyword(id) {
         keywordLog = keywordLog.filter(e => e.id !== id);
+        this.discardMessage(id);
         this.onUpdate();
     },
 

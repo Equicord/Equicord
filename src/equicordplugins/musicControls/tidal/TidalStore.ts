@@ -51,7 +51,7 @@ function mapApiResponseToTrack(apiData: any): Track | null {
         url: track.url || null,
         album: track.album?.title || null,
         id: track.id?.toString() || "0",
-        vibrantColor: track.album.vibrantColor || null,
+        vibrantColor: track.album?.vibrantColor || null,
     };
 }
 

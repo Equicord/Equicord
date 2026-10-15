@@ -97,8 +97,8 @@ export function convert(sp: LineStickerPack): StickerPack {
   */
 export function parseHtml(html: string): LineStickerPack {
     const doc = new DOMParser().parseFromString(html, "text/html");
-    const mainImage = JSON.parse((doc.querySelector("[ref=mainImage]") as HTMLElement)?.dataset?.preview ?? "null") as LineSticker;
-    const { id } = mainImage;
+    const mainImage = JSON.parse((doc.querySelector("[ref=mainImage]") as HTMLElement)?.dataset?.preview ?? "null") as LineSticker | null;
+    const id = mainImage?.id ?? "";
 
     const stickers =
         [...doc.querySelectorAll('[data-test="sticker-item"]')]

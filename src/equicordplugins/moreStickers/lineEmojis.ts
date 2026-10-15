@@ -97,8 +97,8 @@ export function convert(sp: LineEmojiPack): StickerPack {
   */
 export function parseHtml(html: string): LineEmojiPack {
     const doc = new DOMParser().parseFromString(html, "text/html");
-    const mainImage = JSON.parse((doc.querySelector("[ref=mainImage]") as HTMLElement)?.dataset?.preview ?? "null") as LineEmoji;
-    const { id } = mainImage;
+    const mainImage = JSON.parse((doc.querySelector("[ref=mainImage]") as HTMLElement)?.dataset?.preview ?? "null") as LineEmoji | null;
+    const id = mainImage?.id ?? "";
 
     const stickers =
         [...doc.querySelectorAll(".FnStickerPreviewItem")]

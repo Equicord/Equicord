@@ -70,10 +70,13 @@ export default definePlugin({
     ],
     start() {
         const amount = settings.store.enableShortHexCodes ? "{1,2}" : "{2}";
-        regex.push({
+        const hexEntry = {
             reg: new RegExp("#(?:[0-9a-fA-F]{3})" + amount, "g"),
             type: ColorType.HEX
-        });
+        };
+        const existingIndex = regex.findIndex(r => r.type === ColorType.HEX);
+        if (existingIndex !== -1) regex[existingIndex] = hexEntry;
+        else regex.push(hexEntry);
     },
     // Needed to load all regex before patching
     startAt: StartAt.Init,

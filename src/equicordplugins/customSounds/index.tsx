@@ -259,10 +259,10 @@ const settings = definePluginSettings({
                     const reader = new FileReader();
                     reader.onload = async (e: ProgressEvent<FileReader>) => {
                         try {
-                            resetOverrides();
                             const imported = JSON.parse(e.target?.result as string);
 
-                            if (imported.overrides && Array.isArray(imported.overrides)) {
+                            if (imported?.overrides && Array.isArray(imported.overrides)) {
+                                resetOverrides();
                                 imported.overrides.forEach((setting: any) => {
                                     if (setting.id) {
                                         const override: SoundOverride = {

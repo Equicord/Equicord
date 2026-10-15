@@ -272,11 +272,7 @@ const createPopoutChatContextMenuItem = (id: string, label: string, action: () =
 };
 
 const UserContextPatch: NavContextMenuPatchCallback = (children, args: { user: User; }) => {
-    const checks = [
-        args.user,
-        args.user.id !== UserStore.getCurrentUser().id,
-    ];
-    if (checks.some(check => !check)) return;
+    if (!args.user || args.user.id === UserStore.getCurrentUser()?.id) return;
     const channelId = ChannelStore.getDMFromUserId?.(args.user.id) ?? null;
     const isOpen = channelId ? isPopoutWindowOpen(channelId) : false;
 
@@ -296,8 +292,8 @@ const UserContextPatch: NavContextMenuPatchCallback = (children, args: { user: U
 };
 
 const ChannelContextPatch: NavContextMenuPatchCallback = (children, args: { channel: Channel; }) => {
+    if (!args.channel) return;
     const checks = [
-        args.channel,
         args.channel.type !== ChannelType.GUILD_CATEGORY,
         PermissionStore.can(PermissionsBits.VIEW_CHANNEL, args.channel) || args.channel.type === ChannelType.GROUP_DM,
     ];

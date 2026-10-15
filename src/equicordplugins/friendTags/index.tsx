@@ -43,15 +43,16 @@ function queryFriendTags(query) {
     const users = Array.from(new Set([...ChannelStore.getDMUserIds(), ...RelationshipStore.getFriendIDs()]))
         .filter(user => filteredTagObjects.some(tag => tag.userIds.includes(user)));
 
-    return users.map(user => {
+    return users.flatMap(user => {
         const userObject: any = UserStore.getUser(user);
-        return {
+        if (!userObject) return [];
+        return [{
             type: "USER",
             record: userObject,
             score: 20,
             comparator: userObject.globalName || userObject.username,
             sortable: userObject.globalName || userObject.username
-        };
+        }];
     });
 }
 
@@ -70,7 +71,12 @@ async function GetData() {
         SavedData = [];
         return;
     }
-    SavedData = JSON.parse(fetchData);
+    try {
+        const parsed = JSON.parse(fetchData);
+        SavedData = Array.isArray(parsed) ? parsed : [];
+    } catch {
+        SavedData = [];
+    }
 }
 
 function TagConfigCard(props) {
@@ -111,7 +117,7 @@ function TagConfigCard(props) {
                             const userData: any = UserStore.getUser(user);
                             if (!userData) return null;
                             return (
-                                <div style={{ display: "flex" }} key={user.id}>
+                                <div style={{ display: "flex" }} key={userData.id}>
                                     <img src={userData.getAvatarURL()} style={{ height: "20px", borderRadius: "50%", marginRight: "5px" }}></img>
                                     <BaseText style={{ cursor: "pointer" }} size="md" onClick={() => setUserIDs(userIds.replace(`, ${user}`, "").replace(user, ""))}>{userData.globalName || userData.username}</BaseText>
                                 </div>
@@ -174,16 +180,18 @@ const settings = definePluginSettings({
 });
 
 function UserToTagID(user, tag, remove) {
+    const tagEntry = SavedData.find(e => e.tagName === tag);
+    if (!tagEntry) return;
     if (remove) {
-        SavedData.filter(e => e.tagName === tag)[0].userIds = SavedData.filter(e => e.tagName === tag)[0].userIds.filter(e => e !== user);
-    }
-    else {
-        SavedData.filter(e => e.tagName === tag)[0]?.userIds.push(user);
+        tagEntry.userIds = tagEntry.userIds.filter(e => e !== user);
+    } else {
+        tagEntry.userIds.push(user);
     }
     SetData();
 }
 
 const userPatch: NavContextMenuPatchCallback = (children, { user }) => {
+    if (!user) return;
     const buttonElement =
         <Menu.MenuItem
             id="vc-tag-group"

@@ -334,13 +334,13 @@ export default function ChannelsTabsContainer(props: BasicChannelTabsProps) {
 
 export function ChannelTabsPreview(p: { setValue: (v: TabSet) => void; }) {
     const id = UserStore.getCurrentUser()?.id;
-    if (!id) return <Paragraph>there's no logged in account?????</Paragraph>;
-
     const { setValue } = p;
     const { tabSet }: { tabSet: TabSet; } = settings.use(["tabSet"]);
 
     const placeholder = [{ guildId: "@me", channelId: undefined as any }];
-    const [currentTabs, setCurrentTabs] = useState(tabSet?.[id] ?? placeholder);
+    const [currentTabs, setCurrentTabs] = useState(tabSet?.[id ?? ""] ?? placeholder);
+
+    if (!id) return <Paragraph>there's no logged in account?????</Paragraph>;
 
     return (
         <>

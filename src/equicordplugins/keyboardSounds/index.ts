@@ -81,7 +81,7 @@ function assignSounds(volume: number, pack: "operagx" | "osu") {
 
         for (let i = 0; i < 3; i++) {
             for (const url of chosenPack[key]) {
-                soundIndex++;
+                const currentIndex = ++soundIndex;
 
                 allSounds[key].push({
                     playing: false,
@@ -89,7 +89,11 @@ function assignSounds(volume: number, pack: "operagx" | "osu") {
                         volume,
                         preload: true,
                         persistent: true,
-                        onEnded: () => { allSounds[key][soundIndex].playing = false; }
+                        onEnded: () => {
+                            if (allSounds[key][currentIndex]) {
+                                allSounds[key][currentIndex].playing = false;
+                            }
+                        }
                     })
                 });
             }
@@ -137,6 +141,7 @@ export default definePlugin({
     },
     stop: () => {
         clearSounds();
+        keysCurrentlyPressed.clear();
         document.removeEventListener("keyup", keyup);
         document.removeEventListener("keydown", keydown);
     },

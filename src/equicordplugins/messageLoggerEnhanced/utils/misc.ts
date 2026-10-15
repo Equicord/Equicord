@@ -128,7 +128,7 @@ export const messageJsonToMessageClass = memoize((log: { message: LoggedMessageJ
 export function parseJSON(json?: string | null) {
     try {
         return JSON.parse(json!);
-    } finally {
+    } catch {
         return null;
     }
 }

@@ -57,13 +57,13 @@ function ButtonsInnerComponent({ buttons }: { buttons: ReactNode; }) {
             ? []
             : [buttons];
 
-    if (buttonItems.length === 0 || buttonItems.every(button => (button as any)?.props?.disabled === true)) return null;
-
     const [open, setOpen] = useState(hidechatbuttonsopen);
 
     useEffect(() => {
         hidechatbuttonsopen = open;
     }, [open]);
+
+    if (buttonItems.length === 0 || buttonItems.every(button => (button as any)?.props?.disabled === true)) return null;
 
     return (
         <div key="chat-bar-buttons-menu" id="chat-bar-buttons-menu" style={{

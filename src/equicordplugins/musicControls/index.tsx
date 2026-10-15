@@ -119,6 +119,7 @@ export default definePlugin({
     },
 
     stop() {
+        toggleHoverControls(false);
         stopTidalLrcStore();
         stopTidalStore();
     },

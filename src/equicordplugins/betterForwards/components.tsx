@@ -30,7 +30,7 @@ const fetchGuildProfile = findByCodeLazy('type:"GUILD_PROFILE_FETCH_SUCCESS"');
 export function ForwardFooter({ message }: { message: Message; }) {
     const targetChannelId = message.getChannelId();
     const targetGuildId = useStateFromStores([ChannelStore],
-        () => ChannelStore.getChannel(targetChannelId).getGuildId(),
+        () => ChannelStore.getChannel(targetChannelId)?.getGuildId(),
         [targetChannelId]
     );
 

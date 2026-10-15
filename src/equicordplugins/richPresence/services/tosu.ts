@@ -49,9 +49,14 @@ const throttledOnMessage = throttle(onMessage, 3000, () =>
 );
 
 async function onMessage(data: string) {
-    const json: TosuApi = JSON.parse(data);
+    let json: TosuApi;
+    try {
+        json = JSON.parse(data);
+    } catch {
+        return;
+    }
     // @ts-ignore
-    if (json.error) return FluxDispatcher.dispatch({ type: "LOCAL_ACTIVITY_UPDATE", activity: null, socketId: SOCKET_ID });
+    if (!json || json.error || !json.profile?.mode || !json.state) return FluxDispatcher.dispatch({ type: "LOCAL_ACTIVITY_UPDATE", activity: null, socketId: SOCKET_ID });
 
     const { state, session, profile, beatmap, play, resultsScreen } = json;
 

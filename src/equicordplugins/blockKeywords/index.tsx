@@ -118,14 +118,13 @@ const settings = definePluginSettings({
 });
 
 export function containsBlockedKeywords(message: Message) {
-    if (!blockedKeywords) return false;
+    if (!blockedKeywords?.length || !message) return false;
 
     // test a nullable string against all keywords
     const testField = (text: string | null | undefined) => text != null && blockedKeywords.some(regex => regex.test(text));
 
-    return blockedKeywords.some(regex =>
-        regex.test(message.content)) || message.embeds.some(embed =>
-            testField(embed.rawDescription) || testField(embed.rawTitle));
+    return testField(message.content) || (message.embeds ?? []).some(embed =>
+        testField(embed.rawDescription ?? (embed as any).description) || testField(embed.rawTitle ?? (embed as any).title));
 }
 
 export default definePlugin({
@@ -168,14 +167,19 @@ export default definePlugin({
     containsBlockedKeywords,
 
     start() {
+        blockedKeywords = [];
         const blockedWordsList = splitPatterns(settings.store.blockedWords);
         const caseSensitiveFlag = settings.store.caseSensitive ? "" : "i";
 
         if (blockedWordsList.length === 0) return;
 
         if (settings.store.useRegex) {
-            blockedKeywords = blockedWordsList.map(word => {
-                return new RegExp(word, caseSensitiveFlag);
+            blockedKeywords = blockedWordsList.flatMap(word => {
+                try {
+                    return [new RegExp(word, caseSensitiveFlag)];
+                } catch {
+                    return [];
+                }
             });
         } else {
             blockedKeywords = blockedWordsList.map(word => {
@@ -183,6 +187,10 @@ export default definePlugin({
                 return new RegExp(`\\b${word.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`, caseSensitiveFlag);
             });
         }
+    },
+
+    stop() {
+        blockedKeywords = [];
     },
 
     blockMessagesWithKeywords(messageList) {

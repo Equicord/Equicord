@@ -30,7 +30,7 @@ export async function exportCollections() {
 export async function importCollections(data: string) {
     const parsed = JSON.parse(data);
 
-    if ("collections" in parsed) {
+    if (parsed && typeof parsed === "object" && "collections" in parsed && Array.isArray(parsed.collections)) {
         await DataStore.set(DATA_COLLECTION_NAME, parsed.collections);
         await refreshCacheCollection();
     } else {

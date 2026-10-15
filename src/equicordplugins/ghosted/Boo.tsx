@@ -88,7 +88,6 @@ export function Boo({ channel }: { channel: Channel; }) {
 
     const currentUserId = useStateFromStores([UserStore], () => UserStore.getCurrentUser()?.id);
     const lastMessage = useStateFromStores([MessageStore], () => MessageStore.getMessages(id)?.last());
-    if (!lastMessage || !currentUserId) return null;
 
     const [state, setState] = useState({
         isCurrentUser: null as boolean | null,
@@ -129,7 +128,7 @@ export function Boo({ channel }: { channel: Channel; }) {
     }, [id, lastMessage?.id]);
 
     useEffect(() => {
-        if (!state.isDataProcessed) return;
+        if (!state.isDataProcessed || !lastMessage) return;
 
         const isExempted = isChannelExempted(channel);
         let wasManuallyCleared = clearedChannels.has(id);

@@ -16,7 +16,6 @@ import { ActivityView, getActivityApplication } from "../utils";
 
 export function showAllActivitiesComponent({ activity, user, ...props }: Readonly<AllActivitiesProps>): JSX.Element | null {
     const currentUser = UserStore.getCurrentUser();
-    if (!currentUser) return null;
 
     const [currentActivity, setCurrentActivity] = useState<Activity | null>(
         activity?.type !== 4 ? activity! : null
@@ -24,7 +23,7 @@ export function showAllActivitiesComponent({ activity, user, ...props }: Readonl
 
     const activities = useStateFromStores(
         [PresenceStore],
-        () => PresenceStore.getActivities(user.id).filter((activity: Activity) => activity != null && activity.type !== 4)
+        () => user?.id ? PresenceStore.getActivities(user.id).filter((activity: Activity) => activity != null && activity.type !== 4) : []
     );
 
     useEffect(() => {
@@ -48,7 +47,7 @@ export function showAllActivitiesComponent({ activity, user, ...props }: Readonl
         return acc;
     }, {}), [props]);
 
-    if (!activities.length) return null;
+    if (!currentUser || !activities.length) return null;
 
     if (settings.store.allActivitiesStyle === "carousel") {
         if (!currentActivity) return null;
