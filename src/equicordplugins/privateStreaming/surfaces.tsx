@@ -216,7 +216,7 @@ const PortalScope = ErrorBoundary.wrap(function PortalScope({ children }: Portal
 }, { noop: true });
 
 export function portalContents(children: React.ReactNode) {
-    return React.createElement(PortalScope, null, children);
+    return <PortalScope>{children}</PortalScope>;
 }
 
 const secondaryClasses = ["name", "nameText", "aboutMe", "pronouns", "statusText", "headerTitle", "headerText", "headerFull", "headerName", "partyMember", "sectionTitle", "voiceSectionDetails", "textContent", "activityName", "channelInfo", "emoji", "truncated", "linkTop", "titleWrapper", "titleText", "content", "description", "text", "searchAnswer", "searchFilter"];

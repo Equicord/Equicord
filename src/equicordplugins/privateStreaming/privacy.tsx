@@ -185,7 +185,7 @@ export function PrivacyRegion({ children, area, ownAccount }: RegionProps) {
     return <PrivacyContext.Provider value={{ ...parent, allowed }}>{children}</PrivacyContext.Provider>;
 }
 
-interface MaskProps extends React.HTMLAttributes<HTMLElement> {
+interface MaskProps extends React.HTMLAttributes<Element> {
     as?: keyof React.JSX.IntrinsicElements;
     kind?: keyof BlurOptions | "wholeItem";
     identity?: unknown;
@@ -222,7 +222,7 @@ function Mask({ as: Tag = "span", kind, children, identity = children, className
         return () => clearTimeout(timer);
     }, [masked, held, eligible, hovered, epoch, identity, options.revealDelay]);
 
-    function move(event: React.PointerEvent<HTMLElement>) {
+    function move(event: React.PointerEvent<Element>) {
         if (event.pointerType !== "mouse" && event.pointerType !== "pen") {
             setHovered(false);
             setHoverIdentity(null);
@@ -238,20 +238,24 @@ function Mask({ as: Tag = "span", kind, children, identity = children, className
         setHoverIdentity(previous => previous?.epoch === epoch && previous.identity === identity ? previous : { epoch, identity });
     }
 
+    const maskStyle = { ...style, "--vc-private-streaming-blur": `${Number.isFinite(options.blur) ? Math.max(12, Math.min(32, options.blur)) : 16}px` };
+
     return (
         <PrivacyContext.Provider value={context}>
-            {React.createElement(Tag, {
-                ...props,
-                "data-vc-private-streaming": true,
-                className: classes(className, cl({ mask: masked, opaque: masked && options.opaque, revealed: show })),
-                style: { ...style, "--vc-private-streaming-blur": `${Number.isFinite(options.blur) ? Math.max(12, Math.min(32, options.blur)) : 16}px` },
-                title: active && options.blurTooltips !== false ? undefined : title,
-                onPointerEnter: (event: React.PointerEvent<HTMLElement>) => { onPointerEnter?.(event); move(event); },
-                onPointerMove: (event: React.PointerEvent<HTMLElement>) => { onPointerMove?.(event); move(event); },
-                onPointerLeave: (event: React.PointerEvent<HTMLElement>) => { onPointerLeave?.(event); setHovered(false); setHoverIdentity(null); setRevealed(null); },
-                onPointerDown: (event: React.PointerEvent<HTMLElement>) => { onPointerDown?.(event); setHoverIdentity(null); setRevealed(null); },
-                onFocus: (event: React.FocusEvent<HTMLElement>) => { onFocus?.(event); resetReveal(true); }
-            }, children)}
+            <Tag
+                {...props}
+                data-vc-private-streaming
+                className={classes(className, cl({ mask: masked, opaque: masked && options.opaque, revealed: show }))}
+                style={maskStyle}
+                title={active && options.blurTooltips !== false ? undefined : title}
+                onPointerEnter={(event: React.PointerEvent<Element>) => { onPointerEnter?.(event); move(event); }}
+                onPointerMove={(event: React.PointerEvent<Element>) => { onPointerMove?.(event); move(event); }}
+                onPointerLeave={(event: React.PointerEvent<Element>) => { onPointerLeave?.(event); setHovered(false); setHoverIdentity(null); setRevealed(null); }}
+                onPointerDown={(event: React.PointerEvent<Element>) => { onPointerDown?.(event); setHoverIdentity(null); setRevealed(null); }}
+                onFocus={(event: React.FocusEvent<Element>) => { onFocus?.(event); resetReveal(true); }}
+            >
+                {children}
+            </Tag>
         </PrivacyContext.Provider>
     );
 }

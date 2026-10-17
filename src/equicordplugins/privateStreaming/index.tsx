@@ -146,9 +146,12 @@ const settings = definePluginSettings({
 });
 
 function SettingsSection({ option }: PluginSettingComponentProps) {
-    return React.createElement("section", null,
-        React.createElement(HeadingSecondary, null, option.componentProps?.title),
-        React.createElement(Paragraph, null, option.componentProps?.description));
+    return (
+        <section>
+            <HeadingSecondary>{option.componentProps?.title}</HeadingSecondary>
+            <Paragraph>{option.componentProps?.description}</Paragraph>
+        </section>
+    );
 }
 
 function setProtectionMessage(message: string) {
@@ -157,8 +160,7 @@ function setProtectionMessage(message: string) {
 
 function ProtectionStatus() {
     const message = usePrivacyState(state => state.protectionMessage);
-    return React.createElement("div", null,
-        React.createElement(Paragraph, null, message));
+    return <div><Paragraph>{message}</Paragraph></div>;
 }
 
 function failProtection(message: string) {
@@ -338,7 +340,7 @@ export default definePlugin({
         if (props.title == null) return props;
         return {
             ...props,
-            title: React.createElement(PrivateRegion, { area: "hideWindowTitle" }, React.createElement(PrivacyMask, { kind: "hideWindowTitle" }, props.title))
+            title: <PrivateRegion area="hideWindowTitle"><PrivacyMask kind="hideWindowTitle">{props.title}</PrivacyMask></PrivateRegion>
         };
     },
 
