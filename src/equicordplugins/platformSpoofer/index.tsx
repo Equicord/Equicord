@@ -13,7 +13,7 @@ import { UserStore } from "@webpack/common";
 const settings = definePluginSettings({
     platform: {
         type: OptionType.SELECT,
-        description: "What platform to show up as on",
+        description: "What platform to pretend you're on. Choosing Xbox/Playstation/VR may make your client an outdated version.",
         restartNeeded: true,
         options: [
             {

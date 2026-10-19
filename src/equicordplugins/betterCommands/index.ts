@@ -27,7 +27,7 @@ function fetchIndex(target: object) {
 
 export default definePlugin({
     name: "BetterCommands",
-    description: "Enhances the command system with miscellaneous improvements.",
+    description: "Autofills command with all arguments instead of just required ones",
     dependencies: ["CommandsAPI"],
     tags: ["Appearance", "Commands", "Shortcuts"],
     authors: [Devs.thororen],
