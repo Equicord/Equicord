@@ -9,7 +9,7 @@ import { Devs } from "@utils/constants";
 import definePlugin from "@utils/types";
 import { User } from "@vencord/discord-types";
 import { findByCodeLazy } from "@webpack";
-import { Toasts } from "@webpack/common";
+import { showToast } from "@webpack/common";
 
 interface MakeContextMenuProps {
     user: User,
@@ -44,23 +44,17 @@ export default definePlugin({
                     throw new Error("button_urls does not contain index");
                 }
                 copyToClipboard(button_urls[index]);
-                Toasts.show({
-                    id: Toasts.genId(),
-                    message: "Copied URL",
-                    type: Toasts.Type.SUCCESS,
-                    options: {
-                        position: Toasts.Position.TOP
-                    }
+                showToast({
+                    text: "Copied URL",
+                    variant: "success",
+                    position: "top"
                 });
             } catch (e) {
                 console.error(e);
-                Toasts.show({
-                    id: Toasts.genId(),
-                    message: "Error copying URL, check console for more info",
-                    type: Toasts.Type.FAILURE,
-                    options: {
-                        position: Toasts.Position.TOP
-                    }
+                showToast({
+                    text: "Error copying URL, check console for more info",
+                    variant: "critical",
+                    position: "top"
                 });
             }
         };

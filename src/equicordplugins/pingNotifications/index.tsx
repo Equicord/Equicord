@@ -8,18 +8,15 @@ import { showNotification } from "@api/Notifications";
 import { definePluginSettings } from "@api/Settings";
 import { EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
-import { findStoreLazy } from "@webpack";
 import {
     ChannelStore,
-    GuildStore,
     NavigationRouter,
     PresenceStore,
     RelationshipStore,
     SelectedChannelStore,
+    UserGuildSettingsStore,
     UserStore
 } from "@webpack/common";
-
-const UserGuildSettingsStore = findStoreLazy("UserGuildSettingsStore");
 
 const settings = definePluginSettings({
     friends: {
@@ -61,7 +58,7 @@ function checkIfMuted(channel) {
     if (!settings.store.ignoreMuted) return false;
     if (!channel) return false;
 
-    if (channel.isMuted?.()) return true;
+    if (channel.isMuted()) return true;
 
     const isDM = [1, 3].includes(channel.type);
     if (isDM) {
@@ -69,17 +66,14 @@ function checkIfMuted(channel) {
         for (const userId of recipientIds) {
             if (RelationshipStore.isBlocked(userId)) return true;
         }
-
-        if (UserGuildSettingsStore?.getMutedChannels?.()?.includes?.(channel.id)) return true;
     }
 
     if (channel.guild_id) {
-        const guild = GuildStore.getGuild(channel.guild_id);
         if (UserGuildSettingsStore.isMuted(channel.guild_id)) return true;
 
-        if (UserGuildSettingsStore?.isMuted?.(channel.guild_id)) return true;
-        if (UserGuildSettingsStore?.isChannelMuted?.(channel.guild_id, channel.id)) return true;
-        if (UserGuildSettingsStore?.isCategoryMuted?.(channel.guild_id, channel.id)) return true;
+        if (UserGuildSettingsStore.isMuted(channel.guild_id)) return true;
+        if (UserGuildSettingsStore.isChannelMuted(channel.guild_id, channel.id)) return true;
+        if (UserGuildSettingsStore.isCategoryMuted(channel.guild_id, channel.id)) return true;
     }
 
     return false;

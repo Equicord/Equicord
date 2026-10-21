@@ -53,14 +53,15 @@ export const settings = definePluginSettings({
         hidden: IS_WEB,
         options: [
             { label: "Google Translate", value: "google", default: true },
-            { label: "DeepL Free — API key required", value: "deepl" },
-            { label: "DeepL Pro — API key required", value: "deepl-pro" },
-            { label: "Kagi Translate — API key required", value: "kagi" }
+            { label: "DeepL Free - API key required", value: "deepl" },
+            { label: "DeepL Pro - API key required", value: "deepl-pro" },
+            { label: "Kagi Translate - API key required", value: "kagi" }
         ] as const,
         onChange: resetLanguageDefaults
     },
     deeplApiKey: {
         type: OptionType.STRING,
+        displayName: "DeepL API Key",
         description: "Your DeepL API key (from deepl.com/your-account)",
         default: ""
     },
@@ -95,7 +96,7 @@ export const settings = definePluginSettings({
         hidden() { return this.store.service !== "kagi"; }
     }
 }).withPrivateSettings<{
-    showAutoTranslateAlert: boolean;
+    dismissedAutoTranslateAlert?: boolean;
 }>();
 
 export function resetLanguageDefaults() {

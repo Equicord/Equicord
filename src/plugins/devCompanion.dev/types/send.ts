@@ -6,7 +6,7 @@
 
 import { ReporterData } from "@debug/reporterData";
 
-export type OutgoingMessage = Base<DiffModule | ExtractModule | ModuleList | RawId | I18nValue | VersionResponse>;
+export type OutgoingMessage = Base<DiffModule | ExtractModule | ModuleList | RawId | I18nValue | VersionResponse | GenericOk>;
 export type FullOutgoingMessage = OutgoingMessage & Nonce;
 
 export type Base<T> = ({
@@ -30,6 +30,11 @@ export type ModuleResult = {
      * if {@link ExtractModule.data|ExtractModule.data.find} is true, this will be a list of what patched the entire module (not just the part that was found)
      */
     patchedBy: string[];
+};
+
+export type GenericOk = {
+    type: "genericOk";
+    data: {};
 };
 
 // #region valid payloads

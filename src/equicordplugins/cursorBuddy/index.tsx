@@ -196,7 +196,11 @@ const settings = definePluginSettings({
     }
 });
 
+let destroyBuddy: (() => void) | undefined;
+
 function unload() {
+    destroyBuddy?.();
+    destroyBuddy = undefined;
     document.getElementById("oneko")?.remove();
     document.getElementById("fathorse")?.remove();
 }
@@ -207,7 +211,7 @@ function load() {
 
     switch (settings.store.buddy) {
         case "oneko": {
-            oneko({
+            destroyBuddy = oneko({
                 speed: settings.store.speed,
                 fps: settings.store.fps,
                 image: ONEKO_IMAGE,
@@ -218,7 +222,7 @@ function load() {
             break;
         }
         case "fathorse": {
-            fathorse({
+            destroyBuddy = fathorse({
                 speed: settings.store.speed,
                 fps: settings.store.fps,
                 size: settings.store.size,

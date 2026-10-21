@@ -24,9 +24,10 @@ export const GUILD_ID = "1173279886065029291";
 export const DONOR_ROLE_ID = "1173316879083896912";
 export const CONTRIB_ROLE_ID = "1222677964760682556";
 export const EQUICORD_TEAM = "1173520023239786538";
-export const EQUICORD_HELPERS = "1326406112144265257";
+export const EQUICORD_HELPERS = "1509542478905213088";
 export const VENCORD_CONTRIB_ROLE_ID = "1173343399470964856";
 export const EQUIBOT_USER_ID = "1243063117852835941";
+export const KNOWN_ISSUES_CHANNEL_ID = "1466558228379992266";
 
 // Vencord
 export const VC_SUPPORT_CHANNEL_ID = "1026515880080842772";
@@ -36,7 +37,7 @@ export const VC_DONOR_ROLE_ID = "1042507929485586532";
 export const VC_CONTRIB_ROLE_ID = "1026534353167208489";
 export const VC_REGULAR_ROLE_ID = "1026504932959977532";
 export const VC_SUPPORT_CATEGORY_ID = "1108135649699180705";
-export const VC_KNOWN_ISSUES_CHANNEL_ID = "1222936386626129920";
+export const VC_KNOWN_ISSUES_CHANNEL_ID = "1257025907625951423";
 export const VESKTOP_SUPPORT_CHANNEL_ID = "1345457031426871417";
 export const VC_SUPPORT_CHANNEL_IDS = [VC_SUPPORT_CHANNEL_ID, VESKTOP_SUPPORT_CHANNEL_ID];
 
@@ -44,6 +45,7 @@ export const GUILD_IDS = [GUILD_ID, VC_GUILD_ID];
 export const SUPPORT_CHANNEL_IDS = [SUPPORT_CHANNEL_ID, VC_SUPPORT_CHANNEL_ID];
 export const DONOR_ROLE_IDS = [DONOR_ROLE_ID, VC_DONOR_ROLE_ID];
 export const CONTRIB_ROLE_IDS = [CONTRIB_ROLE_ID, VENCORD_CONTRIB_ROLE_ID, VC_CONTRIB_ROLE_ID];
+export const KNOWN_ISSUES_CHANNEL_IDS = [KNOWN_ISSUES_CHANNEL_ID, VC_KNOWN_ISSUES_CHANNEL_ID];
 
 const platform = navigator.platform.toLowerCase();
 export const IS_WINDOWS = platform.startsWith("win");
@@ -190,10 +192,6 @@ export const Devs = /* #__PURE__*/ Object.freeze({
     kemo: {
         name: "kemo",
         id: 715746190813298788n
-    },
-    dzshn: {
-        name: "dzshn",
-        id: 310449948011528192n
     },
     Ducko: {
         name: "Ducko",
@@ -373,8 +371,8 @@ export const Devs = /* #__PURE__*/ Object.freeze({
         id: 354191516979429376n
     },
     Rini: {
-        name: "Rini",
-        id: 1079479184478441643n
+        name: "rini",
+        id: 0n
     },
     castdrian: {
         name: "castdrian",
@@ -514,7 +512,7 @@ export const Devs = /* #__PURE__*/ Object.freeze({
     },
     Byeoon: {
         name: "byeoon",
-        id: 1167275288036655133n
+        id: 495683688474869781n
     },
     Kaitlyn: {
         name: "kaitlyn",
@@ -558,7 +556,7 @@ export const Devs = /* #__PURE__*/ Object.freeze({
     },
     nyx: {
         name: "verticalsync.",
-        id: 1207087393929171095n
+        id: 1280505961546649633n
     },
     nekohaxx: {
         name: "nekohaxx",
@@ -612,6 +610,10 @@ export const Devs = /* #__PURE__*/ Object.freeze({
         name: "RamziAH",
         id: 1279957227612147747n
     },
+    ThaUnknown: {
+        name: "ThaUnknown_",
+        id: 252390917665718273n
+    },
     SomeAspy: {
         name: "SomeAspy",
         id: 516750892372852754n
@@ -657,6 +659,58 @@ export const Devs = /* #__PURE__*/ Object.freeze({
         name: "prism",
         id: 390884143749136386n,
     },
+    creations: {
+        name: "creations",
+        id: 209830981060788225n
+    },
+    nightmaresan: {
+        name: "NightmareSan",
+        id: 304239816466235392n
+    },
+    angelcube: {
+        name: "angelcube",
+        id: 958505257288208446n
+    },
+    Lunascape: {
+        name: "Lunascape",
+        id: 383365021415243776n
+    },
+    paige: {
+        name: "paige",
+        id: 1375697625864601650n
+    },
+    jax: {
+        name: "jax",
+        id: 1493703027801194598n
+    },
+    yuna0x0: {
+        name: "yuna0x0",
+        id: 213656926414831616n
+    },
+    scattagain: {
+        name: "Amelia",
+        id: 1098234477626544180n
+    },
+    Davri: {
+        name: "Davri",
+        id: 457579346282938368n
+    },
+    Kaede: {
+        name: "Kaede",
+        id: 1492642701320126504n
+    },
+    c0nnorgg: {
+        name: "c0nnorgg",
+        id: 1088882977985003620n,
+    },
+    f3tch: {
+        name: "f3tch",
+        id: 1016388460929626174n
+    },
+    imnotplayinginreallife: {
+        name: "I'm not playing in real life",
+        id: 841939724306087986n
+    }
 } satisfies Record<string, Dev>);
 
 export const EquicordDevs = Object.freeze({
@@ -673,8 +727,8 @@ export const EquicordDevs = Object.freeze({
         id: 353229259482857475n
     },
     nyx: {
-        name: "verticalsync",
-        id: 1207087393929171095n
+        name: "verticalsync.",
+        id: 1280505961546649633n
     },
     Cortex: {
         name: "Cortex",
@@ -743,6 +797,10 @@ export const EquicordDevs = Object.freeze({
     Balaclava: {
         name: "Balaclava",
         id: 854886148455399436n
+    },
+    tt: {
+        name: "_.tt",
+        id: 497966466617049089n
     },
     dat_insanity: {
         name: "dat_insanity",
@@ -949,9 +1007,9 @@ export const EquicordDevs = Object.freeze({
         name: "castdrian",
         id: 224617799434108928n
     },
-    echo: {
-        name: "ECHO",
-        id: 712639419785412668n
+    amy: {
+        name: "Amy",
+        id: 603229858612510720n
     },
     RyanCaoDev: {
         name: "RyanCaoDev",
@@ -1111,7 +1169,7 @@ export const EquicordDevs = Object.freeze({
     },
     Byeoon: {
         name: "byeoon",
-        id: 1167275288036655133n
+        id: 495683688474869781n
     },
     Skully: {
         name: "Skully",
@@ -1265,10 +1323,6 @@ export const EquicordDevs = Object.freeze({
         name: "korzi",
         id: 740966310875365416n
     },
-    davri: {
-        name: "Davri",
-        id: 457579346282938368n
-    },
     yash: {
         name: "yash",
         id: 889150838658977874n
@@ -1324,6 +1378,98 @@ export const EquicordDevs = Object.freeze({
     NassCT: {
         name: "NassCT",
         id: 354996937868705793n
+    },
+    yafyx: {
+        name: "kiniyaku",
+        id: 658209494609821699n
+    },
+    dhopcs: {
+        name: "dhopcs",
+        id: 206309860038410240n
+    },
+    qdnx: {
+        name: "qdnx",
+        id: 1374803023506702508n
+    },
+    BachLe2000: {
+        name: "BachLe2000",
+        id: 624091967625625610n
+    },
+    pandaptable: {
+        name: "pandaptable",
+        id: 97153209843335168n
+    },
+    SobakinTech: {
+        name: "sobakintech",
+        id: 745203026335236178n
+    },
+    Nyro: {
+        name: "zeyno36",
+        id: 1325431712406179962n
+    },
+    Jahsohsani: {
+        name: "jahsohsani",
+        id: 806442568564604968n
+    },
+    dawn: {
+        name: "dawn",
+        id: 604653220341743618n
+    },
+    Willow: {
+        name: "Willow",
+        id: 965933914092888074n
+    },
+    kat: {
+        name: "kat",
+        id: 665120188047556609n
+    },
+    Star123451: {
+        name: "Star123451",
+        id: 1037526188039618560n
+    },
+    auggeeo: {
+        name: "August (auggeeo)",
+        id: 594864203102158859n
+    },
+    bastih18: {
+        name: "bastih18",
+        id: 273797150880563201n
+    },
+    lucabeyer: {
+        name: "luca.beyer",
+        id: 405090676771127317n
+    },
+    benjas333: {
+        name: "benjas333",
+        id: 456577284464443394n,
+    },
+    k304: {
+        name: "k304",
+        id: 255004979637649408n
+    },
+    ELJoOker: {
+        name: "ELJoOker",
+        id: 605894319408283678n
+    },
+    penguinwokrs: {
+        name: "penguinwokrs",
+        id: 385266832136863746n
+    },
+    Kurt: {
+        name: "Kurt",
+        id: 112222963276750848n
+    },
+    heart_menace: {
+        name: "heart_menace",
+        id: 281162701303185408n
+    },
+    tie: {
+        name: "tie",
+        id: 783087994419675201n
+    },
+    itzmeshadow999: {
+        name: "ItzMeShadow999",
+        id: 1065604516399026176n
     },
 } satisfies Record<string, Dev>);
 

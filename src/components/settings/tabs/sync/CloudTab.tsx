@@ -25,7 +25,7 @@ import { Divider } from "@components/Divider";
 import { Flex } from "@components/Flex";
 import { FormSwitch } from "@components/FormSwitch";
 import { Heading } from "@components/Heading";
-import { CloudDownloadIcon, CloudUploadIcon } from "@components/Icons";
+import { CloudDownloadIcon, CloudUploadIcon, SkullIcon } from "@components/Icons";
 import { Link } from "@components/Link";
 import { Notice } from "@components/Notice";
 import { Paragraph } from "@components/Paragraph";
@@ -48,7 +48,6 @@ function VencordIcon() {
 
 const RefreshIcon = findComponentByCodeLazy("M4 12a8 8 0 0 1 14.93-4H15");
 const TrashIcon = findComponentByCodeLazy("2.81h8.36a3");
-const SkullIcon = findComponentByCodeLazy("m13.47 1 .07.04c.45.06");
 
 function validateUrl(url: string) {
     try {
@@ -257,7 +256,7 @@ function CloudTab() {
                     })}
                 >
                     <Flex gap="8px" alignItems="center">
-                        <SkullIcon color="currentColor" />
+                        <SkullIcon />
                         Delete Cloud Account
                     </Flex>
                 </Button>

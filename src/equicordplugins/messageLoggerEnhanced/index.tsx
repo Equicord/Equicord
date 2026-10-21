@@ -41,8 +41,8 @@ let didClearLogsOnStartup = false;
 
 const cacheThing = findByPropsLazy("commit", "getOrCreate");
 
-export async function clearLogs(showToast = true) {
-    await idb.clearMessagesIDB(showToast);
+export async function clearLogs(toast = true) {
+    await idb.clearMessagesIDB(toast);
     cacheSentMessages.clear();
 }
 
@@ -50,12 +50,7 @@ let oldGetMessage: typeof MessageStore.getMessage;
 
 const handledMessageIds = new Set();
 async function messageDeleteHandler(payload: MessageDeletePayload & { isBulk: boolean; }) {
-    if (payload.mlDeleted) {
-        if (settings.store.permanentlyRemoveLogByDefault)
-            await idb.deleteMessageIDB(payload.id);
-
-        return;
-    }
+    if (payload.mlDeleted) return;
 
     if (handledMessageIds.has(payload.id)) {
         return;
@@ -284,14 +279,6 @@ export default definePlugin({
                 replace: "deleted:$self.getDeleted(...arguments), editHistory:$self.getEdited(...arguments),"
             }
         },
-        // MessagePreview component in LogsModal
-        {
-            find: "=!0,disableInteraction:",
-            replacement: {
-                match: /childrenHeader:.{0,100}childrenMessageContent/,
-                replace: "childrenAccessories:arguments[0].childrenAccessories || null,$&"
-            }
-        },
         // fix vidoes failing because there are no thumbnails
         {
             find: ".handleImageLoad)",
@@ -314,7 +301,7 @@ export default definePlugin({
 
         // only check for expired attachments if the message is not deleted
         {
-            find: "\"/ephemeral-attachments/\"",
+            find: ".ATTACHMENTS_REFRESH_URLS,",
             replacement: {
                 match: /\i\.attachments\.some\(\i\)\|\|\i\.embeds\.some/,
                 replace: "!arguments[0].deleted && $&"
@@ -368,10 +355,7 @@ export default definePlugin({
     },
 
     getEdited(m1, m2) {
-        const editHistory = m2?.editHistory;
-        if (editHistory == null && m1?.editHistory != null && m1.editHistory.length > 0)
-            return m1.editHistory.map(mapTimestamp);
-        return editHistory;
+        return m2?.editHistory ?? m1?.editHistory?.map(mapTimestamp) ?? [];
     },
 
     flux: {
@@ -414,9 +398,10 @@ export default definePlugin({
             }
         }
 
-        const { imageCacheDir, logsDir } = await Native.getSettings();
+        const { imageCacheDir, logsDir, attachmentFileExtensions } = await Native.getSettings();
         settings.store.imageCacheDir = imageCacheDir;
         settings.store.logsDir = logsDir;
+        settings.store.attachmentFileExtensions = attachmentFileExtensions ?? "none";
 
         setupContextMenuPatches();
     },

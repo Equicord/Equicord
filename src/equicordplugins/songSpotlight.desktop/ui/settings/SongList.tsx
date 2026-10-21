@@ -31,17 +31,28 @@ import {
 import { DragEvent } from "react";
 
 interface EditableSongProps {
+    index: number;
     song: Song;
     insert?: "top" | "bottom";
-    setSongRef(div: HTMLAnchorElement | null): void;
-    onDrag(event: DragEvent<HTMLAnchorElement>): void;
+    setSongRef(index: number, div: HTMLAnchorElement | null): void;
+    onDrag(index: number, event: DragEvent<HTMLAnchorElement>): void;
     onDrop(song: Song): void;
     onRemove(song: Song): void;
 }
 
-function EditableSong({ song, insert, setSongRef, onDrag, onDrop, onRemove }: EditableSongProps) {
+function EditableSong({ index, song, insert, setSongRef, onDrag, onDrop, onRemove }: EditableSongProps) {
     const { render, failed } = useRender(song);
     const [dragging, setDragging] = useState(false);
+
+    const refCallback = useCallback((div: HTMLAnchorElement | null) => setSongRef(index, div), [index, setSongRef]);
+    const dragCallback = useCallback((event: DragEvent<HTMLAnchorElement>) => {
+        setDragging(true);
+        onDrag(index, event);
+    }, [index, onDrag]);
+    const dragEndCallback = useCallback(() => {
+        setDragging(false);
+        onDrop(song);
+    }, [song, onDrop]);
 
     return (
         <Link
@@ -57,6 +68,7 @@ function EditableSong({ song, insert, setSongRef, onDrag, onDrop, onRemove }: Ed
                             id="copy-link"
                             label="Copy link"
                             icon={LinkIcon}
+                            leadingAccessory={{ type: "icon", icon: LinkIcon }}
                             action={() => render && copyWithToast(render.link)}
                             disabled={!render}
                         />
@@ -65,6 +77,7 @@ function EditableSong({ song, insert, setSongRef, onDrag, onDrop, onRemove }: Ed
                             color="danger"
                             label="Remove song"
                             icon={TrashIcon}
+                            leadingAccessory={{ type: "icon", icon: TrashIcon }}
                             action={() => onRemove(song)}
                         />
                     </Menu.Menu>
@@ -72,17 +85,10 @@ function EditableSong({ song, insert, setSongRef, onDrag, onDrop, onRemove }: Ed
             draggable="true"
             data-dragging={dragging}
             data-insert={insert}
-            onDragStart={event => {
-                setDragging(true);
-                onDrag(event);
-            }}
-            onDrag={onDrag}
-            onDragEnd={() => {
-                setDragging(false);
-                onDrop(song);
-            }}
-            useDefaultUnderlineStyles={false}
-            ref={div => setSongRef(div)}
+            onDragStart={dragCallback}
+            onDrag={dragCallback}
+            onDragEnd={dragEndCallback}
+            ref={refCallback}
             className={cl("editable-song-container")}
         >
             <Flex alignItems="center" gap="12px" className={cl("editable-song")}>
@@ -190,7 +196,7 @@ export default function SongList({ localData, setLocalData }: SongListProps) {
         if (localData.length >= apiConstants.songLimit) return "Not enough space";
         if (localData.some(x => sid(x) === sid(song))) return "You've already added this song";
 
-        showToast("Added song!");
+        showToast({ text: "Added song!" });
         setLocalData([
             ...localData,
             song,
@@ -201,7 +207,7 @@ export default function SongList({ localData, setLocalData }: SongListProps) {
         const i = localData.indexOf(song);
         if (i === -1) return;
 
-        showToast("Removed song!");
+        showToast({ text: "Removed song!" });
         setLocalData(localData.toSpliced(i, 1));
     }, [localData]);
 
@@ -211,10 +217,11 @@ export default function SongList({ localData, setLocalData }: SongListProps) {
                 if (slot === "song") {
                     return (
                         <EditableSong
+                            index={i}
                             song={song}
                             insert={last && insert === i + 1 ? "bottom" : insert === i ? "top" : undefined}
-                            setSongRef={element => handleRef(i, element)}
-                            onDrag={event => handleDrag(i, event)}
+                            setSongRef={handleRef}
+                            onDrag={handleDrag}
                             onDrop={handleDrop}
                             onRemove={handleRemove}
                             key={sid(song)}

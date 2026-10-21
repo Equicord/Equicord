@@ -26,13 +26,9 @@ export default definePlugin({
                     replace: "true"
                 },
                 {
-                    match: /children:\[.{0,80}#{intl::BUILD_OVERRIDE}.{0,15}\{\}\)\]/,
+                    match: /children:\[.{0,60}(?:#{intl::BUILD_OVERRIDE}|#{intl::uyrfYF::raw}).{0,40}\{\}\)\]/g,
                     replace: "children:$self.makeDevBanner()"
-                },
-                {
-                    match: /children:\[.{0,80}#{intl::uyrfYF::raw}.{0,50}\{\}\)\]/,
-                    replace: "children:$self.makeDevBanner()"
-                },
+                }
             ]
         }
     ],

@@ -11,7 +11,7 @@ import { HeadingSecondary } from "@components/Heading";
 import { Paragraph } from "@components/Paragraph";
 import { SettingsSection } from "@components/settings/tabs/plugins/components/Common";
 import { makeRange, OptionType } from "@utils/types";
-import { MaskedLink, Select, showToast, TextInput, Toasts } from "@webpack/common";
+import { MaskedLink, Select, showToast, TextInput } from "@webpack/common";
 
 import hoverOnlyStyle from "./hoverOnly.css?managed";
 import { clearLyricsCache, removeTranslations } from "./spotify/lyrics/api";
@@ -39,35 +39,34 @@ function InstallInstructions() {
 }
 
 function LyricsProviderSettings() {
-    const { store } = settings;
-
     return (
         <>
-            <SettingsSection name="Lyrics Provider" description="Where lyrics are fetched from.">
+            <SettingsSection id="lyrics-provider" name="Lyrics Provider" description="Where lyrics are fetched from.">
                 <Select
                     options={[
                         { value: Provider.Lrclib, label: "LRCLIB", default: true },
                         { value: Provider.Spotify, label: "Spotify (Musixmatch)" },
                     ]}
-                    isSelected={v => v === store.lyricsProvider}
-                    select={v => { store.lyricsProvider = v as Provider; }}
+                    isSelected={v => v === settings.store.lyricsProvider}
+                    select={v => { settings.store.lyricsProvider = v as Provider; }}
                     serialize={v => v}
                     placeholder="Select a lyrics provider"
                 />
             </SettingsSection>
 
-            {store.lyricsProvider === Provider.Spotify && (
+            {settings.store.lyricsProvider === Provider.Spotify && (
                 <SettingsSection
+                    id="spotify-lyrics-provider"
                     name="Spotify Lyrics API Base URL"
                     description="Custom instance base URL (for example: http://localhost:8080)."
                 >
                     <TextInput
                         type="text"
-                        value={store.spotifyLyricsApiUrl}
+                        value={settings.store.spotifyLyricsApiUrl}
                         onChange={v => {
-                            store.spotifyLyricsApiUrl = v;
+                            settings.store.spotifyLyricsApiUrl = v;
                             void clearLyricsCache();
-                            showToast("Lyrics cache purged", Toasts.Type.SUCCESS);
+                            showToast({ text: "Lyrics cache purged", variant: "success" });
                         }}
                         placeholder="https://spotify-lyrics-api-pi.vercel.app"
                         maxLength={null}
@@ -114,7 +113,7 @@ export const settings = definePluginSettings({
         default: "https://spotify-lyrics-api-pi.vercel.app",
         onChange: async () => {
             await clearLyricsCache();
-            showToast("Lyrics cache purged", Toasts.Type.SUCCESS);
+            showToast({ text: "Lyrics cache purged", variant: "success" });
         }
     },
     lyricsProviderSettings: {
@@ -127,7 +126,7 @@ export const settings = definePluginSettings({
         options: languages,
         onChange: async () => {
             await removeTranslations();
-            showToast("Translations cleared", Toasts.Type.SUCCESS);
+            showToast({ text: "Translations cleared", variant: "success" });
         }
     },
     lyricsConversion: {
@@ -163,7 +162,7 @@ export const settings = definePluginSettings({
                 color={ButtonCompat.Colors.RED}
                 onClick={() => {
                     clearLyricsCache();
-                    showToast("Lyrics cache purged", Toasts.Type.SUCCESS);
+                    showToast({ text: "Lyrics cache purged", variant: "success" });
                 }}
             >
                 Purge Cache

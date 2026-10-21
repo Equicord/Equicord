@@ -4,13 +4,11 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { HeadingPrimary } from "@components/Heading";
 import { PickerContent, PickerContentHeader, PickerContentRow, PickerContentRowGrid, PickerHeaderProps, SidebarProps, Sticker, StickerCategoryType, StickerPack } from "@equicordplugins/moreStickers/types";
 import { sendSticker } from "@equicordplugins/moreStickers/upload";
 import { clPicker, FFmpegStateContext } from "@equicordplugins/moreStickers/utils";
 import { debounce } from "@shared/debounce";
-import { ModalContent, ModalHeader, ModalRoot, ModalSize, openModal } from "@utils/modal";
-import { React, TextInput } from "@webpack/common";
+import { Modal,openModal, React, TextInput } from "@webpack/common";
 import { JSX } from "react";
 
 import { CategoryImage, CategoryScroller, CategoryWrapper, StickerCategory } from "./categories";
@@ -72,14 +70,9 @@ export const PickerSidebar = ({ packMetas, onPackSelect }: SidebarProps) => {
                     onClick={() => {
                         openModal(modalProps => {
                             return (
-                                <ModalRoot size={ModalSize.LARGE} {...modalProps}>
-                                    <ModalHeader>
-                                        <HeadingPrimary>Stickers+</HeadingPrimary>
-                                    </ModalHeader>
-                                    <ModalContent>
-                                        <Packs />
-                                    </ModalContent>
-                                </ModalRoot>
+                                <Modal size="lg" title="Stickers+" {...modalProps}>
+                                    <Packs />
+                                </Modal>
                             );
                         });
                     }}

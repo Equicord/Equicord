@@ -4,18 +4,17 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { BaseText } from "@components/BaseText";
 import { Flex } from "@components/Flex";
 import { FormSwitch } from "@components/FormSwitch";
 import { Heading } from "@components/Heading";
 import { characters } from "@equicordplugins/sekaiStickers/characters.json";
-import { ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot, ModalSize, openModal } from "@utils/modal";
-import { Button, ChannelStore, React, SelectedChannelStore, Slider, TextArea, UploadHandler } from "@webpack/common";
+import { RenderModalProps } from "@vencord/discord-types";
+import { ChannelStore, Modal, openModal, React, SelectedChannelStore, Slider, TextArea, UploadHandler } from "@webpack/common";
 
 import Canvas from "./Canvas";
 import CharSelectModal from "./Picker";
 
-export default function SekaiStickersModal({ modalProps, settings }: { modalProps: ModalProps; settings: any; }) {
+export default function SekaiStickersModal({ modalProps, settings }: { modalProps: RenderModalProps; settings: any; }) {
     const [text, setText] = React.useState<string>("奏でーかわいい");
     const [character, setChracter] = React.useState<number>(49);
     const [fontSize, setFontSize] = React.useState<number>(characters[character].defaultText.s);
@@ -97,45 +96,51 @@ export default function SekaiStickersModal({ modalProps, settings }: { modalProp
         }
     };
     return (
-        <ModalRoot {...modalProps} size={ModalSize.DYNAMIC}>
-            <ModalHeader>
-                <BaseText size="lg" weight="bold" style={{ flexGrow: 1 }}>Sekai Stickers</BaseText>
-                <ModalCloseButton onClick={modalProps.onClose} ></ModalCloseButton>
-            </ModalHeader>
-            <ModalContent>
-                <Flex flexDirection="row" style={{ paddingTop: 12 }}>
-                    <div style={{ marginRight: 30 }}>
-                        <Canvas draw={draw} id="SekaiCard_Canvas" />
-                        <Heading>Text Y Pos</Heading>
-                        <Slider minValue={0} maxValue={256} asValueChanges={va => { va = Math.round(va); setPosition({ x: position.x, y: curve ? 256 + fontSize * 3 - va : 256 - va }); }} initialValue={curve ? 256 - position.y + fontSize * 3 : 256 - position.y} orientation={"vertical"} onValueRender={va => String(Math.round(va))} />
-                        <Heading>Text XZ Pos</Heading>
-                        <Slider minValue={0} maxValue={296} asValueChanges={va => { va = Math.round(va); setPosition({ y: position.y, x: va }); }} initialValue={position.x} orientation={"horizontal"} onValueRender={(v: number) => String(Math.round(v))} />
-                    </div>
-                    <div style={{ marginRight: 10, width: "30vw" }}>
-                        <Heading>Text</Heading>
-                        <TextArea onChange={setText} placeholder={text} rows={4} />
-                        <Heading>Rotation</Heading>
-                        <Slider markers={[-10, -5, 0, 5, 10]} stickToMarkers={false} minValue={-10} maxValue={10} asValueChanges={val => setRotate(val)} initialValue={rotate} keyboardStep={0.2} orientation={"horizontal"} onValueRender={(v: number) => String(v.toFixed(2))} />
-                        <Heading>Font Size</Heading>
-                        <Slider minValue={10} asValueChanges={val => setFontSize(Math.round(val))} maxValue={100} initialValue={fontSize} keyboardStep={1} orientation={"horizontal"} onValueRender={(v: number) => String(Math.round(v))} />
-                        <Heading>Spacing</Heading>
-                        <Slider markers={[18, 36, 72, 100]} stickToMarkers={false} minValue={18} maxValue={100} initialValue={spaceSize} asValueChanges={e => setSpaceSize(e)} onValueRender={e => String(Math.round(e))} />
-                        <FormSwitch title="Enable curve" value={curve} onChange={val => setCurve(val)} />
-                        <Button onClick={() => openModal(props => <CharSelectModal modalProps={props} setCharacter={setChracter} />)}>Switch Character</Button>
-                    </div>
-                </Flex>
-            </ModalContent>
-            <ModalFooter>
-                <Flex flexDirection="row" style={{ gap: 12 }}>
-                    <Button onClick={() => {
+        <Modal
+            {...modalProps}
+            size="lg"
+            title="Sekai Stickers"
+            actions={[
+                {
+                    text: "Switch Character",
+                    variant: "primary",
+                    onClick: () => {
+                        openModal(props => <CharSelectModal modalProps={props} setCharacter={setChracter} />);
+                    }
+                },
+                {
+                    text: "Upload as Attachment",
+                    variant: "primary",
+                    onClick: () => {
                         if (settings.store.AutoCloseModal) modalProps.onClose();
                         canvast.toBlob(blob => {
                             const file = new File([blob as Blob], `${characters[character].character}-sekai_cards.png`, { type: "image/png" });
                             UploadHandler.promptToUpload([file], ChannelStore.getChannel(SelectedChannelStore.getChannelId()), 0);
                         });
-                    }}>Upload as Attachment</Button>
-                </Flex>
-            </ModalFooter>
-        </ModalRoot>
+                    }
+                }
+            ]}
+        >
+            <Flex flexDirection="row" style={{ paddingTop: 12 }}>
+                <div style={{ marginRight: 30 }}>
+                    <Canvas draw={draw} id="SekaiCard_Canvas" />
+                    <Heading>Text Y Pos</Heading>
+                    <Slider minValue={0} maxValue={256} asValueChanges={va => { va = Math.round(va); setPosition({ x: position.x, y: curve ? 256 + fontSize * 3 - va : 256 - va }); }} initialValue={curve ? 256 - position.y + fontSize * 3 : 256 - position.y} orientation={"vertical"} onValueRender={va => String(Math.round(va))} />
+                    <Heading>Text XZ Pos</Heading>
+                    <Slider minValue={0} maxValue={296} asValueChanges={va => { va = Math.round(va); setPosition({ y: position.y, x: va }); }} initialValue={position.x} orientation={"horizontal"} onValueRender={(v: number) => String(Math.round(v))} />
+                </div>
+                <div style={{ marginRight: 10, width: "30vw" }}>
+                    <Heading>Text</Heading>
+                    <TextArea onChange={setText} placeholder={text} rows={4} />
+                    <Heading>Rotation</Heading>
+                    <Slider markers={[-10, -5, 0, 5, 10]} stickToMarkers={false} minValue={-10} maxValue={10} asValueChanges={val => setRotate(val)} initialValue={rotate} keyboardStep={0.2} orientation={"horizontal"} onValueRender={(v: number) => String(v.toFixed(2))} />
+                    <Heading>Font Size</Heading>
+                    <Slider minValue={10} asValueChanges={val => setFontSize(Math.round(val))} maxValue={100} initialValue={fontSize} keyboardStep={1} orientation={"horizontal"} onValueRender={(v: number) => String(Math.round(v))} />
+                    <Heading>Spacing</Heading>
+                    <Slider markers={[18, 36, 72, 100]} stickToMarkers={false} minValue={18} maxValue={100} initialValue={spaceSize} asValueChanges={e => setSpaceSize(e)} onValueRender={e => String(Math.round(e))} />
+                    <FormSwitch title="Enable curve" value={curve} onChange={val => setCurve(val)} />
+                </div>
+            </Flex>
+        </Modal>
     );
 }

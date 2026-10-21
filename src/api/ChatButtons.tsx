@@ -138,7 +138,7 @@ export const ChatBarButton = ErrorBoundary.wrap((props: ChatBarButtonProps) => {
     return (
         <Tooltip text={props.tooltip}>
             {({ onMouseEnter, onMouseLeave }) => (
-                <div className={`expression-picker-chat-input-button ${ChannelTextAreaClasses?.buttonContainer ?? ""}`}>
+                <div className={`expression-picker-chat-input-button ${ChannelTextAreaClasses?.buttonContainer ?? ""} vc-chatbar-button`}>
                     <Clickable
                         aria-label={props.tooltip}
                         onMouseEnter={onMouseEnter}
@@ -191,20 +191,28 @@ addContextMenuPatch("textarea-context", (children, args) => {
     );
 });
 
-// Wrapper stuff is down here to avoid conflicts with above
 export type ChatBarButtonWrapper = (buttons: ReactNode) => ReactNode;
 
-/**
- * Registry for plugins that need to wrap the entire chat bar button container
- */
-export const ChatBarButtonWrappers = new Map<string, ChatBarButtonWrapper>();
+export interface ChatBarButtonWrapperData {
+    wrapper: ChatBarButtonWrapper;
+    priority: number;
+}
 
-export const addChatBarButtonWrapper = (id: string, wrapper: ChatBarButtonWrapper) => ChatBarButtonWrappers.set(id, wrapper);
+/**
+ * Registry for plugins that need to wrap the entire chat bar button container.
+ * Wrappers are applied in ascending priority order (lower number = outermost wrapper).
+ */
+export const ChatBarButtonWrappers = new Map<string, ChatBarButtonWrapperData>();
+
+export const addChatBarButtonWrapper = (id: string, wrapper: ChatBarButtonWrapper, priority: number = 0) => ChatBarButtonWrappers.set(id, { wrapper, priority });
 export const removeChatBarButtonWrapper = (id: string) => ChatBarButtonWrappers.delete(id);
 
 export function _wrapButtons(buttons: ReactNode) {
+    const sorted = [...ChatBarButtonWrappers.values()]
+        .sort((a, b) => a.priority - b.priority);
+
     let wrapped = buttons;
-    for (const wrapper of ChatBarButtonWrappers.values()) {
+    for (const { wrapper } of sorted) {
         wrapped = wrapper(wrapped);
     }
     return wrapped;

@@ -196,31 +196,41 @@ export default function oneko(options = {}) {
 
         document.body.appendChild(nekoEl);
 
-        document.addEventListener("mousemove", function (event) {
-            mousePosX = event.clientX;
-            mousePosY = event.clientY;
-        });
+        document.addEventListener("mousemove", handleMouseMove);
 
         if (persistPosition) {
-            window.addEventListener("beforeunload", function (event) {
-                window.localStorage.setItem(
-                    "oneko",
-                    JSON.stringify({
-                        nekoPosX: nekoPosX,
-                        nekoPosY: nekoPosY,
-                        mousePosX: mousePosX,
-                        mousePosY: mousePosY,
-                        frameCount: frameCount,
-                        idleTime: idleTime,
-                        idleAnimation: idleAnimation,
-                        idleAnimationFrame: idleAnimationFrame,
-                        bgPos: nekoEl.style.backgroundPosition,
-                    })
-                );
-            });
+            window.addEventListener("beforeunload", handleBeforeUnload);
         }
 
         window.requestAnimationFrame(onAnimationFrame);
+    }
+
+    function handleMouseMove(event) {
+        mousePosX = event.clientX;
+        mousePosY = event.clientY;
+    }
+
+    function handleBeforeUnload(event) {
+        window.localStorage.setItem(
+            "oneko",
+            JSON.stringify({
+                nekoPosX: nekoPosX,
+                nekoPosY: nekoPosY,
+                mousePosX: mousePosX,
+                mousePosY: mousePosY,
+                frameCount: frameCount,
+                idleTime: idleTime,
+                idleAnimation: idleAnimation,
+                idleAnimationFrame: idleAnimationFrame,
+                bgPos: nekoEl.style.backgroundPosition,
+            })
+        );
+    }
+
+    function destroy() {
+        document.removeEventListener("mousemove", handleMouseMove);
+        window.removeEventListener("beforeunload", handleBeforeUnload);
+        nekoEl.remove();
     }
 
     let lastFrameTimestamp;
@@ -335,4 +345,6 @@ export default function oneko(options = {}) {
     }
 
     init();
+
+    return destroy;
 }

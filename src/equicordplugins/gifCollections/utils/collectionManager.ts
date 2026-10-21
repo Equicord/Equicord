@@ -5,7 +5,7 @@
  */
 
 import { DataStore } from "@api/index";
-import { Toasts } from "@webpack/common";
+import { showToast } from "@webpack/common";
 
 import { settings } from "../settings";
 import { Collection, Gif } from "../types";
@@ -32,7 +32,7 @@ export async function createCollection(name: string, gifs: Gif[]): Promise<void>
     const fullName = `${settings.store.collectionPrefix}${name}`;
 
     if (collections.some(c => c.name === fullName)) {
-        Toasts.show({ message: "That collection already exists", type: Toasts.Type.FAILURE, id: Toasts.genId(), options: { duration: 3000, position: Toasts.Position.BOTTOM } });
+        showToast({ text: "That collection already exists", variant: "critical", duration: 3000, position: "bottom" });
         return;
     }
 
@@ -56,7 +56,7 @@ export async function addToCollection(name: string, gif: Gif): Promise<void> {
     if (!collection) return void logger.warn("Collection not found");
 
     if (settings.store.preventDuplicates && collection.gifs.some(g => g.url === gif.url)) {
-        Toasts.show({ message: "This GIF is already in the collection", type: Toasts.Type.FAILURE, id: Toasts.genId(), options: { duration: 3000, position: Toasts.Position.BOTTOM } });
+        showToast({ text: "This GIF is already in the collection", variant: "critical", duration: 3000, position: "bottom" });
         return;
     }
 

@@ -4,159 +4,28 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { ApplicationCommandInputType, sendBotMessage } from "@api/Commands";
-import { HeaderBarButton } from "@api/HeaderBar";
-import { addMessagePreSendListener, removeMessagePreSendListener } from "@api/MessageEvents";
-import { isPluginEnabled } from "@api/PluginManager";
-import { definePluginSettings, migratePluginToSettings, Settings } from "@api/Settings";
-import { ShieldIcon, WarningIcon } from "@components/Icons";
-import customRPC from "@plugins/customRPC";
+import { Settings } from "@api/Settings";
 import { Devs, EquicordDevs, GUILD_ID, SUPPORT_CHANNEL_ID, SUPPORT_CHANNEL_IDS, VC_SUPPORT_CHANNEL_IDS } from "@utils/constants";
 import { isAnyPluginDev } from "@utils/misc";
-import definePlugin, { OptionType } from "@utils/types";
-import { StandingState } from "@vencord/discord-types/enums";
-import { findByCodeLazy, findStoreLazy } from "@webpack";
-import { Alerts, ApplicationCommandIndexStore, NavigationRouter, React, SettingsRouter, UserStore, useStateFromStores } from "@webpack/common";
-import { ComponentType } from "react";
+import definePlugin from "@utils/types";
+import { Alerts, NavigationRouter, UserStore } from "@webpack/common";
 
 import { PluginButtons } from "./pluginButtons";
 import { PluginCards } from "./pluginCards";
 
-migratePluginToSettings(true, "EquicordHelper", "NoBulletPoints", "noBulletPoints");
-migratePluginToSettings(true, "EquicordHelper", "NoModalAnimation", "noModalAnimation");
-migratePluginToSettings(true, "EquicordHelper", "GuildTagSettings", "disableAdoptTagPrompt");
-
 let clicked = false;
-
-const SafetyHubStore = findStoreLazy("SafetyHubStore");
-const fetchSafetyHub: () => Promise<void> = findByCodeLazy("SAFETY_HUB_FETCH_START");
-
-const StandingConfig: Record<number, { label: string; hoverColor: string; Icon: ComponentType<any>; }> = {
-    [StandingState.ALL_GOOD]: { label: "All good!", hoverColor: "var(--status-positive)", Icon: ShieldIcon },
-    [StandingState.LIMITED]: { label: "Limited", hoverColor: "var(--status-warning)", Icon: WarningIcon },
-    [StandingState.VERY_LIMITED]: { label: "Very limited", hoverColor: "var(--orange-345)", Icon: WarningIcon },
-    [StandingState.AT_RISK]: { label: "At risk", hoverColor: "var(--status-danger)", Icon: WarningIcon },
-    [StandingState.SUSPENDED]: { label: "Suspended", hoverColor: "var(--interactive-muted)", Icon: WarningIcon },
-};
-
-function StandingButton() {
-    const standing = useStateFromStores([SafetyHubStore], () => SafetyHubStore.getAccountStanding());
-    const isInitialized = useStateFromStores([SafetyHubStore], () => SafetyHubStore.isInitialized());
-    const [hovered, setHovered] = React.useState(false);
-
-    React.useEffect(() => {
-        if (!isInitialized) fetchSafetyHub().catch(() => { });
-    }, [isInitialized]);
-
-    const config = StandingConfig[standing?.state] ?? StandingConfig[StandingState.ALL_GOOD];
-
-    return (
-        <div style={{ display: "contents" }} onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
-            <HeaderBarButton
-                tooltip={config.label}
-                position="bottom"
-                icon={props => <config.Icon {...props} color={hovered ? config.hoverColor : "currentColor"} />}
-                onClick={() => SettingsRouter.openUserSettings("my_account_panel")}
-            />
-        </div>
-    );
-}
-
-const listener = async (channelId, msg) => {
-    if (!settings.store.noBulletPoints) return;
-    msg.content = textProcessing(msg.content);
-};
-
-const settings = definePluginSettings({
-    noMirroredCamera: {
-        type: OptionType.BOOLEAN,
-        description: "Prevents the camera from being mirrored on your screen",
-        restartNeeded: true,
-        default: false,
-    },
-    removeActivitySection: {
-        type: OptionType.BOOLEAN,
-        description: "Removes the activity section above member list",
-        restartNeeded: true,
-        default: false,
-    },
-    showYourOwnActivityButtons: {
-        type: OptionType.BOOLEAN,
-        description: "Discord hides your own activity buttons for some reason",
-        restartNeeded: true,
-        default: false,
-    },
-    refreshSlashCommands: {
-        type: OptionType.BOOLEAN,
-        description: "Refreshes Slash Commands to show newly added commands without restarting your client.",
-        default: false,
-    },
-    forceRoleIcon: {
-        type: OptionType.BOOLEAN,
-        description: "Forces role icons to display next to messages in compact mode",
-        restartNeeded: true,
-        default: false
-    },
-    accountStandingButton: {
-        type: OptionType.BOOLEAN,
-        description: "Show an account standing button in the header bar",
-        restartNeeded: true,
-        default: false,
-    },
-    restoreFileDownloadButton: {
-        type: OptionType.BOOLEAN,
-        description: "Adds back the Download button at the top right corner of files",
-        restartNeeded: true,
-        default: false
-    },
-    noBulletPoints: {
-        type: OptionType.BOOLEAN,
-        description: "Stops you from typing markdown bullet points (stinky)",
-        restartNeeded: true,
-        default: false
-    },
-    noModalAnimation: {
-        type: OptionType.BOOLEAN,
-        description: "Remove the 300ms long animation when opening or closing modals",
-        restartNeeded: true,
-        default: false
-    },
-    disableAdoptTagPrompt: {
-        type: OptionType.BOOLEAN,
-        description: "Disable the prompt to adopt tags",
-        restartNeeded: true,
-        default: false,
-    },
-    jsonGateway: {
-        type: OptionType.BOOLEAN,
-        description: "Forces JSON on gateway reconnect",
-        restartNeeded: true,
-        default: false,
-    }
-});
 
 export default definePlugin({
     name: "EquicordHelper",
-    description: "Used to provide support, fix discord caused crashes, and other misc features.",
-    tags: ["Appearance", "Commands", "Utility"],
-    dependencies: ["CommandsAPI", "HeaderBarAPI", "MessageAccessoriesAPI"],
+    description: "Used to provide support and fix discord caused crashes.",
+    tags: ["Utility"],
+    dependencies: ["MessageAccessoriesAPI"],
     authors: [
         Devs.thororen,
         EquicordDevs.nyx,
         EquicordDevs.Naibuu,
-        EquicordDevs.keircn,
-        EquicordDevs.SerStars,
-        EquicordDevs.mart,
-        EquicordDevs.omaw,
-        Devs.Samwich,
-        Devs.AutumnVN
     ],
     required: true,
-    settings,
-    headerBarButton: {
-        icon: ShieldIcon,
-        render: () => (settings.store.accountStandingButton ? <StandingButton /> : null),
-    },
     patches: [
         // Fixes Unknown Resolution/FPS Crashing
         {
@@ -172,7 +41,7 @@ export default definePlugin({
                 }
             ]
         },
-        // Fix a race condition?
+        // Fix a race condition
         {
             find: ".completeOperation(",
             replacement: {
@@ -180,129 +49,13 @@ export default definePlugin({
                 replace: "$2,$1"
             }
         },
-        // catch if it cant open
+        // Catch IndexedDB if it fails to open
         {
             find: "discarding speculative database",
             replacement: {
-                match: /await (\i)\((\i)\)(?=;.{0,15}this\.databases)/,
+                match: /await \i\(\i\)(?=;.{0,15}this\.databases)/,
                 replace: "$&.catch(()=>null)"
             }
-        },
-        // When focused on voice channel or group chat voice call
-        {
-            find: ".STATUS_WARNING_BACKGROUND})})",
-            predicate: () => settings.store.noMirroredCamera,
-            replacement: {
-                match: /mirror:\i/,
-                replace: "mirror:!1"
-            },
-        },
-        // Popout camera when not focused on voice channel
-        {
-            find: "this.handleReady})",
-            all: true,
-            predicate: () => settings.store.noMirroredCamera,
-            replacement: {
-                match: /(\[\i\.\i\]:)\i/,
-                replace: "$1!1"
-            },
-        },
-        // Overriding css on Preview Camera/Change Video Background popup
-        {
-            find: ".PREVIEW_CAMERA_MODAL,",
-            replacement: {
-                match: /className:\i.\i,(?=children:\()/,
-                replace: "$&style:{transform: \"scalex(1)\"},"
-            },
-            predicate: () => settings.store.noMirroredCamera
-        },
-        // Remove Activity Section above Member List
-        {
-            find: ".GLOBAL_FEED});",
-            predicate: () => settings.store.removeActivitySection,
-            replacement: {
-                match: /null==\i\|\|0.{0,100}VIEW_CHANNEL\)&&/,
-                replace: "true||$&"
-            },
-        },
-        // Show your own activity buttons because discord removes them for who knows why
-        {
-            find: ".USER_PROFILE_ACTIVITY_BUTTONS),",
-            predicate: () => settings.store.showYourOwnActivityButtons && !isPluginEnabled(customRPC.name),
-            replacement: {
-                match: /.getId\(\)===\i.id/,
-                replace: "$& && false"
-            }
-        },
-        // Force Role Icon
-        {
-            find: "#{intl::GUILD_COMMUNICATION_DISABLED_ICON_TOOLTIP_BODY}",
-            predicate: () => settings.store.forceRoleIcon,
-            replacement: {
-                match: /(?<=\}\):null\].{0,150}\?2:)0(?=\})/,
-                replace: "1"
-            }
-        },
-        // Restore File Download Button
-        {
-            find: '"VISUAL_PLACEHOLDER":',
-            predicate: () => settings.store.restoreFileDownloadButton,
-            replacement: {
-                match: /(\.downloadUrl,showDownload:)\i/,
-                replace: "$1!0"
-            }
-        },
-        // Removes Modal Animation
-        {
-            find: "DURATION_IN:",
-            predicate: () => settings.store.noModalAnimation,
-            replacement: {
-                match: /300,/,
-                replace: "0,",
-            }
-        },
-        // Removes Modal Animation
-        {
-            find: 'backdropFilter:"blur(0px)"',
-            predicate: () => settings.store.noModalAnimation,
-            replacement: {
-                match: /\?0:200/,
-                replace: "?0:0",
-            }
-        },
-        // Removes Modal Animation
-        {
-            find: '="ABOVE"',
-            predicate: () => settings.store.noModalAnimation,
-            replacement: {
-                match: /\?\?300/,
-                replace: "??0",
-            }
-        },
-        // Removes Modal Animation
-        {
-            find: ".SWITCH_THUMB_BACKGROUND_SELECTED_DEFAULT)",
-            predicate: () => settings.store.noModalAnimation,
-            replacement: {
-                match: /200:300/g,
-                replace: "0:0",
-            },
-        },
-        {
-            find: "GuildTagAvailableCoachmark",
-            replacement: {
-                match: /return.{0,200}GUILD_TAG_COACHMARK_ASSET/g,
-                replace: "return null;$&"
-            },
-            predicate: () => settings.store.disableAdoptTagPrompt
-        },
-        {
-            find: "JSONEncoding",
-            replacement: {
-                match: /void 0!==\i\?\i:/,
-                replace: ""
-            },
-            predicate: () => settings.store.jsonGateway
         },
         {
             find: ".USE_OSX_NATIVE_TRAFFIC_LIGHTS",
@@ -310,7 +63,7 @@ export default definePlugin({
                 match: /case \i\.\i\.WINDOWS:/,
                 replace: 'case "WEB":'
             },
-            predicate: () => Settings.winNativeTitleBar,
+            predicate: () => Settings.nativeTitleBar,
         },
         {
             find: '"refresh-title-bar-small"',
@@ -324,8 +77,16 @@ export default definePlugin({
                     replace: "true"
                 }
             ],
-            predicate: () => Settings.winNativeTitleBar,
+            predicate: () => Settings.nativeTitleBar,
         },
+        // gif-picker context menu doesnt get full context so give it
+        {
+            find: "renderEmptyFavorite",
+            replacement: {
+                match: /(?<=handleContextMenu.{0,150})(?=link:(\i)\.url)/,
+                replace: "...$1,"
+            }
+        }
     ],
     renderMessageAccessory(props) {
         return (
@@ -357,37 +118,5 @@ export default definePlugin({
                 });
             }
         },
-    },
-    commands: [
-        {
-            name: "refresh-commands",
-            description: "Refresh Slash Commands",
-            inputType: ApplicationCommandInputType.BUILT_IN,
-            predicate: () => settings.store.refreshSlashCommands,
-            execute: async (opts, ctx) => {
-                try {
-                    ApplicationCommandIndexStore.indices = {};
-                    sendBotMessage(ctx.channel.id, { content: "Slash Commands refreshed successfully." });
-                }
-                catch (e) {
-                    console.error("[refreshSlashCommands] Failed to refresh commands:", e);
-                    sendBotMessage(ctx.channel.id, { content: "Failed to refresh commands. Check console for details." });
-                }
-            }
-        }
-    ],
-    start() {
-        if (settings.store.noBulletPoints) {
-            addMessagePreSendListener(listener);
-        }
-    },
-    stop() {
-        if (settings.store.noBulletPoints) {
-            removeMessagePreSendListener(listener);
-        }
     }
 });
-
-function textProcessing(text: string): string {
-    return text.replace(/(^|\n)(\s*)([*+-])\s+/g, "$1$2\\$3 ");
-}

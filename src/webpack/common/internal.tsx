@@ -24,7 +24,7 @@ import { ComponentType } from "react";
 const logger = new Logger("Webpack");
 
 export function waitForComponent<T extends ComponentType<any> = ComponentType<any> & Record<string, any>>(name: string, filter: FilterFn | string | string[], fallbackValue: ComponentType<any> | null = null) {
-    if (IS_REPORTER) lazyWebpackSearchHistory.push(["waitForComponent", Array.isArray(filter) ? filter : [filter]]);
+    if (IS_REPORTER) lazyWebpackSearchHistory.push(["waitForComponent", Array.isArray(filter) ? filter : [filter], new Error().stack]);
 
     let myValue: T | null = null;
 
@@ -48,7 +48,7 @@ export function waitForComponent<T extends ComponentType<any> = ComponentType<an
 }
 
 export function waitForStore(name: string, cb: (v: any) => void) {
-    if (IS_REPORTER) lazyWebpackSearchHistory.push(["waitForStore", [name]]);
+    if (IS_REPORTER) lazyWebpackSearchHistory.push(["waitForStore", [name], new Error().stack]);
 
     waitFor(filters.byStoreName(name), cb, { isIndirect: true });
 }

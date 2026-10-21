@@ -56,6 +56,9 @@ export function sortPermissionOverwrites<T extends { id: string; type: number; }
         const roleA = roles[a.id];
         const roleB = roles[b.id];
 
-        return roleB.position - roleA.position;
+        const posA = roleA?.position ?? -Infinity;
+        const posB = roleB?.position ?? -Infinity;
+
+        return posB - posA;
     });
 }

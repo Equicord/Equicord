@@ -17,21 +17,14 @@
 */
 
 import { FormSwitch } from "@components/FormSwitch";
-import { Heading, HeadingTertiary } from "@components/Heading";
+import { Heading } from "@components/Heading";
 import { insertTextIntoChatInputBox } from "@utils/discord";
-import {
-    ModalContent,
-    ModalFooter,
-    ModalHeader,
-    ModalProps,
-    ModalRoot,
-    openModal,
-} from "@utils/modal";
-import { Button, React, TextInput } from "@webpack/common";
+import { RenderModalProps } from "@vencord/discord-types";
+import { Modal, openModal, React, TextInput } from "@webpack/common";
 
 import { encrypt } from "../index";
 
-function EncModal(props: ModalProps) {
+function EncModal(props: RenderModalProps) {
     const [secret, setSecret] = React.useState("");
     const [cover, setCover] = React.useState("");
     const [password, setPassword] = React.useState("password");
@@ -39,72 +32,65 @@ function EncModal(props: ModalProps) {
 
     const isValid = secret && (noCover || (cover && cover.trim().split(" ").length > 1));
 
+    const onSend = () => {
+        if (!isValid) return;
+        const encrypted = encrypt(secret, password, noCover ? "d d" : cover);
+        const toSend = noCover ? encrypted.replaceAll("d", "") : encrypted;
+        if (!toSend) return;
+
+        insertTextIntoChatInputBox(toSend);
+
+        props.onClose();
+    };
+
     return (
-        <ModalRoot {...props}>
-            <ModalHeader>
-                <HeadingTertiary>Encrypt Message</HeadingTertiary>
-            </ModalHeader>
-
-            <ModalContent>
-                <Heading style={{ marginTop: "10px" }}>Secret</Heading>
-                <TextInput
-                    onChange={(e: string) => {
-                        setSecret(e);
-                    }}
-                />
-                <Heading style={{ marginTop: "10px" }}>Cover (2 or more Words!!)</Heading>
-                <TextInput
-                    disabled={noCover}
-                    onChange={(e: string) => {
-                        setCover(e);
-                    }}
-                />
-                <Heading style={{ marginTop: "10px" }}>Password</Heading>
-                <TextInput
-                    style={{ marginBottom: "20px" }}
-                    defaultValue={"password"}
-                    onChange={(e: string) => {
-                        setPassword(e);
-                    }}
-                />
-                <FormSwitch
-                    title="Don't use a Cover"
-                    value={noCover}
-                    onChange={(e: boolean) => {
-                        setNoCover(e);
-                    }}
-                />
-            </ModalContent>
-
-            <ModalFooter>
-                <Button
-                    color={Button.Colors.GREEN}
-                    disabled={!isValid}
-                    onClick={() => {
-                        if (!isValid) return;
-                        const encrypted = encrypt(secret, password, noCover ? "d d" : cover);
-                        const toSend = noCover ? encrypted.replaceAll("d", "") : encrypted;
-                        if (!toSend) return;
-
-                        insertTextIntoChatInputBox(toSend);
-
-                        props.onClose();
-                    }}
-                >
-                    Send
-                </Button>
-                <Button
-                    color={Button.Colors.TRANSPARENT}
-                    look={Button.Looks.LINK}
-                    style={{ left: 15, position: "absolute" }}
-                    onClick={() => {
-                        props.onClose();
-                    }}
-                >
-                    Cancel
-                </Button>
-            </ModalFooter>
-        </ModalRoot>
+        <Modal
+            {...props}
+            size="sm"
+            title="Encrypt Message"
+            actions={[
+                {
+                    text: "Send",
+                    variant: "primary",
+                    disabled: !isValid,
+                    onClick: onSend
+                },
+                {
+                    text: "Cancel",
+                    variant: "secondary",
+                    onClick: props.onClose
+                }
+            ]}
+        >
+            <Heading style={{ marginTop: "10px" }}>Secret</Heading>
+            <TextInput
+                onChange={(e: string) => {
+                    setSecret(e);
+                }}
+            />
+            <Heading style={{ marginTop: "10px" }}>Cover (2 or more Words!!)</Heading>
+            <TextInput
+                disabled={noCover}
+                onChange={(e: string) => {
+                    setCover(e);
+                }}
+            />
+            <Heading style={{ marginTop: "10px" }}>Password</Heading>
+            <TextInput
+                style={{ marginBottom: "20px" }}
+                defaultValue={"password"}
+                onChange={(e: string) => {
+                    setPassword(e);
+                }}
+            />
+            <FormSwitch
+                title="Don't use a Cover"
+                value={noCover}
+                onChange={(e: boolean) => {
+                    setNoCover(e);
+                }}
+            />
+        </Modal>
     );
 }
 

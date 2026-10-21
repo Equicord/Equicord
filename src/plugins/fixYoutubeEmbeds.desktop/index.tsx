@@ -29,24 +29,22 @@ export default definePlugin({
     description: "Bypasses youtube videos being blocked from display on Discord (for example by UMG)",
     tags: ["Media", "Utility"],
     authors: [Devs.coolelectronics, Devs.arHSM],
+    isModified: true,
     settings,
     patches: [
         {
-            find: "#{intl::SUPPRESS_ALL_EMBEDS}",
+            find: "this.renderContentPlaceholder({",
             predicate: () => settings.store.youtubeDescription,
             replacement: {
-                match: /case (\i\.\i\.VIDEO):(case \i\.\i\.\i:)*break;default:(\i)=(?:(this\.renderDescription)\(\))\}/,
-                replace: "$2 break; case $1: $3 = $self.ToggleableDescriptionWrapper({ embed: this.props.embed, original: $4.bind(this) }); break; default: $3 = $4() }"
+                match: /(\i)=(\i\.\i\.has\((\i)\.type\))\?null:(?:(this\.renderDescription)\(\))/,
+                replace: '$1=$3.type==="video"?$self.ToggleableDescriptionWrapper({embed:this.props.embed,original:$4.bind(this)}):($2?null:$4())'
             }
         }
     ],
     ToggleableDescription: ErrorBoundary.wrap(({ embed, original }: ToggleableDescriptionProps) => {
         const [isOpen, setOpen] = useState(false);
-
-        if (!embed.rawDescription)
-            return null;
-        if (embed.rawDescription.length <= 20)
-            return original();
+        if (!embed.rawDescription) return null;
+        if (embed.rawDescription.length <= 20) return original();
 
         return (
             <div

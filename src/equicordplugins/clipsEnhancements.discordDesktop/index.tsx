@@ -25,36 +25,6 @@ const settings = definePluginSettings({
             { label: "Never", value: "never" },
         ]
     },
-    enableScreenshotKeybind: {
-        type: OptionType.BOOLEAN,
-        description: "Enable the screenshot keybind feature",
-        default: true,
-        restartNeeded: true
-    },
-    enableVoiceOnlyClips: {
-        type: OptionType.BOOLEAN,
-        description: "Enable voice-only clips (audio without video)",
-        default: true,
-        restartNeeded: true
-    },
-    enableSpeakingIndicators: {
-        type: OptionType.BOOLEAN,
-        description: "Enable speaking indicators",
-        default: true,
-        restartNeeded: true
-    },
-    enableAdvancedSignals: {
-        type: OptionType.BOOLEAN,
-        description: "Enable advanced clip signals (auto-clip triggers)",
-        default: true,
-        restartNeeded: true
-    },
-    ignorePlatformRestriction: {
-        type: OptionType.BOOLEAN,
-        description: "Allow Platform Restricted Clipping (may cause save errors)",
-        default: true,
-        restartNeeded: true
-    },
     clipsLink: {
         type: OptionType.COMPONENT,
         description: "",
@@ -90,27 +60,18 @@ export default definePlugin({
             }
         },
         {
-            find: ".CLIPS_FRAME_RATE,{",
-            replacement: {
-                match: /\[\{.{0,25}\i.\i.FPS_15.{0,500}\}\]/,
-                replace: "$self.patchFramerates($&)"
-            }
+            find: ".SECONDS_30,label:",
+            replacement: [
+                {
+                    match: /\[\{.{0,25}\i.\i.SECONDS_30.{0,500}\}\]/,
+                    replace: " $self.patchTimeslots($&)"
+                },
+                {
+                    match: /\[\{.{0,25}\i.\i.FPS_15.{0,500}\}\]/,
+                    replace: " $self.patchFramerates($&)"
+                }
+            ]
         },
-        {
-            find: ".CLIPS_LENGTH,{",
-            replacement: {
-                match: /\[\{.{0,25}\i.\i.SECONDS_30.{0,500}\}\]/,
-                replace: "$self.patchTimeslots($&)"
-            }
-        },
-        // enables clips
-        {
-            find: "2026-03-clips-experiment",
-            replacement: {
-                match: /defaultConfig:\{enableClips:!\d,ignorePlatformRestriction:!\d,enableScreenshotKeybind:!\d,enableVoiceOnlyClips:!\d,enableSpeakingIndicators:!\d,enableAdvancedSignals:!\d\}/,
-                replace: "defaultConfig:{enableClips:!0,ignorePlatformRestriction:$self.settings.store.ignorePlatformRestriction,enableScreenshotKeybind:$self.settings.store.enableScreenshotKeybind,enableVoiceOnlyClips:$self.settings.store.enableVoiceOnlyClips,enableSpeakingIndicators:$self.settings.store.enableSpeakingIndicators,enableAdvancedSignals:$self.settings.store.enableAdvancedSignals}"
-            }
-        }
     ],
 
     patchTimeslots(timeslots: { id: string; value: number; label: string; }[]) {

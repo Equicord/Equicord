@@ -8,7 +8,7 @@ import { getMimeFromExtension } from "@equicordplugins/fileUpload/utils/getMedia
 import { FFmpeg } from "@ffmpeg/ffmpeg";
 import { insertTextIntoChatInputBox, MessageOptions } from "@utils/discord";
 import { CloudUploadPlatform } from "@vencord/discord-types/enums";
-import { ChannelStore, CloudUploader, Constants, DraftStore, FluxDispatcher, MessageActions, PendingReplyStore, RestAPI, showToast, SnowflakeUtils, Toasts, UploadHandler } from "@webpack/common";
+import { ChannelStore, CloudUploader, Constants, DraftStore, FluxDispatcher, MessageActions, PendingReplyStore, RestAPI, showToast, SnowflakeUtils, UploadHandler } from "@webpack/common";
 
 import { settings } from ".";
 import { FFmpegState, Sticker } from "./types";
@@ -133,7 +133,12 @@ export async function sendSticker({ channelId, sticker, ctrlKey, shiftKey, ffmpe
         const res = await corsFetch(sticker.image);
         if (!res.ok) throw new Error("Failed to fetch sticker image");
         const blobUrl = URL.createObjectURL(await res.blob());
-        const processed = await resizeImage(blobUrl);
+        let processed: Blob;
+        try {
+            processed = await resizeImage(blobUrl);
+        } finally {
+            URL.revokeObjectURL(blobUrl);
+        }
         const filename = sticker.filename ?? new URL(sticker.image).pathname.split("/").pop()!;
         const mimeType = getMimeFromExtension(filename.split(".").pop());
 
@@ -164,7 +169,7 @@ export async function sendSticker({ channelId, sticker, ctrlKey, shiftKey, ffmpe
         });
     });
 
-    upload.on("error", () => showToast("Failed to upload sticker", Toasts.Type.FAILURE));
+    upload.on("error", () => showToast({ text: "Failed to upload sticker", variant: "critical" }));
 
     upload.upload();
 }

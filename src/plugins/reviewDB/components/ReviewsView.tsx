@@ -62,7 +62,7 @@ export default function ReviewsView({
 }: Props) {
     const [signal, refetch] = useForceUpdater(true);
 
-    const [reviewData] = useAwaiter(() => getReviews(discordId, { offset: (page - 1) * REVIEWS_PER_PAGE }), {
+    const [reviewData] = useAwaiter(() => getReviews(discordId, { offset: (page - 1) * REVIEWS_PER_PAGE, limit: REVIEWS_PER_PAGE, fetchVotes: true }), {
         fallbackValue: null,
         deps: [refetchSignal, signal, page],
         onSuccess: data => {
@@ -70,7 +70,7 @@ export default function ReviewsView({
             const systemReviews = data!.reviews.filter(r => r.type === ReviewType.System);
             const normalReviews = data!.reviews.filter(r => r.type !== ReviewType.System);
 
-            data!.reviews = [...systemReviews, ...normalReviews.reverse()];
+            data!.reviews = [...systemReviews, ...normalReviews];
             scrollToTop?.();
             onFetchReviews(data!);
         }
@@ -125,7 +125,7 @@ function ReviewList({ refetch, reviews, hideOwnReview, profileId, type }: { refe
 }
 
 export function ReviewsInputComponent(
-    { discordId, isAuthor, refetch, name, modalKey, repliesTo }: { discordId: string, name: string; isAuthor: boolean; refetch(): void; modalKey?: string; repliesTo?: number; }
+    { discordId, isAuthor, refetch, name, modalKey }: { discordId: string, name: string; isAuthor: boolean; refetch(): void; modalKey?: string; }
 ) {
     const { token } = Auth;
     const editorRef = useRef<any>(null);
@@ -138,7 +138,7 @@ export function ReviewsInputComponent(
         <>
             <div onClick={() => {
                 if (!token) {
-                    showToast("Opening authorization window...");
+                    showToast({ text: "Opening authorization window..." });
                     authorize();
                 }
             }}>
@@ -148,10 +148,9 @@ export function ReviewsInputComponent(
                     placeholder={
                         !token
                             ? "You need to authorize to review users!"
-                            : repliesTo ? `Reply to @${name}`
-                                : isAuthor
-                                    ? `Update review for @${name}`
-                                    : `Review @${name}`
+                            : isAuthor
+                                ? `Update review for @${name}`
+                                : `Review @${name}`
                     }
                     type={inputType}
                     disableThemedBackground={true}
@@ -160,12 +159,9 @@ export function ReviewsInputComponent(
                     textValue=""
                     onSubmit={
                         async res => {
-                            // I know this naming is deranged, but for compatibility it has to stay this way
-
                             const response = await addReview({
                                 userid: discordId,
                                 comment: res.value,
-                                repliesto: repliesTo,
                             });
 
                             if (response) {

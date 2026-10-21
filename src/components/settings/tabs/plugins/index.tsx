@@ -35,9 +35,11 @@ import { isTruthy } from "@utils/guards";
 import { Logger } from "@utils/Logger";
 import { Margins } from "@utils/margins";
 import { classes } from "@utils/misc";
-import { useAwaiter, useIntersection } from "@utils/react";
+import { PluginTarget } from "@utils/pluginTargets";
+import { promptToRestart } from "@utils/promptToRestart";
+import { useAwaiter, useCleanupEffect, useIntersection } from "@utils/react";
 import { PluginTag, PluginTags } from "@utils/types";
-import { Alerts, lodash, Parser, React, SearchableSelect, Select, TextInput, Toasts, Tooltip, useCallback, useMemo, useRef, useState } from "@webpack/common";
+import { Alerts, lodash, Parser, React, SearchableSelect, Select, showToast, TextInput, Tooltip, useCallback, useMemo, useRef, useState } from "@webpack/common";
 import { JSX } from "react";
 
 import Plugins, { ExcludedPlugins, PluginMeta } from "~plugins";
@@ -51,13 +53,10 @@ export const cl = classNameFactory("vc-plugins-");
 export const logger = new Logger("PluginSettings", "#a6d189");
 
 function showErrorToast(message: string) {
-    Toasts.show({
-        message,
-        type: Toasts.Type.FAILURE,
-        id: Toasts.genId(),
-        options: {
-            position: Toasts.Position.BOTTOM
-        }
+    showToast({
+        text: message,
+        variant: "critical",
+        position: "bottom"
     });
 }
 
@@ -83,9 +82,9 @@ function ReloadRequiredCard({ required, enabledPlugins, openWarningModal, resetC
             )}
             {enabledPlugins.length > 0 && !required && (
                 <Button
-                    variant="secondary"
+                    variant="dangerPrimary"
                     size="small"
-                    className={"vc-plugins-disable-warning vc-modal-align-reset"}
+                    className={"vc-modal-align-reset"}
                     onClick={() => {
                         return openWarningModal(null, undefined, false, enabledPlugins.length, resetCheckAndDo);
                     }}
@@ -99,6 +98,7 @@ function ReloadRequiredCard({ required, enabledPlugins, openWarningModal, resetC
 
 const enum SearchStatus {
     ALL,
+    FAVORITES,
     ENABLED,
     DISABLED,
     EQUICORD,
@@ -108,13 +108,14 @@ const enum SearchStatus {
     API_PLUGINS
 }
 
-export const ExcludedReasons: Record<"web" | "discordDesktop" | "vesktop" | "equibop" | "desktop" | "dev", string> = {
+export const ExcludedReasons: Record<PluginTarget, string> = {
     desktop: "Discord Desktop app or Vesktop/Equibop",
     discordDesktop: "Discord Desktop app",
     vesktop: "Vesktop/Equibop apps",
     equibop: "Vesktop/Equibop apps",
     web: "Vesktop/Equibop apps & Discord web",
-    dev: "Developer version of Equicord"
+    dev: "Developer version of Equicord",
+    browser: "Web Browser version of Equicord"
 };
 
 function ExcludedPluginsList({ search }: { search: string; }) {
@@ -147,7 +148,7 @@ export default function PluginSettings() {
     const changeRef = useRef<ChangeList<string>>(null);
     const changes = changeRef.current ??= new ChangeList<string>();
 
-    React.useEffect(() => {
+    useCleanupEffect(() => {
         return () => {
             if (!changes.hasChanges) return;
 
@@ -157,22 +158,19 @@ export default function PluginSettings() {
             const displayed = pluginNames.slice(0, maxDisplay);
             const remainingCount = pluginNames.length - displayed.length;
 
-            Alerts.show({
-                title: "Restart required",
-                body: (
+            promptToRestart("reload", {
+                children: <>
+                    <p>The following plugins require a restart:</p>
                     <div>
                         {displayed.map((s, i) => (
-                            <span key={i}>
+                            <React.Fragment key={i}>
                                 {i > 0 && ", "}
                                 {Parser.parse("`" + s + "`")}
-                            </span>
+                            </React.Fragment>
                         ))}
                         {remainingCount > 0 && <span> and {remainingCount} more</span>}
                     </div>
-                ),
-                confirmText: "Restart now",
-                cancelText: "Later!",
-                onConfirm: () => location.reload()
+                </>
             });
         };
     }, []);
@@ -191,8 +189,11 @@ export default function PluginSettings() {
         return o;
     }, []);
 
-    const sortedPlugins = useMemo(() => Object.values(Plugins)
-        .sort((a, b) => a.name.localeCompare(b.name)), []);
+    const sortedPlugins = useMemo(() =>
+        Object.values(Plugins).sort((a, b) => a.name.localeCompare(b.name)),
+        []
+    )
+        .toSorted((a, b) => Number(settings.plugins[b.name]?.isFavorite ?? false) - Number(settings.plugins[a.name]?.isFavorite ?? false));
 
     const hasUserPlugins = useMemo(() => !IS_STANDALONE && Object.values(PluginMeta).some(m => m.userPlugin), []);
 
@@ -205,6 +206,9 @@ export default function PluginSettings() {
         const { status, tags } = searchValue;
 
         switch (status) {
+            case SearchStatus.FAVORITES:
+                if (!settings.plugins[plugin.name]?.isFavorite) return false;
+                break;
             case SearchStatus.DISABLED:
                 if (isPluginEnabled(plugin.name)) return false;
                 break;
@@ -413,6 +417,7 @@ export default function PluginSettings() {
                     <Select
                         options={[
                             { label: "Show All", value: SearchStatus.ALL, default: true },
+                            { label: "Show Favorites", value: SearchStatus.FAVORITES },
                             { label: "Show Enabled", value: SearchStatus.ENABLED },
                             { label: "Show Disabled", value: SearchStatus.DISABLED },
                             { label: "Show Equicord", value: SearchStatus.EQUICORD },

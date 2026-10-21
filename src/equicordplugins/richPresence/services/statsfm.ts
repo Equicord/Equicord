@@ -7,8 +7,7 @@
 import { Logger } from "@utils/Logger";
 import { Activity, ActivityButton } from "@vencord/discord-types";
 import { ActivityFlags, ActivityType } from "@vencord/discord-types/enums";
-import { findByPropsLazy } from "@webpack";
-import { ApplicationAssetUtils, FluxDispatcher } from "@webpack/common";
+import { ApplicationAssetUtils, FluxDispatcher, SelfPresenceStore } from "@webpack/common";
 
 import { settings } from "../settings";
 import { NameFormat } from "../types";
@@ -18,7 +17,6 @@ const APPLICATION_ID = "1325126169179197500";
 const PLACEHOLDER_ID = "2a96cbd8b46e442fc41c2b86b821562f";
 const SOCKET_ID = "RichPresence_SFM";
 const logger = new Logger("RichPresence:StatsFm");
-const PresenceStore = findByPropsLazy("getLocalPresence");
 
 let updateInterval: NodeJS.Timeout | undefined;
 
@@ -67,11 +65,11 @@ function getLargeImage(track: SfmTrackData): string | undefined {
 
 async function getActivity(): Promise<Activity | null> {
     if (settings.store.sfm_hideWithExternalRPC) {
-        if (PresenceStore.getActivities().some(a => a.application_id !== APPLICATION_ID)) return null;
+        if (SelfPresenceStore.getActivities().some(a => a.application_id !== APPLICATION_ID)) return null;
     }
 
     if (settings.store.sfm_hideWithSpotify) {
-        if (PresenceStore.getActivities().some(a => a.type === ActivityType.LISTENING && a.application_id !== APPLICATION_ID))
+        if (SelfPresenceStore.getActivities().some(a => a.type === ActivityType.LISTENING && a.application_id !== APPLICATION_ID))
             return null;
     }
 

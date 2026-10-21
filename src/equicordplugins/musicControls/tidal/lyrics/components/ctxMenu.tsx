@@ -29,6 +29,7 @@ export function LyricsContextMenu() {
                 disabled={!currLyric?.text}
                 action={() => copyWithToast(currLyric!.text!, "Lyric copied!")}
                 icon={CopyIcon}
+                leadingAccessory={{ type: "icon", icon: CopyIcon }}
             />
         </Menu.Menu>
     );

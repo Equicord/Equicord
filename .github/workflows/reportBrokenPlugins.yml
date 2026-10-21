@@ -12,9 +12,18 @@ on:
                 default: both
             webhook_url:
                 type: string
-                description: "Webhook URL that the report will be posted to. This will be
+                description:
+                    "Webhook URL that the report will be posted to. This will be
                     visible for everyone, so DO NOT pass sensitive webhooks like
                     discord webhook. This is meant to be used by Equibot."
+                required: false
+            repository:
+                type: string
+                description: repository to test patches on
+                required: false
+            ref:
+                type: string
+                description: "Git reference to test patches on. This can be a branch, tag, or commit SHA."
                 required: false
     schedule:
         #   # Every day at midnight
@@ -29,12 +38,12 @@ jobs:
         runs-on: ubuntu-latest
 
         steps:
-            - uses: actions/checkout@v6
+            - uses: actions/checkout@v7
               with:
-                  ref: ${{ github.event_name == 'schedule' && 'dev' || github.ref }}
+                  repository: ${{ inputs.pr_repo || github.repository }}
+                  ref: ${{ inputs.ref || (github.event_name == 'schedule' && 'dev' || github.ref) }}
 
             - uses: oven-sh/setup-bun@v2
-
               with:
                   bun-version: latest
 

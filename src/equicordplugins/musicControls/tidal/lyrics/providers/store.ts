@@ -23,6 +23,8 @@ function showNotif(title: string, body: string) {
     }
 }
 
+let tidalStoreChangeListener: (() => void) | undefined;
+
 export const TidalLrcStore = proxyLazyWebpack(() => {
     let lyrics: EnhancedLyric[] | null = null;
     let lastTrackId: string | null = null;
@@ -49,6 +51,14 @@ export const TidalLrcStore = proxyLazyWebpack(() => {
     }
 
     TidalStore.addChangeListener(handleTidalStoreChange);
+    tidalStoreChangeListener = handleTidalStoreChange;
 
     return store;
 });
+
+export function stopTidalLrcStore() {
+    if (tidalStoreChangeListener) {
+        TidalStore.removeChangeListener(tidalStoreChangeListener);
+        tidalStoreChangeListener = undefined;
+    }
+}

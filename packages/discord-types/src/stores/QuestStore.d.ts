@@ -8,7 +8,6 @@ import {
     QuestRewardType,
     QuestTargetedContent,
     QuestTaskType,
-    QuestHomePlacement,
     QuestTranscriptFetchStatus,
     QuestErrorType,
     QuestSharePolicy,
@@ -431,47 +430,18 @@ export interface ExcludedQuest {
     replacementId: string;
 }
 
-/** Ad tracking identifiers for quest delivery. */
-export interface QuestAdIdentifiers {
-    ad_id?: string;
-    adset_id?: string;
-    ad_set_id?: string;
-    campaign_id?: string;
-    creative_id?: string;
-    creative_type?: string;
-    /** Request ID from ad decision. */
-    decision_id?: string;
-    /** Whether quest was served via targeting. */
-    is_targeted: boolean;
-}
-
-/** Quest delivery information for a placement. */
-export interface QuestDeliveryInfo {
-    /** Quest to deliver. */
-    quest: Quest;
-    /** Ad tracking data. */
-    adDecisionData: QuestAdIdentifiers;
-    /** Ad context for analytics. */
-    adContext: string | null;
-    /** Raw metadata for ad attribution. */
-    metadataRaw: string | null;
-    /** Sealed metadata for verification. */
-    metadataSealed: string | null;
-}
-
-/** Ad decision cache entry for quest delivery. */
-export interface QuestAdDecision {
-    /** Quest ID or null if no quest to deliver. */
-    questId: string | null;
+/** Earned quest delivery decision for a single quest. */
+export interface EarnedQuestDeliveryDecision {
     /** Unix timestamp when decision was fetched. */
     fetchedAt: number;
-    /** Cache TTL in milliseconds. Default 6 hours. */
+    /** Cache TTL in milliseconds. */
     ttlMillis: number;
-    /** Ad tracking data. */
-    adDecisionData: QuestAdIdentifiers;
-    adContext: string | null;
-    metadataRaw: string | null;
-    metadataSealed: string | null;
+    shouldDeliver: boolean;
+}
+
+/** Earned quest delivery decisions for a placement. */
+export interface EarnedQuestDeliveryDecisions {
+    earnedDecisionByQuestId: Map<string, EarnedQuestDeliveryDecision>;
 }
 
 /** Stream heartbeat failure tracking. Updated via QUESTS_SEND_HEARTBEAT_FAILURE. */
@@ -482,53 +452,6 @@ export interface StreamHeartbeatFailure {
     streamKey: string;
     /** Unix timestamp of first failure. */
     firstFailedAt: number;
-}
-
-/** Asset for quest home takeover display. */
-export interface QuestHomeTakeoverAsset {
-    /** Accessibility text. */
-    altText: string;
-    /** Asset type identifier. */
-    assetType: string;
-    /** Asset URL. */
-    url: string;
-}
-
-/** Sponsor CTA for quest home takeover. */
-export interface QuestHomeTakeoverCtaSponsor {
-    ctaType: string;
-    title: string;
-    /** Sponsor destination URL. */
-    url: string;
-}
-
-/** Quest CTA for quest home takeover. */
-export interface QuestHomeTakeoverCtaQuest {
-    ctaType: string;
-    title: string;
-    /** Quest ID to navigate to. */
-    questId: string;
-}
-
-/** Quest home takeover banner configuration. */
-export interface QuestHomeTakeoverConfig {
-    placementType: QuestHomePlacement;
-    /** Campaign identifier. */
-    campaignId: string;
-    labelTitle: string;
-    labelSubtitle: string;
-    /** Hero banner asset. */
-    assetHeroImage: QuestHomeTakeoverAsset;
-    /** Sponsor logo asset. */
-    assetSponsorImage: QuestHomeTakeoverAsset;
-    /** Sponsor link CTA. */
-    ctaSponsorUrl: QuestHomeTakeoverCtaSponsor;
-    /** Quest navigation CTAs. */
-    ctaQuests: QuestHomeTakeoverCtaQuest[];
-    /** ISO timestamp when takeover starts. */
-    startsAt: string;
-    /** ISO timestamp when takeover expires. */
-    expiresAt: string;
 }
 
 /** Claimed reward code details. Returned by QUESTS_FETCH_REWARD_CODE_SUCCESS. */
@@ -652,32 +575,32 @@ export class QuestStore extends FluxStore {
     /** Unix timestamp of last current quests fetch. Default 0. */
     get lastFetchedCurrentQuests(): number;
 
-    /** Unix timestamp of last quest-to-deliver fetch. Default 0. */
-    get lastFetchedQuestToDeliver(): number;
-
-    /** Whether fetching quest to deliver. Set via QUESTS_FETCH_QUEST_TO_DELIVER_BEGIN. */
-    get isFetchingQuestToDeliver(): boolean;
-
-    /** Override quest for delivery testing. Set via QUESTS_DELIVERY_OVERRIDE. */
-    get questDeliveryOverride(): Quest | undefined;
-
-    /** Quest delivery info keyed by {@link QuestPlacement}. Updated via QUESTS_FETCH_QUEST_TO_DELIVER_SUCCESS. */
-    get questToDeliverForPlacement(): Map<QuestPlacement, QuestDeliveryInfo>;
-
     /** Date until enrollment is blocked, null if not blocked. Set via QUESTS_ENROLL_FAILURE. */
     get questEnrollmentBlockedUntil(): Date | null;
 
-    /** Ad decision cache keyed by {@link QuestPlacement}. Updated via QUESTS_FETCH_QUEST_TO_DELIVER_SUCCESS. */
-    get questAdDecisionByPlacement(): Map<QuestPlacement, QuestAdDecision>;
+    /** Date until quest access is suspended, null if not suspended. */
+    get questAccessSuspendedUntil(): Date | null;
 
-    /** Quest configs keyed by quest ID. */
-    get questConfigs(): Map<string, QuestConfig>;
+    /** Whether quest access is currently suspended. */
+    get isQuestAccessSuspended(): boolean;
+
+    /** Whether fetching any earned quest to deliver. Set via QUESTS_FETCH_EARNED_QUEST_TO_DELIVER_BEGIN. */
+    get isFetchingEarnedQuestToDeliver(): boolean;
+
+    /** Earned quest delivery decisions keyed by content placement. Updated via QUESTS_FETCH_EARNED_QUEST_TO_DELIVER_SUCCESS. */
+    get earnedQuestForPlacement(): Map<string, EarnedQuestDeliveryDecisions>;
 
     /** Whether fetching preview for a quest. */
     isFetchingQuestPreview(questId: string): boolean;
 
-    /** Whether fetching quest to deliver for a placement. */
-    isFetchingQuestToDeliverByPlacement(placement: QuestPlacement): boolean;
+    /** Whether fetching earned quest to deliver for a content placement. */
+    isFetchingEarnedQuestToDeliverByPlacement(content: string): boolean;
+
+    /** Gets the quest forced into a placement via QUESTS_PREVIEW_OVERRIDE. */
+    getQuestPreviewOverride(placement: QuestPlacement): Quest | undefined;
+
+    /** Whether ad content was dismissed. Set via AD_CONTENT_DISMISS_BEGIN. */
+    isAdContentDismissed(adCreativeId: string): boolean;
 
     /** Gets preview fetch error for a quest. */
     getFetchQuestPreviewError(questId: string): QuestErrorType | undefined;
@@ -726,13 +649,4 @@ export class QuestStore extends FluxStore {
 
     /** Gets quest loaded via preview tool. Updated via QUESTS_FETCH_PREVIEW_SUCCESS. */
     getQuestLoadedViaPreview(questId: string): Quest | undefined;
-
-    /** Whether fetching quest home takeover config. Set via QUESTS_FETCH_QUEST_HOME_TAKEOVER_BEGIN. */
-    isFetchingQuestHomeTakeover(): boolean;
-
-    /** Gets quest home takeover config. Updated via QUESTS_FETCH_QUEST_HOME_TAKEOVER_SUCCESS. */
-    getQuestHomeTakeoverConfig(): QuestHomeTakeoverConfig | null;
-
-    /** Gets Unix timestamp of last takeover fetch, null if never fetched. */
-    getLastFetchedQuestHomeTakeover(): number | null;
 }

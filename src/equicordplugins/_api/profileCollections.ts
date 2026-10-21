@@ -12,13 +12,15 @@ export default definePlugin({
     description: "API to add collections to the user profile panel like discords game collection.",
     authors: [Devs.thororen],
     patches: [
+        // message and member list popouts
         {
-            find: "#{intl::USER_PROFILE_FRIEND_REQUEST_TOAST}",
+            find: '"UserProfilePopout");',
             replacement: {
                 match: /user:\i,widgets:.{0,100}?\}\),/,
                 replace: "$&Vencord.Api.ProfileCollections.renderProfileCollections(arguments[0]),",
             }
         },
+        // user panel popout
         {
             find: '"UserProfileAccountPopout"',
             replacement: {
@@ -26,12 +28,19 @@ export default definePlugin({
                 replace: "$&Vencord.Api.ProfileCollections.renderProfileCollections(arguments[0]),",
             },
         },
+        // dm sidebar
         {
             find: ".SIDEBAR,disableToolbar:",
-            replacement: {
-                match: /user:(\i),widgets:.{0,100}?\}\),/,
-                replace: "$&Vencord.Api.ProfileCollections.renderProfileCollections({...arguments[0],isSideBar:true}),"
-            }
+            replacement: [
+                {
+                    match: /user:\i,widgets:.{0,100}?\}\),(?=.{0,100}user:\i,currentUser:\i)/,
+                    replace: "$&arguments[0]?.isRedesignEnabled&&Vencord.Api.ProfileCollections.renderProfileCollections({...arguments[0],isSideBar:true}),"
+                },
+                {
+                    match: /user:\i,widgets:.{0,100}?\}\),(?=.{0,100}unownedWishlistItems:\i,wishlistId:\i)/,
+                    replace: "$&!arguments[0]?.isRedesignEnabled&&Vencord.Api.ProfileCollections.renderProfileCollections({...arguments[0],isSideBar:true}),"
+                }
+            ]
         }
     ]
 });

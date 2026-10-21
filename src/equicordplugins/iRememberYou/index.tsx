@@ -20,7 +20,7 @@ export default definePlugin({
     name: "IRememberYou",
     description: "Locally saves everyone you've been communicating with (including servers), in case of lose",
     tags: ["Chat", "Servers"],
-    authors: [EquicordDevs.zoodogood, EquicordDevs.keircn],
+    authors: [EquicordDevs.zoodogood, EquicordDevs.keircn, EquicordDevs.tt],
     dependencies: ["MessageEventsAPI"],
 
     patches: [],

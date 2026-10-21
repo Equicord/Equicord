@@ -8,7 +8,9 @@ import { QuestTaskType } from "@vencord/discord-types/enums";
 import type { JSX } from "react";
 
 import { getQuestifySettings, useQuestifySettings } from "../settings/access";
-import { autoCompleteQuestTaskTypes, defaultAllowChangingDangerousSettings, defaultAutoCompleteQuestsSimultaneously, defaultAutoCompleteQuestTypes, defaultCompleteVideoQuestsQuicker, defaultMakeMobileVideoQuestsDesktopCompatible, defaultResumeInterruptedQuests, isDesktopCompatible } from "../settings/def";
+import { resetDangerousSettings } from "../settings/dangerous";
+import { autoCompleteQuestTaskTypes, defaultAutoCompleteQuestTypes, isDesktopCompatible } from "../settings/def";
+import { validateIgnoredQuests } from "../settings/ignoredQuests";
 import { Alerts, q } from "../utils/ui";
 import { ManaButton, type ManaSelectOption, SettingsCard, SettingsDescription, SettingsHeader, SettingsNotice, SettingsParagraph, SettingsSelect, SettingsSubheader, SettingsSubtleSwitch } from "./shared";
 
@@ -25,6 +27,8 @@ type QuestModifySettingKey =
     | "autoCompleteQuestsSimultaneously"
     | "resumeInterruptedQuests"
     | "completeVideoQuestsQuicker"
+    | "preventVideoQuestsPausing"
+    | "hideNonAutoCompletableQuests"
     | "makeMobileVideoQuestsDesktopCompatible";
 
 interface QuestDisableOption {
@@ -91,33 +95,6 @@ const autoCompleteQuestTypeManaOptions: ManaSelectOption[] = autoCompleteQuestTy
     disabled: !isDesktopCompatible(value),
 }));
 
-interface SettingsAllowDangerousButtonProps {
-    allowed: boolean;
-    disabled?: boolean;
-    onClick?: (e: React.MouseEvent) => void;
-}
-
-function SettingsAllowDangerousButton({
-    allowed,
-    disabled,
-    onClick,
-}: SettingsAllowDangerousButtonProps): JSX.Element {
-    return (
-        <div className={q("settings-button", "allow-dangerous-button")}>
-            <ManaButton
-                text={allowed
-                    ? "Reset and disallow changing dangerous settings..."
-                    : "Allow changing dangerous settings..."}
-                variant={allowed ? "critical-secondary" : "critical-primary"}
-                fullWidth={true}
-                disabled={disabled}
-                onClick={onClick}
-                size="sm"
-            />
-        </div>
-    );
-}
-
 export function QuestFeaturesSetting(): JSX.Element {
     const questFeatures = useQuestifySettings([
         "disableQuestsEverything",
@@ -134,6 +111,8 @@ export function QuestFeaturesSetting(): JSX.Element {
         "autoCompleteQuestsSimultaneously",
         "autoCompleteQuestTypes",
         "completeVideoQuestsQuicker",
+        "preventVideoQuestsPausing",
+        "hideNonAutoCompletableQuests",
     ]);
 
     const selectedDisableValues = disableFeatureOptions
@@ -175,6 +154,7 @@ export function QuestFeaturesSetting(): JSX.Element {
         }
 
         getQuestifySettings().autoCompleteQuestTypes = nextAutoCompleteQuestTypes;
+        validateIgnoredQuests();
     }
 
     function updateDisableEverything(checked: boolean) {
@@ -195,17 +175,6 @@ export function QuestFeaturesSetting(): JSX.Element {
         }
     }
 
-    function resetDangerousSettings() {
-        const settings = getQuestifySettings();
-
-        settings.allowChangingDangerousSettings = defaultAllowChangingDangerousSettings;
-        settings.autoCompleteQuestsSimultaneously = defaultAutoCompleteQuestsSimultaneously;
-        settings.completeVideoQuestsQuicker = defaultCompleteVideoQuestsQuicker;
-        settings.makeMobileVideoQuestsDesktopCompatible = defaultMakeMobileVideoQuestsDesktopCompatible;
-        settings.resumeInterruptedQuests = defaultResumeInterruptedQuests;
-        settings.autoCompleteQuestTypes = { ...defaultAutoCompleteQuestTypes };
-    }
-
     function updateDangerousAccess(checked: boolean) {
         function setDangerousAccess() {
             getQuestifySettings().allowChangingDangerousSettings = checked;
@@ -224,6 +193,10 @@ export function QuestFeaturesSetting(): JSX.Element {
 
     function updateModifyValue(key: QuestModifySettingKey, checked: boolean) {
         getQuestifySettings()[key] = checked;
+
+        if (key === "hideNonAutoCompletableQuests" || key === "makeMobileVideoQuestsDesktopCompatible") {
+            validateIgnoredQuests();
+        }
     }
 
     return (
@@ -265,38 +238,69 @@ export function QuestFeaturesSetting(): JSX.Element {
             <SettingsSubheader> Modify Features </SettingsSubheader>
             <SettingsNotice className={["notice-card-red", questFeatures.disableQuestsEverything ? "dimmed-settings-item" : undefined, questFeatures.allowChangingDangerousSettings ? undefined : "notice-card-solo", "no-bottom-margin"].filter(c => c !== undefined)}>
                 <SettingsParagraph>
-                    Discord has began issuing warnings to users of scripts or plugins that modify how Quests are completed, which is against their <a href="https://discord.com/safety/platform-manipulation-policy-explainer" target="_blank" rel="noreferrer">Terms of Service</a>.
+                    Discord is known to punish users of scripts or plugins that modify the completion of Quests. Modifying the completion of Quests is against Discord's <a href="https://discord.com/safety/platform-manipulation-policy-explainer" target="_blank" rel="noreferrer">Terms of Service</a>.
                 </SettingsParagraph>
                 <br />
                 <SettingsParagraph>
-                    The warnings appear limited to threat of loss of access to Quests or their rewards, but Discord may escalate at any time.
+                    The punishment consists of a temporary or permanent loss of access to Quests and their rewards. <strong>The punishment also consists of an account standing violation which lasts 2 years per violation.</strong>
                 </SettingsParagraph>
                 <br />
                 <SettingsParagraph>
-                    Due to the various methods Discord uses to track users, there's no way to realistically evade detection. If you proceed, understand that Discord likely will detect it at some point.
+                    Due to the various methods Discord uses to track users, there's no way to realistically evade detection. If you proceed, understand that Discord likely will detect your use at some point.
                 </SettingsParagraph>
                 <br />
                 <SettingsParagraph>
                     Use the following toggle to access potentially dangerous settings at your own risk.
                 </SettingsParagraph>
-                <SettingsAllowDangerousButton
-                    allowed={questFeatures.allowChangingDangerousSettings}
-                    disabled={questFeatures.disableQuestsEverything}
-                    onClick={() => updateDangerousAccess(!questFeatures.allowChangingDangerousSettings)}
-                />
-                {questFeatures.allowChangingDangerousSettings && <>
+                <div className={q("settings-button", "allow-dangerous-button")}>
+                    <ManaButton
+                        text={questFeatures.allowChangingDangerousSettings
+                            ? "Reset and disallow changing dangerous settings..."
+                            : "Allow changing dangerous settings..."}
+                        variant={questFeatures.allowChangingDangerousSettings ? "critical-secondary" : "critical-primary"}
+                        fullWidth={true}
+                        disabled={questFeatures.disableQuestsEverything}
+                        onClick={() => updateDangerousAccess(!questFeatures.allowChangingDangerousSettings)}
+                        size="sm"
+                    />
+                </div>
+                <div style={{ display: questFeatures.allowChangingDangerousSettings ? undefined : "none" }}>
+                    <SettingsSubtleSwitch
+                        disabled={questFeatures.disableQuestsEverything || !questFeatures.allowChangingDangerousSettings}
+                        checked={questFeatures.hideNonAutoCompletableQuests}
+                        label="Hide Non Auto-Completable Quests:"
+                        onChange={checked => updateModifyValue("hideNonAutoCompletableQuests", checked)}
+                        topSpacing="10"
+                        bottomSpacing="5"
+                        tooltip={{
+                            position: "top",
+                            text: "Hide incomplete Quests with an unclaimed or ignored status when no auto-complete task is supported on this platform and enabled in the Quest types dropdown. Claimed, expired, and completed Quests are exempt. Use the Status Order Hidden options to hide those Quests."
+                        }}
+                    />
                     <SettingsSubtleSwitch
                         disabled={questFeatures.disableQuestsEverything || !questFeatures.allowChangingDangerousSettings}
                         checked={questFeatures.completeVideoQuestsQuicker}
                         label="Accelerate Video Quest auto-completion:"
                         onChange={checked => updateModifyValue("completeVideoQuestsQuicker", checked)}
-                        topSpacing="10"
                         bottomSpacing="5"
                         tooltip={{
                             position: "top",
                             text: "Discord allows Video Quests to be completed once 24 seconds less than the duration of the video has passed since you enrolled into the Quest."
                                 + "\n\nThis means that if a Video Quest is 24 seconds or less, or if you enroll in a Video Quest and return later to complete it, it can be completed immediately."
                                 + "\n\nThis setting will only apply to auto-completing Video Quests and relies on the auto-complete setting below. Manually completing Video Quests will still require waiting the full duration and is not dependent on enrollment time."
+                        }}
+                    />
+                    <SettingsSubtleSwitch
+                        disabled={questFeatures.disableQuestsEverything || !questFeatures.allowChangingDangerousSettings}
+                        checked={questFeatures.preventVideoQuestsPausing}
+                        label="Prevent Video Quests from pausing when losing focus:"
+                        onChange={checked => updateModifyValue("preventVideoQuestsPausing", checked)}
+                        bottomSpacing="5"
+                        tooltip={{
+                            position: "top",
+                            text: "Discord forces you to be tabbed into the client for Video Quests to play their video."
+                                + "\n\nThis setting prevents the video from pausing and allows completion to progress as normal."
+                                + "\n\nThis setting applies only to manually completing Video Quests."
                         }}
                     />
                     <SettingsSubtleSwitch
@@ -359,7 +363,7 @@ export function QuestFeaturesSetting(): JSX.Element {
                                 + "\n\nAuto-completing Quests is the riskiest dangerous setting available. Enable it at your own risk."
                         }}
                     />
-                </>}
+                </div>
             </SettingsNotice>
         </SettingsCard>
     );

@@ -5,7 +5,7 @@
  */
 
 import type { UserData } from "@song-spotlight/api/structs";
-import { showToast, Toasts, UserStore } from "@webpack/common";
+import { showToast, UserStore } from "@webpack/common";
 
 import { useAuthorizationStore } from "./stores/AuthorizationStore";
 import { useSongStore } from "./stores/SongStore";
@@ -65,20 +65,20 @@ export async function authFetch(url: string | URL, options?: RequestInit, retrie
             if (retry) return await authFetch(url, options, true);
             else {
                 useAuthorizationStore.getState().deleteTokens();
-                showToast("You have been signed out from Song Spotlight. Please sign in again.", Toasts.Type.FAILURE);
+                showToast({ text: "You have been signed out from Song Spotlight. Please sign in again.", variant: "critical" });
             }
         } else {
-            showToast(
-                !text.includes("<body>") && res.status >= 400 && res.status <= 599
+            showToast({
+                text: !text.includes("<body>") && res.status >= 400 && res.status <= 599
                     ? `Song Spotlight: ${text}`
                     : `Song Spotlight fetch error at ${url.pathname}`,
-                Toasts.Type.FAILURE,
-            );
+                variant: "critical"
+            });
         }
 
         throw new Error(text);
     } catch (error) {
-        showToast(`Song Spotlight: ${error}`, Toasts.Type.FAILURE);
+        showToast({ text: `Song Spotlight: ${error}`, variant: "critical" });
 
         throw error;
     }

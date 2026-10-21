@@ -41,7 +41,7 @@ export default definePlugin({
             find: "#{intl::xdCLeM::raw}",
             replacement: [
                 {
-                    match: /profile:\i\}\),.{0,20}profile:\i(?=.{0,20}profile:\i)/,
+                    match: /profile:\i,disableGuildNameClick:!\i/,
                     replace: "$&,invite:arguments[0].invite"
                 }
             ]
@@ -50,15 +50,17 @@ export default definePlugin({
             find: "isBannerVisible:!1})},",
             replacement: [
                 {
-                    // make the button clickable
                     match: /children:(\i)\.name\}\)\}\)\}\)/,
                     replace: "onClick:$self.Lurkable($1),$&"
                 },
                 {
-                    // tip gets inserted in the name container, header gets inserted beside it
-                    match: /(:(\i),disableGuildNameClick:.{0,20}\}\),\i)(\]\}\))/,
-                    replace: "$1,$self.RenderTip(arguments[0].invite?.expires_at)$3,$self.Header(arguments[0].invite?.inviter,$2.name)"
-                }
+                    match: /(profile:\i\}\))/,
+                    replace: "$1,$self.RenderTip(arguments[0]?.invite?.expires_at)"
+                },
+                {
+                    match: /(?<=\]\}\),)(?=.{0,15}onlineCount:\i\.onlineCount)/,
+                    replace: "$self.Header(arguments[0]?.invite?.inviter,arguments[0]?.profile?.name),"
+                },
             ]
         },
     ],

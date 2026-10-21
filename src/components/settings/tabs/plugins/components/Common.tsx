@@ -22,6 +22,7 @@ interface SettingBaseProps<T> {
     };
     id: string;
     definedSettings: DefinedSettings;
+    closePluginSettings(): void;
 }
 
 export type SettingProps<T extends PluginSettingDefCommon> = SettingBaseProps<T>;
@@ -34,19 +35,20 @@ export function resolveError(isValidResult: boolean | string) {
 }
 
 interface SettingsSectionProps extends PropsWithChildren {
-    name: string;
+    name?: string;
+    id: string;
     description: string;
     error?: string | null;
     inlineSetting?: boolean;
     tag?: "label" | "div";
 }
 
-export function SettingsSection({ tag: Tag = "div", name, description, error, inlineSetting, children }: SettingsSectionProps) {
+export function SettingsSection({ tag: Tag = "div", name, id, description, error, inlineSetting, children }: SettingsSectionProps) {
     return (
         <Tag className={cl("section")}>
             <div className={classes(cl("content"), inlineSetting && cl("inline"))}>
                 <div className={cl("label")}>
-                    {name && <BaseText className={cl("title")} size="md" weight="medium">{wordsToTitle(wordsFromCamel(name))}</BaseText>}
+                    <BaseText className={cl("title")} size="md" weight="medium">{name ?? wordsToTitle(wordsFromCamel(id))}</BaseText>
                     {description && <BaseText className={cl("description")} size="sm">{description}</BaseText>}
                 </div>
                 {children}

@@ -171,7 +171,17 @@ export function QuestNotificationsSetting(): JSX.Element {
         }
 
         clearActivePlayer();
-        const player = createAudioPlayer(sound, { volume: Math.max(0, Math.min(100, volume)), onEnded: clearActivePlayer });
+
+        function finishPreview(): void {
+            if (activePlayer.current !== player) {
+                return;
+            }
+
+            activePlayer.current = null;
+            setPlayingSound(null);
+        }
+
+        const player = createAudioPlayer(sound, { volume: Math.max(0, Math.min(100, volume)), onEnded: finishPreview, onError: finishPreview });
         activePlayer.current = player;
         setPlayingSound(sound);
         player?.play();

@@ -24,6 +24,7 @@
 import monacoHtmlLocal from "file://monacoWin.html?minify";
 import * as DataStore from "@api/DataStore";
 import type { Settings } from "@api/Settings";
+import { getThemeInfo } from "@main/themes";
 import { debounce } from "@shared/debounce";
 import { localStorage } from "@utils/localStorage";
 import { getStylusWebStoreUrl } from "@utils/web";
@@ -43,9 +44,8 @@ window.VencordNative = {
     themes: {
         uploadTheme: (fileName: string, fileData: string) => DataStore.set(fileName, fileData, themeStore),
         deleteTheme: (fileName: string) => DataStore.del(fileName, themeStore),
-        getThemesDir: async () => "",
         getThemesList: () => DataStore.entries(themeStore).then(entries =>
-            entries.map(([name, css]) => ({ fileName: name as string, content: css }))
+            entries.map(([name, css]) => getThemeInfo(css, name.toString()))
         ),
         getThemeData: (fileName: string) => DataStore.get(fileName, themeStore),
         getSystemValues: async () => ({}),
@@ -55,6 +55,7 @@ window.VencordNative = {
 
     native: {
         getVersions: () => ({}),
+        supportsWindowsMaterial: () => false,
         openExternal: async (url) => void open(url, "_blank"),
         getRendererCss: async () => {
             if (IS_USERSCRIPT)
@@ -72,8 +73,8 @@ window.VencordNative = {
     updater: {
         getRepo: async () => ({ ok: true, value: "https://github.com/Equicord/Equicord" }),
         getUpdates: async () => ({ ok: true, value: [] }),
-        update: async () => ({ ok: true, value: false }),
-        rebuild: async () => ({ ok: true, value: true }),
+        fetchUpdate: async () => ({ ok: true, value: false }),
+        applyUpdate: async () => ({ ok: true, value: true }),
     },
 
     quickCss: {
@@ -122,7 +123,8 @@ window.VencordNative = {
     settings: {
         get: () => {
             try {
-                return JSON.parse(localStorage.getItem("EquicordSettings") || "{}");
+                const settings = JSON.parse(localStorage.getItem("EquicordSettings") || "{}");
+                return typeof settings === "string" ? JSON.parse(settings) : settings;
             } catch (e) {
                 console.error("Failed to parse settings from localStorage: ", e);
                 return {};
@@ -135,9 +137,4 @@ window.VencordNative = {
 
     pluginHelpers: {} as any,
     csp: {} as any,
-    tray: {
-        setUpdateState: NOOP,
-        onCheckUpdates: NOOP,
-        onRepair: NOOP,
-    },
 };

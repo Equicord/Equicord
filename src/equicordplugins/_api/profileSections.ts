@@ -12,15 +12,15 @@ export default definePlugin({
     description: "API to add sections near the 'Member Since' area of user profile panels.",
     authors: [Devs.thororen],
     patches: [
-        // DM User Sidebar
+        // dm user sidebar
         {
-            find: "#{intl::PREMIUM_GIFTING_BUTTON}),action:",
+            find: ".SIDEBAR,disableToolbar:",
             replacement: {
-                match: /(#{intl::USER_PROFILE_MEMBER_SINCE}\),.{0,100}userId:(\i\.id)}\)}\))/,
+                match: /(#{intl::USER_PROFILE_MEMBER_SINCE}\),.{0,100}userId:(\i\.id)\}\)\}\))(?=.{0,100}unownedWishlistItems:\i,wishlistId:\i)/,
                 replace: "$1,Vencord.Api.ProfileSections.renderProfileSections({userId:$2,isSideBar:true})",
             }
         },
-        // User Profile Modal
+        // user profile modal
         {
             find: ",applicationRoleConnection:",
             replacement: {
@@ -28,7 +28,7 @@ export default definePlugin({
                 replace: "$1,Vencord.Api.ProfileSections.renderProfileSections({userId:$2,isSideBar:false}),",
             }
         },
-        // User Profile Modal v2
+        // user profile modal v2
         {
             find: ".MODAL_V2,onClose:",
             replacement: {

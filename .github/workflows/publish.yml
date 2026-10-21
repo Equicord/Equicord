@@ -15,7 +15,7 @@ jobs:
         runs-on: ubuntu-latest
 
         steps:
-            - uses: actions/checkout@v6
+            - uses: actions/checkout@v7
               with:
                   fetch-depth: 0
 
@@ -26,8 +26,9 @@ jobs:
             - name: Get latest Git tag
               id: tag
               run: |
-                  latest_tag=$(git tag --list 'v*' --sort=-v:refname | head -n 1 || echo "v0.0.0")
-                  echo "latest=$latest_tag" >> $GITHUB_OUTPUT
+                  latest_tag=$(git tag --list 'v*' --sort=-v:refname | head -n 1)
+                  [ -z "$latest_tag" ] && latest_tag="v0.0.0"
+                  echo "latest=$latest_tag" >> "$GITHUB_OUTPUT"
 
             - name: Check if package.json version is newer
               id: check
@@ -52,7 +53,7 @@ jobs:
 
             - name: Create Tag
               if: steps.check.outputs.release == 'true'
-              uses: butlerlogic/action-autotag@1.1.2
+              uses: thororen1234/action-autotag@v1.1.6
               env:
                   GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
               with:
@@ -74,25 +75,31 @@ jobs:
 
             - name: Create sources zip
               if: steps.check.outputs.release == 'true'
-              run: zip -r dist/extension-sources.zip . -x "node_modules/*" -x "dist/*" -x
+              run:
+                  zip -r dist/extension-sources.zip . -x "node_modules/*" -x "dist/*" -x
                   ".git/*"
 
             - name: Publish extension
               if: steps.check.outputs.release == 'true' && !vars.ACT == 'false'
-              run: bunx @equicord/publish-browser-extension@latest --chrome-zip
-                  dist/extension-chrome.zip --firefox-zip
-                  dist/extension-firefox.zip --firefox-sources-zip
-                  dist/extension-sources.zip --edge-zip
-                  dist/extension-chrome.zip
+              run:
+                  bunx @equicord/publish-browser-extension@latest
+                  --chrome-zip dist/extension-chrome.zip
+                  --firefox-zip dist/extension-firefox.zip
+                  --firefox-sources-zip dist/extension-sources.zip
+                  --edge-zip dist/extension-chrome.zip
+                  #--opera-zip dist/extension-chrome.zip
               env:
+                  CHROME_API_VERSION: ${{ secrets.CHROME_API_VERSION }}
                   CHROME_EXTENSION_ID: ${{ secrets.CHROME_EXTENSION_ID }}
                   CHROME_PUBLISHER_ID: ${{ secrets.CHROME_PUBLISHER_ID }}
-                  CHROME_CLIENT_ID: ${{ secrets.CHROME_CLIENT_ID }}
-                  CHROME_CLIENT_SECRET: ${{ secrets.CHROME_CLIENT_SECRET }}
-                  CHROME_REFRESH_TOKEN: ${{ secrets.CHROME_REFRESH_TOKEN }}
+                  CHROME_SERVICE_ACCOUNT_CLIENT_EMAIL: ${{ secrets.CHROME_SERVICE_ACCOUNT_CLIENT_EMAIL }}
+                  CHROME_SERVICE_ACCOUNT_PRIVATE_KEY: ${{ secrets.CHROME_SERVICE_ACCOUNT_PRIVATE_KEY }}
+                  EDGE_API_KEY: ${{ secrets.EDGE_API_KEY }}
+                  EDGE_PRODUCT_ID: ${{ secrets.EDGE_PRODUCT_ID }}
+                  EDGE_CLIENT_ID: ${{ secrets.EDGE_CLIENT_ID }}
+                  FIREFOX_COMPATIBILITY: ${{ secrets.FIREFOX_COMPATIBILITY }}
                   FIREFOX_EXTENSION_ID: ${{ secrets.FIREFOX_EXTENSION_ID }}
                   FIREFOX_JWT_ISSUER: ${{ secrets.FIREFOX_JWT_ISSUER }}
                   FIREFOX_JWT_SECRET: ${{ secrets.FIREFOX_JWT_SECRET }}
-                  EDGE_PRODUCT_ID: ${{ secrets.EDGE_PRODUCT_ID }}
-                  EDGE_CLIENT_ID: ${{ secrets.EDGE_CLIENT_ID }}
-                  EDGE_API_KEY: ${{ secrets.EDGE_API_KEY }}
+                  #OPERA_PACKAGE_ID: ${{ secrets.OPERA_PACKAGE_ID }}
+                  #OPERA_SESSION_ID: ${{ secrets.OPERA_SESSION_ID }}

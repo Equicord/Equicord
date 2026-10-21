@@ -1,0 +1,28 @@
+name: autofix.ci
+
+on:
+    pull_request:
+
+permissions:
+    contents: read
+
+jobs:
+    autofix:
+        name: autofix
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v6
+
+            - name: Setup PNPM
+              uses: pnpm/setup@v2.1.0
+              with:
+                  runtime: node@v24
+                  require-lockfile: true
+
+            - name: Run lint fix
+              run: pnpm lint:fix
+
+            - name: Run stylelint fix
+              run: pnpm lint-styles:fix
+
+            - uses: autofix-ci/action@v1

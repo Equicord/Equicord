@@ -65,6 +65,8 @@ export interface TooltipProps {
 
     tooltipClassName?: string;
     tooltipContentClassName?: string;
+
+    delay?: number;
 }
 
 export type Tooltip = ComponentType<TooltipProps> & {
@@ -192,6 +194,7 @@ export type TextInput = ComponentType<PropsWithChildren<{
 export type TextArea = ComponentType<Omit<HTMLProps<HTMLTextAreaElement>, "onChange"> & {
     onChange(v: string): void;
     inputRef?: Ref<HTMLTextAreaElement>;
+    autosize?: boolean;
 }>;
 
 export interface SelectOption {
@@ -541,3 +544,16 @@ export type ColorPicker = ComponentType<{
     onChange(value: number | null): void;
     disabled?: boolean;
 }>;
+
+export type RoleMemberPopout = ComponentType<{
+    popoutProps: PopoutProps;
+    guildId: string;
+    channelId: string;
+    roleId: string;
+}>;
+
+export type ComponentSection = ComponentType<PropsWithChildren<{
+    heading?: string;
+    disabled?: boolean;
+    showNitroIcon?: boolean;
+}>>;

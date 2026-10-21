@@ -4,18 +4,36 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import "../settings.css";
+
 import { Card } from "@components/Card";
 import { Heading } from "@components/Heading";
 import { Paragraph } from "@components/Paragraph";
 import { findComponentByCodeLazy } from "@webpack";
-import { ColorPicker, Slider } from "@webpack/common";
-import type { ComponentProps, ComponentType, JSX, ReactNode } from "react";
+import { ColorPicker, React, Slider } from "@webpack/common";
+import type { ComponentProps, ComponentType, JSX, ReactElement, ReactNode } from "react";
 
+import { collectSettingsSearchTerms, getSettingsSearchMatchScore, registerSettingsSearchTerms, SettingsSearchPriority, useSettingsSearchQuery } from "../settings/search";
 import { q } from "../utils/ui";
 
+const searchComponentPriorities = new Map<ReactElement["type"], SettingsSearchPriority>([
+    [SettingsHeader, SettingsSearchPriority.Title],
+    [SettingsDescription, SettingsSearchPriority.Description],
+    [SettingsSubheader, SettingsSearchPriority.Subheading],
+    [SettingsParagraph, SettingsSearchPriority.Text],
+]);
+
 export function SettingsCard({ children }: { children: ReactNode; }): JSX.Element {
+    const query = useSettingsSearchQuery();
+    const id = React.useId();
+    const terms = React.useMemo(() => collectSettingsSearchTerms(children, searchComponentPriorities), [children]);
+    const score = getSettingsSearchMatchScore(query, terms);
+    const hidden = score === null;
+
+    React.useEffect(() => registerSettingsSearchTerms(id, terms), [id, terms]);
+
     return (
-        <Card variant="primary" className={q("setting")}>
+        <Card variant="primary" className={q("setting")} hidden={hidden} style={{ display: hidden ? "none" : undefined, order: query.trim() ? score ?? 0 : undefined }}>
             {children}
         </Card>
     );
@@ -266,7 +284,7 @@ interface SettingsSwitchLayoutProps extends SwitchWithLabelProps {
     tooltip?: { position: "top" | "bottom", text: string; };
 }
 
-const SwitchWithLabel = findComponentByCodeLazy('"data-toggleable-component":"switch"') as React.ComponentType<SwitchWithLabelProps>;
+const SwitchWithLabel = findComponentByCodeLazy("switchIconsEnabled:", ".hasIcon?") as React.ComponentType<SwitchWithLabelProps>;
 
 export type SettingsSubtleSwitchProps = Omit<SettingsSwitchLayoutProps, "description">;
 
@@ -351,6 +369,8 @@ function SettingsTooltip({
                 position={position}
                 color="brand"
                 tooltipStyle={{ maxWidth: wider ? "602px" : "350px" }}
+                tooltipClassName={q("settings-tooltip")}
+                tooltipPointerClassName={q("settings-tooltip-pointer")}
                 tooltipContentClassName={q("settings-tooltip-content")}
                 delay={50}
             >

@@ -83,11 +83,13 @@ async function zipGuildAssets(guild: Guild, type: "emojis" | "stickers") {
         .then(results => {
             const zipped = zipSync(Object.fromEntries(results.map(({ file, filename }) => [filename, file])));
             const blob = new Blob([new Uint8Array(zipped)], { type: "application/zip" });
+            const objectUrl = URL.createObjectURL(blob);
             const link = document.createElement("a");
-            link.href = URL.createObjectURL(blob);
+            link.href = objectUrl;
             link.download = `${guild.name}-${type}.zip`;
             link.click();
             link.remove();
+            setTimeout(() => URL.revokeObjectURL(objectUrl), 1000);
         })
         .catch(console.error);
 }

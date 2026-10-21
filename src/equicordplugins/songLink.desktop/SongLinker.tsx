@@ -12,19 +12,28 @@ import { Button, useEffect, useState } from "@webpack/common";
 import pl, { Native, settings, SongLinkResult } from ".";
 import { Providers } from "./Providers";
 
-export default function SongLinker({ url }: { url: string; }) {
+interface SongLinkerProps {
+    url: string;
+    onResolved?: (url: string, result: SongLinkResult) => void;
+}
+
+export default function SongLinker({ url, onResolved }: SongLinkerProps) {
     const [songData, setSongData] = useState<SongLinkResult>();
 
     useEffect(() => {
         async function doStuff() {
-            if (pl.cache[url]) return void setSongData(pl.cache[url]);
-
-            const sd = await Native.getTrackData(url);
+            let sd: SongLinkResult;
+            if (pl.cache[url]) {
+                sd = pl.cache[url];
+            } else {
+                sd = await Native.getTrackData(url);
+                pl.addToCache(url, sd);
+            }
             setSongData(sd);
-            pl.addToCache(url, sd);
+            onResolved?.(url, sd);
         }
         doStuff();
-    });
+    }, [url]);
 
     return <BaseText>
         {

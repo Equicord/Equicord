@@ -52,8 +52,8 @@ export default definePlugin({
                     replace: "false"
                 },
                 {
-                    match: /\(\)=>\i\.length<\i\.length/,
-                    replace: "()=>false",
+                    match: /return \i\.length<\i\.length/,
+                    replace: "return false",
                     predicate: () => settings.store.hideArrow
                 }
             ]

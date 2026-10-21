@@ -19,9 +19,8 @@ import {
     wrapTab,
 } from "@components/settings/tabs/BaseTab";
 import { classes, isObjectEmpty } from "@utils/misc";
-import { closeAllModals } from "@utils/modal";
 import { relaunch } from "@utils/native";
-import { Alerts, NavigationRouter, Toasts, useEffect, useState } from "@webpack/common";
+import { Alerts, closeAllModals, NavigationRouter, showToast,useEffect, useState } from "@webpack/common";
 
 import userpluginInstaller, { Native } from "..";
 import {
@@ -237,11 +236,7 @@ function UserPluginsTab() {
                                     setEnabled={t => {
                                         Vencord.Settings.plugins[pl.name].enabled = t;
                                         if (pluginRequiresRestart(pl)) {
-                                            Toasts.show({
-                                                id: Toasts.genId(),
-                                                message: "Restart to apply changes!",
-                                                type: Toasts.Type.MESSAGE
-                                            });
+                                            showToast({ text: "Restart to apply changes!" });
                                         } else {
                                             (t ? startPlugin : stopPlugin)(pl);
                                         }

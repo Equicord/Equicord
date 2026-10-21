@@ -8,14 +8,13 @@ import { generateId } from "@api/Commands";
 import { Settings } from "@api/Settings";
 import { Button } from "@components/Button";
 import { Card } from "@components/Card";
-import { HeadingPrimary, HeadingTertiary } from "@components/Heading";
+import { HeadingPrimary } from "@components/Heading";
 import { Paragraph } from "@components/Paragraph";
 import type { Theme, ThemeLikeProps } from "@equicordplugins/themeLibrary/types";
 import { proxyLazy } from "@utils/lazy";
 import { Margins } from "@utils/margins";
-import { ModalContent, ModalFooter, ModalHeader, ModalRoot, ModalSize, openModal } from "@utils/modal";
 import { User } from "@vencord/discord-types";
-import { FluxDispatcher, Parser, React, UserStore, UserUtils } from "@webpack/common";
+import { FluxDispatcher, Modal, openModal, Parser, React, UserStore, UserUtils } from "@webpack/common";
 import { Constructor } from "type-fest";
 
 import { LikesComponent } from "./LikesComponent";
@@ -65,36 +64,32 @@ export const ThemeCard: React.FC<ThemeCardProps> = ({ theme, themeLinks, likedTh
 
         if (requiresThemeAttributes && !Settings.plugins.ThemeAttributes.enabled) {
             openModal(modalProps => (
-                <ModalRoot {...modalProps} size={ModalSize.SMALL}>
-                    <ModalHeader>
-                        <HeadingTertiary>Hold on!</HeadingTertiary>
-                    </ModalHeader>
-                    <ModalContent>
-                        <Paragraph style={{ padding: "8px" }}>
-                            <p>This theme requires the <b>ThemeAttributes</b> plugin to work properly!</p>
-                            <p>Do you want to enable it?</p>
-                        </Paragraph>
-                    </ModalContent>
-                    <ModalFooter>
-                        <Button
-                            variant="positive"
-                            onClick={() => {
+                <Modal
+                    {...modalProps}
+                    size="sm"
+                    title="Hold on!"
+                    actions={[
+                        {
+                            text: "Enable Plugin",
+                            variant: "primary",
+                            onClick: () => {
                                 Settings.plugins.ThemeAttributes.enabled = true;
                                 modalProps.onClose();
                                 handleAddRemoveTheme();
-                            }}
-                        >
-                            Enable Plugin
-                        </Button>
-                        <Button
-                            variant="dangerPrimary"
-                            className={Margins.right8}
-                            onClick={() => modalProps.onClose()}
-                        >
-                            Cancel
-                        </Button>
-                    </ModalFooter>
-                </ModalRoot>
+                            }
+                        },
+                        {
+                            text: "Cancel",
+                            variant: "secondary",
+                            onClick: () => modalProps.onClose()
+                        }
+                    ]}
+                >
+                    <Paragraph style={{ padding: "8px" }}>
+                        <p>This theme requires the <b>ThemeAttributes</b> plugin to work properly!</p>
+                        <p>Do you want to enable it?</p>
+                    </Paragraph>
+                </Modal>
             ));
         } else {
             handleAddRemoveTheme();

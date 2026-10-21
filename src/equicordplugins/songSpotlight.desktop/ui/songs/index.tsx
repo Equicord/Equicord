@@ -25,26 +25,12 @@ import AudioPlayer from "@equicordplugins/songSpotlight.desktop/ui/components/Au
 import ProgressCircle from "@equicordplugins/songSpotlight.desktop/ui/components/ProgressCircle";
 import ServiceIcon from "@equicordplugins/songSpotlight.desktop/ui/components/ServiceIcon";
 import { openSettingsModal } from "@equicordplugins/songSpotlight.desktop/ui/settings";
-import { RenderInfoEntryBased, RenderSongInfo } from "@song-spotlight/api/handlers";
+import { RenderInfoEntry, RenderInfoEntryBased, RenderSongInfo } from "@song-spotlight/api/handlers";
 import { Song as SongType } from "@song-spotlight/api/structs";
 import { isListLayout, sid } from "@song-spotlight/api/util";
 import { copyWithToast } from "@utils/discord";
 import { classes } from "@utils/misc";
-import {
-    Clickable,
-    ContextMenuApi,
-    FluxDispatcher,
-    Menu,
-    React,
-    ScrollerThin,
-    showToast,
-    Toasts,
-    Tooltip,
-    useCallback,
-    useMemo,
-    useRef,
-    useState,
-} from "@webpack/common";
+import { Clickable, ContextMenuApi, FluxDispatcher, Menu, React, ScrollerThin, showToast, Tooltip, useCallback, useMemo, useRef, useState } from "@webpack/common";
 
 interface SongEntryProps {
     entry: RenderInfoEntryBased;
@@ -72,25 +58,27 @@ function SongEntry({ entry, number, isLoaded, isPlaying, big, onClick }: SongEnt
                             id="copy-link"
                             label="Copy link"
                             icon={LinkIcon}
+                            leadingAccessory={{ type: "icon", icon: LinkIcon }}
                             action={() => copyWithToast(entry.link)}
                         />
                         <Menu.MenuItem
                             id="steal-song"
                             label="Steal song"
                             icon={PuzzlePieceIcon}
+                            leadingAccessory={{ type: "icon", icon: PuzzlePieceIcon }}
                             action={async () => {
                                 const self = useSongStore.getState().self?.data ?? [];
                                 if (self.length >= apiConstants.songLimit) {
-                                    return showToast("You don't have enough space!");
+                                    return showToast({ text: "You don't have enough space!" });
                                 }
 
                                 const song = await Native.parseLink(entry.link);
                                 if (!song) {
-                                    return showToast("Uh oh, this song doesn't exist!", Toasts.Type.FAILURE);
+                                    return showToast({ text: "Uh oh, this song doesn't exist!", variant: "critical" });
                                 }
 
                                 if (self.find(x => sid(x) === sid(song))) {
-                                    return showToast("You already have this song added!");
+                                    return showToast({ text: "You already have this song added!" });
                                 }
 
                                 openSettingsModal([...self, song]);
@@ -134,27 +122,28 @@ interface SongInfoProps {
 }
 
 function SongInfo({ owned, song, render, big }: SongInfoProps) {
-    const [playing, setPlaying] = useState<number | false>(false);
+    const [playing, setPlaying] = useState<number | undefined>(undefined);
     const [loaded, setLoaded] = useState(new Set<number>());
+    const setLoadedAudio = useCallback((index: number, state: boolean) => {
+        if (state) loaded.add(index);
+        else loaded.delete(index);
+        setLoaded(new Set(loaded));
+    }, [loaded]);
+
     const audios = useMemo(() => render.form === "single" ? [render.single] : render.list, [render]);
     const audioRef = useRef<HTMLAudioElement>(undefined);
+    const playingRef = useRef<RenderInfoEntry>(undefined);
+    playingRef.current = playing !== undefined ? audios[playing] : undefined;
+
     const duration = useMemo(
-        () => {
-            if (playing !== false) {
-                return audios[playing].audio?.duration;
-            } else {
-                return render.form === "single" ? render.single.audio?.duration : undefined;
-            }
-        },
+        () =>
+            render.form === "single" ?
+                render.single.audio?.duration :
+                playing !== undefined ?
+                    render.list[playing].audio?.duration :
+                    undefined,
         [playing, render],
     );
-
-    const setLoadedAudio = useCallback((index: number, state: boolean) =>
-        setLoaded(ld => {
-            if (state) ld.add(index);
-            else ld.delete(index);
-            return new Set(ld);
-        }), []);
 
     const baseSize = big ? "md" : "sm";
     const subSize = big ? "sm" : "xs";
@@ -166,7 +155,7 @@ function SongInfo({ owned, song, render, big }: SongInfoProps) {
                 list={audios}
                 playing={playing}
                 setPlaying={setPlaying}
-                setLoaded={setLoadedAudio}
+                setLoadedAudio={setLoadedAudio}
             />
             <div className={cl("song-grid")}>
                 <Flex gap="8px" alignItems="center" className={cl("song-core")}>
@@ -185,6 +174,7 @@ function SongInfo({ owned, song, render, big }: SongInfoProps) {
                                                 id="copy-link"
                                                 label="Copy link"
                                                 icon={LinkIcon}
+                                                leadingAccessory={{ type: "icon", icon: LinkIcon }}
                                                 action={() => copyWithToast(render.link)}
                                             />
                                             {!owned
@@ -193,13 +183,14 @@ function SongInfo({ owned, song, render, big }: SongInfoProps) {
                                                         id="steal-song"
                                                         label="Steal song"
                                                         icon={PuzzlePieceIcon}
+                                                        leadingAccessory={{ type: "icon", icon: PuzzlePieceIcon }}
                                                         action={() => {
                                                             const self = useSongStore.getState().self?.data ?? [];
                                                             if (self.length >= apiConstants.songLimit) {
-                                                                return showToast("You don't have enough space!");
+                                                                return showToast({ text: "You don't have enough space!" });
                                                             }
                                                             if (self.find(x => sid(x) === sid(song))) {
-                                                                return showToast("You already have this song added!");
+                                                                return showToast({ text: "You already have this song added!" });
                                                             }
 
                                                             openSettingsModal([...self, song]);
@@ -212,12 +203,13 @@ function SongInfo({ owned, song, render, big }: SongInfoProps) {
                                                         color="danger"
                                                         label="Remove song"
                                                         icon={TrashIcon}
+                                                        leadingAccessory={{ type: "icon", icon: TrashIcon }}
                                                         action={() => {
                                                             const self = useSongStore.getState().self?.data ?? [];
 
                                                             const i = self.findIndex(x => sid(x) === sid(song));
                                                             if (i === -1) {
-                                                                return showToast("You... don't have this song added?");
+                                                                return showToast({ text: "You... don't have this song added?" });
                                                             }
 
                                                             openSettingsModal(self.toSpliced(i, 1));
@@ -273,7 +265,7 @@ function SongInfo({ owned, song, render, big }: SongInfoProps) {
                     alignItems="flex-end"
                     gap="6px"
                     className={cl("song-player")}
-                    data-idle={playing === false && !big}
+                    data-idle={playing === undefined && !big}
                 >
                     {duration && (
                         <BaseText size={subSize} weight="medium" className={cl("mono", "sub")}>
@@ -282,19 +274,19 @@ function SongInfo({ owned, song, render, big }: SongInfoProps) {
                     )}
                     <div className={cl("song-progress-container")}>
                         <ProgressCircle
-                            border={2}
+                            border={2.5}
+                            playingRef={playingRef}
                             audioRef={audioRef}
                             className={cl("song-progress")}
                         />
                         <PlayButton
-                            state={playing !== false}
+                            state={playing !== undefined}
                             disabled={loaded.size < 1}
                             onClick={() => {
-                                const loadedI = loaded.values().toArray().sort()[0];
-                                if (loadedI === undefined) return;
+                                if (playing !== undefined) return setPlaying(undefined);
 
-                                if (playing !== false) setPlaying(false);
-                                else setPlaying(loadedI);
+                                const loadedIndex = loaded.values().toArray().sort()[0];
+                                if (loadedIndex !== undefined) setPlaying(loadedIndex);
                             }}
                         />
                     </div>
@@ -312,10 +304,8 @@ function SongInfo({ owned, song, render, big }: SongInfoProps) {
                                     isLoaded={loaded.has(i)}
                                     isPlaying={playing === i}
                                     onClick={() => {
-                                        if (!loaded.has(i)) return;
-
-                                        if (playing !== i) setPlaying(i);
-                                        else setPlaying(false);
+                                        if (playing === i) setPlaying(undefined);
+                                        else if (loaded.has(i)) setPlaying(i);
                                     }}
                                     big={big}
                                     key={entry.link}

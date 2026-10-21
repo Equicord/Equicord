@@ -12,7 +12,7 @@ import { Paragraph } from "@components/Paragraph";
 import { copyToClipboard } from "@utils/clipboard";
 import { classNameFactory } from "@utils/css";
 import { OptionType } from "@utils/types";
-import { Button, Toasts } from "@webpack/common";
+import { Button, showToast } from "@webpack/common";
 
 import { authorizeUser, deauthorizeUser } from "./auth";
 
@@ -32,26 +32,20 @@ export const settings = definePluginSettings({
             const handleClick = async () => {
                 const token = await DataStore.get("ThemeLibrary_uniqueToken");
 
-                if (!token) return Toasts.show({
-                    message: "No token to copy, try authorizing first!",
-                    id: Toasts.genId(),
-                    type: Toasts.Type.FAILURE,
-                    options: {
-                        duration: 2.5e3,
-                        position: Toasts.Position.BOTTOM
-                    }
+                if (!token) return showToast({
+                    text: "No token to copy, try authorizing first!",
+                    variant: "critical",
+                    duration: 2.5e3,
+                    position: "bottom"
                 });
 
                 copyToClipboard(token);
 
-                Toasts.show({
-                    message: "Copied to Clipboard!",
-                    id: Toasts.genId(),
-                    type: Toasts.Type.SUCCESS,
-                    options: {
-                        duration: 2.5e3,
-                        position: Toasts.Position.BOTTOM
-                    }
+                showToast({
+                    text: "Copied to Clipboard!",
+                    variant: "success",
+                    duration: 2.5e3,
+                    position: "bottom"
                 });
             };
 

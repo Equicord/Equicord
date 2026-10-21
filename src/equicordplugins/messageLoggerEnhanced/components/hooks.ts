@@ -33,6 +33,7 @@ export function useMessages(query: string, currentTab: LogTabs, sortNewest: bool
     const [messages, setMessages] = useState<DBMessageRecord[]>([]);
     const [statusTotal, setStatusTotal] = useState<number>(0);
     const [total, setTotal] = useState<number>(0);
+    const [resetCounter, setResetCounter] = useState(0);
 
     const debouncedQuery = useDebouncedValue(query, 300);
 
@@ -41,6 +42,8 @@ export function useMessages(query: string, currentTab: LogTabs, sortNewest: bool
     }, [pending]);
 
     useEffect(() => {
+        setPending(true);
+
         let isMounted = true;
 
         const loadMessages = async () => {
@@ -55,9 +58,8 @@ export function useMessages(query: string, currentTab: LogTabs, sortNewest: bool
                 if (isMounted) {
                     setMessages(messages);
                     setStatusTotal(statusTotal);
+                    setPending(false);
                 }
-
-                setPending(false);
             } else {
                 const allMessages = await getDateStortedMessagesByStatusIDB(sortNewest, Number.MAX_SAFE_INTEGER, status);
                 const { queries, rest } = tokenizeQuery(debouncedQuery);
@@ -78,8 +80,8 @@ export function useMessages(query: string, currentTab: LogTabs, sortNewest: bool
                 if (isMounted) {
                     setMessages(filteredMessages);
                     setStatusTotal(Number.MAX_SAFE_INTEGER);
+                    setPending(false);
                 }
-                setPending(false);
             }
         };
 
@@ -89,9 +91,9 @@ export function useMessages(query: string, currentTab: LogTabs, sortNewest: bool
             isMounted = false;
         };
 
-    }, [debouncedQuery, sortNewest, numDisplayedMessages, currentTab, pending]);
+    }, [debouncedQuery, sortNewest, numDisplayedMessages, currentTab, resetCounter]);
 
-    return { messages, statusTotal, total, pending, reset: () => setPending(true) };
+    return { messages, statusTotal, total, pending, reset: () => setResetCounter(c => c + 1) };
 }
 
 function getStatus(currentTab: LogTabs) {

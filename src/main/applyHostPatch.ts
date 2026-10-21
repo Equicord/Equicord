@@ -1,5 +1,5 @@
 /*
- * Vencord, a modification for Discord's desktop app
+ * Vencord, a Discord client mod
  * Copyright (c) 2026 Vendicated and contributors
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
@@ -32,8 +32,7 @@ export const patchResourcesDir = (resources: string, patcherJsPath: string): boo
     const app = join(resources, "app.asar");
     const _app = join(resources, "_app.asar");
 
-    if (isAlreadyPatched(resources)) return false;
-    if (!existsSync(app)) return false;
+    if (isAlreadyPatched(resources) || !existsSync(app) || existsSync(_app)) return false;
     try {
         if (lstatSync(app).isDirectory()) return false;
     } catch {

@@ -5,7 +5,6 @@
  */
 
 import { definePluginSettings } from "@api/Settings";
-import { disableStyle, enableStyle } from "@api/Styles";
 import { BaseText } from "@components/BaseText";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { ErrorCard } from "@components/ErrorCard";
@@ -15,9 +14,7 @@ import { Devs, IS_MAC } from "@utils/constants";
 import { Margins } from "@utils/margins";
 import definePlugin, { OptionType } from "@utils/types";
 import { findByPropsLazy } from "@webpack";
-import { ExperimentStore, React } from "@webpack/common";
-
-import hideBugReport from "./hideBugReport.css?managed";
+import { React } from "@webpack/common";
 
 const KbdStyles = findByPropsLazy("key", "combo");
 const modKey = IS_MAC ? "cmd" : "ctrl";
@@ -121,7 +118,7 @@ export default definePlugin({
         // dev://playground/mana, dev://playground/payments, dev://playground/virtual-currency,
         // dev://playground/nitro, dev://playground/mfa, dev://playground/cms, dev://playground/void
         {
-            find: "{PlaygroundEmbed:()=>",
+            find: ".useComponentPlaygroundConfigs)()",
             replacement: {
                 match: /"Revenue".{0,250}getCurrentUser\(\);return/,
                 replace: "$& true||"
@@ -131,7 +128,7 @@ export default definePlugin({
             // Expands the experiment regex to allow negative numbers as well as text in the last segment of the URL.
             find: '"^dev://experiment/',
             replacement: {
-                match: /(\[0-9\]\+)/,
+                match: /\[0-9\]\+(?=\)\)\?\$")/,
                 replace: "[a-zA-Z0-9-]+"
             }
         },
@@ -153,9 +150,6 @@ export default definePlugin({
         return !!labelCleaned && urlEndCleaned !== undefined && labelCleaned === urlEndCleaned;
     },
 
-    start: () => ExperimentStore.getUserExperimentBucket("2026-01-bug-reporter") > 0 && enableStyle(hideBugReport),
-    stop: () => disableStyle(hideBugReport),
-
     settingsAboutComponent: () => {
         return (
             <React.Fragment>
@@ -163,8 +157,8 @@ export default definePlugin({
                 <BaseText size="md">
                     You can open Discord's DevTools via {" "}
                     <div className={KbdStyles.combo} style={{ display: "inline-flex" }}>
-                        <kbd className={KbdStyles.key}>{modKey}</kbd> +{" "}
-                        <kbd className={KbdStyles.key}>{altKey}</kbd> +{" "}
+                        <kbd className={KbdStyles.key}>{modKey}</kbd>{" "}
+                        <kbd className={KbdStyles.key}>{altKey}</kbd>{" "}
                         <kbd className={KbdStyles.key}>O</kbd>{" "}
                     </div>
                 </BaseText>

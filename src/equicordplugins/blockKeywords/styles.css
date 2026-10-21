@@ -1,0 +1,16 @@
+.vc-block-keywords-regex {
+    padding: 0.75em
+}
+
+.vc-block-keywords-card {
+    padding: 0.4em 0.75em;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.vc-block-keywords-error {
+    font-size: 12px;
+    margin-left: 1em;
+    flex-shrink: 0;
+}

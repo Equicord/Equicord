@@ -22,7 +22,7 @@ import {
 import { openSettingsModal } from "@equicordplugins/songSpotlight.desktop/ui/settings";
 import { sid } from "@song-spotlight/api/util";
 import { copyWithToast } from "@utils/discord";
-import { classes } from "@utils/index";
+import { classes } from "@utils/misc";
 import { User } from "@vencord/discord-types";
 import {
     ContextMenuApi,
@@ -39,7 +39,7 @@ import {
 import Song from ".";
 import CollapsedProfileSongs from "./CollapsedProfileSongs";
 
-export interface ProfileSongsProps {
+interface ProfileSongsProps {
     user: User;
     isSideBar: boolean;
 }
@@ -49,7 +49,7 @@ export default function ProfileSongs({ user, isSideBar }: ProfileSongsProps) {
     const { isAuthorized } = useAuthorizationStore();
     const { users } = useSongStore();
     const { profileSongsLimit, collapseSongList } = settings.use();
-    const userId = user?.id;
+    const userId = user.id;
     const data = users[userId]?.data;
     useEffect(() => {
         if (isAuthorized() && !data) listData(userId).catch(() => setFailed(true));
@@ -110,6 +110,7 @@ export default function ProfileSongs({ user, isSideBar }: ProfileSongsProps) {
                                                 id="edit-songs"
                                                 label="Edit songs"
                                                 icon={PencilIcon}
+                                                leadingAccessory={{ type: "icon", icon: PencilIcon }}
                                                 action={() => openSettingsModal()}
                                             />
                                         )}
@@ -117,6 +118,7 @@ export default function ProfileSongs({ user, isSideBar }: ProfileSongsProps) {
                                             id="copy-link"
                                             label="Copy JSON"
                                             icon={LinkIcon}
+                                            leadingAccessory={{ type: "icon", icon: LinkIcon }}
                                             action={() => copyWithToast(JSON.stringify(data))}
                                         />
                                     </Menu.Menu>

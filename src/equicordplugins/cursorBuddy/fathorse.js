@@ -155,15 +155,23 @@ export default function fathorse(cfg) {
 
     if (config.shake) document.body.style.willChange = "transform";
 
-    window.addEventListener("mousemove", ev => {
+    function handleMouseMove(ev) {
         mousePos.x = ev.clientX;
         mousePos.y = ev.clientY;
 
         nextMove = Date.now() + freeroamStart;
         isRoaming = false;
-    });
+    }
+    window.addEventListener("mousemove", handleMouseMove);
 
     requestAnimationFrame(lifecycle);
 
-    return mousePos;
+    return function destroy() {
+        window.removeEventListener("mousemove", handleMouseMove);
+        if (config.shake) {
+            document.body.style.willChange = "";
+            document.body.style.transform = "";
+        }
+        fathorse.remove();
+    };
 };

@@ -5,17 +5,17 @@
  */
 
 import { set } from "@api/DataStore";
-import { HeadingPrimary, HeadingSecondary } from "@components/Heading";
+import { HeadingSecondary } from "@components/Heading";
 import { classNameFactory } from "@utils/css";
 import { Margins } from "@utils/margins";
-import { ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot } from "@utils/modal";
-import { Button, ColorPicker, useState } from "@webpack/common";
+import { RenderModalProps } from "@vencord/discord-types";
+import { ColorPicker, Modal, React, useState } from "@webpack/common";
 
 import { colors, DATASTORE_KEY } from "./index";
 
 const cl = classNameFactory("vc-customColors-");
 
-export function SetColorModal({ id, modalProps }: { id: string, modalProps: ModalProps; }) {
+export function SetColorModal({ id, modalProps }: { id: string, modalProps: RenderModalProps; }) {
     const initialColor = parseInt(colors[id], 16) || 372735;
     // color picker default to current color set for user (if null it's 0x05afff :3 )
 
@@ -26,7 +26,7 @@ export function SetColorModal({ id, modalProps }: { id: string, modalProps: Moda
         setColorPickerColor(color);
     }
 
-    function handleKey(e: KeyboardEvent) {
+    function handleKey(e: React.KeyboardEvent) {
         if (e.key === "Enter")
             saveUserColor();
     }
@@ -44,14 +44,24 @@ export function SetColorModal({ id, modalProps }: { id: string, modalProps: Moda
     }
 
     return (
-        <ModalRoot {...modalProps}>
-            <ModalHeader className={cl("modal-header")}>
-                <HeadingPrimary>
-                    Custom Color
-                </HeadingPrimary>
-                <ModalCloseButton onClick={modalProps.onClose} />
-            </ModalHeader>
-            <ModalContent className={cl("modal-content")} onKeyDown={handleKey}>
+        <Modal
+            {...modalProps}
+            size="sm"
+            title="Custom Color"
+            actions={[
+                {
+                    text: "Save",
+                    variant: "primary",
+                    onClick: saveUserColor
+                },
+                {
+                    text: "Delete Entry",
+                    variant: "dangerPrimary",
+                    onClick: deleteUserColor
+                }
+            ]}
+        >
+            <div onKeyDown={handleKey} className={cl("modal-content")}>
                 <section className={Margins.bottom16}>
                     <HeadingSecondary>
                         Pick a Color
@@ -62,22 +72,7 @@ export function SetColorModal({ id, modalProps }: { id: string, modalProps: Moda
                         showEyeDropper={false}
                     />
                 </section>
-            </ModalContent>
-
-            <ModalFooter className={cl("modal-footer")}>
-                <Button
-                    color={Button.Colors.RED}
-                    onClick={deleteUserColor}
-                >
-                    Delete Entry
-                </Button>
-                <Button
-                    color={Button.Colors.BRAND}
-                    onClick={saveUserColor}
-                >
-                    Save
-                </Button>
-            </ModalFooter>
-        </ModalRoot>
+            </div>
+        </Modal>
     );
 }

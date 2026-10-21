@@ -43,6 +43,7 @@ export const ALLOWED_PROTOCOLS = [
     "tidal:",
     "itunes:",
     "vrcx:",
+    "tg:",
 ];
 
 export const IS_VANILLA = /* @__PURE__ */ process.argv.includes("--vanilla");

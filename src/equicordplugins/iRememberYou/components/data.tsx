@@ -89,7 +89,7 @@ export class Data {
             const groupKey = source?.id ?? "dm";
             const group = (target[groupKey] ||= {
                 name: source?.name || "dm",
-                id: source?.id || user.id,
+                id: source?.id ?? "dm",
                 users: {},
                 inviteLink: undefined
             });

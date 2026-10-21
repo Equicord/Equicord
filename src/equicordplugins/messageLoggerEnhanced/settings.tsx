@@ -8,9 +8,10 @@ import { definePluginSettings, Settings } from "@api/Settings";
 import { Button } from "@components/Button";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { OptionType } from "@utils/types";
-import { Alerts, useState } from "@webpack/common";
+import { useState } from "@webpack/common";
 
-import { clearLogs, Native } from ".";
+import { Native } from ".";
+import { ClearLogsButton } from "./components/ClearLogsButton";
 import { ImageCacheDir, LogsDir } from "./components/FolderSelectInput";
 import { openLogModal } from "./components/LogsModal";
 import { blockedExts } from "./list";
@@ -189,21 +190,29 @@ export const settings = definePluginSettings({
     attachmentFileExtensions: {
         default: "png,jpg,jpeg,gif,webp,mp4,webm,mp3,ogg,wav",
         type: OptionType.STRING,
-        description: "Comma separated list of file extensions to save. Attachments with file extensions not in this list will not be saved. Leave empty to save all attachments.",
+        description: "Comma separated list of file extensions to save. Attachments with file extensions not in this list will not be saved.",
         onChange: (value: string) => {
-            if (!value) return;
-            const exts = value.split(",").map(ext => ext.trim().toLowerCase());
+            let processedValue = "";
 
-            const invalid = exts.filter(ext => blockedExts.includes(ext));
-            if (invalid.length > 0) {
-                console.warn("Rejected invalid file extensions:", invalid);
-                return exts.filter(ext => !blockedExts.includes(ext)).join(",");
+            if (value) {
+                const exts = value.split(",").map(ext => ext.trim().toLowerCase());
+                const invalid = exts.filter(ext => blockedExts.includes(ext));
+
+                if (invalid.length > 0) {
+                    console.warn("Rejected invalid file extensions:", invalid);
+                    processedValue = exts.filter(ext => !blockedExts.includes(ext)).join(",");
+                } else {
+                    processedValue = exts.join(",");
+                }
             }
 
-            return exts.join(",");
+            Native.updateAllowedExtensions(processedValue).catch((err: any) => {
+                console.error("Failed to sync attachment extensions natively:", err);
+            });
+
+            return processedValue;
         }
     },
-
     cacheLimit: {
         default: 1000,
         type: OptionType.NUMBER,
@@ -225,13 +234,13 @@ export const settings = definePluginSettings({
     whitelistedIds: {
         default: "",
         type: OptionType.STRING,
-        description: "Whitelisted server, channel, or user IDs."
+        description: "Server, channel, or user IDs to always show in message log."
     },
 
     blacklistedIds: {
         default: "",
         type: OptionType.STRING,
-        description: "Blacklisted server, channel, or user IDs."
+        description: "Server, channel, or user IDs to never show in message log."
     },
 
     imageCacheDir: {
@@ -283,7 +292,7 @@ export const settings = definePluginSettings({
                     || settings.store.imageCacheDir == null
                     || settings.store.imageCacheDir === DEFAULT_IMAGE_CACHE_DIR
                 }
-                onClick={() => Native.showItemInFolder(settings.store.imageCacheDir)}
+                onClick={() => Native.showItemInFolder()}
             >
                 Open Image Cache Folder
             </Button>
@@ -292,23 +301,7 @@ export const settings = definePluginSettings({
     clearLogs: {
         type: OptionType.COMPONENT,
         description: "Clear Logs",
-        component: () =>
-            <Button
-                variant="dangerPrimary"
-                onClick={() => Alerts.show({
-                    title: "Clear Logs",
-                    body: "Are you sure you want to clear all logs?",
-                    // @ts-expect-error not typed
-                    confirmVariant: "critical-primary",
-                    confirmText: "Clear",
-                    cancelText: "Cancel",
-                    onConfirm: async () => {
-                        await clearLogs();
-                    },
-                })}
-            >
-                Clear Logs
-            </Button>
+        component: () => <ClearLogsButton />
     },
 
 });

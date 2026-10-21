@@ -51,6 +51,7 @@ export const settings = definePluginSettings({
     },
     tryHljs: {
         type: OptionType.SELECT,
+        displayName: "Try Highlight.js",
         description: "Use the more lightweight default Discord highlighter and theme.",
         options: [
             {
@@ -71,6 +72,11 @@ export const settings = definePluginSettings({
                 value: HljsSetting.Always,
             },
         ],
+    },
+    ignoredLanguages: {
+        type: OptionType.STRING,
+        description: "Comma separated list of languages to leave to Discord's default codeblocks",
+        default: "ansi",
     },
     useDevIcon: {
         type: OptionType.SELECT,

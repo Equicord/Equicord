@@ -1,0 +1,14 @@
+.vc-limitlessScreenshare-settings-card {
+    white-space: nowrap;
+    text-wrap-mode: nowrap;
+}
+
+.vc-limitlessScreenshare-settings-preset-label {
+    padding-left: 0.5em;
+}
+
+.vc-limitlessScreenshare-settings-flex-input > div:first-child > div > div > div {
+    --custom-text-input-height: 2em;
+
+    width: 5em;
+}

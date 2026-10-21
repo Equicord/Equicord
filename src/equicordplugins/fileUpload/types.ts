@@ -8,6 +8,7 @@ export enum ServiceType {
     ZIPLINE = "zipline",
     NEST = "nest",
     EZHOST = "ezhost",
+    ENCRYPTINGHOST = "encryptinghost",
     S3 = "s3",
     CATBOX = "catbox",
     ZEROX0 = "0x0",
@@ -19,13 +20,15 @@ export enum ServiceType {
     TEMPSH = "tempsh",
     FILEBIN = "filebin",
     PIXELVAULT = "pixelvault",
-    PIXELDRAIN = "pixeldrain"
+    PIXELDRAIN = "pixeldrain",
+    WEBDAV = "webdav"
 }
 
 export const serviceLabels: Record<ServiceType, string> = {
     [ServiceType.ZIPLINE]: "Zipline",
     [ServiceType.NEST]: "Nest",
     [ServiceType.EZHOST]: "E-Z Host",
+    [ServiceType.ENCRYPTINGHOST]: "Encrypting.host",
     [ServiceType.S3]: "S3-Compatible",
     [ServiceType.CATBOX]: "Catbox",
     [ServiceType.ZEROX0]: "0x0.st",
@@ -37,13 +40,15 @@ export const serviceLabels: Record<ServiceType, string> = {
     [ServiceType.TEMPSH]: "temp.sh",
     [ServiceType.FILEBIN]: "filebin.net",
     [ServiceType.PIXELVAULT]: "PixelVault",
-    [ServiceType.PIXELDRAIN]: "PixelDrain"
+    [ServiceType.PIXELDRAIN]: "PixelDrain",
+    [ServiceType.WEBDAV]: "WebDAV"
 };
 
 export const fallbackServiceOrder: ServiceType[] = [
     ServiceType.ZIPLINE,
     ServiceType.EZHOST,
     ServiceType.NEST,
+    ServiceType.ENCRYPTINGHOST,
     ServiceType.S3,
     ServiceType.CATBOX,
     ServiceType.ZEROX0,
@@ -55,6 +60,7 @@ export const fallbackServiceOrder: ServiceType[] = [
     ServiceType.FILEBIN,
     ServiceType.PIXELVAULT,
     ServiceType.PIXELDRAIN,
+    ServiceType.WEBDAV,
     ServiceType.SHAREX
 ];
 

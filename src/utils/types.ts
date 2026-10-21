@@ -18,7 +18,7 @@
 
 import { AudioProcessor } from "@api/AudioPlayer";
 import type { ProfileBadge } from "@api/Badges";
-import type { ChatBarButtonData, ChatBarButtonWrapper } from "@api/ChatButtons";
+import type { ChatBarButtonData, ChatBarButtonWrapperData } from "@api/ChatButtons";
 import type { NavContextMenuPatchCallback } from "@api/ContextMenu";
 import { HeaderBarButtonData } from "@api/HeaderBar";
 import type { MemberListDecoratorFactory } from "@api/MemberListDecorators";
@@ -27,8 +27,8 @@ import type { MessageDecorationFactory } from "@api/MessageDecorations";
 import type { MessageClickListener, MessageEditListener, MessageSendListener } from "@api/MessageEvents";
 import type { MessagePopoverButtonData } from "@api/MessagePopover";
 import type { NicknameIconFactory } from "@api/NicknameIcons";
-import { ProfileCollectionFactory } from "@api/ProfileCollections";
-import { ProfileSectionFactory } from "@api/ProfileSections";
+import { ProfileCollectionData } from "@api/ProfileCollections";
+import { ProfileSectionData } from "@api/ProfileSections";
 import type { UserAreaButtonData } from "@api/UserArea";
 import type { Command, FluxEvents } from "@vencord/discord-types";
 import type { ReactNode } from "react";
@@ -233,9 +233,9 @@ export interface PluginDef {
     headerBarButton?: HeaderBarButtonData;
     audioProcessor?: AudioProcessor;
     userAreaButton?: UserAreaButtonData;
-    renderProfileCollection?: ProfileCollectionFactory;
-    chatBarButtonWrapper?: ChatBarButtonWrapper;
-    renderProfileSection?: ProfileSectionFactory;
+    renderProfileCollection?: ProfileCollectionData;
+    chatBarButtonWrapper?: ChatBarButtonWrapperData;
+    renderProfileSection?: ProfileSectionData;
 
     /**
      * A Vencord plugin that is modified for extra features in Equicord
@@ -292,6 +292,7 @@ export type PluginSettingDef =
 
 export interface PluginSettingDefCommon extends IsDisabledOrHidden, IsValid<unknown> {
     description: string;
+    displayName?: string;
     placeholder?: string;
     onChange?(newValue: any): void;
     /**
@@ -375,7 +376,7 @@ export interface PluginSettingSliderDef extends PluginSettingDefCommon {
     stickToMarkers?: boolean;
 }
 
-export interface PluginSettingComponentDef extends Omit<PluginSettingDefCommon, "description" | "placeholder"> {
+export interface PluginSettingComponentDef extends Omit<PluginSettingDefCommon, "description" | "placeholder" | "displayName"> {
     type: OptionType.COMPONENT;
     component: (props: PluginSettingComponentProps) => ReactNode | Promise<ReactNode>;
     default?: any;
@@ -389,6 +390,8 @@ export interface PluginSettingComponentProps {
      * The options object
      */
     option: PluginSettingComponentDef;
+    /** Close the plugin settings modal */
+    closePluginSettings(): void;
 }
 
 /** Maps a `PluginSettingDef` to its value type */
@@ -447,3 +450,9 @@ export type PluginNative<PluginExports extends Record<string, (event: Electron.I
 };
 
 export type AllOrNothing<T> = T | { [K in keyof T]?: never; };
+
+export type ConstEnumToRuntimeEnum<T> = {
+    [K in keyof T as T[K] extends number ? T[K] : never]: K;
+} & {
+    [K in keyof T]: T[K];
+};

@@ -17,14 +17,13 @@
 */
 
 import type { MessageObject } from "@api/MessageEvents";
-import type { Channel, CloudUpload, Guild, GuildFeatures, Message, User } from "@vencord/discord-types";
-import { ChannelActionCreators, ChannelStore, ComponentDispatch, Constants, FluxDispatcher, GuildStore, i18n, InviteActions, MessageActions, RestAPI, SelectedChannelStore, SelectedGuildStore, Toasts, UserProfileActions, UserProfileStore, UserSettingsActionCreators, UserUtils } from "@webpack/common";
+import type { BasicGuild, Channel, CloudUpload, Guild, GuildFeatures, GuildProfile, MediaModalItem, MediaModalProps, Message, User } from "@vencord/discord-types";
+import { ChannelActionCreators, ChannelStore, ComponentDispatch, Constants, FluxDispatcher, GuildStore, i18n, InviteActions, MessageActions, openMediaModal, openUserProfileModal, RestAPI, SelectedChannelStore, SelectedGuildStore, showToast, UserProfileStore, UserSettingsActionCreators, UserUtils } from "@webpack/common";
 import { Except } from "type-fest";
 
 import { copyToClipboard } from "./clipboard";
 import { runtimeHashMessageKey } from "./intlHash";
 import { Logger } from "./Logger";
-import { MediaModalItem, MediaModalProps, openMediaModal } from "./modal";
 
 const IntlManagerLogger = new Logger("IntlManager");
 
@@ -91,8 +90,8 @@ export function getCurrentGuild(): Guild | undefined {
     return GuildStore.getGuild(getCurrentChannel()?.guild_id!);
 }
 
-export function openPrivateChannel(userId: string) {
-    ChannelActionCreators.openPrivateChannel(userId);
+export function openPrivateChannel(userId: string, navigateToChannel = true) {
+    return ChannelActionCreators.openPrivateChannel({ recipientIds: [userId], navigateToChannel });
 }
 
 export const enum Theme {
@@ -117,11 +116,7 @@ export function insertTextIntoChatInputBox(text: string) {
 
 export async function copyWithToast(text: string, toastMessage = "Copied to clipboard!") {
     await copyToClipboard(text);
-    Toasts.show({
-        message: toastMessage,
-        id: Toasts.genId(),
-        type: Toasts.Type.SUCCESS
-    });
+    showToast({ text: toastMessage, variant: "success" });
 }
 
 export interface MessageOptions {
@@ -183,14 +178,14 @@ export async function openUserProfile(id: string) {
     if (!user) throw new Error("No such user: " + id);
 
     const guildId = SelectedGuildStore.getGuildId();
-    UserProfileActions.openUserProfileModal({
+    openUserProfileModal({
         userId: id,
         guildId,
         channelId: SelectedChannelStore.getChannelId(),
-        analyticsLocation: {
-            page: guildId ? "Guild Channel" : "DM Channel",
-            section: "Profile Popout"
-        }
+        sourceAnalyticsLocations: [
+            "username",
+            "user profile popout",
+        ]
     });
 }
 
@@ -237,7 +232,7 @@ export function getUniqueUsername(user: User) {
 }
 
 // Discord has a similar function in their code
-export function getGuildAcronym(guild: Guild): string {
+export function getGuildAcronym(guild: Guild | BasicGuild | GuildProfile): string {
     return guild.name
         .replaceAll("'s ", " ")
         .replace(/\w+/g, m => m[0])

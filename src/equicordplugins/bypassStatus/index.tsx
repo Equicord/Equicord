@@ -24,14 +24,28 @@ interface IMessageCreate {
 
 const SILENT_PING_FLAG = 1 << 12;
 
-function Icon(enabled?: boolean): JSX.Element {
-    return <svg
-        width="18"
-        height="18"
-    >
-        <circle cx="9" cy="9" r="8" fill={!enabled ? "var(--status-danger)" : "currentColor"} />
-        <circle cx="9" cy="9" r="3.75" fill={!enabled ? "white" : "black"} />
-    </svg>;
+function DisabledIcon(): JSX.Element {
+    return (
+        <svg
+            width="18"
+            height="18"
+        >
+            <circle cx="9" cy="9" r="8" fill="var(--status-danger)" />
+            <circle cx="9" cy="9" r="3.75" fill="white" />
+        </svg>
+    );
+}
+
+function EnabledIcon(): JSX.Element {
+    return (
+        <svg
+            width="18"
+            height="18"
+        >
+            <circle cx="9" cy="9" r="8" fill="currentColor" />
+            <circle cx="9" cy="9" r="3.75" fill="black" />
+        </svg>
+    );
 }
 
 function processIds(value: string): string {
@@ -80,7 +94,8 @@ function ContextCallback(name: "guild" | "user" | "channel"): NavContextMenuPatc
                 <Menu.MenuItem
                     id={`status-${name}-bypass`}
                     label={`${enabled ? "Remove" : "Add"} Status Bypass`}
-                    icon={() => Icon(enabled)}
+                    icon={enabled ? EnabledIcon : DisabledIcon}
+                    leadingAccessory={{ type: "icon", icon: enabled ? EnabledIcon : DisabledIcon }}
                     action={() => {
                         let bypasses: string[] = settings.store[`${name}s`].split(", ");
                         if (enabled) bypasses = bypasses.filter(id => id !== type.id);

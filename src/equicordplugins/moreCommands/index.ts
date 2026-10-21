@@ -19,7 +19,7 @@
 import { ApplicationCommandInputType, ApplicationCommandOptionType, findOption, OptionalMessageOption, RequiredMessageOption, sendBotMessage } from "@api/Commands";
 import { addMessagePreEditListener, addMessagePreSendListener, MessageObject, removeMessagePreEditListener, removeMessagePreSendListener } from "@api/MessageEvents";
 import { migratePluginSettings } from "@api/Settings";
-import { Devs, EquicordDevs } from "@utils/constants";
+import { Devs, EquicordDevs, GUILD_IDS } from "@utils/constants";
 import { sendMessage } from "@utils/discord";
 import definePlugin from "@utils/types";
 import { DraftType, UploadHandler, UploadManager, UserAffinitiesStore, UserStore } from "@webpack/common";
@@ -33,8 +33,7 @@ import {
     generatePoissonDiskPosition,
     getCuteAnimeBoys,
     getCuteNeko,
-    getCutePats,
-    getMessage,
+    getFavoriteGif,
     isMorse,
     loadFriendImage,
     loadImage,
@@ -350,13 +349,6 @@ export default definePlugin({
             },
         },
         {
-            name: "pat",
-            description: "Sends a headpat gif",
-            execute: async () => ({
-                content: await getCutePats()
-            })
-        },
-        {
             name: "nekos",
             description: "Send Neko",
             execute: async () => ({
@@ -478,9 +470,15 @@ export default definePlugin({
         {
             name: "gifroulette",
             description: "Tempt fate and send a gif",
-            execute: (opts, other) => ({
-                content: getMessage(opts, other)
-            }),
+            execute: (opts, other) => {
+                if (GUILD_IDS.includes(other?.guild?.id ?? "")) return sendBotMessage(other.channel.id, {
+                    content: "This command is restricted in this server."
+                });
+
+                return {
+                    content: getFavoriteGif(opts, other)
+                };
+            }
         },
         {
             inputType: ApplicationCommandInputType.BUILT_IN,
@@ -868,7 +866,7 @@ export default definePlugin({
             find: ".isPureReactComponent=!0;",
             predicate: () => settings.store.uwuEverything,
             replacement: {
-                match: /(\.defaultProps\).{0,80}return \i\(\i,\i,void 0,void 0,null,)(\i)\)/,
+                match: /(\.defaultProps\).{0,80}return \i\(\i,\i,)(\i)\)/,
                 replace: "$1$self.uwuifyProps($2))"
             }
         }

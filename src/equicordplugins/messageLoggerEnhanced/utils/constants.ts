@@ -17,7 +17,7 @@
 */
 
 export const DEFAULT_IMAGE_CACHE_DIR = "savedImages";
-
+export const DEFAULT_ATTACHMENT_FILE_EXTENSIONS = "png,jpg,jpeg,gif,webp,mp4,webm,mp3,ogg,wav";
 export const DB_NAME = "MessageLoggerIDB";
 export const DB_VERSION = 1;
 export const LOGS_DATA_FILENAME = "message-logger-logs.json";

@@ -45,9 +45,11 @@ export const Canvas = ({ file }: { file: File; }) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
     useEffect(() => {
+        const objectUrl = URL.createObjectURL(file);
         image = new Image();
-        image.src = URL.createObjectURL(file);
+        image.src = objectUrl;
         image.onload = () => {
+            URL.revokeObjectURL(objectUrl);
             canvas = canvasRef.current;
 
             if (!canvas) return;
@@ -66,7 +68,9 @@ export const Canvas = ({ file }: { file: File; }) => {
 
             initInput();
         };
-    });
+
+        return () => URL.revokeObjectURL(objectUrl);
+    }, [file]);
 
     return (<canvas ref={canvasRef} className="vc-remix-canvas"></canvas>);
 };

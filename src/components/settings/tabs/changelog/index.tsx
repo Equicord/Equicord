@@ -19,7 +19,7 @@ import { HashLink } from "@components/settings/tabs/updater/Components";
 import { Margins } from "@utils/margins";
 import { useAwaiter } from "@utils/react";
 import { getRepo, UpdateLogger } from "@utils/updater";
-import { Alerts, React, Toasts } from "@webpack/common";
+import { Alerts, React, showToast } from "@webpack/common";
 
 import gitHash from "~git-hash";
 
@@ -352,13 +352,9 @@ function ChangelogContent() {
                 const logged = await ensureLocalUpdateLogged();
                 if (!logged) {
                     setChangelog([]);
-                    Toasts.show({
-                        message: "Already up to date with repository",
-                        id: Toasts.genId(),
-                        type: Toasts.Type.MESSAGE,
-                        options: {
-                            position: Toasts.Position.BOTTOM,
-                        },
+                    showToast({
+                        text: "Already up to date with repository",
+                        position: "bottom"
                     });
                 }
                 return;
@@ -384,26 +380,20 @@ function ChangelogContent() {
                     await loadChangelogHistory();
                     setRecentlyChecked(true);
 
-                    Toasts.show({
-                        message: `Found ${updates.value.length} commit${updates.value.length === 1 ? "" : "s"} from repository`,
-                        id: Toasts.genId(),
-                        type: Toasts.Type.SUCCESS,
-                        options: {
-                            position: Toasts.Position.BOTTOM,
-                        },
+                    showToast({
+                        text: `Found ${updates.value.length} commit${updates.value.length === 1 ? "" : "s"} from repository`,
+                        variant: "success",
+                        position: "bottom"
                     });
                 } else {
                     const logged = await ensureLocalUpdateLogged();
                     setRecentlyChecked(true);
-                    Toasts.show({
-                        message: logged
+                    showToast({
+                        text: logged
                             ? "Logged commits from your latest update"
                             : "Repository is up to date with your local copy",
-                        id: Toasts.genId(),
-                        type: logged ? Toasts.Type.SUCCESS : Toasts.Type.MESSAGE,
-                        options: {
-                            position: Toasts.Position.BOTTOM,
-                        },
+                        variant: logged ? "success" : "default",
+                        position: "bottom"
                     });
                     if (!logged) {
                         setChangelog([]);
@@ -422,13 +412,10 @@ function ChangelogContent() {
             setError(errorMessage);
 
             // funny little error toast hopefully doesn't happen!
-            Toasts.show({
-                message: "Could not fetch commits from repository",
-                id: Toasts.genId(),
-                type: Toasts.Type.FAILURE,
-                options: {
-                    position: Toasts.Position.BOTTOM,
-                },
+            showToast({
+                text: "Could not fetch commits from repository",
+                variant: "critical",
+                position: "bottom"
             });
         } finally {
             setIsLoading(false);
@@ -520,13 +507,10 @@ function ChangelogContent() {
                                         await clearChangelogHistory();
                                         await loadChangelogHistory();
                                         setShowHistory(false);
-                                        Toasts.show({
-                                            message: "All logs have been cleared",
-                                            id: Toasts.genId(),
-                                            type: Toasts.Type.SUCCESS,
-                                            options: {
-                                                position: Toasts.Position.BOTTOM,
-                                            },
+                                        showToast({
+                                            text: "All logs have been cleared",
+                                            variant: "success",
+                                            position: "bottom"
                                         });
                                     },
                                 });
@@ -659,13 +643,10 @@ function ChangelogContent() {
                                                     Array.from(expandedLogs).filter(id => id !== logId),
                                                 ),
                                             );
-                                            Toasts.show({
-                                                message: "Log has been cleared",
-                                                id: Toasts.genId(),
-                                                type: Toasts.Type.SUCCESS,
-                                                options: {
-                                                    position: Toasts.Position.BOTTOM,
-                                                },
+                                            showToast({
+                                                text: "Log has been cleared",
+                                                variant: "success",
+                                                position: "bottom"
                                             });
                                         },
                                     });

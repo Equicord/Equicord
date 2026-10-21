@@ -22,7 +22,7 @@ import { Button, React, SearchableSelect, TextInput, useEffect, useState } from 
 
 import { ThemeCard } from "./ThemeCard";
 
-const InputStyles = findCssClassesLazy("inputWrapper", "inputError", "error");
+const InputStyles = findCssClassesLazy("inputWrapper", "editable", "error");
 
 export const apiUrl = "https://themes.equicord.org/api";
 export const logger = new Logger("ThemeLibrary", "#e5c890");
@@ -64,12 +64,13 @@ function ThemeTab() {
     const [searchValue, setSearchValue] = useState({ value: "", status: SearchStatus.ALL });
     const [hideWarningCard, setHideWarningCard] = useState(Settings.plugins.ThemeLibrary.hideWarningCard);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(false);
 
     const onSearch = (query: string) => setSearchValue(prev => ({ ...prev, value: query }));
     const onStatusChange = (status: SearchStatus) => setSearchValue(prev => ({ ...prev, status }));
 
     const themeFilter = (theme: Theme) => {
-        const enabled = themeLinks.includes(`${apiUrl}/${theme.name}`);
+        const enabled = themeLinks.includes(`${apiUrl}/${theme.id}`);
 
         const tags = new Set(theme.tags.map(tag => tag?.toLowerCase()));
 
@@ -115,6 +116,7 @@ function ThemeTab() {
                 setFilteredThemes(themes);
             } catch (err) {
                 logger.error(err);
+                setError(true);
             } finally {
                 setLoading(false);
             }
@@ -161,6 +163,11 @@ function ThemeTab() {
                         }}> This won't take long! </p>
 
                     </div>
+                ) : error ? (
+                    <ErrorCard>
+                        <HeadingTertiary>Failed to fetch themes</HeadingTertiary>
+                        <Paragraph className={Margins.top8}>Could not fetch the theme list. Try again later.</Paragraph>
+                    </ErrorCard>
                 ) : (
                     <>
                         {hideWarningCard ? null : (

@@ -57,7 +57,7 @@ export default definePlugin({
                     replace: "$1$self.getMaxAccounts()",
                 },
                 {
-                    match: /(\i.length(<|>=))5/g,
+                    match: /(\i.length(?:<|>=))5/g,
                     replace: "$1$self.getMaxAccounts()",
                 },
             ]

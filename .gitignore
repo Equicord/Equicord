@@ -34,3 +34,9 @@ ExtensionCache/
 
 # wakatime related stuff
 .wakatime-project
+
+# discord modules cache
+misc/bundle
+
+# intl scripts
+misc/scripts

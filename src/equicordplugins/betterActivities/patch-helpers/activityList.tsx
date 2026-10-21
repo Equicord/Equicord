@@ -24,7 +24,7 @@ export function patchActivityList({ activities: rawActivities, user, hideTooltip
 
     if (user.bot || settings.store.hideTooltip && hideTooltip) return null;
 
-    const activities = rawActivities.filter((a): a is Activity => a != null);
+    const activities = rawActivities?.filter((a): a is Activity => a != null) ?? [];
     const applicationIcons = getApplicationIcons(activities);
     if (applicationIcons.length) {
         const compareImageSource = (a: ApplicationIcon, b: ApplicationIcon) => {

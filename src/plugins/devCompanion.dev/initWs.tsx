@@ -12,12 +12,12 @@ import { reporterData } from "@debug/reporterData";
 import { getIntlMessageFromHash } from "@utils/discord";
 import { canonicalizeMatch, canonicalizeReplace } from "@utils/patches";
 import { filters, findAll, search, wreq } from "@webpack";
-import { React, Toasts, useState } from "@webpack/common";
+import { React, showToast,useState } from "@webpack/common";
 
 import { CLIENT_VERSION, logger, PORT, settings } from ".";
 import { Recieve } from "./types";
 import { FullOutgoingMessage, OutgoingMessage } from "./types/send";
-import { extractModule, extractOrThrow, findModuleId, getModulePatchedBy, mkRegexFind, parseNode, toggleEnabled, } from "./util";
+import { extractModule, extractOrThrow, findAllModuleIds, findModuleId, getModulePatchedBy, mkRegexFind, parseNode, toggleEnabled, } from "./util";
 
 export function stopWs() {
     socket?.close(1000, "Plugin Stopped");
@@ -65,13 +65,10 @@ export function initWs(isManual = false) {
 
         try {
             if (settings.store.notifyOnAutoConnect || isManual) {
-                Toasts.show({
-                    message: "Connected to WebSocket",
-                    id: Toasts.genId(),
-                    type: Toasts.Type.SUCCESS,
-                    options: {
-                        position: Toasts.Position.TOP
-                    }
+                showToast({
+                    text: "Connected to WebSocket",
+                    variant: "success",
+                    position: "top"
                 });
             }
         }
@@ -87,13 +84,10 @@ export function initWs(isManual = false) {
 
         logger.error("Dev Companion Error:", e);
 
-        Toasts.show({
-            message: "Dev Companion Error",
-            id: Toasts.genId(),
-            type: Toasts.Type.FAILURE,
-            options: {
-                position: Toasts.Position.TOP
-            }
+        showToast({
+            text: "Dev Companion Error",
+            variant: "critical",
+            position: "top"
         });
     });
 
@@ -102,13 +96,10 @@ export function initWs(isManual = false) {
 
         logger.info("Dev Companion Disconnected:", e.code, e.reason);
 
-        Toasts.show({
-            message: "Dev Companion Disconnected",
-            id: Toasts.genId(),
-            type: Toasts.Type.FAILURE,
-            options: {
-                position: Toasts.Position.TOP
-            }
+        showToast({
+            text: "Dev Companion Disconnected",
+            variant: "critical",
+            position: "top"
         });
     });
 
@@ -122,11 +113,24 @@ export function initWs(isManual = false) {
         /**
          * @param error the error to reply with. if there is no error, the reply is a sucess
          */
-        function reply(error?: string) {
-            const toSend = { nonce: d.nonce, ok: !error } as Record<string, unknown>;
-            if (error) toSend.error = error;
+        function replyError(error: string) {
+            const toSend = { nonce: d.nonce, ok: false, error } as Record<string, unknown>;
             logger.debug("Replying with:", toSend);
             ws.send(JSON.stringify(toSend));
+        }
+        function replyOk() {
+            const toSend = {
+                nonce: d.nonce,
+                ok: true,
+                type: "genericOk",
+                data: {},
+            } as Record<string, unknown>;
+            logger.debug("Replying with:", toSend);
+            ws.send(JSON.stringify(toSend));
+        }
+        function reply(error?: string) {
+            if (error) replyError(error);
+            else replyOk();
         }
         function replyData(data: OutgoingMessage) {
             const toSend: FullOutgoingMessage = {
@@ -256,47 +260,47 @@ export function initWs(isManual = false) {
                             }
 
                             try {
-                                let results: any[];
+                                let moduleIds: string[];
                                 switch (m.findType.replace("find", "").replace("Lazy", "")) {
                                     case "":
                                     case "Component":
-                                        results = findAll(parsedArgs[0]);
+                                        moduleIds = findAllModuleIds(parsedArgs[0]);
                                         break;
                                     case "CssClasses":
-                                        results = findAll(filters.byClassNames(...parsedArgs), { topLevelOnly: true });
+                                        moduleIds = findAllModuleIds(filters.byClassNames(...parsedArgs), { topLevelOnly: true });
                                         break;
                                     case "ByProps":
-                                        results = findAll(filters.byProps(...parsedArgs));
+                                        moduleIds = findAllModuleIds(filters.byProps(...parsedArgs));
                                         break;
                                     case "Store":
-                                        results = findAll(filters.byStoreName(parsedArgs[0]));
+                                        moduleIds = findAllModuleIds(filters.byStoreName(parsedArgs[0]));
                                         break;
                                     case "ByCode":
-                                        results = findAll(filters.byCode(...parsedArgs));
+                                        moduleIds = findAllModuleIds(filters.byCode(...parsedArgs));
                                         break;
                                     case "ModuleId":
-                                        results = Object.keys(search(parsedArgs[0]));
+                                        moduleIds = Object.keys(search(parsedArgs[0]));
                                         break;
                                     case "ComponentByCode":
-                                        results = findAll(filters.componentByCode(...parsedArgs));
+                                        moduleIds = findAllModuleIds(filters.componentByCode(...parsedArgs));
                                         break;
                                     default:
                                         return reply("Unknown Find Type " + m.findType);
                                 }
 
-                                const uniqueResultsCount = new Set(results).size;
-                                if (uniqueResultsCount === 0) throw "No results";
-                                if (uniqueResultsCount > 1) throw "Found more than one result! Make this filter more specific";
+                                const uniqueModuleIds = new Set(moduleIds).size;
+                                if (uniqueModuleIds === 0) throw "No results";
+                                if (uniqueModuleIds > 1) throw "Found more than one result! Make this filter more specific";
                                 // best name ever
-                                const foundFind: string = [...results][0].toString();
+                                const [foundId] = moduleIds;
                                 replyData({
                                     type: "extract",
                                     ok: true,
                                     data: {
-                                        module: foundFind,
+                                        module: extractModule(foundId),
                                         find: true,
-                                        moduleNumber: +findModuleId([foundFind]),
-                                        patchedBy: getModulePatchedBy(foundFind)
+                                        moduleNumber: +foundId,
+                                        patchedBy: getModulePatchedBy(foundId)
                                     },
                                 });
                             } catch (err) {

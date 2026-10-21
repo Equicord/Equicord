@@ -99,8 +99,8 @@ export default definePlugin({
             replacement: [
                 // override default stream quality with configured bitrate/resolution/fps
                 {
-                    match: /(this\.goliveMaxQuality)=(this\.getDefaultGoliveQuality\(\))/,
-                    replace: "$1=$self.patchStreamQuality($2)",
+                    match: /this\.getDefaultGoliveQuality\(\)/,
+                    replace: "$self.patchStreamQuality($&)",
                 },
                 // inject configured quality when stream settings change mid-stream
                 {

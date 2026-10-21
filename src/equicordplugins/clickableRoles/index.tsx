@@ -153,29 +153,27 @@ export default definePlugin({
         {
             find: "#{intl::zr0Y5R::raw}",
             replacement: {
-                match: /(\.colorString\?\?\i;)return(.*?enableTooltip:!1\}\):null,\i\]\}\))/,
+                match: /(\.colorString\?\?\i;)return(.*?enableTooltip:!1\}\)\}\):null,\i\]\}\))/,
                 replace: "$1return $self.wrapRolePill(arguments[0],()=>$2)",
             },
         },
         {
             find: 'tutorialId:"whos-online"',
             replacement: {
-                match: /\((function\(\i\)\{let\{id:.*?#{intl::CHANNEL_MEMBERS_A11Y_LABEL}.*?\}\))\}\);/,
-                replace: "($self.wrapRoleGroup($1}));",
+                match: /(\i\.\i),\{(?=\.\.\.\i,key:`section-)/g,
+                replace: "$self.RoleGroup,{Original:$1,",
             },
         },
     ],
 
-    wrapRoleGroup(originalFn: (props: { id: string; guildId: string; }) => React.ReactNode) {
-        return (props: { id: string; guildId: string; }) => {
-            const result = originalFn(props);
-            if (!GuildRoleStore.getRole(props.guildId, props.id)) return result;
-            return (
-                <WrappedClickableRole roleId={props.id} guildId={props.guildId}>
-                    {result}
-                </WrappedClickableRole>
-            );
-        };
+    RoleGroup({ Original, ...props }: { Original: React.ComponentType<{ id: string; guildId: string; }>; id: string; guildId: string; }) {
+        const result = <Original {...props} />;
+        if (!GuildRoleStore.getRole(props.guildId, props.id)) return result;
+        return (
+            <WrappedClickableRole roleId={props.id} guildId={props.guildId}>
+                {result}
+            </WrappedClickableRole>
+        );
     },
 
     wrapRolePill(props: { role: Role; guildId: string; }, renderOriginal: () => React.ReactNode) {

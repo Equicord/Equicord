@@ -8,8 +8,9 @@ import { showNotice } from "@api/Notices";
 import { plugins, startDependenciesRecursive, startPlugin, stopPlugin } from "@api/PluginManager";
 import { Settings } from "@api/Settings";
 import { canonicalizeMatch } from "@utils/patches";
-import { CodeFilter, stringMatches, wreq } from "@webpack";
-import { Toasts } from "@webpack/common";
+import { Module } from "@vencord/discord-types/webpack";
+import { CodeFilter, FilterFn, stringMatches, wreq } from "@webpack";
+import { showToast } from "@webpack/common";
 
 import { WebpackPatcher } from "../../Vencord";
 import { logger, settings as companionSettings } from ".";
@@ -106,13 +107,10 @@ export function mkRegexFind(idOrSearch: string): RegExp[] {
 }
 // the next two functions are copied from components/pluginSettings
 function showErrorToast(message: string) {
-    Toasts.show({
-        message,
-        type: Toasts.Type.FAILURE,
-        id: Toasts.genId(),
-        options: {
-            position: Toasts.Position.BOTTOM
-        }
+    showToast({
+        text: message,
+        variant: "critical",
+        position: "bottom"
     });
 }
 
@@ -127,14 +125,10 @@ export function toggleEnabled(name: string, beforeReload: (error?: string) => vo
                 beforeReload();
                 window.location.reload();
             }
-            Toasts.show({
-                id: Toasts.genId(),
-                message: "Reload Needed",
-                type: Toasts.Type.MESSAGE,
-                options: {
-                    duration: 5000,
-                    position: Toasts.Position.TOP
-                }
+            showToast({
+                text: "Reload Needed",
+                duration: 5000,
+                position: "top"
             });
         }
     }
@@ -192,4 +186,32 @@ export function toggleEnabled(name: string, beforeReload: (error?: string) => vo
 
     settings.enabled = !wasEnabled;
     beforeReturn();
+}
+
+export function findAllModuleIds(filter: FilterFn, { topLevelOnly = false }: { topLevelOnly?: boolean; } = {}): string[] {
+    const { c } = wreq;
+    const ret: string[] = [];
+
+    outer: for (const key in c) {
+        const mod: Module | undefined = c[key];
+        if (!mod?.loaded || mod.exports == null) {
+            continue;
+        }
+        if (filter(mod.exports)) {
+            ret.push(key);
+            continue;
+        }
+        if (typeof mod.exports !== "object" || topLevelOnly) {
+            continue;
+        }
+        for (const nestedMod in mod.exports) {
+            const nested = mod.exports[nestedMod];
+            if (nested && filter(nested)) {
+                ret.push(key);
+                continue outer;
+            }
+        }
+    }
+
+    return ret;
 }

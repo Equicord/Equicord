@@ -4,16 +4,17 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import "./styles.css";
+
 import { Devs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
 import definePlugin from "@utils/types";
-import { findComponentByCodeLazy, findStoreLazy } from "@webpack";
-import { TypingStore, UserStore, useStateFromStores } from "@webpack/common";
+import { findComponentByCodeLazy } from "@webpack";
+import { PrivateChannelSortStore, TypingStore, UserStore, useStateFromStores } from "@webpack/common";
 
 const cl = classNameFactory("vc-home-typing-");
 
 const ThreeDots = findComponentByCodeLazy("Math.min(1,Math.max(", "dotRadius:");
-const PrivateChannelSortStore = findStoreLazy("PrivateChannelSortStore") as { getPrivateChannelIds: () => string[]; };
 
 export default definePlugin({
     name: "HomeTyping",
@@ -36,7 +37,7 @@ export default definePlugin({
             replacement:
                 [
                     {
-                        match: /(\(0,\i.jsxs?\)\(\i,{}\))/,
+                        match: /(?<=BUTTON_HOME.{0,10}children:)(\(0,\i.jsxs?\)\(\i,{}\))/,
                         replace: "arguments[0].user == null ? null : (vcIsTyping ? $self.TypingIcon() : $1)"
                     },
                     // define isTyping earlier in the function so i dont bReAk ThE rUlEs Of HoOkS

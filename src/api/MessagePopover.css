@@ -1,0 +1,60 @@
+.vc-message-popover-slot {
+    inset-inline-start: 0;
+}
+
+.vc-message-popover {
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+.vc-message-popover .vc-message-popover-bar {
+    display: flex;
+    max-width: 100%;
+}
+
+.vc-popover-overflow {
+    min-width: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+    container-type: scroll-state;
+}
+
+.vc-popover-overflow::-webkit-scrollbar {
+    display: none;
+}
+
+.vc-popover-overflow-track {
+    display: flex;
+    align-items: center;
+    width: max-content;
+}
+
+.vc-popover-overflow .vc-popover-overflow-arrow {
+    display: none;
+    position: sticky;
+    z-index: 1;
+    width: 24px;
+    background: var(--background-surface-high);
+}
+
+.vc-popover-overflow .vc-popover-overflow-arrow-left {
+    left: 0;
+    margin-inline-end: -24px;
+}
+
+.vc-popover-overflow .vc-popover-overflow-arrow-right {
+    right: 0;
+    margin-inline-start: -24px;
+}
+
+@container scroll-state(scrollable: left) {
+    .vc-popover-overflow .vc-popover-overflow-arrow-left {
+        display: flex;
+    }
+}
+
+@container scroll-state(scrollable: right) {
+    .vc-popover-overflow .vc-popover-overflow-arrow-right {
+        display: flex;
+    }
+}

@@ -6,19 +6,34 @@
 
 import { definePluginSettings } from "@api/Settings";
 import { disableStyle, enableStyle } from "@api/Styles";
+import { AchievementsIcon, AppsIcon, CreditCardIcon, EquicordIcon, GameControllerIcon, HammerAndChiselIcon, MainSettingsIcon, PencilSparkleIcon, UserIcon } from "@components/Icons";
 import { buildPluginMenuEntries, buildThemeMenuEntries } from "@equicordplugins/equicordToolbox/menu";
 import { Devs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
+import { getIntlMessage } from "@utils/discord";
 import { Logger } from "@utils/Logger";
 import definePlugin, { OptionType } from "@utils/types";
+import { Icon } from "@vencord/discord-types";
 import { findCssClassesLazy } from "@webpack";
 import { ComponentDispatch, FocusLock, Menu, useEffect, useRef } from "@webpack/common";
-import type { HTMLAttributes, ReactNode } from "react";
+import type { HTMLAttributes, ReactElement, ReactNode } from "react";
 
 import fullHeightStyle from "./fullHeightContext.css?managed";
 
 const cl = classNameFactory("");
 const Classes = findCssClassesLazy("animating", "baseLayer", "bg", "layer", "layers");
+
+const SECTION_ICONS: Record<string, Icon> = {
+    profile_section: PencilSparkleIcon,
+    user_section: UserIcon,
+    equicord_section: EquicordIcon,
+    billing_section: CreditCardIcon,
+    app_section: AppsIcon,
+    games_and_apps_section: GameControllerIcon,
+    developer_section: HammerAndChiselIcon,
+    utility_section: MainSettingsIcon,
+    playgrounds: AchievementsIcon,
+};
 
 const settings = definePluginSettings({
     disableFade: {
@@ -95,8 +110,8 @@ export default definePlugin({
             find: "this.renderArtisanalHack()",
             replacement: [
                 {
-                    match: /class (\i)(?= extends \i\.PureComponent.+?static contextType=.+?jsx\)\(\1,\{mode:)/,
-                    replace: "var $1=$self.Layer;class VencordPatchedOldFadeLayer",
+                    match: /class (\i)( extends \i\.PureComponent.+?jsx\)\(\1,\{mode:)/,
+                    replace: "var $1=$self.Layer;class VencordPatchedOldFadeLayer$2",
                     predicate: () => settings.store.disableFade
                 },
                 { // Lazy-load contents
@@ -155,9 +170,9 @@ export default definePlugin({
             predicate: () => settings.store.organizeMenu,
             replacement: [
                 {
-                    match: /children:\[(\i),(?<=\1=(?:function|.{0,30}\.openUserSettings).+?)/, // TODO .{0,30}\.openUserSettings is stable compat
-                    replace: "children:[$self.transformSettingsEntries($1),",
-                },
+                    match: /children:\[(\i),null!=(\i).{0,30}\}\),(\i)\](?<=\1=(?:function|.{0,30}\.openUserSettings).+?)/, // TODO .{0,30}\.openUserSettings is stable compat
+                    replace: "children:$self.transformSettingsEntries([$1,$2,$3])",
+                }
             ]
         },
     ],
@@ -177,12 +192,19 @@ export default definePlugin({
         return <Layer {...props} />;
     },
 
-    transformSettingsEntries(list) {
+    transformSettingsEntries(list: ReactElement<any>[]): ReactNode[] {
         const items: ReactNode[] = [];
+        const SECTION_NAMES: Record<string, string> = {
+            user_section: getIntlMessage("USER_SETTINGS"),
+            utility_section: getIntlMessage("USER_SETTINGS_KEYBINDS_MISCELLANEOUS_SECTION_TITLE")
+        };
 
-        for (const item of list) {
+        const flat = list.flat(Infinity);
+        let logout: ReactNode = null;
+
+        for (const item of flat) {
+            if (!item?.props) continue;
             const { key, props } = item;
-            if (!props) continue;
 
             if (key === "equicord_plugins" || key === "equicord_themes") {
                 const children = key === "equicord_plugins"
@@ -194,10 +216,20 @@ export default definePlugin({
                         {children}
                     </Menu.MenuItem>
                 );
-            } else if (key.endsWith("_section") && props.label) {
+            } else if ((key?.endsWith("_section") || key === "playgrounds") && (props.label ?? SECTION_NAMES[key])) {
+                const iconLeft = SECTION_ICONS[key];
+                const children: any = [].concat(props.children ?? []).flat(Infinity);
+                const logoutItem = children.find(c => c?.key === "logout_sidebar_item");
+                if (logoutItem) logout = <Menu.MenuItem key={logoutItem.key} {...logoutItem.props} />;
+
                 items.push(
-                    <Menu.MenuItem key={key} label={props.label} id={props.label}>
-                        {this.transformSettingsEntries(props.children)}
+                    <Menu.MenuItem
+                        key={key}
+                        label={props.label ?? SECTION_NAMES[key]}
+                        id={props.label ?? SECTION_NAMES[key]}
+                        {...(iconLeft && { iconLeft })}
+                    >
+                        {this.transformSettingsEntries(children.filter(c => c?.key !== "logout_sidebar_item"))}
                     </Menu.MenuItem>
                 );
             } else {
@@ -205,6 +237,7 @@ export default definePlugin({
             }
         }
 
+        if (logout) items.push(logout);
         return items;
     }
 });

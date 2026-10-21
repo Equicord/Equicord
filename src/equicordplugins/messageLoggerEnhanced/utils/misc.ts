@@ -22,7 +22,7 @@ import { ChannelStore, moment, UserStore } from "@webpack/common";
 
 import { DBMessageStatus } from "../db";
 import { LoggedMessageJSON } from "../types";
-import { DEFAULT_IMAGE_CACHE_DIR } from "./constants";
+import { DEFAULT_ATTACHMENT_FILE_EXTENSIONS, DEFAULT_IMAGE_CACHE_DIR } from "./constants";
 import { DISCORD_EPOCH } from "./index";
 import { memoize } from "./memoize";
 
@@ -144,9 +144,11 @@ export function getNative(): PluginNative<typeof import("../native")> {
             writeLogs: async () => { },
             getDefaultNativeImageDir: async () => DEFAULT_IMAGE_CACHE_DIR,
             getDefaultNativeDataDir: async () => "",
+            getDefaultAttachmentFileExtensions: async () => DEFAULT_ATTACHMENT_FILE_EXTENSIONS,
+            updateAllowedExtensions: async () => { },
             deleteFileNative: async () => { },
             chooseDir: async (x: string) => "",
-            getSettings: async () => ({ imageCacheDir: DEFAULT_IMAGE_CACHE_DIR, logsDir: "" }),
+            getSettings: async () => ({ imageCacheDir: DEFAULT_IMAGE_CACHE_DIR, logsDir: "", attachmentFileExtensions: DEFAULT_ATTACHMENT_FILE_EXTENSIONS }),
             init: async () => { },
             initDirs: async () => { },
             getImageNative: async (x: string) => new Uint8Array(0),

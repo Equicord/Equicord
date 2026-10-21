@@ -227,14 +227,12 @@ function buildTooltipContent(el: Element, computed: CSSStyleDeclaration, rect: D
     html += `<div class="${cl("color")}"><span class="${cl("swatch")}" style="--c:${computed.color}"></span>${colorVar}</div>`;
     html += `<div class="${cl("hex")}">${hex}</div>`;
 
-    const { store } = settings;
-
-    if (store.showId) {
+    if (settings.store.showId) {
         const { id } = el;
         if (id) html += `<div class="${cl("info")}"><span class="${cl("label")}">id:</span> #${id}</div>`;
     }
 
-    if (store.showClasses) {
+    if (settings.store.showClasses) {
         const classes = el.className;
         if (classes && typeof classes === "string") {
             const truncated = classes.length > 60 ? classes.slice(0, 60) + "…" : classes;
@@ -242,28 +240,28 @@ function buildTooltipContent(el: Element, computed: CSSStyleDeclaration, rect: D
         }
     }
 
-    if (store.showFont) {
+    if (settings.store.showFont) {
         const font = computed.fontFamily.split(",")[0].replace(/["']/g, "");
         const size = computed.fontSize;
         html += `<div class="${cl("info")}"><span class="${cl("label")}">font:</span> ${font} ${size}</div>`;
     }
 
-    if (store.showPadding) {
+    if (settings.store.showPadding) {
         const padding = formatBoxValue(computed.padding);
         if (padding) html += `<div class="${cl("info")}"><span class="${cl("label")}">padding:</span> ${padding}</div>`;
     }
 
-    if (store.showMargin) {
+    if (settings.store.showMargin) {
         const margin = formatBoxValue(computed.margin);
         if (margin) html += `<div class="${cl("info")}"><span class="${cl("label")}">margin:</span> ${margin}</div>`;
     }
 
-    if (store.showBorderRadius) {
+    if (settings.store.showBorderRadius) {
         const radius = formatBoxValue(computed.borderRadius);
         if (radius) html += `<div class="${cl("info")}"><span class="${cl("label")}">radius:</span> ${radius}</div>`;
     }
 
-    if (store.showPosition) {
+    if (settings.store.showPosition) {
         const pos = computed.position;
         if (pos !== "static") {
             const zIndex = computed.zIndex !== "auto" ? ` z:${computed.zIndex}` : "";
@@ -271,7 +269,7 @@ function buildTooltipContent(el: Element, computed: CSSStyleDeclaration, rect: D
         }
     }
 
-    if (store.showDisplay) {
+    if (settings.store.showDisplay) {
         const { display } = computed;
         let extra = "";
         if (display === "flex" || display === "inline-flex") {

@@ -23,7 +23,7 @@ import { appendFile, mkdir, readdir, rm } from "fs/promises";
 import { join } from "path";
 import Zip from "zip-local";
 
-import { BUILD_TIMESTAMP, commonOpts, globPlugins, IS_DEV, IS_REPORTER, IS_COMPANION_TEST, VERSION, commonRendererPlugins, buildOrWatchAll, stringifyValues, IS_ANTI_CRASH_TEST } from "./common.mjs";
+import { BUILD_TIMESTAMP, commonOpts, globPlugins, IS_DEV, IS_ANTI_CRASH_TEST, IS_REPORTER, IS_COMPANION_TEST, IS_STANDALONE, VERSION, commonRendererPlugins, buildOrWatchAll, stringifyValues } from "./common.mjs";
 
 /**
  * @type {import("esbuild").BuildOptions}
@@ -43,7 +43,7 @@ const commonOptions = {
         IS_WEB: true,
         IS_EXTENSION: false,
         IS_USERSCRIPT: false,
-        IS_STANDALONE: true,
+        IS_STANDALONE,
         IS_DEV,
         IS_REPORTER,
         IS_COMPANION_TEST,
@@ -192,7 +192,7 @@ const appendCssRuntime = Bun.file("dist/Equicord.user.css").text().then(content 
 if (!process.argv.includes("--skip-extension")) {
     await Promise.all([
         appendCssRuntime,
-        buildExtension("chromium-unpacked", ["modifyResponseHeaders.json", "content.js", "manifest.json", "icon.png"]),
+        buildExtension("chromium-unpacked", ["modifyResponseHeaders.json", "content.js", "manifest.json", "icon.png", "service-worker.js"]),
         buildExtension("firefox-unpacked", ["background.js", "content.js", "manifestv2.json", "icon.png"]),
     ]);
 

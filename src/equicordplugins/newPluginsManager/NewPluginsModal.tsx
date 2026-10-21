@@ -8,17 +8,16 @@ import "./styles.css";
 
 import { Settings, useSettings } from "@api/Settings";
 import { BaseText } from "@components/BaseText";
-import { Button } from "@components/Button";
 import ErrorBoundary from "@components/ErrorBoundary";
-import { Flex } from "@components/Flex";
+import { Link } from "@components/Link";
+import { Notice } from "@components/Notice";
 import { PluginDependencyList } from "@components/settings/tabs/plugins";
 import { PluginCard } from "@components/settings/tabs/plugins/PluginCard";
 import { ChangeList } from "@utils/ChangeList";
 import { classNameFactory } from "@utils/css";
-import { CloseButton, closeModal, ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot, ModalSize, openModal } from "@utils/modal";
 import { useForceUpdater } from "@utils/react";
-import { findComponentByCodeLazy } from "@webpack";
-import { Tooltip, useMemo } from "@webpack/common";
+import { RenderModalProps } from "@vencord/discord-types";
+import { closeModal, Modal, openModal, Tooltip, useMemo } from "@webpack/common";
 import { ReactNode } from "react";
 
 import Plugins from "~plugins";
@@ -27,12 +26,10 @@ import { getNewPlugins, getNewSettings, KnownPluginSettingsMap, writeKnownSettin
 
 const cl = classNameFactory("vc-new-plugins-");
 
-const Checkbox = findComponentByCodeLazy('"data-toggleable-component":"checkbox');
-
 let hasSeen = false;
 
 interface ModalComponentProps {
-    modalProps: ModalProps;
+    modalProps: RenderModalProps;
     newPlugins: Set<string>;
     newSettings: KnownPluginSettingsMap;
 }
@@ -121,63 +118,47 @@ function NewPluginsModal({ modalProps, newPlugins, newSettings }: ModalComponent
     };
 
     return (
-        <ModalRoot {...modalProps} size={ModalSize.MEDIUM}>
-            <ModalHeader separator={false} className={cl("header")}>
+        <Modal
+            {...modalProps}
+            size="md"
+            title={
                 <div className={cl("header-content")}>
                     <BaseText size="lg" weight="semibold" className={cl("title")}>
                         New Plugins and Settings ({totalCount})
                     </BaseText>
+                </div>
+            }
+            subtitle={
+                <>
                     <BaseText size="sm" className={cl("description")}>
                         New plugins have been added since your last visit. Enable any you'd like or continue to dismiss.
                     </BaseText>
-                </div>
-                <div className={cl("header-trailing")}>
-                    <CloseButton onClick={modalProps.onClose} />
-                </div>
-            </ModalHeader>
-
-            <ModalContent>
-                <div className={cl("grid")}>
-                    {pluginCards}
-                    {requiredPluginCards}
-                </div>
-            </ModalContent>
-
-            <ModalFooter>
-                <Flex className={cl("footer")}>
-                    <Tooltip
-                        text={
-                            <>
-                                The following plugins require a restart:
-                                <ul className={cl("restart-list")}>
-                                    {changes.map(p => <li key={p}>{p}</li>)}
-                                </ul>
-                            </>
-                        }
-                        shouldShow={changes.hasChanges}
-                    >
-                        {tooltipProps => (
-                            <Button
-                                {...tooltipProps}
-                                onClick={handleContinue}
-                            >
-                                {changes.hasChanges ? "Restart" : "Continue"}
-                            </Button>
-                        )}
-                    </Tooltip>
-
-                    <Checkbox
-                        type="inverted"
-                        value={!settings?.plugins?.NewPluginsManager?.enabled}
-                        onChange={() => {
-                            Settings.plugins.NewPluginsManager.enabled = !settings?.plugins?.NewPluginsManager?.enabled;
-                        }}
-                    >
-                        Don't show this again
-                    </Checkbox>
-                </Flex>
-            </ModalFooter>
-        </ModalRoot>
+                    <br />
+                    <Notice.Info className={cl("notice")}>
+                        Equicord is Open Source Software. If you enjoy using it, consider supporting us <Link href="https://github.com/sponsors/thororen1234" target="_blank" rel="noopener noreferrer">here</Link>.
+                    </Notice.Info>
+                </>
+            }
+            actions={[
+                {
+                    text: "Don't show this again",
+                    onClick: () => {
+                        Settings.plugins.NewPluginsManager.enabled = !settings?.plugins?.NewPluginsManager?.enabled;
+                    },
+                    variant: "secondary"
+                },
+                {
+                    text: changes.hasChanges ? "Restart" : "Continue",
+                    onClick: handleContinue,
+                    variant: "primary"
+                }
+            ]}
+        >
+            <div className={cl("grid")}>
+                {pluginCards}
+                {requiredPluginCards}
+            </div>
+        </Modal >
     );
 }
 

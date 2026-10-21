@@ -1,8 +1,11 @@
 blank_issues_enabled: false
 contact_links:
-    - name: Equicord Support Server
+    - name: 💬 Discord Community
       url: https://equicord.org/discord
-      about: If you need help regarding Equicord, please join our support server!
-    - name: Equicord Installer
-      url: https://github.com/Equicord/Equilotl
-      about: You can find the Equicord Installer here
+      about: For plugin requests, support questions, and general help - join our Discord server
+    - name: 🔌 Plugin Requests
+      url: https://equicord.org/discord
+      about: Want a new plugin? Request it in our Discord community, not here
+    - name: ❓ Support & Questions
+      url: https://equicord.org/discord
+      about: Need help? Ask in our Discord server for faster responses

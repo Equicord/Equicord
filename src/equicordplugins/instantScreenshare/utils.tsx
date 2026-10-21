@@ -8,9 +8,10 @@ import { definePluginSettings } from "@api/Settings";
 import { Heading } from "@components/Heading";
 import { Margins } from "@components/margins";
 import { Paragraph } from "@components/Paragraph";
+import { IS_WINDOWS } from "@utils/constants";
 import { Logger } from "@utils/Logger";
 import { OptionType } from "@utils/types";
-import { findByCodeLazy, findByPropsLazy } from "@webpack";
+import { findByCodeLazy } from "@webpack";
 import { MediaEngineStore, SearchableSelect, useEffect, useState } from "@webpack/common";
 
 interface PickerProps {
@@ -19,7 +20,6 @@ interface PickerProps {
 }
 
 const getDesktopSources = findByCodeLazy("desktop sources");
-const configModule = findByPropsLazy("getOutputVolume");
 const log = new Logger("InstantScreenShare");
 
 export const settings = definePluginSettings({
@@ -68,11 +68,11 @@ export const settings = definePluginSettings({
 
 export async function getCurrentMedia() {
     const media = MediaEngineStore.getMediaEngine();
-    const sources = await getDesktopSources(media, ["screen", "window"], null) ?? [];
+    const sources = await getDesktopSources(media, IS_WINDOWS, ["screen", "window"], null) ?? [];
 
     if (settings.store.includeVideoDevices) {
         try {
-            const videoDevices = Object.values(configModule.getVideoDevices() || {});
+            const videoDevices = Object.values(MediaEngineStore.getVideoDevices() || {});
             const videoSources = videoDevices.map((device: any) => ({
                 id: device.id,
                 name: device.name,
@@ -122,11 +122,11 @@ function ScreenSetting() {
         let active = true;
         async function fetchMedia() {
             setLoading(true);
-            const sources = await getDesktopSources(media, ["screen", "window"], null) ?? [];
+            const sources = await getDesktopSources(media, IS_WINDOWS, ["screen", "window"], null) ?? [];
 
             if (includeVideoDevices) {
                 try {
-                    const videoDevices = Object.values(configModule.getVideoDevices() || {});
+                    const videoDevices = Object.values(MediaEngineStore.getVideoDevices() || {});
                     const videoSources = videoDevices.map((device: any) => ({
                         id: device.id,
                         name: device.name,

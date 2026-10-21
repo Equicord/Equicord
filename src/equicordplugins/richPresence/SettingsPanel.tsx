@@ -10,7 +10,7 @@ import { Margins } from "@utils/margins";
 import { classes } from "@utils/misc";
 import { Select, Slider, TabBar, TextInput, useState } from "@webpack/common";
 
-import { onServiceChange, settings, SettingsStore } from "./settings";
+import { settings, SettingsStore } from "./settings";
 import { NameFormat, ServiceTab } from "./types";
 
 type SettingsKey = keyof SettingsStore;
@@ -18,8 +18,11 @@ type SettingsKey = keyof SettingsStore;
 function SwitchSetting({ name, description, settingsKey }: { name: string; description: string; settingsKey: SettingsKey; }) {
     const [value, setValue] = useState(settings.store[settingsKey] ?? false);
     return (
-        <SettingsSection tag="label" name={name} description={description} inlineSetting>
-            <Switch checked={!!value} onChange={v => { setValue(v); (settings.store[settingsKey] as boolean) = v; onServiceChange?.(); }} />
+        <SettingsSection tag="label" inlineSetting id={name} name={name} description={description}>
+            <Switch
+                checked={Boolean(value)}
+                onChange={v => { setValue(v); (settings.store[settingsKey] as boolean) = v; }}
+            />
         </SettingsSection>
     );
 }
@@ -27,7 +30,7 @@ function SwitchSetting({ name, description, settingsKey }: { name: string; descr
 function TextSetting({ name, description, settingsKey, placeholder }: { name: string; description: string; settingsKey: SettingsKey; placeholder?: string; }) {
     const [value, setValue] = useState(settings.store[settingsKey] ?? "");
     return (
-        <SettingsSection name={name} description={description}>
+        <SettingsSection id={name} name={name} description={description}>
             <TextInput
                 type="text"
                 value={String(value)}
@@ -38,10 +41,10 @@ function TextSetting({ name, description, settingsKey, placeholder }: { name: st
     );
 }
 
-function SelectSetting({ name, description, settingsKey, options }: { name: string; description: string; settingsKey: SettingsKey; options: { label: string; value: string; }[]; }) {
+function SelectSetting({ name, description, settingsKey, options }: { name: string; description: string; settingsKey: SettingsKey; options: { label: string; value: string | number; }[]; }) {
     const [value, setValue] = useState(settings.store[settingsKey] ?? options[0]?.value);
     return (
-        <SettingsSection name={name} description={description}>
+        <SettingsSection id={name} name={name} description={description}>
             <Select
                 options={options}
                 isSelected={v => v === value}
@@ -57,7 +60,7 @@ function SelectSetting({ name, description, settingsKey, options }: { name: stri
 function AudioBookShelfSettings() {
     return (
         <>
-            <SettingsSection name="" description="Display your currently playing audiobooks as Discord Rich Presence. Requires your AudioBookShelf server URL, username, and password." />
+            <SettingsSection id="audiobookshelf-settings" name="" description="Display your currently playing audiobooks as Discord Rich Presence. Requires your AudioBookShelf server URL, username, and password." />
             <TextSetting name="Server URL" description="AudioBookShelf server URL." settingsKey="abs_serverUrl" placeholder="https://abs.example.com" />
             <TextSetting name="Username" description="AudioBookShelf username." settingsKey="abs_username" />
             <TextSetting name="Password" description="AudioBookShelf password." settingsKey="abs_password" />
@@ -67,7 +70,7 @@ function AudioBookShelfSettings() {
 
 function TosuSettings() {
     return (
-        <SettingsSection name="" description="Connects to tosu via WebSocket on port 24050. No configuration needed, just make sure tosu is running alongside osu!." />
+        <SettingsSection id="tosu-settings" name="" description="Connects to tosu via WebSocket on port 24050. No configuration needed, just make sure tosu is running alongside osu!." />
     );
 }
 
@@ -83,7 +86,7 @@ const nameFormatOptions = [
 function StatsFmSettings() {
     return (
         <>
-            <SettingsSection name="" description="Show what you're currently listening to via stats.fm. Requires your listening history to be public." />
+            <SettingsSection id="statsfm-settings" name="" description="Show what you're currently listening to via stats.fm. Requires your listening history to be public." />
             <TextSetting name="Username" description="Stats.fm username." settingsKey="sfm_username" placeholder="stats.fm username" />
             <TextSetting name="Custom Status Text" description="Custom status text." settingsKey="sfm_statusName" placeholder="Stats.fm" />
             <SelectSetting name="Name Format" description="Name format." settingsKey="sfm_nameFormat" options={nameFormatOptions} />
@@ -105,9 +108,9 @@ function StatsFmSettings() {
 function JellyfinSettings() {
     return (
         <>
-            <SettingsSection name="" description="Show what you're playing on Jellyfin. To get your API key: open your Jellyfin web UI, press F12 to open Developer Tools, go to the Network tab, look for requests to your server, and find the X-MediaBrowser-Token header (Ctrl+F to search). Your user ID can be found in your profile page URL." />
+            <SettingsSection id="jellyfin-settings" name="" description="Show what you're playing on Jellyfin. To get your API key: open your Jellyfin web UI, press F12 to open Developer Tools, go to the Network tab, look for requests to your server, find the Authorization header (Ctrl+F to search), and You need the part from Token='this'. Your user ID can be found in your profile page URL." />
             <TextSetting name="Server URL" description="Jellyfin server URL." settingsKey="jf_serverUrl" placeholder="https://jellyfin.example.com" />
-            <TextSetting name="API Key" description="Jellyfin API key." settingsKey="jf_apiKey" placeholder="X-MediaBrowser-Token" />
+            <TextSetting name="API Key" description="Jellyfin API key." settingsKey="jf_apiKey" placeholder="Authorization" />
             <TextSetting name="User ID" description="Jellyfin user ID." settingsKey="jf_userId" placeholder="User ID from profile URL" />
             <SelectSetting name="Name Display" description="Name display format." settingsKey="jf_nameDisplay" options={[
                 { label: "Series/Movie Name", value: "default" },
@@ -138,43 +141,72 @@ function JellyfinSettings() {
     );
 }
 
-function ListenBrainzSettings() {
-    return (
-        <>
-            <SettingsSection name="" description="Show what you're currently listening to via ListenBrainz. The MusicBrainz API requires a meaningful user agent string (an email usually works)." />
-            <TextSetting name="Username" description="ListenBrainz username." settingsKey="lb_username" placeholder="ListenBrainz username" />
-            <TextSetting name="MusicBrainz Contact" description="MusicBrainz contact for user agent." settingsKey="lb_mbContact" placeholder="your@email.com" />
-            <TextSetting name="Custom Status Text" description="Custom status text." settingsKey="lb_statusName" placeholder="some music" />
-            <SelectSetting name="Name Format" description="Name format." settingsKey="lb_nameFormat" options={nameFormatOptions} />
-            <SelectSetting name="Missing Art Fallback" description="Fallback when art is missing." settingsKey="lb_missingArt" options={[
-                { label: "Use large ListenBrainz logo", value: "listenbrainzLogo" },
-                { label: "Use generic placeholder", value: "placeholder" },
-            ]} />
-            <SwitchSetting name="Show Listening Status" description="Show listening status." settingsKey="lb_useListeningStatus" />
-            <SwitchSetting name="Show Time Bar" description="Use track duration to display a time bar." settingsKey="lb_useTimeBar" />
-            <SwitchSetting name="Show ListenBrainz Logo" description="Show ListenBrainz logo on album art." settingsKey="lb_useLogo" />
-            <SwitchSetting name="Show Profile Link" description="Show link to ListenBrainz profile." settingsKey="lb_shareUsername" />
-            <SwitchSetting name="Show Song Link" description="Show link to song on ListenBrainz." settingsKey="lb_shareSong" />
-            <SwitchSetting name="Hide With Spotify" description="Hide presence if Spotify is running." settingsKey="lb_hideWithSpotify" />
-            <SwitchSetting name="Hide With Any Activity" description="Hide presence if any other presence exists." settingsKey="lb_hideWithActivity" />
-        </>
-    );
-}
-
 function GensokyoRadioSettings() {
     const [value, setValue] = useState(settings.store.gr_refreshInterval ?? 15);
     return (
         <>
-            <SettingsSection name="" description="Discord rich presence for Gensokyo Radio. Just enable it and listen!" />
-            <SettingsSection name="Refresh Interval" description="Refresh interval in seconds.">
-            <Slider
-                markers={[1, 2, 2.5, 3, 5, 10, 15]}
-                initialValue={value}
-                onValueChange={v => { setValue(v); settings.store.gr_refreshInterval = v; }}
-                onValueRender={v => `${v}s`}
-                stickToMarkers
-            />
-        </SettingsSection>
+            <SettingsSection id="gensokyoradio-settings" name="" description="Discord rich presence for Gensokyo Radio. Just enable it and listen!" />
+            <SettingsSection id="refresh-interval" name="Refresh Interval" description="Refresh interval in seconds.">
+                <Slider
+                    markers={[1, 2, 2.5, 3, 5, 10, 15]}
+                    initialValue={value}
+                    onValueChange={v => { setValue(v); settings.store.gr_refreshInterval = v; }}
+                    onValueRender={v => `${v}s`}
+                    stickToMarkers
+                />
+            </SettingsSection>
+        </>
+    );
+}
+
+const ND_DYNAMIC_KEYS: SettingsKey[] = ["nd_activityType", "nd_albumArtMode"];
+
+function NavidromeSettings() {
+    const [refreshInterval, setRefreshInterval] = useState(settings.store.nd_refreshInterval ?? 10);
+    const { nd_activityType, nd_albumArtMode } = settings.use(ND_DYNAMIC_KEYS);
+    return (
+        <>
+            <SettingsSection id="navidrome-settings" name="" description="Show what you're currently listening to via Navidrome." />
+            <TextSetting name="Server URL" description="Navidrome Server URL (must be a public domain, e.g. https://navidrome.example.com)." settingsKey="nd_serverUrl" placeholder="https://navidrome.example.com" />
+            <TextSetting name="Username" description="Navidrome username." settingsKey="nd_username" />
+            <TextSetting name="Password" description="Navidrome password." settingsKey="nd_password" />
+            <TextSetting name="Client ID" description="Optional Discord Application Client ID." settingsKey="nd_clientId" placeholder="1470554657506984069" />
+            <SelectSetting name="Album Art Mode" description="How to fetch album art." settingsKey="nd_albumArtMode" options={[
+                { label: "None", value: "none" },
+                { label: "Navidrome Instance (Exposes Server URL. One-time auth sent.)", value: "instance" },
+                { label: "Last.fm API (Sends Metadata to last.fm)", value: "lastfm" },
+            ]} />
+            {nd_albumArtMode === "lastfm" && (
+                <TextSetting name="Last.fm API Key" description="Optional: Provide your own Last.fm API Key (leaves default if empty)." settingsKey="nd_lastfmApiKey" placeholder="feff915bf5987580c9dc354d523dc6b9" />
+            )}
+            <SwitchSetting name="Show Small Image" description="Show Navidrome logo in bottom right of album art." settingsKey="nd_showSmallImage" />
+            <SwitchSetting name="Show Album" description="Show album name in presence." settingsKey="nd_showAlbum" />
+            <SelectSetting name="Activity Type" description="Which type of activity to display." settingsKey="nd_activityType" options={[
+                { label: "Listening", value: 2 },
+                { label: "Playing", value: 0 },
+                { label: "Watching", value: 3 }
+            ]} />
+            <SelectSetting name="Status Display Type" description="Show the state / details line contents in the member list" settingsKey="nd_statusDisplayType" options={[
+                { label: "Don't show (shows generic listening message)", value: "off" },
+                { label: "Show state line content", value: "artist" },
+                { label: "Show details line content", value: "track" }
+            ]} />
+            <SwitchSetting name="Hide On Pause" description="Hide Rich Presence when music is paused (instead of showing a stopwatch)" settingsKey="nd_hideOnPause" />
+            {Number(nd_activityType ?? 2) !== 0 && (
+                <TextSetting name="Activity Name Format" description="The 'Listening to' text (e.g. {artist})" settingsKey="nd_nameString" placeholder="Navidrome" />
+            )}
+            <TextSetting name="Details Format" description="The main line showing what song is playing (e.g. {song})" settingsKey="nd_detailsString" placeholder="{song}" />
+            <TextSetting name="State Format" description="The line below the song name (e.g. {artist})" settingsKey="nd_stateString" placeholder="{artist}" />
+            <TextSetting name="Large Text Format" description="The album line (e.g. {album})" settingsKey="nd_largeTextString" placeholder="{album}" />
+            <SettingsSection id="nd-refresh-interval" name="Refresh Interval" description="Refresh interval in seconds.">
+                <Slider
+                    markers={[1, 2, 5, 10, 15]}
+                    initialValue={refreshInterval}
+                    onValueChange={v => { setRefreshInterval(v); settings.store.nd_refreshInterval = v; }}
+                    onValueRender={v => `${v}s`}
+                    stickToMarkers
+                />
+            </SettingsSection>
         </>
     );
 }
@@ -184,8 +216,8 @@ const TAB_COMPONENTS: Record<ServiceTab, React.ComponentType> = {
     [ServiceTab.Tosu]: TosuSettings,
     [ServiceTab.StatsFm]: StatsFmSettings,
     [ServiceTab.Jellyfin]: JellyfinSettings,
-    [ServiceTab.ListenBrainz]: ListenBrainzSettings,
     [ServiceTab.GensokyoRadio]: GensokyoRadioSettings,
+    [ServiceTab.Navidrome]: NavidromeSettings,
 };
 
 const TAB_LABELS: Record<ServiceTab, string> = {
@@ -193,8 +225,8 @@ const TAB_LABELS: Record<ServiceTab, string> = {
     [ServiceTab.Tosu]: "osu!",
     [ServiceTab.StatsFm]: "stats.fm",
     [ServiceTab.Jellyfin]: "Jellyfin",
-    [ServiceTab.ListenBrainz]: "ListenBrainz",
     [ServiceTab.GensokyoRadio]: "Gensokyo Radio",
+    [ServiceTab.Navidrome]: "Navidrome",
 };
 
 const ENABLE_KEYS: Record<ServiceTab, SettingsKey> = {
@@ -202,8 +234,8 @@ const ENABLE_KEYS: Record<ServiceTab, SettingsKey> = {
     [ServiceTab.Tosu]: "tosu_enabled",
     [ServiceTab.StatsFm]: "sfm_enabled",
     [ServiceTab.Jellyfin]: "jf_enabled",
-    [ServiceTab.ListenBrainz]: "lb_enabled",
     [ServiceTab.GensokyoRadio]: "gr_enabled",
+    [ServiceTab.Navidrome]: "nd_enabled",
 };
 
 const TABS = Object.values(ServiceTab);

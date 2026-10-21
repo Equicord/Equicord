@@ -8,13 +8,13 @@ import "./style.css";
 
 import { ButtonAction } from "@equicordplugins/keyboardNavigation/commands";
 import { classNameFactory } from "@utils/css";
-import { closeAllModals, ModalProps, ModalRoot, ModalSize, openModal } from "@utils/modal";
-import { React, TextInput, useEffect, useState } from "@webpack/common";
+import { RenderModalProps } from "@vencord/discord-types";
+import { closeAllModals, Modal,openModal, React, TextInput, useEffect, useState } from "@webpack/common";
 
 import { settings } from "..";
 
 interface MultipleChoiceProps {
-    modalProps: ModalProps;
+    modalProps: RenderModalProps;
     onSelect: (selectedValue: any) => void;
     choices: ButtonAction[];
 }
@@ -99,9 +99,8 @@ export function MultipleChoice({ modalProps, onSelect, choices }: MultipleChoice
     }, [queryEh]);
 
     return (
-        // @ts-ignore
-        <ModalRoot className={cl("root")} {...modalProps} size={ModalSize.MEDIUM} onKeyDown={handleKeyDown} onWheel={handleWheel}>
-            <div>
+        <Modal {...modalProps} size="md" title="Multiple Choice">
+            <div className={cl("root")} onKeyDown={handleKeyDown} onWheel={handleWheel}>
                 <TextInput
                     value={queryEh}
                     onChange={e => setQuery(e)}
@@ -123,7 +122,7 @@ export function MultipleChoice({ modalProps, onSelect, choices }: MultipleChoice
                     ))}
                 </div>
             </div>
-        </ModalRoot>
+        </Modal>
     );
 }
 

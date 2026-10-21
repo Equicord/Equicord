@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { closeModal, ModalContent, ModalHeader, ModalRoot, openModalLazy } from "@utils/modal";
-import { Button, Menu, Slider, TextInput, useState } from "@webpack/common";
+import { Button, closeModal, Menu, Modal,openModalLazy, Slider, TextInput, useState } from "@webpack/common";
 
 import { folderIconsData, settings } from "./settings";
 import { folderProp, int2rgba, setFolderData } from "./util";
@@ -95,17 +94,12 @@ export function makeContextItem(a: folderProp) {
             action={() => {
                 openModalLazy(async () => {
                     return props => (
-                        <ModalRoot {...props}>
-                            <ModalHeader >
-                                <div style={{
-                                    color: "white"
-                                }}>
-                                    Set a New Icon.
-                                </div>
-                            </ModalHeader>
-                            <ModalContent>
-                                <ImageModal folderId={a.folderId} folderColor={a.folderColor} />
-                            </ModalContent>
+                        <Modal
+                            {...props}
+                            size="sm"
+                            title="Set a New Icon."
+                        >
+                            <ImageModal folderId={a.folderId} folderColor={a.folderColor} />
                             <div style={{
                                 color: "white",
                                 margin: "2.5%",
@@ -113,7 +107,7 @@ export function makeContextItem(a: folderProp) {
                             }}>
                                 You might have to hover the folder after setting in order for it to refresh.
                             </div>
-                        </ModalRoot>
+                        </Modal>
                     );
                 },
                     {

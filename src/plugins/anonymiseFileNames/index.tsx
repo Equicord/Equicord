@@ -32,6 +32,7 @@ const enum Methods {
     Random,
     Consistent,
     Timestamp,
+    Date
 }
 
 const ANONYMISE_UPLOAD_SYMBOL = Symbol("vcAnonymise");
@@ -55,6 +56,7 @@ const settings = definePluginSettings({
             { label: "Random Characters", value: Methods.Random, default: true },
             { label: "Consistent", value: Methods.Consistent },
             { label: "Timestamp", value: Methods.Timestamp },
+            { label: "Date", value: Methods.Date },
         ],
     },
     randomisedLength: {
@@ -67,13 +69,21 @@ const settings = definePluginSettings({
         type: OptionType.STRING,
         default: "image"
     },
+    dateFormat: {
+        description: "Date format (YYYY, MM, DD, HH, mm, ss, SSS are supported)",
+        type: OptionType.STRING,
+        default: "YYYY-MM-DD_HH-mm-ss-SSS"
+    }
 }, {
     randomisedLength: {
         disabled() { return this.store.method !== Methods.Random; },
     },
     consistent: {
         disabled() { return this.store.method !== Methods.Consistent; },
-    }
+    },
+    dateFormat: {
+        disabled() { return this.store.method !== Methods.Date; },
+    },
 });
 
 export default definePlugin({
@@ -151,6 +161,18 @@ export default definePlugin({
                     return addSpoilerPrefix(settings.store.consistent + ext);
                 case Methods.Timestamp:
                     return addSpoilerPrefix(Date.now().toString() + ext);
+                case Methods.Date:
+                    const now = new Date();
+                    const format = settings.store.dateFormat
+                        .replace(/YYYY/g, now.getFullYear().toString())
+                        .replace(/MM/g, (now.getMonth() + 1).toString().padStart(2, "0"))
+                        .replace(/DD/g, now.getDate().toString().padStart(2, "0"))
+                        .replace(/HH/g, now.getHours().toString().padStart(2, "0"))
+                        .replace(/mm/g, now.getMinutes().toString().padStart(2, "0"))
+                        .replace(/ss/g, now.getSeconds().toString().padStart(2, "0"))
+                        .replace(/SSS/g, now.getMilliseconds().toString().padStart(3, "0"));
+
+                    return format ? addSpoilerPrefix(format + ext) : addSpoilerPrefix(Date.now().toString() + ext);
             }
         })();
 

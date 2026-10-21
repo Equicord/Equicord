@@ -20,21 +20,33 @@ import { mkdirSync } from "fs";
 import { join } from "path";
 
 const BASE_URL = "https://github.com/Equicord/Equilotl/releases/latest/download/";
-const INSTALLER_PATH_DARWIN = "Equilotl.app/Contents/MacOS/Equilotl";
-const INSTALLER_APP_DARWIN = "Equilotl.app";
 
 const BASE_DIR = join(import.meta.dir, "..");
 const FILE_DIR = join(BASE_DIR, "dist", "Installer");
 const ETAG_FILE = join(FILE_DIR, "etag.txt");
 
+function byArch(files) {
+    return files[process.arch] ?? files.default;
+}
+
 function getFilename() {
     switch (process.platform) {
         case "win32":
-            return "EquilotlCli.exe";
+            return byArch({
+                arm64: "EquilotlCli-arm64.exe",
+                default: "EquilotlCli.exe"
+            });
         case "darwin":
-            return "Equilotl.MacOS.zip";
+            return byArch({
+                x64: "EquilotlCli-x64",
+                arm64: "EquilotlCli-arm64",
+                default: "EquilotlCli-universal"
+            });
         case "linux":
-            return "EquilotlCli-linux";
+            return byArch({
+                arm64: "EquilotlCli-linux-arm64",
+                default: "EquilotlCli-Linux"
+            });
         default:
             throw new Error("Unsupported platform: " + process.platform);
     }
@@ -62,7 +74,7 @@ async function ensureBinary() {
     const res = await fetch(BASE_URL + filename, {
         headers: {
             "User-Agent": "Equicord (https://github.com/Equicord/Equicord)",
-            "If-None-Match": etag
+            ...(etag ? { "If-None-Match": etag } : {})
         }
     });
 
@@ -70,30 +82,36 @@ async function ensureBinary() {
         console.log("Up to date, not redownloading!");
         return outputFile;
     }
+
     if (!res.ok)
         throw new Error(`Failed to download installer: ${res.status} ${res.statusText}`);
 
-    await Bun.write(ETAG_FILE, res.headers.get("etag"));
+    await Bun.write(ETAG_FILE, res.headers.get("etag") ?? "");
 
     if (process.platform === "darwin") {
         console.log("Saving zip...");
         await Bun.write(downloadName, new Uint8Array(await res.arrayBuffer()));
 
         console.log("Unzipping app bundle...");
-        Bun.spawnSync(["ditto", "-x", "-k", downloadName, FILE_DIR], { stdio: ["inherit", "inherit", "inherit"] });
+        const result = Bun.spawnSync(["ditto", "-x", "-k", downloadName, FILE_DIR], {
+            stdio: ["inherit", "inherit", "inherit"]
+        });
+
+        if (!result.success)
+            throw new Error("Failed to extract installer app bundle");
 
         console.log("Clearing quarantine from installer app (this is required to run it)");
         console.log("xattr might error, that's okay");
 
-        const logAndRun = args => {
-            console.log("Running", args.join(" "));
-            try {
-                Bun.spawnSync(args, { stdio: ["inherit", "inherit", "inherit"] });
-            } catch { }
-        };
-        logAndRun(["sudo", "xattr", "-dr", "com.apple.quarantine", outputApp]);
+        const args = ["sudo", "xattr", "-dr", "com.apple.quarantine", outputApp];
+        console.log("Running", args.join(" "));
+
+        try {
+            Bun.spawnSync(args, { stdio: ["inherit", "inherit", "inherit"] });
+        } catch { }
     } else {
         await Bun.write(outputFile, new Uint8Array(await res.arrayBuffer()));
+
         if (process.platform !== "win32") {
             const { chmodSync } = await import("fs");
             chmodSync(outputFile, 0o755);
@@ -104,8 +122,6 @@ async function ensureBinary() {
 
     return outputFile;
 }
-
-
 
 const installerBin = await ensureBinary();
 

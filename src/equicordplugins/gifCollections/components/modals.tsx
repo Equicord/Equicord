@@ -8,8 +8,8 @@ import { Flex } from "@components/Flex";
 import { Heading } from "@components/Heading";
 import { Paragraph } from "@components/Paragraph";
 import { classes } from "@utils/misc";
-import { ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot, ModalSize, openModal } from "@utils/modal";
-import { Button, FluxDispatcher, TextInput, useCallback, useState } from "@webpack/common";
+import { RenderModalProps } from "@vencord/discord-types";
+import { Button, FluxDispatcher, Modal, openModal, TextInput, useCallback, useState } from "@webpack/common";
 
 import { settings } from "../settings";
 import { Collection, Gif } from "../types";
@@ -49,124 +49,116 @@ export function openRenameCollectionModal(name: string) {
     openModal(props => <RenameCollectionModal props={props} name={name} />);
 }
 
-function InfoModal({ props, title, rows }: { props: ModalProps; title: string; rows: { label: string; value: string; }[]; }) {
+function InfoModal({ props, title, rows }: { props: RenderModalProps; title: string; rows: { label: string; value: string; }[]; }) {
     return (
-        <ModalRoot {...props} size={ModalSize.SMALL} className={cl("modal")}>
-            <ModalHeader separator={false} className={cl("modal-header")}>
-                <Paragraph className={cl("modal-title")}>{title}</Paragraph>
-            </ModalHeader>
-            <ModalContent className={cl("modal-content")}>
-                <section>
-                    {rows.map(row => (
-                        <Flex key={row.label} className={cl("info-row")}>
-                            <Heading className={cl("info-title")}>{row.label}</Heading>
-                            <Paragraph className={cl("info-text")}>{row.value}</Paragraph>
-                        </Flex>
+        <Modal
+            {...props}
+            size="sm"
+            title={title}
+            actions={[
+                { text: "Close", variant: "secondary", onClick: props.onClose }
+            ]}
+        >
+            <section>
+                {rows.map(row => (
+                    <Flex key={row.label} className={cl("info-row")}>
+                        <Heading className={cl("info-title")}>{row.label}</Heading>
+                        <Paragraph className={cl("info-text")}>{row.value}</Paragraph>
+                    </Flex>
+                ))}
+            </section>
+        </Modal>
+    );
+}
+
+function MoveToCollectionModal({ props, gifId }: { props: RenderModalProps; gifId: string; }) {
+    return (
+        <Modal
+            {...props}
+            size="sm"
+            title="Move To Collection"
+            actions={[
+                { text: "Close", variant: "secondary", onClick: props.onClose }
+            ]}
+        >
+            <Heading style={{ marginBottom: "10px" }}>Select a collection to move the item to</Heading>
+            <div className={cl("buttons")}>
+                {cache_collections
+                    .filter(col => col.name !== getItemCollectionNameFromId(gifId))
+                    .map(col => (
+                        <Button
+                            key={col.name}
+                            className={cl("button")}
+                            onClick={async () => {
+                                const fromCollection = getItemCollectionNameFromId(gifId);
+                                if (!fromCollection) return;
+                                await moveGifToCollection(gifId, fromCollection, col.name);
+                                FluxDispatcher.dispatch({ type: "GIF_PICKER_QUERY", query: "" });
+                                FluxDispatcher.dispatch({ type: "GIF_PICKER_QUERY", query: fromCollection });
+                                props.onClose();
+                            }}
+                        >
+                            {stripPrefix(col.name)}
+                        </Button>
                     ))}
-                </section>
-            </ModalContent>
-            <ModalFooter className={cl("modal-footer")}>
-                <Button onClick={props.onClose}>Close</Button>
-            </ModalFooter>
-        </ModalRoot>
+            </div>
+        </Modal>
     );
 }
 
-function MoveToCollectionModal({ props, gifId }: { props: ModalProps; gifId: string; }) {
-    return (
-        <ModalRoot {...props} size={ModalSize.SMALL} className={cl("modal")}>
-            <ModalHeader separator={false} className={cl("modal-header")}>
-                <Paragraph className={cl("modal-title")}>Move To Collection</Paragraph>
-            </ModalHeader>
-            <ModalContent className={cl("modal-content")}>
-                <Heading>Select a collection to move the item to</Heading>
-                <div className={cl("buttons")}>
-                    {cache_collections
-                        .filter(col => col.name !== getItemCollectionNameFromId(gifId))
-                        .map(col => (
-                            <Button
-                                key={col.name}
-                                className={cl("button")}
-                                onClick={async () => {
-                                    const fromCollection = getItemCollectionNameFromId(gifId);
-                                    if (!fromCollection) return;
-                                    await moveGifToCollection(gifId, fromCollection, col.name);
-                                    FluxDispatcher.dispatch({ type: "GIF_PICKER_QUERY", query: "" });
-                                    FluxDispatcher.dispatch({ type: "GIF_PICKER_QUERY", query: fromCollection });
-                                    props.onClose();
-                                }}
-                            >
-                                {stripPrefix(col.name)}
-                            </Button>
-                        ))}
-                </div>
-            </ModalContent>
-            <ModalFooter className={cl("modal-footer")}>
-                <Button onClick={props.onClose}>Close</Button>
-            </ModalFooter>
-        </ModalRoot>
-    );
-}
-
-function CreateCollectionModal({ props, gif }: { props: ModalProps; gif: Gif; }) {
+function CreateCollectionModal({ props, gif }: { props: RenderModalProps; gif: Gif; }) {
     const [name, setName] = useState("");
-    const onSubmit = useCallback((e: React.FormEvent) => {
-        e.preventDefault();
+    const onSubmit = useCallback((e?: React.FormEvent) => {
+        e?.preventDefault();
         if (!name.length) return;
         createCollection(name, [gif]);
         props.onClose();
     }, [name, gif, props]);
 
     return (
-        <ModalRoot {...props}>
+        <Modal
+            {...props}
+            size="sm"
+            title="Create Collection"
+            actions={[
+                { text: "Create", onClick: onSubmit, disabled: !name.length, variant: "primary" }
+            ]}
+        >
             <form onSubmit={onSubmit}>
-                <ModalHeader>
-                    <Paragraph>Create Collection</Paragraph>
-                </ModalHeader>
-                <ModalContent>
-                    <Heading className={cl("rename-text")}>Collection Name</Heading>
-                    <TextInput onChange={setName} />
-                </ModalContent>
-                <ModalFooter>
-                    <Button type="submit" color={Button.Colors.GREEN} disabled={!name.length} onClick={onSubmit}>
-                        Create
-                    </Button>
-                </ModalFooter>
+                <Heading className={cl("rename-text")}>Collection Name</Heading>
+                <TextInput onChange={setName} />
             </form>
-        </ModalRoot>
+        </Modal>
     );
 }
 
-function RenameCollectionModal({ props, name }: { props: ModalProps; name: string; }) {
+function RenameCollectionModal({ props, name }: { props: RenderModalProps; name: string; }) {
     const prefix = settings.store.collectionPrefix;
     const strippedName = name.startsWith(prefix) ? name.slice(prefix.length) : name;
     const [newName, setNewName] = useState(strippedName);
     const tooLong = newName.length >= 25;
 
-    const onSubmit = useCallback(async (e: React.FormEvent) => {
-        e.preventDefault();
+    const onSubmit = useCallback(async (e?: React.FormEvent) => {
+        e?.preventDefault();
         if (!newName.length || tooLong) return;
         await renameCollection(name, newName);
         props.onClose();
     }, [newName, name, tooLong, props]);
 
     return (
-        <ModalRoot {...props}>
+        <Modal
+            {...props}
+            size="sm"
+            title="Rename Collection"
+            actions={[
+                { text: "Rename", onClick: onSubmit, disabled: !newName.length || tooLong, variant: "primary" }
+            ]}
+        >
             <form onSubmit={onSubmit}>
-                <ModalHeader>
-                    <Paragraph>Rename Collection</Paragraph>
-                </ModalHeader>
-                <ModalContent>
-                    <Paragraph className={cl("rename-text")}>New Collection Name</Paragraph>
-                    <TextInput value={newName} className={classes(cl("rename-input"), tooLong ? cl("input-warning") : "")} onChange={setNewName} />
-                    {tooLong && <Paragraph className={cl("warning-text")}>Name can't be longer than 24 characters</Paragraph>}
-                </ModalContent>
-                <ModalFooter>
-                    <Button type="submit" color={Button.Colors.GREEN} disabled={!newName.length || tooLong} onClick={onSubmit}>
-                        Rename
-                    </Button>
-                </ModalFooter>
+                <Paragraph className={cl("rename-text")}>New Collection Name</Paragraph>
+                <TextInput value={newName} className={classes(cl("rename-input"), tooLong ? cl("input-warning") : "")} onChange={setNewName} />
+                {tooLong && <Paragraph className={cl("warning-text")}>Name can't be longer than 24 characters</Paragraph>}
             </form>
-        </ModalRoot>
+        </Modal>
     );
 }

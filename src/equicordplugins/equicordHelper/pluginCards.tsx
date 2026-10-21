@@ -59,7 +59,7 @@ export function ChatPluginCard({ url, description }: { url: string, description:
             : card;
     }
 
-    const onRestartNeeded = () => showToast("A restart is required for the change to take effect!");
+    const onRestartNeeded = () => showToast({ text: "A restart is required for the change to take effect!" });
 
     const depMap = useMemo(() => {
         const o = {} as Record<string, string[]>;
@@ -127,8 +127,6 @@ export const PluginCards = ErrorBoundary.wrap(function PluginCards({ message }: 
 
         if (!pluginName || seenPlugins.has(pluginName)) return;
         seenPlugins.add(pluginName);
-
-        if (embed.rawDescription.startsWith("A fork that has")) embed.rawDescription = "";
 
         pluginCards.push(
             <ChatPluginCard

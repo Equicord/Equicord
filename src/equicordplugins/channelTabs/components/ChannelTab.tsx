@@ -9,7 +9,7 @@ import { ChannelTabsProps, closeTab, ensureUnreadFallbackCountsLoaded, getNotifi
 import { ActivityIcon, CircleQuestionIcon, DiscoveryIcon, EnvelopeIcon, FriendsIcon, ICYMIIcon, NitroIcon, QuestIcon, ShopIcon } from "@equicordplugins/channelTabs/util/icons";
 import { getActiveAutoCompletes } from "@equicordplugins/questify/utils/completion";
 import { classNameFactory } from "@utils/css";
-import { getGuildAcronym, getIntlMessage, getUniqueUsername } from "@utils/discord";
+import { getGuildAcronym, getIntlMessage } from "@utils/discord";
 import { classes } from "@utils/misc";
 import { Channel, Guild, User } from "@vencord/discord-types";
 import { findComponentByCodeLazy, findCssClassesLazy } from "@webpack";
@@ -133,7 +133,7 @@ export const NotificationDot = ({ channelIds }: { channelIds: string[]; }) => {
                 width: "16px"
             }}
             ref={node => node?.style.setProperty("background-color",
-                hasMention ? "var(--red-400)" : "var(--brand-500)", "important"
+                hasMention ? "var(--danger-color, var(--red-400))" : "var(--main-color, var(--brand-experiment, var(--brand-500)))", "important"
             )}
         >
             {badgeText}
@@ -174,9 +174,8 @@ function ChannelTabContent(props: ChannelTabsProps & {
     const userId = UserStore.getCurrentUser()?.id;
     const recipients = channel?.recipients;
     const {
-        noPomeloNames,
         showStatusIndicators
-    } = settings.use(["noPomeloNames", "showStatusIndicators"]);
+    } = settings.use(["showStatusIndicators"]);
 
     const [isTyping, status, isMobile] = useStateFromStores(
         [TypingStore, PresenceStore],
@@ -233,9 +232,7 @@ function ChannelTabContent(props: ChannelTabsProps & {
     if (channel && recipients?.length) {
         if (recipients.length === 1) {
             const user = UserStore.getUser(recipients[0]) as User & { globalName: string; };
-            const username = noPomeloNames
-                ? user.globalName || user.username
-                : getUniqueUsername(user);
+            const username = user.globalName || user.username;
 
             return (
                 <>

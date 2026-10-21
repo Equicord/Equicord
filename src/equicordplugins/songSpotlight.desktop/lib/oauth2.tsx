@@ -4,9 +4,8 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { openModal } from "@utils/modal";
 import { ApplicationIntegrationType } from "@vencord/discord-types/enums";
-import { OAuth2AuthorizeModal, showToast, Toasts } from "@webpack/common";
+import { OAuth2AuthorizeModal, openModal, showToast } from "@webpack/common";
 
 import { apiConstants, authFetch, getData } from "./api";
 import { useAuthorizationStore } from "./stores/AuthorizationStore";
@@ -42,10 +41,10 @@ export function presentOAuth2Modal() {
                     useAuthorizationStore.getState().setToken(access, refresh);
                     getData();
 
-                    showToast("Successfully authorized!", Toasts.Type.SUCCESS);
+                    showToast({ text: "Successfully authorized!", variant: "success" });
                 } catch (error) {
                     logger.error("Got an error during OAuth2", error);
-                    if (typeof error === "string") showToast(error, Toasts.Type.FAILURE);
+                    if (typeof error === "string") showToast({ text: error, variant: "critical" });
                 }
             }}
         />

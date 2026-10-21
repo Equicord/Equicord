@@ -7,6 +7,7 @@
 import { QuestRewardType, QuestTaskType } from "@vencord/discord-types/enums";
 import type { JSX } from "react";
 
+import { enabledOnStartup } from "..";
 import { getQuestifySettings, useQuestifySettings } from "../settings/access";
 import { type QuestButtonAction, type QuestButtonDisplayMode, type QuestButtonIncludedTypes, type QuestButtonIndicatorMode } from "../settings/def";
 import { startAutoFetchingQuests } from "../settings/fetching";
@@ -142,7 +143,7 @@ export function QuestButtonSetting(): JSX.Element {
                     <SettingsHeader> Quest Button </SettingsHeader>
                     <SettingsDescription> Show a Quest Button in the server list with an optional indicator for unclaimed and unignored Quests. </SettingsDescription>
                 </SettingsRowItem>
-                <SettingsRowItem width="content">
+                {enabledOnStartup && <SettingsRowItem width="content">
                     <DummyQuestButton
                         badgeColor={questButton.questButtonBadgeColor}
                         leftClickAction={questButton.questButtonLeftClickAction}
@@ -152,7 +153,7 @@ export function QuestButtonSetting(): JSX.Element {
                         showPill={canShowPill(questButton.questButtonIndicator)}
                         visible={canShowButton(questButton.questButtonDisplay)}
                     />
-                </SettingsRowItem>
+                </SettingsRowItem>}
             </SettingsRow>
             <SettingsSubheader className="no-top-margin"> Button Behavior </SettingsSubheader>
             <SettingsRow>

@@ -4,21 +4,31 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import "./styles.css";
+
 import { definePluginSettings } from "@api/Settings";
 import { UserAreaButton, UserAreaRenderProps } from "@api/UserArea";
+import { Button } from "@components/Button";
+import ErrorBoundary from "@components/ErrorBoundary";
+import { Switch } from "@components/Switch";
 import { debounce } from "@shared/debounce";
-import { Devs, EquicordDevs } from "@utils/constants";
+import { Devs, EquicordDevs, IS_MAC } from "@utils/constants";
+import { classNameFactory } from "@utils/css";
 import definePlugin, { makeRange, OptionType } from "@utils/types";
-import type { Channel, VoiceState } from "@vencord/discord-types";
-import { findByCodeLazy, findByPropsLazy } from "@webpack";
-import { ChannelActions, ChannelRouter, ChannelStore, ContextMenuApi, FluxDispatcher, GuildStore, MediaEngineStore, Menu, PermissionsBits, PermissionStore, React, RelationshipStore, SelectedChannelStore, Toasts, UserStore, VoiceActions, VoiceStateStore } from "@webpack/common";
+import type { Channel, ToastVariant, VoiceState } from "@vencord/discord-types";
+import { findByCodeLazy } from "@webpack";
+import { ChannelActions, ChannelRouter, ChannelStore, ContextMenuApi, FluxDispatcher, GuildStore, MediaEngineStore, Menu, PermissionsBits, PermissionStore, React, RelationshipStore, SelectedChannelStore, showToast as originalShowToast, useEffect, UserStore, useState, VoiceActions, VoiceStateStore } from "@webpack/common";
 
 const startStream = findByCodeLazy('type:"STREAM_START"');
 const getDesktopSources = findByCodeLazy("desktop sources");
-const { isVideoEnabled } = findByPropsLazy("isVideoEnabled");
 const NO_SERVERS = "__NONE__";
+const DEFAULT_KEYBIND = IS_MAC ? ["Meta", "Shift", "R"] : ["Control", "Shift", "R"];
+const MODIFIER_KEYS = new Set(["control", "ctrl", "shift", "alt", "option", "meta", "cmd", "command", "mod"]);
 
-type RandomVoiceOperation = "<" | ">" | "==";
+let isRecordingKeybind = false;
+const cl = classNameFactory("vc-random-voice-");
+
+type RandomVoiceOperation = "<" | ">" | "==" | string;
 type StateFilterKey = "mute" | "deafen" | "video" | "stream";
 type SelfSettingKey = "selfMute" | "selfDeafen" | "autoCamera" | "autoStream" | "leaveEmpty" | "autoNavigate" | "avoidStages" | "avoidAfk" | "prioritizeFriends";
 type PostJoinAction = () => void | Promise<void>;
@@ -68,12 +78,178 @@ interface RandomVoiceStateLike {
     selfVideo?: boolean | null;
 }
 
+function RandomVoiceKeybindSettings() {
+    const [isListening, setIsListening] = useState(false);
+    const { keybind, keybindEnabled } = settings.use();
+
+    useEffect(() => {
+        isRecordingKeybind = isListening;
+        if (!isListening) return;
+
+        const handleKeyDown = (event: KeyboardEvent) => {
+            event.preventDefault();
+            event.stopPropagation();
+
+            if (isModifierKey(event.key)) return;
+
+            settings.store.keybind = eventToKeybind(event);
+            setIsListening(false);
+        };
+
+        const handleBlur = () => setIsListening(false);
+
+        document.addEventListener("keydown", handleKeyDown, true);
+        window.addEventListener("blur", handleBlur);
+
+        return () => {
+            isRecordingKeybind = false;
+            document.removeEventListener("keydown", handleKeyDown, true);
+            window.removeEventListener("blur", handleBlur);
+        };
+    }, [isListening]);
+
+    return (
+        <div className={cl("record")}>
+            <div className={cl("keybind")}>Keybind</div>
+            <Switch checked={keybindEnabled} onChange={value => { settings.store.keybindEnabled = value; }} />
+            {keybindEnabled && (
+                <div className={cl("recording")}>
+                    <Button type="button" variant="secondary" onClick={() => setIsListening(true)} disabled={isListening}>
+                        {isListening ? "Recording..." : formatKeybind(keybind)}
+                    </Button>
+                    <Button type="button" variant="secondary" onClick={() => { settings.store.keybind = DEFAULT_KEYBIND; }} disabled={isListening}>
+                        Reset
+                    </Button>
+                </div>
+            )}
+        </div>
+    );
+}
+
+function formatKeybind(keybind: string | string[]) {
+    const keybindString = Array.isArray(keybind) ? keybind.join("+") : keybind;
+    return IS_MAC
+        ? keybindString.replace(/Control/gi, "^").replace(/Meta|Command|Cmd/gi, "⌘").replace(/Alt|Option/gi, "⌥").replace(/Shift/gi, "⇧")
+        : keybindString;
+}
+
+function eventToKeybind(event: KeyboardEvent) {
+    const keys: string[] = [];
+    addPressedModifiers(event, keys);
+    keys.push(normalizeKey(event.key));
+    return keys;
+}
+
+function getConfiguredKeybind() {
+    const raw = settings.store.keybind;
+    if (Array.isArray(raw) && raw.some(key => !isModifierKey(key))) return raw;
+    return DEFAULT_KEYBIND;
+}
+
+function matchesKeybind(event: KeyboardEvent) {
+    const keybind = getConfiguredKeybind().map(key => key.toLowerCase());
+    const pressed = normalizeKey(event.key).toLowerCase();
+    const code = normalizeCode(event.code);
+    let nonModifierMatched = false;
+
+    if (!matchesModifiers(event, keybind)) return false;
+
+    for (const key of keybind) {
+        if (isModifierKey(key)) continue;
+
+        if (pressed !== key && code !== key) return false;
+        nonModifierMatched = true;
+    }
+
+    return nonModifierMatched;
+}
+
+function isModifierKey(key: string) {
+    return MODIFIER_KEYS.has(key.toLowerCase());
+}
+
+function matchesModifiers(event: KeyboardEvent, keybind: string[]) {
+    const expected = new Set(keybind.map(getModifierKey).filter(key => key !== null));
+    const pressed = new Set<string>();
+
+    if (event.ctrlKey) pressed.add("control");
+    if (event.shiftKey) pressed.add("shift");
+    if (event.altKey) pressed.add("alt");
+    if (event.metaKey) pressed.add("meta");
+
+    return expected.size === pressed.size && [...expected].every(key => pressed.has(key));
+}
+
+function getModifierKey(key: string) {
+    switch (key) {
+        case "mod":
+            return IS_MAC ? "meta" : "control";
+        case "control":
+        case "ctrl":
+            return "control";
+        case "shift":
+            return "shift";
+        case "alt":
+        case "option":
+            return "alt";
+        case "meta":
+        case "cmd":
+        case "command":
+            return "meta";
+        default:
+            return null;
+    }
+}
+
+function addPressedModifiers(event: KeyboardEvent, keys: string[]) {
+    if (event.metaKey) keys.push("Meta");
+    if (event.ctrlKey) keys.push("Control");
+    if (event.shiftKey) keys.push("Shift");
+    if (event.altKey) keys.push("Alt");
+}
+
+function keybindUsesModifier() {
+    return getConfiguredKeybind().some(isModifierKey);
+}
+
+function normalizeKey(key: string) {
+    if (key === " ") return "Space";
+    if (key === "Esc") return "Escape";
+    return key.length === 1 ? key.toUpperCase() : key;
+}
+
+function normalizeCode(code: string) {
+    return code
+        .toLowerCase()
+        .replace(/^key/, "")
+        .replace(/^digit/, "")
+        .replace(/^numpad/, "");
+}
+
+function shouldIgnoreKeybindTarget(target: EventTarget | null) {
+    return target instanceof HTMLElement && (target.isContentEditable || ["INPUT", "TEXTAREA", "SELECT"].includes(target.tagName));
+}
+
 const settings = definePluginSettings({
+    keybind: {
+        type: OptionType.COMPONENT,
+        default: DEFAULT_KEYBIND,
+        component: ErrorBoundary.wrap(RandomVoiceKeybindSettings),
+    },
+    keybindEnabled: {
+        description: "Show the random voice keybind controls",
+        type: OptionType.BOOLEAN,
+        default: false,
+        hidden: true,
+    },
     UserAmountOperation: {
         description: "Select an operation for the amounts of users",
         type: OptionType.SELECT,
-        options: [...operationOptions],
-        default: "<",
+        options: [
+            { label: "More than", value: "<", default: true },
+            { label: "Less than", value: ">", default: false },
+            { label: "Equal to", value: "==", default: false },
+        ],
     },
     UserAmount: {
         description: "Select amount of users",
@@ -85,8 +261,11 @@ const settings = definePluginSettings({
     spacesLeftOperation: {
         description: "Select an operation for the maximum amounts of users",
         type: OptionType.SELECT,
-        options: [...operationOptions],
-        default: "<",
+        options: [
+            { label: "More than", value: "<", default: true },
+            { label: "Less than", value: ">", default: false },
+            { label: "Equal to", value: "==", default: false },
+        ],
     },
     spacesLeft: {
         description: "Select amount of max users",
@@ -98,8 +277,11 @@ const settings = definePluginSettings({
     vcLimitOperation: {
         description: "Select an operation for the voice-channel.",
         type: OptionType.SELECT,
-        options: [...operationOptions],
-        default: "<",
+        options: [
+            { label: "More than", value: "<", default: true },
+            { label: "Less than", value: ">", default: false },
+            { label: "Equal to", value: "==", default: false },
+        ],
     },
     vcLimit: {
         description: "Select a voice-channel limit",
@@ -190,13 +372,8 @@ const settings = definePluginSettings({
     },
 });
 
-function showToast(message: string, type: (typeof Toasts.Type)[keyof typeof Toasts.Type]) {
-    Toasts.show({
-        message,
-        type,
-        id: Toasts.genId(),
-        options: { position: Toasts.Position.BOTTOM },
-    });
+function showToast(text: string, variant?: ToastVariant) {
+    originalShowToast({ text, variant, position: "bottom" });
 }
 
 function RandomVoiceIcon({ className }: { className?: string; }) {
@@ -363,7 +540,7 @@ function pickRandomChannel(store = settings.store) {
 }
 
 async function enableCamera() {
-    if (isVideoEnabled()) return;
+    if (MediaEngineStore.isVideoEnabled()) return;
 
     FluxDispatcher.dispatch({
         type: "MEDIA_ENGINE_SET_VIDEO_ENABLED",
@@ -412,34 +589,33 @@ function runAfterVoiceJoin(channelId: string, callbacks: PostJoinAction[]) {
 async function joinRandomVoice() {
     const channelId = pickRandomChannel();
     if (!channelId) {
-        showToast("Failed to find a voice channel.", Toasts.Type.MESSAGE);
+        showToast("Failed to find a voice channel.");
         return;
     }
 
     const channel = ChannelStore.getChannel(channelId);
     if (!channel) {
-        showToast("Voice channel is unavailable.", Toasts.Type.FAILURE);
+        showToast("Voice channel is unavailable.", "critical");
         return;
     }
 
-    const { store } = settings;
     ChannelActions.selectVoiceChannel(channelId);
 
-    if (store.autoNavigate) {
+    if (settings.store.autoNavigate) {
         ChannelRouter.transitionToChannel(channelId);
     }
 
     const postJoinActions: PostJoinAction[] = [];
-    if (store.selfMute && !MediaEngineStore.isSelfMute()) {
+    if (settings.store.selfMute && !MediaEngineStore.isSelfMute()) {
         postJoinActions.push(() => VoiceActions.toggleSelfMute());
     }
-    if (store.selfDeafen && !MediaEngineStore.isSelfDeaf()) {
+    if (settings.store.selfDeafen && !MediaEngineStore.isSelfDeaf()) {
         postJoinActions.push(() => VoiceActions.toggleSelfDeaf());
     }
-    if (store.autoCamera) {
+    if (settings.store.autoCamera) {
         postJoinActions.push(enableCamera);
     }
-    if (store.autoStream) {
+    if (settings.store.autoStream) {
         postJoinActions.push(() => startChannelStream(channel));
     }
 
@@ -463,16 +639,15 @@ function RandomVoiceButton({ iconForeground, hideTooltips, nameplate }: UserArea
 
 function RandomVoiceMenu({ onClose }: { onClose(): void; }) {
     const [, rerender] = React.useReducer(value => value + 1, 0);
-    const { store } = settings;
     const guilds = getRenderableGuilds();
     const allServerIds = guilds.map(guild => guild.id);
-    const selectedServerIds = getSelectedServerIds(store) ?? allServerIds;
+    const selectedServerIds = getSelectedServerIds(settings.store) ?? allServerIds;
 
-    const update = <K extends keyof typeof store>(key: K, value: typeof store[K]) => {
-        store[key] = value;
+    const update = <K extends keyof typeof settings.store>(key: K, value: typeof settings.store[K]) => {
+        settings.store[key] = value;
         rerender();
     };
-    const toggle = <K extends SelfSettingKey | StateFilterKey | "includeStates" | "avoidStates">(key: K) => update(key, !store[key]);
+    const toggle = <K extends SelfSettingKey | StateFilterKey | "includeStates" | "avoidStates">(key: K) => update(key, !settings.store[key]);
     const selectAllServers = () => {
         setServerIds(guilds.map(guild => guild.id));
         rerender();
@@ -492,7 +667,7 @@ function RandomVoiceMenu({ onClose }: { onClose(): void; }) {
 
     const setSlider = <K extends "UserAmount" | "spacesLeft" | "vcLimit">(key: K) =>
         debounce((value: number) => {
-            store[key] = Math.round(value);
+            settings.store[key] = Math.round(value);
             rerender();
         }, 50);
 
@@ -534,7 +709,7 @@ function RandomVoiceMenu({ onClose }: { onClose(): void; }) {
                             key={key}
                             id={`random-voice-filter-${key}`}
                             label={label}
-                            checked={store[key]}
+                            checked={settings.store[key]}
                             action={() => toggle(key)}
                         />
                     ))}
@@ -542,15 +717,15 @@ function RandomVoiceMenu({ onClose }: { onClose(): void; }) {
                     <Menu.MenuCheckboxItem
                         id="random-voice-include-states"
                         label="Include Filters"
-                        checked={store.includeStates}
-                        disabled={store.avoidStates || !hasStateFilters(store)}
+                        checked={settings.store.includeStates}
+                        disabled={settings.store.avoidStates || !hasStateFilters(settings.store)}
                         action={() => toggle("includeStates")}
                     />
                     <Menu.MenuCheckboxItem
                         id="random-voice-avoid-states"
                         label="Avoid Filters"
-                        checked={store.avoidStates}
-                        disabled={store.includeStates || !hasStateFilters(store)}
+                        checked={settings.store.avoidStates}
+                        disabled={settings.store.includeStates || !hasStateFilters(settings.store)}
                         action={() => toggle("avoidStates")}
                     />
                 </>
@@ -563,8 +738,8 @@ function RandomVoiceMenu({ onClose }: { onClose(): void; }) {
                 label: "User Amount",
                 sliderKey: "UserAmount",
                 operationKey: "UserAmountOperation",
-                sliderValue: store.UserAmount,
-                operationValue: store.UserAmountOperation,
+                sliderValue: settings.store.UserAmount,
+                operationValue: settings.store.UserAmountOperation,
                 onOperationChange: value => update("UserAmountOperation", value),
                 onSliderChange: setSlider("UserAmount"),
             })}
@@ -576,8 +751,8 @@ function RandomVoiceMenu({ onClose }: { onClose(): void; }) {
                 label: "Spaces Left",
                 sliderKey: "spacesLeft",
                 operationKey: "spacesLeftOperation",
-                sliderValue: store.spacesLeft,
-                operationValue: store.spacesLeftOperation,
+                sliderValue: settings.store.spacesLeft,
+                operationValue: settings.store.spacesLeftOperation,
                 onOperationChange: value => update("spacesLeftOperation", value),
                 onSliderChange: setSlider("spacesLeft"),
             })}
@@ -589,8 +764,8 @@ function RandomVoiceMenu({ onClose }: { onClose(): void; }) {
                 label: "Voice Limit",
                 sliderKey: "vcLimit",
                 operationKey: "vcLimitOperation",
-                sliderValue: store.vcLimit,
-                operationValue: store.vcLimitOperation,
+                sliderValue: settings.store.vcLimit,
+                operationValue: settings.store.vcLimitOperation,
                 onOperationChange: value => update("vcLimitOperation", value),
                 onSliderChange: setSlider("vcLimit"),
             })}
@@ -604,7 +779,7 @@ function RandomVoiceMenu({ onClose }: { onClose(): void; }) {
                             key={key}
                             id={`random-voice-setting-${key}`}
                             label={label}
-                            checked={store[key]}
+                            checked={settings.store[key]}
                             action={() => toggle(key)}
                         />
                     ))}
@@ -679,6 +854,25 @@ export default definePlugin({
     userAreaButton: {
         icon: RandomVoiceIcon,
         render: RandomVoiceButton,
+    },
+
+    start() {
+        window.addEventListener("keydown", this.onKeyDown, true);
+    },
+
+    stop() {
+        window.removeEventListener("keydown", this.onKeyDown, true);
+    },
+
+    onKeyDown(event: KeyboardEvent) {
+        if (isRecordingKeybind) return;
+        if (!settings.store.keybindEnabled) return;
+        if (shouldIgnoreKeybindTarget(event.target) && !keybindUsesModifier()) return;
+        if (!matchesKeybind(event)) return;
+
+        event.preventDefault();
+        event.stopPropagation();
+        void joinRandomVoice();
     },
 
     flux: {

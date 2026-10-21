@@ -458,6 +458,84 @@ export async function uploadToPixelDrain(
     }
 }
 
+function isValidHttpsUrl(url: string): boolean {
+    try {
+        const parsed = new URL(url);
+        return parsed.protocol === "https:";
+    } catch {
+        return false;
+    }
+}
+
+export async function uploadToWebdav(
+    _: IpcMainInvokeEvent,
+    fileBuffer: ArrayBuffer,
+    uploadUrl: string,
+    headers: Record<string, string>
+): Promise<NativeUploadResult> {
+    if (!isValidHttpsUrl(uploadUrl)) {
+        return { success: false, error: "Invalid or non-HTTPS upload URL" };
+    }
+
+    try {
+        const response = await fetch(uploadUrl, {
+            method: "PUT",
+            headers,
+            body: new Blob([fileBuffer])
+        });
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            return { success: false, error: `Upload failed: ${response.status} ${errorText}` };
+        }
+
+        return { success: true, url: uploadUrl };
+    } catch (e) {
+        return { success: false, error: e instanceof Error ? e.message : "Unknown error" };
+    }
+}
+
+export async function createWebdavShare(
+    _: IpcMainInvokeEvent,
+    ocsUrl: string,
+    headers: Record<string, string>,
+    body: string
+): Promise<NativeUploadResult> {
+    if (!isValidHttpsUrl(ocsUrl)) {
+        return { success: false, error: "Invalid or non-HTTPS share endpoint URL" };
+    }
+
+    try {
+        const response = await fetch(ocsUrl, {
+            method: "POST",
+            headers,
+            body
+        });
+
+        const text = await response.text();
+
+        if (!response.ok) {
+            return { success: false, error: `Share creation failed: ${response.status} ${text.slice(0, 200)}` };
+        }
+
+        let data: { ocs?: { data?: { token?: string; }; }; };
+        try {
+            data = JSON.parse(text);
+        } catch {
+            return { success: false, error: `Invalid share response: ${text.slice(0, 200)}` };
+        }
+
+        const token = data?.ocs?.data?.token;
+        if (!token) {
+            return { success: false, error: "No share token in server response" };
+        }
+
+        return { success: true, url: token };
+    } catch (e) {
+        return { success: false, error: e instanceof Error ? e.message : "Unknown error" };
+    }
+}
+
 export async function fetchFile(
 
     _: IpcMainInvokeEvent,

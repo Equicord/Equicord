@@ -10,11 +10,10 @@ import { NavContextMenuPatchCallback } from "@api/ContextMenu";
 import { get } from "@api/DataStore";
 import { definePluginSettings, Settings } from "@api/Settings";
 import { EquicordDevs } from "@utils/constants";
-import { openModal } from "@utils/modal";
 import definePlugin, { OptionType } from "@utils/types";
 import { Channel, User } from "@vencord/discord-types";
 import { extractAndLoadChunksLazy } from "@webpack";
-import { ChannelStore, Menu, SelectedChannelStore } from "@webpack/common";
+import { ChannelStore, Menu, openModal,SelectedChannelStore } from "@webpack/common";
 
 import { SetColorModal } from "./SetColorModal";
 
@@ -49,6 +48,7 @@ const userContextMenuPatch: NavContextMenuPatchCallback = (children, { user }: {
             label="Set Color"
             id="set-color"
             icon={ColorIcon}
+            leadingAccessory={{ type: "icon", icon: ColorIcon }}
             action={async () => {
                 await requireSettingsMenu();
                 openModal(modalProps => <SetColorModal id={user.id} modalProps={modalProps} />);
@@ -67,6 +67,7 @@ const channelContextMenuPatch: NavContextMenuPatchCallback = (children, { channe
             label="Set Color"
             id="set-color"
             icon={ColorIcon}
+            leadingAccessory={{ type: "icon", icon: ColorIcon }}
             action={async () => {
                 await requireSettingsMenu();
                 openModal(modalProps => <SetColorModal id={channel.id} modalProps={modalProps} />);

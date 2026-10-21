@@ -17,7 +17,7 @@ import { isV1, migrate } from "@equicordplugins/moreStickers/migrate-v1";
 import { deleteStickerPack, getStickerPack, getStickerPackMetas, saveStickerPack } from "@equicordplugins/moreStickers/stickers";
 import { SettingsTabsKey, Sticker, StickerPack, StickerPackMeta } from "@equicordplugins/moreStickers/types";
 import { cl, clPicker, Mutex } from "@equicordplugins/moreStickers/utils";
-import { Button, React, TabBar, TextArea, Toasts } from "@webpack/common";
+import { Button, React, showToast,TabBar, TextArea } from "@webpack/common";
 import { JSX } from "react";
 
 const mutex = new Mutex();
@@ -58,23 +58,17 @@ const StickerPackMetadata = ({ meta, hoveredStickerPackId, setHoveredStickerPack
                 onClick={async () => {
                     try {
                         await deleteStickerPack(meta.id);
-                        Toasts.show({
-                            message: "Sticker Pack deleted",
-                            type: Toasts.Type.SUCCESS,
-                            id: Toasts.genId(),
-                            options: {
-                                duration: 1000
-                            }
+                        showToast({
+                            text: "Sticker Pack deleted",
+                            variant: "success",
+                            duration: 1000
                         });
                         await refreshStickerPackMetas();
                     } catch (e: any) {
-                        Toasts.show({
-                            message: e.message,
-                            type: Toasts.Type.FAILURE,
-                            id: Toasts.genId(),
-                            options: {
-                                duration: 1000
-                            }
+                        showToast({
+                            text: e.message,
+                            variant: "critical",
+                            duration: 1000
                         });
                     }
                 }}
@@ -210,22 +204,16 @@ export const Packs = () => {
                                 refreshStickerPackMetas();
 
                                 if (errorMessage) {
-                                    Toasts.show({
-                                        message: errorMessage,
-                                        type: Toasts.Type.FAILURE,
-                                        id: Toasts.genId(),
-                                        options: {
-                                            duration: 1000
-                                        }
+                                    showToast({
+                                        text: errorMessage,
+                                        variant: "critical",
+                                        duration: 1000
                                     });
                                 } else {
-                                    Toasts.show({
-                                        message: "Sticker Pack added",
-                                        type: Toasts.Type.SUCCESS,
-                                        id: Toasts.genId(),
-                                        options: {
-                                            duration: 1000
-                                        }
+                                    showToast({
+                                        text: "Sticker Pack added",
+                                        variant: "success",
+                                        duration: 1000
                                     });
                                 }
 
@@ -288,22 +276,16 @@ export const Packs = () => {
                                 refreshStickerPackMetas();
 
                                 if (errorMessage) {
-                                    Toasts.show({
-                                        message: errorMessage,
-                                        type: Toasts.Type.FAILURE,
-                                        id: Toasts.genId(),
-                                        options: {
-                                            duration: 1000
-                                        }
+                                    showToast({
+                                        text: errorMessage,
+                                        variant: "critical",
+                                        duration: 1000
                                     });
                                 } else {
-                                    Toasts.show({
-                                        message: "Sticker Pack added",
-                                        type: Toasts.Type.SUCCESS,
-                                        id: Toasts.genId(),
-                                        options: {
-                                            duration: 1000
-                                        }
+                                    showToast({
+                                        text: "Sticker Pack added",
+                                        variant: "success",
+                                        duration: 1000
                                     });
                                 }
                             }}
@@ -340,23 +322,17 @@ export const Packs = () => {
                                         await saveStickerPack(stickerPack);
                                     }
 
-                                    Toasts.show({
-                                        message: "Sticker Packs added",
-                                        type: Toasts.Type.SUCCESS,
-                                        id: Toasts.genId(),
-                                        options: {
-                                            duration: 1000
-                                        }
+                                    showToast({
+                                        text: "Sticker Packs added",
+                                        variant: "success",
+                                        duration: 1000
                                     });
                                 } catch (e: any) {
                                     console.error(e);
-                                    Toasts.show({
-                                        message: e.message,
-                                        type: Toasts.Type.FAILURE,
-                                        id: Toasts.genId(),
-                                        options: {
-                                            duration: 1000
-                                        }
+                                    showToast({
+                                        text: e.message,
+                                        variant: "critical",
+                                        duration: 1000
                                     });
                                 }
                             };
@@ -388,18 +364,17 @@ export const Packs = () => {
                                     }
                                 }
 
+                                const objectUrl = URL.createObjectURL(new Blob([JSON.stringify(result)], { type: "application/json" }));
                                 const a = document.createElement("a");
-                                a.href = URL.createObjectURL(new Blob([JSON.stringify(result)], { type: "application/json" }));
+                                a.href = objectUrl;
                                 a.download = "MoreStickers.stickerpacks";
                                 a.click();
+                                setTimeout(() => URL.revokeObjectURL(objectUrl), 1000);
 
-                                Toasts.show({
-                                    message: "Sticker Packs exported",
-                                    type: Toasts.Type.SUCCESS,
-                                    id: Toasts.genId(),
-                                    options: {
-                                        duration: 1000
-                                    }
+                                showToast({
+                                    text: "Sticker Packs exported",
+                                    variant: "success",
+                                    duration: 1000
                                 });
                             }}
                         >Export Sticker Packs</Button>

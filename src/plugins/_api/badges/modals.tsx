@@ -6,22 +6,24 @@
 
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Flex } from "@components/Flex";
-import { HeadingPrimary } from "@components/Heading";
+import { Heading } from "@components/Heading";
 import { Heart } from "@components/Heart";
 import { Paragraph } from "@components/Paragraph";
 import { DonateButton, TranslateButton } from "@components/settings";
 import { Margins } from "@utils/margins";
-import { closeModal, ModalContent, ModalFooter, ModalHeader, ModalRoot, openModal } from "@utils/modal";
+import { Modal, openModal } from "@webpack/common";
 
 export function VencordDonorModal() {
-    const modalKey = openModal(props => (
+    openModal(props => (
         <ErrorBoundary noop onError={() => {
-            closeModal(modalKey);
+            props.onClose();
             VencordNative.native.openExternal("https://github.com/sponsors/Vendicated");
         }}>
-            <ModalRoot {...props}>
-                <ModalHeader>
-                    <HeadingPrimary
+            <Modal
+                {...props}
+                title={
+                    <Heading
+                        tag="h2"
                         style={{
                             width: "100%",
                             textAlign: "center",
@@ -32,9 +34,10 @@ export function VencordDonorModal() {
                             <Heart />
                             Vencord Donor
                         </Flex>
-                    </HeadingPrimary>
-                </ModalHeader>
-                <ModalContent>
+                    </Heading>
+                }
+            >
+                <div>
                     <Flex>
                         <img
                             role="presentation"
@@ -57,26 +60,28 @@ export function VencordDonorModal() {
                             Please consider supporting the development of Vencord by becoming a donor. It would mean a lot!!
                         </Paragraph>
                     </div>
-                </ModalContent>
-                <ModalFooter>
+                </div>
+                <div>
                     <Flex justifyContent="center" style={{ width: "100%" }}>
                         <DonateButton />
                     </Flex>
-                </ModalFooter>
-            </ModalRoot>
+                </div>
+            </Modal>
         </ErrorBoundary>
     ));
 }
 
 export function EquicordDonorModal() {
-    const modalKey = openModal(props => (
+    openModal(props => (
         <ErrorBoundary noop onError={() => {
-            closeModal(modalKey);
+            props.onClose();
             VencordNative.native.openExternal("https://github.com/sponsors/thororen1234");
         }}>
-            <ModalRoot {...props}>
-                <ModalHeader>
-                    <HeadingPrimary
+            <Modal
+                {...props}
+                title={
+                    <Heading
+                        tag="h2"
                         style={{
                             width: "100%",
                             textAlign: "center",
@@ -87,9 +92,10 @@ export function EquicordDonorModal() {
                             <Heart />
                             Equicord Donor
                         </Flex>
-                    </HeadingPrimary>
-                </ModalHeader>
-                <ModalContent>
+                    </Heading>
+                }
+            >
+                <div>
                     <Flex>
                         <img
                             role="presentation"
@@ -112,25 +118,27 @@ export function EquicordDonorModal() {
                             Please consider supporting the development of Equicord by becoming a donor. It would mean a lot! :3
                         </Paragraph>
                     </div>
-                </ModalContent>
-                <ModalFooter>
+                </div>
+                <div>
                     <Flex justifyContent="center" style={{ width: "100%" }}>
                         <DonateButton equicord={true} />
                     </Flex>
-                </ModalFooter>
-            </ModalRoot>
-        </ErrorBoundary>
+                </div>
+            </Modal>
+        </ErrorBoundary >
     ));
 }
 
 export function EquicordTranslatorModal() {
-    const modalKey = openModal(props => (
+    openModal(props => (
         <ErrorBoundary noop onError={() => {
-            closeModal(modalKey);
+            props.onClose();
         }}>
-            <ModalRoot {...props}>
-                <ModalHeader>
-                    <HeadingPrimary
+            <Modal
+                {...props}
+                title={
+                    <Heading
+                        tag="h2"
                         style={{
                             width: "100%",
                             textAlign: "center",
@@ -140,9 +148,10 @@ export function EquicordTranslatorModal() {
                         <Flex justifyContent="center" alignItems="center" gap="0.5em">
                             Equicord Translator
                         </Flex>
-                    </HeadingPrimary>
-                </ModalHeader>
-                <ModalContent>
+                    </Heading>
+                }
+            >
+                <div>
                     <Flex>
                         <img
                             className="vc-translate-modal-icon"
@@ -156,13 +165,13 @@ export function EquicordTranslatorModal() {
                             Awarded to contributors who expand Equicord’s language support by translating content for the community.
                         </Paragraph>
                     </div>
-                </ModalContent>
-                <ModalFooter>
+                </div>
+                <div>
                     <Flex justifyContent="center" style={{ width: "100%" }}>
                         <TranslateButton />
                     </Flex>
-                </ModalFooter>
-            </ModalRoot>
+                </div>
+            </Modal>
         </ErrorBoundary>
     ));
 }

@@ -3,8 +3,12 @@ name: Build Branches
 on:
     push:
         branches:
-            - "**"
-            - "!pr-**"
+            - main
+            - dev
+            - i18n_translation
+            - translation
+            - bun
+            - dev2
     workflow_dispatch:
         inputs:
             branch:
@@ -36,19 +40,12 @@ jobs:
               with:
                   ref: ${{ github.event.inputs.branch || github.ref }}
 
-            - uses: pnpm/action-setup@v6
+            - name: Setup PNPM
               if: github.ref_name != 'bun'
-
-            - name: Use Node.js 24
-              if: github.ref_name != 'bun'
-              uses: actions/setup-node@v6
+              uses: pnpm/setup@v2.1.0
               with:
-                  node-version: 24
-                  cache: "pnpm"
-
-            - name: Install dependencies
-              if: github.ref_name != 'bun'
-              run: pnpm install --frozen-lockfile
+                  runtime: node@v24
+                  require-lockfile: true
 
             - name: Build web
               if: github.ref_name != 'bun'
@@ -98,10 +95,13 @@ jobs:
 
                   git config --global user.name "GitHub-Actions"
                   git config --global user.email actions@github.com
-                  git clone https://$USERNAME:$GITHUB_TOKEN@github.com/$REPO.git equibuilds
-                  cd equibuilds
+
+                  mkdir equibuilds && cd equibuilds
+                  git init -b "$BRANCH"
+                  git remote add origin https://$USERNAME:$GITHUB_TOKEN@github.com/$REPO.git
 
                   if git ls-remote --exit-code --heads origin "$BRANCH" > /dev/null 2>&1; then
+                      git fetch --depth 1 origin "$BRANCH"
                       git checkout "$BRANCH"
                   else
                       git checkout --orphan "$BRANCH"
@@ -117,6 +117,5 @@ jobs:
                   mv extension-*.zip browser/
 
                   git add -A
-
                   git commit -m "Builds for https://github.com/$GITHUB_REPOSITORY/commit/$COMMIT_SHA"
-                  git push --force https://$USERNAME:$GITHUB_TOKEN@github.com/$REPO.git "$BRANCH"
+                  git push --force origin "$BRANCH"

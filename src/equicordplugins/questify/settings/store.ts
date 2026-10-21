@@ -13,7 +13,8 @@ import { QuestFeaturesSetting } from "../components/questFeaturesSetting";
 import { QuestNotificationsSetting } from "../components/questNotificationsSetting";
 import { QuestTilesSetting } from "../components/questTilesSetting";
 import { ReorderQuestsSetting } from "../components/reorderQuestsSetting";
-import { defaultAllowChangingDangerousSettings, defaultAutoCompleteQuestsSimultaneously, defaultAutoCompleteQuestTypes, defaultClaimedSubsort, defaultCompleteVideoQuestsQuicker, defaultDisableAccountPanelPromo, defaultDisableAccountPanelQuestProgress, defaultDisableFriendsListPromo, defaultDisableMembersListPromo, defaultDisableOrbsAndQuestsBadges, defaultDisableQuestsEverything, defaultDisableRelocationNotices, defaultDisableSponsoredBanner, defaultExpiredSubsort, defaultIgnoredQuestIDs, defaultIgnoredSubsort, defaultIsOnQuestsPage, defaultLastQuestPageFilters, defaultLastQuestPageSort, defaultLeftClickAction, defaultMakeMobileVideoQuestsDesktopCompatible, defaultMiddleClickAction, defaultNewExcludedQuestAlertSound, defaultNewExcludedQuestAlertVolume, defaultNewQuestAlertSound, defaultNewQuestAlertVolume, defaultNotifyOnNewExcludedQuests, defaultNotifyOnNewQuests, defaultNotifyOnQuestComplete, defaultQuestButtonBadgeColor, defaultQuestButtonBadgeCount, defaultQuestButtonDisplay, defaultQuestButtonIncludedTypes, defaultQuestButtonIndicator, defaultQuestCompletedAlertSound, defaultQuestCompletedAlertVolume, defaultQuestFetchInterval, defaultQuestOrder, defaultQuestTileClaimedColorSetting, defaultQuestTileExpiredColorSetting, defaultQuestTileGradient, defaultQuestTileIgnoredColorSetting, defaultQuestTilePreload, defaultQuestTileUnclaimedColorSetting, defaultRememberQuestPageFilters, defaultRememberQuestPageSort, defaultResumeInterruptedQuests, defaultResumeQuestIDs, defaultRightClickAction, defaultUnclaimedSubsort, type QuestButtonAction, type QuestButtonDisplayMode, type QuestButtonIncludedTypes, type QuestButtonIndicatorMode, type QuestOrderStatus } from "./def";
+import { SettingsSearch } from "../components/settingsSearch";
+import { defaultAcknowledgedNotices, defaultAllowChangingDangerousSettings, defaultAutoCompleteQuestsSimultaneously, defaultAutoCompleteQuestTypes, defaultClaimedSubsort, defaultCompleteVideoQuestsQuicker, defaultDisableAccountPanelPromo, defaultDisableAccountPanelQuestProgress, defaultDisableFriendsListPromo, defaultDisableMembersListPromo, defaultDisableOrbsAndQuestsBadges, defaultDisableQuestsEverything, defaultDisableRelocationNotices, defaultDisableSponsoredBanner, defaultExpiredSubsort, defaultHiddenQuestStatuses, defaultHideNonAutoCompletableQuests, defaultIgnoredQuestIDs, defaultIgnoredSubsort, defaultIsOnQuestsPage, defaultLastQuestPageFilters, defaultLastQuestPageSort, defaultLeftClickAction, defaultMakeMobileVideoQuestsDesktopCompatible, defaultMiddleClickAction, defaultNewExcludedQuestAlertSound, defaultNewExcludedQuestAlertVolume, defaultNewQuestAlertSound, defaultNewQuestAlertVolume, defaultNotifyOnNewExcludedQuests, defaultNotifyOnNewQuests, defaultNotifyOnQuestComplete, defaultPreventVideoQuestsPausing, defaultQuestButtonBadgeColor, defaultQuestButtonBadgeCount, defaultQuestButtonDisplay, defaultQuestButtonIncludedTypes, defaultQuestButtonIndicator, defaultQuestCompletedAlertSound, defaultQuestCompletedAlertVolume, defaultQuestFetchInterval, defaultQuestOrder, defaultQuestTileClaimedColorSetting, defaultQuestTileExpiredColorSetting, defaultQuestTileGradient, defaultQuestTileIgnoredColorSetting, defaultQuestTilePreload, defaultQuestTileUnclaimedColorSetting, defaultRememberQuestPageFilters, defaultRememberQuestPageSort, defaultResumeInterruptedQuests, defaultResumeQuestIDs, defaultRightClickAction, defaultUnclaimedSubsort, type QuestButtonAction, type QuestButtonDisplayMode, type QuestButtonIncludedTypes, type QuestButtonIndicatorMode, type QuestOrderStatus } from "./def";
 
 const MIGRATION_TARGET = 1;
 const CURRENT_SETTINGS = PlainSettings.plugins.Questify;
@@ -38,6 +39,17 @@ export const settings = definePluginSettings({
         description: "The current migration version of the settings.",
         default: MIGRATION_TARGET,
         hidden: true,
+    },
+    acknowledgedNotices: {
+        type: OptionType.CUSTOM,
+        description: "One-time notices that the user has acknowledged.",
+        default: { ...defaultAcknowledgedNotices },
+        hidden: true,
+    },
+    settingsSearch: {
+        type: OptionType.COMPONENT,
+        component: ErrorBoundary.wrap(SettingsSearch) as any,
+        description: "Search Questify settings.",
     },
     questFeatures: {
         type: OptionType.COMPONENT,
@@ -120,6 +132,12 @@ export const settings = definePluginSettings({
         restartNeeded: true,
         hidden: true,
     },
+    hideNonAutoCompletableQuests: {
+        type: OptionType.BOOLEAN,
+        description: "Hide incomplete Quests without a supported and enabled auto-complete task.",
+        default: defaultHideNonAutoCompletableQuests,
+        hidden: true,
+    },
     autoCompleteQuestsSimultaneously: {
         type: OptionType.BOOLEAN,
         description: "Complete Quests simultaneously rather than sequentially.",
@@ -131,6 +149,13 @@ export const settings = definePluginSettings({
         type: OptionType.BOOLEAN,
         description: "Use Discord's progress leeway and elapsed enrollment time for Video Quest auto-completion.",
         default: defaultCompleteVideoQuestsQuicker,
+        restartNeeded: true,
+        hidden: true,
+    },
+    preventVideoQuestsPausing: {
+        type: OptionType.BOOLEAN,
+        description: "Prevent pausing the video when the Quest modal loses focus.",
+        default: defaultPreventVideoQuestsPausing,
         restartNeeded: true,
         hidden: true,
     },
@@ -310,6 +335,12 @@ export const settings = definePluginSettings({
         type: OptionType.CUSTOM,
         description: "Sort order for Quest status groups.",
         default: Array.from(defaultQuestOrder) as QuestOrderStatus[],
+        hidden: true,
+    },
+    hiddenQuestStatuses: {
+        type: OptionType.CUSTOM,
+        description: "Quest status groups to hide.",
+        default: Array.from(defaultHiddenQuestStatuses),
         hidden: true,
     },
     unclaimedSubsort: {

@@ -11,6 +11,10 @@
     color: var(--text-default);
 }
 
+.vc-card-normal {
+    border: 1px solid var(--border-subtle);
+}
+
 .vc-card-danger {
     background-color: var(--background-feedback-critical);
     border-color: var(--background-feedback-critical);

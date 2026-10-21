@@ -8,20 +8,19 @@ import "./styles.css";
 
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Paginator, requirePaginator } from "@plugins/reviewDB/components/ReviewModal";
-import { ModalCloseButton } from "@utils/modal";
 import { Message } from "@vencord/discord-types";
-import { findCssClassesLazy } from "@webpack";
+import { findComponentByCodeLazy } from "@webpack";
 import { React, useRef, useState } from "@webpack/common";
-import { MutableRefObject } from "react";
+
+const CloseButton = findComponentByCodeLazy("CLOSE_BUTTON_LABEL");
+import type { RefObject } from "react";
 
 import { jumper } from "./index";
-
-const containerStyles = findCssClassesLazy("containerBottom", "containerTop");
 
 export default function ReplyNavigator({ replies }: { replies: Message[]; }) {
     const [page, setPage] = useState(1);
     const [visible, setVisible] = useState(true);
-    const ref: MutableRefObject<HTMLDivElement | null> = useRef(null);
+    const ref: RefObject<HTMLDivElement | null> = useRef(null);
     React.useEffect(() => {
         setPage(1);
         setVisible(true);
@@ -42,7 +41,7 @@ export default function ReplyNavigator({ replies }: { replies: Message[]; }) {
     requirePaginator();
     return (
         <ErrorBoundary>
-            <div ref={ref} className={containerStyles.containerBottom + " vc-findreply-div"} style={{
+            <div ref={ref} className="vc-findreply-div" style={{
                 display: visible ? "flex" : "none",
             }}>
                 <Paginator
@@ -53,7 +52,7 @@ export default function ReplyNavigator({ replies }: { replies: Message[]; }) {
                     totalCount={replies.length}
                     onPageChange={processPageChange}
                 />
-                <ModalCloseButton className={"vc-findreply-close"} onClick={() => setVisible(false)} />
+                <CloseButton className={"vc-findreply-close"} onClick={() => setVisible(false)} />
             </div>
         </ErrorBoundary>
     );

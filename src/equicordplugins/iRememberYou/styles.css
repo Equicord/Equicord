@@ -9,6 +9,19 @@
     margin-top: 16px;
 }
 
+.vc-i-remember-you-header-id {
+    display: inline-block;
+    font-size: 0.8em;
+    font-weight: normal;
+    opacity: 0.75;
+    cursor: pointer;
+    margin-left: 6px;
+}
+
+.vc-i-remember-you-header-id:hover {
+    opacity: 1;
+}
+
 .vc-i-remember-you-header-btns {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 350px));

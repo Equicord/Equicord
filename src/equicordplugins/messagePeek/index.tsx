@@ -14,7 +14,7 @@ import betterActivities from "@equicordplugins/betterActivities";
 import showMeYourName from "@plugins/showMeYourName";
 import { Devs, EquicordDevs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
-import { classes } from "@utils/misc";
+import { classes, pluralize } from "@utils/misc";
 import definePlugin, { OptionType } from "@utils/types";
 import { Activity, ApplicationStream, Channel, Message, OnlineStatus, User } from "@vencord/discord-types";
 import { MessageFlags } from "@vencord/discord-types/enums";
@@ -113,10 +113,6 @@ function formatRelativeTime(timestamp: number): string {
     if (days > 0) return `${days}d`;
     if (hours > 0) return `${hours}h`;
     return `${Math.max(1, minutes)}m`;
-}
-
-function pluralize(count: number, singular: string, plural = singular + "s") {
-    return count === 1 ? `1 ${singular}` : `${count} ${plural}`;
 }
 
 function getMessageContent(message: Message): MessageContent | null {
@@ -225,7 +221,9 @@ function Timestamp({ channel }: { channel: Channel; }) {
     if (!lastMessage) return null;
 
     const timestamp = SnowflakeUtils.extractTimestamp(lastMessage.id);
-    const className = ExperimentStore.getUserExperimentBucket("2026-01-favorites-server") > 0 ? cl("timestamp-favorites") : cl("timestamp");
+    const isChannelPinned = UserGuildSettingsStore.isMessagesFavorite(channel?.id);
+    const isFavoritesEnabled = ExperimentStore.getUserExperimentBucket("2026-01-favorites-server") > 0;
+    const className = isFavoritesEnabled || isChannelPinned ? cl("timestamp-favorites") : cl("timestamp");
     return <span className={className}>{formatRelativeTime(timestamp)}</span>;
 }
 
@@ -248,7 +246,7 @@ export default definePlugin({
         {
             find: "PrivateChannel.renderAvatar",
             replacement: {
-                match: /,subText:(\i)\.isSystemDM\(\).{0,500}:null,(?=name:)/,
+                match: /,subText:\i\.isSystemDM\(\).{0,700}:null,(?=name:)/,
                 replace: ",subText:$self.getSubText(arguments[0]),"
             }
         }

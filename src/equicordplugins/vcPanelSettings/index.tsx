@@ -13,9 +13,8 @@ import { Link } from "@components/Link";
 import { Devs } from "@utils/constants";
 import { identity } from "@utils/misc";
 import definePlugin, { OptionType } from "@utils/types";
-import { findByPropsLazy } from "@webpack";
-import { FluxDispatcher, Select, Slider, useEffect, useState } from "@webpack/common";
-const configModule = findByPropsLazy("getOutputVolume");
+import { VideoDevice } from "@vencord/discord-types";
+import { FluxDispatcher, MediaEngineStore, Select, Slider, useEffect, useState } from "@webpack/common";
 
 const settings = definePluginSettings({
     title1: {
@@ -91,12 +90,13 @@ const settings = definePluginSettings({
 });
 
 function OutputVolumeComponent() {
-    const [outputVolume, setOutputVolume] = useState(configModule.getOutputVolume());
+    const [outputVolume, setOutputVolume] = useState(MediaEngineStore.getOutputVolume());
 
     useEffect(() => {
-        const listener = () => setOutputVolume(configModule.getOutputVolume());
+        const listener = () => setOutputVolume(MediaEngineStore.getOutputVolume());
         FluxDispatcher.subscribe("AUDIO_SET_OUTPUT_VOLUME", listener);
-    });
+        return () => FluxDispatcher.unsubscribe("AUDIO_SET_OUTPUT_VOLUME", listener);
+    }, []);
 
     return (
         <>
@@ -112,12 +112,13 @@ function OutputVolumeComponent() {
 }
 
 function InputVolumeComponent() {
-    const [inputVolume, setInputVolume] = useState(configModule.getInputVolume());
+    const [inputVolume, setInputVolume] = useState(MediaEngineStore.getInputVolume());
 
     useEffect(() => {
-        const listener = () => setInputVolume(configModule.getInputVolume());
+        const listener = () => setInputVolume(MediaEngineStore.getInputVolume());
         FluxDispatcher.subscribe("AUDIO_SET_INPUT_VOLUME", listener);
-    });
+        return () => FluxDispatcher.unsubscribe("AUDIO_SET_INPUT_VOLUME", listener);
+    }, []);
 
     return (
         <>
@@ -133,17 +134,18 @@ function InputVolumeComponent() {
 }
 
 function OutputDeviceComponent() {
-    const [outputDevice, setOutputDevice] = useState(configModule.getOutputDeviceId());
+    const [outputDevice, setOutputDevice] = useState(MediaEngineStore.getOutputDeviceId());
 
     useEffect(() => {
-        const listener = () => setOutputDevice(configModule.getOutputDeviceId());
+        const listener = () => setOutputDevice(MediaEngineStore.getOutputDeviceId());
         FluxDispatcher.subscribe("AUDIO_SET_OUTPUT_DEVICE", listener);
-    });
+        return () => FluxDispatcher.unsubscribe("AUDIO_SET_OUTPUT_DEVICE", listener);
+    }, []);
 
     return (
         <>
             {settings.store.showOutputDeviceHeader && <Heading>Output device</Heading>}
-            <Select options={Object.values(configModule.getOutputDevices()).map((device: any /* i am NOT typing this*/) => {
+            <Select options={Object.values(MediaEngineStore.getOutputDevices()).map((device: any /* i am NOT typing this*/) => {
                 return { value: device.id, label: settings.store.showOutputDeviceHeader ? device.name : `🔊 ${device.name}` };
             })}
                 serialize={identity}
@@ -161,17 +163,18 @@ function OutputDeviceComponent() {
 }
 
 function InputDeviceComponent() {
-    const [inputDevice, setInputDevice] = useState(configModule.getInputDeviceId());
+    const [inputDevice, setInputDevice] = useState(MediaEngineStore.getInputDeviceId());
 
     useEffect(() => {
-        const listener = () => setInputDevice(configModule.getInputDeviceId());
+        const listener = () => setInputDevice(MediaEngineStore.getInputDeviceId());
         FluxDispatcher.subscribe("AUDIO_SET_INPUT_DEVICE", listener);
-    });
+        return () => FluxDispatcher.unsubscribe("AUDIO_SET_INPUT_DEVICE", listener);
+    }, []);
 
     return (
         <div style={{ marginTop: "10px" }}>
             {settings.store.showInputDeviceHeader && <Heading>Input device</Heading>}
-            <Select options={Object.values(configModule.getInputDevices()).map((device: any /* i am NOT typing this*/) => {
+            <Select options={Object.values(MediaEngineStore.getInputDevices()).map((device: any /* i am NOT typing this*/) => {
                 return { value: device.id, label: settings.store.showInputDeviceHeader ? device.name : `🎤 ${device.name}` };
             })}
                 serialize={identity}
@@ -189,17 +192,18 @@ function InputDeviceComponent() {
 }
 
 function VideoDeviceComponent() {
-    const [videoDevice, setVideoDevice] = useState(configModule.getVideoDeviceId());
+    const [videoDevice, setVideoDevice] = useState(MediaEngineStore.getVideoDeviceId());
 
     useEffect(() => {
-        const listener = () => setVideoDevice(configModule.getVideoDeviceId());
+        const listener = () => setVideoDevice(MediaEngineStore.getVideoDeviceId());
         FluxDispatcher.subscribe("MEDIA_ENGINE_SET_VIDEO_DEVICE", listener);
-    });
+        return () => FluxDispatcher.unsubscribe("MEDIA_ENGINE_SET_VIDEO_DEVICE", listener);
+    }, []);
 
     return (
         <div style={{ marginTop: "10px" }}>
             {settings.store.showVideoDeviceHeader && <Heading>Camera</Heading>}
-            <Select options={Object.values(configModule.getVideoDevices()).map((device: any /* i am NOT typing this*/) => {
+            <Select options={Object.values(MediaEngineStore.getVideoDevices()).map((device: VideoDevice) => {
                 return { value: device.id, label: settings.store.showVideoDeviceHeader ? device.name : `📷 ${device.name}` };
             })}
                 serialize={identity}
@@ -244,10 +248,10 @@ export default definePlugin({
     renderVoiceSettings() { return <VoiceSettings />; },
     patches: [
         {
-            find: "this.renderChannelButtons()",
+            find: "}getAccessibilityLabel(){",
             replacement: {
-                match: /this.renderChannelButtons\(\)/,
-                replace: "this.renderChannelButtons(), $self.renderVoiceSettings()"
+                match: /this.renderVoiceStates\(\),\i/,
+                replace: "$&,$self.renderVoiceSettings()"
             }
         }
     ]

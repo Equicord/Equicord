@@ -6,17 +6,16 @@
 
 import { definePluginSettings } from "@api/Settings";
 import { getUserSettingLazy } from "@api/UserSettings";
-import { ImageIcon } from "@components/Icons";
+import { CopyIdIcon, ImageIcon } from "@components/Icons";
 import { copyToClipboard } from "@utils/clipboard";
 import { Devs } from "@utils/constants";
-import { getCurrentChannel, getCurrentGuild, openImageModal } from "@utils/discord";
+import { getCurrentChannel, getCurrentGuild, getIntlMessage, openImageModal } from "@utils/discord";
 import { isTruthy } from "@utils/guards";
 import { classes } from "@utils/misc";
 import definePlugin, { OptionType } from "@utils/types";
-import { Guild, PopoutProps, Role } from "@vencord/discord-types";
+import { Guild, Role } from "@vencord/discord-types";
 import { findByCodeLazy, findByPropsLazy, findCssClassesLazy } from "@webpack";
-import { GuildRoleStore, Menu, PermissionStore, Popout, useRef } from "@webpack/common";
-import { ComponentType } from "react";
+import { ContextMenuApi, GuildRoleStore, Menu, PermissionStore, Popout, RoleMemberPopout, useRef } from "@webpack/common";
 
 const GuildSettingsActions = findByPropsLazy("open", "selectRole", "updateGuild");
 const MenuItemClasses = findCssClassesLazy("item", "labelContainer", "colorDefault", "label", "iconContainer");
@@ -26,7 +25,6 @@ const DeveloperMode = getUserSettingLazy("appearance", "developerMode")!;
 
 async function openRoleIconModal(roleId: string, roleIcon: string, roleName: string) {
     const format = settings.store.roleIconFileFormat;
-    const contentType = format === "jpg" ? "image/jpeg" : `image/${format}`;
     const original = `${location.protocol}//${window.GLOBAL_ENV.CDN_HOST}/role-icons/${roleId}/${roleIcon}.${format}`;
     const url = original.replace(`//${window.GLOBAL_ENV.CDN_HOST}/`, "//media.discordapp.net/");
 
@@ -34,18 +32,7 @@ async function openRoleIconModal(roleId: string, roleIcon: string, roleName: str
         url,
         original,
         height: 128,
-        width: 128,
-        contentType,
-        originalContentType: contentType,
-        sourceMetadata: {
-            identifier: {
-                type: "attachment",
-                attachmentId: roleId,
-                filename: `role-icon-${roleId}.${format}`,
-                title: roleName,
-                size: 1,
-            }
-        }
+        width: 128
     });
 }
 
@@ -101,16 +88,6 @@ const settings = definePluginSettings({
     }
 });
 
-interface RoleMemberPopoutProps {
-    popoutProps: PopoutProps;
-    guildId: string;
-    channelId: string;
-    roleId: string;
-}
-type RoleMemberPopout = ComponentType<RoleMemberPopoutProps>;
-
-let RoleMemberPopout: RoleMemberPopout = () => null;
-
 export function buildExtraRoleContextMenuItems(role: Role, guild: Guild, popoutRef?: React.RefObject<any>) {
     if (!role) return { before: [], after: [] };
 
@@ -125,6 +102,7 @@ export function buildExtraRoleContextMenuItems(role: Role, guild: Guild, popoutR
                     GuildSettingsActions.selectRole(role.id);
                 }}
                 icon={PencilIcon}
+                leadingAccessory={{ type: "icon", icon: PencilIcon }}
             />
         ),
         role.colorString && (
@@ -134,6 +112,7 @@ export function buildExtraRoleContextMenuItems(role: Role, guild: Guild, popoutR
                 label="Copy Role Color"
                 action={() => copyToClipboard(role.colorString!)}
                 icon={AppearanceIcon}
+                leadingAccessory={{ type: "icon", icon: AppearanceIcon }}
             />
         )
     ].filter(isTruthy);
@@ -152,6 +131,7 @@ export function buildExtraRoleContextMenuItems(role: Role, guild: Guild, popoutR
                     });
                 }}
                 icon={ImageIcon}
+                leadingAccessory={{ type: "icon", icon: ImageIcon }}
             />
         ),
         popoutRef && (
@@ -182,6 +162,7 @@ export function buildExtraRoleContextMenuItems(role: Role, guild: Guild, popoutR
                                 {...popoutProps}
                             >
                                 <div className={MenuItemClasses.label}>View Role Members</div>
+                                {/* FIXME: update to new icon style */}
                                 <div className={MenuItemClasses.iconContainer}>
                                     <RoleMembersIcon />
                                 </div>
@@ -196,30 +177,67 @@ export function buildExtraRoleContextMenuItems(role: Role, guild: Guild, popoutR
     return { before, after };
 }
 
+export function openRoleContextMenu(event: React.MouseEvent<HTMLElement>, { guildId, id: roleId }: { guildId: string; id: string; }) {
+    const guild = getCurrentGuild();
+    if (!guild || guild.id !== guildId) return;
+
+    const role = GuildRoleStore.getRole(guildId, roleId);
+    if (!role) return;
+
+    ContextMenuApi.openContextMenu(event, () => {
+        const popoutRef = useRef(null);
+        const { before, after } = buildExtraRoleContextMenuItems(role, guild, popoutRef);
+
+        return (
+            <Menu.Menu
+                navId="vc-better-role-context-member-list"
+                onClose={ContextMenuApi.closeContextMenu}
+                aria-label="Role Actions"
+            >
+                {before}
+                {after}
+                <Menu.MenuItem
+                    key="vc-better-role-context-copy-role-id"
+                    id="vc-better-role-context-copy-role-id"
+                    label={getIntlMessage("COPY_ID_ROLE")}
+                    icon={CopyIdIcon}
+                    leadingAccessory={{ type: "icon", icon: CopyIdIcon }}
+                    action={() => copyToClipboard(role.id)}
+                />
+            </Menu.Menu>
+        );
+    });
+}
+
 export default definePlugin({
     name: "BetterRoleContext",
-    description: "Adds options to copy role color / edit role / view role icon when right clicking roles in the user profile",
+    description: "Adds options to copy role color / edit role / view role icon when right clicking roles in the user profile or in the member list",
     tags: ["Roles", "Appearance"],
-    authors: [Devs.Ven, Devs.goodbee],
+    authors: [Devs.Ven, Devs.goodbee, Devs.nightmaresan],
     dependencies: ["UserSettingsAPI"],
-
     settings,
-
-    patches: [{
-        find: ".ROLE_MENTION)",
-        replacement: {
-            match: /function (\i)(?=.+?renderPopout:.{0,20}\1,\{guildId:\i,channelId:\i)/,
-            replace: "$self.RoleMembers=$1;$&"
+    openRoleContextMenu,
+    patches: [
+        {
+            find: 'tutorialId:"whos-online',
+            replacement: {
+                match: /(?<=#{intl::CHANNEL_MEMBERS_A11Y_LABEL}.{0,400}?)children:(?=.{0,20}?(?:—|\\u2014) ",\i\])/,
+                replace: "onContextMenu:e=>$self.openRoleContextMenu(e,arguments[0]),$&"
+            }
+        },
+        // member list role headers
+        {
+            find: "?null:new Intl.NumberFormat",
+            replacement: {
+                match: /(?<=#{intl::CHANNEL_MEMBERS_A11Y_LABEL},\{title:\i,count:\i\}\)\}\),\(0,\i\.jsxs\)\("div",\{)/,
+                replace: "onContextMenu:e=>$self.openRoleContextMenu(e,arguments[0]),"
+            }
         }
-    }],
+    ],
 
     start() {
         // DeveloperMode needs to be enabled for the context menu to be shown
         DeveloperMode.updateSetting(true);
-    },
-
-    set RoleMembers(component: RoleMemberPopout) {
-        RoleMemberPopout = component;
     },
 
     contextMenus: {
@@ -239,6 +257,7 @@ export default definePlugin({
                         label="Copy Role Color"
                         action={() => copyToClipboard(role.colorString!)}
                         icon={AppearanceIcon}
+                        leadingAccessory={{ type: "icon", icon: AppearanceIcon }}
                     />
                 );
             }
@@ -253,6 +272,7 @@ export default definePlugin({
                             GuildSettingsActions.selectRole(id);
                         }}
                         icon={PencilIcon}
+                        leadingAccessory={{ type: "icon", icon: PencilIcon }}
                     />
                 );
             }
@@ -265,6 +285,7 @@ export default definePlugin({
                         label="View Role Icon"
                         action={() => openRoleIconModal(role.id, roleIcon, role.name)}
                         icon={ImageIcon}
+                        leadingAccessory={{ type: "icon", icon: ImageIcon }}
                     />
 
                 );

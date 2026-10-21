@@ -7,6 +7,8 @@
 import type { Settings } from "@api/Settings";
 import type { CspRequestResult } from "@main/csp/manager";
 import type { PluginIpcMappings } from "@main/ipcPlugins";
+import { UserThemeHeader } from "@main/themes";
+import { UpdateData } from "@main/updater";
 import { IpcEvents } from "@shared/IpcEvents";
 import type { IpcRes } from "@utils/types";
 import { ipcRenderer } from "electron/renderer";
@@ -34,9 +36,10 @@ export default {
         uploadTheme: async (fileName: string, fileData: string): Promise<void> => {
             throw new Error("uploadTheme is WEB only");
         },
-        deleteTheme: (fileName: string) => invoke<void>(IpcEvents.DELETE_THEME, fileName),
-        getThemesDir: () => invoke<string>(IpcEvents.GET_THEMES_DIR),
-        getThemesList: () => invoke<Array<{ fileName: string; content: string; }>>(IpcEvents.GET_THEMES_LIST),
+        deleteTheme: async (fileName: string): Promise<void> => {
+            throw new Error("deleteTheme is WEB only");
+        },
+        getThemesList: () => invoke<Array<UserThemeHeader>>(IpcEvents.GET_THEMES_LIST),
         getThemeData: (fileName: string) => invoke<string | undefined>(IpcEvents.GET_THEME_DATA, fileName),
         getSystemValues: () => invoke<Record<string, string>>(IpcEvents.GET_THEME_SYSTEM_VALUES),
 
@@ -44,10 +47,10 @@ export default {
     },
 
     updater: {
-        getUpdates: () => invoke<IpcRes<Record<"hash" | "author" | "message", string>[]>>(IpcEvents.GET_UPDATES),
-        update: () => invoke<IpcRes<boolean>>(IpcEvents.UPDATE),
-        rebuild: () => invoke<IpcRes<boolean>>(IpcEvents.BUILD),
-        getRepo: () => invoke<IpcRes<string>>(IpcEvents.GET_REPO),
+        getRepo: () => invoke<IpcRes<string>>(IpcEvents.UPDATER_GET_REPO),
+        getUpdates: () => invoke<IpcRes<UpdateData[]>>(IpcEvents.UPDATER_LIST_UPDATES),
+        fetchUpdate: () => invoke<IpcRes<boolean>>(IpcEvents.UPDATER_FETCH_UPDATE),
+        applyUpdate: () => invoke<IpcRes<boolean>>(IpcEvents.UPDATER_APPLY_UPDATE),
     },
 
     settings: {
@@ -77,6 +80,7 @@ export default {
 
     native: {
         getVersions: () => process.versions as Partial<NodeJS.ProcessVersions>,
+        supportsWindowsMaterial: () => sendSync<boolean>(IpcEvents.SUPPORTS_WINDOWS_MATERIAL),
         openExternal: (url: string) => invoke<void>(IpcEvents.OPEN_EXTERNAL, url),
         getRendererCss: () => invoke<string>(IpcEvents.GET_RENDERER_CSS),
         onRendererCssUpdate: (cb: (newCss: string) => void) => {
@@ -96,12 +100,6 @@ export default {
         removeOverride: (url: string) => invoke<boolean>(IpcEvents.CSP_REMOVE_OVERRIDE, url),
         requestAddOverride: (url: string, directives: string[], callerName: string) =>
             invoke<CspRequestResult>(IpcEvents.CSP_REQUEST_ADD_OVERRIDE, url, directives, callerName),
-    },
-
-    tray: {
-        setUpdateState: (available: boolean) => ipcRenderer.send(IpcEvents.SET_TRAY_UPDATE_STATE, available),
-        onCheckUpdates: (cb: () => void) => { ipcRenderer.on(IpcEvents.TRAY_CHECK_UPDATES, cb); },
-        onRepair: (cb: () => void) => { ipcRenderer.on(IpcEvents.TRAY_REPAIR, cb); },
     },
 
     pluginHelpers: PluginHelpers

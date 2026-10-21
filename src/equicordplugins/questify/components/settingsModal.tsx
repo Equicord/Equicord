@@ -5,8 +5,8 @@
  */
 
 import PluginModal from "@components/settings/tabs/plugins/PluginModal";
-import { openModal } from "@utils/modal";
 import type { Plugin } from "@utils/types";
+import { openModal } from "@webpack/common";
 
 import { promptToRestartIfDirty } from "../settings/restartTracking";
 import { setSettingsModalOpen } from "../state";

@@ -13,6 +13,7 @@
     letter-spacing: 0.02em;
     text-align: center;
     text-transform: uppercase;
+    white-space: nowrap;
 }
 
 .vc-badge-icon {

@@ -66,6 +66,29 @@ declare global {
     export var unsafeWindow: any;
 
     interface Window extends Record<PropertyKey, any> { }
+
+    interface MediaTrackConstraintSet {
+        restrictOwnAudio?: boolean;
+        suppressLocalAudioPlayback?: boolean;
+    }
+
+    type CaptureController = {
+        decreaseZoomLevel(): Promise<undefined>;
+        forwardWheel(): Promise<undefined>;
+        getSupportedZoomLevels(): number[];
+        increaseZoomLevel(): Promise<undefined>;
+        resetZoomLevel(): Promise<undefined>;
+        setFocusBehavior(): undefined;
+    };
+
+    interface DisplayMediaStreamOptions {
+        surfaceSwitching?: "include" | "exclude";
+        selfBrowserSurface?: "include" | "exclude";
+        systemAudio?: "include" | "exclude";
+        monitorTypeSurfaces?: "include" | "exclude";
+        controller?: CaptureController;
+        preferCurrentTab?: boolean;
+    }
 }
 
 export { };

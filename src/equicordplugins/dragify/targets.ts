@@ -46,10 +46,6 @@ function collectEventElements(event: DragEvent): HTMLElement[] {
     add(event.target);
     for (const entry of event.composedPath?.() ?? []) add(entry);
 
-    if (typeof document !== "undefined" && event.clientX != null && event.clientY != null) {
-        for (const element of document.elementsFromPoint?.(event.clientX, event.clientY) ?? []) add(element);
-    }
-
     return elements;
 }
 

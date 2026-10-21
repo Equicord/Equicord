@@ -12,7 +12,25 @@ export interface GitHubRepo {
     stargazers_count: number;
     language: string;
     fork: boolean;
+    owner: {
+        login: string;
+        type: string;
+    };
 }
+
+export interface GitHubOrg {
+    login: string;
+    avatar_url: string;
+}
+
+export interface RepoGroup {
+    key: string;
+    label: string;
+    avatarUrl?: string;
+    repos: GitHubRepo[];
+}
+
+export type RepoSortMode = "count" | "alpha";
 
 export interface IconProps {
     className?: string;

@@ -7,24 +7,17 @@
 import { PlainSettings } from "@api/Settings";
 import { Logger } from "@utils/Logger";
 import { chooseFile, saveFile } from "@utils/web";
-import { moment, Toasts } from "@webpack/common";
+import { moment, showToast } from "@webpack/common";
 
 import { DataStore } from "..";
 
 type BackupType = "all" | "plugins" | "css" | "datastore";
 
-const toast = (type: string, message: string) =>
-    Toasts.show({
-        type,
-        message,
-        id: Toasts.genId()
-    });
-
 const toastSuccess = () =>
-    toast(Toasts.Type.SUCCESS, "Settings successfully imported. Restart to apply changes!");
+    showToast({ text: "Settings successfully imported. Restart to apply changes!", variant: "success" });
 
 const toastFailure = (err: any) =>
-    toast(Toasts.Type.FAILURE, `Failed to import settings: ${String(err)}`);
+    showToast({ text: `Failed to import settings: ${String(err)}`, variant: "critical" });
 
 const logger = new Logger("SettingsSync:Offline", "#39b7e0");
 
@@ -112,13 +105,13 @@ export async function exportSettings({ syncDataStore = true, type = "all", minif
 
     if (syncDataStore) {
         try {
-            dataStore = await DataStore.entries();
+            dataStore = (await Promise.all((await DataStore.keys<IDBValidKey>()).map(async (key): Promise<[IDBValidKey, unknown] | undefined> => { try { return [key, await DataStore.get<unknown>(key)]; } catch (error) { logger.warn(`Skipping unreadable DataStore record ${String(key)}:`, error); return undefined; } }))).filter((entry): entry is [IDBValidKey, unknown] => entry !== undefined);
         } catch (err) {
             logger.error("Failed to read DataStore entries:", err);
 
             if (type === "all") {
                 logger.warn("Skipping DataStore in backup due to size. Export DataStore separately if needed.");
-                toast(Toasts.Type.MESSAGE, "DataStore too large - exported without it. Use 'Export DataStore' separately if needed.");
+                showToast({ text: "DataStore too large - exported without it. Use 'Export DataStore' separately if needed." });
                 dataStore = undefined;
             } else if (type === "datastore") {
                 throw new Error("DataStore is too large to export. Please clear some plugin data and try again.");
@@ -156,7 +149,7 @@ export async function downloadSettingsBackup(type: BackupType = "all", { minify 
         }
     } catch (err) {
         logger.error("Failed to export settings:", err);
-        toast(Toasts.Type.FAILURE, "Failed to export settings, check console");
+        showToast({ text: "Failed to export settings, check console", variant: "critical" });
         throw err;
     }
 }

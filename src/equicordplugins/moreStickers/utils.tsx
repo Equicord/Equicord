@@ -54,12 +54,16 @@ export async function loadFFmpeg(ffmpeg: FFmpeg, setLoaded: () => void) {
     const classWorkerBlob = new Blob([(new TextEncoder()).encode(classWorkerRaw)], { type: "text/javascript" });
     const classWorkerUrl = URL.createObjectURL(classWorkerBlob);
 
-    await ffmpeg.load({
-        coreURL: `${baseURL}/ffmpeg-core.js`,
-        wasmURL: `${baseURL}/ffmpeg-core.wasm`,
-        workerURL: `${baseURL}/ffmpeg-core.worker.js`,
-        classWorkerURL: classWorkerUrl,
-    });
+    try {
+        await ffmpeg.load({
+            coreURL: `${baseURL}/ffmpeg-core.js`,
+            wasmURL: `${baseURL}/ffmpeg-core.wasm`,
+            workerURL: `${baseURL}/ffmpeg-core.worker.js`,
+            classWorkerURL: classWorkerUrl,
+        });
+    } finally {
+        URL.revokeObjectURL(classWorkerUrl);
+    }
     setLoaded();
     console.log("FFmpeg loaded!");
 }

@@ -10,7 +10,7 @@ import { gitHashShort } from "@shared/vencordUserAgent";
 import { copyToClipboard } from "@utils/clipboard";
 import { relaunch, showItemInFolder } from "@utils/native";
 import { checkForUpdates, getRepo } from "@utils/updater";
-import { GuildStore, NavigationRouter, SettingsRouter, Toasts } from "@webpack/common";
+import { GuildStore, NavigationRouter, SettingsRouter, showToast } from "@webpack/common";
 
 import gitRemote from "~git-remote";
 import Plugins from "~plugins";
@@ -46,13 +46,10 @@ export const actions: ButtonAction[] = [
                 new URL(newUrl); // Throws if invalid
                 VencordNative.native.openExternal(newUrl);
             } catch {
-                Toasts.show({
-                    message: "Invalid URL",
-                    type: Toasts.Type.FAILURE,
-                    id: Toasts.genId(),
-                    options: {
-                        position: Toasts.Position.BOTTOM
-                    }
+                showToast({
+                    text: "Invalid URL",
+                    variant: "critical",
+                    position: "bottom"
                 });
             }
         }, registrar: "Equicord"
@@ -92,23 +89,17 @@ export const actions: ButtonAction[] = [
                 const text = await res.text();
                 copyToClipboard(text);
 
-                Toasts.show({
-                    message: "Copied response to clipboard!",
-                    type: Toasts.Type.SUCCESS,
-                    id: Toasts.genId(),
-                    options: {
-                        position: Toasts.Position.BOTTOM
-                    }
+                showToast({
+                    text: "Copied response to clipboard!",
+                    variant: "success",
+                    position: "bottom"
                 });
 
             } catch (e) {
-                Toasts.show({
-                    message: "Issue fetching URL",
-                    type: Toasts.Type.FAILURE,
-                    id: Toasts.genId(),
-                    options: {
-                        position: Toasts.Position.BOTTOM
-                    }
+                showToast({
+                    text: "Issue fetching URL",
+                    variant: "critical",
+                    position: "bottom"
                 });
             }
         }, registrar: "Equicord"
@@ -118,13 +109,10 @@ export const actions: ButtonAction[] = [
         id: "copyGitInfo", label: "Copy Git Info", callback: async () => {
             copyToClipboard(`gitHash: ${gitHashShort}\ngitRemote: ${gitRemote}`);
 
-            Toasts.show({
-                message: "Copied git info to clipboard!",
-                type: Toasts.Type.SUCCESS,
-                id: Toasts.genId(),
-                options: {
-                    position: Toasts.Position.BOTTOM
-                }
+            showToast({
+                text: "Copied git info to clipboard!",
+                variant: "success",
+                position: "bottom"
             });
         }, registrar: "Equicord"
     },
@@ -144,13 +132,9 @@ export const actions: ButtonAction[] = [
                     }
                 }), 10_000);
             } else {
-                Toasts.show({
-                    message: "No updates available",
-                    type: Toasts.Type.MESSAGE,
-                    id: Toasts.genId(),
-                    options: {
-                        position: Toasts.Position.BOTTOM
-                    }
+                showToast({
+                    text: "No updates available",
+                    position: "bottom"
                 });
             }
         }, registrar: "Equicord"
@@ -181,13 +165,10 @@ function togglePlugin(plugin: ButtonAction, enabled: boolean) {
 
     Settings.plugins[plugin.id].enabled = enabled;
 
-    Toasts.show({
-        message: `Successfully ${enabled ? "enabled" : "disabled"} ${plugin.id}`,
-        type: Toasts.Type.SUCCESS,
-        id: Toasts.genId(),
-        options: {
-            position: Toasts.Position.BOTTOM
-        }
+    showToast({
+        text: `Successfully ${enabled ? "enabled" : "disabled"} ${plugin.id}`,
+        variant: "success",
+        position: "bottom"
     });
 }
 

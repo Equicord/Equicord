@@ -40,6 +40,7 @@ const UserContextMenuPatch: NavContextMenuPatchCallback = (children, { user }: U
             label="Copy User Mention"
             action={() => copyToClipboard(`<@${user.id}>`)}
             icon={MentionIcon}
+            leadingAccessory={{ type: "icon", icon: MentionIcon }}
         />
     );
 };

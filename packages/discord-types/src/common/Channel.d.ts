@@ -332,6 +332,8 @@ export class Channel extends DiscordRecord {
     isMultiUserDM(): boolean;
     /** Whether the channel is marked as NSFW. */
     isNSFW(): boolean;
+    /** Whether the channel details are obfuscated */
+    isObfuscated(): boolean;
     /**
      * Checks if the given user is the channel owner.
      * @param userId User ID to check.

@@ -1,3 +1,22 @@
+.vc-profile-presets-tab-heading {
+    margin-bottom: 16px;
+}
+
+.vc-profile-presets-section-switch {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.vc-profile-presets-guild-picker {
+    max-width: 300px;
+    margin-bottom: 16px;
+}
+
+.vc-profile-presets-empty-state {
+    color: var(--text-muted);
+}
+
 .vc-profile-presets-section {
     margin-bottom: 20px;
     padding: 0;
@@ -26,6 +45,34 @@
     width: 100%;
     max-width: 500px;
     min-width: 0;
+    height: 38px;
+    padding: 1px 12px;
+    background: transparent;
+    color: var(--text-normal);
+    border: none;
+    outline: none;
+    box-shadow: none;
+    box-sizing: border-box;
+    font-size: 16px;
+    line-height: normal;
+}
+
+.vc-profile-presets-text-input input {
+    width: 100%;
+    height: 38px;
+    padding: 1px 12px;
+    background: transparent;
+    color: var(--text-normal);
+    border: none;
+    outline: none;
+    box-shadow: none;
+    box-sizing: border-box;
+    font-size: 16px;
+    line-height: normal;
+}
+
+.vc-profile-presets-text-input input::placeholder {
+    color: var(--text-muted);
 }
 
 .vc-profile-presets-search {
@@ -69,28 +116,6 @@
     gap: 8px;
     margin-top: 12px;
     margin-bottom: 16px;
-}
-
-.vc-profile-presets-random {
-    background: linear-gradient(135deg, #ff5f6d 0%, #ffc371 50%, #8a7bff 100%);
-    color: #fff;
-    border: none;
-}
-
-.vc-profile-presets-random:hover {
-    filter: brightness(1.05);
-}
-
-.vc-profile-presets-random-content {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-}
-
-.vc-profile-presets-random-icon {
-    width: 16px;
-    height: 16px;
-    display: inline-block;
 }
 
 .vc-profile-presets-block {

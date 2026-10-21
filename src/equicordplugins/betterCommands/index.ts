@@ -12,15 +12,10 @@ import { FluxDispatcher, UserStore } from "@webpack/common";
 
 const settings = definePluginSettings({
     autoFillArguments: {
-        description: "Automatically fill command with all arguements instead of just required ones",
+        description: "Automatically fill command with all arguments instead of just required ones.",
         type: OptionType.BOOLEAN,
         default: true,
     },
-    allowNewlinesInCommands: {
-        description: "Allow newlines in command inputs (CTRL + Shift + Enter)",
-        type: OptionType.BOOLEAN,
-        default: true,
-    }
 });
 
 function fetchIndex(target: object) {
@@ -48,26 +43,6 @@ export default definePlugin({
                 },
             ]
         },
-        {
-            find: '"italics"),!0;',
-            predicate: () => settings.store.allowNewlinesInCommands,
-            replacement: [
-                {
-                    match: /case (\i\.\i)\.TAB:if\(null!=(\i).selection&&\i\((\i)(?=.{0,300}(\i\.\i\.insertText))/,
-                    replace: (orig, keys, editor, event, insertText) => {
-                        return `case ${keys}.ENTER:
-                                    if(${event}.shiftKey && ${event}.ctrlKey){
-                                        ${event}.preventDefault();
-                                        ${event}.stopPropagation();
-                                        ${insertText}(${editor},'\\n');
-                                        return true;
-                                    }
-                                    break;
-                                ${orig}`;
-                    }
-                }
-            ]
-        }
     ],
     commands: [
         {

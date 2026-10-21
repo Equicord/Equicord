@@ -23,11 +23,10 @@ import { getUserSettingLazy } from "@api/UserSettings";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { EquicordDevs } from "@utils/constants";
 import { proxyLazy } from "@utils/lazy";
-import { openModalLazy } from "@utils/modal";
 import { useForceUpdater } from "@utils/react";
 import definePlugin, { OptionType, StartAt } from "@utils/types";
 import { extractAndLoadChunksLazy, findComponentByCodeLazy, findModuleId, wreq } from "@webpack";
-import { Menu, OverridePremiumTypeStore, Toasts } from "@webpack/common";
+import { Menu, openModalLazy, OverridePremiumTypeStore, showToast } from "@webpack/common";
 
 interface Emoji {
     animated: boolean;
@@ -92,6 +91,10 @@ const StatusSubMenuComponent = () => {
                             ? () => <EmojiComponent emoji={status.emojiInfo} animate={false} hideTooltip={false} />
                             : undefined
                         }
+                        leadingAccessory={status.emojiInfo != null
+                            ? { type: "icon", icon: () => <EmojiComponent emoji={status.emojiInfo} animate={false} hideTooltip={false} /> }
+                            : undefined
+                        }
                         disabled={status.emojiInfo?.id != null && premiumType === 0}
                     >
                         <Menu.MenuItem
@@ -138,8 +141,8 @@ export default definePlugin({
         {
             find: "#{intl::STATUS_MENU_LABEL}",
             replacement: {
-                match: /(,\{onClose:\i,popoutContainerRef:\i\}\))\]/,
-                replace: "$1,$self.render()]"
+                match: /(popoutContainerRef:\i,scrollerRef:\i.{0,50}\}\))(?=\])/,
+                replace: "$1,$self.render()"
             }
         },
         {
@@ -186,11 +189,7 @@ export default definePlugin({
             style: { marginLeft: "20px" },
             onClick: () => {
                 settings.store.StatusPresets[status.text] = status;
-                Toasts.show({
-                    message: "Successfully Saved Status",
-                    type: Toasts.Type.SUCCESS,
-                    id: Toasts.genId()
-                });
+                showToast({ text: "Successfully Saved Status", variant: "success" });
             }
         };
     },

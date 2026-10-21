@@ -1,0 +1,179 @@
+/*
+ * Vencord, a Discord client mod
+ * Copyright (c) 2025 Vendicated and contributors
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+.vc-gifmaker-modal-body {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-height: 500px;
+}
+
+.vc-gifmaker-preview-section {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 0;
+    overflow: hidden;
+}
+
+.vc-gifmaker-preview-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+.vc-gifmaker-preview {
+    border-radius: 8px;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    display: block;
+}
+
+.vc-gifmaker-generating-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgb(0 0 0 / 50%);
+    border-radius: 8px;
+    color: var(--text-normal);
+    font-weight: 600;
+}
+
+.vc-gifmaker-error-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgb(0 0 0 / 50%);
+    border-radius: 8px;
+    color: var(--status-danger);
+    font-weight: 600;
+    font-size: 13px;
+    padding: 20px;
+    text-align: center;
+}
+
+.vc-gifmaker-controls-section {
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.vc-gifmaker-section-heading {
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-muted);
+    margin-top: 12px;
+    margin-bottom: 4px;
+    padding-top: 12px;
+    border-top: 1px solid var(--background-modifier-accent);
+}
+
+.vc-gifmaker-section-heading:first-of-type {
+    border-top: none;
+    margin-top: 0;
+    padding-top: 0;
+}
+
+.vc-gifmaker-preview-generating {
+    opacity: 0.5;
+}
+
+.vc-gifmaker-preview-crosshair {
+    cursor: crosshair;
+}
+
+.vc-gifmaker-label {
+    display: block;
+    margin-bottom: 4px;
+    color: var(--text-muted);
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.vc-gifmaker-input {
+    width: 100%;
+    padding: 8px 10px;
+    border-radius: 6px;
+    border: 1px solid var(--background-modifier-accent);
+    background: var(--input-background);
+    color: var(--text-normal);
+    box-sizing: border-box;
+    font-size: 14px;
+    transition: border-color .15s ease;
+}
+
+.vc-gifmaker-input:focus {
+    outline: none;
+    border-color: var(--brand-500);
+}
+
+.vc-gifmaker-dims-row {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.vc-gifmaker-field {
+    flex: 1;
+}
+
+.vc-gifmaker-section {
+    margin-bottom: 4px;
+}
+
+.vc-gifmaker-section-hint {
+    margin-bottom: 8px;
+    color: var(--text-muted);
+    font-size: 12px;
+    font-style: italic;
+}
+
+.vc-gifmaker-font-selector {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.vc-gifmaker-font-selector > div {
+    width: 100%;
+}
+
+.vc-gifmaker-font-range {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.vc-gifmaker-font-range > div:first-child {
+    min-width: 62px;
+    flex-shrink: 0;
+    font-size: 13px;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+.vc-gifmaker-font-range span {
+    min-width: 36px;
+    text-align: right;
+    font-size: 13px;
+    color: var(--text-normal);
+    font-weight: 600;
+    flex-shrink: 0;
+}
+

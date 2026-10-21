@@ -12,7 +12,7 @@ import { classNameFactory } from "@utils/css";
 import { classes } from "@utils/misc";
 import { Channel } from "@vencord/discord-types";
 import { findByPropsLazy, findCssClassesLazy } from "@webpack";
-import { ChannelRouter, ChannelStore, Parser, PermissionsBits, PermissionStore, React, showToast, Toasts, Tooltip, useMemo, UserStore, UserSummaryItem, useStateFromStores, VoiceStateStore } from "@webpack/common";
+import { ChannelRouter, ChannelStore, Parser, PermissionsBits, PermissionStore, React, showToast, Tooltip, useMemo, UserStore, UserSummaryItem, useStateFromStores, VoiceStateStore } from "@webpack/common";
 import { PropsWithChildren } from "react";
 
 const cl = classNameFactory("vc-uvs-");
@@ -118,13 +118,14 @@ export type VoiceChannelIndicatorProps = {
     userId: string;
     isMessageIndicator?: boolean;
     isProfile?: boolean;
+    isMessage?: boolean;
     isActionButton?: boolean;
     shouldHighlight?: boolean;
 };
 
 const clickTimers = new Map<string, any>();
 
-export const VoiceChannelIndicator = ErrorBoundary.wrap(({ userId, isProfile, isActionButton, shouldHighlight }: VoiceChannelIndicatorProps) => {
+export const VoiceChannelIndicator = ErrorBoundary.wrap(({ userId, isProfile, isMessage, isActionButton, shouldHighlight }: VoiceChannelIndicatorProps) => {
     const channelId = useStateFromStores([VoiceStateStore], () => VoiceStateStore.getVoiceStateForUser(userId)?.channelId);
 
     const { isMuted, isDeaf } = useStateFromStores([VoiceStateStore], () => {
@@ -154,7 +155,7 @@ export const VoiceChannelIndicator = ErrorBoundary.wrap(({ userId, isProfile, is
 
         if (e.detail > 1) {
             if (!isDM && !PermissionStore.can(PermissionsBits.CONNECT, channel)) {
-                showToast("You cannot join the user's Voice Channel", Toasts.Type.FAILURE);
+                showToast({ text: "You cannot join the user's Voice Channel", variant: "critical" });
                 return;
             }
 
@@ -194,7 +195,7 @@ export const VoiceChannelIndicator = ErrorBoundary.wrap(({ userId, isProfile, is
                         isActionButton && shouldHighlight && ActionButtonClasses.highlight,
                         cl(isProfile && "profile-speaker")
                     )}
-                    size={isActionButton ? 20 : 16}
+                    size={(isActionButton || isMessage) ? 20 : 16}
                 />
             )}
         </Tooltip>
