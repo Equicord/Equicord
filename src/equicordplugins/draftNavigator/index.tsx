@@ -9,8 +9,9 @@ import "./styles.css";
 import { ChatBarButton, ChatBarButtonFactory } from "@api/ChatButtons";
 import { Button } from "@components/Button";
 import ErrorBoundary from "@components/ErrorBoundary";
+import { NotesIcon as DraftIcon } from "@components/Icons";
 import { EquicordDevs } from "@utils/constants";
-import definePlugin, { IconComponent } from "@utils/types";
+import definePlugin from "@utils/types";
 import type { Channel, RenderModalProps } from "@vencord/discord-types";
 import { ChannelRouter, ChannelStore, closeModal, DraftStore, DraftType, GuildStore, lodash, Modal, openModal, TextInput, UserStore, useState, useStateFromStores } from "@webpack/common";
 
@@ -29,13 +30,6 @@ interface DraftRowProps {
     draft: DraftEntry;
     onClose: () => void;
 }
-
-const DraftIcon: IconComponent = ({ width = 24, height = 24, className }) => (
-    <svg width={width} height={height} className={className} viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        <path d="M13 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-8M16 3l5 5M10 14l2-5 6-6a2.12 2.12 0 0 1 3 3l-6 6-5 2Z" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
-        <path d="M7 17h10" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
-    </svg>
-);
 
 function getChannelDetails(channel: Channel | undefined, channelId: string) {
     // keeps drafts visible even when their channels arent loaded
@@ -143,7 +137,7 @@ const DraftChatBarButton = ErrorBoundary.wrap<Parameters<ChatBarButtonFactory>[0
     if (!isAnyChat) return null;
     return (
         <ChatBarButton tooltip="Draft Navigator" onClick={openDraftNavigator}>
-            <DraftIcon />
+            <DraftIcon width={20} height={20} />
         </ChatBarButton>
     );
 }, { noop: true });
