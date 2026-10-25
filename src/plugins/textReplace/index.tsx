@@ -29,9 +29,11 @@ import { TooltipContainer } from "@components/TooltipContainer";
 import { Devs, EquicordDevs, SUPPORT_CHANNEL_IDS } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
 import { Logger } from "@utils/Logger";
+import { isObject, sleep } from "@utils/misc";
 import definePlugin, { OptionType } from "@utils/types";
+import { chooseFile, saveFile } from "@utils/web";
 import { Message } from "@vencord/discord-types";
-import { React, Select, TextInput, UserStore, useState } from "@webpack/common";
+import { React, Select, showToast, TextInput, UserStore, useState } from "@webpack/common";
 
 const cl = classNameFactory("vc-textReplace-");
 
@@ -66,30 +68,12 @@ const makeEmptyRule: () => Rule = () => ({
 });
 
 const makeEmptyRuleArray = () => [makeEmptyRule()];
+const RULE_SETTINGS: ("stringRules" | "regexRules")[] = ["stringRules", "regexRules"];
 
 const settings = definePluginSettings({
     replace: {
         type: OptionType.COMPONENT,
-        component: () => {
-            const { stringRules, regexRules } = settings.use(["stringRules", "regexRules"]);
-
-            return (
-                <>
-                    <TextReplaceTesting />
-                    <TextReplace
-                        title="Simple Replacements"
-                        description="Simple find and replace rules. For example, find 'brb' and replace it with 'be right back'"
-                        rulesArray={stringRules}
-                    />
-                    <TextReplace
-                        title="Regex Replacements"
-                        description="More powerful replacements using Regular Expressions. This section is for advanced users. If you don't understand it, just ignore it"
-                        rulesArray={regexRules}
-                        isRegex
-                    />
-                </>
-            );
-        }
+        component: TextReplaceSettings
     },
     stringRules: {
         type: OptionType.CUSTOM,
@@ -102,6 +86,79 @@ const settings = definePluginSettings({
         description: "Rules for replacing text using regular expressions."
     }
 });
+
+function TextReplaceSettings() {
+    const { stringRules, regexRules } = settings.use(RULE_SETTINGS);
+
+    return (
+        <>
+            <HeadingSecondary>Import and Export</HeadingSecondary>
+            <Paragraph>Export your rules as a JSON file or import rules to add them to your existing rules.</Paragraph>
+            <Flex>
+                <Button onClick={exportRules}>Export JSON</Button>
+                <Button onClick={importRules}>Import JSON</Button>
+            </Flex>
+            <TextReplaceTesting />
+            <TextReplace
+                title="Simple Replacements"
+                description="Simple find and replace rules. For example, find 'brb' and replace it with 'be right back'"
+                rulesArray={stringRules}
+            />
+            <TextReplace
+                title="Regex Replacements"
+                description="More powerful replacements using Regular Expressions. This section is for advanced users. If you don't understand it, just ignore it"
+                rulesArray={regexRules}
+                isRegex
+            />
+        </>
+    );
+}
+
+async function exportRules() {
+    await sleep(0);
+    const { stringRules, regexRules } = settings.plain;
+    const json = JSON.stringify({ stringRules, regexRules }, null, 4);
+    saveFile(new File([json], "textreplace-rules.json", { type: "application/json" }));
+}
+
+async function importRules() {
+    try {
+        const file = await chooseFile(".json,application/json");
+        if (!file) return;
+
+        const data: unknown = JSON.parse(await file.text());
+        if (!isObject(data) || !("stringRules" in data) || !("regexRules" in data)) {
+            throw new Error("The file must contain simple and regex rule lists.");
+        }
+
+        const [stringRules, regexRules] = [data.stringRules, data.regexRules].map((rules: unknown) => {
+            if (!Array.isArray(rules)) throw new Error("The rule lists must be arrays.");
+
+            return rules.map((rule: unknown): Rule => {
+                if (!isObject(rule)
+                    || !("find" in rule) || typeof rule.find !== "string"
+                    || !("replace" in rule) || typeof rule.replace !== "string"
+                    || !("onlyIfIncludes" in rule) || typeof rule.onlyIfIncludes !== "string") {
+                    throw new Error("Each rule must contain text to find, replacement text and a condition.");
+                }
+
+                const name = "name" in rule ? rule.name : "";
+                const scope = "scope" in rule ? rule.scope : "myMessages";
+                if (typeof name !== "string" || (scope !== "myMessages" && scope !== "othersMessages" && scope !== "allMessages")) {
+                    throw new Error("A rule has an invalid name or message scope.");
+                }
+
+                return { name, find: rule.find, replace: rule.replace, onlyIfIncludes: rule.onlyIfIncludes, scope, id: crypto.randomUUID() };
+            });
+        });
+
+        settings.store.stringRules = [...settings.plain.stringRules, ...stringRules];
+        settings.store.regexRules = [...settings.plain.regexRules, ...regexRules];
+        showToast({ text: "Rules imported successfully.", variant: "success" });
+    } catch {
+        showToast({ text: "Could not import rules. Choose a valid TextReplace JSON file.", variant: "critical" });
+    }
+}
 
 function stringToRegex(str: string) {
     const match = str.match(/^(\/)?(.+?)(?:\/([gimsuyv]*))?$/); // Regex to match regex
@@ -425,7 +482,7 @@ export default definePlugin({
     description: "Replace text in your messages. You can find pre-made rules in the #textreplace-rules channel in Vencord's Server",
     dependencies: ["MessagePopoverAPI"],
     tags: ["Chat", "Customisation", "Utility"],
-    authors: [Devs.AutumnVN, Devs.TheKodeToad, EquicordDevs.Etorix, EquicordDevs.Ape],
+    authors: [Devs.AutumnVN, Devs.TheKodeToad, EquicordDevs.Etorix, EquicordDevs.Ape, EquicordDevs.rot],
     isModified: true,
     settings,
     modifyIncomingMessage,
