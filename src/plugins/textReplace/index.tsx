@@ -92,12 +92,6 @@ function TextReplaceSettings() {
 
     return (
         <>
-            <HeadingSecondary>Import and Export</HeadingSecondary>
-            <Paragraph>Export your rules as a JSON file or import rules to add them to your existing rules.</Paragraph>
-            <Flex>
-                <Button onClick={exportRules}>Export JSON</Button>
-                <Button onClick={importRules}>Import JSON</Button>
-            </Flex>
             <TextReplaceTesting />
             <TextReplace
                 title="Simple Replacements"
@@ -110,7 +104,21 @@ function TextReplaceSettings() {
                 rulesArray={regexRules}
                 isRegex
             />
+            <TextReplaceImportExport />
         </>
+    );
+}
+
+function TextReplaceImportExport() {
+    return (
+        <div>
+            <HeadingSecondary>Import and Export</HeadingSecondary>
+            <Paragraph>Export your rules as a JSON file or import rules to add them to your existing rules.</Paragraph>
+            <Flex className={cl("import-export-buttons")}>
+                <Button onClick={exportRules}>Export JSON</Button>
+                <Button onClick={importRules}>Import JSON</Button>
+            </Flex>
+        </div>
     );
 }
 
