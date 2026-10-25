@@ -16,7 +16,7 @@ let updateFunc = (v: any) => { };
 
 export default definePlugin({
     name: "BetterBlockedUsers",
-    description: "Allows you to search in blocked users list, make names selectable in settings, and skips the profile prompt when opening blocked users.",
+    description: "Allows you to search in blocked users list, make names selectable in settings, and skips the profile prompt when opening blocked users profiles.",
     tags: ["Appearance", "Shortcuts"],
     authors: [EquicordDevs.TheArmagan],
     patches: [
