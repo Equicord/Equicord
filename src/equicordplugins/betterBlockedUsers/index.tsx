@@ -21,7 +21,7 @@ export default definePlugin({
     authors: [EquicordDevs.TheArmagan],
     patches: [
         {
-            // skips the profile prompt allowing the user to via blocked profiles without hitting yes everytime
+            // skips the profile prompt allowing the user to view blocked profiles without hitting yes everytime
             find: "useSetting(),{isBlocked:",
             replacement: {
                 match: /(?<=isBlocked:)\i\.\i\.isBlocked\(\i\)/,
