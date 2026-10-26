@@ -255,7 +255,7 @@
     },
     "cloud": {
         "integrations": {
-            "enabled": "เปิดใช้งานการรวมระบบคลาวด์แล้ว!",
+            "enabled": "เปิดใช้งานการเชื่อมต่อคลาวด์แล้ว!",
             "error": "การตั้งค่าล้มเหลว ({e})",
             "failedToRetrieveOAuth": "การตั้งค่าล้มเหลว (ไม่สามารถเรียกข้อมูลการกำหนดค่า OAuth)",
             "header": "บูรณาการระบบคลาวด์",
@@ -450,14 +450,26 @@
     },
     "decor": {
         "accessFromProfiles": "คุณยังสามารถเข้าถึงการตกแต่งได้จากหน้า {link}",
+        "apply": "นำไปใช้",
+        "browse": "เรียกดู",
         "changeDecoration": "เปลี่ยนการตกแต่ง",
+        "chooseAFile": "เลือกไฟล์",
+        "continue": "ดำเนินการต่อ",
+        "copyPresetId": "คัดลอก Preset ID",
+        "createdBy": "สร้างโดย",
         "delete": "ลบ",
         "deleteConfirm": "คุณต้องการลบชื่อหรือไม่",
         "description": "สร้างและใช้การตกแต่งอวตารที่คุณกำหนดเอง หรือเลือกสิ่งที่คุณชื่นชอบจากพรีเซ็ต",
         "enableAndRestart": "เปิดใช้งานการตกแต่งและรีสตาร์ทไคลเอนต์ของคุณเพื่อเปลี่ยนการตกแต่งอวตารของคุณ",
+        "file": "ไฟล์",
+        "fileNotice": "ไฟล์ควรเป็น APNG หรือ PNG",
+        "logOut": "ออกจากระบบ",
+        "name": "ชื่อ",
         "options": "การตกแต่ง",
+        "pendingReview": "อยู่ระหว่างตรวจสอบ",
         "profilesLink": "โปรไฟล์",
         "removeDecoration": "ลบการตกแต่ง",
+        "theGuidelines": "คู่มือ",
         "title": "ตกแต่ง"
     },
     "devCompanion": {
@@ -505,7 +517,8 @@
     },
     "expressionCloner": {
         "cloneEmoji": "โคลนอีโมจิ",
-        "cloneSticker": "สติ๊กเกอร์โคลน",
+        "cloneName": "ทำสำเนา {name}",
+        "cloneSticker": "ทำสำเนา Sticker",
         "cloneTo": "โคลนไปที่ {guild}",
         "clonedSuccess": "โคลน {name} เป็น {guild} สำเร็จแล้ว!",
         "customName": "ชื่อที่กำหนดเอง",
@@ -531,6 +544,7 @@
             "body3": "คุณแน่ใจหรือไม่ว่าต้องการส่งข้อความนี้? รายการ FakeNitro ของคุณจะปรากฏเป็นลิงก์เท่านั้น",
             "disableNotice": "คุณสามารถปิดการใช้งานประกาศนี้ได้ในการตั้งค่าปลั๊กอิน"
         },
+        "ok": "ตกลง",
         "sendAnyway": "ส่งยังไงก็ได้",
         "settings": {
             "disableEmbedPermissionCheck": "ว่าจะปิดการใช้งานการตรวจสอบสิทธิ์การฝังเมื่อส่งอิโมจิและสติ๊กเกอร์ปลอมหรือไม่",
@@ -1425,6 +1439,7 @@
         "nevermind": "ไม่เป็นไร",
         "newReviews": "คุณมีบทวิจารณ์ใหม่ในโปรไฟล์ของคุณ!",
         "noBlockedUsers": "ไม่มีผู้ใช้ที่ถูกบล็อก",
+        "noReviewsYet": "ยังไม่มีการรีวิว",
         "notLoggedIn": "คุณไม่ได้เข้าสู่ระบบ ReviewDB!",
         "ok": "ตกลง",
         "readMore": "อ่านเพิ่มเติม",
@@ -1450,6 +1465,7 @@
         },
         "system": "ระบบ",
         "unblockUser": "เลิกบล็อกผู้ใช้",
+        "userReviews": "รีวิวจากผู้ใช้",
         "viewReviews": "ดูรีวิว"
     },
     "roleColorEverywhere": {
@@ -1857,6 +1873,7 @@
             "membersListIndicators": "ตัวชี้วัดรายชื่อสมาชิก",
             "silentTyping": "การพิมพ์แบบเงียบ"
         },
+        "description": "ซ่อนตัวแสดงสถานะขณะพิมพ์",
         "noChanges": "ไม่มีการเปลี่ยนแปลงการตั้งค่าการพิมพ์แบบเงียบ",
         "settings": {
             "chatContextMenu": "แสดงเมนูแบบเลื่อนลงในเมนูบริบทของแชทเพื่อแก้ไขการตั้งค่าปลั๊กอินขณะเดินทาง",
@@ -1923,12 +1940,14 @@
     },
     "textReplace": {
         "find": "ค้นหา",
+        "findDesc": "ข้อความที่จะแทนที่",
         "messageWithRules": "ข้อความที่มีการใช้กฎเกณฑ์",
         "onlyIfIncludes": "เฉพาะในกรณีที่มี",
         "replace": "แทนที่",
         "scope.allMessages": "นำไปใช้กับข้อความทั้งหมด",
         "scope.myMessages": "ใช้กับข้อความของคุณ (ทุกคนมองเห็นได้)",
         "scope.othersMessages": "ใช้กับข้อความของผู้อื่น (มองเห็นได้เฉพาะคุณเท่านั้น)",
+        "testMessage": "พิมพ์ข้อความเพื่อทดสอบ",
         "testRules": "กฎการทดสอบ",
         "typeMessage": "พิมพ์ข้อความ",
         "usingRegex": "การใช้ Regex",
@@ -1944,6 +1963,7 @@
             "title": "Equicord เปิดใช้งานการแปลอัตโนมัติ"
         },
         "autoTranslateEnabledLabel": "เปิดใช้งานการแปลอัตโนมัติแล้ว",
+        "description": "แปลข้อความด้วย Google Translate หรือ DeepL",
         "disableAutoTranslate": "ปิดใช้งานการแปลอัตโนมัติ",
         "dontShowAgain": "อย่าแสดงอีก",
         "gotIt": "เข้าใจแล้ว",
