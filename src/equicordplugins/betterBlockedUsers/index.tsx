@@ -11,15 +11,45 @@ import { getIntlMessage, openUserProfile } from "@utils/discord";
 import definePlugin from "@utils/types";
 import { Button, React, RelationshipStore, TextInput, UserStore } from "@webpack/common";
 
+interface ChannelStreamItem {
+    type: string;
+    content?: unknown;
+    hasUnread?: boolean;
+    hasJumpTarget?: boolean;
+    mixed?: boolean;
+}
+
+function isHiddenGroup(item: ChannelStreamItem | undefined): item is ChannelStreamItem & { content: unknown[]; } {
+    return item?.type === "MESSAGE_GROUP_BLOCKED" || item?.type === "MESSAGE_GROUP_IGNORED";
+}
+
 let lastSearch = "";
 let updateFunc = (v: any) => { };
 
 export default definePlugin({
     name: "BetterBlockedUsers",
-    description: "Allows you to search in blocked users list, make names selectable in settings, and skips the profile prompt when opening blocked users profiles.",
+    description: "Allows you to search in blocked users list, make names selectable in settings, skips blocked profile prompt, and groups blocked / ignored messages.",
     tags: ["Appearance", "Shortcuts"],
     authors: [EquicordDevs.TheArmagan],
     patches: [
+        {
+            find: "`forum-post-action-bar-",
+            group: true,
+            replacement: [
+                {
+                    match: /(?<=\i=)(\i)(?=\.map\(\(\i,\i\)=>\{if\(\i\.type===\i\.\i\.DIVIDER\))/,
+                    replace: "($1=$self.mergeHiddenMessages($1))"
+                },
+                {
+                    match: /(?=canUncollapse:\i\},"collapsed-message-item")/,
+                    replace: "mixed:arguments[0].messages.mixed,"
+                },
+                {
+                    match: /(?<=children:\[)\i\.intl\.format\(\i,\{count:\i\}\)(?=,\i&&)/,
+                    replace: "arguments[0].mixed?arguments[0].count+' blocked/ignored messages':$&"
+                }
+            ]
+        },
         {
             // skips the profile prompt allowing the user to view blocked profiles without hitting yes everytime
             find: "useSetting(),{isBlocked:",
@@ -51,6 +81,23 @@ export default definePlugin({
             ]
         }
     ],
+    mergeHiddenMessages(stream: ChannelStreamItem[]) {
+        const merged: ChannelStreamItem[] = [];
+
+        for (const item of stream) {
+            const previous = merged.at(-1);
+            if (isHiddenGroup(item) && isHiddenGroup(previous)) {
+                previous.content.push(...item.content);
+                previous.hasUnread ||= item.hasUnread;
+                previous.hasJumpTarget ||= item.hasJumpTarget;
+                previous.mixed ||= item.mixed || previous.type !== item.type;
+            } else {
+                merged.push(isHiddenGroup(item) ? { ...item, content: [...item.content] } : item);
+            }
+        }
+
+        return merged;
+    },
     renderSearchInput() {
         const [value, setValue] = React.useState(lastSearch);
 
