@@ -16,7 +16,6 @@ interface ChannelStreamItem {
     content?: unknown;
     hasUnread?: boolean;
     hasJumpTarget?: boolean;
-    mixed?: boolean;
 }
 
 function isHiddenGroup(item: ChannelStreamItem | undefined): item is ChannelStreamItem & { content: unknown[]; } {
@@ -34,21 +33,10 @@ export default definePlugin({
     patches: [
         {
             find: "`forum-post-action-bar-",
-            group: true,
-            replacement: [
-                {
-                    match: /(?<=\i=)(\i)(?=\.map\(\(\i,\i\)=>\{if\(\i\.type===\i\.\i\.DIVIDER\))/,
-                    replace: "($1=$self.mergeHiddenMessages($1))"
-                },
-                {
-                    match: /(?=canUncollapse:\i\},"collapsed-message-item")/,
-                    replace: "mixed:arguments[0].messages.mixed,"
-                },
-                {
-                    match: /(?<=children:\[)\i\.intl\.format\(\i,\{count:\i\}\)(?=,\i&&)/,
-                    replace: "arguments[0].mixed?arguments[0].count+' blocked/ignored messages':$&"
-                }
-            ]
+            replacement: {
+                match: /(?<=\i=)(\i)(?=\.map\(\(\i,\i\)=>\{if\(\i\.type===\i\.\i\.DIVIDER\))/,
+                replace: "($1=$self.mergeHiddenMessages($1))"
+            }
         },
         {
             // skips the profile prompt allowing the user to view blocked profiles without hitting yes everytime
@@ -83,16 +71,22 @@ export default definePlugin({
     ],
     mergeHiddenMessages(stream: ChannelStreamItem[]) {
         const merged: ChannelStreamItem[] = [];
+        let groups: Record<string, ChannelStreamItem & { content: unknown[]; }> = {};
 
         for (const item of stream) {
-            const previous = merged.at(-1);
-            if (isHiddenGroup(item) && isHiddenGroup(previous)) {
+            if (!isHiddenGroup(item)) {
+                groups = {};
+                merged.push(item);
+                continue;
+            }
+
+            const previous = groups[item.type];
+            if (previous) {
                 previous.content.push(...item.content);
                 previous.hasUnread ||= item.hasUnread;
                 previous.hasJumpTarget ||= item.hasJumpTarget;
-                previous.mixed ||= item.mixed || previous.type !== item.type;
             } else {
-                merged.push(isHiddenGroup(item) ? { ...item, content: [...item.content] } : item);
+                merged.push(groups[item.type] = { ...item, content: [...item.content] });
             }
         }
 
