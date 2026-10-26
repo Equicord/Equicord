@@ -29,7 +29,6 @@ import { TooltipContainer } from "@components/TooltipContainer";
 import { Devs, EquicordDevs, SUPPORT_CHANNEL_IDS } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
 import { Logger } from "@utils/Logger";
-import { isObject, sleep } from "@utils/misc";
 import definePlugin, { OptionType } from "@utils/types";
 import { chooseFile, saveFile } from "@utils/web";
 import { Message } from "@vencord/discord-types";
@@ -73,7 +72,27 @@ const RULE_SETTINGS: ("stringRules" | "regexRules")[] = ["stringRules", "regexRu
 const settings = definePluginSettings({
     replace: {
         type: OptionType.COMPONENT,
-        component: TextReplaceSettings
+        component: () => {
+            const { stringRules, regexRules } = settings.use(["stringRules", "regexRules"]);
+
+            return (
+                <>
+                    <TextReplaceTesting />
+                    <TextReplace
+                        title="Simple Replacements"
+                        description="Simple find and replace rules. For example, find 'brb' and replace it with 'be right back'"
+                        rulesArray={stringRules}
+                    />
+                    <TextReplace
+                        title="Regex Replacements"
+                        description="More powerful replacements using Regular Expressions. This section is for advanced users. If you don't understand it, just ignore it"
+                        rulesArray={regexRules}
+                        isRegex
+                    />
+                    <TextReplaceImportExport />
+                </>
+            );
+        }
     },
     stringRules: {
         type: OptionType.CUSTOM,
@@ -86,28 +105,6 @@ const settings = definePluginSettings({
         description: "Rules for replacing text using regular expressions."
     }
 });
-
-function TextReplaceSettings() {
-    const { stringRules, regexRules } = settings.use(RULE_SETTINGS);
-
-    return (
-        <>
-            <TextReplaceTesting />
-            <TextReplace
-                title="Simple Replacements"
-                description="Simple find and replace rules. For example, find 'brb' and replace it with 'be right back'"
-                rulesArray={stringRules}
-            />
-            <TextReplace
-                title="Regex Replacements"
-                description="More powerful replacements using Regular Expressions. This section is for advanced users. If you don't understand it, just ignore it"
-                rulesArray={regexRules}
-                isRegex
-            />
-            <TextReplaceImportExport />
-        </>
-    );
-}
 
 function TextReplaceImportExport() {
     return (
@@ -122,48 +119,32 @@ function TextReplaceImportExport() {
     );
 }
 
-async function exportRules() {
-    await sleep(0);
+function exportRules() {
     const { stringRules, regexRules } = settings.plain;
-    const json = JSON.stringify({ stringRules, regexRules }, null, 4);
-    saveFile(new File([json], "textreplace-rules.json", { type: "application/json" }));
+    const json = JSON.stringify({ stringRules, regexRules }, (key, value) => key === "id" ? undefined : value, 4);
+
+    if (IS_DISCORD_DESKTOP) DiscordNative.fileManager.saveWithDialog(new TextEncoder().encode(json), "textreplace-rules.json");
+    else saveFile(new File([json], "textreplace-rules.json", { type: "application/json" }));
 }
 
 async function importRules() {
-    try {
-        const file = await chooseFile(".json,application/json");
-        if (!file) return;
+    const file = await chooseFile("application/json");
+    if (!file) return;
 
-        const data: unknown = JSON.parse(await file.text());
-        if (!isObject(data) || !("stringRules" in data) || !("regexRules" in data)) {
-            throw new Error("The file must contain simple and regex rule lists.");
+    try {
+        const data = JSON.parse(await file.text());
+
+        for (const key of RULE_SETTINGS) {
+            const imported = (data[key] ?? [])
+                .filter((rule: Rule) => typeof rule?.find === "string" && rule.find)
+                .map((rule: Rule) => ({ ...makeEmptyRule(), ...rule, id: crypto.randomUUID() }));
+
+            settings.store[key] = [...settings.plain[key].filter(rule => !isEmptyRule(rule)), ...imported, makeEmptyRule()];
         }
 
-        const [stringRules, regexRules] = [data.stringRules, data.regexRules].map((rules: unknown) => {
-            if (!Array.isArray(rules)) throw new Error("The rule lists must be arrays.");
-
-            return rules.map((rule: unknown): Rule => {
-                if (!isObject(rule)
-                    || !("find" in rule) || typeof rule.find !== "string"
-                    || !("replace" in rule) || typeof rule.replace !== "string"
-                    || !("onlyIfIncludes" in rule) || typeof rule.onlyIfIncludes !== "string") {
-                    throw new Error("Each rule must contain text to find, replacement text and a condition.");
-                }
-
-                const name = "name" in rule ? rule.name : "";
-                const scope = "scope" in rule ? rule.scope : "myMessages";
-                if (typeof name !== "string" || (scope !== "myMessages" && scope !== "othersMessages" && scope !== "allMessages")) {
-                    throw new Error("A rule has an invalid name or message scope.");
-                }
-
-                return { name, find: rule.find, replace: rule.replace, onlyIfIncludes: rule.onlyIfIncludes, scope, id: crypto.randomUUID() };
-            });
-        });
-
-        settings.store.stringRules = [...settings.plain.stringRules, ...stringRules];
-        settings.store.regexRules = [...settings.plain.regexRules, ...regexRules];
         showToast({ text: "Rules imported successfully.", variant: "success" });
-    } catch {
+    } catch (err) {
+        new Logger("TextReplace").error("Failed to import rules:", err);
         showToast({ text: "Could not import rules. Choose a valid TextReplace JSON file.", variant: "critical" });
     }
 }
