@@ -119,12 +119,15 @@ interface PlatformIndicatorProps {
     isMemberList?: boolean;
 }
 
+const settingsKeys: Array<keyof typeof settings.store> = ["ignoreSelf"];
+
 const PlatformIndicator = ({ user, isProfile, isMessage, isMemberList }: PlatformIndicatorProps) => {
+    const { ignoreSelf } = settings.use(settingsKeys);
     if (user == null || (user.bot && !settings.store.showBots)) return null;
     useEnsureOwnStatus(user);
 
     const status = useStateFromStores([PresenceStore], () => PresenceStore.getClientStatus(user.id));
-    if (!status) return null;
+    if (!status || (ignoreSelf && user.id === AuthenticationStore.getId())) return null;
 
     const icons = Array.from(Object.entries(status), ([platform, status]) => (
         <PlatformIcon
@@ -157,6 +160,11 @@ const settings = definePluginSettings({
         type: OptionType.BOOLEAN,
         description: "Show indicators in user profiles",
         default: true,
+    },
+    ignoreSelf: {
+        type: OptionType.BOOLEAN,
+        description: "Hide your own platform indicators in profiles, messages, and the member list.",
+        default: false,
     },
     messages: {
         type: OptionType.BOOLEAN,
