@@ -6,29 +6,42 @@
 
 import "./styles.css";
 
+import { definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
-import definePlugin from "@utils/types";
+import definePlugin, { OptionType } from "@utils/types";
 import { findComponentByCodeLazy } from "@webpack";
-import { PrivateChannelSortStore, TypingStore, UserStore, useStateFromStores } from "@webpack/common";
+import { PrivateChannelSortStore, TypingStore, UserGuildSettingsStore, UserStore, useStateFromStores } from "@webpack/common";
 
 const cl = classNameFactory("vc-home-typing-");
 
 const ThreeDots = findComponentByCodeLazy("Math.min(1,Math.max(", "dotRadius:");
+
+const settings = definePluginSettings({
+    ignoreMutedChannels: {
+        type: OptionType.BOOLEAN,
+        description: "Hide the home typing indicator for muted DMs and group DMs.",
+        default: true
+    }
+});
+const settingsKeys: Array<keyof typeof settings.store> = ["ignoreMutedChannels"];
 
 export default definePlugin({
     name: "HomeTyping",
     description: "Changes the home button to a typing indicator if someone in your dms is typing",
     tags: ["Chat"],
     authors: [Devs.Samwich],
+    settings,
     TypingIcon() {
         return <ThreeDots className={cl("dots")} dotRadius={3} themed={true} />;
     },
     isTyping() {
-        return useStateFromStores([TypingStore], () =>
+        const { ignoreMutedChannels } = settings.use(settingsKeys);
+        return useStateFromStores([TypingStore, PrivateChannelSortStore, UserGuildSettingsStore, UserStore], () =>
             PrivateChannelSortStore.getPrivateChannelIds().some(id =>
-                Object.keys(TypingStore.getTypingUsers(id)).some(userId => userId !== UserStore.getCurrentUser().id)
-            )
+                (!ignoreMutedChannels || !UserGuildSettingsStore.isChannelMuted(null, id))
+                && Object.keys(TypingStore.getTypingUsers(id)).some(userId => userId !== UserStore.getCurrentUser().id)
+            ), [ignoreMutedChannels]
         );
     },
     patches: [
