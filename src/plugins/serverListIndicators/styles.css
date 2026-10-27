@@ -14,10 +14,3 @@
     gap: 4px;
     box-sizing: border-box;
 }
-
-#vc-friendcount-icon,
-#vc-guildcount-icon {
-    color: var(--text-default);
-    width: 12px;
-    height: 12px;
-}

@@ -21,8 +21,7 @@ import "./styles.css";
 import { addServerListElement, removeServerListElement, ServerListItem, ServerListRenderPosition } from "@api/ServerList";
 import { definePluginSettings } from "@api/Settings";
 import { BaseText } from "@components/BaseText";
-import { FriendsIcon } from "@equicordplugins/channelTabs/util";
-import { ServerIcon } from "@equicordplugins/commandPalette/ui/icons";
+import { FriendsIcon, ServerIcon } from "@components/Icons";
 import { Devs, EquicordDevs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
 import definePlugin, { OptionType } from "@utils/types";
@@ -56,7 +55,7 @@ function FriendsIndicator() {
 
     return (
         <div id="vc-friendcount">
-            {!settings.store.useCompact && <FriendsIcon/>}
+            {!settings.store.useCompact && <FriendsIcon width="12px" height="12px" />}
             <BaseText size="xs" id="vc-friendcount-text">{onlineFriendsCount}</BaseText>
             {!!settings.store.useCompact && <BaseText size="xs" id="vc-friendcount-text-compact">Friends</BaseText>}
         </div>
@@ -74,7 +73,7 @@ function ServersIndicator() {
 
     return (
         <div id="vc-guildcount">
-            {!settings.store.useCompact && <ServerIcon/>}
+            {!settings.store.useCompact && <ServerIcon width="12px" height="12px"/>}
             <BaseText size="xs" id="vc-guildcount-text">{guildCount}</BaseText>
             {!!settings.store.useCompact && <BaseText size="xs" id="vc-guildcount-text-compact">Servers</BaseText>}
         </div>
