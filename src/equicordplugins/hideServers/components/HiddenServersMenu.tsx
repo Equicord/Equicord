@@ -5,14 +5,15 @@
  */
 
 import { BaseText } from "@components/BaseText";
-import { Heading } from "@components/Heading";
+import { Button, TextButton } from "@components/Button";
+import { XSmallIcon } from "@components/Icons";
 import { HiddenServersStore } from "@equicordplugins/hideServers/HiddenServersStore";
 import { classNameFactory } from "@utils/css";
 import { getGuildAcronym } from "@utils/discord";
 import { classes } from "@utils/misc";
 import { Guild, RenderModalProps } from "@vencord/discord-types";
 import { findCssClassesLazy } from "@webpack";
-import { Button, closeModal, IconUtils, Modal, openModal, SortedGuildStore, useStateFromStores } from "@webpack/common";
+import { closeModal, IconUtils, Modal, openModal, SortedGuildStore, useStateFromStores } from "@webpack/common";
 
 const cl = classNameFactory("vc-hideservers-");
 const IconClasses = findCssClassesLazy("icon", "acronym", "childWrapper");
@@ -54,8 +55,6 @@ function GuildRow({ guild }) {
                 {guild.icon ? (
                     <img
                         alt=""
-                        height="48"
-                        width="48"
                         src={IconUtils.getGuildIconURL({
                             id: guild.id,
                             icon: guild.icon,
@@ -72,16 +71,38 @@ function GuildRow({ guild }) {
                     </div>
                 )}
             </div>
-            <Heading className={cl("name")}>
+            <BaseText size="md" weight="medium" className={cl("name")}>
                 {guild.name}
-            </Heading>
-            <Button
-                className="row-button"
-                color={Button.Colors.PRIMARY}
-                onClick={() => restoreGuild(guild, SortedGuildStore)}
-            >
-                Remove
-            </Button>
+            </BaseText>
+            <TextButton variant="danger" >
+                <XSmallIcon/>
+            </TextButton>
+        </div>
+    );
+}
+
+function Group({ folderName, guilds }) {
+    return (
+        <div className={cl("folder-group")}>
+            <div className={cl("folder-header")}>
+                <BaseText size="md" weight="medium">{folderName || "Folder"}</BaseText>
+                <Button
+                    variant="dangerSecondary"
+                    onClick={() => {
+                        guilds.forEach(g => restoreGuild(g, SortedGuildStore));
+                    }}
+                    size="medium"
+                    className={cl("restore-all")}
+                >
+                    Remove All
+                </Button>
+            </div>
+            {guilds.map(guild => (
+                <GuildRow
+                    key={guild.id}
+                    guild={guild}
+                />
+            ))}
         </div>
     );
 }
@@ -107,39 +128,22 @@ export function HiddenServersMenu({ guilds }: { guilds: Guild[]; }) {
             if (!folder) return null;
 
             return (
-                <div key={folderId} className={cl("folder")}>
-                    <div className={cl("folder-header")}>
-                        <BaseText size="sm" weight="medium">{folder.folderName || "Folder"}</BaseText>
-                        <Button
-                            color={Button.Colors.PRIMARY}
-                            onClick={() => {
-                                folderGuilds.forEach(g => restoreGuild(g, SortedGuildStore));
-                            }}
-                            size={Button.Sizes.SMALL}
-                            className={cl("restore-all")}
-                        >
-                            Remove All
-                        </Button>
-                    </div>
-                    {folderGuilds.map(guild => (
-                        <GuildRow
-                            key={guild.id}
-                            guild={guild}
-                        />
-                    ))}
-                </div>
+                <Group
+                    key={folderId}
+                    folderName={folder.folderName}
+                    guilds={folderGuilds}
+                />
             );
         })}
 
-        <BaseText size="sm" weight="medium">Guilds</BaseText>
-        {guildsWithoutFolder.map(guild => (
-            <GuildRow
-                key={guild.id}
-                guild={guild}
+        {guildsWithoutFolder.length > 0 ? (
+            <Group
+                folderName="Guilds"
+                guilds={guildsWithoutFolder}
             />
-        ))}
+        ) : null}
 
-        {hiddenGuilds.length === 0 && <BaseText size="sm" weight="medium">No hidden servers</BaseText>}
+        {hiddenGuilds.length === 0 && <BaseText size="md" weight="medium">No hidden servers</BaseText>}
     </div>;
 }
 
