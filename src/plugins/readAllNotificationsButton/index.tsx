@@ -17,6 +17,7 @@
 */
 
 import { addServerListElement, removeServerListElement, ServerListItem, ServerListRenderPosition } from "@api/ServerList";
+import { DoubleCheckmarkIcon } from "@components/Icons";
 import { Devs, EquicordDevs } from "@utils/constants";
 import definePlugin from "@utils/types";
 import { ActiveJoinedThreadsStore, FluxDispatcher, GuildChannelStore, GuildStore, React, ReadStateStore } from "@webpack/common";
@@ -49,29 +50,6 @@ function onClick() {
     });
 }
 
-const DoubleCheckmark = () => {
-    return (
-        <svg
-            id="vc-ranb-icon"
-            aria-hidden="true"
-            role="img"
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            fill="none"
-            viewBox="0 0 24 24">
-            <path
-                fill="currentColor"
-                d="M16.7 8.7a1 1 0 0 0-1.4-1.4l-3.26 3.24a1 1 0 0 0 1.42 1.42L16.7 8.7ZM3.7 11.3a1 1 0 0 0-1.4 1.4l4.5 4.5a1 1 0 0 0 1.4-1.4l-4.5-4.5Z">
-            </path>
-            <path
-                fill="currentColor"
-                d="M21.7 9.7a1 1 0 0 0-1.4-1.4L13 15.58l-3.3-3.3a1 1 0 0 0-1.4 1.42l4 4a1 1 0 0 0 1.4 0l8-8Z">
-            </path>
-        </svg>
-    );
-};
-
 export default definePlugin({
     name: "ReadAllNotificationsButton",
     description: "Read all server notifications with a single button click!",
@@ -83,7 +61,7 @@ export default definePlugin({
         return (
             <ServerListItem
                 id="vc-ranb-button-container"
-                icon={DoubleCheckmark}
+                icon={DoubleCheckmarkIcon}
                 tooltip="Read All"
                 onClick={onClick}
             />
