@@ -58,13 +58,15 @@ function FriendsIndicator() {
             {!settings.store.useCompact &&
                 <svg
                     id="vc-friendcount-icon"
+                    aria-hidden="true"
+                    role="img"
                     xmlns="http://www.w3.org/2000/svg"
-                    width="14"
-                    height="14"
-                    fill="currentColor"
+                    fill="none"
                     viewBox="0 0 24 24">
-                    <path fill="currentColor"
-                        d="M13 10a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z" />
+                    <path
+                        fill="currentColor"
+                        d="M13 10a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z">
+                    </path>
                     <path
                         fill="currentColor"
                         d="M3 5v-.75C3 3.56 3.56 3 4.25 3s1.24.56 1.33 1.25C6.12 8.65 9.46 12 13 12h1a8 8 0 0 1 8 8 2 2 0 0 1-2 2 .21.21 0 0 1-.2-.15 7.65 7.65 0 0 0-1.32-2.3c-.15-.2-.42-.06-.39.17l.25 2c.02.15-.1.28-.25.28H9a2 2 0 0 1-2-2v-2.22c0-1.57-.67-3.05-1.53-4.37A15.85 15.85 0 0 1 3 5Z">
@@ -97,13 +99,15 @@ function ServersIndicator() {
                     aria-hidden="true"
                     role="img"
                     xmlns="http://www.w3.org/2000/svg"
-                    width="14"
-                    height="14"
-                    fill="currentColor"
+                    fill="none"
                     viewBox="0 0 24 24">
                     <path
                         fill="currentColor"
-                        d="M19.73 4.87a18.2 18.2 0 0 0-4.6-1.44c-.21.4-.4.8-.58 1.21-1.69-.25-3.4-.25-5.1 0-.18-.41-.37-.82-.59-1.2-1.6.27-3.14.75-4.6 1.43A19.04 19.04 0 0 0 .96 17.7a18.43 18.43 0 0 0 5.63 2.87c.46-.62.86-1.28 1.2-1.98-.65-.25-1.29-.55-1.9-.92.17-.12.32-.24.47-.37 3.58 1.7 7.7 1.7 11.28 0l.46.37c-.6.36-1.25.67-1.9.92.35.7.75 1.35 1.2 1.98 2.03-.63 3.94-1.6 5.64-2.87.47-4.87-.78-9.09-3.3-12.83ZM8.3 15.12c-1.1 0-2-1.02-2-2.27 0-1.24.88-2.26 2-2.26s2.02 1.02 2 2.26c0 1.25-.89 2.27-2 2.27Zm7.4 0c-1.1 0-2-1.02-2-2.27 0-1.24.88-2.26 2-2.26s2.02 1.02 2 2.26c0 1.25-.88 2.27-2 2.27Z">
+                        d="M10.55 4.4c.13-.24.1-.54-.12-.71L8.6 2.24a1 1 0 0 0-1.24 0l-4 3.15a1 1 0 0 0-.38.79v4.03c0 .43.5.66.82.39l2.28-1.9a3 3 0 0 1 3.84 0c.03.02.08 0 .08-.04V6.42a4 4 0 0 1 .55-2.02ZM7.36 10.23a1 1 0 0 1 1.28 0l1.18.99 2.98 2.48 1.84 1.53a1 1 0 0 1-.67 1.77.1.1 0 0 0-.1.09l-.23 3.06a2 2 0 0 1-2 1.85H4.36a2 2 0 0 1-2-1.85l-.24-3.16a1 1 0 0 1-.76-1.76l6-5Z">
+                    </path>
+                    <path
+                    fill="currentColor"
+                    d="M12 10.2c0 .14.07.28.18.38l3.74 3.12a3 3 0 0 1 .03 4.58.55.55 0 0 0-.2.37l-.12 1.65a4 4 0 0 1-.17.9c-.12.38.13.8.52.8H20a2 2 0 0 0 2-2V3.61a1.5 1.5 0 0 0-2-1.41l-6.66 2.33A2 2 0 0 0 12 6.42">
                     </path>
                 </svg>
             }
@@ -125,13 +129,13 @@ export const settings = definePluginSettings({
             { label: "Only server count", value: IndicatorType.SERVER },
             { label: "Both server and online friend counts", value: IndicatorType.BOTH },
         ],
-        restartNeeded: true // Restart needed just to force update
+        restartNeeded: false
     },
     useCompact: {
         description: "Makes the indicator appear with only text",
         type: OptionType.BOOLEAN,
         default: false,
-        restartNeeded: true // Restart needed just to force update
+        restartNeeded: false
     }
 });
 
