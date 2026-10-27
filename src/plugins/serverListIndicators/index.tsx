@@ -18,14 +18,13 @@
 
 import "./styles.css";
 
-import { addServerListElement, removeServerListElement, ServerListRenderPosition } from "@api/ServerList";
+import { addServerListElement, removeServerListElement, ServerListItem, ServerListRenderPosition } from "@api/ServerList";
 import { definePluginSettings } from "@api/Settings";
 import { BaseText } from "@components/BaseText";
-import ErrorBoundary from "@components/ErrorBoundary";
 import { Devs, EquicordDevs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
 import definePlugin, { OptionType } from "@utils/types";
-import { GuildStore, PresenceStore, RelationshipStore, Tooltip, UserGuildJoinRequestStore, useStateFromStores } from "@webpack/common";
+import { GuildStore, PresenceStore, RelationshipStore, UserGuildJoinRequestStore, useStateFromStores } from "@webpack/common";
 
 const enum IndicatorType {
     SERVER = 1 << 0,
@@ -149,7 +148,7 @@ export default definePlugin({
 
     renderIndicator: () => {
         const { mode, useCompact } = settings.store;
-        let text;
+        let text: string;
         // switch is simply better
         switch (mode) {
             case IndicatorType.BOTH:
@@ -165,21 +164,25 @@ export default definePlugin({
 
         const cl = useCompact ? classNameFactory("vc-indicators-compact-") : classNameFactory("vc-indicators-");
 
-        return <ErrorBoundary noop>
-            <div id={cl("container")}>
-                <Tooltip text={text} position="right">
-                    {({ onMouseEnter, onMouseLeave }) => (
-                        <div
-                            id={cl("indicator-items")}
-                            onMouseEnter={onMouseEnter}
-                            onMouseLeave={onMouseLeave}>
-                            {!!(mode & IndicatorType.FRIEND) && <FriendsIndicator />}
-                            {!!(mode & IndicatorType.SERVER) && <ServersIndicator />}
-                        </div>
-                    )}
-                </Tooltip>
-            </div>
-        </ErrorBoundary>;
+        const items = () => {
+            return (
+                <div
+                    id={cl("indicator-items")}>
+                    {!!(mode & IndicatorType.FRIEND) && <FriendsIndicator />}
+                    {!!(mode & IndicatorType.SERVER) && <ServersIndicator />}
+                </div>
+            );
+        };
+
+        return useCompact ? (
+            items()
+        ) : (
+            <ServerListItem
+                id={cl("container")}
+                icon={items}
+                tooltip={text}
+            />
+        );
     },
 
     start() {
