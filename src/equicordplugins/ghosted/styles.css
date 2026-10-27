@@ -2,20 +2,6 @@
     height: 42px;
 }
 
-#vc-boo-container {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    background-color: var(--background-primary);
-    height: 30px;
-    width: 48px;
-    margin-left: auto;
-    margin-right: auto;
-    color: var(--text-default);
-    fill: var(--text-default);
-}
-
 .vc-boo-clickable {
     cursor: pointer;
     transition: opacity 0.2s ease;
@@ -52,7 +38,6 @@
     flex-direction: column;
     gap: 2px;
 }
-
 
 .vc-boo-clear {
     margin-right: 16px;
