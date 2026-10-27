@@ -1,16 +1,3 @@
-.vc-hideservers-button-wrapper {
-    display: flex;
-    justify-content: center;
-    margin: 0 0 8px;
-}
-
-.vc-hideservers-button {
-    max-width: 48px;
-    font-size: 60%;
-    background-color: var(--background-primary);
-    color: var(--text-default);
-}
-
 .vc-hideservers-list {
     flex: 1 1 auto;
 }
