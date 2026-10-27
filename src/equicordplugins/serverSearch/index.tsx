@@ -4,13 +4,10 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import "./styles.css";
-
-import { addServerListElement, removeServerListElement, ServerListRenderPosition } from "@api/ServerList";
-import ErrorBoundary from "@components/ErrorBoundary";
+import { addServerListElement, removeServerListElement, ServerListItem, ServerListRenderPosition } from "@api/ServerList";
 import { EquicordDevs } from "@utils/constants";
 import definePlugin from "@utils/types";
-import { FluxDispatcher, Tooltip } from "@webpack/common";
+import { FluxDispatcher } from "@webpack/common";
 
 function SearchIcon() {
     return (
@@ -31,27 +28,20 @@ export default definePlugin({
     tags: ["Shortcuts", "Servers"],
 
     renderButton() {
-        return <ErrorBoundary noop>
-            <div id="vc-searchbutton-container">
-                <Tooltip text="Search" position="right">
-                    {({ onMouseEnter, onMouseLeave }) => (
-                        <div
-                            id="vc-searchbutton"
-                            onMouseEnter={onMouseEnter}
-                            onMouseLeave={onMouseLeave}
-                            onClick={() =>
-                                FluxDispatcher.dispatch({
-                                    type: "QUICKSWITCHER_SHOW",
-                                    query: "",
-                                    queryMode: null
-                                })
-                            }>
-                            <SearchIcon />
-                        </div>
-                    )}
-                </Tooltip>
-            </div>
-        </ErrorBoundary>;
+        return (
+            <ServerListItem
+                id="vc-searchbutton-container"
+                icon={SearchIcon}
+                tooltip="Search"
+                onClick={() => {
+                    FluxDispatcher.dispatch({
+                        type: "QUICKSWITCHER_SHOW",
+                        query: "",
+                        queryMode: null
+                    });
+                }}
+            />
+        );
     },
 
     start() {
