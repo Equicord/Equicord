@@ -5,7 +5,9 @@
  */
 
 import { BaseText } from "@components/BaseText";
-import { Button, TextButton } from "@components/Button";
+import { Button } from "@components/Button";
+import { Card } from "@components/Card";
+import { HeadingTertiary } from "@components/Heading";
 import { XSmallIcon } from "@components/Icons";
 import { HiddenServersStore } from "@equicordplugins/hideServers/HiddenServersStore";
 import { classNameFactory } from "@utils/css";
@@ -74,36 +76,42 @@ function GuildRow({ guild }) {
             <BaseText size="md" weight="medium" className={cl("name")}>
                 {guild.name}
             </BaseText>
-            <TextButton variant="danger" >
+            <Button
+                variant="dangerSecondary"
+                size="iconOnly"
+                onClick={() => restoreGuild(guild, SortedGuildStore)}
+            >
                 <XSmallIcon/>
-            </TextButton>
+            </Button>
         </div>
     );
 }
 
 function Group({ folderName, guilds }) {
     return (
-        <div className={cl("folder-group")}>
+        <Card variant="primary" className={cl("folder-group")}>
             <div className={cl("folder-header")}>
-                <BaseText size="md" weight="medium">{folderName || "Folder"}</BaseText>
+                <HeadingTertiary tag="h4">{folderName}</HeadingTertiary>
                 <Button
                     variant="dangerSecondary"
                     onClick={() => {
                         guilds.forEach(g => restoreGuild(g, SortedGuildStore));
                     }}
-                    size="medium"
+                    size="small"
                     className={cl("restore-all")}
                 >
                     Remove All
                 </Button>
             </div>
-            {guilds.map(guild => (
+            <div className={cl("rows")}>
+                {guilds.map(guild => (
                 <GuildRow
                     key={guild.id}
                     guild={guild}
                 />
             ))}
-        </div>
+            </div>
+        </Card>
     );
 }
 

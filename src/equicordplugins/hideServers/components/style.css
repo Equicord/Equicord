@@ -1,4 +1,5 @@
 .vc-hideservers-folder-group {
+    overflow: hidden;
     margin-bottom: 1em;
 }
 
@@ -10,7 +11,12 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 0.5em;
+    padding: 1em;
+    background-color: var(--border-subtle);
+}
+
+.vc-hideservers-rows {
+    padding: 0.5em 1em;
 }
 
 /* copied from blocked row */
@@ -19,7 +25,7 @@
     align-items: center;
     flex-direction: row;
     justify-content: space-between;
-    padding: 0.5em 0;
+    padding: 0.25em 0;
 }
 
 .vc-hideservers-guildicon {
