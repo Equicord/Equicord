@@ -7,10 +7,10 @@
 import { Button } from "@components/Button";
 import { SettingsSection } from "@components/settings/tabs/plugins/components/Common";
 import { Switch } from "@components/Switch";
+import { useCspPermission } from "@utils/csp";
 import { Margins } from "@utils/margins";
 import { classes } from "@utils/misc";
-import { promptToRestart } from "@utils/promptToRestart";
-import { Select, showToast, Slider, TabBar, TextInput, useState } from "@webpack/common";
+import { Select, Slider, TabBar, TextInput, useState } from "@webpack/common";
 
 import { settings, SettingsStore } from "./settings";
 import { NameFormat, ServiceTab } from "./types";
@@ -44,14 +44,10 @@ function TextSetting({ name, description, settingsKey, placeholder }: { name: st
 }
 
 function AllowServerSetting({ settingsKey }: { settingsKey: SettingsKey; }) {
-    if (IS_WEB) return null;
+    const url = String(settings.use([settingsKey])[settingsKey] ?? "").trim();
+    const [isAllowed, allow] = useCspPermission(url && (/^https?:\/\//.test(url) ? url : `https://${url}`), ["connect-src"], "RichPresence");
 
-    const allow = async () => {
-        const url = String(settings.store[settingsKey] ?? "");
-        const res = await VencordNative.csp.requestAddOverride(/^https?:\/\//.test(url) ? url : `https://${url}`, ["connect-src"], "RichPresence");
-        if (res === "ok") promptToRestart("relaunch");
-        else if (res !== "cancelled") showToast({ text: res === "conflict" ? "This server is already allowed." : "Could not allow this server.", variant: "critical" });
-    };
+    if (isAllowed) return null;
 
     return (
         <SettingsSection id={`${settingsKey}-allow`} name="Allow Server" description="Equicord can only connect to servers you allow. A restart is needed afterwards.">

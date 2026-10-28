@@ -8,8 +8,8 @@ import { definePluginSettings } from "@api/Settings";
 import { Button } from "@components/Button";
 import { SettingsSection } from "@components/settings/tabs/plugins/components/Common";
 import { Switch } from "@components/Switch";
+import { useCspPermission } from "@utils/csp";
 import { classNameFactory } from "@utils/css";
-import { promptToRestart } from "@utils/promptToRestart";
 import { useForceUpdater } from "@utils/react";
 import { OptionType, PluginNative } from "@utils/types";
 import { React, Select, showToast, TextArea, TextInput } from "@webpack/common";
@@ -504,10 +504,30 @@ function FallbackOrderSettings() {
     );
 }
 
+function getShareXRequestUrl(config: string) {
+    try {
+        return parseShareXConfig(config).RequestURL;
+    } catch {
+        return undefined;
+    }
+}
+
+function AllowServerSection({ id, url }: { id: string; url?: string; }) {
+    const [isAllowed, allow] = useCspPermission(url, ["connect-src"], "FileUpload");
+    if (isAllowed) return null;
+
+    return (
+        <SettingsSection id={id} name="Allow Server" description="Equicord can only connect to servers you allow. A restart is needed afterwards.">
+            <Button size="small" variant="secondary" onClick={allow}>Allow Server</Button>
+        </SettingsSection>
+    );
+}
+
 export function SettingsComponent() {
     const update = useForceUpdater();
     const sharexFileInputRef = React.useRef<HTMLInputElement>(null);
     const { serviceType } = settings.store;
+    const { serviceUrl, sharexConfig } = settings.use(["serviceUrl", "sharexConfig"]);
 
     const validateShareXConfig = () => {
         try {
@@ -517,17 +537,6 @@ export function SettingsComponent() {
             const message = error instanceof Error ? error.message : "Invalid ShareX config";
             showToast({ text: message, variant: "critical" });
         }
-    };
-
-    const allowServer = async (getUrl: () => string | undefined) => {
-        let res: string;
-        try {
-            res = await VencordNative.csp.requestAddOverride(getUrl() ?? "", ["connect-src"], "FileUpload");
-        } catch {
-            res = "invalid";
-        }
-        if (res === "ok") promptToRestart("relaunch");
-        else if (res !== "cancelled") showToast({ text: res === "conflict" ? "This server is already allowed." : "Could not allow this server.", variant: "critical" });
     };
 
     const triggerShareXFileUpload = () => {
@@ -576,11 +585,7 @@ export function SettingsComponent() {
                         onChange={v => settings.store.serviceUrl = v}
                         placeholder="https://your-zipline-instance.com"
                     />
-                    {!IS_WEB && (
-                        <SettingsSection id="zipline-allow" name="Allow Server" description="Equicord can only connect to servers you allow. A restart is needed afterwards.">
-                            <Button size="small" variant="secondary" onClick={() => allowServer(() => settings.store.serviceUrl)}>Allow Server</Button>
-                        </SettingsSection>
-                    )}
+                    <AllowServerSection id="zipline-allow" url={serviceUrl} />
                     <SettingTextInput
                         name="Zipline Token"
                         description="Your Zipline API authorization token"
@@ -823,7 +828,6 @@ export function SettingsComponent() {
                         <div className={cl("actions")}>
                             <Button size="small" onClick={triggerShareXFileUpload}>Import .sxcu/.json</Button>
                             <Button size="small" onClick={validateShareXConfig}>Validate</Button>
-                            {!IS_WEB && <Button size="small" variant="secondary" onClick={() => allowServer(() => parseShareXConfig(settings.store.sharexConfig || "").RequestURL)}>Allow Server</Button>}
                         </div>
                         <input
                             ref={sharexFileInputRef}
@@ -833,6 +837,7 @@ export function SettingsComponent() {
                             onChange={handleShareXFileUpload}
                         />
                     </SettingsSection>
+                    <AllowServerSection id="sharex-allow" url={getShareXRequestUrl(sharexConfig || "")} />
                 </SettingGroup>
             )}
 

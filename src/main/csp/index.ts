@@ -186,6 +186,13 @@ const patchCsp = (headers: PolicyMap) => {
     }
 };
 
+export function isHostAllowed(host: string, directives: string[]) {
+    return [...Object.entries(CspPolicies), ...Object.entries(NativeSettings.store.customCspRules)].some(([source, allowed]) =>
+        (source === host || source.startsWith("*.") && host.endsWith(source.slice(1)) || source.endsWith(":*") && host.startsWith(source.slice(0, -1)))
+        && directives.every(d => allowed.includes(d))
+    );
+}
+
 function migrateThemeLinks() {
     if (NativeSettings.store.migratedThemeLinkCsp) return;
 
@@ -194,11 +201,7 @@ function migrateThemeLinks() {
         const url = URL.parse(link.replace(/^@(light|dark) /, ""));
         if (url?.protocol !== "https:") continue;
 
-        const { host } = url;
-        const isAllowed = Object.entries({ ...CspPolicies, ...NativeSettings.store.customCspRules })
-            .some(([source, directives]) => (source === host || source.startsWith("*.") && host.endsWith(source.slice(1))) && directives.includes("style-src"));
-
-        if (!isAllowed) NativeSettings.store.customCspRules[host] = ["style-src", "img-src", "font-src"];
+        if (!isHostAllowed(url.host, ["style-src"])) NativeSettings.store.customCspRules[url.host] = ["style-src", "img-src", "font-src"];
     }
 
     NativeSettings.store.migratedThemeLinkCsp = true;

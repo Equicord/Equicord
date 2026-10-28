@@ -9,9 +9,8 @@ import { Button } from "@components/Button";
 import { Heading } from "@components/Heading";
 import { Margins } from "@components/margins";
 import { Notice } from "@components/Notice";
-import { useCspErrors } from "@utils/cspViolations";
+import { useCspPermission } from "@utils/csp";
 import { classNameFactory } from "@utils/css";
-import { promptToRestart } from "@utils/promptToRestart";
 import { RenderModalProps } from "@vencord/discord-types";
 import { IconUtils, Modal, React, showToast,TextInput, UserStore, useState } from "@webpack/common";
 
@@ -37,15 +36,8 @@ export function SetAvatarModal({ userId, modalProps }: { userId: string; modalPr
     const [preview, setPreview] = useState<string>(avatars[userId] || "");
     const [isDragging, setIsDragging] = useState(false);
     const fileInputRef = React.useRef<HTMLInputElement>(null);
-    const cspErrors = useCspErrors();
-    const previewHost = !IS_WEB && URL.parse(preview)?.host;
-    const isBlocked = !!previewHost && cspErrors.some(blockedUrl => URL.parse(blockedUrl)?.host === previewHost);
-
-    async function allowHost() {
-        const res = await VencordNative.csp.requestAddOverride(preview, ["img-src"], "UserPFP");
-        if (res === "ok") promptToRestart("relaunch");
-        else if (res === "conflict") showToast({ text: "This host is already allowed. Restart Discord to apply it.", variant: "critical" });
-    }
+    const previewUrl = URL.parse(preview);
+    const [isAllowed, allowHost] = useCspPermission(previewUrl?.protocol === "https:" ? preview : undefined, ["img-src"], "UserPFP");
 
     function handleKey(e: React.KeyboardEvent) {
         if (e.key === "Enter") saveUserAvatar();
@@ -135,13 +127,13 @@ export function SetAvatarModal({ userId, modalProps }: { userId: string; modalPr
                         onChange={handleUrlChange}
                         autoFocus
                     />
-                    {isBlocked && (
+                    {!isAllowed && (
                         <Notice
                             variant="warning"
                             className={Margins.top8}
                             action={<Button size="small" variant="secondary" onClick={allowHost}>Allow Host</Button>}
                         >
-                            Images from {previewHost} are blocked. Allow this host if you trust it, then restart Discord.
+                            Images from {previewUrl?.host} are blocked. Allow this host if you trust it, then restart Discord.
                         </Notice>
                     )}
                 </section>
