@@ -117,7 +117,7 @@ function BooIndicator() {
                     icon={Icon}
                     tooltip={getTooltipText()}
                     badge={{
-                        count: 9
+                        count: count
                     }}
                     onClick={handleClick}
                 />
