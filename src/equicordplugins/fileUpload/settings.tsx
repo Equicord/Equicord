@@ -6,16 +6,21 @@
 
 import { definePluginSettings } from "@api/Settings";
 import { Button } from "@components/Button";
+import { Notice } from "@components/Notice";
 import { SettingsSection } from "@components/settings/tabs/plugins/components/Common";
 import { Switch } from "@components/Switch";
+import { useCspPermission } from "@utils/csp";
 import { classNameFactory } from "@utils/css";
 import { useForceUpdater } from "@utils/react";
-import { OptionType } from "@utils/types";
+import { OptionType, PluginNative } from "@utils/types";
 import { React, Select, showToast, TextArea, TextInput } from "@webpack/common";
 
-import { CORS_PROXY } from "./constants";
 import { fallbackServiceOrder, serviceLabels, ServiceType } from "./types";
 import { parseShareXConfig } from "./utils/sharex";
+
+const Native = IS_WEB
+    ? null
+    : VencordNative.pluginHelpers.FileUpload as PluginNative<typeof import("./native")>;
 
 const defaultFallbackOrder = fallbackServiceOrder.join(",");
 const cl = classNameFactory("vc-file-upload-settings-");
@@ -27,7 +32,7 @@ const serviceOptions = [
     { label: "Encrypting.host", value: ServiceType.ENCRYPTINGHOST },
     { label: "S3-Compatible", value: ServiceType.S3 },
     { label: "Catbox.moe", value: ServiceType.CATBOX },
-    ...(IS_DISCORD_DESKTOP ? [{ label: "0x0.st", value: ServiceType.ZEROX0 }] : []),
+    ...(IS_WEB ? [] : [{ label: "0x0.st", value: ServiceType.ZEROX0 }]),
     { label: "Litterbox", value: ServiceType.LITTERBOX },
     { label: "GoFile", value: ServiceType.GOFILE },
     { label: "tmpfiles.org", value: ServiceType.TMPFILES },
@@ -48,8 +53,8 @@ const litterboxOptions = [
 ];
 
 const embedProxyOptions = [
-    { label: "CORS Proxy", value: "cors", default: true },
-    { label: "discord.nfp.is", value: "nfp" }
+    { label: "CORS Proxy", value: "cors" },
+    { label: "discord.nfp.is", value: "nfp", default: true }
 ];
 
 const encryptingHostUrlStyleOptions = [
@@ -288,13 +293,13 @@ export const settings = definePluginSettings({
         type: OptionType.SELECT,
         description: "Embed helper service to wrap uploaded video links.",
         options: embedProxyOptions,
-        default: "cors",
+        default: "nfp",
         hidden: true
     },
     corsProxyUrl: {
         type: OptionType.STRING,
-        description: "CORS proxy URL used for browser uploads",
-        default: CORS_PROXY,
+        description: "Optional CORS proxy URL used for browser uploads",
+        default: "",
         hidden: true
     },
     apngToGif: {
@@ -518,10 +523,30 @@ function FallbackOrderSettings() {
     );
 }
 
+function getShareXRequestUrl(config: string) {
+    try {
+        return parseShareXConfig(config).RequestURL;
+    } catch {
+        return undefined;
+    }
+}
+
+function AllowHostNotice({ url }: { url?: string; }) {
+    const [isAllowed, allow] = useCspPermission(url, ["connect-src"], "FileUpload");
+    if (isAllowed || !url) return null;
+
+    return (
+        <Notice variant="warning" action={<Button size="small" variant="secondary" onClick={allow}>Allow Host</Button>}>
+            Connections to {URL.parse(url)?.host} are blocked. Allow this host if you trust it, then restart Discord.
+        </Notice>
+    );
+}
+
 export function SettingsComponent() {
     const update = useForceUpdater();
     const sharexFileInputRef = React.useRef<HTMLInputElement>(null);
     const { serviceType } = settings.store;
+    const { serviceUrl, sharexConfig, corsProxyUrl } = settings.use(["serviceUrl", "sharexConfig", "corsProxyUrl"]);
 
     const validateShareXConfig = () => {
         try {
@@ -579,6 +604,7 @@ export function SettingsComponent() {
                         onChange={v => settings.store.serviceUrl = v}
                         placeholder="https://your-zipline-instance.com"
                     />
+                    <AllowHostNotice url={serviceUrl} />
                     <SettingTextInput
                         name="Zipline Token"
                         description="Your Zipline API authorization token"
@@ -830,6 +856,7 @@ export function SettingsComponent() {
                             onChange={handleShareXFileUpload}
                         />
                     </SettingsSection>
+                    <AllowHostNotice url={getShareXRequestUrl(sharexConfig || "")} />
                 </SettingGroup>
             )}
 
@@ -1018,15 +1045,12 @@ export function SettingsComponent() {
             <SettingGroup name="Network" description="Configure browser upload proxying and timeouts.">
                 <SettingTextInput
                     name="CORS Proxy URL"
-                    description="CORS proxy used for web uploads. Leave empty to use the default proxy."
+                    description="Optional CORS proxy for uploads that can't go through the desktop app. The proxy sees every file and token sent through it, so only use one you trust. Leave empty to upload directly."
                     value={settings.store.corsProxyUrl || ""}
                     onChange={v => settings.store.corsProxyUrl = v}
                     placeholder="https://your-cors-proxy.example.com"
                 />
-
-                <SettingsSection id="default-cors-proxy-source" name="Default CORS Proxy Source" description="Source code for the default CORS proxy">
-                    <a href="https://codeberg.org/key/corsproxy" target="_blank" rel="noreferrer">codeberg.org/key/corsproxy</a>
-                </SettingsSection>
+                <AllowHostNotice url={corsProxyUrl} />
 
                 <SettingsSection id="upload-timeout" name="Upload Timeout" description="Maximum time to wait per upload attempt before switching to fallback">
                     <Select
@@ -1046,6 +1070,20 @@ export function SettingsComponent() {
                         placeholder="Select timeout"
                     />
                 </SettingsSection>
+
+                {Native && (
+                    <SettingsSection id="approved-servers" name="Approved Servers" description="S3 and WebDAV servers you allowed FileUpload to upload to. Resetting will ask again on the next upload.">
+                        <Button
+                            size="small"
+                            onClick={async () => {
+                                await Native.clearApprovedOrigins();
+                                showToast({ text: "Approved servers reset" });
+                            }}
+                        >
+                            Reset Approved Servers
+                        </Button>
+                    </SettingsSection>
+                )}
             </SettingGroup>
 
             <FallbackOrderSettings />

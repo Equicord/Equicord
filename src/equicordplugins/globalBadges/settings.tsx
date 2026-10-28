@@ -5,6 +5,9 @@
  */
 
 import { definePluginSettings } from "@api/Settings";
+import { Button } from "@components/Button";
+import { Notice } from "@components/Notice";
+import { useCspPermission } from "@utils/csp";
 import { OptionType } from "@utils/types";
 import { findComponentByCodeLazy } from "@webpack";
 
@@ -59,6 +62,18 @@ function ShowXSettings() {
     );
 }
 
+function ApiUrlNotice() {
+    const { apiUrl } = settings.use(["apiUrl"]);
+    const [isAllowed, allow] = useCspPermission(apiUrl, ["connect-src"], "GlobalBadges");
+    if (isAllowed) return null;
+
+    return (
+        <Notice variant="warning" action={<Button size="small" variant="secondary" onClick={allow}>Allow Host</Button>}>
+            Connections to {URL.parse(apiUrl)?.host} are blocked. Allow this host if you trust it, then restart Discord.
+        </Notice>
+    );
+}
+
 export const settings = definePluginSettings({
     showModStyle: {
         type: OptionType.SELECT,
@@ -79,6 +94,10 @@ export const settings = definePluginSettings({
             if (!value) return false;
             return true;
         })
+    },
+    apiUrlPermission: {
+        type: OptionType.COMPONENT,
+        component: () => <ApiUrlNotice />
     },
     showClientMods: {
         type: OptionType.COMPONENT,
