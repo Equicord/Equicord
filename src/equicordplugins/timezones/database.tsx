@@ -4,15 +4,34 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { Button } from "@components/Button";
+import { Notice } from "@components/Notice";
+import { useCspPermission } from "@utils/csp";
 import { OAuth2AuthorizeModal, openModal, showToast } from "@webpack/common";
+
+import { settings } from ".";
 
 const databaseTimezones: Record<string, { value: string | null; }> = {};
 const CLIENT_ID = "1377021506810417173";
 
-const DOMAIN = "https://timezone.creations.works";
+export function DatabaseUrlNotice() {
+    const { databaseUrl } = settings.use(["databaseUrl"]);
+    const [isAllowed, allow] = useCspPermission(databaseUrl, ["connect-src"], "Timezones");
+    if (isAllowed) return null;
+
+    return (
+        <Notice variant="warning" action={<Button size="small" variant="secondary" onClick={allow}>Allow Host</Button>}>
+            Connections to {URL.parse(databaseUrl)?.host} are blocked. Allow this host if you trust it, then restart Discord.
+        </Notice>
+    );
+}
+
+function getDomain(): string {
+    return settings.store.databaseUrl || "https://timezone.creations.works";
+}
 
 function getRedirectUri(): string {
-    return `${DOMAIN}/auth/discord/callback`;
+    return `${getDomain()}/auth/discord/callback`;
 }
 
 function handleApiError(error: any, defaultMessage: string): void {
@@ -40,7 +59,7 @@ export function getTimezone(userId: string): string | null {
 
 export async function loadDatabaseTimezones(): Promise<boolean> {
     try {
-        const res = await fetch(`${DOMAIN}/list`, {
+        const res = await fetch(`${getDomain()}/list`, {
             headers: { Accept: "application/json" }
         });
         if (res.ok) {
@@ -61,7 +80,7 @@ export async function loadDatabaseTimezones(): Promise<boolean> {
 
 async function checkAuthentication(): Promise<boolean> {
     try {
-        const res = await fetch(`${DOMAIN}/me`, {
+        const res = await fetch(`${getDomain()}/me`, {
             credentials: "include",
             headers: { Accept: "application/json" }
         });
@@ -91,7 +110,7 @@ async function setTimezoneInternal(timezone: string): Promise<boolean> {
     formData.append("timezone", timezone);
 
     try {
-        const res = await fetch(`${DOMAIN}/set`, {
+        const res = await fetch(`${getDomain()}/set`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/x-www-form-urlencoded",
@@ -131,7 +150,7 @@ export async function deleteTimezone(): Promise<boolean> {
 
 async function deleteTimezoneInternal(): Promise<boolean> {
     try {
-        const res = await fetch(`${DOMAIN}/delete`, {
+        const res = await fetch(`${getDomain()}/delete`, {
             method: "DELETE",
             headers: {
                 Accept: "application/json"

@@ -5,6 +5,7 @@
  */
 
 import { Button } from "@components/Button";
+import { Notice } from "@components/Notice";
 import { SettingsSection } from "@components/settings/tabs/plugins/components/Common";
 import { Switch } from "@components/Switch";
 import { useCspPermission } from "@utils/csp";
@@ -45,14 +46,15 @@ function TextSetting({ name, description, settingsKey, placeholder }: { name: st
 
 function AllowServerSetting({ settingsKey }: { settingsKey: SettingsKey; }) {
     const url = String(settings.use([settingsKey])[settingsKey] ?? "").trim();
-    const [isAllowed, allow] = useCspPermission(url && (/^https?:\/\//.test(url) ? url : `https://${url}`), ["connect-src"], "RichPresence");
+    const fullUrl = url && (/^https?:\/\//.test(url) ? url : `https://${url}`);
+    const [isAllowed, allow] = useCspPermission(fullUrl, ["connect-src"], "RichPresence");
 
     if (isAllowed) return null;
 
     return (
-        <SettingsSection id={`${settingsKey}-allow`} name="Allow Server" description="Equicord can only connect to servers you allow. A restart is needed afterwards.">
-            <Button size="small" variant="secondary" onClick={allow}>Allow Server</Button>
-        </SettingsSection>
+        <Notice variant="warning" action={<Button size="small" variant="secondary" onClick={allow}>Allow Host</Button>}>
+            Connections to {URL.parse(fullUrl)?.host} are blocked. Allow this host if you trust it, then restart Discord.
+        </Notice>
     );
 }
 

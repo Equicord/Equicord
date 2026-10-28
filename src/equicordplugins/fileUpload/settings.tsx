@@ -6,6 +6,7 @@
 
 import { definePluginSettings } from "@api/Settings";
 import { Button } from "@components/Button";
+import { Notice } from "@components/Notice";
 import { SettingsSection } from "@components/settings/tabs/plugins/components/Common";
 import { Switch } from "@components/Switch";
 import { useCspPermission } from "@utils/csp";
@@ -512,14 +513,14 @@ function getShareXRequestUrl(config: string) {
     }
 }
 
-function AllowServerSection({ id, url }: { id: string; url?: string; }) {
+function AllowHostNotice({ url }: { url?: string; }) {
     const [isAllowed, allow] = useCspPermission(url, ["connect-src"], "FileUpload");
-    if (isAllowed) return null;
+    if (isAllowed || !url) return null;
 
     return (
-        <SettingsSection id={id} name="Allow Server" description="Equicord can only connect to servers you allow. A restart is needed afterwards.">
-            <Button size="small" variant="secondary" onClick={allow}>Allow Server</Button>
-        </SettingsSection>
+        <Notice variant="warning" action={<Button size="small" variant="secondary" onClick={allow}>Allow Host</Button>}>
+            Connections to {URL.parse(url)?.host} are blocked. Allow this host if you trust it, then restart Discord.
+        </Notice>
     );
 }
 
@@ -585,7 +586,7 @@ export function SettingsComponent() {
                         onChange={v => settings.store.serviceUrl = v}
                         placeholder="https://your-zipline-instance.com"
                     />
-                    <AllowServerSection id="zipline-allow" url={serviceUrl} />
+                    <AllowHostNotice url={serviceUrl} />
                     <SettingTextInput
                         name="Zipline Token"
                         description="Your Zipline API authorization token"
@@ -837,7 +838,7 @@ export function SettingsComponent() {
                             onChange={handleShareXFileUpload}
                         />
                     </SettingsSection>
-                    <AllowServerSection id="sharex-allow" url={getShareXRequestUrl(sharexConfig || "")} />
+                    <AllowHostNotice url={getShareXRequestUrl(sharexConfig || "")} />
                 </SettingGroup>
             )}
 

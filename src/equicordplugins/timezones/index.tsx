@@ -17,7 +17,7 @@ import { Message, User } from "@vencord/discord-types";
 import { findByPropsLazy, findCssClassesLazy } from "@webpack";
 import { Button, ChannelStore, Menu, openModal, showToast, Tooltip, useEffect, UserStore, useState } from "@webpack/common";
 
-import { deleteTimezone, getTimezone, loadDatabaseTimezones, setUserDatabaseTimezone } from "./database";
+import { DatabaseUrlNotice, deleteTimezone, getTimezone, loadDatabaseTimezones, setUserDatabaseTimezone } from "./database";
 import { SetTimezoneModal } from "./TimezoneModal";
 
 export let timezones: Record<string, string | null> = {};
@@ -96,6 +96,17 @@ export const settings = definePluginSettings({
         type: OptionType.BOOLEAN,
         description: "Show Local Timezone instead of just local",
         default: false,
+    },
+
+    databaseUrl: {
+        type: OptionType.STRING,
+        description: "Database URL for timezone storage",
+        default: "https://timezone.creations.works"
+    },
+
+    databaseUrlPermission: {
+        type: OptionType.COMPONENT,
+        component: () => <DatabaseUrlNotice />
     },
 
     setDatabaseTimezone: {

@@ -47,6 +47,19 @@ const settings = definePluginSettings({
             { label: "Nitro", value: true, default: true },
         ],
     },
+    databaseSource: {
+        description: "URL to load database from",
+        type: OptionType.STRING,
+        default: "https://userpfp.github.io/UserPFP/source/data.json",
+        hidden: !IS_DEV,
+        isValid: (value => {
+            if (!value) {
+                value = "https://userpfp.github.io/UserPFP/source/data.json";
+                return false;
+            }
+            return true;
+        })
+    },
 });
 
 export default definePlugin({
@@ -164,7 +177,7 @@ export default definePlugin({
     async start() {
         data.avatars = await get<Record<string, string>>(KEY_DATASTORE) || {};
 
-        await fetch("https://userpfp.github.io/UserPFP/source/data.json")
+        await fetch(settings.store.databaseSource)
             .then(res => res.ok && res.json())
             .then(remote => remote?.avatars && Object.assign(data.avatars, remote.avatars))
             .catch(() => null);

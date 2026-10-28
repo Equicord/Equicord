@@ -8,6 +8,7 @@ import { definePluginSettings } from "@api/Settings";
 import { disableStyle, enableStyle } from "@api/Styles";
 import { Button, ButtonCompat } from "@components/Button";
 import { HeadingSecondary } from "@components/Heading";
+import { Notice } from "@components/Notice";
 import { Paragraph } from "@components/Paragraph";
 import { SettingsSection } from "@components/settings/tabs/plugins/components/Common";
 import { useCspPermission } from "@utils/csp";
@@ -79,9 +80,9 @@ function LyricsProviderSettings() {
             )}
 
             {!isLyricsServerAllowed && settings.store.lyricsProvider === Provider.Spotify && (
-                <SettingsSection id="spotify-lyrics-allow" name="Allow Server" description="Equicord can only connect to lyrics servers you allow. A restart is needed afterwards.">
-                    <Button size="small" variant="secondary" onClick={allowLyricsServer}>Allow Server</Button>
-                </SettingsSection>
+                <Notice variant="warning" action={<Button size="small" variant="secondary" onClick={allowLyricsServer}>Allow Host</Button>}>
+                    Connections to {URL.parse(spotifyLyricsApiUrl.trim())?.host} are blocked. Allow this host if you trust it, then restart Discord.
+                </Notice>
             )}
         </>
     );
