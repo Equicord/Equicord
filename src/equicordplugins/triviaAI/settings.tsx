@@ -5,7 +5,22 @@
  */
 
 import { definePluginSettings } from "@api/Settings";
+import { Button } from "@components/Button";
+import { Notice } from "@components/Notice";
+import { useCspPermission } from "@utils/csp";
 import { OptionType } from "@utils/types";
+
+function EndpointNotice() {
+    const { endpoint } = settings.use(["endpoint"]);
+    const [isAllowed, allow] = useCspPermission(endpoint, ["connect-src"], "TriviaAI");
+    if (isAllowed) return null;
+
+    return (
+        <Notice variant="warning" action={<Button size="small" variant="secondary" onClick={allow}>Allow Host</Button>}>
+            Connections to {URL.parse(endpoint)?.host} are blocked. Allow this host if you trust it, then restart Discord.
+        </Notice>
+    );
+}
 
 export const settings = definePluginSettings({
     apiKey: {
@@ -40,6 +55,10 @@ export const settings = definePluginSettings({
         description: "OpenAI Compatible AI Endpoint.",
         default: "https://openrouter.ai/api/v1/chat/completions",
         placeholder: "Enter your OpenAI compatible AI endpoint here."
+    },
+    endpointPermission: {
+        type: OptionType.COMPONENT,
+        component: () => <EndpointNotice />
     },
     context: {
         type: OptionType.NUMBER,

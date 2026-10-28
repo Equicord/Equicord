@@ -5,8 +5,11 @@
  */
 
 import { set } from "@api/DataStore";
+import { Button } from "@components/Button";
 import { Heading } from "@components/Heading";
 import { Margins } from "@components/margins";
+import { Notice } from "@components/Notice";
+import { useCspPermission } from "@utils/csp";
 import { classNameFactory } from "@utils/css";
 import { RenderModalProps } from "@vencord/discord-types";
 import { IconUtils, Modal, React, showToast,TextInput, UserStore, useState } from "@webpack/common";
@@ -33,6 +36,8 @@ export function SetAvatarModal({ userId, modalProps }: { userId: string; modalPr
     const [preview, setPreview] = useState<string>(avatars[userId] || "");
     const [isDragging, setIsDragging] = useState(false);
     const fileInputRef = React.useRef<HTMLInputElement>(null);
+    const previewUrl = URL.parse(preview);
+    const [isAllowed, allowHost] = useCspPermission(previewUrl?.protocol === "https:" ? preview : undefined, ["img-src"], "UserPFP");
 
     function handleKey(e: React.KeyboardEvent) {
         if (e.key === "Enter") saveUserAvatar();
@@ -47,7 +52,7 @@ export function SetAvatarModal({ userId, modalProps }: { userId: string; modalPr
         if (!file.type.startsWith("image/")) return;
 
         if (file.type === "image/gif" || file.type === "image/webp") {
-            showToast({ text: "GIFs/WebP must be added via URL. Upload your GIF/WebP to a image hosting service and paste the link.", variant: "critical" });
+            showToast({ text: "GIFs/WebP must be added via URL. Imgur, GitHub, Tenor, Giphy and Discord links work without extra setup.", variant: "critical" });
             return;
         }
 
@@ -122,6 +127,15 @@ export function SetAvatarModal({ userId, modalProps }: { userId: string; modalPr
                         onChange={handleUrlChange}
                         autoFocus
                     />
+                    {!isAllowed && (
+                        <Notice
+                            variant="warning"
+                            className={Margins.top8}
+                            action={<Button size="small" variant="secondary" onClick={allowHost}>Allow Host</Button>}
+                        >
+                            Images from {previewUrl?.host} are blocked. Allow this host if you trust it, then restart Discord.
+                        </Notice>
+                    )}
                 </section>
 
                 {/* Drag & drop */}

@@ -6,10 +6,12 @@
 
 import { definePluginSettings } from "@api/Settings";
 import { disableStyle, enableStyle } from "@api/Styles";
-import { ButtonCompat } from "@components/Button";
+import { Button, ButtonCompat } from "@components/Button";
 import { HeadingSecondary } from "@components/Heading";
+import { Notice } from "@components/Notice";
 import { Paragraph } from "@components/Paragraph";
 import { SettingsSection } from "@components/settings/tabs/plugins/components/Common";
+import { useCspPermission } from "@utils/csp";
 import { makeRange, OptionType } from "@utils/types";
 import { MaskedLink, Select, showToast, TextInput } from "@webpack/common";
 
@@ -39,6 +41,9 @@ function InstallInstructions() {
 }
 
 function LyricsProviderSettings() {
+    const { spotifyLyricsApiUrl } = settings.use(["spotifyLyricsApiUrl"]);
+    const [isLyricsServerAllowed, allowLyricsServer] = useCspPermission(spotifyLyricsApiUrl.trim(), ["connect-src"], "MusicControls");
+
     return (
         <>
             <SettingsSection id="lyrics-provider" name="Lyrics Provider" description="Where lyrics are fetched from.">
@@ -72,6 +77,12 @@ function LyricsProviderSettings() {
                         maxLength={null}
                     />
                 </SettingsSection>
+            )}
+
+            {!isLyricsServerAllowed && settings.store.lyricsProvider === Provider.Spotify && (
+                <Notice variant="warning" action={<Button size="small" variant="secondary" onClick={allowLyricsServer}>Allow Host</Button>}>
+                    Connections to {URL.parse(spotifyLyricsApiUrl.trim())?.host} are blocked. Allow this host if you trust it, then restart Discord.
+                </Notice>
             )}
         </>
     );
