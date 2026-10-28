@@ -54,6 +54,7 @@ export interface Settings {
     themeLinks: string[];
     mainWindowFrameless: boolean;
     frameless: boolean;
+    noRoundCorners: boolean;
     transparent: boolean;
     winCtrlQ: boolean;
     macosVibrancyStyle:
@@ -117,6 +118,7 @@ const DefaultSettings: Settings = {
     enableReactDevtools: false,
     mainWindowFrameless: false,
     frameless: false,
+    noRoundCorners: false,
     transparent: false,
     winCtrlQ: false,
     macosVibrancyStyle: undefined,
