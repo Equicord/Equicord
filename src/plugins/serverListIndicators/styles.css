@@ -1,13 +1,4 @@
-#vc-indicators-compact-indicator-items {
-    width: var(--custom-guild-list-width);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
-#vc-friendcount,
-#vc-guildcount {
+.vc-indicators-item {
     display: flex;
     align-items: center;
     justify-content: space-evenly;

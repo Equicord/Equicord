@@ -54,10 +54,9 @@ function FriendsIndicator() {
     });
 
     return (
-        <div id="vc-friendcount">
-            {!settings.store.useCompact && <FriendsIcon width="12px" height="12px" />}
+        <div id="vc-friendcount" className="vc-serverlistindicators-item" aria-label={onlineFriendsCount + " Friends"}>
+            <FriendsIcon width="12px" height="12px" />
             <BaseText size="xs" id="vc-friendcount-text">{onlineFriendsCount}</BaseText>
-            {!!settings.store.useCompact && <BaseText size="xs" id="vc-friendcount-text-compact">Friends</BaseText>}
         </div>
     );
 }
@@ -72,10 +71,9 @@ function ServersIndicator() {
     });
 
     return (
-        <div id="vc-guildcount">
-            {!settings.store.useCompact && <ServerIcon width="12px" height="12px"/>}
+        <div id="vc-guildcount" className="vc-serverlistindicators-item" aria-label={guildCount + " Servers"}>
+            <ServerIcon width="12px" height="12px"/>
             <BaseText size="xs" id="vc-guildcount-text">{guildCount}</BaseText>
-            {!!settings.store.useCompact && <BaseText size="xs" id="vc-guildcount-text-compact">Servers</BaseText>}
         </div>
     );
 }
@@ -88,14 +86,7 @@ export const settings = definePluginSettings({
             { label: "Only online friend count", value: IndicatorType.FRIEND, default: true },
             { label: "Only server count", value: IndicatorType.SERVER },
             { label: "Both server and online friend counts", value: IndicatorType.BOTH },
-        ],
-        restartNeeded: false
-    },
-    useCompact: {
-        description: "Makes the indicator appear with only text",
-        type: OptionType.BOOLEAN,
-        default: false,
-        restartNeeded: false
+        ]
     }
 });
 
@@ -108,7 +99,7 @@ export default definePlugin({
     settings,
 
     renderIndicator: () => {
-        const { mode, useCompact } = settings.store;
+        const { mode } = settings.store;
         let text: string;
         // switch is simply better
         switch (mode) {
@@ -123,21 +114,18 @@ export default definePlugin({
                 break;
         }
 
-        const cl = useCompact ? classNameFactory("vc-indicators-compact-") : classNameFactory("vc-indicators-");
+        const cl = classNameFactory("vc-indicators-");
 
         const items = () => {
             return (
-                <div
-                    id={cl("indicator-items")}>
+                <div id={cl("indicator-items")}>
                     {!!(mode & IndicatorType.FRIEND) && <FriendsIndicator />}
                     {!!(mode & IndicatorType.SERVER) && <ServersIndicator />}
                 </div>
             );
         };
 
-        return useCompact ? (
-            items()
-        ) : (
+        return (
             <ServerListItem
                 id={cl("container")}
                 icon={items}
