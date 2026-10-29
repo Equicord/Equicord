@@ -20,7 +20,7 @@ import { isPluginEnabled } from "@api/PluginManager";
 import { definePluginSettings } from "@api/Settings";
 import ErrorBoundary from "@components/ErrorBoundary";
 import NoBlockedMessagesPlugin from "@plugins/noBlockedMessages";
-import { Devs } from "@utils/constants";
+import { Devs, EquicordDevs } from "@utils/constants";
 import { sleep } from "@utils/misc";
 import { Queue } from "@utils/Queue";
 import { useForceUpdater } from "@utils/react";
@@ -160,7 +160,7 @@ export default definePlugin({
     name: "WhoReacted",
     description: "Renders the avatars of users who reacted to a message",
     tags: ["Reactions", "Chat", "Appearance"],
-    authors: [Devs.Ven, Devs.KannaDev, Devs.newwares, Devs.paige, Devs.BioTomateDE],
+    authors: [Devs.Ven, Devs.KannaDev, Devs.newwares, Devs.paige, EquicordDevs.BioTomateDE],
     settings,
     patches: [
         {
