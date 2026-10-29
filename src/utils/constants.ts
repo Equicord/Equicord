@@ -1325,7 +1325,7 @@ export const EquicordDevs = Object.freeze({
     },
     BioTomateDE: {
         name: "BioTomateDE",
-        id: 553499669226061844n
+        id: 1383525574508679228n
     },
     korzi: {
         name: "korzi",
