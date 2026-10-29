@@ -36,6 +36,8 @@ const enum IndicatorType {
 let onlineFriendsCount = 0;
 let guildCount = 0;
 
+const cl = classNameFactory("vc-indicators-");
+
 function FriendsIndicator() {
     onlineFriendsCount = useStateFromStores([RelationshipStore, PresenceStore], () => {
         let count = 0;
@@ -54,7 +56,7 @@ function FriendsIndicator() {
     });
 
     return (
-        <div id="vc-friendcount" className="vc-serverlistindicators-item" aria-label={onlineFriendsCount + " Friends"}>
+        <div id="vc-friendcount" className={cl("item")} aria-label={onlineFriendsCount + " Friends"}>
             <FriendsIcon width="12px" height="12px" />
             <BaseText size="xs" id="vc-friendcount-text">{onlineFriendsCount}</BaseText>
         </div>
@@ -71,7 +73,7 @@ function ServersIndicator() {
     });
 
     return (
-        <div id="vc-guildcount" className="vc-serverlistindicators-item" aria-label={guildCount + " Servers"}>
+        <div id="vc-guildcount" className={cl("item")} aria-label={guildCount + " Servers"}>
             <ServerIcon width="12px" height="12px"/>
             <BaseText size="xs" id="vc-guildcount-text">{guildCount}</BaseText>
         </div>
@@ -114,11 +116,9 @@ export default definePlugin({
                 break;
         }
 
-        const cl = classNameFactory("vc-indicators-");
-
         const items = () => {
             return (
-                <div id={cl("indicator-items")}>
+                <div id={cl("group")}>
                     {!!(mode & IndicatorType.FRIEND) && <FriendsIndicator />}
                     {!!(mode & IndicatorType.SERVER) && <ServersIndicator />}
                 </div>
