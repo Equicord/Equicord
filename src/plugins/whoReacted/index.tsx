@@ -213,7 +213,7 @@ export default definePlugin({
                 const { blocked, ignored } = NoBlockedMessagesPlugin.getRelationshipStatus(user);
                 return !(blocked || (ignored && NoBlockedMessagesPlugin.settings.store.alsoHideIgnoredUsers));
             });
-        
+
         if (users.length === 0) return null;
         if (reactorLimit !== 0 && users.length >= reactorLimit) return null;
         return <ReactionUsers message={message} users={users} />;
