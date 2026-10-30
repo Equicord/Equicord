@@ -150,7 +150,6 @@ export function ConvertAccessory({ message }: { message: Message; }) {
         <span style={{
             color: "var(--text-muted)",
             marginTop: "0.5em",
-            fontStyle: "italic",
             fontWeight: 400,
             lineHeight: "1.2rem",
             whiteSpace: "break-spaces"
