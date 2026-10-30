@@ -57,7 +57,7 @@ export default definePlugin({
     authors: [Devs.kemo, EquicordDevs.KrystalSkull],
     dependencies: ["ServerListAPI"],
 
-    renderButton() {
+    renderReadAllButton() {
         return (
             <ServerListItem
                 id="vc-ranb-button-container"
@@ -69,10 +69,10 @@ export default definePlugin({
     },
 
     start() {
-        addServerListElement(ServerListRenderPosition.Above, this.renderButton);
+        addServerListElement(ServerListRenderPosition.Above, this.renderReadAllButton);
     },
 
     stop() {
-        removeServerListElement(ServerListRenderPosition.Above, this.renderButton);
+        removeServerListElement(ServerListRenderPosition.Above, this.renderReadAllButton);
     }
 });
