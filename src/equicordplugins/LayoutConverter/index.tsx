@@ -1,4 +1,5 @@
 import definePlugin from "@utils/types";
+import { EquicordDevs } from "@utils/constants";
 import { Message } from "@vencord/discord-types";
 import { ChannelStore, useEffect, useState } from "@webpack/common";
 import { settings } from "./settings";
@@ -165,7 +166,7 @@ export function ConvertAccessory({ message }: { message: Message; }) {
 export default definePlugin({
     name: "LayoutConverter",
     description: "converts text between keyboard layouts (arabic and russian only)",
-    authors: [{ name: "coder", id: 1099039269391171765n }],
+    authors: [EquicordDevs.coder],
     dependencies: ["MessagePopoverAPI", "MessageAccessoriesAPI"],
     settings,
 
