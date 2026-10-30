@@ -9,7 +9,7 @@ import ru from "./maps/ru.json";
 
 type LangMap = {
     map: Record<string, string>;
-    range: [number, number][];
+    range: number[][];
 };
 
 const maps: Record<string, LangMap> = {
@@ -17,15 +17,15 @@ const maps: Record<string, LangMap> = {
     ru: ru as LangMap
 };
 
-const EN_RANGE: [number, number][] = [[65, 90], [97, 122]];
+const EN_RANGE: number[][] = [[65, 90], [97, 122]];
 
 const revCache: Record<string, Record<string, string>> = {};
 
-function getRange(lang: string): [number, number][] {
+function getRange(lang: string): number[][] {
     return maps[lang]?.range ?? EN_RANGE;
 }
 
-function inRange(char: string, ranges: [number, number][]): boolean {
+function inRange(char: string, ranges: number[][]): boolean {
     const code = char.charCodeAt(0);
     for (const [s, e] of ranges) {
         if (code >= s && code <= e) return true;
@@ -107,7 +107,7 @@ function convertText(text: string): string {
     return out;
 }
 
-const ConvertIcon = ({ height = 20, width = 20, className, style }: { height?: number; width?: number; className?: string; style?: React.CSSProperties; }) => (
+const ConvertIcon = ({ height = 20, width = 20, className, style }: { height?: string | number; width?: string | number; className?: string; style?: React.CSSProperties; }) => (
 // DO NOT EDIT THE SVG PATH PLS
     <svg viewBox="0 0 24 24" fill="currentColor" width={width} height={height} className={className} style={style}>
         <path d="M6.99 11L3 15l3.99 4v-3H14v-2H6.99v-3zM21 9l-3.99-4v3H10v2h7.01v3L21 9z" />
@@ -165,7 +165,7 @@ export function ConvertAccessory({ message }: { message: Message; }) {
 export default definePlugin({
     name: "LayoutConverter",
     description: "converts text between keyboard layouts (arabic and russian only)",
-    authors: [{ name: "coder", id: "1099039269391171765" }],
+    authors: [{ name: "coder", id: 1099039269391171765n }],
     dependencies: ["MessagePopoverAPI", "MessageAccessoriesAPI"],
     settings,
 
