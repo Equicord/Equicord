@@ -6,14 +6,7 @@
 
 import { EquicordDevs } from "@utils/constants";
 import definePlugin from "@utils/types";
-import { Constants, RestAPI, SelectedChannelStore } from "@webpack/common";
-
-let interval: ReturnType<typeof setInterval> | undefined;
-
-function sendTyping() {
-    const channelId = SelectedChannelStore.getChannelId();
-    if (channelId) RestAPI.post({ url: Constants.Endpoints.TYPING(channelId) });
-}
+import { Constants, ExpressionPickerStore, RestAPI, useEffect } from "@webpack/common";
 
 export default definePlugin({
     name: "GifPickerTyping",
@@ -23,31 +16,24 @@ export default definePlugin({
     patches: [
         {
             find: "renderHeaderContent()",
-            replacement: [
-                {
-                    match: /componentDidMount\(\)\{(?=\i\.\i\(\),document\.addEventListener\("keydown",this\.backToFrontPage\))/,
-                    replace: "$&$self.startTyping(),"
-                },
-                {
-                    match: /componentWillUnmount\(\)\{(?=\i\.\i\(\),document\.removeEventListener\("keydown",this\.backToFrontPage\))/,
-                    replace: "$&$self.stopTyping(),"
-                }
-            ]
+            replacement: {
+                match: /(?<=function \i\(\i\)\{let\{ref:\i,\.\.\.\i\}=\i;)(?=\i\.useEffect\(\(\)=>\(\i\.persistSearch)/,
+                replace: "$self.useGifPickerTyping();"
+            }
         }
     ],
 
-    startTyping() {
-        clearInterval(interval);
-        sendTyping();
-        interval = setInterval(sendTyping, 8000);
-    },
+    useGifPickerTyping() {
+        const channelId = ExpressionPickerStore.useExpressionPickerStore(state => state.activeChannelId);
 
-    stopTyping() {
-        clearInterval(interval);
-        interval = undefined;
-    },
+        useEffect(() => {
+            if (!channelId) return;
 
-    stop() {
-        this.stopTyping();
+            const type = () => RestAPI.post({ url: Constants.Endpoints.TYPING(channelId) });
+            type();
+
+            const interval = setInterval(type, 8000);
+            return () => clearInterval(interval);
+        }, [channelId]);
     }
 });
