@@ -5,6 +5,7 @@
  */
 
 import { definePluginSettings } from "@api/Settings";
+import { Button } from "@components/Button";
 import { EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 import { SoundboardSound } from "@vencord/discord-types";
@@ -31,12 +32,25 @@ interface SoundboardSoundPayload {
     available: boolean;
 }
 
+const openConfig = () => {
+    if (ws?.readyState !== WebSocket.OPEN) {
+        showToast({ text: "Not connected to Orbolay", variant: "critical" });
+        return;
+    }
+
+    ws.send(JSON.stringify({ cmd: "OPEN_CONFIG" }));
+};
+
 const settings = definePluginSettings({
     port: {
         type: OptionType.NUMBER,
         description: "Port to connect to",
         default: 6888,
         restartNeeded: true
+    },
+    openConfig: {
+        type: OptionType.COMPONENT,
+        component: () => <Button onClick={openConfig}>Open Orbolay settings</Button>
     },
 });
 
