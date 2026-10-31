@@ -1343,8 +1343,8 @@ export const EquicordDevs = Object.freeze({
         name: "Leon135",
         id: 309275452231385088n
     },
-    bbpltergiest: {
-        name: "bbpltergiest",
+    luqenov: {
+        name: "luqenov",
         id: 279448683672502274n
     },
     mshl: {
