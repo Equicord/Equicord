@@ -4,10 +4,12 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { Button } from "@components/Button";
+import { Text } from "@components/Text";
 import { classNameFactory } from "@utils/css";
 import { Channel, RenderModalProps } from "@vencord/discord-types";
 import { findByPropsLazy, findComponentByCodeLazy } from "@webpack";
-import { Avatar, Button, ChannelStore, MessageStore, Modal,React, Text, UserStore } from "@webpack/common";
+import { Avatar, ChannelStore, MessageStore, Modal, React, UserStore } from "@webpack/common";
 
 const cl = classNameFactory("vc-boo-");
 
@@ -95,7 +97,7 @@ export function GhostedUsersModal({ modalProps, ghostedChannels: initialChannels
         >
             <div className={cl("modal-content")}>
                 {ghostedChannels.length === 0 ? (
-                    <Text variant="text-md/normal">No ghosts here!</Text>
+                    <Text size="md">No ghosts here!</Text>
                 ) : (
                     ghostedChannels.map(channelId => {
                         const channel = ChannelStore.getChannel(channelId);
@@ -121,18 +123,18 @@ export function GhostedUsersModal({ modalProps, ghostedChannels: initialChannels
                                         aria-label={displayName}
                                     />}
                                 <div className={cl("user-info")}>
-                                    <Text variant="text-md/normal">
+                                    <Text size="md">
                                         {displayName}
                                     </Text>
                                     {lastMessageDate && (
-                                        <Text variant="text-xs/normal" className={cl("modal-text")}>
+                                        <Text size="xs" className={cl("modal-text")}>
                                             {lastMessageDate}
                                         </Text>
                                     )}
                                 </div>
                                 <Button
-                                    size={Button.Sizes.SMALL}
-                                    color={Button.Colors.PRIMARY}
+                                    size="small"
+                                    variant="secondary"
                                     onClick={e => handleClearClick(e, channelId)}
                                 >
                                     Clear

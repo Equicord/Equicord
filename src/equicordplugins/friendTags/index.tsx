@@ -10,11 +10,12 @@ import { NavContextMenuPatchCallback } from "@api/ContextMenu";
 import { DataStore } from "@api/index";
 import { definePluginSettings } from "@api/Settings";
 import { BaseText } from "@components/BaseText";
+import { Button } from "@components/Button";
 import { Divider } from "@components/Divider";
 import { Devs } from "@utils/constants";
 import { useForceUpdater } from "@utils/react";
 import definePlugin, { OptionType } from "@utils/types";
-import { Button, ChannelStore, Menu, RelationshipStore, TextInput, useEffect, UserStore, useState } from "@webpack/common";
+import { ChannelStore, Menu, RelationshipStore, TextInput, useEffect, UserStore, useState } from "@webpack/common";
 
 interface UserTagData {
     tagName: string;
@@ -126,7 +127,7 @@ function TagConfigCard(props) {
                     await SetData();
                     update();
                 }}
-                color={Button.Colors.RED}
+                variant="dangerPrimary"
             >
                 Remove
             </Button>

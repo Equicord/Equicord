@@ -8,9 +8,10 @@ import { definePluginSettings } from "@api/Settings";
 import { Card } from "@components/Card";
 import { Flex } from "@components/Flex";
 import { FormSwitch } from "@components/FormSwitch";
+import { Heading } from "@components/Heading";
 import { Paragraph } from "@components/Paragraph";
 import { OptionType } from "@utils/types";
-import { Forms, TextInput, Tooltip } from "@webpack/common";
+import { TextInput, Tooltip } from "@webpack/common";
 
 import moreUserTags from ".";
 import { Tag, tags } from "./consts";
@@ -43,7 +44,7 @@ function SettingsComponent() {
                             boxSizing: "border-box",
                         }}
                     >
-                        <Forms.FormTitle style={{ width: "fit-content" }}>
+                        <Heading style={{ width: "fit-content" }}>
                             <Tooltip text={t.description}>
                                 {({ onMouseEnter, onMouseLeave }) => (
                                     <div
@@ -54,7 +55,7 @@ function SettingsComponent() {
                                     </div>
                                 )}
                             </Tooltip>
-                        </Forms.FormTitle>
+                        </Heading>
 
                         <div style={{ marginBottom: "10px" }}>
                             <Paragraph style={{

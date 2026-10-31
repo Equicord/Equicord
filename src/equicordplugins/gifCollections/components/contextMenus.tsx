@@ -7,7 +7,7 @@
 import { findGroupChildrenByChildId, NavContextMenuPatchCallback } from "@api/ContextMenu";
 import { FolderIcon, InfoIcon, LinkIcon, PencilIcon, PlusIcon, RemixIcon, TrashIcon } from "@components/Icons";
 import { copyToClipboard } from "@utils/clipboard";
-import { Alerts, Button, FluxDispatcher, Menu, showToast } from "@webpack/common";
+import { Alerts, FluxDispatcher, Menu, showToast } from "@webpack/common";
 
 import { settings } from "../settings";
 import { Gif } from "../types";
@@ -172,7 +172,7 @@ export function RemoveItemContextMenuItems({ type, nameOrId }: { type: "collecti
                         title: "Are you sure?",
                         body: `Do you really want to ${type === "collection" ? "delete this collection" : "remove this item"}?`,
                         confirmText: type === "collection" ? "Delete" : "Remove",
-                        confirmColor: Button.Colors.RED,
+                        confirmColor: "danger",
                         cancelText: "Nevermind",
                         onConfirm: doDelete,
                     });

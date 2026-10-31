@@ -6,10 +6,11 @@
 
 import "./styles.css";
 
+import { Button } from "@components/Button";
 import { EquicordDevs } from "@utils/constants";
 import { getIntlMessage, openUserProfile } from "@utils/discord";
 import definePlugin from "@utils/types";
-import { Button, React, RelationshipStore, TextInput, UserStore } from "@webpack/common";
+import { React, RelationshipStore, TextInput, UserStore } from "@webpack/common";
 
 interface ChannelStreamItem {
     type: string;
@@ -117,7 +118,7 @@ export default definePlugin({
     renderUser(userId: string, rest: any) {
         return (
             <div style={{ display: "flex", gap: "8px" }}>
-                <Button color={Button.Colors.PRIMARY} onClick={() => openUserProfile(userId)}>
+                <Button variant="secondary" onClick={() => openUserProfile(userId)}>
                     {getIntlMessage("SHOW_USER_PROFILE")}
                 </Button>
                 {rest}

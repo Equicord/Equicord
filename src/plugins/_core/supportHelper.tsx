@@ -41,7 +41,7 @@ import definePlugin from "@utils/types";
 import { checkForUpdates, isOutdated, update } from "@utils/updater";
 import { RenderModalProps } from "@vencord/discord-types";
 import { CloudUploadPlatform } from "@vencord/discord-types/enums";
-import { Alerts, ChannelStore, CloudUploader, ConfirmModal, Constants, GuildMemberStore, openModal, Parser, PermissionsBits, PermissionStore, RelationshipStore, RestAPI, SelectedChannelStore, showToast, SnowflakeUtils, Text, UserStore } from "@webpack/common";
+import { Alerts, ChannelStore, CloudUploader, ConfirmModal, Constants, GuildMemberStore, openModal, Parser, PermissionsBits, PermissionStore, RelationshipStore, RestAPI, SelectedChannelStore, showToast, SnowflakeUtils, UserStore } from "@webpack/common";
 import { JSX } from "react";
 
 import plugins, { PluginMeta } from "~plugins";
@@ -302,7 +302,7 @@ function DevBuildConfirmModal(props: RenderModalProps) {
                     Either <Link href="https://equicord.org/download">switch to an official build</Link> or figure your issue out yourself.
                 </Paragraph>
 
-                <Text variant="text-md/bold" className={Margins.top8}>You will be banned from receiving support if you ignore this rule.</Text>
+                <Paragraph size="md" weight="bold" className={Margins.top8}>You will be banned from receiving support if you ignore this rule.</Paragraph>
             </div>
         </ConfirmModal>
     );

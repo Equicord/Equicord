@@ -7,12 +7,13 @@
 import { findGroupChildrenByChildId, NavContextMenuPatchCallback } from "@api/ContextMenu";
 import { DataStore } from "@api/index";
 import { definePluginSettings } from "@api/Settings";
+import { Button } from "@components/Button";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Devs } from "@utils/constants";
 import { classes } from "@utils/misc";
 import definePlugin, { OptionType } from "@utils/types";
 import { findCssClassesLazy } from "@webpack";
-import { Button, Menu } from "@webpack/common";
+import { Menu } from "@webpack/common";
 import React, { ReactNode } from "react";
 
 const CodeContainerClasses = findCssClassesLazy("markup", "codeContainer");
@@ -62,7 +63,7 @@ function blockedComponentRender(sticker) {
 
     if (showButton) {
         elements.push(
-            <Button key="button" onClick={() => toggleBlock(sticker.id)} color={Button.Colors.RED}>Unblock {(showMessage) ? "" : sticker.name}</Button>
+            <Button key="button" onClick={() => toggleBlock(sticker.id)} variant="dangerPrimary">Unblock {(showMessage) ? "" : sticker.name}</Button>
         );
     }
 

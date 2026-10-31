@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { Button } from "@components/Button";
 import { ErrorCard } from "@components/ErrorCard";
 import { HeadingPrimary, HeadingSecondary } from "@components/Heading";
 import { Paragraph } from "@components/Paragraph";
@@ -12,7 +13,7 @@ import { createOrUpdateThemeColorVars } from "@plugins/clientTheme/utils/styleUt
 import { classNameFactory } from "@utils/css";
 import { Margins } from "@utils/margins";
 import { findByCodeLazy } from "@webpack";
-import { Button, ClientThemesBackgroundStore, ColorPicker, ThemeStore, useStateFromStores } from "@webpack/common";
+import { ClientThemesBackgroundStore, ColorPicker, ThemeStore, useStateFromStores } from "@webpack/common";
 
 import { settings } from "..";
 
@@ -86,8 +87,8 @@ export function ThemeSettingsComponent() {
                     {nitroThemeEnabled && <Paragraph>{">"} Nitro themes aren't supported</Paragraph>}
 
                     <div className={cl("buttons-container")}>
-                        {(contrastWarning && fixableContrast) && <Button onClick={() => setDiscordTheme(oppositeTheme)} color={Button.Colors.RED}>Switch to {oppositeTheme} mode</Button>}
-                        {(nitroThemeEnabled) && <Button onClick={() => setDiscordTheme(currentTheme)} color={Button.Colors.RED}>Disable Nitro Theme</Button>}
+                        {(contrastWarning && fixableContrast) && <Button onClick={() => setDiscordTheme(oppositeTheme)} variant="dangerPrimary">Switch to {oppositeTheme} mode</Button>}
+                        {(nitroThemeEnabled) && <Button onClick={() => setDiscordTheme(currentTheme)} variant="dangerPrimary">Disable Nitro Theme</Button>}
                     </div>
                 </ErrorCard>
             </>)}

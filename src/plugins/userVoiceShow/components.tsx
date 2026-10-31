@@ -5,8 +5,8 @@
  */
 
 import { isPluginEnabled } from "@api/PluginManager";
-import { BaseText } from "@components/BaseText";
 import ErrorBoundary from "@components/ErrorBoundary";
+import { Paragraph } from "@components/Paragraph";
 import ShowHiddenChannelsPlugin from "@plugins/showHiddenChannels";
 import { classNameFactory } from "@utils/css";
 import { classes } from "@utils/misc";
@@ -99,8 +99,8 @@ function VoiceChannelTooltip({ channel, isLocked }: VoiceChannelTooltipProps) {
     const Icon = isLocked ? LockedSpeakerIcon : SpeakerIcon;
     return (
         <>
-            <BaseText size="sm" weight="bold">In Voice Chat</BaseText>
-            <BaseText size="sm" weight="bold">{Parser.parse(`<#${channel.id}>`)}</BaseText>
+            <Paragraph weight="bold">In Voice Chat</Paragraph>
+            <Paragraph weight="bold">{Parser.parse(`<#${channel.id}>`)}</Paragraph>
             <div className={cl("vc-members")}>
                 <Icon size={18} />
                 <UserSummaryItem

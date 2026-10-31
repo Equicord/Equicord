@@ -366,7 +366,7 @@ export function SpotifyPlayer() {
 
     // Hide player after 5 minutes of inactivity
 
-    React.useEffect(() => {
+    useEffect(() => {
         setShouldHide(false);
         if (!isPlaying) {
             const timeout = setTimeout(() => setShouldHide(true), 1000 * 60 * 5);

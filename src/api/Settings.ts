@@ -20,7 +20,7 @@ import { SettingsStore as SettingsStoreClass } from "@shared/SettingsStore";
 import { Logger } from "@utils/Logger";
 import { mergeDefaults } from "@utils/mergeDefaults";
 import { DefinedSettings, OptionType, SettingsChecks, SettingsDefinition } from "@utils/types";
-import { React, useEffect } from "@webpack/common";
+import { useEffect, useReducer } from "@webpack/common";
 
 import plugins from "~plugins";
 
@@ -54,6 +54,7 @@ export interface Settings {
     themeLinks: string[];
     mainWindowFrameless: boolean;
     frameless: boolean;
+    noRoundCorners: boolean;
     transparent: boolean;
     winCtrlQ: boolean;
     macosVibrancyStyle:
@@ -117,6 +118,7 @@ const DefaultSettings: Settings = {
     enableReactDevtools: false,
     mainWindowFrameless: false,
     frameless: false,
+    noRoundCorners: false,
     transparent: false,
     winCtrlQ: false,
     macosVibrancyStyle: undefined,
@@ -220,7 +222,7 @@ export const Settings = SettingsStore.store;
  */
 // TODO: Representing paths as essentially "string[].join('.')" wont allow dots in paths, change to "paths?: string[][]" later
 export function useSettings(paths?: UseSettings<Settings>[]) {
-    const [, forceUpdate] = React.useReducer(() => ({}), {});
+    const [, forceUpdate] = useReducer(() => ({}), {});
 
     useEffect(() => {
         if (paths) {

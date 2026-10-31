@@ -20,7 +20,7 @@ import { definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 import { findByPropsLazy } from "@webpack";
-import { Alerts, Button, GuildStore } from "@webpack/common";
+import { Alerts, GuildStore } from "@webpack/common";
 
 const DeleteGuild = findByPropsLazy("deleteGuild", "sendTransferOwnershipPincode").deleteGuild;
 
@@ -95,7 +95,7 @@ export default definePlugin({
             return Alerts.show({
                 title: "Delete server?",
                 body: <p>It's permanent, if that wasn't obvious.</p>,
-                confirmColor: Button.Colors.RED,
+                confirmColor: "danger",
                 confirmText: "Delete",
                 onConfirm: () => GetPropsAndDeleteGuild(server.id),
                 cancelText: "Cancel"

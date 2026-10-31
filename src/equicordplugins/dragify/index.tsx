@@ -231,7 +231,7 @@ export default definePlugin({
         {
             find: "PrivateChannel.renderAvatar: Invalid prop configuration - no user or channel",
             replacement: {
-                match: /\.CHANNEL\(\i\.\i,\i\.\i\),(?=.{0,150}\.isMultiUserDM\(\))/,
+                match: /\.CHANNEL\(\i\.\i,\i\.\i\),(?=.{0,200}\.isMultiUserDM\(\))/,
                 replace: "$&draggable:!0,onDragStart:e=>$self.onDmDragStart(e,arguments[0].channel),"
             }
         },

@@ -16,7 +16,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-import { Button, MediaEngineStore, useState } from "@webpack/common";
+import { Button } from "@components/Button";
+import { useFluxSubscription } from "@utils/react";
+import { MediaEngineStore, useState } from "@webpack/common";
 
 import { settings, type VoiceRecorder } from "..";
 
@@ -25,10 +27,19 @@ export const VoiceRecorderWeb: VoiceRecorder = ({ setAudioBlob, onRecordingChang
     const [paused, setPaused] = useState(false);
     const [recorder, setRecorder] = useState<MediaRecorder>();
 
-    const changeRecording = (recording: boolean) => {
+    useFluxSubscription("VENCORD_STOP_RECORDING", stopRecording);
+
+    function changeRecording(recording: boolean) {
         setRecording(recording);
         onRecordingChange?.(recording);
-    };
+    }
+
+    function stopRecording() {
+        if (!recording) return;
+
+        recorder?.stop();
+        recorder?.stream.getTracks().forEach(track => track.stop());
+    }
 
     function toggleRecording() {
         const nowRecording = !recording;
@@ -67,8 +78,7 @@ export const VoiceRecorderWeb: VoiceRecorder = ({ setAudioBlob, onRecordingChang
                 changeRecording(true);
             });
         } else {
-            recorder?.stop();
-            recorder?.stream.getTracks().forEach(track => track.stop());
+            stopRecording();
         }
     }
 

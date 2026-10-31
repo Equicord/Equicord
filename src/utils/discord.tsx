@@ -17,8 +17,8 @@
 */
 
 import type { MessageObject } from "@api/MessageEvents";
-import type { BasicGuild, Channel, CloudUpload, Guild, GuildFeatures, GuildProfile, MediaModalItem, MediaModalProps, Message, User } from "@vencord/discord-types";
-import { ChannelActionCreators, ChannelStore, ComponentDispatch, Constants, FluxDispatcher, GuildStore, i18n, InviteActions, MessageActions, openMediaModal, openUserProfileModal, RestAPI, SelectedChannelStore, SelectedGuildStore, showToast, UserProfileStore, UserSettingsActionCreators, UserUtils } from "@webpack/common";
+import type { BasicGuild, Channel, CloudUpload, ConfirmModalProps, Guild, GuildFeatures, GuildProfile, MediaModalItem, MediaModalProps, Message, User } from "@vencord/discord-types";
+import { ChannelActionCreators, ChannelStore, ComponentDispatch, ConfirmModal, Constants, FluxDispatcher, GuildStore, i18n, InviteActions, MessageActions, openMediaModal, openModal, openUserProfileModal, RestAPI, SelectedChannelStore, SelectedGuildStore, showToast, UserProfileStore, UserSettingsActionCreators, UserUtils } from "@webpack/common";
 import { Except } from "type-fest";
 
 import { copyToClipboard } from "./clipboard";
@@ -241,4 +241,35 @@ export function getGuildAcronym(guild: Guild | BasicGuild | GuildProfile): strin
 
 export function hasGuildFeature(guild: Guild, feature: GuildFeatures): boolean {
     return guild.features?.has(feature) ?? false;
+}
+
+export type ConfirmOptions = Pick<ConfirmModalProps, "title" | "subtitle" | "confirmText" | "cancelText" | "variant" | "onConfirm" | "onCancel" | "onCloseCallback">;
+
+export async function confirmAction({ variant, confirmText, title, cancelText, subtitle, onConfirm, onCancel, onCloseCallback }: ConfirmOptions) {
+    return new Promise<boolean>((res, rej) => {
+        const wrap = (fn: Function | undefined, value: boolean) => async (...args: any[]): Promise<void> => {
+            try {
+                await fn?.(...args);
+                res(value);
+            } catch (e) {
+                rej(e);
+            }
+        };
+
+        openModal(modalProps => {
+            return (
+                <ConfirmModal
+                    {...modalProps}
+                    variant={variant}
+                    confirmText={confirmText}
+                    cancelText={cancelText}
+                    title={title}
+                    subtitle={subtitle}
+                    onConfirm={wrap(onConfirm, true)}
+                    onCancel={wrap(onCancel, false)}
+                    onCloseCallback={wrap(onCloseCallback, false)}
+                />
+            );
+        });
+    });
 }

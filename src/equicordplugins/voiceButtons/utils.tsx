@@ -6,9 +6,10 @@
 
 import "./styles.css";
 
+import { Button } from "@components/Button";
 import { Icon, User } from "@vencord/discord-types";
 import { findComponentByCodeLazy } from "@webpack";
-import { Button, ChannelActionCreators, ChannelStore, GuildActions, MediaEngineStore, NavigationRouter, PermissionsBits, PermissionStore, SoundboardStore, Tooltip, UserStore, VoiceActions, VoiceStateStore } from "@webpack/common";
+import { ChannelActionCreators, ChannelStore, GuildActions, MediaEngineStore, NavigationRouter, PermissionsBits, PermissionStore, SoundboardStore, Tooltip, UserStore, VoiceActions, VoiceStateStore } from "@webpack/common";
 import { JSX } from "react";
 
 import { settings } from "./settings";
@@ -28,9 +29,8 @@ function VoiceUserButton({ user, tooltip, icon, onClick }: { user: User; tooltip
             <Tooltip text={tooltip} shouldShow={!disabled}>
                 {({ onMouseEnter, onMouseLeave }) => (
                     <Button
-                        size={Button.Sizes.MIN}
-                        color={Button.Colors.TRANSPARENT}
-                        look={Button.Looks.FILLED}
+                        size="min"
+                        variant="secondary"
                         disabled={disabled}
                         onClick={e => {
                             e.preventDefault();

@@ -5,8 +5,9 @@
  */
 
 import { definePluginSettings } from "@api/Settings";
+import { Button } from "@components/Button";
 import { OptionType } from "@utils/types";
-import { Button, useStateFromStores } from "@webpack/common";
+import { useStateFromStores } from "@webpack/common";
 
 import { addIndicator, removeIndicator } from ".";
 import { HiddenServersMenu } from "./components/HiddenServersMenu";
@@ -39,8 +40,8 @@ export default definePluginSettings({
         component: () => (
             <div>
                 <Button
-                    size={Button.Sizes.SMALL}
-                    color={Button.Colors.RED}
+                    size="small"
+                    variant="dangerPrimary"
                     onClick={() => HiddenServersStore.clearHidden()}
                 >
                     Reset Hidden Servers

@@ -7,7 +7,7 @@
 import "./FormSwitch.css";
 
 import { classes } from "@utils/misc";
-import type { PropsWithChildren, ReactNode } from "react";
+import type { ReactNode } from "react";
 
 import { Flex } from "./Flex";
 import { Span } from "./Span";
@@ -40,8 +40,4 @@ export function FormSwitch({ onChange, title, value, description, disabled, clas
             </label>
         </div>
     );
-}
-
-export function FormSwitchCompat({ note, children, ...restProps }: PropsWithChildren<any>) {
-    return <FormSwitch title={children ?? ""} description={note} {...restProps} />;
 }

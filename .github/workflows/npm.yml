@@ -1,0 +1,33 @@
+name: Publish NPM packages
+on:
+    push:
+        tags:
+            - v*
+    workflow_dispatch:
+permissions:
+    contents: read
+    id-token: write
+
+jobs:
+    npm:
+        if: github.repository == 'Equicord/Equicord'
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+            - name: Setup PNPM
+              uses: pnpm/setup@fa36a5ef7dcdefc3a7cb25655c122e00cf6e636e # v3.1.2
+              with:
+                  runtime: node@v24
+                  require-lockfile: true
+
+            - name: Run Tests
+              run: pnpm test
+
+            - name: Build Equicord Types
+              run: pnpm generateTypes
+
+            - name: Publish NPM Packages
+              run: pnpm -r publish --filter "./packages/{discord,vencord}-types" --provenance --access public --no-git-checks

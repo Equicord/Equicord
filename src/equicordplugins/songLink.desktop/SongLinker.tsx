@@ -5,9 +5,10 @@
  */
 
 import { BaseText } from "@components/BaseText";
+import { Button } from "@components/Button";
 import { Card } from "@components/Card";
 import { HeadphonesIcon } from "@components/Icons";
-import { Button, useEffect, useState } from "@webpack/common";
+import { useEffect, useState } from "@webpack/common";
 
 import pl, { Native, settings, SongLinkResult } from ".";
 import { Providers } from "./Providers";

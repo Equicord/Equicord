@@ -4,13 +4,15 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { Button } from "@components/Button";
 import { Divider } from "@components/Divider";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Heading } from "@components/Heading";
 import { Paragraph } from "@components/Paragraph";
+import { Text } from "@components/Text";
 import { settings } from "@equicordplugins/channelTabs/util";
 import { IS_MAC } from "@utils/constants";
-import { Button, React, Text, useEffect, useRef, useState } from "@webpack/common";
+import { React, useEffect, useRef, useState } from "@webpack/common";
 import { JSX } from "react";
 
 interface KeybindInputProps {
@@ -115,17 +117,17 @@ function KeybindInput({ label, description, settingKey, enabledKey }: KeybindInp
     return (
         <div className="channelTabs-keybind-input">
             <div className="channelTabs-keybind-info">
-                <Text variant="text-md/semibold">{label}</Text>
-                <Text variant="text-sm/normal" style={{ color: "var(--text-muted)" }}>
+                <Text size="md" weight="semibold">{label}</Text>
+                <Text size="sm" style={{ color: "var(--text-muted)" }}>
                     {description}
                 </Text>
                 {!isEnabled && (
-                    <Text variant="text-xs/normal" style={{ color: "var(--text-feedback-critical)" }}>
+                    <Text size="xs" style={{ color: "var(--text-feedback-critical)" }}>
                         This shortcut is currently disabled
                     </Text>
                 )}
                 {error && (
-                    <Text variant="text-xs/normal" className="channelTabs-keybind-conflict">
+                    <Text size="xs" className="channelTabs-keybind-conflict">
                         {error}
                     </Text>
                 )}
@@ -140,8 +142,8 @@ function KeybindInput({ label, description, settingKey, enabledKey }: KeybindInp
                     {isListening ? "Press any key..." : formatKeybind(currentKeybind)}
                 </button>
                 <Button
-                    size={Button.Sizes.SMALL}
-                    color={Button.Colors.PRIMARY}
+                    size="small"
+                    variant="secondary"
                     onClick={handleReset}
                     disabled={!isEnabled}
                 >
@@ -216,7 +218,7 @@ export function KeybindSettings(): JSX.Element {
 
                 <div style={{ marginTop: "16px" }}>
                     <Button
-                        color={Button.Colors.RED}
+                        variant="dangerPrimary"
                         onClick={handleResetAll}
                     >
                         Reset All to Defaults

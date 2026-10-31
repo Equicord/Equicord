@@ -9,11 +9,12 @@ import "./style.css";
 import { addContextMenuPatch, NavContextMenuPatchCallback, removeContextMenuPatch } from "@api/ContextMenu";
 import { DataStore } from "@api/index";
 import { definePluginSettings } from "@api/Settings";
+import { Button } from "@components/Button";
 import { EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 import { chooseFile, saveFile } from "@utils/web";
 import { CustomEmoji, ToastVariant, UnicodeEmoji } from "@vencord/discord-types";
-import { Alerts, Button, EmojiStore, GuildStore, IconUtils, Menu, showToast as originalShowToast, useEffect, useState } from "@webpack/common";
+import { Alerts, EmojiStore, GuildStore, IconUtils, Menu, showToast as originalShowToast, useEffect, useState } from "@webpack/common";
 import { JSX } from "react";
 
 import { ContextMenuEmoji, SavedEmoji, Target } from "./types";
@@ -233,7 +234,6 @@ const WhiteListedEmojisComponent = (): JSX.Element => {
                         <Button
                             className="remove-all-button"
                             size="small"
-                            look="outlined"
                             color="red"
                             onClick={() => handleRemoveAllEmojis(guildId)}
                         >
@@ -257,7 +257,6 @@ const WhiteListedEmojisComponent = (): JSX.Element => {
                                     <Button
                                         className="remove-button"
                                         size="small"
-                                        look="outlined"
                                         color="red"
                                         onClick={() => handleRemoveEmoji(emoji)}
                                     >
@@ -367,7 +366,7 @@ const settings = definePluginSettings({
                     title: "Are you sure?",
                     body: "This will overwrite your current whitelist.",
                     confirmText: "Import",
-                    confirmColor: Button.Colors.RED,
+                    confirmColor: "danger",
                     cancelText: "Cancel",
                     onConfirm: uploadEmojis
                 })}>
@@ -384,7 +383,7 @@ const settings = definePluginSettings({
                     title: "Are you sure?",
                     body: "This will remove all emojis from your whitelist.",
                     confirmText: "Reset",
-                    confirmColor: Button.Colors.RED,
+                    confirmColor: "danger",
                     cancelText: "Cancel",
                     onConfirm: resetEmojis
                 })}>

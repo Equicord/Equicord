@@ -6,6 +6,7 @@
 
 import { plugins } from "@api/PluginManager";
 import { definePluginSettings } from "@api/Settings";
+import { Button } from "@components/Button";
 import { QrCodeIcon } from "@components/Icons";
 import { Paragraph } from "@components/Paragraph";
 import SettingsPlugin from "@plugins/_core/settings";
@@ -13,7 +14,6 @@ import { EquicordDevs } from "@utils/constants";
 import { getIntlMessage } from "@utils/discord";
 import { removeFromArray } from "@utils/misc";
 import definePlugin, { OptionType } from "@utils/types";
-import { Button } from "@webpack/common";
 
 import { preload, unload } from "./images";
 import openQrModal from "./ui/modals/QrModal";
@@ -31,7 +31,7 @@ const settings = definePluginSettings({
                 );
 
             return (
-                <Button size={Button.Sizes.SMALL} onClick={openQrModal}>
+                <Button size="small" onClick={openQrModal}>
                     {getIntlMessage("USER_SETTINGS_SCAN_QR_CODE")}
                 </Button>
             );

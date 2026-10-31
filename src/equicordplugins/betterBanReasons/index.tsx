@@ -7,12 +7,13 @@
 import "./styles.css";
 
 import { definePluginSettings } from "@api/Settings";
+import { Button } from "@components/Button";
 import { Heading } from "@components/Heading";
 import { DeleteIcon, PlusIcon } from "@components/Icons";
 import { Devs, EquicordDevs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
 import definePlugin, { OptionType } from "@utils/types";
-import { Button, Select, TextInput, useState } from "@webpack/common";
+import { Select, TextInput, useState } from "@webpack/common";
 
 const cl = classNameFactory("vc-bbr-");
 
@@ -60,10 +61,9 @@ function ReasonsComponent() {
                     />
                     <Button
                         className={cl("remove-button")}
-                        color={Button.Colors.TRANSPARENT}
+                        variant="secondary"
                         onClick={() => update(reasons.filter((_, j) => j !== i))}
-                        look={Button.Looks.FILLED}
-                        size={Button.Sizes.MIN}
+                        size="min"
                     >
                         <DeleteIcon />
                     </Button>
@@ -82,8 +82,8 @@ function ReasonsComponent() {
                 <Button
                     onClick={() => update([...reasons, { text: "" }])}
                     className={cl("add-button")}
-                    size={Button.Sizes.LARGE}
-                    color={Button.Colors.TRANSPARENT}
+                    size="medium"
+                    variant="secondary"
                 >
                     <PlusIcon /> Add another reason
                 </Button>

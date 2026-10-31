@@ -20,7 +20,9 @@ import "./styles.css";
 
 import { NavContextMenuPatchCallback } from "@api/ContextMenu";
 import { definePluginSettings } from "@api/Settings";
+import { Button } from "@components/Button";
 import { Card } from "@components/Card";
+import { Heading } from "@components/Heading";
 import { ClockIcon, Microphone } from "@components/Icons";
 import { Link } from "@components/Link";
 import { Paragraph } from "@components/Paragraph";
@@ -33,7 +35,7 @@ import definePlugin, { OptionType } from "@utils/types";
 import { chooseFile } from "@utils/web";
 import { RenderModalProps } from "@vencord/discord-types";
 import { CloudUploadPlatform } from "@vencord/discord-types/enums";
-import { Button, CloudUploader, Constants, FluxDispatcher, Forms, lodash, Menu, MessageActions, Modal, openModal, PendingReplyStore, PermissionsBits, PermissionStore, RestAPI, SelectedChannelStore, showToast, SnowflakeUtils, useEffect, useState } from "@webpack/common";
+import { CloudUploader, Constants, FluxDispatcher, lodash, Menu, MessageActions, Modal, openModal, PendingReplyStore, PermissionsBits, PermissionStore, RestAPI, SelectedChannelStore, showToast, SnowflakeUtils, useEffect, useState } from "@webpack/common";
 import { ComponentType } from "react";
 
 import { VoiceRecorderDesktop } from "./components/DesktopRecorder";
@@ -58,7 +60,7 @@ export const cl = classNameFactory("vc-vmsg-");
 
 export type VoiceRecorder = React.ComponentType<{
     setAudioBlob(blob: Blob): void;
-    onRecordingChange?(recording: boolean): void;
+    onRecordingChange(recording: boolean): void;
 }>;
 
 export let VoiceMessage: ComponentType<VoiceMessageProps> = () => null;
@@ -90,7 +92,11 @@ const ctxMenuPatch: NavContextMenuPatchCallback = (children, props) => {
                 icon: Microphone
             }}
             label="Send Voice Message"
-            action={() => openModal(modalProps => <VoiceMessageModal modalProps={modalProps} />)}
+            action={() =>
+                openModal(modalProps => <VoiceMessageModal modalProps={modalProps} />, {
+                    onCloseCallback: () => FluxDispatcher.dispatch({ type: "VENCORD_STOP_RECORDING" })
+                })
+            }
         />
     );
 };
@@ -280,7 +286,7 @@ function VoiceMessageModal({ modalProps }: { modalProps: RenderModalProps; }) {
                 </Button>
             </div>
 
-            <Forms.FormTitle>Preview</Forms.FormTitle>
+            <Heading>Preview</Heading>
             {metaError
                 ? <Paragraph className={cl("error")}>Failed to parse selected audio file: {metaError.message}</Paragraph>
                 : (
@@ -293,11 +299,11 @@ function VoiceMessageModal({ modalProps }: { modalProps: RenderModalProps; }) {
 
             {isUnsupportedFormat && (
                 <Card variant="warning" className={Margins.top16} defaultPadding>
-                    <Forms.FormText>Voice Messages have to be OggOpus to be playable on iOS. This file is <code>{blob.type}</code> so it will not be playable on iOS.</Forms.FormText>
+                    <Paragraph>Voice Messages have to be OggOpus to be playable on iOS. This file is <code>{blob.type}</code> so it will not be playable on iOS.</Paragraph>
 
-                    <Forms.FormText className={Margins.top8}>
+                    <Paragraph className={Margins.top8}>
                         To fix it, first convert it to OggOpus, for example using the <Link href="https://convertio.co/mp3-opus/">convertio web converter</Link>
-                    </Forms.FormText>
+                    </Paragraph>
                 </Card>
             )}
         </Modal>

@@ -7,11 +7,12 @@
 import { DataStore } from "@api/index";
 import { definePluginSettings } from "@api/Settings";
 import { BaseText } from "@components/BaseText";
+import { Button } from "@components/Button";
 import { Divider } from "@components/Divider";
 import { Heading } from "@components/Heading";
 import { Paragraph } from "@components/Paragraph";
 import { OptionType } from "@utils/types";
-import { Alerts, Button, useState } from "@webpack/common";
+import { Alerts, useState } from "@webpack/common";
 
 import { DATA_COLLECTION_NAME, getCollections, refreshCacheCollection } from "./utils/collectionManager";
 import { cl } from "./utils/misc";
@@ -88,7 +89,7 @@ export const settings = definePluginSettings({
                     title: "Are you sure?",
                     body: "Importing collections will overwrite your current collections.",
                     confirmText: "Import",
-                    confirmColor: Button.Colors.RED,
+                    confirmColor: "danger",
                     cancelText: "Nevermind",
                     onConfirm: () => uploadGifCollections(),
                 }) : uploadGifCollections()}>
@@ -112,7 +113,7 @@ export const settings = definePluginSettings({
                     title: "Are you sure?",
                     body: "Resetting collections will remove all your collections.",
                     confirmText: "Reset",
-                    confirmColor: Button.Colors.RED,
+                    confirmColor: "danger",
                     cancelText: "Nevermind",
                     onConfirm: async () => {
                         await DataStore.set(DATA_COLLECTION_NAME, []);

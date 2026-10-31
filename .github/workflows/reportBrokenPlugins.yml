@@ -31,6 +31,8 @@ on:
 
 env:
     FORCE_COLOR: true
+permissions:
+    contents: read
 
 jobs:
     TestPlugins:
@@ -38,13 +40,14 @@ jobs:
         runs-on: ubuntu-latest
 
         steps:
-            - uses: actions/checkout@v7
+            - name: Checkout repository
+              uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
               with:
                   repository: ${{ inputs.pr_repo || github.repository }}
                   ref: ${{ inputs.ref || (github.event_name == 'schedule' && 'dev' || github.ref) }}
 
             - name: Setup PNPM
-              uses: pnpm/setup@v2.1.0
+              uses: pnpm/setup@fa36a5ef7dcdefc3a7cb25655c122e00cf6e636e # v3.1.2
               with:
                   runtime: node@v24
                   require-lockfile: true

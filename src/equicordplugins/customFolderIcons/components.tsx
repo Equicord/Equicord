@@ -4,7 +4,8 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { Button, closeModal, Menu, Modal,openModalLazy, Slider, TextInput, useState } from "@webpack/common";
+import { Button } from "@components/Button";
+import { closeModal, Menu, Modal, openModalLazy, Slider, TextInput, useState } from "@webpack/common";
 
 import { folderIconsData, settings } from "./settings";
 import { folderProp, int2rgba, setFolderData } from "./util";

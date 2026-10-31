@@ -7,13 +7,14 @@
 import "./styles.css";
 
 import { Heading } from "@components/Heading";
+import { Paragraph } from "@components/Paragraph";
 import { classNameFactory } from "@utils/css";
 import { getGuildAcronym, openImageModal, openUserProfile } from "@utils/discord";
 import { classes } from "@utils/misc";
 import { useAwaiter } from "@utils/react";
 import { Guild, RenderModalProps, User } from "@vencord/discord-types";
 import { findComponentByCodeLazy, findCssClassesLazy } from "@webpack";
-import { FluxDispatcher, Forms, GuildChannelStore, GuildMemberStore, GuildRoleStore, GuildStore, IconUtils, Modal, openModal, Parser, PresenceStore, RelationshipStore, ScrollerThin, SnowflakeUtils, TabBar, Timestamp, useEffect, UserStore, UserUtils, useState, useStateFromStores } from "@webpack/common";
+import { FluxDispatcher, GuildChannelStore, GuildMemberStore, GuildRoleStore, GuildStore, IconUtils, Modal, openModal, Parser, PresenceStore, RelationshipStore, ScrollerThin, SnowflakeUtils, TabBar, Timestamp, useEffect, UserStore, UserUtils, useState, useStateFromStores } from "@webpack/common";
 
 import { settings } from ".";
 
@@ -98,8 +99,8 @@ function GuildInfoModal({ guild, modalProps }: GuildProps & { modalProps: Render
                     }
 
                     <div className={cl("name-and-description")}>
-                        <Forms.FormTitle tag="h5" className={cl("name")}>{guild.name}</Forms.FormTitle>
-                        {guild.description && <Forms.FormText>{guild.description}</Forms.FormText>}
+                        <Heading className={cl("name")}>{guild.name}</Heading>
+                        {guild.description && <Paragraph>{guild.description}</Paragraph>}
                     </div>
                 </div>
             }

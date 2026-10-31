@@ -239,7 +239,21 @@ export default definePlugin({
         return (
             <div className="vc-tenorGifSearch-wrapper" onMouseDown={e => e.stopPropagation()}>
                 <Component placeholder={placeholder} aria-label={ariaLabel} ref={ref} {...restProps} />
-                <ProviderSelect value={provider} onChange={v => settings.store.provider = v} />
+                <ProviderSelect value={provider} onChange={v => {
+                    settings.store.provider = v;
+
+                    const { query, onChange } = restProps;
+                    if (!query) return;
+
+                    // Discord memos it somewhere in a different place.
+                    // It already re-fetches the results internally, but doesn't re-render.
+                    // As a workaround we force a re-render by toggling a space at the start of the query
+                    onChange(
+                        query.startsWith(" ")
+                            ? query.slice(1)
+                            : " " + query
+                    );
+                }} />
             </div>
         );
     }, { noop: true }),

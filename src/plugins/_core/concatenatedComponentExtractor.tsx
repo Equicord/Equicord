@@ -31,7 +31,7 @@ export default definePlugin({
             }
         },
         {
-            find: '("UserProfileModalV2EditingPanel")',
+            find: "UserProfileModalV2EditingPanel",
             replacement: [
                 {
                     match: /function (\i).{0,50}showNitroIcon:.{0,500}\}\),\i\]\}\)\}/,

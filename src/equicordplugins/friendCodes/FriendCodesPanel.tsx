@@ -7,11 +7,12 @@
 import "./styles.css";
 
 import { BaseText } from "@components/BaseText";
+import { Button } from "@components/Button";
 import { Flex } from "@components/Flex";
 import { Heading, HeadingTertiary } from "@components/Heading";
 import { copyToClipboard } from "@utils/clipboard";
 import { findByPropsLazy, findCssClassesLazy } from "@webpack";
-import { Button, Parser, useEffect, useState } from "@webpack/common";
+import { Parser, useEffect, useState } from "@webpack/common";
 
 import { FriendInvite } from "./types";
 
@@ -30,9 +31,8 @@ function CopyButton({ copyText, copiedText, onClick }) {
     return (
         <Button
             onClick={handleButtonClick}
-            color={copied ? Button.Colors.GREEN : Button.Colors.BRAND}
-            size={Button.Sizes.SMALL}
-            look={Button.Looks.FILLED}
+            variant={copied ? "positive" : "primary"}
+            size="small"
         >
             {copied ? copiedText : copyText}
         </Button>
@@ -91,16 +91,14 @@ export default function FriendCodesPanel() {
                     <h2 className="vc-friend-codes-info-header">{`Friend Codes - ${invites.length}`}</h2>
                     <Flex justifyContent="end">
                         <Button
-                            color={Button.Colors.GREEN}
-                            look={Button.Looks.FILLED}
+                            variant="positive"
                             onClick={() => createFriendInvite().then((invite: FriendInvite) => setInvites([...invites, invite]))}
                         >
                             Create Friend Code
                         </Button>
                         <Button
                             style={{ marginLeft: "8px" }}
-                            color={Button.Colors.RED}
-                            look={Button.Looks.FILLED}
+                            variant="dangerPrimary"
                             disabled={!invites.length}
                             onClick={() => revokeFriendInvites().then(setInvites([]))}
                         >

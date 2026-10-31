@@ -8,14 +8,16 @@ import "./settings.css";
 
 import { DataStore } from "@api/index";
 import { isPluginEnabled } from "@api/PluginManager";
+import { Button } from "@components/Button";
 import { Divider } from "@components/Divider";
 import { Heading } from "@components/Heading";
+import { Paragraph } from "@components/Paragraph";
 import { resolveError } from "@components/settings/tabs/plugins/components/Common";
 import { debounce } from "@shared/debounce";
 import { classNameFactory } from "@utils/css";
 import { useAwaiter } from "@utils/react";
 import { ActivityType } from "@vencord/discord-types/enums";
-import { Button, Select, showToast, Text, TextInput, useState } from "@webpack/common";
+import { Select, showToast, TextInput, useState } from "@webpack/common";
 
 import CustomRPCPlugin, { RpcConfig, setRpc, settings, TimestampMode } from ".";
 
@@ -125,7 +127,7 @@ function SingleSetting<T>({ settingsKey, label, disabled, isValid, transform }: 
 
     return (
         <div className={cl("single", { disabled })}>
-            <Heading tag="h5">{label}</Heading>
+            <Heading>{label}</Heading>
             <TextInput
                 type="text"
                 placeholder={"Enter a value"}
@@ -133,7 +135,7 @@ function SingleSetting<T>({ settingsKey, label, disabled, isValid, transform }: 
                 onChange={handleChange}
                 disabled={disabled}
             />
-            {error && <Text className={cl("error")} variant="text-sm/normal">{error}</Text>}
+            {error && <Paragraph className={cl("error")}>{error}</Paragraph>}
         </div>
     );
 }
@@ -141,7 +143,7 @@ function SingleSetting<T>({ settingsKey, label, disabled, isValid, transform }: 
 function SelectSetting<T>({ settingsKey, label, options, disabled }: SelectOption<T>) {
     return (
         <div className={cl("single", { disabled })}>
-            <Heading tag="h5">{label}</Heading>
+            <Heading>{label}</Heading>
             <Select
                 placeholder={"Select an option"}
                 options={options}
@@ -229,10 +231,10 @@ function PresetSettings({ onLoad }: { onLoad(): void; }) {
                         serialize={String}
                     />
                     <Button disabled={!selectedPreset} onClick={loadPreset}>Load</Button>
-                    <Button color={Button.Colors.RED} disabled={!selectedPreset} onClick={deletePreset}>Delete</Button>
+                    <Button variant="dangerPrimary" disabled={!selectedPreset} onClick={deletePreset}>Delete</Button>
                 </div>
             ) : (
-                <Text variant="text-sm/normal">No saved presets yet.</Text>
+                <Paragraph>No saved presets yet.</Paragraph>
             )}
         </div>
     );

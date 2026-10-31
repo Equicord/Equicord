@@ -4,12 +4,13 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { Button } from "@components/Button";
 import { Flex } from "@components/Flex";
 import { Heading } from "@components/Heading";
 import { Paragraph } from "@components/Paragraph";
 import { classes } from "@utils/misc";
 import { RenderModalProps } from "@vencord/discord-types";
-import { Button, FluxDispatcher, Modal, openModal, TextInput, useCallback, useState } from "@webpack/common";
+import { FluxDispatcher, Modal, openModal, TextInput, useCallback, useState } from "@webpack/common";
 
 import { settings } from "../settings";
 import { Collection, Gif } from "../types";

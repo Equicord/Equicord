@@ -5,6 +5,7 @@
  */
 
 import { BaseText } from "@components/BaseText";
+import { Button } from "@components/Button";
 import { Heading } from "@components/Heading";
 import { BookCheckIcon, OpenExternalIcon, PencilIcon, StarFilled, StarOutlined, TrashIcon, UnsendIcon, WindowTopOutlineIcon, XLargeBoldIcon } from "@components/Icons";
 import { Paragraph } from "@components/Paragraph";
@@ -13,7 +14,7 @@ import { Bookmark, BookmarkFolder, Bookmarks, ChannelTabsProps, UseBookmarkMetho
 import { getIntlMessage } from "@utils/discord";
 import { Margins } from "@utils/margins";
 import { RenderModalProps } from "@vencord/discord-types";
-import { Button, ChannelStore, closeModal, ColorPicker, FluxDispatcher, Menu, Modal, openModal, ReadStateStore, ReadStateUtils, Select, TextInput, useMemo, useState } from "@webpack/common";
+import { ChannelStore, closeModal, ColorPicker, FluxDispatcher, Menu, Modal, openModal, ReadStateStore, ReadStateUtils, Select, TextInput, useMemo, useState } from "@webpack/common";
 
 const legacyFolderColors: Record<string, string> = {
     "var(--channeltabs-red)": bookmarkFolderColors.Red,
@@ -255,8 +256,7 @@ function FolderAppearanceFields({
         >Choose Icon</Button>
         {iconName && <Button
             className={Margins.top8}
-            color={Button.Colors.TRANSPARENT}
-            look={Button.Looks.FILLED}
+            variant="secondary"
             onClick={() => setIconName(undefined)}
         >Use Default Icon</Button>}
     </>;

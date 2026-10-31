@@ -6,7 +6,7 @@
 
 import { definePluginSettings } from "@api/Settings";
 import { disableStyle, enableStyle } from "@api/Styles";
-import { Button, ButtonCompat } from "@components/Button";
+import { Button } from "@components/Button";
 import { HeadingSecondary } from "@components/Heading";
 import { Notice } from "@components/Notice";
 import { Paragraph } from "@components/Paragraph";
@@ -169,15 +169,15 @@ export const settings = definePluginSettings({
         description: "Purge the lyrics cache",
         type: OptionType.COMPONENT,
         component: () => (
-            <ButtonCompat
-                color={ButtonCompat.Colors.RED}
+            <Button
+                variant="dangerPrimary"
                 onClick={() => {
                     clearLyricsCache();
                     showToast({ text: "Lyrics cache purged", variant: "success" });
                 }}
             >
                 Purge Cache
-            </ButtonCompat>
+            </Button>
         ),
     },
     spotifySectionTitle: {

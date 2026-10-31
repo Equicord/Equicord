@@ -7,13 +7,14 @@
 import "./style.css";
 
 import { definePluginSettings } from "@api/Settings";
+import { Button } from "@components/Button";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { EquicordDevs } from "@utils/constants";
 import { Logger } from "@utils/Logger";
 import { classes, pluralise } from "@utils/misc";
 import definePlugin, { OptionType } from "@utils/types";
 import { chooseFile, saveFile } from "@utils/web";
-import { Alerts, Button, React, showToast, useCallback, useEffect, useRef, useState } from "@webpack/common";
+import { Alerts, React, showToast, useCallback, useEffect, useRef, useState } from "@webpack/common";
 
 import { cl, croppedLabel, Shelf } from "./components/Shelf";
 import { add, clear, CropState, currentApplied, Entry, exportAll, forget, forgetCrops, getFile, getThumbs, Group, importAll, Kind, previousApplied, readIndex, recordApplied, saveCrop, toDataUrl, togglePin, touch } from "./library";
@@ -76,11 +77,11 @@ const settings = definePluginSettings({
         description: "Drop every remembered crop and open each picture the way Discord would.",
         component: () => (
             <Button
-                color={Button.Colors.PRIMARY}
+                variant="secondary"
                 onClick={() => Alerts.show({
                     title: "Forget every remembered crop?",
                     body: "Your pictures stay. Each one opens unframed from now on, until you crop it again.",
-                    confirmColor: Button.Colors.RED,
+                    confirmColor: "danger",
                     confirmText: "Forget",
                     cancelText: "Cancel",
                     onConfirm: () => forgetCrops()
@@ -110,8 +111,8 @@ const settings = definePluginSettings({
         description: "Carry your pictures, and how each one is framed, to another device.",
         component: () => (
             <div className={cl("buttons")}>
-                <Button color={Button.Colors.PRIMARY} onClick={exportLibrary}>Export to a file</Button>
-                <Button color={Button.Colors.PRIMARY} onClick={importLibrary}>Import from a file</Button>
+                <Button variant="secondary" onClick={exportLibrary}>Export to a file</Button>
+                <Button variant="secondary" onClick={importLibrary}>Import from a file</Button>
             </div>
         )
     },
@@ -120,11 +121,11 @@ const settings = definePluginSettings({
         description: "Throw away every picture you have saved.",
         component: () => (
             <Button
-                color={Button.Colors.PRIMARY}
+                variant="secondary"
                 onClick={() => Alerts.show({
                     title: "Clear saved pictures?",
                     body: "Every picture you have saved here goes, along with the crop remembered for each one. Discord's own archive and your current avatar and banner are not touched.",
-                    confirmColor: Button.Colors.RED,
+                    confirmColor: "danger",
                     confirmText: "Clear",
                     cancelText: "Cancel",
                     onConfirm: () => clear().catch(err => logger.error("could not clear the library", err))
@@ -248,7 +249,7 @@ function useForget(bump: () => void) {
         Alerts.show({
             title: "Remove this picture?",
             body: `${entry.name} goes from your saved pictures, along with the crop remembered for it.`,
-            confirmColor: Button.Colors.RED,
+            confirmColor: "danger",
             confirmText: "Remove",
             cancelText: "Cancel",
             onConfirm: run

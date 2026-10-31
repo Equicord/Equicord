@@ -6,13 +6,14 @@
 
 import * as DataStore from "@api/DataStore";
 import { definePluginSettings } from "@api/Settings";
+import { Button } from "@components/Button";
 import { HeadingSecondary } from "@components/Heading";
 import { OpenExternalIcon } from "@components/Icons";
 import { Paragraph } from "@components/Paragraph";
 import { copyToClipboard } from "@utils/clipboard";
 import { classNameFactory } from "@utils/css";
 import { OptionType } from "@utils/types";
-import { Button, showToast } from "@webpack/common";
+import { showToast } from "@webpack/common";
 
 import { authorizeUser, deauthorizeUser } from "./auth";
 
@@ -59,7 +60,7 @@ export const settings = definePluginSettings({
                         <Button onClick={handleClick}>
                             Copy ThemeLibrary Token
                         </Button>
-                        <Button color={Button.Colors.RED} onClick={() => deauthorizeUser()}>
+                        <Button variant="dangerPrimary" onClick={() => deauthorizeUser()}>
                             Deauthorize ThemeLibrary
                         </Button>
                     </div>

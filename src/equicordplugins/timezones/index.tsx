@@ -10,12 +10,13 @@ import { NavContextMenuPatchCallback } from "@api/ContextMenu";
 import * as DataStore from "@api/DataStore";
 import { showNotification } from "@api/Notifications";
 import { definePluginSettings, migratePluginSetting } from "@api/Settings";
+import { Button } from "@components/Button";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Devs, EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 import { Message, User } from "@vencord/discord-types";
 import { findByPropsLazy, findCssClassesLazy } from "@webpack";
-import { Button, ChannelStore, Menu, openModal, showToast, Tooltip, useEffect, UserStore, useState } from "@webpack/common";
+import { ChannelStore, Menu, openModal, showToast, Tooltip, useEffect, UserStore, useState } from "@webpack/common";
 
 import { DatabaseUrlNotice, deleteTimezone, getTimezone, loadDatabaseTimezones, setUserDatabaseTimezone } from "./database";
 import { SetTimezoneModal } from "./TimezoneModal";
@@ -126,7 +127,7 @@ export const settings = definePluginSettings({
         type: OptionType.COMPONENT,
         component: () => (
             <Button
-                color={Button.Colors.RED}
+                variant="dangerPrimary"
                 onClick={async () => {
                     try {
                         await setUserDatabaseTimezone(UserStore.getCurrentUser().id, null);

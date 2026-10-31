@@ -11,12 +11,13 @@ import { Badges } from "@api/index";
 import { definePluginSettings } from "@api/Settings";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Flex } from "@components/Flex";
+import { Heading } from "@components/Heading";
 import { Paragraph } from "@components/Paragraph";
 import { Devs, EquicordDevs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
 import definePlugin, { OptionType } from "@utils/types";
 import { RenderModalProps } from "@vencord/discord-types";
-import { Forms, Modal, openModal, RelationshipStore, Tooltip, useStateFromStores } from "@webpack/common";
+import { Modal, openModal, RelationshipStore, Tooltip, useStateFromStores } from "@webpack/common";
 
 interface rankInfo {
     title: string;
@@ -100,13 +101,13 @@ function openRankModal(rank: rankInfo) {
                 size="sm"
                 title={
                     <Flex className={cl("flex")}>
-                        <Forms.FormTitle
+                        <Heading
                             className={cl("img")}
                             tag="h2"
                         >
                             <img src={rank.iconSrc} alt="rank icon" />
                             {rank.title}
-                        </Forms.FormTitle>
+                        </Heading>
                     </Flex>
                 }
             >

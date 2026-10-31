@@ -42,7 +42,7 @@ export default definePlugin({
         },
         // Patch profile customization settings to include Decor section
         {
-            find: "DefaultCustomizationSections",
+            find: "PROFILE_SIDEBAR_ITEM_WYSIWYG,",
             replacement: {
                 match: /(?<=#{intl::USER_SETTINGS_AVATAR_DECORATION}\)},"decoration"\),)/,
                 replace: "$self.DecorSection(),"
@@ -121,7 +121,7 @@ export default definePlugin({
         },
         // 2026-03-wysiwyg-user-profile-editing
         {
-            find: '("UserProfileModalV2EditingPanel")',
+            find: "UserProfileModalV2EditingPanel",
             replacement: [
                 {
                     match: /disabled:(\i\|\|\i),avatarErrorMessage:\i,avatarDecorationErrorMessage:\i\}\),/,
