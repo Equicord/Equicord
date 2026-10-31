@@ -26,15 +26,12 @@ import { confirmAction } from "@utils/discord";
 import { Logger } from "@utils/Logger";
 import { removeFromArray } from "@utils/misc";
 import definePlugin, { OptionType } from "@utils/types";
-import { CustomEmoji, FluxStore, Guild, GuildSticker, Message, Sticker, StickerItem } from "@vencord/discord-types";
+import { CustomEmoji, Guild, GuildSticker, Message, StickerItem } from "@vencord/discord-types";
 import { EmojiIntention, StickerFormatType, StickerType } from "@vencord/discord-types/enums";
-import { findStoreLazy } from "@webpack";
-import { Constants, EmojiStore, GuildStore, Menu, PermissionsBits, PermissionStore, React, RestAPI, SelectedGuildStore, showToast, StickersStore, UserSettingsActionCreators } from "@webpack/common";
+import { Constants, EmojiStore, GuildStore, Menu, PermissionsBits, PermissionStore, React, RestAPI, SelectedGuildStore, showToast, StickersPersistedStore, StickersStore, UserSettingsActionCreators } from "@webpack/common";
 
 import { buildCloneEmojiItem, editEmoji, EmojiURLRegex, openEmojiUploadModal, resolveEmojiName } from "./emojis";
 import { buildCloneStickerItem, buildStickerLinkItems, editSticker } from "./stickers";
-
-const StickersPersistedStore = findStoreLazy("StickersPersistedStore") as FluxStore & { stickerFrecencyWithoutFetchingLatest: { frequently: Sticker[]; }; };
 
 let emojiIntention: EmojiIntention;
 
