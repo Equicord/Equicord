@@ -10,7 +10,7 @@ import { DataStore } from "@api/index";
 import { definePluginSettings } from "@api/Settings";
 import { Button } from "@components/Button";
 import { Flex } from "@components/Flex";
-import { HeadingTertiary } from "@components/Heading";
+import { Heading } from "@components/Heading";
 import { DeleteIcon } from "@components/Icons";
 import { EquicordDevs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
@@ -130,7 +130,7 @@ function FlaggedWords() {
 
     return (
         <>
-            <HeadingTertiary>Flagged Words</HeadingTertiary>
+            <Heading tag="h4">Flagged Words</Heading>
             {inputs}
         </>
     );

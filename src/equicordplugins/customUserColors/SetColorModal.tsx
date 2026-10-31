@@ -5,7 +5,7 @@
  */
 
 import { set } from "@api/DataStore";
-import { HeadingSecondary } from "@components/Heading";
+import { Heading } from "@components/Heading";
 import { classNameFactory } from "@utils/css";
 import { Margins } from "@utils/margins";
 import { RenderModalProps } from "@vencord/discord-types";
@@ -63,9 +63,9 @@ export function SetColorModal({ id, modalProps }: { id: string, modalProps: Rend
         >
             <div onKeyDown={handleKey} className={cl("modal-content")}>
                 <section className={Margins.bottom16}>
-                    <HeadingSecondary>
+                    <Heading tag="h3" className={Margins.bottom8}>
                         Pick a Color
-                    </HeadingSecondary>
+                    </Heading>
                     <ColorPicker
                         color={colorPickerColor}
                         onChange={setUserColor}

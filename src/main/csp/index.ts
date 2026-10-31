@@ -210,8 +210,12 @@ function migrateThemeLinks() {
 export function initCsp() {
     migrateThemeLinks();
 
-    session.defaultSession.webRequest.onHeadersReceived(({ responseHeaders, resourceType }, cb) => {
+    session.defaultSession.webRequest.onHeadersReceived(({ responseHeaders, resourceType, url }, cb) => {
         if (responseHeaders) {
+            if (url === DESKTOP_MONACO_EDITOR_URL) {
+                const header = findHeader(responseHeaders, "content-type") ?? "content-type";
+                responseHeaders[header] = ["text/html"];
+            }
             if (resourceType === "mainFrame")
                 patchCsp(responseHeaders);
 

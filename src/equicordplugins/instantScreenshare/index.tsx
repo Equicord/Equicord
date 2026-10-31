@@ -5,7 +5,8 @@
  */
 
 import { getUserSettingLazy } from "@api/UserSettings";
-import { HeadingSecondary } from "@components/Heading";
+import { Heading } from "@components/Heading";
+import { Margins } from "@components/margins";
 import { Paragraph } from "@components/Paragraph";
 import { Devs, EquicordDevs } from "@utils/constants";
 import definePlugin from "@utils/types";
@@ -70,19 +71,19 @@ export default definePlugin({
 
     settingsAboutComponent: () => (
         <>
-            <HeadingSecondary>For Linux</HeadingSecondary>
+            <Heading tag="h3" className={Margins.bottom8}>For Linux</Heading>
             <Paragraph>
                 For Wayland it only pops up the screenshare select
                 <br />
                 For X11 it may or may not work :shrug:
             </Paragraph>
             <br />
-            <HeadingSecondary>Video Devices</HeadingSecondary>
+            <Heading tag="h3" className={Margins.bottom8}>Video Devices</Heading>
             <Paragraph>
                 Supports cameras and capture cards (like Elgato HD60X) when enabled in settings
             </Paragraph>
             <br />
-            <HeadingSecondary>Regarding Sound & Preview Settings</HeadingSecondary>
+            <Heading tag="h3" className={Margins.bottom8}>Regarding Sound & Preview Settings</Heading>
             <Paragraph>
                 We use the settings set and used by discord to decide if stream preview and sound should be enabled or not
             </Paragraph>

@@ -5,7 +5,7 @@
  */
 
 import * as DataStore from "@api/DataStore";
-import { HeadingSecondary } from "@components/Heading";
+import { Heading } from "@components/Heading";
 import { Margins } from "@utils/margins";
 import { RenderModalProps } from "@vencord/discord-types";
 import { Modal, SearchableSelect, useEffect, useMemo, useState } from "@webpack/common";
@@ -76,9 +76,9 @@ export function SetTimezoneModal({ userId, modalProps, database }: { userId: str
             actions={actions}
         >
             <section className={Margins.bottom16}>
-                <HeadingSecondary>
+                <Heading tag="h3" className={Margins.bottom8}>
                     Select Timezone
-                </HeadingSecondary>
+                </Heading>
 
                 <SearchableSelect
                     options={options}

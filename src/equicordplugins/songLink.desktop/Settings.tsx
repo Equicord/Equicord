@@ -5,7 +5,7 @@
  */
 
 import { FormSwitch } from "@components/FormSwitch";
-import { HeadingTertiary } from "@components/Heading";
+import { Heading } from "@components/Heading";
 
 import { settings } from ".";
 import { Providers } from "./Providers";
@@ -30,7 +30,7 @@ export function Settings() {
                         style={{ width: 16, height: 16, objectFit: "contain", display: "block" }}
                     />
                     <div style={{ display: "flex", alignItems: "center" }}>
-                        <HeadingTertiary>{provider[1].name}</HeadingTertiary>
+                        <Heading tag="h4">{provider[1].name}</Heading>
                     </div>
                 </div>
                 <div style={{

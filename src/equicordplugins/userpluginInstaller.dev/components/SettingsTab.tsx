@@ -10,7 +10,7 @@ import { BaseText } from "@components/BaseText";
 import { Button } from "@components/Button";
 import { Card } from "@components/Card";
 import { CheckedTextInput } from "@components/CheckedTextInput";
-import { HeadingTertiary } from "@components/Heading";
+import { Heading } from "@components/Heading";
 import { DeleteIcon } from "@components/Icons";
 import { Paragraph } from "@components/Paragraph";
 import { AddonCard } from "@components/settings";
@@ -90,9 +90,9 @@ function UserPluginsTab() {
                     <Card
                         className={classes(cl("info-card"), "vc-warning-card")}
                     >
-                        <HeadingTertiary className={cl("install-title")}>
+                        <Heading tag="h4" className={cl("install-title")}>
                             Plugin Updates Available
-                        </HeadingTertiary>
+                        </Heading>
                         <Paragraph className={cl("install-desc")}>
                             The following plugins are out-of-date:
                             <ul className={cl("outdated-list")}>
@@ -110,9 +110,9 @@ function UserPluginsTab() {
                 )}
             </div>
             <Card className={cl("info-card")}>
-                <HeadingTertiary className={cl("install-title")}>
+                <Heading tag="h4" className={cl("install-title")}>
                     Install Plugin
-                </HeadingTertiary>
+                </Heading>
                 <Paragraph className={cl("install-desc")}>
                     You can install a plugin from GitHub, GitLab, Codeberg,
                     git.nin0.dev, or plugins.nin0.dev by pasting its clone URL

@@ -6,7 +6,7 @@
 
 import { BaseText } from "@components/BaseText";
 import { Card } from "@components/Card";
-import { HeadingPrimary } from "@components/Heading";
+import { Heading } from "@components/Heading";
 import { Paragraph } from "@components/Paragraph";
 import { SettingsTab, wrapTab } from "@components/settings";
 import { classNameFactory } from "@utils/css";
@@ -40,7 +40,7 @@ function UsersCollectionRows({ usersCollection }: { usersCollection: Data["users
                     return (
                         <aside key={key}>
                             <div className={cl("header-container")}>
-                                <HeadingPrimary className={cl("header-name")}>
+                                <Heading tag="h2" className={cl("header-name")}>
                                     {name}
                                     {isGuild && (
                                         <span
@@ -67,7 +67,7 @@ function UsersCollectionRows({ usersCollection }: { usersCollection: Data["users
                                             </Clickable>
                                         </span>
                                     )}
-                                </HeadingPrimary>
+                                </Heading>
                                 <div className={cl("header-btns")}>
                                     {users.map(u => <UserRow key={u.id} user={u} />)}
                                 </div>

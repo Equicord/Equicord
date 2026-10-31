@@ -45,7 +45,8 @@
     },
     "web_accessible_resources": [
         "dist/Equicord.js",
-        "dist/Equicord.css"
+        "dist/Equicord.css",
+        "vendor/*"
     ],
     "browser_specific_settings": {
         "gecko": {

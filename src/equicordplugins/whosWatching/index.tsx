@@ -9,7 +9,7 @@ import "./styles.css";
 import { definePluginSettings } from "@api/Settings";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Flex } from "@components/Flex";
-import { Heading, HeadingSecondary } from "@components/Heading";
+import { Heading } from "@components/Heading";
 import { Paragraph } from "@components/Paragraph";
 import { Devs, EquicordDevs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
@@ -131,9 +131,9 @@ export default definePlugin({
             <div className={cl("screenshare-panel")}>
                 <div {...props}>{props.children}</div>
                 <div className={classes(cl("spectating-panel"), Margins.top8)}>
-                    <HeadingSecondary className={cl("spectating-header")}>
+                    <Heading tag="h3" className={cl("spectating-header")}>
                         {getIntlMessage("SPECTATORS", { numViewers: userIds.length })}
-                    </HeadingSecondary>
+                    </Heading>
                     {users.length ?
                         <div className={cl("spectating-users")}>
                             <UserSummaryItem

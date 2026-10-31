@@ -113,7 +113,7 @@ function PatchHelper() {
                 A developer tool to help you create patches for Equicord plugins.
             </Paragraph>
 
-            <Heading className="">Full Patch</Heading>
+            <Heading className={Margins.bottom8}>Full Patch</Heading>
             <Paragraph className={Margins.bottom8}>Paste your full JSON patch here to fill out the fields</Paragraph>
             <FullPatchInput
                 setFind={onFindChange}
@@ -123,7 +123,7 @@ function PatchHelper() {
             />
 
             <div className={Margins.top20}>
-                <Heading className="">Find</Heading>
+                <Heading className={Margins.bottom8}>Find</Heading>
                 <TextInput
                     type="text"
                     value={find}
@@ -132,7 +132,7 @@ function PatchHelper() {
                 />
             </div>
             <div className={Margins.top20}>
-                <Heading className="">Match</Heading>
+                <Heading className={Margins.bottom8}>Match</Heading>
                 <TextInput
                     type="text"
                     value={match}

@@ -7,7 +7,8 @@
 import { BaseText } from "@components/BaseText";
 import { CodeBlock } from "@components/CodeBlock";
 import { Flex } from "@components/Flex";
-import { HeadingSecondary } from "@components/Heading";
+import { Heading } from "@components/Heading";
+import { Margins } from "@components/margins";
 import { Paragraph } from "@components/Paragraph";
 import { TooltipContainer } from "@components/TooltipContainer";
 import { copyWithToast, getIntlMessage } from "@utils/discord";
@@ -287,7 +288,7 @@ export function openIconModal(iconName: string, Icon: Icon) {
 export function SettingsAbout() {
     return (
         <>
-            <HeadingSecondary>Features</HeadingSecondary>
+            <Heading tag="h3" className={Margins.bottom8}>Features</Heading>
             <Paragraph>
                 <ul className="vc-ic-unordered-list">
                     <li>Preview icons</li>
@@ -298,7 +299,7 @@ export function SettingsAbout() {
                     <li>Search for colors by right-clicking the color name</li>
                 </ul>
             </Paragraph>
-            <HeadingSecondary>Special thanks</HeadingSecondary>
+            <Heading tag="h3" className={Margins.bottom8}>Special thanks</Heading>
             <Paragraph>
                 <ul className="vc-ic-unordered-list">
                     <li>krystalskullofficial._.</li>

@@ -6,7 +6,7 @@
 
 import { Button } from "@components/Button";
 import { ErrorCard } from "@components/ErrorCard";
-import { HeadingPrimary, HeadingSecondary } from "@components/Heading";
+import { Heading } from "@components/Heading";
 import { Paragraph } from "@components/Paragraph";
 import { relativeLuminance } from "@plugins/clientTheme/utils/colorUtils";
 import { createOrUpdateThemeColorVars } from "@plugins/clientTheme/utils/styleUtils";
@@ -69,7 +69,7 @@ export function ThemeSettingsComponent() {
         <div className={cl("settings")}>
             <div className={cl("container")}>
                 <div className={cl("settings-labels")}>
-                    <HeadingSecondary>Theme Color</HeadingSecondary>
+                    <Heading className={Margins.bottom8}>Theme Color</Heading>
                     <Paragraph>Add a color to your Discord client theme</Paragraph>
                 </div>
                 <ColorPicker
@@ -81,7 +81,7 @@ export function ThemeSettingsComponent() {
             </div>
             {(contrastWarning || nitroThemeEnabled) && (<>
                 <ErrorCard className={Margins.top8}>
-                    <HeadingPrimary>Your theme won't look good!</HeadingPrimary>
+                    <Heading className={Margins.bottom8}>Your theme won't look good!</Heading>
 
                     {contrastWarning && <Paragraph>{">"} Selected color won't contrast well with text</Paragraph>}
                     {nitroThemeEnabled && <Paragraph>{">"} Nitro themes aren't supported</Paragraph>}

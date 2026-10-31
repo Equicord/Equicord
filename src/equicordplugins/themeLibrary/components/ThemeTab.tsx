@@ -10,7 +10,7 @@ import * as DataStore from "@api/DataStore";
 import { Settings } from "@api/Settings";
 import { Button } from "@components/Button";
 import { ErrorCard } from "@components/ErrorCard";
-import { HeadingPrimary, HeadingTertiary } from "@components/Heading";
+import { Heading } from "@components/Heading";
 import { OpenExternalIcon } from "@components/Icons";
 import { Paragraph } from "@components/Paragraph";
 import { SettingsTab, wrapTab } from "@components/settings";
@@ -166,14 +166,14 @@ function ThemeTab() {
                     </div>
                 ) : error ? (
                     <ErrorCard>
-                        <HeadingTertiary>Failed to fetch themes</HeadingTertiary>
+                        <Heading tag="h4">Failed to fetch themes</Heading>
                         <Paragraph className={Margins.top8}>Could not fetch the theme list. Try again later.</Paragraph>
                     </ErrorCard>
                 ) : (
                     <>
                         {hideWarningCard ? null : (
                             <ErrorCard>
-                                <HeadingTertiary>Want your theme removed?</HeadingTertiary>
+                                <Heading tag="h4">Want your theme removed?</Heading>
                                 <Paragraph className={Margins.top8}>
                                     If you want your theme(s) permanently removed, please open an issue on <a href="https://github.com/Faf4a/plugins/issues/new?labels=removal&projects=&template=request_removal.yml&title=Theme+Removal">GitHub <OpenExternalIcon height={16} width={16} /></a>
                                 </Paragraph>
@@ -189,13 +189,15 @@ function ThemeTab() {
                             </ErrorCard>
                         )}
                         <div className={classes(Margins.bottom8, Margins.top16)}>
-                            <HeadingPrimary
+                            <Heading
+                                tag="h2"
+                                className={Margins.bottom20}
                                 style={{
                                     overflowWrap: "break-word",
                                     marginTop: 8,
                                 }}>
                                 {searchValue.status === SearchStatus.LIKED ? "Most Liked" : "Newest Additions"}
-                            </HeadingPrimary>
+                            </Heading>
 
                             {themes.slice(0, 2).map((theme: Theme) => (
                                 <ThemeCard
@@ -208,12 +210,12 @@ function ThemeTab() {
                                 />
                             ))}
                         </div>
-                        <HeadingPrimary style={{
+                        <Heading tag="h2" className={Margins.bottom20} style={{
                             overflowWrap: "break-word",
                             marginTop: 20,
                         }}>
                             Themes
-                        </HeadingPrimary>
+                        </Heading>
                         <div className={classes(Margins.bottom20, "vce-search-grid")}>
                             <TextInput value={searchValue.value} placeholder="Search for a theme..." onChange={onSearch} />
                             <div className={InputStyles.inputWrapper}>

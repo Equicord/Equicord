@@ -9,7 +9,7 @@ import "./styles.css";
 import { BaseText } from "@components/BaseText";
 import { Button } from "@components/Button";
 import { Flex } from "@components/Flex";
-import { Heading, HeadingTertiary } from "@components/Heading";
+import { Heading } from "@components/Heading";
 import { copyToClipboard } from "@utils/clipboard";
 import { findByPropsLazy, findCssClassesLazy } from "@webpack";
 import { Parser, useEffect, useState } from "@webpack/common";
@@ -44,9 +44,9 @@ function FriendInviteCard({ invite }: { invite: FriendInvite; }) {
         <div className="vc-friend-codes-card">
             <Flex justifyContent="start">
                 <div className="vc-friend-codes-card-title">
-                    <HeadingTertiary style={{ textTransform: "none" }}>
+                    <Heading tag="h4" style={{ textTransform: "none" }}>
                         {invite.code}
-                    </HeadingTertiary>
+                    </Heading>
                     <span>
                         Expires {Parser.parse(`<t:${new Date(invite.expires_at).getTime() / 1000}:R>`)} • {invite.uses}/{invite.max_uses} uses
                     </span>

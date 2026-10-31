@@ -7,7 +7,8 @@
 import { definePluginSettings } from "@api/Settings";
 import { disableStyle, enableStyle } from "@api/Styles";
 import { Button } from "@components/Button";
-import { HeadingSecondary } from "@components/Heading";
+import { Heading } from "@components/Heading";
+import { Margins } from "@components/margins";
 import { Notice } from "@components/Notice";
 import { Paragraph } from "@components/Paragraph";
 import { SettingsSection } from "@components/settings/tabs/plugins/components/Common";
@@ -32,7 +33,7 @@ export function toggleHoverControls(value: boolean) {
 function InstallInstructions() {
     return (
         <section>
-            <HeadingSecondary>How to install</HeadingSecondary>
+            <Heading tag="h3" className={Margins.bottom8}>How to install</Heading>
             <Paragraph>
                 Install <MaskedLink href="https://github.com/Inrixia/TidaLuna#installation">TidaLuna</MaskedLink> from here, then go to TidalLuna settings &rarr; Plugin stores &rarr; Install <code>@vmohammad/api</code>
             </Paragraph>
@@ -184,7 +185,7 @@ export const settings = definePluginSettings({
         type: OptionType.COMPONENT,
         component: () => (
             <section>
-                <HeadingSecondary>Spotify</HeadingSecondary>
+                <Heading tag="h3" className={Margins.bottom8}>Spotify</Heading>
             </section>
         )
     },
@@ -213,7 +214,7 @@ export const settings = definePluginSettings({
         type: OptionType.COMPONENT,
         component: () => (
             <section>
-                <HeadingSecondary>Tidal</HeadingSecondary>
+                <Heading tag="h3" className={Margins.bottom8}>Tidal</Heading>
             </section>
         )
     },

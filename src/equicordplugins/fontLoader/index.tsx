@@ -11,7 +11,7 @@ import { definePluginSettings } from "@api/Settings";
 import { managedStyleRootNode } from "@api/Styles";
 import { Button } from "@components/Button";
 import { Card } from "@components/Card";
-import { HeadingSecondary, HeadingTertiary } from "@components/Heading";
+import { Heading } from "@components/Heading";
 import { Paragraph } from "@components/Paragraph";
 import { debounce } from "@shared/debounce";
 import { EquicordDevs } from "@utils/constants";
@@ -121,7 +121,7 @@ function GoogleFontSearch({ onSelect }: { onSelect: (font: GoogleFontMetadata) =
 
     return (
         <section>
-            <HeadingSecondary>Search Google Fonts</HeadingSecondary>
+            <Heading tag="h3" className={Margins.bottom8}>Search Google Fonts</Heading>
             <Paragraph className={Margins.bottom8}>Click on any font to apply it.</Paragraph>
 
             {selectedFont && (
@@ -156,7 +156,7 @@ function GoogleFontSearch({ onSelect }: { onSelect: (font: GoogleFontMetadata) =
                             onClick={() => onSelect(font)}
                         >
                             <div className="eq-googlefonts-preview" style={{ fontFamily: font.family }}>
-                                <HeadingTertiary>{font.displayName}</HeadingTertiary>
+                                <Heading tag="h4">{font.displayName}</Heading>
                                 <Paragraph>The quick brown fox jumps over the lazy dog</Paragraph>
                             </div>
                             {font.authors?.length && (

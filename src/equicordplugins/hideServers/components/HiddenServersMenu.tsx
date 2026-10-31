@@ -7,7 +7,7 @@
 import { BaseText } from "@components/BaseText";
 import { Button } from "@components/Button";
 import { Card } from "@components/Card";
-import { HeadingTertiary } from "@components/Heading";
+import { Heading } from "@components/Heading";
 import { XSmallIcon } from "@components/Icons";
 import { HiddenServersStore } from "@equicordplugins/hideServers/HiddenServersStore";
 import { classNameFactory } from "@utils/css";
@@ -91,7 +91,7 @@ function Group({ folderName, guilds }) {
     return (
         <Card variant="primary" className={cl("folder-group")}>
             <div className={cl("folder-header")}>
-                <HeadingTertiary tag="h4">{folderName}</HeadingTertiary>
+                <Heading tag="h4">{folderName}</Heading>
                 <Button
                     variant="dangerSecondary"
                     onClick={() => {

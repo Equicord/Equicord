@@ -5,7 +5,7 @@
  */
 
 import { Button } from "@components/Button";
-import { HeadingPrimary } from "@components/Heading";
+import { Heading } from "@components/Heading";
 import { SettingsTab, wrapTab } from "@components/settings";
 import { GuildStore, React, SearchableSelect, SelectedGuildStore, useStateFromStores } from "@webpack/common";
 
@@ -31,7 +31,7 @@ function ProfileSetsTab() {
 
     return (
         <SettingsTab>
-            <HeadingPrimary className={cl("tab-heading")}>Profile Sets</HeadingPrimary>
+            <Heading tag="h2" className={cl("tab-heading")}>Profile Sets</Heading>
 
             <div className={cl("section-switch")}>
                 <Button

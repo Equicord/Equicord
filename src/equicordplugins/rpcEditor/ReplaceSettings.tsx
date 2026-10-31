@@ -7,7 +7,7 @@
 import { Card } from "@components/Card";
 import { CheckedTextInput } from "@components/CheckedTextInput";
 import { FormSwitch } from "@components/FormSwitch";
-import { Heading, HeadingSecondary } from "@components/Heading";
+import { Heading } from "@components/Heading";
 import { Paragraph } from "@components/Paragraph";
 import { Margins } from "@utils/margins";
 import { identity } from "@utils/misc";
@@ -32,7 +32,7 @@ export function ReplaceTutorial() {
     const activities: Activity[] = PresenceStore.getActivities(UserStore.getCurrentUser().id);
     return (
         <>
-            <HeadingSecondary>IDs of currently running activities</HeadingSecondary>
+            <Heading tag="h3" className={Margins.bottom8}>IDs of currently running activities</Heading>
             {
                 activities.length === 0
                     ? <Paragraph>No running activities</Paragraph>
@@ -43,7 +43,7 @@ export function ReplaceTutorial() {
                             : null;
                     })
             }
-            <HeadingSecondary className={Margins.top8}>Available variables</HeadingSecondary>
+            <Heading tag="h3" className={Margins.top8}>Available variables</Heading>
             <Paragraph>
                 In all fields (except stream URL), you can put in variables that'll automatically be replaced by their original content:
                 <pre style={{ fontFamily: "monospace" }}>
@@ -52,7 +52,7 @@ export function ReplaceTutorial() {
                     :large_image:, :large_text:, :small_image:, :small_text:
                 </pre>
             </Paragraph>
-            <HeadingSecondary className={Margins.top8}>More details</HeadingSecondary>
+            <Heading tag="h3" className={Margins.top8}>More details</Heading>
             <Paragraph>
                 Leave a field empty to leave it as is.
                 <br />
@@ -90,7 +90,7 @@ export function ReplaceSettings({ appIds, update, save }: SettingsProps) {
                                     }}
                                     className={Margins.bottom8}
                                     hideBorder={true}
-                                /> : <HeadingSecondary>Add new application</HeadingSecondary>
+                                /> : <Heading tag="h3" className={Margins.bottom8}>Add new application</Heading>
                         }
                         <Heading className={`${Margins.top8} ${Margins.bottom8}`}>Application ID</Heading>
                         <CheckedTextInput

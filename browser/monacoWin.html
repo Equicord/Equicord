@@ -1,152 +1,63 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>Equicord QuickCSS Editor</title>
+        <style>
+            html,
+            body,
+            #container {
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+                overflow: hidden;
+                background-color: #1e1e1e;
+            }
 
-<head>
-    <meta charset="utf-8">
-    <title>Equicord QuickCSS Editor</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/monaco-editor@0.50.0/min/vs/editor/editor.main.css"
-        integrity="sha256-tiJPQ2O04z/pZ/AwdyIghrOMzewf+PIvEl1YKbQvsZk=" crossorigin="anonymous"
-        referrerpolicy="no-referrer">
-    <style>
-        html,
-        body,
-        #container {
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-            background-color: #1e1e1e;
-        }
-
-        body {
-            display: flex;
-            flex-direction: column;
-        }
-
-        #title-bar {
-            display: none;
-        }
-
-        @media all and (display-mode: window-controls-overlay) {
-            #title-bar {
+            body {
                 display: flex;
-                align-items: center;
-                padding-left: 14px;
-                font-family: Consolas, Courier New, monospace;
-                line-height: 1;
-                height: env(titlebar-area-height, 0px);
-                app-region: drag;
-                color: white;
+                flex-direction: column;
             }
-        }
 
-        header {
-            position: fixed;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px;
-            background: #1e1e1e;
-            color: #1e1e1e;
-            border-bottom: 1px solid #444;
-            width: 100%;
-            z-index: 10;
-        }
-
-        #container {
-            margin-top: 45px;
-            background-color: #1e1e1e;
-            border: 1px solid #1e1e1e;
-        }
-
-        .toolbar button:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-    </style>
-</head>
-
-<body>
-    <header>
-        <div>
-            <button id="selectAllButton"
-                style="background: #1e1e1e; color: #ffffff; border: 1px solid transparent; padding: 5px 10px; margin-right: 5px; border-radius: 4px; transition: background 0.3s, border 0.3s;">Select
-                All</button>
-            <button id="saveButton"
-                style="background: #1e1e1e; color: #ffffff; border: 1px solid transparent; padding: 5px 10px; margin-right: 5px; border-radius: 4px; transition: background 0.3s, border 0.3s;">Save</button>
-            <button id="copyButton"
-                style="background: #1e1e1e; color: #ffffff; border: 1px solid transparent; padding: 5px 10px; border-radius: 4px; transition: background 0.3s, border 0.3s;">Copy</button>
-            <button id="undoButton"
-                style="background: #1e1e1e; color: #ffffff; border: 1px solid transparent; padding: 5px 10px; border-radius: 4px; transition: background 0.3s, border 0.3s;">Undo</button>
-            <button id="redoButton"
-                style="background: #1e1e1e; color: #ffffff; border: 1px solid transparent; padding: 5px 10px; border-radius: 4px; transition: background 0.3s, border 0.3s;">Redo</button>
-        </div>
-    </header>
-    <div id="title-bar">Equicord QuickCSS Editor</div>
-    <div id="container"></div>
-
-    <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.50.0/min/vs/loader.js"
-        integrity="sha256-KcU48TGr84r7unF7J5IgBo95aeVrEbrGe04S7TcFUjs=" crossorigin="anonymous"
-        referrerpolicy="no-referrer"></script>
-
-    <script>
-        require.config({
-            paths: {
-                vs: "https://cdn.jsdelivr.net/npm/monaco-editor@0.50.0/min/vs"
+            #title-bar {
+                display: none;
             }
-        });
 
-        require(["vs/editor/editor.main"], () => {
-            getCurrentCss().then((css) => {
-                const editor = monaco.editor.create(document.getElementById("container"), {
-                    value: css,
-                    language: "css",
-                    theme: getTheme()
-                });
+            @media all and (display-mode: window-controls-overlay) {
+                #title-bar {
+                    display: flex;
+                    align-items: center;
+                    padding-left: 14px;
+                    font-family:
+                        Consolas,
+                        Courier New,
+                        monospace;
+                    line-height: 1;
+                    height: env(titlebar-area-height, 0px);
+                    app-region: drag;
+                    color: white;
+                }
+            }
+        </style>
+    </head>
 
-                editor.onDidChangeModelContent(() => setCss(editor.getValue()));
+    <body>
+        <div id="title-bar">Equicord QuickCSS Editor</div>
+        <div id="container"></div>
 
-                document.getElementById('selectAllButton').onclick = () => {
-                    editor.setSelection(editor.getModel().getFullModelRange());
-                    editor.focus();
-                };
+        <script>
+            const script = document.createElement("script");
+            script.type = "module";
+            script.src = new URL("/vendor/monaco/index.js", baseUrl);
 
-                document.getElementById('saveButton').onclick = () => {
-                    const css = editor.getValue();
-                    const blob = new Blob([css], { type: 'text/css' });
-                    const url = URL.createObjectURL(blob);
-                    const link = document.createElement('a');
-                    link.href = url;
-                    link.download = 'style.css';
-                    document.body.append(link);
-                    link.click();
-                    link.remove();
-                    URL.revokeObjectURL(url);
-                };
+            const link = document.createElement("link");
+            link.rel = "stylesheet";
+            link.href = new URL("/vendor/monaco/style.css", baseUrl);
 
-                document.getElementById('copyButton').onclick = () => {
-                    editor.focus();
-                    const selection = editor.getSelection();
-                    editor.setSelection(selection);
-                    document.execCommand('copy');
-                };
-
-                document.getElementById('undoButton').onclick = () => {
-                    editor.trigger('keyboard', 'undo');
-                };
-
-                document.getElementById('redoButton').onclick = () => {
-                    editor.trigger('keyboard', 'redo');
-                };
-
-                window.addEventListener("resize", () => {
-                    editor.layout();
-                });
-            });
-        });
-    </script>
-</body>
-
+            document.head.append(link, script);
+        </script>
+    </body>
 </html>

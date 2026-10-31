@@ -5,7 +5,8 @@
  */
 
 import { definePluginSettings, Settings, SettingsStore } from "@api/Settings";
-import { HeadingSecondary } from "@components/Heading";
+import { Heading } from "@components/Heading";
+import { Margins } from "@components/margins";
 import { Paragraph } from "@components/Paragraph";
 import { debounce } from "@shared/debounce";
 import { Devs, IS_MAC } from "@utils/constants";
@@ -250,7 +251,7 @@ export default definePlugin({
     startAt: StartAt.DOMContentLoaded,
     settingsAboutComponent: () => (
         <>
-            <HeadingSecondary>Bindings</HeadingSecondary>
+            <Heading tag="h3" className={Margins.bottom8}>Bindings</Heading>
             <Paragraph>
                 Use Ctrl/Cmd+Shift+Arrows to navigate (Left/Right: cycle themes, Up: enable, Down: disable).
                 <br />

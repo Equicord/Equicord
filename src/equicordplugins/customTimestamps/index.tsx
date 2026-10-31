@@ -8,7 +8,7 @@ import "./style.css";
 
 import { definePluginSettings, useSettings } from "@api/Settings";
 import { Divider } from "@components/Divider";
-import { Heading, HeadingPrimary } from "@components/Heading";
+import { Heading } from "@components/Heading";
 import { Link } from "@components/Link";
 import { Paragraph } from "@components/Paragraph";
 import { Devs, EquicordDevs } from "@utils/constants";
@@ -130,7 +130,7 @@ export default definePlugin({
     settings,
     settingsAboutComponent: () => (
         <div className={"vc-cmt-info-card"}>
-            <HeadingPrimary>How to use:</HeadingPrimary>
+            <Heading tag="h2" className={Margins.bottom20}>How to use:</Heading>
             <Paragraph>
                 <Link href="https://momentjs.com/docs/#/displaying/format/">Moment.js formatting documentation</Link>
                 <div className={Margins.top8}>

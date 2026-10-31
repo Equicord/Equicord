@@ -9,7 +9,7 @@ import "./style.css";
 import { isPluginEnabled } from "@api/PluginManager";
 import { definePluginSettings, migratePluginSetting } from "@api/Settings";
 import { Divider } from "@components/Divider";
-import { HeadingSecondary } from "@components/Heading";
+import { Heading } from "@components/Heading";
 import { Notice } from "@components/Notice";
 import decor from "@plugins/decor";
 import { Devs, EquicordDevs } from "@utils/constants";
@@ -157,9 +157,9 @@ function SectionSeparator(title: string) {
     return (
         <div className={cl("section-separator")}>
             <Divider />
-            <HeadingSecondary className={cl("section-title")}>
+            <Heading tag="h3" className={cl("section-title")}>
                 {title}
-            </HeadingSecondary>
+            </Heading>
         </div>
     );
 }

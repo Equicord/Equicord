@@ -23,7 +23,6 @@ import "./settings";
 import { debounce } from "@shared/debounce";
 import { IpcEvents } from "@shared/IpcEvents";
 import { app, BrowserWindow, dialog, ipcMain, nativeTheme, shell, systemPreferences } from "electron";
-import monacoHtml from "file://monacoWin.html?minify&base64";
 import { FSWatcher, mkdirSync, readFileSync, watch, writeFileSync } from "fs";
 import { open, readdir, readFile, unlink } from "fs/promises";
 import { release } from "os";
@@ -177,7 +176,7 @@ ipcMain.handle(IpcEvents.OPEN_MONACO_EDITOR, async () => {
     makeLinksOpenExternally(monacoWin);
     monacoWin.webContents.on("will-navigate", e => e.preventDefault());
 
-    await monacoWin.loadURL(`data:text/html;base64,${monacoHtml}`);
+    await monacoWin.loadURL(DESKTOP_MONACO_EDITOR_URL);
 });
 
 app.on("before-quit", async event => {

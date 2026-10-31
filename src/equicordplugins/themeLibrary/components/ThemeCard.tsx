@@ -8,7 +8,7 @@ import { generateId } from "@api/Commands";
 import { Settings } from "@api/Settings";
 import { Button } from "@components/Button";
 import { Card } from "@components/Card";
-import { HeadingPrimary } from "@components/Heading";
+import { Heading } from "@components/Heading";
 import { Paragraph } from "@components/Paragraph";
 import type { Theme, ThemeLikeProps } from "@equicordplugins/themeLibrary/types";
 import { proxyLazy } from "@utils/lazy";
@@ -110,9 +110,9 @@ export const ThemeCard: React.FC<ThemeCardProps> = ({ theme, themeLinks, likedTh
 
     return (
         <Card style={{ padding: ".5rem", marginBottom: ".5em", marginTop: ".5em", display: "flex", flexDirection: "column", backgroundColor: "var(--background-base-lower-alt)" }} key={theme.id}>
-            <HeadingPrimary style={{ overflowWrap: "break-word", marginTop: "8px" }} className="vce-theme-text-title">
+            <Heading tag="h2" style={{ overflowWrap: "break-word", marginTop: "8px" }} className="vce-theme-text-title">
                 {theme.name}
-            </HeadingPrimary>
+            </Heading>
             <Paragraph className="vce-theme-text-description">
                 {Parser.parse(theme.description)}
             </Paragraph>

@@ -205,16 +205,21 @@ define(Function.prototype, "m", {
 
             // Overwrite Webpack's defineExports function to define the export descriptors configurable.
             // This is needed so we can later blacklist specific exports from Webpack search by making them non-enumerable
-            this.d = function (exports, definition) {
-                for (const key in definition) {
-                    if (Object.hasOwn(definition, key) && !Object.hasOwn(exports, key)) {
-                        Object.defineProperty(exports, key, {
-                            enumerable: true,
-                            configurable: true,
-                            get: definition[key],
-                        });
+            this.d = function (exports, getters, values) {
+                const defineProps = (definitions: Record<PropertyKey, any> | undefined, kind: "get" | "value") => {
+                    for (const key in definitions) {
+                        if (Object.hasOwn(definitions, key) && !Object.hasOwn(exports, key)) {
+                            Object.defineProperty(exports, key, {
+                                enumerable: true,
+                                configurable: true,
+                                [kind]: definitions[key]
+                            });
+                        }
                     }
-                }
+                };
+
+                defineProps(getters, "get");
+                defineProps(values, "value");
             };
         };
     }
@@ -251,18 +256,18 @@ const moduleFactoriesHandler: ProxyHandler<AnyWebpackRequire["m"]> = {
 // The proxy for patching lazily and/or running factories with our wrapper.
 const moduleFactoryHandler: ProxyHandler<MaybePatchedModuleFactory> = {
     apply(target, thisArg: unknown, argArray: Parameters<AnyModuleFactory>) {
-        // If SYM_ORIGINAL_FACTORY exists in the proxy target, it means the proxy target is already a patched factory.
-        // In that case, just run it.
-        if (target[SYM_ORIGINAL_FACTORY] != null) {
-            return runFactoryWithWrap(target as PatchedModuleFactory, thisArg, argArray);
-        }
-
         // SAFETY: Factories have `name` as their key in the module factories object, and that is always their module id.
         const moduleId: string = target.name;
 
+        // If SYM_ORIGINAL_FACTORY exists in the proxy target, it means the proxy target is already a patched factory.
+        // In that case, just run it.
+        if (target[SYM_ORIGINAL_FACTORY] != null) {
+            return runFactoryWithWrap(target as PatchedModuleFactory, moduleId, thisArg, argArray);
+        }
+
         // Patch the proxy target, which is the original factory.
         const patchedFactory = patchFactory(moduleId, target);
-        return runFactoryWithWrap(patchedFactory, thisArg, argArray);
+        return runFactoryWithWrap(patchedFactory, moduleId, thisArg, argArray);
     },
 
     get(target, p, receiver) {
@@ -372,10 +377,11 @@ function notifyFactoryListeners(moduleId: PropertyKey, factory: AnyModuleFactory
  * Run a (possibly) patched module factory with a wrapper which notifies our listeners.
  *
  * @param patchedFactory The (possibly) patched module factory
+ * @param moduleId The id of the module being executed
  * @param thisArg The `value` of the call to the factory
  * @param argArray The arguments of the call to the factory
  */
-function runFactoryWithWrap(patchedFactory: PatchedModuleFactory, thisArg: unknown, argArray: Parameters<MaybePatchedModuleFactory>) {
+function runFactoryWithWrap(patchedFactory: PatchedModuleFactory, moduleId: PropertyKey, thisArg: unknown, argArray: Parameters<MaybePatchedModuleFactory>) {
     const originalFactory = patchedFactory[SYM_ORIGINAL_FACTORY];
 
     if (patchedFactory === originalFactory) {
@@ -386,7 +392,7 @@ function runFactoryWithWrap(patchedFactory: PatchedModuleFactory, thisArg: unkno
     let [module, exports, require] = argArray;
 
     // Restore the original factory in all the module factories objects, discarding our proxy and allowing it to be garbage collected
-    defineInWebpackInstances(module.id, originalFactory);
+    defineInWebpackInstances(moduleId, originalFactory);
 
     if (wreq == null) {
         if (!wreqFallbackApplied) {
@@ -399,7 +405,7 @@ function runFactoryWithWrap(patchedFactory: PatchedModuleFactory, thisArg: unkno
 
                 logger.warn(
                     "WebpackRequire was not initialized, falling back to WebpackRequire passed to the first called wrapped module factory (" +
-                    `id: ${String(module.id)}` + interpolateIfDefined`, WebpackInstance origin: ${webpackInstanceFileName}` +
+                    `id: ${String(moduleId)}` + interpolateIfDefined`, WebpackInstance origin: ${webpackInstanceFileName}` +
                     ")"
                 );
 
@@ -430,7 +436,7 @@ function runFactoryWithWrap(patchedFactory: PatchedModuleFactory, thisArg: unkno
     exports = module.exports;
 
     if (typeof require === "function" && require.c) {
-        if (_blacklistBadModules(require.c, exports, module.id)) {
+        if (_blacklistBadModules(require.c, exports, moduleId)) {
             return factoryReturn;
         }
     }
@@ -441,7 +447,7 @@ function runFactoryWithWrap(patchedFactory: PatchedModuleFactory, thisArg: unkno
 
     for (const callback of moduleListeners) {
         try {
-            callback(exports, module.id);
+            callback(exports, moduleId);
         } catch (err) {
             logger.error("Error in Webpack module listener:\n", err, callback);
         }
@@ -451,7 +457,7 @@ function runFactoryWithWrap(patchedFactory: PatchedModuleFactory, thisArg: unkno
         try {
             if (filter(exports)) {
                 waitForSubscriptions.delete(filter);
-                callback(exports, module.id);
+                callback(exports, moduleId);
                 continue;
             }
         } catch (err) {
@@ -478,7 +484,7 @@ function runFactoryWithWrap(patchedFactory: PatchedModuleFactory, thisArg: unkno
 
                 if (exportValue != null && filter(exportValue)) {
                     waitForSubscriptions.delete(filter);
-                    callback(exportValue, module.id);
+                    callback(exportValue, moduleId);
                     break;
                 }
             } catch (err) {
