@@ -17,6 +17,7 @@
 */
 
 import { addServerListElement, removeServerListElement, ServerListItem, ServerListRenderPosition } from "@api/ServerList";
+import ErrorBoundary from "@components/ErrorBoundary";
 import { DoubleCheckmarkIcon } from "@components/Icons";
 import { Devs, EquicordDevs } from "@utils/constants";
 import definePlugin from "@utils/types";
@@ -50,6 +51,15 @@ function onClick() {
     });
 }
 
+const ReadAllButton = () => (
+    <ServerListItem
+        id="vc-ranb-button-container"
+        icon={DoubleCheckmarkIcon}
+        tooltip="Read All"
+        onClick={onClick}
+    />
+);
+
 export default definePlugin({
     name: "ReadAllNotificationsButton",
     description: "Read all server notifications with a single button click!",
@@ -57,16 +67,7 @@ export default definePlugin({
     authors: [Devs.kemo, EquicordDevs.KrystalSkull],
     dependencies: ["ServerListAPI"],
 
-    renderReadAllButton() {
-        return (
-            <ServerListItem
-                id="vc-ranb-button-container"
-                icon={DoubleCheckmarkIcon}
-                tooltip="Read All"
-                onClick={onClick}
-            />
-        );
-    },
+    renderReadAllButton: ErrorBoundary.wrap(ReadAllButton, { noop: true }),
 
     start() {
         addServerListElement(ServerListRenderPosition.Above, this.renderReadAllButton);
