@@ -16,8 +16,8 @@ export const SignedUrlsStore = proxyLazyWebpack(() => {
         public static readonly displayName = "SignedUrlsStore";
         private static readonly _expirationThreshold = 60 * 60 * 1000;
 
-        private _urls = new Map<string, string>();
-        private _queue = new BatchedRequestQueue<string>(batch => this._handleBatch(batch), {
+        _urls = new Map<string, string>();
+        _queue = new BatchedRequestQueue<string>(batch => this._handleBatch(batch), {
             maxCount: 50,
             timeout: 50
         });
@@ -47,27 +47,27 @@ export const SignedUrlsStore = proxyLazyWebpack(() => {
             else this._update([[`${this._clean(parsed)}`, url]]);
         }
 
-        private _refresh(url: URL): void {
+        _refresh(url: URL): void {
             this._queue.add(`${this._clean(url)}`);
         }
 
-        private _clean(url: URL): URL {
+        _clean(url: URL): URL {
             const clean = new URL(url);
             clean.search = "";
             clean.hash = "";
             return clean;
         }
 
-        private _isValid(url: URL | null): url is URL {
+        _isValid(url: URL | null): url is URL {
             return !!(url && isAllowedHost(url.hostname));
         }
 
-        private _willExpire(url: URL): boolean {
+        _willExpire(url: URL): boolean {
             const expiryTimestamp = parseInt(url.searchParams.get("ex")!, 16) * 1000;
             return isNaN(expiryTimestamp) || expiryTimestamp - SignedUrlsStoreClass._expirationThreshold < Date.now();
         }
 
-        private _update(urls: [string, string][]): void {
+        _update(urls: [string, string][]): void {
             let hasChanged: boolean = false;
 
             for (const [url, value] of urls) {
@@ -80,7 +80,7 @@ export const SignedUrlsStore = proxyLazyWebpack(() => {
             if (hasChanged) this.emitChange();
         }
 
-        private async _handleBatch(batch: string[]): Promise<void> {
+        async _handleBatch(batch: string[]): Promise<void> {
             await RestAPI.post({ url: Constants.Endpoints.ATTACHMENTS_REFRESH_URLS, body: { attachment_urls: batch }, retries: 3 })
                 .then(({ body }: { body: RefreshedUrlsResponse; }) =>
                     this._update(body.refreshed_urls.map(({ original, refreshed }) => [original, refreshed!]))
