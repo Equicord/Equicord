@@ -10,7 +10,7 @@
     --vc-cui-user-area-collapsed-width: 52px;
     --vc-cui-header-bar-height: 32px;
     --vc-cui-collapsed-block-size: 8px;
-    --vc-cui-guild-bar-expanded-width: 64px;
+    --vc-cui-guild-bar-expanded-width: var(--custom-guild-list-width);
     --vc-cui-channel-list-min-width: 264px;
     --vc-cui-channel-list-max-width: 432px;
     --vc-cui-members-list-expanded-width: 240px;
