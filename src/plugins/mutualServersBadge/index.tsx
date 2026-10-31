@@ -1,8 +1,14 @@
+/*
+ * Vencord, a Discord client mod
+ * Copyright (c) 2026 Vendicated and contributors
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
 import { addMemberListDecorator, removeMemberListDecorator } from "@api/MemberListDecorators";
 import { definePluginSettings } from "@api/Settings";
 import { ModalCloseButton, ModalContent, ModalHeader, ModalRoot, ModalSize, openModal } from "@utils/modal";
 import definePlugin, { OptionType } from "@utils/types";
-import { GuildMemberStore, GuildStore, NavigationRouter, RestAPI, UserProfileStore, UserStore, useEffect, useState } from "@webpack/common";
+import { GuildMemberStore, GuildStore, NavigationRouter, RestAPI, useEffect, UserProfileStore, UserStore, useState } from "@webpack/common";
 
 const settings = definePluginSettings({
     showBots: {
@@ -104,7 +110,7 @@ function Badge({ user }: { user: any; }) {
     const [ids, setIds] = useState<string[]>(() => cached(user.id) ?? local(user.id));
 
     useEffect(() => {
-        const id = user.id;
+        const { id } = user;
         const hit = cached(id);
         if (hit) return setIds(hit);
         setIds(local(id));
