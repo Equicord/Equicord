@@ -7,14 +7,14 @@
 import "./styles.css";
 
 import { findGroupChildrenByChildId } from "@api/ContextMenu";
-import { addServerListElement, removeServerListElement, ServerListRenderPosition } from "@api/ServerList";
+import { addServerListElement, removeServerListElement, ServerListItem, ServerListRenderPosition } from "@api/ServerList";
 import { definePluginSettings } from "@api/Settings";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Devs, EquicordDevs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
 import definePlugin, { OptionType } from "@utils/types";
 import { Channel } from "@vencord/discord-types";
-import { Menu, openModal, Tooltip, useEffect, useState } from "@webpack/common";
+import { Menu, openModal, useEffect, useState } from "@webpack/common";
 
 import { Boo, clearChannelFromGhost, getBooCount, getGhostedChannels, onBooCountChange } from "./Boo";
 import { getChannelDisplayName, GhostedUsersModal } from "./GhostedUsersModal";
@@ -107,24 +107,20 @@ function BooIndicator() {
         return `${ghostedChannels.length} Ghosted Users`;
     };
 
+    const Icon = () => (<IconGhost fill="currentColor"/>);
+
     return (
         <>
             {settings.store.showIndicator && getGhostedChannels().length > 0 && (
-                <div id={cl("container")}>
-                    <Tooltip text={getTooltipText()} position="right">
-                        {({ onMouseEnter, onMouseLeave }) => (
-                            <div
-                                id={cl("container")}
-                                className={cl("clickable")}
-                                onMouseEnter={onMouseEnter}
-                                onMouseLeave={onMouseLeave}
-                                onClick={handleClick}
-                            >
-                                {count} <IconGhost fill="currentColor" />
-                            </div>
-                        )}
-                    </Tooltip>
-                </div>
+                <ServerListItem
+                    id={cl("container")}
+                    icon={Icon}
+                    tooltip={getTooltipText()}
+                    badge={{
+                        count: count
+                    }}
+                    onClick={handleClick}
+                />
             )}
         </>
     );
@@ -179,9 +175,7 @@ export default definePlugin({
 
     renderIndicator() {
         return (
-            <ErrorBoundary noop>
-                <BooIndicator />
-            </ErrorBoundary>
+            <BooIndicator />
         );
     },
 

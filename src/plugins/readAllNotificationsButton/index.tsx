@@ -16,11 +16,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-import "./style.css";
-
-import { addServerListElement, removeServerListElement, ServerListRenderPosition } from "@api/ServerList";
-import { TextButton } from "@components/Button";
+import { addServerListElement, removeServerListElement, ServerListItem, ServerListRenderPosition } from "@api/ServerList";
 import ErrorBoundary from "@components/ErrorBoundary";
+import { DoubleCheckmarkIcon } from "@components/Icons";
 import { Devs, EquicordDevs } from "@utils/constants";
 import definePlugin from "@utils/types";
 import { ActiveJoinedThreadsStore, FluxDispatcher, GuildChannelStore, GuildStore, React, ReadStateStore } from "@webpack/common";
@@ -54,13 +52,12 @@ function onClick() {
 }
 
 const ReadAllButton = () => (
-    <TextButton
-        variant="secondary"
+    <ServerListItem
+        id="vc-ranb-button-container"
+        icon={DoubleCheckmarkIcon}
+        tooltip="Read All"
         onClick={onClick}
-        className="vc-ranb-button"
-    >
-        Read All
-    </TextButton>
+    />
 );
 
 export default definePlugin({
