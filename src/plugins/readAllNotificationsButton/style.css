@@ -1,0 +1,13 @@
+.vc-ranb-button {
+    color: var(--interactive-icon-default);
+    padding: 0 0.5em;
+    width: var(--custom-guild-list-width, 100%);
+    max-width: none;
+    font-size: 14px;
+    white-space: nowrap;
+    box-sizing: border-box;
+}
+
+.vc-ranb-button:hover {
+    color: var(--interactive-icon-active);
+}
