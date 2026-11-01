@@ -82,6 +82,8 @@ export const settings = definePluginSettings({
 const ctxMenuPatch: NavContextMenuPatchCallback = (children, props) => {
     if (props.channel.guild_id && !(PermissionStore.can(PermissionsBits.SEND_VOICE_MESSAGES, props.channel) && PermissionStore.can(PermissionsBits.SEND_MESSAGES, props.channel))) return;
 
+    const hasNativeRecorder = children.some(c => c?.props?.id === "record_voice_message");
+
     children.push(
         <Menu.MenuItem
             id="vc-send-vmsg"
@@ -90,7 +92,7 @@ const ctxMenuPatch: NavContextMenuPatchCallback = (children, props) => {
                 type: "icon",
                 icon: Microphone
             }}
-            label="Send Voice Message"
+            label={hasNativeRecorder ? "Send Audio File as Voice Message" : "Send Voice Message"}
             action={() =>
                 openModal(modalProps => <VoiceMessageModal modalProps={modalProps} channelId={props.channel.id} />, {
                     onCloseCallback: () => FluxDispatcher.dispatch({ type: "VENCORD_STOP_RECORDING" })

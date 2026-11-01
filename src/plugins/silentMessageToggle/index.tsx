@@ -124,6 +124,18 @@ export default definePlugin({
     isModified: true,
     settings,
 
+    patches: [
+        {
+            find: "Voice message recording is not supported on this client",
+            replacement: {
+                match: /(?<=flags:\i\.\i\.IS_VOICE_MESSAGE)/,
+                replace: "|$self.takeSilentFlag()"
+            }
+        }
+    ],
+
+    takeSilentFlag,
+
     chatBarButton: {
         icon: SilentMessageIcon,
         render: SilentMessageToggle
