@@ -692,8 +692,8 @@ function renderUsername(
     const isReaction = isReactionsTooltip || isReactionsPopout;
     const isVoice = type === "voiceChannel";
 
-    const config = hookless ? settings.store : settings.use(["messages", "replies", "mentions", "typingIndicator", "memberList", "searchAutocomplete", "styleDirectMessagesList", "styleDirectMessagesMessages", "styleFriendsList", "styleActiveNow", "profilePopout", "reactions", "friendNameOnlyInDirectMessages", "customNameOnlyInDirectMessages", "discriminators", "hideDefaultAtSign", "truncateAllNamesWithStreamerMode", "removeDuplicates", "ignoreEffects", "ignoreFonts", "animateEffects", "alwaysAnimateEffects", "gradientGlow", "includedNames", "customNameColor", "friendNameColor", "nicknameColor", "displayNameColor", "usernameColor", "nameSeparator", "triggerNameRerender"]);
-    const { messages, replies, mentions, typingIndicator, memberList, searchAutocomplete, styleDirectMessagesMessages, profilePopout, reactions, friendNameOnlyInDirectMessages, customNameOnlyInDirectMessages, discriminators, truncateAllNamesWithStreamerMode, removeDuplicates, ignoreEffects, ignoreFonts, animateEffects, includedNames, customNameColor, friendNameColor, nicknameColor, displayNameColor, usernameColor, nameSeparator, triggerNameRerender } = config;
+    const config = hookless ? settings.store : settings.use(["messages", "replies", "mentions", "typingIndicator", "memberList", "searchAutocomplete", "styleDirectMessagesList", "styleDirectMessagesMessages", "styleFriendsList", "styleActiveNow", "profilePopout", "reactions", "voiceChannels", "friendNameOnlyInDirectMessages", "customNameOnlyInDirectMessages", "discriminators", "hideDefaultAtSign", "truncateAllNamesWithStreamerMode", "removeDuplicates", "ignoreEffects", "ignoreFonts", "animateEffects", "alwaysAnimateEffects", "gradientGlow", "includedNames", "customNameColor", "friendNameColor", "nicknameColor", "displayNameColor", "usernameColor", "nameSeparator", "triggerNameRerender"]);
+    const { messages, replies, mentions, typingIndicator, memberList, searchAutocomplete, styleDirectMessagesMessages, profilePopout, reactions, voiceChannels, friendNameOnlyInDirectMessages, customNameOnlyInDirectMessages, discriminators, truncateAllNamesWithStreamerMode, removeDuplicates, ignoreEffects, ignoreFonts, animateEffects, includedNames, customNameColor, friendNameColor, nicknameColor, displayNameColor, usernameColor, nameSeparator, triggerNameRerender } = config;
 
     const channel = channelId ? ChannelStore.getChannel(channelId) || null : null;
     const message = channelId && messageId ? MessageStore.getMessage(channelId, messageId) : null;
@@ -847,7 +847,7 @@ function renderUsername(
         return [null, null, null];
     } else if (isReaction && !reactions) {
         return [null, null, null];
-    } else if (isVoice && !reactions) {
+    } else if (isVoice && !voiceChannels) {
         return [null, null, null];
     } else if (!author || !username) {
         return [null, null, null];
