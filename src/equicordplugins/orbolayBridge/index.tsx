@@ -215,10 +215,10 @@ const handleMessageNotification = dispatch => {
 };
 
 const handleVoiceStateUpdates = async dispatch => {
-    const { id } = UserStore.getCurrentUser();
+    const userId = UserStore.getCurrentUser()?.id;
 
     for (const state of dispatch.voiceStates) {
-        const ourState = state.userId === id;
+        const ourState = state.userId === userId;
         const { guildId } = state;
 
         if (ourState) {
@@ -298,6 +298,11 @@ const createWebsocket = () => {
     };
     ws.onclose = () => {
         ws = null;
+
+        if (!stopped) {
+            if (retryTimer) clearTimeout(retryTimer);
+            retryTimer = setTimeout(createWebsocket, 5000);
+        }
     };
     ws.onopen = async () => {
         showToast({ text: "Connected to Orbolay server", variant: "success" });
