@@ -59,6 +59,7 @@ let ws: WebSocket | null = null;
 let currentChannel: string | null = null;
 let retryTimer: ReturnType<typeof setTimeout> | null = null;
 let stopped = false;
+let voiceChatEnabled = false;
 
 const waitForPopulate = async fn => {
     while (true) {
@@ -199,6 +200,9 @@ const incoming = payload => {
 
             break;
         }
+        case "SET_VOICE_CHANNEL_CHAT":
+            voiceChatEnabled = payload.enabled === true;
+            break;
     }
 };
 
@@ -286,6 +290,37 @@ const handleVoiceStateUpdates = async dispatch => {
     }
 };
 
+const handleMessageCreate = async ({ channelId, message }) => {
+    if (!voiceChatEnabled || !currentChannel || channelId !== currentChannel || !message?.guild_id) return;
+    if (StreamerModeStore.enabled) return;
+
+    const { author } = message;
+    const nick = await customNameFor(message.guild_id, author.id) || usernameFor(message.guild_id, author.id);
+
+    ws?.send(
+        JSON.stringify({
+            cmd: "VOICE_CHANNEL_MESSAGE",
+            channel_id: channelId,
+            channel_name: ChannelStore.getChannel(channelId)?.name ?? null,
+            message: {
+                id: message.id,
+                type: message.type,
+                guild_id: message.guild_id,
+                content: message.content,
+                nick: nick ?? null,
+                blocked: RelationshipStore.isBlockedOrIgnored(author.id),
+                author: {
+                    id: author.id,
+                    username: author.username,
+                    global_name: author.global_name ?? author.globalName ?? null,
+                    avatar: author.avatar ?? null,
+                },
+                mentions: (message.mentions ?? []).map(m => ({ id: m.id, username: m.username, global_name: m.global_name ?? m.globalName ?? null })),
+            },
+        })
+    );
+};
+
 const handleStreamerMode = dispatch => {
     ws?.send(
         JSON.stringify({
@@ -297,6 +332,7 @@ const handleStreamerMode = dispatch => {
 
 const createWebsocket = () => {
     console.log("Attempting to connect to Orbolay server");
+    voiceChatEnabled = false;
     if (ws?.close) ws.close();
 
     ws = new WebSocket("ws://127.0.0.1:" + settings.store.port);
@@ -373,6 +409,7 @@ export default definePlugin({
         VOICE_STATE_UPDATES: handleVoiceStateUpdates,
         RPC_NOTIFICATION_CREATE: handleMessageNotification,
         STREAMER_MODE: handleStreamerMode,
+        MESSAGE_CREATE: handleMessageCreate,
     },
 
     start() {
