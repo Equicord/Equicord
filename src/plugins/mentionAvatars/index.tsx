@@ -13,7 +13,7 @@ import showMeYourName from "@plugins/showMeYourName";
 import { Devs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 import { User } from "@vencord/discord-types";
-import { GuildRoleStore, SelectedGuildStore, useState } from "@webpack/common";
+import { GuildRoleStore, SelectedGuildStore, UserStore, useState } from "@webpack/common";
 import { JSX } from "react";
 
 const settings = definePluginSettings({
@@ -70,7 +70,7 @@ export default definePlugin({
         // show avatar in the chat input box
         find: '"text":"locked"',
         replacement: {
-            match: /(?<=,(\i)\).{0,55})`@\$\{(\i)\}`/,
+            match: /(?<=null==\i\?`<@\$\{(\i)\}>`:)`@\$\{(\i)\}`/,
             replace: "$self.renderInputMention($2,$1)"
         }
     }],
@@ -101,7 +101,8 @@ export default definePlugin({
         );
     }, { noop: true }),
 
-    renderInputMention(username: string, user: User) {
+    renderInputMention(username: string, userId: string) {
+        const user = UserStore.getUser(userId);
         if (!user) return getUsernameString(username);
         return (
             <>
