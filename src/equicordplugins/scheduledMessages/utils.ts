@@ -34,8 +34,8 @@ export async function loadScheduledMessages(): Promise<void> {
     scheduledMessages = Array.isArray(saved) ? saved : [];
 }
 
-async function saveScheduledMessages(): Promise<void> {
-    await DataStore.set(STORAGE_KEY, scheduledMessages);
+function saveScheduledMessages() {
+    DataStore.set(STORAGE_KEY, scheduledMessages);
 }
 
 export function getScheduledMessages(): ScheduledMessage[] {
@@ -409,7 +409,7 @@ export async function addScheduledMessage(
 
     scheduledMessages.push(newMessage);
     scheduledMessages.sort((a, b) => a.scheduledTime - b.scheduledTime);
-    await saveScheduledMessages();
+    saveScheduledMessages();
     createPhantomMessage(newMessage);
 
     return { success: true };
@@ -440,7 +440,7 @@ export async function updateScheduledMessageTime(id: string, scheduledTime: numb
     removePhantomMessage(message);
     message.scheduledTime = scheduledTime;
     scheduledMessages.sort((left, right) => left.scheduledTime - right.scheduledTime);
-    await saveScheduledMessages();
+    saveScheduledMessages();
     await createPhantomMessage(message);
     return { success: true };
 }
@@ -464,7 +464,7 @@ export async function removeScheduledMessage(id: string): Promise<void> {
     const msg = scheduledMessages.find(m => m.id === id);
     if (msg) removePhantomMessage(msg);
     scheduledMessages = scheduledMessages.filter(m => m.id !== id);
-    await saveScheduledMessages();
+    saveScheduledMessages();
 }
 
 export async function clearAllScheduledMessages(): Promise<void> {
@@ -472,7 +472,7 @@ export async function clearAllScheduledMessages(): Promise<void> {
         removePhantomMessage(msg);
     }
     scheduledMessages = [];
-    await saveScheduledMessages();
+    saveScheduledMessages();
 }
 
 async function checkAndSendMessages(): Promise<void> {

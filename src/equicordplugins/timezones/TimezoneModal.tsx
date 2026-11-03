@@ -13,9 +13,9 @@ import { Modal, SearchableSelect, useEffect, useMemo, useState } from "@webpack/
 import { DATASTORE_KEY, getSystemTimezone, resolveUserTimezone, settings, timezones } from ".";
 import { setTimezone, setUserDatabaseTimezone } from "./database";
 
-export async function setUserTimezone(userId: string, timezone: string | null) {
+export function setUserTimezone(userId: string, timezone: string | null) {
     timezones[userId] = timezone;
-    await DataStore.set(DATASTORE_KEY, timezones);
+    DataStore.set(DATASTORE_KEY, timezones);
 }
 
 export function SetTimezoneModal({ userId, modalProps, database }: { userId: string, modalProps: RenderModalProps; database?: boolean; }) {
@@ -48,7 +48,7 @@ export function SetTimezoneModal({ userId, modalProps, database }: { userId: str
                         await setUserDatabaseTimezone(userId, currentValue);
                     }
                 } else {
-                    await setUserTimezone(userId, currentValue);
+                    setUserTimezone(userId, currentValue);
                 }
 
                 modalProps.onClose();
@@ -62,7 +62,7 @@ export function SetTimezoneModal({ userId, modalProps, database }: { userId: str
             variant: "dangerPrimary",
             disabled: false,
             onClick: async () => {
-                await setUserTimezone(userId, null);
+                setUserTimezone(userId, null);
                 modalProps.onClose();
             }
         });
