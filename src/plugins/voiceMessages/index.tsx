@@ -26,7 +26,7 @@ import { Heading } from "@components/Heading";
 import { ClockIcon, Microphone } from "@components/Icons";
 import { Link } from "@components/Link";
 import { Paragraph } from "@components/Paragraph";
-import { lastState as silentMessageEnabled } from "@plugins/silentMessageToggle";
+import { takeSilentFlag } from "@plugins/silentMessageToggle";
 import { Devs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
 import { Margins } from "@utils/margins";
@@ -35,7 +35,7 @@ import definePlugin, { OptionType } from "@utils/types";
 import { chooseFile } from "@utils/web";
 import { RenderModalProps } from "@vencord/discord-types";
 import { CloudUploadPlatform } from "@vencord/discord-types/enums";
-import { CloudUploader, Constants, FluxDispatcher, lodash, Menu, MessageActions, Modal, openModal, PendingReplyStore, PermissionsBits, PermissionStore, RestAPI, SelectedChannelStore, showToast, SnowflakeUtils, useEffect, useState } from "@webpack/common";
+import { CloudUploader, Constants, FluxDispatcher, lodash, Menu, MessageActions, Modal, openModal, PendingReplyStore, PermissionsBits, PermissionStore, RestAPI, showToast, SnowflakeUtils, useEffect, useState } from "@webpack/common";
 import { ComponentType } from "react";
 
 import { VoiceRecorderDesktop } from "./components/DesktopRecorder";
@@ -43,7 +43,6 @@ import { VoiceMessageProps, VoicePreview } from "./components/VoicePreview";
 import { VoiceRecorderWeb } from "./components/WebRecorder";
 
 const VOICE_MESSAGE_FLAG = 1 << 13;
-const SILENT_MESSAGE_FLAG = 4096;
 const DEFAULT_WAVEFORM = "AAAAAAAAAAAA";
 const DEFAULT_DURATION = 1;
 const WAVEFORM_MIN_BINS = 32;
@@ -83,6 +82,8 @@ export const settings = definePluginSettings({
 const ctxMenuPatch: NavContextMenuPatchCallback = (children, props) => {
     if (props.channel.guild_id && !(PermissionStore.can(PermissionsBits.SEND_VOICE_MESSAGES, props.channel) && PermissionStore.can(PermissionsBits.SEND_MESSAGES, props.channel))) return;
 
+    const hasNativeRecorder = children.some(c => c?.props?.id === "record_voice_message");
+
     children.push(
         <Menu.MenuItem
             id="vc-send-vmsg"
@@ -91,9 +92,9 @@ const ctxMenuPatch: NavContextMenuPatchCallback = (children, props) => {
                 type: "icon",
                 icon: Microphone
             }}
-            label="Send Voice Message"
+            label={hasNativeRecorder ? "Send Audio File as Voice Message" : "Send Voice Message"}
             action={() =>
-                openModal(modalProps => <VoiceMessageModal modalProps={modalProps} />, {
+                openModal(modalProps => <VoiceMessageModal modalProps={modalProps} channelId={props.channel.id} />, {
                     onCloseCallback: () => FluxDispatcher.dispatch({ type: "VENCORD_STOP_RECORDING" })
                 })
             }
@@ -106,6 +107,7 @@ export default definePlugin({
     description: "Allows you to send voice messages like on mobile. To do so, right click the upload button and click Send Voice Message",
     tags: ["Voice"],
     authors: [Devs.Ven, Devs.Vap, Devs.Nickyux],
+    isModified: true,
     settings,
 
     patches: [
@@ -164,9 +166,9 @@ function generateWaveform(audioBuffer: AudioBuffer): string {
     return window.btoa(String.fromCharCode(...bins));
 }
 
-function sendAudio(blob: Blob, meta: AudioMetadata) {
-    const channelId = SelectedChannelStore.getChannelId();
+function sendAudio(blob: Blob, meta: AudioMetadata, channelId: string) {
     const reply = PendingReplyStore.getPendingReply(channelId);
+    const silentFlag = takeSilentFlag();
     if (reply) FluxDispatcher.dispatch({ type: "DELETE_PENDING_REPLY", channelId });
 
     const upload = new CloudUploader({
@@ -179,7 +181,7 @@ function sendAudio(blob: Blob, meta: AudioMetadata) {
         RestAPI.post({
             url: Constants.Endpoints.MESSAGES(channelId),
             body: {
-                flags: VOICE_MESSAGE_FLAG | (silentMessageEnabled ? SILENT_MESSAGE_FLAG : 0),
+                flags: VOICE_MESSAGE_FLAG | silentFlag,
                 channel_id: channelId,
                 content: "",
                 nonce: SnowflakeUtils.fromTimestamp(Date.now()),
@@ -211,7 +213,12 @@ function useObjectUrl() {
     return [url, setWithFree] as const;
 }
 
-function VoiceMessageModal({ modalProps }: { modalProps: RenderModalProps; }) {
+interface VoiceMessageModalProps {
+    modalProps: RenderModalProps;
+    channelId: string;
+}
+
+function VoiceMessageModal({ modalProps, channelId }: VoiceMessageModalProps) {
     const [isRecording, setRecording] = useState(false);
     const [blob, setBlob] = useState<Blob>();
     const [blobUrl, setBlobUrl] = useObjectUrl();
@@ -259,7 +266,7 @@ function VoiceMessageModal({ modalProps }: { modalProps: RenderModalProps; }) {
                 text: "Send",
                 variant: "primary",
                 onClick: () => {
-                    sendAudio(blob!, meta ?? EMPTY_META);
+                    sendAudio(blob!, meta ?? EMPTY_META, channelId);
                     modalProps.onClose();
                     showToast({ text: "Now sending voice message... Please be patient", icon: ClockIcon, iconColor: "var(--text-default)" });
                 },
