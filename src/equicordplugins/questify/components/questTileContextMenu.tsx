@@ -11,7 +11,7 @@ import type { ReactNode } from "react";
 
 import { addIgnoredQuest, questIsIgnored, removeIgnoredQuest } from "../settings/ignoredQuests";
 import { rerenderQuests } from "../settings/rerender";
-import { canAutoCompleteQuest, enrollAndStartQuestAutoComplete, ensureQuestEnrolled, getQuestAutoCompleteEntry, isQuestEnrollmentCompatible, stopQuestAutoComplete } from "../utils/completion";
+import { canAutoCompleteQuest, enrollAndLaunchQuestActivity, enrollAndStartQuestAutoComplete, ensureQuestEnrolled, getQuestActivityApplicationId, getQuestAutoCompleteEntry, isQuestEnrollmentCompatible, stopQuestAutoComplete } from "../utils/completion";
 import { getQuestStatus, QuestStatus, refreshQuest } from "../utils/questState";
 import { q } from "../utils/ui";
 
@@ -32,9 +32,20 @@ export function QuestTileContextMenu(
     const canStartAutoComplete = !isClaimedMenu && canAutoCompleteQuest(quest);
     const canEnroll = !isClaimedMenu && !isEnrolled && !quest.userStatus?.completedAt
         && getQuestStatus(quest, []) === QuestStatus.Unclaimed && isQuestEnrollmentCompatible(quest);
+    const canLaunchActivity = getQuestActivityApplicationId(quest) !== null && (isEnrolled || canEnroll);
 
     children.unshift((
         <Menu.MenuGroup>
+            {canLaunchActivity && (
+                <Menu.MenuItem
+                    id={q("launch-activity")}
+                    label="Launch Activity"
+                    action={async () => {
+                        await enrollAndLaunchQuestActivity(quest);
+                        rerenderQuests();
+                    }}
+                />
+            )}
             {canEnroll && (
                 <Menu.MenuItem
                     id={q("enroll-in-quest")}
