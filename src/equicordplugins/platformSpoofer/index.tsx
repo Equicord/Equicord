@@ -93,7 +93,7 @@ export default definePlugin({
                 case "playstation":
                     return { browser: "Discord Embedded" };
                 case "vr":
-                    return { browser: "Discord VR" };
+                    return { os: "android", browser: "Discord VR", device: "Discord VR" };
                 default:
                     return null;
             }
