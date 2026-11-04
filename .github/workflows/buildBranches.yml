@@ -18,7 +18,7 @@ on:
                     - main
                     - dev
                     - translation
-                default: "dev"
+                default: "main"
 
 env:
     FORCE_COLOR: true
@@ -33,7 +33,7 @@ jobs:
     Build:
         name: Build Equicord
         runs-on: ubuntu-latest
-        if: github.repository == 'Equicord/Equicord'
+        if: github.repository == 'haveancieday/Equicord'
 
         steps:
             - uses: actions/checkout@v6
