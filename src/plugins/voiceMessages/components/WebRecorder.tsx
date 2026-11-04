@@ -17,17 +17,34 @@
 */
 
 import { Button } from "@components/Button";
+import { Logger } from "@utils/Logger";
 import { useFluxSubscription } from "@utils/react";
-import { MediaEngineStore, useState } from "@webpack/common";
+import { MediaEngineStore, useRef, useState } from "@webpack/common";
 
 import { settings, type VoiceRecorder } from "..";
+import { webmToOgg } from "../webmToOgg";
+
+const OGG_OPUS = "audio/ogg; codecs=opus";
+
+async function tryRemux(webm: Blob) {
+    try {
+        return webmToOgg(await webm.arrayBuffer());
+    } catch (e) {
+        new Logger("VoiceMessages").error("Failed to remux WebM to Ogg, falling back to WebM", e);
+        return webm;
+    }
+}
 
 export const VoiceRecorderWeb: VoiceRecorder = ({ setAudioBlob, onRecordingChange }) => {
     const [recording, setRecording] = useState(false);
     const [paused, setPaused] = useState(false);
     const [recorder, setRecorder] = useState<MediaRecorder>();
+    const closed = useRef(false);
 
-    useFluxSubscription("VENCORD_STOP_RECORDING", stopRecording);
+    useFluxSubscription("VENCORD_STOP_RECORDING", () => {
+        closed.current = true;
+        stopRecording();
+    });
 
     function changeRecording(recording: boolean) {
         setRecording(recording);
@@ -52,17 +69,27 @@ export const VoiceRecorderWeb: VoiceRecorder = ({ setAudioBlob, onRecordingChang
                     deviceId: MediaEngineStore.getInputDeviceId()
                 }
             }).then(mediaStream => {
+                // mic permission can resolve after the modal has closed
+                if (closed.current) {
+                    mediaStream.getTracks().forEach(track => track.stop());
+                    return;
+                }
+
                 const chunks: Blob[] = [];
 
-                const recorder = new MediaRecorder(mediaStream);
+                // Chromium can't record Ogg, so record WebM and remux it on stop
+                const recorder = new MediaRecorder(mediaStream, {
+                    mimeType: MediaRecorder.isTypeSupported(OGG_OPUS) ? OGG_OPUS : "audio/webm; codecs=opus"
+                });
                 setRecorder(recorder);
 
                 const handleDataAvailable = (e: BlobEvent) => {
                     chunks.push(e.data);
                 };
 
-                const handleStop = () => {
-                    setAudioBlob(new Blob(chunks, { type: "audio/ogg; codecs=opus" }));
+                const handleStop = async () => {
+                    const blob = new Blob(chunks, { type: recorder.mimeType });
+                    setAudioBlob(blob.type.startsWith("audio/webm") ? await tryRemux(blob) : blob);
                     changeRecording(false);
 
                     recorder.removeEventListener("dataavailable", handleDataAvailable);
