@@ -23,7 +23,7 @@ on:
 env:
     FORCE_COLOR: true
     GITHUB_TOKEN: ${{ secrets.ETOKEN }}
-    REPO: Equicord/Equibuilds
+    REPO: haveancieday/Equibuilds
     USERNAME: GitHub-Actions
 
 permissions:
