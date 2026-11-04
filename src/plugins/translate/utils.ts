@@ -21,12 +21,28 @@ import { onlyOnce } from "@utils/onlyOnce";
 import { PluginNative } from "@utils/types";
 import { showToast } from "@webpack/common";
 
+import { completion } from "./ai";
+import { InvalidApiKeyError, notifyInvalidApiKey, resetCredentialWarning } from "./credentials";
 import { DeeplLanguages, deeplLanguageToGoogleLanguage, GoogleLanguages, KagiLanguages } from "./languages";
-import { resetLanguageDefaults, settings } from "./settings";
+import { mixedTranslate } from "./mixed";
+import { getAIModels, resetLanguageDefaults, settings } from "./settings";
 
 export const cl = classNameFactory("vc-trans-");
 
 const Native = VencordNative.pluginHelpers.Translate as PluginNative<typeof import("./native")>;
+
+async function abortableNativeRequest<T>(signal: AbortSignal | undefined, request: (requestId?: string) => Promise<T>): Promise<T> {
+    if (!signal) return request();
+    signal.throwIfAborted();
+    const requestId = crypto.randomUUID();
+    const cancel = () => { Native.cancelTranslateRequest(requestId); };
+    signal.addEventListener("abort", cancel, { once: true });
+    try {
+        return await request(requestId);
+    } finally {
+        signal.removeEventListener("abort", cancel);
+    }
+}
 
 interface GoogleData {
     translation: string;
@@ -52,12 +68,16 @@ export interface TranslationValue {
     text: string;
 }
 
+export type TranslationProgress = (status: string) => void;
+
 export const getLanguages = () => {
     if (IS_WEB) {
         return GoogleLanguages;
     }
     switch (settings.store.service) {
         case "google":
+        case "ai":
+        case "mixed":
             return GoogleLanguages;
         case "kagi":
             return KagiLanguages;
@@ -66,30 +86,36 @@ export const getLanguages = () => {
     }
 };
 
-export async function translate(kind: "received" | "sent", text: string): Promise<TranslationValue> {
+export async function translate(kind: "received" | "sent", text: string, onProgress?: TranslationProgress): Promise<TranslationValue> {
     const translate = IS_WEB ? googleTranslate : (() => {
         switch (settings.store.service) {
             case "google":
                 return googleTranslate;
             case "kagi":
                 return kagiTranslate;
+            case "ai":
+                return aiTranslate;
+            case "mixed":
+                return mixedTranslate;
             default:
                 return deeplTranslate;
         }
     })();
 
     try {
+        onProgress?.("Translating…");
         return await translate(
             text,
             settings.store[`${kind}Input`],
-            settings.store[`${kind}Output`]
+            settings.store[`${kind}Output`],
+            onProgress
         );
     } catch (e) {
-        const userMessage = typeof e === "string"
+        const userMessage = e instanceof Error ? e.message : typeof e === "string"
             ? e
             : "Something went wrong. If this issue persists, please check the console or ask for help in the support server.";
 
-        showToast({ text: userMessage, variant: "critical" });
+        if (!(e instanceof InvalidApiKeyError)) showToast({ text: userMessage, variant: "critical" });
 
         throw e instanceof Error
             ? e
@@ -97,7 +123,27 @@ export async function translate(kind: "received" | "sent", text: string): Promis
     }
 }
 
-async function googleTranslate(text: string, sourceLang: string, targetLang: string): Promise<TranslationValue> {
+export async function aiTranslate(text: string, sourceLang: string, targetLang: string, onProgress?: TranslationProgress, provider = getAIModels().find(entry => entry.id === settings.store.aiSelected) ?? getAIModels()[0]): Promise<TranslationValue> {
+    if (!provider?.apiKey.trim())
+        throw new Error("Enter an AI API key in Translate settings.");
+    if (!provider.model.trim())
+        throw new Error("Enter an AI model in Translate settings.");
+    onProgress?.(`Translating with ${provider.name} / ${provider.model}…`);
+
+    return {
+        sourceLanguage: sourceLang === "auto" ? "Auto" : GoogleLanguages[sourceLang] ?? sourceLang,
+        text: await completion({
+            provider,
+            model: provider.model,
+            maxTokens: provider.maxTokens,
+            text,
+            sourceLanguage: sourceLang === "auto" ? "auto" : GoogleLanguages[sourceLang] ?? sourceLang,
+            targetLanguage: GoogleLanguages[targetLang] ?? targetLang
+        })
+    };
+}
+
+export async function googleTranslate(text: string, sourceLang: string, targetLang: string, onProgress?: TranslationProgress): Promise<TranslationValue> {
     const url = "https://translate-pa.googleapis.com/v1/translate?" + new URLSearchParams({
         "params.client": "gtx",
         "dataTypes": "TRANSLATION",
@@ -107,13 +153,15 @@ async function googleTranslate(text: string, sourceLang: string, targetLang: str
         "query.text": text,
     });
 
-    const res = await fetch(url);
+    onProgress?.("Connecting to Google Translate…");
+    const res = await fetch(url, { signal: AbortSignal.timeout(30_000) });
     if (!res.ok)
         throw new Error(
             `Failed to translate "${text}" (${sourceLang} -> ${targetLang})`
             + `\n${res.status} ${res.statusText}`
         );
 
+    onProgress?.("Receiving translation from Google Translate…");
     const { sourceLanguage, translation }: GoogleData = await res.json();
 
     return {
@@ -122,11 +170,12 @@ async function googleTranslate(text: string, sourceLang: string, targetLang: str
     };
 }
 
-function fallbackToGoogle(text: string, sourceLang: string, targetLang: string): Promise<TranslationValue> {
+function fallbackToGoogle(text: string, sourceLang: string, targetLang: string, onProgress?: TranslationProgress): Promise<TranslationValue> {
     return googleTranslate(
         text,
         deeplLanguageToGoogleLanguage(sourceLang),
-        deeplLanguageToGoogleLanguage(targetLang)
+        deeplLanguageToGoogleLanguage(targetLang),
+        onProgress
     );
 }
 
@@ -134,37 +183,45 @@ const showDeeplApiQuotaToast = onlyOnce(
     () => showToast({ text: "Deepl API quota exceeded. Falling back to Google Translate", variant: "critical" })
 );
 
-async function deeplTranslate(text: string, sourceLang: string, targetLang: string): Promise<TranslationValue> {
+export async function deeplTranslate(text: string, sourceLang: string, targetLang: string, onProgress?: TranslationProgress, pro = settings.store.service === "deepl-pro", fallback = true, notifyAuthFailure = true, signal?: AbortSignal): Promise<TranslationValue> {
     if (!settings.store.deeplApiKey) {
+        if (!fallback) throw new Error("Enter a DeepL API key in Translate settings.");
         showToast({ text: "DeepL API key is not set. Resetting to Google", variant: "critical" });
 
         settings.store.service = "google";
         resetLanguageDefaults();
 
-        return fallbackToGoogle(text, sourceLang, targetLang);
+        return fallbackToGoogle(text, sourceLang, targetLang, onProgress);
     }
 
+    onProgress?.("Translating with DeepL…");
     // CORS jumpscare
-    const { status, data } = await Native.makeDeeplTranslateRequest(
-        settings.store.service === "deepl-pro",
-        settings.store.deeplApiKey,
+    const apiKey = settings.store.deeplApiKey;
+    const { status, data } = await abortableNativeRequest(signal, requestId => Native.makeDeeplTranslateRequest(
+        pro,
+        apiKey,
         JSON.stringify({
             text: [text],
             target_lang: targetLang,
             source_lang: sourceLang.split("-")[0]
-        })
-    );
+        }),
+        requestId
+    ));
 
     switch (status) {
         case 200:
+            resetCredentialWarning("deeplApiKey");
             break;
         case -1:
             throw "Failed to connect to DeepL API: " + data;
+        case 401:
         case 403:
-            throw "Invalid DeepL API key or version";
+            if (notifyAuthFailure) notifyInvalidApiKey("deeplApiKey", apiKey);
+            throw new InvalidApiKeyError("The DeepL API key is invalid, expired, or for a different plan.");
         case 456:
+            if (!fallback) throw new Error("DeepL API quota exceeded.");
             showDeeplApiQuotaToast();
-            return fallbackToGoogle(text, sourceLang, targetLang);
+            return fallbackToGoogle(text, sourceLang, targetLang, onProgress);
         default:
             throw new Error(`Failed to translate "${text}" (${sourceLang} -> ${targetLang})\n${status} ${data}`);
     }
@@ -178,16 +235,20 @@ async function deeplTranslate(text: string, sourceLang: string, targetLang: stri
     };
 }
 
-async function kagiTranslate(text: string, sourceLang: string, targetLang: string): Promise<TranslationValue> {
-    const { status, data } = await Native.makeKagiTranslateRequest(
-        settings.store.kagiSession, text, sourceLang, targetLang
-    );
+export async function kagiTranslate(text: string, sourceLang: string, targetLang: string, onProgress?: TranslationProgress, notifyAuthFailure = true, signal?: AbortSignal): Promise<TranslationValue> {
+    onProgress?.("Translating with Kagi…");
+    const token = settings.store.kagiSession;
+    const { status, data } = await abortableNativeRequest(signal, requestId => Native.makeKagiTranslateRequest(
+        token, text, sourceLang, targetLang, requestId
+    ));
 
     switch (status) {
         case 200:
+            resetCredentialWarning("kagiSession");
             break;
         case 401:
-            throw "Invalid or expired Kagi session token";
+            if (notifyAuthFailure) notifyInvalidApiKey("kagiSession", token);
+            throw new InvalidApiKeyError("The Kagi session is invalid or expired. Update it and try again.");
         default:
             throw new Error(`Failed to translate "${text}" (${sourceLang} -> ${targetLang})\n${status} ${data}`);
     }

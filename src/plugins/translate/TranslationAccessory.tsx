@@ -20,20 +20,38 @@ import { Message } from "@vencord/discord-types";
 import { Parser, useEffect, useState } from "@webpack/common";
 
 import { TranslateIcon } from "./TranslateIcon";
-import { cl, TranslationValue } from "./utils";
+import { cl, translate, TranslationValue } from "./utils";
+
+type TranslationState = TranslationValue | string | undefined;
 
 interface TranslationSetter {
     messageId: string;
-    handleTranslation(v: TranslationValue): void;
+    handleTranslation(v: TranslationState): void;
 }
 
 const TranslationSetters = new Set<TranslationSetter>();
 
-export function handleTranslate(messageId: string, data: TranslationValue) {
+export function handleTranslate(messageId: string, data: TranslationState) {
     for (const setter of TranslationSetters) {
         if (setter.messageId === messageId) {
             setter.handleTranslation(data);
         }
+    }
+}
+
+const pendingTranslations = new Set<string>();
+
+export async function translateMessage(messageId: string, text: string) {
+    if (pendingTranslations.has(messageId)) return;
+    pendingTranslations.add(messageId);
+    handleTranslate(messageId, "Translating…");
+    try {
+        const result = await translate("received", text, status => handleTranslate(messageId, status));
+        handleTranslate(messageId, result);
+    } catch (error) {
+        handleTranslate(messageId, error instanceof Error ? error.message : "Translation failed. Try again.");
+    } finally {
+        pendingTranslations.delete(messageId);
     }
 }
 
@@ -49,11 +67,11 @@ function Dismiss({ onDismiss }: { onDismiss: () => void; }) {
 }
 
 export function TranslationAccessory({ message }: { message: Message; }) {
-    const [translation, setTranslation] = useState<TranslationValue>();
+    const [translation, setTranslation] = useState<TranslationState>();
 
     useEffect(() => {
         // Ignore MessageLinkEmbeds messages
-        if ((message as any).vencordEmbeddedBy) return;
+        if ("vencordEmbeddedBy" in message && message.vencordEmbeddedBy) return;
 
         const setter: TranslationSetter = {
             messageId: message.id,
@@ -62,12 +80,20 @@ export function TranslationAccessory({ message }: { message: Message; }) {
 
         TranslationSetters.add(setter);
         return () => void TranslationSetters.delete(setter);
-    }, []);
+    }, [message.id]);
 
     if (!translation) return null;
 
+    if (typeof translation === "string")
+        return (
+            <span className={cl("accessory")} role="status" aria-live="polite">
+                <TranslateIcon width={16} height={16} className={cl("accessory-icon")} />
+                {translation}
+            </span>
+        );
+
     return (
-        <span className={cl("accessory")}>
+        <span className={cl("accessory")} role="status" aria-live="polite">
             <TranslateIcon width={16} height={16} className={cl("accessory-icon")} />
             {Parser.parse(translation.text)}
             <br />

@@ -6,13 +6,23 @@
 
 import { IpcMainInvokeEvent } from "electron";
 
-export async function makeDeeplTranslateRequest(_: IpcMainInvokeEvent, pro: boolean, apiKey: string, payload: string) {
+const requests = new Map<string, AbortController>();
+
+export function cancelTranslateRequest(event: IpcMainInvokeEvent, requestId: string) {
+    requests.get(`${event.sender.id}:${requestId}`)?.abort();
+}
+
+export async function makeDeeplTranslateRequest(event: IpcMainInvokeEvent, pro: boolean, apiKey: string, payload: string, requestId?: string) {
+    const key = requestId === undefined ? undefined : `${event.sender.id}:${requestId}`;
+    const controller = new AbortController();
+    if (key !== undefined) requests.set(key, controller);
     const url = pro
         ? "https://api.deepl.com/v2/translate"
         : "https://api-free.deepl.com/v2/translate";
 
     try {
         const res = await fetch(url, {
+            signal: AbortSignal.any([controller.signal, AbortSignal.timeout(30_000)]),
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -25,14 +35,20 @@ export async function makeDeeplTranslateRequest(_: IpcMainInvokeEvent, pro: bool
         return { status: res.status, data };
     } catch (e) {
         return { status: -1, data: String(e) };
+    } finally {
+        if (key !== undefined) requests.delete(key);
     }
 }
 
-export async function makeKagiTranslateRequest(_: IpcMainInvokeEvent, token: string, text: string, sourceLang: string, targetLang: string) {
+export async function makeKagiTranslateRequest(event: IpcMainInvokeEvent, token: string, text: string, sourceLang: string, targetLang: string, requestId?: string) {
+    const key = requestId === undefined ? undefined : `${event.sender.id}:${requestId}`;
+    const controller = new AbortController();
+    if (key !== undefined) requests.set(key, controller);
     const url = "https://translate.kagi.com/api/translate";
 
     try {
         const res = await fetch(url, {
+            signal: AbortSignal.any([controller.signal, AbortSignal.timeout(30_000)]),
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -50,5 +66,7 @@ export async function makeKagiTranslateRequest(_: IpcMainInvokeEvent, token: str
         return { status: res.status, data };
     } catch (e) {
         return { status: -1, data: String(e) };
+    } finally {
+        if (key !== undefined) requests.delete(key);
     }
 }

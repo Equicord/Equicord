@@ -100,6 +100,8 @@ export const CspPolicies: PolicyMap = {
     "api.stats.fm": ConnectSrc,
     "timezone.creations.works": ConnectSrc,
     "openrouter.ai": ConnectSrc,
+    "api.openai.com": ConnectSrc,
+    "api.anthropic.com": ConnectSrc,
     "aiapi.serversmp.xyz": ConnectSrc,
     "embed.sammcheese.net": ConnectSrc,
     "encrypting.host": ConnectSrc,

@@ -41,6 +41,7 @@ export const TranslateIcon: IconComponent = ({ height = 20, width = 20, classNam
 };
 
 export let setShouldShowTranslateEnabledTooltip: undefined | ((show: boolean) => void);
+export let setTranslationProgress: undefined | ((status: string | undefined) => void);
 
 function AutoTranslateConfirmModal(props: RenderModalProps) {
     const s = settings.use(["dismissedAutoTranslateAlert"]);
@@ -66,10 +67,16 @@ export const TranslateChatBarIcon: ChatBarButtonFactory = ({ isMainChat }) => {
     const { autoTranslate } = settings.use(["autoTranslate"]);
 
     const [shouldShowTranslateEnabledTooltip, setter] = useState(false);
+    const [translationProgress, setProgress] = useState<string>();
     useEffect(() => {
+        if (!isMainChat) return;
         setShouldShowTranslateEnabledTooltip = setter;
-        return () => setShouldShowTranslateEnabledTooltip = undefined;
-    }, []);
+        setTranslationProgress = setProgress;
+        return () => {
+            setShouldShowTranslateEnabledTooltip = undefined;
+            setTranslationProgress = undefined;
+        };
+    }, [isMainChat]);
 
     if (!isMainChat) return null;
 
@@ -96,9 +103,9 @@ export const TranslateChatBarIcon: ChatBarButtonFactory = ({ isMainChat }) => {
         </ChatBarButton>
     );
 
-    if (shouldShowTranslateEnabledTooltip && settings.store.showAutoTranslateTooltip)
+    if (translationProgress || (shouldShowTranslateEnabledTooltip && settings.store.showAutoTranslateTooltip))
         return (
-            <TooltipContainer text="Auto Translate Enabled" forceOpen>
+            <TooltipContainer text={translationProgress ?? "Auto Translate Enabled"} forceOpen>
                 {button}
             </TooltipContainer>
         );

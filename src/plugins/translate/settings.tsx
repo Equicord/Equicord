@@ -18,8 +18,11 @@
 
 import { definePluginSettings } from "@api/Settings";
 import { Button } from "@components/Button";
+import ErrorBoundary from "@components/ErrorBoundary";
 import { OptionType } from "@utils/types";
 
+import { AIProviderPresets, ConfiguredAIModel, ConfiguredAIProvider } from "./ai";
+import { AISettings } from "./AISettings";
 import { openTranslateModal } from "./TranslateModal";
 
 export const settings = definePluginSettings({
@@ -55,20 +58,126 @@ export const settings = definePluginSettings({
             { label: "Google Translate", value: "google", default: true },
             { label: "DeepL Free - API key required", value: "deepl" },
             { label: "DeepL Pro - API key required", value: "deepl-pro" },
-            { label: "Kagi Translate - API key required", value: "kagi" }
+            { label: "Kagi Translate - API key required", value: "kagi" },
+            { label: "AI - API key required", value: "ai" },
+            { label: "Mixed - AI API key required", value: "mixed" }
         ] as const,
         onChange: resetLanguageDefaults
     },
     deeplApiKey: {
         type: OptionType.STRING,
-        displayName: "DeepL API Key",
-        description: "Your DeepL API key (from deepl.com/your-account)",
-        default: ""
+        displayName: "DeepL API key",
+        description: "Used by Free and Pro.",
+        default: "",
+        componentProps: { type: "password" }
     },
     kagiSession: {
         type: OptionType.STRING,
-        description: "Your Kagi session token (from kagi.com/settings?p=user_details)",
-        default: ""
+        displayName: "Kagi session",
+        description: "Your Kagi session token.",
+        default: "",
+        componentProps: { type: "password" }
+    },
+    aiProviderName: {
+        type: OptionType.STRING,
+        hidden: true,
+        displayName: "Name",
+        description: "A name for this provider.",
+        default: "OpenAI",
+        isValid: (value: string) => !!value.trim() || "Enter a provider name."
+    },
+    aiProvider: {
+        type: OptionType.SELECT,
+        hidden: true,
+        displayName: "Provider",
+        description: "Switching clears the API key.",
+        options: [
+            { label: "OpenAI", value: "openai", default: true },
+            { label: "OpenRouter", value: "openrouter" },
+            { label: "Anthropic", value: "anthropic" },
+            { label: "Custom", value: "custom" }
+        ] as const,
+        onChange(value) {
+            settings.store.aiApiKey = "";
+            if (value === "custom") return;
+            const preset = AIProviderPresets[value];
+            settings.store.aiBaseUrl = preset.baseUrl;
+            settings.store.aiAuthorizationHeader = preset.authorizationHeader;
+            settings.store.aiFormat = preset.format;
+            settings.store.aiModel = preset.model;
+        }
+    },
+    aiBaseUrl: {
+        type: OptionType.STRING,
+        hidden: true,
+        displayName: "Base URL",
+        description: "Include the API version path.",
+        default: AIProviderPresets.openai.baseUrl,
+        isValid(value: string) {
+            try {
+                const url = new URL(value);
+                return (url.protocol === "https:" && !url.username && !url.password && !url.hash) || "Enter an HTTPS base URL without credentials or a fragment.";
+            } catch {
+                return "Enter a valid HTTPS base URL.";
+            }
+        }
+    },
+    aiApiKey: {
+        type: OptionType.STRING,
+        hidden: true,
+        displayName: "API key",
+        description: "Receives message text.",
+        default: "",
+        componentProps: { type: "password" }
+    },
+    aiAuthorizationHeader: {
+        type: OptionType.STRING,
+        hidden: true,
+        displayName: "Auth header",
+        description: "Authorization adds the Bearer prefix.",
+        default: AIProviderPresets.openai.authorizationHeader,
+        isValid: (value: string) => /^[\w-]+$/.test(value) || "Enter a valid authorization header name."
+    },
+    aiFormat: {
+        type: OptionType.SELECT,
+        hidden: true,
+        displayName: "API format",
+        description: "Match your endpoint’s API.",
+        options: [
+            { label: "OpenAI", value: "openai", default: true },
+            { label: "Anthropic", value: "anthropic" }
+        ] as const
+    },
+    aiModel: {
+        type: OptionType.STRING,
+        hidden: true,
+        displayName: "Model",
+        description: "The provider’s model ID.",
+        default: AIProviderPresets.openai.model,
+        isValid: (value: string) => !!value.trim() || "Enter a model identifier."
+    },
+    aiMaxTokens: {
+        type: OptionType.NUMBER,
+        hidden: true,
+        displayName: "Max tokens",
+        description: "Response length limit.",
+        default: 128_000,
+        isValid: (value: number) => (Number.isSafeInteger(Number(value)) && Number(value) > 0) || "Enter a positive whole number."
+    },
+    aiSettings: {
+        type: OptionType.COMPONENT,
+        component: ErrorBoundary.wrap(AISettings, { noop: true })
+    },
+    mixedFallback: {
+        type: OptionType.SELECT,
+        displayName: "Judge fallback",
+        description: "",
+        options: [
+            { label: "Google Translate", value: "google", default: true },
+            { label: "DeepL Free", value: "deepl" },
+            { label: "DeepL Pro", value: "deepl-pro" },
+            { label: "Kagi", value: "kagi" }
+        ] as const
     },
     autoTranslate: {
         type: OptionType.BOOLEAN,
@@ -94,13 +203,44 @@ export const settings = definePluginSettings({
     },
     kagiSession: {
         hidden() { return this.store.service !== "kagi"; }
-    }
+    },
+    aiSettings: { hidden() { return this.store.service !== "ai" && this.store.service !== "mixed"; } },
+    mixedFallback: { hidden() { return this.store.service !== "mixed"; } }
 }).withPrivateSettings<{
     dismissedAutoTranslateAlert?: boolean;
+    aiProviders?: ConfiguredAIProvider[];
+    aiSelected?: string;
+    mixedSources?: string[];
+    mixedJudge?: string;
 }>();
 
+export function getAIProviders(): ConfiguredAIProvider[] {
+    const { aiProviders, aiProvider, aiBaseUrl, aiApiKey, aiAuthorizationHeader, aiFormat, aiModel, aiMaxTokens } = settings.store;
+    return aiProviders?.map(provider => ({ ...provider, models: provider.models?.map(model => ({ ...model })) })) ?? [{
+        id: "legacy",
+        name: { openai: "OpenAI", openrouter: "OpenRouter", anthropic: "Anthropic", custom: "Custom" }[aiProvider ?? "openai"],
+        baseUrl: aiBaseUrl,
+        apiKey: aiApiKey,
+        authorizationHeader: aiAuthorizationHeader,
+        format: aiFormat ?? "openai",
+        model: aiModel,
+        maxTokens: aiMaxTokens
+    }];
+}
+
+export function getAIModels(): ConfiguredAIModel[] {
+    return getAIProviders().flatMap(provider => [
+        { ...provider, providerId: provider.id },
+        ...(provider.models ?? []).filter(model => model.model.trim()).map(model => ({ ...provider, ...model, providerId: provider.id }))
+    ]);
+}
+
+export function getMixedSources(): string[] {
+    return settings.store.mixedSources ?? ["google", ...getAIProviders().slice(0, 1).map(provider => provider.id)];
+}
+
 export function resetLanguageDefaults() {
-    if (IS_WEB || settings.store.service === "google" || settings.store.service === "kagi") {
+    if (IS_WEB || settings.store.service === "google" || settings.store.service === "kagi" || settings.store.service === "ai" || settings.store.service === "mixed") {
         settings.store.receivedInput = "auto";
         settings.store.receivedOutput = "en";
         settings.store.sentInput = "auto";

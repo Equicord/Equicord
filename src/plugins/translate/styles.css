@@ -28,3 +28,73 @@
 .vc-trans-chat-button {
     scale: 1.085;
 }
+
+.vc-trans-ai-settings {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px 24px;
+}
+
+.vc-trans-ai-settings > div {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.vc-trans-ai-settings .vc-plugins-setting-section,
+.vc-trans-ai-settings .vc-plugins-setting-content,
+.vc-trans-ai-settings .vc-plugins-setting-label {
+    flex: 1;
+}
+
+.vc-trans-ai-settings-wide {
+    grid-column: 1 / -1;
+}
+
+.vc-trans-provider-settings,
+.vc-trans-provider-list-content,
+.vc-trans-provider-content {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.vc-trans-provider {
+    justify-content: flex-start;
+    text-align: start;
+    white-space: normal;
+    overflow-wrap: anywhere;
+}
+
+.vc-trans-provider-content {
+    padding: 8px 0;
+}
+
+.vc-trans-provider-model {
+    margin-inline-start: 8px;
+    color: var(--text-muted);
+    font-size: 0.875rem;
+    font-weight: 400;
+}
+
+.vc-trans-provider-list > summary {
+    padding: 12px 0;
+    color: var(--text-strong);
+    cursor: pointer;
+    overflow-wrap: anywhere;
+}
+
+.vc-trans-provider-list > summary:focus-visible {
+    outline: 2px solid var(--text-link);
+    outline-offset: 2px;
+}
+
+.vc-trans-provider-content > button {
+    align-self: flex-start;
+}
+
+@media (width <= 600px) {
+    .vc-trans-ai-settings {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
