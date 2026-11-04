@@ -152,19 +152,33 @@ async function progress(origin: URL, authToken: string, questTarget: number, que
     try {
         const options: RequestInit = {
             headers: getActivityHeaders(questId, authToken, activityReferrer),
-            body: JSON.stringify({ progress: questTarget }),
+            body: JSON.stringify({ progress: questTarget, quest_id: questId }),
             method: "POST",
             redirect: "error",
             signal,
         };
 
         const response = await fetch(new URL("/.proxy/acf/quest/progress", origin), options);
+        let detail = await response.text();
+        let data: unknown = null;
 
-        await response.body?.cancel();
+        try {
+            data = JSON.parse(detail);
+        } catch {}
 
-        return response.ok
-            ? { success: true, error: null }
-            : { success: false, error: `HTTP ${response.status}.` };
+        if (response.ok && data != null && typeof data === "object" && "status" in data && data.status === "ok") {
+            return { success: true, error: null };
+        }
+
+        const proxyTicket = activityReferrer ? new URL(activityReferrer).searchParams.get("discord_proxy_ticket") : null;
+
+        for (const secret of [authToken, activityReferrer, proxyTicket]) {
+            if (secret) {
+                detail = detail.replaceAll(secret, "[redacted]").replaceAll(encodeURIComponent(secret), "[redacted]");
+            }
+        }
+
+        return { success: false, error: `HTTP ${response.status}. ${detail || "Empty progress response."}` };
     } catch {
         return { success: false, error: "Request failed or timed out." };
     }
