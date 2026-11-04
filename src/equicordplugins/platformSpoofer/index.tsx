@@ -41,10 +41,6 @@ const settings = definePluginSettings({
                 label: "Playstation",
                 value: "playstation",
             },
-            {
-                label: "VR",
-                value: "vr",
-            },
         ]
     }
 });
@@ -56,7 +52,7 @@ export default definePlugin({
     authors: [EquicordDevs.Drag, EquicordDevs.neoarz],
     settingsAboutComponent: () => (
         <Notice.Warning>
-            We can't guarantee this plugin won't get you warned or banned. Choosing Xbox/Playstation/VR may make your client an outdated version.
+            We can't guarantee this plugin won't get you warned or banned. Choosing Xbox/Playstation may make your client an outdated version.
         </Notice.Warning>
     ),
     settings: settings,
@@ -92,8 +88,6 @@ export default definePlugin({
                     return { browser: "Discord Embedded" };
                 case "playstation":
                     return { browser: "Discord Embedded" };
-                case "vr":
-                    return { os: "android", browser: "Discord VR", device: "Discord VR" };
                 default:
                     return null;
             }
