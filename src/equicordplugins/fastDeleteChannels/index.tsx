@@ -21,7 +21,7 @@ const validKeycodes = [
 
 function showIcon() {
     const [show, setShow] = useState(false);
-    const { keyBind, reqCtrl, reqShift, reqAlt } = settings.store;
+    const { keyBind, reqCtrl, reqShift, reqAlt } = settings.use(["keyBind", "reqCtrl", "reqShift", "reqAlt"]);
 
     const handleKeys = useCallback((e: KeyboardEvent) => {
         const isMatchingKey =
@@ -34,12 +34,12 @@ function showIcon() {
     }, [keyBind, reqCtrl, reqShift, reqAlt]);
 
     useEffect(() => {
-        window.addEventListener("keydown", handleKeys);
-        window.addEventListener("keyup", handleKeys);
+        window.addEventListener("keydown", handleKeys, true);
+        window.addEventListener("keyup", handleKeys, true);
 
         return () => {
-            window.removeEventListener("keydown", handleKeys);
-            window.removeEventListener("keyup", handleKeys);
+            window.removeEventListener("keydown", handleKeys, true);
+            window.removeEventListener("keyup", handleKeys, true);
         };
     }, [handleKeys]);
 
