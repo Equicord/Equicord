@@ -6,10 +6,8 @@
 
 import { definePluginSettings } from "@api/Settings";
 import { Button } from "@components/Button";
-import { Notice } from "@components/Notice";
 import { SettingsSection } from "@components/settings/tabs/plugins/components/Common";
 import { Switch } from "@components/Switch";
-import { useCspPermission } from "@utils/csp";
 import { classNameFactory } from "@utils/css";
 import { useForceUpdater } from "@utils/react";
 import { OptionType, PluginNative } from "@utils/types";
@@ -62,6 +60,18 @@ const encryptingHostUrlStyleOptions = [
     { label: "Param", value: "param" },
     { label: "Fake Link", value: "fakelink" },
     { label: "Embed", value: "embed" }
+];
+
+const webdavServerTypeOptions = [
+    { label: "Nextcloud", value: "nextcloud", default: true },
+    { label: "ownCloud", value: "owncloud" },
+    { label: "Generic WebDAV", value: "generic" }
+];
+
+const webdavShareTypeOptions = [
+    { label: "Share Page", value: "share-page", default: true },
+    { label: "Direct Download", value: "direct-download" },
+    { label: "Markdown Link", value: "markdown" }
 ];
 
 export const settings = definePluginSettings({
@@ -352,22 +362,14 @@ export const settings = definePluginSettings({
     webdavServerType: {
         type: OptionType.SELECT,
         description: "WebDAV server type",
-        options: [
-            { label: "Nextcloud", value: "nextcloud", default: true },
-            { label: "ownCloud", value: "owncloud" },
-            { label: "Generic WebDAV", value: "generic" }
-        ],
+        options: webdavServerTypeOptions,
         default: "nextcloud",
         hidden: true
     },
     webdavShareType: {
         type: OptionType.SELECT,
         description: "WebDAV share link format",
-        options: [
-            { label: "Share Page", value: "share-page", default: true },
-            { label: "Direct Download", value: "direct-download" },
-            { label: "Markdown Link", value: "markdown" }
-        ],
+        options: webdavShareTypeOptions,
         default: "share-page",
         hidden: true
     },
@@ -523,30 +525,10 @@ function FallbackOrderSettings() {
     );
 }
 
-function getShareXRequestUrl(config: string) {
-    try {
-        return parseShareXConfig(config).RequestURL;
-    } catch {
-        return undefined;
-    }
-}
-
-function AllowHostNotice({ url }: { url?: string; }) {
-    const [isAllowed, allow] = useCspPermission(url, ["connect-src"], "FileUpload");
-    if (isAllowed || !url) return null;
-
-    return (
-        <Notice variant="warning" action={<Button size="small" variant="secondary" onClick={allow}>Allow Host</Button>}>
-            Connections to {URL.parse(url)?.host} are blocked. Allow this host if you trust it, then restart Discord.
-        </Notice>
-    );
-}
-
 export function SettingsComponent() {
     const update = useForceUpdater();
     const sharexFileInputRef = React.useRef<HTMLInputElement>(null);
     const { serviceType } = settings.store;
-    const { serviceUrl, sharexConfig, corsProxyUrl } = settings.use(["serviceUrl", "sharexConfig", "corsProxyUrl"]);
 
     const validateShareXConfig = () => {
         try {
@@ -604,7 +586,6 @@ export function SettingsComponent() {
                         onChange={v => settings.store.serviceUrl = v}
                         placeholder="https://your-zipline-instance.com"
                     />
-                    <AllowHostNotice url={serviceUrl} />
                     <SettingTextInput
                         name="Zipline Token"
                         description="Your Zipline API authorization token"
@@ -856,7 +837,6 @@ export function SettingsComponent() {
                             onChange={handleShareXFileUpload}
                         />
                     </SettingsSection>
-                    <AllowHostNotice url={getShareXRequestUrl(sharexConfig || "")} />
                 </SettingGroup>
             )}
 
@@ -892,11 +872,7 @@ export function SettingsComponent() {
                     />
                     <SettingsSection id="server-type" name="Server Type" description="Select your WebDAV server type. Nextcloud and ownCloud will create a public share link. Generic returns the raw file URL.">
                         <Select
-                            options={[
-                                { label: "Nextcloud", value: "nextcloud", default: true },
-                                { label: "ownCloud", value: "owncloud" },
-                                { label: "Generic WebDAV", value: "generic" }
-                            ]}
+                            options={webdavServerTypeOptions}
                             isSelected={v => v === settings.store.webdavServerType}
                             select={v => {
                                 settings.store.webdavServerType = v;
@@ -909,11 +885,7 @@ export function SettingsComponent() {
                     {settings.store.webdavServerType !== "generic" && (
                         <SettingsSection id="share-link-format" name="Share Link Format" description="How to return the public share link. Share Page links to a web page; Direct Download links straight to the file; Markdown Link wraps the share page in a clickable filename.">
                             <Select
-                                options={[
-                                    { label: "Share Page", value: "share-page", default: true },
-                                    { label: "Direct Download", value: "direct-download" },
-                                    { label: "Markdown Link", value: "markdown" }
-                                ]}
+                                options={webdavShareTypeOptions}
                                 isSelected={v => v === settings.store.webdavShareType}
                                 select={v => {
                                     settings.store.webdavShareType = v;
@@ -1050,7 +1022,6 @@ export function SettingsComponent() {
                     onChange={v => settings.store.corsProxyUrl = v}
                     placeholder="https://your-cors-proxy.example.com"
                 />
-                <AllowHostNotice url={corsProxyUrl} />
 
                 <SettingsSection id="upload-timeout" name="Upload Timeout" description="Maximum time to wait per upload attempt before switching to fallback">
                     <Select

@@ -72,13 +72,25 @@ export interface UploadResponse {
     }[];
 }
 
-export interface NestUploadResponse {
-    fileURL: string;
+export type NativeRequestBody =
+    | { type: "raw"; contentType?: string; data: ArrayBuffer; }
+    | { type: "text"; text: string; }
+    | { type: "multipart"; fields: [string, string][]; file: { field: string; filename: string; contentType?: string; data: ArrayBuffer; }; fileIndex?: number; };
+
+export interface NativeRequestOptions {
+    url: string;
+    method?: string;
+    headers?: Record<string, string>;
+    body?: NativeRequestBody;
+    timeoutMs?: number;
 }
 
-export interface NativeUploadResult {
-    success: boolean;
-    url?: string;
+export interface NativeRequestResult {
+    ok: boolean;
+    status: number;
+    statusText: string;
+    headers: Record<string, string>;
+    text: string;
     error?: string;
 }
 
