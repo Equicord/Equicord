@@ -1,0 +1,52 @@
+name: Sync fork from upstream (merge, keep my files)
+
+on:
+  schedule: 
+    - cron: "0 */6 * * *" 
+  workflow_dispatch: 
+
+# We'll push with your PAT, so the default GITHUB_TOKEN can stay read-only.
+permissions:
+  contents: read
+
+jobs:
+  sync:
+    runs-on:  ubuntu-latest
+
+    steps: 
+      - name: Checkout fork
+        uses:  actions/checkout@v4
+        with:
+          fetch-depth:  0
+          persist-credentials:  false  # don't use GITHUB_TOKEN for pushes
+
+      - name: Configure Git author
+        run: |
+          git config user.name  "upstream-sync-bot"
+          git config user.email "upstream-sync-bot@users.noreply. github.com"
+
+      - name: Add & fetch upstream
+        run: |
+          git remote add upstream https://github.com/Equicord/Equicord.git || true
+          git fetch upstream --prune
+
+      - name:  Merge upstream/main into my main (like the UI "Sync fork" button)
+        run: |
+          git checkout main
+          # Try fast-forward; if not, create a merge commit.
+          # Use -X ours strategy to keep our changes on conflicts
+          if !  git merge --ff-only upstream/main; then
+            if ! git merge --no-edit -X ours upstream/main; then
+              # Handle DU conflicts:  deleted by us, modified by them - keep deleted
+              git status --porcelain | grep '^DU' | awk '{print $2}' | xargs -r git rm
+              git commit --no-edit
+            fi
+          fi
+
+      - name: Push back to my fork using the PAT
+        env: 
+          PAT: ${{ secrets.UPSTREAM_SYNC_PAT }}
+        run: |
+          # Use USERNAME:PAT@... for HTTPS pushes (PAT acts as the password)
+          git remote set-url origin "https://${{ github.actor }}:${PAT}@github.com/${{ github.repository }}.git"
+          git push origin main
