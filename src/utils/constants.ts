@@ -734,6 +734,14 @@ export const EquicordDevs = Object.freeze({
         name: "nobody",
         id: 0n
     },
+    __stack_chk_f__: {
+        name: "__stack_chk_f__",
+        id: 230454316941443072n
+    },
+    Kernelstub: {
+        name: "Kernelstub",
+        id: 1485074733652246659n
+    },
     thororen: {
         name: "thororen",
         id: 848339671629299742n

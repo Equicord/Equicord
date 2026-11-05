@@ -1,0 +1,46 @@
+.vc-messagebookmarks-accessory {
+    display: inline-flex;
+    margin-right: 4px;
+    color: var(--status-warning);
+    cursor: pointer;
+}
+
+.vc-messagebookmarks-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-height: 60vh;
+    overflow-y: auto;
+}
+
+.vc-messagebookmarks-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    background-color: var(--background-secondary);
+}
+
+.vc-messagebookmarks-row-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.vc-messagebookmarks-row-title {
+    color: var(--header-primary);
+    font-weight: 600;
+}
+
+.vc-messagebookmarks-row-content {
+    color: var(--text-normal);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.vc-messagebookmarks-row-time {
+    margin-top: 2px;
+    color: var(--text-muted);
+    font-size: 12px;
+}
