@@ -27,8 +27,8 @@ export default definePlugin({
                     replace: "$&.replace(/^\\++/, '+')"
                 },
                 {
-                    match: /=\i\.\i\.getMessages\(\i\.id\)\.last\(\)(?=.{78,85}.getByName\(\i\.)/,
-                    replace: "=$self.getMsgReference()"
+                    match: /(?<==)[^;]+(?=;if\(null==\i\|\|null==\i\.id\)return;.{0,60}\.getByName\()/,
+                    replace: "$self.getMsgReference()"
                 }
             ]
         },

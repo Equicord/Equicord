@@ -18,7 +18,7 @@ const { fetchApplication }: {
 
 const fetchedApplications = new Map<string, Application | null>();
 
-const xboxUrl = "https://discord.com/assets/9a15d086141be29d9fcd.png"; // TODO: replace with "renderXboxImage"?
+const xboxUrl = "/assets/9a15d086141be29d9fcd.png"; // TODO: replace with "renderXboxImage"?
 
 export const ActivityView = findComponentByCodeLazy<ActivityViewProps>('location:"UserProfileActivityCard",');
 

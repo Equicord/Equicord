@@ -309,7 +309,7 @@ export default definePlugin({
             // Choose how many messages are fetched with each history request.
             find: '"scrollManager.loadMore"',
             replacement: {
-                match: /(?<=channelId:(\i)\.props\.channel\.id,before:\i,after:\i,limit:)Math\.min\(\i\.\i,2\*\(0,\i\.\i\)\("scrollManager\.loadMore"\)\)/,
+                match: /(?<=channelId:(\i)\.props\.channel\.id,before:\i,after:\i,limit:)Math\.min\((?:\i\.\i|30),2\*\(0,\i\.\i\)\("scrollManager\.loadMore"\)\)/,
                 replace: "$self.getMessageCount($&,$1)"
             }
         },
@@ -319,7 +319,7 @@ export default definePlugin({
             replacement: [
                 {
                     // Use the custom batch size when jumping to a linked message.
-                    match: /(?<=limit:)\i\.\i(?=,jump:\{messageId:)/,
+                    match: /(?<=limit:)(?:\i\.\i|30)(?=,jump:\{messageId:)/,
                     replace: "$self.getMessageCount($&)"
                 },
                 {
@@ -346,11 +346,11 @@ export default definePlugin({
             group: true,
             replacement: [
                 {
-                    match: /(?<=this\.length<=)\i\.\i(?=\?)/,
+                    match: /(?<=this\.length<=)(?:\i\.\i|120)(?=\?)/,
                     replace: "$self.getWindowThreshold($&)"
                 },
                 {
-                    match: /(?<=this\.length>)\i\.\i(?=\?)/,
+                    match: /(?<=this\.length>)(?:\i\.\i|120)(?=\?)/,
                     replace: "$self.getWindowThreshold($&)"
                 },
                 {
