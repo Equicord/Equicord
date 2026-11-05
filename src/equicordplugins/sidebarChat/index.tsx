@@ -84,7 +84,7 @@ const ChatClasses = findCssClassesLazy("threadSidebarOpen", "loader");
 
 const requireForumView = extractAndLoadChunksLazy(
     ["Missing channel in Channel.renderHeaderToolbar"],
-    /Promise\.all\(\[((?:\i\.e\("\d+"\),?)+)\]\)\.then\(\i\.bind\(\i,(\d+)\)\)[^}]{0,100}?name:"ForumChannel"/
+    /Promise\.all\(\[((?:\i\.e\("?\d+"?\),?)+)\]\)\.then\(\i\.bind\(\i,(\d+)\)\)[^}]{0,100}?name:"ForumChannel"/
 );
 
 function getChannelTitle(channel: Channel | null | undefined) {

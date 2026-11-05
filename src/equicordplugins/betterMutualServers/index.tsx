@@ -79,7 +79,7 @@ export default definePlugin({
         {
             find: "#{intl::USER_PROFILE_MUTUAL_GUILD_GO_TO_SERVER_A11Y_LABEL}",
             replacement: {
-                match: /(?<=\{delay:\i\.\i,children:\i\}\)\}\))(?=\]\}\))/,
+                match: /(?<=\{delay:(?:\i\.\i|300),children:\i\}\)\}\))(?=\]\}\))/,
                 replace: ",$self.MemberDetails(arguments[0])"
             }
         }

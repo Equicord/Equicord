@@ -37,7 +37,7 @@ export function UserPluginsCard({ totalUserPlugins, enabledUserPlugins }) {
                         <Tooltip
                             text={
                                 <img
-                                    src="https://discord.com/assets/ab6835d2922224154ddf.svg"
+                                    src="/assets/ab6835d2922224154ddf.svg"
                                     style={{ width: "40px", height: "40px" }}
                                 />
                             }
