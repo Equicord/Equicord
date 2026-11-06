@@ -16,13 +16,17 @@ export default definePlugin({
     authors: [Devs.thororen],
     patches: [
         {
-            find: "AngleBracketsIcon",
+            find: ".web.tsx`",
             replacement: {
-                match: /\i\.\i\((\i)\),\i\.\i\(\i,\{AIcon/,
-                replace: "$self.setIconsModule($1),$&"
+                match: /function \i\(\i\)\{let \i,\{badgeIcon:(?=.{0,400}\?\?=(\i\(\d+\));let \i=`\.\/\$\{\i\}\.web\.tsx`)/,
+                replace: "$self.loadIcons($1);$&"
             }
         }
     ],
+    async loadIcons(load: ((path: string) => Promise<IconsDef>) & { keys(): string[]; }) {
+        const icons = await Promise.all(load.keys().map(load));
+        this.setIconsModule(Object.assign({}, ...icons));
+    },
     setIconsModule(value: IconsDef) {
         iconsModule = value;
 
