@@ -156,7 +156,9 @@
     cursor: pointer;
     color: var(--vc-toast-notifications-close-button-color);
     opacity: var(--vc-toast-notifications-close-button-opacity);
-    transition: opacity 0.2s ease-in-out, color 0.2s ease-in-out;
+    transition:
+        opacity 0.2s ease-in-out,
+        color 0.2s ease-in-out;
     position: absolute;
     top: 0.4rem;
     right: 0.4rem;

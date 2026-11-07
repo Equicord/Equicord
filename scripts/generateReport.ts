@@ -42,7 +42,7 @@ let metaData = {
 const browser = await pup.launch({
     headless: true,
     executablePath: process.env.CHROMIUM_BIN,
-    args: ['--no-sandbox', '--disable-setuid-sandbox']
+    args: ["--no-sandbox", "--disable-setuid-sandbox"]
 });
 
 const browserJs = readFileSync("./dist/browser/browser.js", "utf-8");
@@ -63,7 +63,7 @@ interface PatchInfo {
     id: string;
     match: string;
     error?: string;
-};
+}
 
 const report = {
     badPatches: [] as PatchInfo[],
@@ -327,6 +327,7 @@ page.on("console", async e => {
                 switch (message) {
                     case "A fatal error occurred:":
                         process.exit(1);
+                        break;
                     case "Webpack Find Fail:":
                         process.exitCode = 1;
 

@@ -22,7 +22,7 @@ jobs:
             - name: Run lint fix
               run: pnpm lint:fix
 
-            - name: Run stylelint fix
-              run: pnpm lint-styles:fix
+            - name: Run format
+              run: pnpm fmt
 
             - uses: autofix-ci/action@v1

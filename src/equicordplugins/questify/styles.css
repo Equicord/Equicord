@@ -66,17 +66,29 @@
 }
 
 /* Quest name color. */
-.questify-quest-item-restyle > div > div[class*="rewardDescriptionContainer"] > div[class*="textContainer"] > [class*="questName_"] {
+.questify-quest-item-restyle
+    > div
+    > div[class*="rewardDescriptionContainer"]
+    > div[class*="textContainer"]
+    > [class*="questName_"] {
     color: var(--questify-quest-name) !important;
 }
 
 /* Reward title + Orbs reward title text color. */
-.questify-quest-item-restyle > div > div[class*="rewardDescriptionContainer"] > div[class*="textContainer"] [class*="header_"] {
+.questify-quest-item-restyle
+    > div
+    > div[class*="rewardDescriptionContainer"]
+    > div[class*="textContainer"]
+    [class*="header_"] {
     color: var(--questify-reward-title) !important;
 }
 
 /* Quest description text color. */
-.questify-quest-item-restyle > div > div[class*="rewardDescriptionContainer"] > div[class*="textContainer"] > div[class*="description_"] {
+.questify-quest-item-restyle
+    > div
+    > div[class*="rewardDescriptionContainer"]
+    > div[class*="textContainer"]
+    > div[class*="description_"] {
     color: var(--questify-reward-description) !important;
 }
 
@@ -89,36 +101,47 @@
     color: var(--questify-reward-description) !important;
 }
 
-.questify-quest-item-contrast-logo > div[class*="container"] > div[class*="positionContentOverBackground"] > div[class*="contents"] > div[class*="partnerBranding"] > img {
+.questify-quest-item-contrast-logo
+    > div[class*="container"]
+    > div[class*="positionContentOverBackground"]
+    > div[class*="contents"]
+    > div[class*="partnerBranding"]
+    > img {
     filter: drop-shadow(0 0 10px rgb(0 0 0 / 80%));
 }
 
 .questify-quest-item-intense-gradient > :nth-child(1) [class*="overlay"] {
-    background: linear-gradient(to top,
-            var(--questify-color) 0,
-            hsl(from var(--questify-color) h s l / 100%) 20.5%,
-            hsl(from var(--questify-color) h s l / 99.5%) 23.33%,
-            hsl(from var(--questify-color) h s l / 98%) 26.66%,
-            hsl(from var(--questify-color) h s l / 97%) 30%,
-            hsl(from var(--questify-color) h s l / 90%) 40%,
-            hsl(from var(--questify-color) h s l / 77%) 50%,
-            hsl(from var(--questify-color) h s l / 0%) 100%);
+    background: linear-gradient(
+        to top,
+        var(--questify-color) 0,
+        hsl(from var(--questify-color) h s l / 100%) 20.5%,
+        hsl(from var(--questify-color) h s l / 99.5%) 23.33%,
+        hsl(from var(--questify-color) h s l / 98%) 26.66%,
+        hsl(from var(--questify-color) h s l / 97%) 30%,
+        hsl(from var(--questify-color) h s l / 90%) 40%,
+        hsl(from var(--questify-color) h s l / 77%) 50%,
+        hsl(from var(--questify-color) h s l / 0%) 100%
+    );
 }
 
 .questify-quest-item-default-gradient > :nth-child(1) [class*="overlay"] {
-    background: linear-gradient(to top,
-            var(--questify-color) 0,
-            hsl(from var(--questify-color) h s l / 95%) 20.31%,
-            hsl(from var(--questify-color) h s l / 0%) 100%);
+    background: linear-gradient(
+        to top,
+        var(--questify-color) 0,
+        hsl(from var(--questify-color) h s l / 95%) 20.31%,
+        hsl(from var(--questify-color) h s l / 0%) 100%
+    );
 }
 
 .questify-quest-item-black-gradient > :nth-child(1) [class*="overlay"] {
-    background: linear-gradient(to top,
-            hsl(0deg 0% 0% / 80%) 10%,
-            hsl(0deg 0% 0% / 65%) 20%,
-            hsl(0deg 0% 0% / 50%) 50%,
-            hsl(0deg 0% 0% / 10%) 75%,
-            hsl(0deg 0% 0% / 0%) 90%);
+    background: linear-gradient(
+        to top,
+        hsl(0deg 0% 0% / 80%) 10%,
+        hsl(0deg 0% 0% / 65%) 20%,
+        hsl(0deg 0% 0% / 50%) 50%,
+        hsl(0deg 0% 0% / 10%) 75%,
+        hsl(0deg 0% 0% / 0%) 90%
+    );
 }
 
 .questify-quest-item-hide-gradient > :nth-child(1) [class*="overlay"] {

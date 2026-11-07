@@ -36,7 +36,6 @@ export interface PassiveUpdateState {
     voiceStates?: VoiceState[];
 }
 
-
 export class FluxEmitter {
     constructor();
 

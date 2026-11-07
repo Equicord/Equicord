@@ -27,14 +27,12 @@ jobs:
               run: pnpm buildWebStandalone
 
             - name: Create sources zip
-              run:
-                  zip -r dist/extension-sources.zip . -x "node_modules/*" -x "dist/*" -x
+              run: zip -r dist/extension-sources.zip . -x "node_modules/*" -x "dist/*" -x
                   ".git/*"
 
             - name: Publish extension
               if: vars.ACT == 'false'
-              run:
-                  pnpx @equicord/publish-browser-extension@latest
+              run: pnpx @equicord/publish-browser-extension@latest
                   --chrome-zip dist/extension-chrome.zip
                   --firefox-zip dist/extension-firefox.zip
                   --firefox-sources-zip dist/extension-sources.zip

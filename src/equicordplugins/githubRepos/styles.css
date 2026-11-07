@@ -27,10 +27,7 @@
     margin-top: 2px;
     padding-top: 12px;
     border-top: 1px solid
-        var(
-            --profile-body-divider-color,
-            var(--input-border-default, var(--input-border))
-        );
+        var(--profile-body-divider-color, var(--input-border-default, var(--input-border)));
 }
 
 .vc-github-repos-show-more {
@@ -54,10 +51,7 @@
     gap: 8px;
     min-width: 0;
     border-bottom: 1px solid
-        var(
-            --profile-body-divider-color,
-            var(--input-border-default, var(--input-border))
-        );
+        var(--profile-body-divider-color, var(--input-border-default, var(--input-border)));
     padding-bottom: 6px;
 }
 
@@ -86,7 +80,9 @@
     font-weight: 500;
     white-space: nowrap;
     cursor: pointer;
-    transition: background-color 0.15s ease, color 0.15s ease;
+    transition:
+        background-color 0.15s ease,
+        color 0.15s ease;
 }
 
 .vc-github-repos-subtab:hover {
@@ -123,7 +119,9 @@
     white-space: nowrap;
     cursor: pointer;
     flex-shrink: 0;
-    transition: background-color 0.15s ease, color 0.15s ease;
+    transition:
+        background-color 0.15s ease,
+        color 0.15s ease;
 }
 
 .vc-github-repos-sort-toggle:hover {

@@ -5,7 +5,7 @@
 }
 
 .vc-random-voice-keybind {
-    color: "var(--text-muted)"
+    color: "var(--text-muted)";
 }
 
 .vc-random-voice-recording {

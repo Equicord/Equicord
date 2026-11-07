@@ -1,18 +1,18 @@
 {
     "name": "equicord",
-    "private": "true",
     "version": "1.15.16.0",
+    "private": "true",
     "description": "The other cutest Discord client mod",
     "homepage": "https://github.com/Equicord/Equicord#readme",
     "bugs": {
         "url": "https://github.com/Equicord/Equicord/issues"
     },
+    "license": "GPL-3.0-or-later",
+    "author": "Equicord",
     "repository": {
         "type": "git",
         "url": "git+https://github.com/Equicord/Equicord.git"
     },
-    "license": "GPL-3.0-or-later",
-    "author": "Equicord",
     "scripts": {
         "build": "node --require=./scripts/suppressExperimentalWarnings.js scripts/build/build.mjs",
         "buildStandalone": "pnpm build --standalone",
@@ -31,13 +31,13 @@
         "inject": "node scripts/runInstaller.mjs -- --install",
         "uninject": "node scripts/runInstaller.mjs -- --uninstall",
         "repair": "node scripts/runInstaller.mjs -- --repair",
-        "lint": "eslint",
-        "lint-styles": "stylelint \"src/**/*.css\" --ignore-pattern src/userplugins",
-        "lint-styles:fix": "pnpm lint-styles --fix",
+        "lint": "oxlint",
+        "fmt": "oxfmt \"**/*.{css,html,json,yml,yaml}\"",
+        "fmt:check": "pnpm fmt --check",
         "lint:fix": "pnpm lint --fix",
         "lint:intl": "node scripts/lintIntl.mjs",
         "lint:patches": "node scripts/lintPatches.mjs",
-        "test": "pnpm buildStandalone && pnpm testTsc && pnpm lint:fix && pnpm lint-styles && pnpm lint:intl && pnpm lint:patches && pnpm generatePluginJson",
+        "test": "pnpm buildStandalone && pnpm testTsc && pnpm lint:fix && pnpm fmt:check && pnpm lint:intl && pnpm lint:patches && pnpm generatePluginJson",
         "testWeb": "pnpm lint:fix && pnpm buildWeb && pnpm testTsc",
         "testTsc": "tsc --noEmit"
     },
@@ -70,33 +70,29 @@
         "@vencord/discord-types": "link:packages/discord-types",
         "diff": "catalog:",
         "esbuild": "catalog:",
-        "eslint": "catalog:",
-        "eslint-import-resolver-alias": "catalog:",
-        "eslint-plugin-react": "catalog:",
         "eslint-plugin-simple-header": "catalog:",
         "eslint-plugin-simple-import-sort": "catalog:",
-        "eslint-plugin-unused-imports": "catalog:",
         "html-minifier-terser": "catalog:",
         "lodash": "catalog:",
         "md5": "catalog:",
         "moment": "catalog:",
+        "oxfmt": "catalog:",
+        "oxlint": "catalog:",
+        "oxlint-tsgolint": "catalog:",
         "p-limit": "catalog:",
         "puppeteer-core": "catalog:",
         "standalone-electron-types": "catalog:",
-        "stylelint": "catalog:",
-        "stylelint-config-standard": "catalog:",
         "svgo": "catalog:",
         "ts-patch": "catalog:",
         "ts-pattern": "catalog:",
         "tsx": "catalog:",
         "type-fest": "catalog:",
         "typescript": "catalog:",
-        "typescript-eslint": "catalog:",
         "typescript-transform-paths": "catalog:",
         "zip-local": "catalog:"
     },
-    "packageManager": "pnpm@12.16.1",
     "engines": {
         "node": ">=22"
-    }
+    },
+    "packageManager": "pnpm@12.16.1"
 }

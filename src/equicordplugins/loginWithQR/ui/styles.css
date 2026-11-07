@@ -12,8 +12,11 @@
     justify-content: center;
     cursor: pointer;
     overflow: hidden;
-    transition: 200ms background-color ease-in-out, 200ms border-color ease-in-out,
-        200ms opacity ease-in-out, 200ms border-width ease-in-out,
+    transition:
+        200ms background-color ease-in-out,
+        200ms border-color ease-in-out,
+        200ms opacity ease-in-out,
+        200ms border-width ease-in-out,
         250ms width cubic-bezier(0.76, 0, 0.24, 1),
         250ms height cubic-bezier(0.76, 0, 0.24, 1);
 }
@@ -84,9 +87,11 @@
 .qrlogin-device-confirm {
     margin-top: 18px;
     width: 20rem;
-    background: linear-gradient(to right,
-            var(--status-danger) calc(var(--progress) - 1%),
-            var(--text-feedback-critical) var(--progress)) !important;
+    background: linear-gradient(
+        to right,
+        var(--status-danger) calc(var(--progress) - 1%),
+        var(--text-feedback-critical) var(--progress)
+    ) !important;
     border-radius: 420rem;
 
     --progress: 0%;
@@ -107,7 +112,6 @@
 }
 
 [data-tab-id="Scan QR Code"]::before {
-    /* stylelint-disable-next-line property-no-vendor-prefix */
     -webkit-mask: var(--si-scan-qr-code) center/contain no-repeat !important;
     mask: var(--si-scan-qr-code) center/contain no-repeat !important;
 

@@ -129,7 +129,7 @@
 @keyframes vc-vmib-enter {
     from {
         opacity: 0;
-        transform: translateY(-4px) scale(.98);
+        transform: translateY(-4px) scale(0.98);
     }
 
     to {
@@ -140,8 +140,8 @@
 
 @keyframes vc-vmib-pulse {
     from {
-        opacity: .65;
-        transform: scale(.85);
+        opacity: 0.65;
+        transform: scale(0.85);
     }
 
     to {

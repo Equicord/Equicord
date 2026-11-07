@@ -1,4 +1,3 @@
-/* stylelint-disable function-url-quotes */
 .vc-more-stickers-icon {
     fill: var(--interactive-icon-default);
     margin-top: 20%;
@@ -302,7 +301,9 @@
     left: 0;
     top: 0;
     mask: url("https://discord.com/assets/7d65d61e6cd25bf1847ec2d3e4a0144d.svg") 0 0/100% 100%;
-    transition: background-color 0.08s ease-out, color 0.08s ease-out;
+    transition:
+        background-color 0.08s ease-out,
+        color 0.08s ease-out;
     z-index: -1;
 }
 

@@ -2,14 +2,14 @@
 .vc-donate-button {
     overflow: visible !important;
     color: black;
-    background-color: color-mix(in srgb, #ED87A9 25%, pink);
+    background-color: color-mix(in srgb, #ed87a9 25%, pink);
 }
 
 .vc-invite-button:hover,
 .vc-donate-button:hover {
     overflow: visible !important;
     color: black;
-    background-color: color-mix(in srgb, #ED87A9 50%, pink);
+    background-color: color-mix(in srgb, #ed87a9 50%, pink);
 }
 
 .vc-invite-support-button,
@@ -49,12 +49,12 @@
     overflow: visible !important;
     margin-top: 1em;
     color: black;
-    background-color: color-mix(in srgb, #EDCC87 60%, lightyellow);
+    background-color: color-mix(in srgb, #edcc87 60%, lightyellow);
 }
 
 .vc-contrib-button:hover {
     color: black;
-    background-color: color-mix(in srgb, #EDCC87 75%, lightyellow);
+    background-color: color-mix(in srgb, #edcc87 75%, lightyellow);
 }
 
 .vc-contrib-github {
@@ -113,12 +113,12 @@
 .vc-special-text {
     color: black;
     font-size: 1em;
-    margin-top: .75em;
+    margin-top: 0.75em;
     white-space: pre-line;
 }
 
 .vc-special-seperator {
-    margin-top: .75em;
+    margin-top: 0.75em;
     border-top: 1px solid white;
     opacity: 0.4;
 }

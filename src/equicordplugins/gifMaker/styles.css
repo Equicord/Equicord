@@ -115,7 +115,7 @@
     color: var(--text-normal);
     box-sizing: border-box;
     font-size: 14px;
-    transition: border-color .15s ease;
+    transition: border-color 0.15s ease;
 }
 
 .vc-gifmaker-input:focus {
@@ -176,4 +176,3 @@
     font-weight: 600;
     flex-shrink: 0;
 }
-

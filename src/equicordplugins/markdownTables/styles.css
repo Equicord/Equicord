@@ -63,8 +63,16 @@
 .vc-markdownTables-scrollFrame {
     --vc-markdown-tables-mask-size: 30px;
     --vc-markdown-tables-fade-color: var(--background-primary);
-    --vc-markdown-tables-fade-mid: color-mix(in srgb, var(--vc-markdown-tables-fade-color) 58%, transparent);
-    --vc-markdown-tables-fade-soft: color-mix(in srgb, var(--vc-markdown-tables-fade-color) 24%, transparent);
+    --vc-markdown-tables-fade-mid: color-mix(
+        in srgb,
+        var(--vc-markdown-tables-fade-color) 58%,
+        transparent
+    );
+    --vc-markdown-tables-fade-soft: color-mix(
+        in srgb,
+        var(--vc-markdown-tables-fade-color) 24%,
+        transparent
+    );
 
     position: relative;
     max-width: 100%;

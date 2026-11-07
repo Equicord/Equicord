@@ -183,12 +183,15 @@
         position: absolute;
         inset: 0;
         border-radius: inherit;
-        background-image: linear-gradient(90deg,
-                var(--opacity-12) 0,
-                var(--opacity-32) var(--spread),
-                var(--opacity-12) calc(var(--spread) * 2));
+        background-image: linear-gradient(
+            90deg,
+            var(--opacity-12) 0,
+            var(--opacity-32) var(--spread),
+            var(--opacity-12) calc(var(--spread) * 2)
+        );
         background-size: 600% 200%;
-        animation: songspotlight-skeleton-shine var(--anim-duration) var(--anim-offset) infinite linear backwards;
+        animation: songspotlight-skeleton-shine var(--anim-duration) var(--anim-offset) infinite
+            linear backwards;
         pointer-events: none;
         transition: var(--time) opacity;
     }

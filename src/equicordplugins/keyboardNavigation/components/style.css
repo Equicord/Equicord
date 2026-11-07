@@ -93,7 +93,9 @@
     color: var(--status-danger) !important;
     background-color: hsl(var(--red-400-hsl) / 10%) !important;
     opacity: 1;
-    transition: opacity.2s ease-in-out, transform.2s ease-in-out;
+    transition:
+        opacity.2s ease-in-out,
+        transform.2s ease-in-out;
 }
 
 .vc-command-palette-key-recorder-button {

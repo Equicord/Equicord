@@ -22,7 +22,7 @@
     text-transform: uppercase;
     font-size: 12px;
     line-height: 16px;
-    letter-spacing: .02em;
+    letter-spacing: 0.02em;
     font-family: var(--font-display);
     font-weight: 600;
 }

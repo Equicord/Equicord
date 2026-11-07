@@ -1,5 +1,5 @@
-import { FluxStore, User } from "..";
 import { PremiumType } from "../../enums";
+import { FluxStore, User } from "..";
 
 export interface OverridePremiumTypeState {
     createdAtOverride: Date | undefined;

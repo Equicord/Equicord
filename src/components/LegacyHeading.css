@@ -39,7 +39,7 @@
 
 .vc-h1-defaultMargin,
 .vc-h2-defaultMargin {
-    margin-bottom: 20px
+    margin-bottom: 20px;
 }
 
 /* This is copied from Discord, don't ask me why 0 margin */
@@ -50,5 +50,5 @@
 
 .vc-h3-defaultMargin,
 .vc-h5-defaultMargin {
-    margin-bottom: 8px
+    margin-bottom: 8px;
 }

@@ -26,7 +26,8 @@
     min-height: 0;
     opacity: 1;
     overflow: hidden;
-    transition: opacity var(--expand-fade-duration, 0.1s) var(--expand-easing-function, ease) var(--expand-structural-duration, 0.2s);
+    transition: opacity var(--expand-fade-duration, 0.1s) var(--expand-easing-function, ease)
+        var(--expand-structural-duration, 0.2s);
 }
 
 .vc-notice-hidden .vc-notice-inner {
@@ -61,7 +62,7 @@
     margin: 0;
 }
 
-.vc-notice-text p~p {
+.vc-notice-text p ~ p {
     margin-top: 8px;
 }
 

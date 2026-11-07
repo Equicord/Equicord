@@ -22,7 +22,9 @@
 }
 
 .vc-icon-icon {
-    transition: transform 0.15s ease, filter 0.15s ease;
+    transition:
+        transform 0.15s ease,
+        filter 0.15s ease;
 }
 
 .vc-icon-container:hover .vc-icon-icon {
@@ -45,7 +47,7 @@
     margin-bottom: 16px;
 }
 
-.vc-icon-tab-search-bar-grid>div:first-child {
+.vc-icon-tab-search-bar-grid > div:first-child {
     flex: 1;
 }
 
@@ -76,7 +78,13 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-image: repeating-linear-gradient(45deg, #ffffff1a 0, #ffffff1a 10px, #0000001a 10px, #0000001a 20px);
+    background-image: repeating-linear-gradient(
+        45deg,
+        #ffffff1a 0,
+        #ffffff1a 10px,
+        #0000001a 10px,
+        #0000001a 20px
+    );
     border-radius: 8px;
     cursor: context-menu;
 }

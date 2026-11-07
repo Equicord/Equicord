@@ -82,11 +82,15 @@
     opacity: 0.6;
 }
 
-.vc-bactivities-controls .vc-bactivities-controls-carousel .vc-bactivities-controls-dot:hover:not(.vc-bactivities-controls-selected) {
+.vc-bactivities-controls
+    .vc-bactivities-controls-carousel
+    .vc-bactivities-controls-dot:hover:not(.vc-bactivities-controls-selected) {
     opacity: 1;
 }
 
-.vc-bactivities-controls .vc-bactivities-controls-carousel .vc-bactivities-controls-dot.vc-bactivities-controls-selected {
+.vc-bactivities-controls
+    .vc-bactivities-controls-carousel
+    .vc-bactivities-controls-dot.vc-bactivities-controls-selected {
     opacity: 1;
     background: var(--dot-color, var(--brand-500));
 }

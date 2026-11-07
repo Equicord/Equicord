@@ -15,7 +15,9 @@ const settings = definePluginSettings({
         description: "Number of reactions (0-42)",
         type: OptionType.NUMBER,
         restartNeeded: true,
-        default: 5
+        default: 5,
+        min: 0,
+        max: 42
     },
     frequentEmojis: {
         description: "Use frequently used emojis instead of favorite emojis",

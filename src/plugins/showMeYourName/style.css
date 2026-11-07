@@ -1,6 +1,3 @@
-/* stylelint-disable rule-empty-line-before */
-/* stylelint-disable property-no-vendor-prefix */
-
 @keyframes smyn-animation {
     0% {
         background-position: 0;
@@ -24,7 +21,7 @@
     filter: blur(4px);
     opacity: 0;
     text-indent: 0;
-    transition: opacity .1s ease-in-out;
+    transition: opacity 0.1s ease-in-out;
     text-wrap-style: balance;
     z-index: -1;
 }
@@ -40,8 +37,8 @@
 }
 
 .smyn-gradient-hovered::after {
-    opacity: .7;
-    transition: opacity .1s ease-in-out;
+    opacity: 0.7;
+    transition: opacity 0.1s ease-in-out;
 }
 
 .smyn-modal-footer-container button {
@@ -55,9 +52,15 @@
 }
 
 .smyn-native-gradient-animated > [data-username-with-effects],
-:where(.smyn-native-gradient-glow-overflow) .smyn-native-gradient-glow > [data-username-with-effects] {
+:where(.smyn-native-gradient-glow-overflow)
+    .smyn-native-gradient-glow
+    > [data-username-with-effects] {
     animation: smyn-animation var(--smyn-gradient-duration, 1.5s) linear infinite;
-    background-image: linear-gradient(to right, var(--custom-display-name-styles-gradient-stops), var(--custom-display-name-styles-main-color) 100%) !important;
+    background-image: linear-gradient(
+        to right,
+        var(--custom-display-name-styles-gradient-stops),
+        var(--custom-display-name-styles-main-color) 100%
+    ) !important;
     background-size: 100px auto !important;
 }
 
@@ -70,7 +73,7 @@
     opacity: 0;
     position: absolute;
     text-indent: 0;
-    transition: opacity .1s ease-in-out;
+    transition: opacity 0.1s ease-in-out;
     -webkit-text-fill-color: transparent;
     z-index: -1;
 }
@@ -79,19 +82,17 @@
 .smyn-native-gradient-glow-overflow,
 .smyn-native-gradient-glow-overflow > .smyn-name-group,
 .smyn-native-gradient-glow-overflow > .smyn-name-group > .smyn-name,
-.smyn-native-gradient-glow-overflow :where(
-    [class^="text_"],
-    [class*=" text_"],
-    [class^="username_"],
-    [class*=" username_"]
-) {
+.smyn-native-gradient-glow-overflow
+    :where([class^="text_"], [class*=" text_"], [class^="username_"], [class*=" username_"]) {
     overflow: visible;
 }
 
 .smyn-native-gradient-glow-active > [data-username-with-effects]::after,
-:where(.smyn-native-gradient-glow-overflow) .smyn-native-gradient-glow > [data-username-with-effects]::after {
-    opacity: .7 !important;
-    transition: opacity .1s ease-in-out;
+:where(.smyn-native-gradient-glow-overflow)
+    .smyn-native-gradient-glow
+    > [data-username-with-effects]::after {
+    opacity: 0.7 !important;
+    transition: opacity 0.1s ease-in-out;
 }
 
 .smyn-native-effect.smyn-native-message-effect {
@@ -99,7 +100,7 @@
 }
 
 .smyn-native-gummy-animated > [data-username-with-effects] {
-    --smyn-gummy-inline-headroom: .12em;
+    --smyn-gummy-inline-headroom: 0.12em;
 
     margin-inline: calc(var(--smyn-gummy-inline-headroom) * -1);
     padding-inline: var(--smyn-gummy-inline-headroom);
@@ -130,7 +131,7 @@
     text-decoration-line: underline;
     text-decoration-style: initial;
     text-decoration-thickness: initial;
-    text-underline-offset: .08em;
+    text-underline-offset: 0.08em;
 }
 
 .smyn-container:hover .smyn-native-gummy > [data-username-with-effects] {

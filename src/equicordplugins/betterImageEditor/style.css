@@ -18,7 +18,9 @@
     font-size: 12px;
     font-weight: 500;
     cursor: pointer;
-    transition: background-color .1s ease-out, color .1s ease-out;
+    transition:
+        background-color 0.1s ease-out,
+        color 0.1s ease-out;
 }
 
 .vc-bie-tab:focus-visible {
@@ -87,7 +89,9 @@
     border-radius: 11px;
     background: var(--background-modifier-hover);
     color: var(--text-muted);
-    transition: width .12s ease-out, background-color .12s ease-out;
+    transition:
+        width 0.12s ease-out,
+        background-color 0.12s ease-out;
 }
 
 .vc-bie-find:focus-within {
@@ -188,7 +192,9 @@
     background-size: cover;
     background-position: center;
     cursor: pointer;
-    transition: border-color .1s ease-out, transform .1s ease-out;
+    transition:
+        border-color 0.1s ease-out,
+        transform 0.1s ease-out;
 }
 
 .vc-bie-thumb:focus-visible {

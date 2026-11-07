@@ -7,7 +7,7 @@
     background-color: var(--background-base-low) !important;
     border-color: var(--vc-donatebutton) !important;
     filter: brightness(1);
-    border-width: .1rem !important;
+    border-width: 0.1rem !important;
     border-style: solid !important;
 }
 
@@ -15,7 +15,6 @@
     background-color: var(--vc-donatebutton) !important;
     border-color: transparent !important;
 }
-
 
 .vc-joindiscordbutton {
     background-color: var(--channeltextarea-background) !important;
@@ -28,8 +27,8 @@
 .vc-settings-card-buttons {
     display: flex;
     gap: 1em !important;
-    margin-left: .2rem;
-    margin-bottom: .2rem;
+    margin-left: 0.2rem;
+    margin-bottom: 0.2rem;
 }
 
 .vc-settingbuttons {

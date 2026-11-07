@@ -173,6 +173,20 @@ ipcMain.handle(IpcEvents.OPEN_MONACO_EDITOR, async () => {
 
     monacoWin.once("closed", () => { monacoWin = null; });
 
+    // Intercept quit shortcuts so they don't quit the main application
+    monacoWin.webContents.on("before-input-event", (e, input) => {
+        if (input.type !== "keyDown") return;
+
+        const key = input.key.toLowerCase();
+        const isQuit = (input.control && !input.alt && !input.shift && key === "q")
+            || (input.alt && !input.control && !input.shift && key === "f4");
+
+        if (isQuit) {
+            e.preventDefault();
+            monacoWin?.close();
+        }
+    });
+
     makeLinksOpenExternally(monacoWin);
     monacoWin.webContents.on("will-navigate", e => e.preventDefault());
 

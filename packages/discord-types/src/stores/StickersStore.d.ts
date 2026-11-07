@@ -1,5 +1,5 @@
-import { FluxStore, GuildSticker, PremiumStickerPack, Sticker } from "..";
 import { LoadState } from "../../enums";
+import { FluxStore, GuildSticker, PremiumStickerPack, Sticker } from "..";
 
 export type StickerGuildMap = Map<string, GuildSticker[]>;
 export type StickerPackMap = Map<string, Sticker[]>;
@@ -27,7 +27,6 @@ export interface DynamicStickerPackMeta extends StickerPackMeta {
 export interface StickerPack extends StickerPackMeta {
     stickers: Sticker[];
 }
-
 
 export interface StickerCategoryType {
     id: string;

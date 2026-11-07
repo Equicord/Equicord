@@ -107,7 +107,8 @@
 }
 
 @keyframes vc-transcription-pulse {
-    0%, 100% {
+    0%,
+    100% {
         opacity: 1;
         transform: scale(1);
     }
@@ -136,7 +137,9 @@
     background: transparent;
     color: var(--interactive-icon-default, var(--text-muted));
     cursor: pointer;
-    transition: color 0.15s ease, background-color 0.15s ease;
+    transition:
+        color 0.15s ease,
+        background-color 0.15s ease;
 }
 
 .vc-transcription-action-btn:hover {

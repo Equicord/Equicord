@@ -1,18 +1,18 @@
 import {
     QuestDismissibleContentFlags,
+    QuestErrorType,
     QuestFeature,
-    QuestPlatform,
     QuestPlacement,
+    QuestPlatform,
+    QuestPlatformMode,
     QuestRewardAssignmentMethod,
     QuestRewardExpirationMode,
     QuestRewardType,
+    QuestSharePolicy,
     QuestTargetedContent,
+    QuestTaskJoinOperator,
     QuestTaskType,
     QuestTranscriptFetchStatus,
-    QuestErrorType,
-    QuestSharePolicy,
-    QuestTaskJoinOperator,
-    QuestPlatformMode,
 } from "../../enums";
 import { FluxStore } from "./FluxStore";
 

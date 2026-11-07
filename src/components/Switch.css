@@ -13,7 +13,9 @@
     height: 24px;
     position: relative;
     width: 48px;
-    transition: background-color 200ms ease, border-color 200ms ease;
+    transition:
+        background-color 200ms ease,
+        border-color 200ms ease;
 }
 
 .vc-switch-checked .vc-switch-indicator {
@@ -78,6 +80,6 @@
 
     &:disabled {
         pointer-events: none;
-        cursor: not-allowed
+        cursor: not-allowed;
     }
 }
