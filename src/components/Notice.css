@@ -55,7 +55,7 @@
     font-size: 14px;
     font-weight: 500;
     line-height: 1.2857;
-    color: var(--text-default);
+    color: var(--white);
 }
 
 .vc-notice-text p {
