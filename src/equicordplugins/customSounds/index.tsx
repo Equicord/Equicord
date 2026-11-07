@@ -175,7 +175,7 @@ export async function debugCustomSounds() {
     let enabledCount = 0;
     let totalSettingsSize = 0;
 
-    for (const [soundId, storedValue] of Object.entries(settings.store)) {
+    for (const soundId of Object.keys(settings.store)) {
         if (soundId === "overrides" || soundId === "soundpack") continue;
 
         const override = getOverride(soundId);

@@ -17,7 +17,7 @@
 */
 
 import { PluginTarget, PluginTargets } from "@utils/pluginTargets";
-import { Dirent, readdirSync, readFileSync, writeFileSync } from "fs";
+import { Dirent, readFileSync } from "fs";
 import { access, readFile } from "fs/promises";
 import { join, sep } from "path";
 import { normalize as posixNormalize, sep as posixSep } from "path/posix";

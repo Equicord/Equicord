@@ -138,7 +138,6 @@ export function PresetList({
                                 className={cl("menu-icon")}
                                 onClick={e => {
                                     e.stopPropagation();
-                                    const target = e.currentTarget;
                                     ContextMenuApi.openContextMenu(e, () => (
                                         <Menu.Menu navId="preset-options" onClose={ContextMenuApi.closeContextMenu}>
                                             <Menu.MenuItem

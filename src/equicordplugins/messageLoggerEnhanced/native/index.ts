@@ -26,15 +26,13 @@ const allowedHosts = new Set(["cdn.discordapp.com", "media.discordapp.net"]);
 const nativeSavedImages = new Map<string, string>();
 export const getNativeSavedImages = () => nativeSavedImages;
 
-let logsDir: string;
 let imageCacheDir: string;
 
 const getImageCacheDir = async () => imageCacheDir ?? await getDefaultNativeImageDir();
 
 export async function initDirs() {
-    const { logsDir: ld, imageCacheDir: icd } = await getSettings();
+    const { imageCacheDir: icd } = await getSettings();
 
-    logsDir = ld || await getDefaultNativeDataDir();
     imageCacheDir = icd || await getDefaultNativeImageDir();
 }
 initDirs();
@@ -94,13 +92,10 @@ export async function chooseDir(event: IpcMainInvokeEvent, logKey: "logsDir" | "
 
     await saveSettings(settings);
 
-    switch (logKey) {
-        case "logsDir": logsDir = dir; break;
-        case "imageCacheDir": imageCacheDir = dir; break;
-    }
-
-    if (logKey === "imageCacheDir")
+    if (logKey === "imageCacheDir") {
+        imageCacheDir = dir;
         await init(event);
+    }
 
     return dir;
 }

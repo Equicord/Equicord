@@ -18,7 +18,7 @@ import { React, TextInput } from "@webpack/common";
 const cl = classNameFactory("vc-settings-theme-");
 
 export function Validator({ link, onValidate }: { link: string; onValidate: (valid: boolean) => void; }) {
-    const [res, err, pending] = useAwaiter(() => fetch(link).then(res => {
+    const [, err, pending] = useAwaiter(() => fetch(link).then(res => {
         if (res.status > 300) throw `${res.status} ${res.statusText}`;
         const contentType = res.headers.get("Content-Type");
         if (!contentType?.startsWith("text/css") && !contentType?.startsWith("text/plain")) {

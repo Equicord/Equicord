@@ -40,7 +40,6 @@ function getTitleNode(track: Track | null) {
 export function LyricsModal({ rootProps }: { rootProps: RenderModalProps; }) {
     const { track, lyrics, currLrcIndex } = useLyrics({ scroll: false });
     const currentLyrics = lyrics || null;
-    const position = track ? TidalStore.mPosition : 0;
 
     return (
         <Modal {...rootProps} size="md" title={getTitleNode(track)}>

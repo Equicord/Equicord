@@ -158,14 +158,7 @@ export default definePlugin({
     },
 
     filterStream(channelStream: [ChannelStreamGroupProps | ChannelStreamMessageProps | ChannelStreamDividerProps]) {
-        const {
-            alsoHideIgnoredUsers,
-            disableNotifications,
-            hideBlockedUserReplies,
-            allowAutoModMessages,
-            defaultHideUsers,
-            overrideUsers
-        } = settings.use([
+        const { alsoHideIgnoredUsers } = settings.use([
             "alsoHideIgnoredUsers",
             "disableNotifications",
             "hideBlockedUserReplies",

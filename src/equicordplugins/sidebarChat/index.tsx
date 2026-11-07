@@ -484,8 +484,6 @@ export default definePlugin({
 });
 
 const Header = ({ guild, channel }: { guild: Guild; channel: Channel; }) => {
-    const recipientId = channel.isPrivate() ? channel.getRecipientId() as string : null;
-
     const name = useStateFromStores([UserStore, RelationshipStore], () => getChannelTitle(channel), [channel.id, channel.name]);
 
     const parentChannel = useStateFromStores(

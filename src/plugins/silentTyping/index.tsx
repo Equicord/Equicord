@@ -147,14 +147,6 @@ const SilentTypingChatToggle: ChatBarButtonFactory = ({ channel, type }) => {
         enabledGlobally,
         chatIcon,
         defaultHidden,
-        enabledLocations,
-        disabledLocations,
-        alwaysEnableInActiveVoiceChat,
-        temporaryEnableThresholdServers,
-        temporaryEnableThresholdDirectMessages,
-        chatIconLeftClickAction,
-        chatIconMiddleClickAction,
-        chatIconRightClickAction,
     } = settings.use([
         "enabledGlobally",
         "chatIcon",
@@ -325,9 +317,7 @@ const ChatBarContextCheckbox: NavContextMenuPatchCallback = children => {
         chatIcon,
         chatContextMenu,
         enabledGlobally,
-        defaultHidden,
-        hideChatBoxTypingIndicators,
-        hideMembersListTypingIndicators
+        defaultHidden
     } = settings.use([
         "chatIcon",
         "chatContextMenu",

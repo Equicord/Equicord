@@ -93,7 +93,6 @@ export function createWordDiff(oldText: string, newText: string): DiffPart[] {
     const oldChars = tokenizeMessage(oldText);
     const newChars = tokenizeMessage(newText);
 
-    const result: DiffPart[] = [];
     const dp: number[][] = [];
 
     for (let i = 0; i <= oldChars.length; i++) {

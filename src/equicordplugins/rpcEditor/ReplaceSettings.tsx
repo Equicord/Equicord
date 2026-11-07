@@ -39,7 +39,7 @@ export function ReplaceTutorial() {
                     : activities.map(activity => {
                         const isSpotify = (activity.flags & (ActivityFlags.SYNC | ActivityFlags.PLAY)) === (ActivityFlags.SYNC | ActivityFlags.PLAY);
                         return !isSpotify
-                            ? <Paragraph>{activity.name}: {activity.application_id}</Paragraph>
+                            ? <Paragraph key={activity.application_id}>{activity.name}: {activity.application_id}</Paragraph>
                             : null;
                     })
             }

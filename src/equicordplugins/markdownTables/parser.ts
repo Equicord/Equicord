@@ -169,13 +169,6 @@ function nextContentLine(lines: string[], cursor: number, fenced?: boolean[]) {
     return -1;
 }
 
-function canStartTableAt(lines: string[], lineIndex: number, fenced?: boolean[]) {
-    if (lineIndex < 0 || lineIndex >= lines.length - 1) return false;
-    if (fenced?.[lineIndex] || fenced?.[lineIndex + 1]) return false;
-
-    return canBeTableLine(lines[lineIndex]) && parseSeparator(lines[lineIndex + 1]) !== null;
-}
-
 function canContinueTableAt(lines: string[], lineIndex: number, fenced?: boolean[]) {
     if (lineIndex < 0 || fenced?.[lineIndex]) return false;
 
