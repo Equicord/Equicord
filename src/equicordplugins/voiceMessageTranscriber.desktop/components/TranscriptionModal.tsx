@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { BaseText } from "@components/BaseText";
 import { Flex } from "@components/Flex";
 import { Heading } from "@components/Heading";
+import { Text } from "@components/Text";
 import { copyToClipboard } from "@utils/clipboard";
 import { RenderModalProps } from "@vencord/discord-types";
 import { Modal, useEffect, useRef, useState } from "@webpack/common";
@@ -123,13 +123,13 @@ export function TranscriptionModal(props: { modalProps: RenderModalProps, src: s
                 {error ? (
                     <Flex flexDirection="column" alignItems="center" gap={12} style={{ padding: "32px 16px" }}>
                         <Heading tag="h3" style={{ color: "var(--red-360)" }}>Transcription Failed</Heading>
-                        <BaseText size="sm" color="text-muted" style={{ textAlign: "center" }}>
+                        <Text size="sm" color="text-muted" style={{ textAlign: "center" }}>
                             {error}
-                        </BaseText>
+                        </Text>
                     </Flex>
                 ) : displayText ? (
                     <div className={cl("result")}>
-                        <BaseText size="md">{displayText}</BaseText>
+                        <Text size="md">{displayText}</Text>
                     </div>
                 ) : (
                     <Flex flexDirection="column" alignItems="center" justifyContent="center" gap={16} style={{ height: "200px" }}>

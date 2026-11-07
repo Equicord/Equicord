@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { BaseText } from "@components/BaseText";
+import { Text } from "@components/Text";
 import { React, useEffect, useRef, useState } from "@webpack/common";
 
 interface EditableTextProps {
@@ -45,12 +45,12 @@ export function EditableText({ value, onChange, className }: EditableTextProps) 
             }}
         />
     ) : (
-        <BaseText
+        <Text
             className={className}
             onClick={() => setEditing(true)}
             style={{ cursor: "pointer" }}
         >
             {value}
-        </BaseText>
+        </Text>
     );
 }

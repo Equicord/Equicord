@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { BaseText } from "@components/BaseText";
 import { Button, TextButton } from "@components/Button";
+import { Text } from "@components/Text";
 import { images } from "@equicordplugins/loginWithQR/images";
 import { getIntlMessage } from "@utils/discord";
 import { RenderModalProps } from "@vencord/discord-types";
@@ -116,7 +116,7 @@ function VerifyModal({
                             key="img-success"
                             draggable={false}
                         />
-                        <BaseText
+                        <Text
                             size="xl"
                             weight="bold"
                             color="text-strong"
@@ -124,15 +124,15 @@ function VerifyModal({
                             className={cl("device-header")}
                         >
                             {getIntlMessage("QR_CODE_LOGIN_SUCCESS")}
-                        </BaseText>
-                        <BaseText
+                        </Text>
+                        <Text
                             size="md"
                             weight="semibold"
                             color="text-default"
                             style={{ width: "30rem", textAlign: "center" }}
                         >
                             {getIntlMessage("QR_CODE_LOGIN_SUCCESS_FLAVOR")}
-                        </BaseText>
+                        </Text>
                     </>
                 ) : state === VerifyState.NotFound ? (
                     <>
@@ -142,7 +142,7 @@ function VerifyModal({
                             key="img-not_found"
                             draggable={false}
                         />
-                        <BaseText
+                        <Text
                             size="xl"
                             weight="bold"
                             color="text-strong"
@@ -150,15 +150,15 @@ function VerifyModal({
                             className={cl("device-header")}
                         >
                             {getIntlMessage("QR_CODE_NOT_FOUND")}
-                        </BaseText>
-                        <BaseText
+                        </Text>
+                        <Text
                             size="md"
                             weight="semibold"
                             color="text-default"
                             style={{ width: "30rem" }}
                         >
                             {getIntlMessage("QR_CODE_NOT_FOUND_DESCRIPTION")}
-                        </BaseText>
+                        </Text>
                     </>
                 ) : (
                     <>
@@ -168,7 +168,7 @@ function VerifyModal({
                             key="img-loaded"
                             draggable={false}
                         />
-                        <BaseText
+                        <Text
                             size="xl"
                             weight="bold"
                             color="text-strong"
@@ -176,10 +176,10 @@ function VerifyModal({
                             className={cl("device-header")}
                         >
                             {getIntlMessage("QR_CODE_LOGIN_CONFIRM")}
-                        </BaseText>
-                        <BaseText size="md" weight="semibold" color="text-danger">
+                        </Text>
+                        <Text size="md" weight="semibold" color="text-danger">
                             Never scan a login QR code from another user or application.
-                        </BaseText>
+                        </Text>
                         <Button
                             size="medium"
                             variant="dangerPrimary"

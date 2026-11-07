@@ -6,11 +6,11 @@
 
 import { DataStore } from "@api/index";
 import { definePluginSettings } from "@api/Settings";
-import { BaseText } from "@components/BaseText";
 import { Button } from "@components/Button";
 import { Divider } from "@components/Divider";
 import { Heading } from "@components/Heading";
 import { Paragraph } from "@components/Paragraph";
+import { Text } from "@components/Text";
 import { OptionType } from "@utils/types";
 import { Alerts, useState } from "@webpack/common";
 
@@ -130,7 +130,7 @@ function RadioOption({ name, value, checked, onChange, label }: { name: string; 
         <div className={cl("sort-option")}>
             <label className={cl("sort-label")}>
                 <input type="radio" name={name} value={value} checked={checked} onChange={onChange} className={cl("sort-input")} />
-                <BaseText className={cl("sort-text")} tag="div" size="sm">{label}</BaseText>
+                <Text className={cl("sort-text")} tag="div" size="sm">{label}</Text>
             </label>
         </div>
     );

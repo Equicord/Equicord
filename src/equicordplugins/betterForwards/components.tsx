@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { BaseText } from "@components/BaseText";
 import { Flex } from "@components/Flex";
 import { AtIcon, DiscordIconSizes, RightArrow, TextIcon } from "@components/Icons";
+import { Text } from "@components/Text";
 import { iconsModule } from "@equicordplugins/_core/concatenatedModules";
 import { getGuildAcronym, getIntlMessage } from "@utils/discord";
 import { getUserAvatarUrl, identity } from "@utils/misc";
@@ -113,9 +113,9 @@ function GuildName({ guildId }: { guildId: string; }) {
             {popoutProps => (
                 <div ref={ref} className={cl("footer-element")} onMouseEnter={preload} {...popoutProps}>
                     {guild ? <GuildIcon guild={guild} /> : widget?.ok ? <WidgetIcon guildId={guildId} name={widget.name!} /> : null}
-                    <BaseText size="sm" weight="medium" className={cl("footer-text")}>
+                    <Text size="sm" weight="medium" className={cl("footer-text")}>
                         {guild?.name ?? widget?.name ?? "View server"}
-                    </BaseText>
+                    </Text>
                     <RightArrow width={DiscordIconSizes.xxs} height={DiscordIconSizes.xxs} fill="currentColor" />
                 </div>
             )}
@@ -159,9 +159,9 @@ function ChannelName({ guildId, channelId, messageId }: { guildId?: string; chan
     return (
         <div className={cl("footer-element")} onClick={navigate} onMouseEnter={prefetch}>
             {channel ? <ChannelIcon channel={channel} name={name} /> : <FallbackIcon width={DiscordIconSizes.xs} height={DiscordIconSizes.xs} />}
-            <BaseText size="sm" weight="medium" className={cl("footer-text")}>
+            <Text size="sm" weight="medium" className={cl("footer-text")}>
                 {channel ? name : <i>{name}</i>}
-            </BaseText>
+            </Text>
             <RightArrow width={DiscordIconSizes.xxs} height={DiscordIconSizes.xxs} fill="currentColor" />
         </div>
     );
@@ -175,9 +175,9 @@ function Timestamp({ snowflake }: { snowflake: string; }) {
 
     return (
         <div className={cl("footer-element")} style={{ pointerEvents: "none" }}>
-            <BaseText size="sm" weight="medium" className={cl("footer-text")}>
+            <Text size="sm" weight="medium" className={cl("footer-text")}>
                 {formatted}
-            </BaseText>
+            </Text>
         </div>
     );
 }
@@ -252,14 +252,14 @@ function SubEmbedPicker({ title, subEmbeds, opts, setOpts, hasOpts, defaultOpts 
 
     return (
         <Flex gap={4} flexDirection="column">
-            <BaseText
+            <Text
                 size="sm"
                 color="text-subtle"
                 className={cl("embed-name")}
                 style={{ opacity: !hasOpts ? 0.5 : undefined }}
             >
                 {title}
-            </BaseText>
+            </Text>
             <TagGroup
                 label={title}
                 selectionMode="multiple"

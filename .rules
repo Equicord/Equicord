@@ -459,7 +459,7 @@ Deprecated: `@api/Themes`. `classNameFactory` re-export from `@api/Styles`.
 
 ### `@components/*`
 
-`Badge`, `BaseText`, `Button`, `Card`, `CheckedTextInput`, `CodeBlock`, `Divider`, `ErrorBoundary`, `ErrorCard`, `Flex`, `FormSwitch`, `Grid`, `Heading`, `Heart`, `Icons`, `Link`, `Notice`, `Paragraph`, `Span`, `Switch`, `margins` (`Margins`), `settings` subtree.
+`Badge`, `Button`, `Card`, `CheckedTextInput`, `CodeBlock`, `Divider`, `ErrorBoundary`, `ErrorCard`, `Flex`, `FormSwitch`, `Grid`, `Heading`, `Heart`, `Icons`, `Link`, `Notice`, `Paragraph`, `Span`, `Switch`, `Text`, `margins` (`Margins`), `settings` subtree.
 
 `ErrorBoundary.wrap(Component, { noop?, fallback?, onError?, message? })`.
 

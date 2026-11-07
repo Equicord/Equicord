@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { BaseText } from "@components/index";
+import { Text } from "@components/Text";
 import { cl } from "@equicordplugins/songSpotlight.desktop/lib/utils";
 import { classes } from "@utils/misc";
 import { findByCodeLazy, findCssClassesLazy } from "@webpack";
@@ -51,14 +51,14 @@ export function ExplicitTag({ className }: HTMLAttributes<HTMLDivElement>) {
     return (
         <Tooltip text="Explicit">
             {tooltipProps => (
-                <BaseText
+                <Text
                     {...tooltipProps}
                     size="xs"
                     weight="medium"
                     className={classes(cl("explicit-tag"), className)}
                 >
                     E
-                </BaseText>
+                </Text>
             )}
         </Tooltip>
     );

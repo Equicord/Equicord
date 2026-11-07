@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { BaseText } from "@components/BaseText";
+import { Text } from "@components/Text";
 import { fetchOrgRepos, fetchReposByUserId, fetchReposByUsername, fetchUserInfo, fetchUserOrgs } from "@equicordplugins/githubRepos/githubApi";
 import { GitHubRepo, RepoGroup, RepoSortMode } from "@equicordplugins/githubRepos/types";
 import { buildRepoGroups, PERSONAL_GROUP_KEY, sortGroups } from "@equicordplugins/githubRepos/utils";
@@ -72,14 +72,14 @@ export function ProfileTabComponent({ id }: { id: string, theme: string; }) {
     }, [id]);
 
     if (loading) return;
-    <BaseText size="xs" weight="semibold" className={cl("loading")} >
+    <Text size="xs" weight="semibold" className={cl("loading")} >
         Loading repositories...
-    </BaseText>;
+    </Text>;
 
     if (error) return;
-    <BaseText size="xs" weight="semibold" className={cl("error")}>
+    <Text size="xs" weight="semibold" className={cl("error")}>
         Error: {error}
-    </BaseText>;
+    </Text>;
 
     if (!groups.length) return null;
 

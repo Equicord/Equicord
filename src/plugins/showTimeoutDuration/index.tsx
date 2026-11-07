@@ -7,8 +7,8 @@
 import "./styles.css";
 
 import { definePluginSettings } from "@api/Settings";
-import { BaseText } from "@components/BaseText";
 import ErrorBoundary from "@components/ErrorBoundary";
+import { Text } from "@components/Text";
 import { Devs } from "@utils/constants";
 import { getIntlMessage } from "@utils/discord";
 import { canonicalizeMatch } from "@utils/patches";
@@ -98,9 +98,9 @@ export default definePlugin({
                 {tooltipProps => (
                     <div {...tooltipProps} className="vc-std-wrapper">
                         {children}
-                        <BaseText tag="span" size="md" color="text-danger">
+                        <Text tag="span" size="md" color="text-danger">
                             {renderTimeout(message, true)} timeout remaining
-                        </BaseText>
+                        </Text>
                     </div>
                 )}
             </Tooltip>

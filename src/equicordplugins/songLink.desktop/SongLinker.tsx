@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { BaseText } from "@components/BaseText";
 import { Button } from "@components/Button";
 import { Card } from "@components/Card";
 import { HeadphonesIcon } from "@components/Icons";
+import { Text } from "@components/Text";
 import { useEffect, useState } from "@webpack/common";
 
 import pl, { Native, settings, SongLinkResult } from ".";
@@ -36,15 +36,15 @@ export default function SongLinker({ url, onResolved }: SongLinkerProps) {
         doStuff();
     }, [url]);
 
-    return <BaseText>
+    return <Text>
         {
             songData ? <Card style={{
                 padding: "10px 15px"
             }}>
                 <div>
-                    <BaseText style={{ display: "flex", alignItems: "center", gap: "6px", fontWeight: 600, fontSize: "1.05rem" }}>
+                    <Text style={{ display: "flex", alignItems: "center", gap: "6px", fontWeight: 600, fontSize: "1.05rem" }}>
                         <HeadphonesIcon /> {songData.info?.title} - {songData.info?.artist}
-                    </BaseText>
+                    </Text>
                     <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "10px", marginTop: "10px" }}>
                         {
                             Object.keys(songData.links).map(service => settings.store.servicesSettings[service].enabled && <Button key={`${service}-${url}`} style={{
@@ -64,7 +64,7 @@ export default function SongLinker({ url, onResolved }: SongLinkerProps) {
                         }
                     </div>
                 </div>
-            </Card> : <BaseText>Loading song link...</BaseText>
+            </Card> : <Text>Loading song link...</Text>
         }
-    </BaseText >;
+    </Text >;
 }

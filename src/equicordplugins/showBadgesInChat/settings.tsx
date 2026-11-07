@@ -5,7 +5,7 @@
  */
 
 import { definePluginSettings } from "@api/Settings";
-import { BaseText } from "@components/BaseText";
+import { Text } from "@components/Text";
 import { OptionType } from "@utils/types";
 import { useEffect, UserStore, useState } from "@webpack/common";
 
@@ -169,10 +169,10 @@ const BadgeSettings = () => {
 
     return (
         <>
-            <BaseText>Drag the badges to reorder them, you can click to enable/disable a specific badge type.</BaseText>
+            <Text>Drag the badges to reorder them, you can click to enable/disable a specific badge type.</Text>
             <div className="vc-sbic-badge-settings">
                 <img className="vc-sbic-settings-avatar" src={UserStore.getCurrentUser().getAvatarURL()}></img>
-                <BaseText className="vc-sbic-settings-username">{(UserStore.getCurrentUser() as any).globalName}</BaseText>
+                <Text className="vc-sbic-settings-username">{(UserStore.getCurrentUser() as any).globalName}</Text>
                 {images
                     .sort((a, b) => a.position - b.position)
                     .map((image, index) => (

@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { BaseText } from "@components/BaseText";
+import { Text } from "@components/Text";
 import { ChannelTabsProps, closeTab, ensureUnreadFallbackCountsLoaded, getNotificationDotState, getUnreadFallbackCounts, isTabSelected, moveDraggedTabs, moveToTab, openedTabs, settings, updateUnreadFallbackCounts } from "@equicordplugins/channelTabs/util";
 import { ActivityIcon, CircleQuestionIcon, DiscoveryIcon, EnvelopeIcon, FriendsIcon, ICYMIIcon, NitroIcon, QuestIcon, ShopIcon } from "@equicordplugins/channelTabs/util/icons";
 import { getActiveAutoCompletes } from "@equicordplugins/questify/utils/completion";
@@ -56,7 +56,7 @@ const GuildIcon = ({ guild }: { guild: Guild; }) => {
             className={cl("icon")}
         />
         : <div className={cl("guild-acronym-icon")}>
-            <BaseText size="xs" weight="semibold" tag="span">{getGuildAcronym(guild)}</BaseText>
+            <Text size="xs" weight="semibold" tag="span">{getGuildAcronym(guild)}</Text>
         </div>;
 };
 
@@ -196,7 +196,7 @@ function ChannelTabContent(props: ChannelTabsProps & {
                 <>
                     <GuildIcon guild={guild} />
                     <ChannelTypeIcon channel={channel} guild={guild} />
-                    <BaseText className={cl("name-text")}>{channel.name}</BaseText>
+                    <Text className={cl("name-text")}>{channel.name}</Text>
                     <NotificationDot channelIds={[channel.id]} />
                     <TypingIndicator isTyping={isTyping} />
                 </>
@@ -223,7 +223,7 @@ function ChannelTabContent(props: ChannelTabsProps & {
             return (
                 <>
                     <GuildIcon guild={guild} />
-                    <BaseText className={cl("name-text")}>{name}</BaseText>
+                    <Text className={cl("name-text")}>{name}</Text>
                 </>
             );
         }
@@ -243,9 +243,9 @@ function ChannelTabContent(props: ChannelTabsProps & {
                         isTyping={isTyping}
                         isMobile={isMobile}
                     />
-                    <BaseText className={cl("name-text")}>
+                    <Text className={cl("name-text")}>
                         {username}
-                    </BaseText>
+                    </Text>
                     <NotificationDot channelIds={[channel.id]} />
                     {!showStatusIndicators && <TypingIndicator isTyping={isTyping} />}
                 </>
@@ -255,7 +255,7 @@ function ChannelTabContent(props: ChannelTabsProps & {
             return (
                 <>
                     <ChannelIcon channel={channel} />
-                    <BaseText className={cl("name-text")}>{channel?.name || getIntlMessage("GROUP_DM")}</BaseText>
+                    <Text className={cl("name-text")}>{channel?.name || getIntlMessage("GROUP_DM")}</Text>
                     <NotificationDot channelIds={[channel.id]} />
                     <TypingIndicator isTyping={isTyping} />
                 </>
@@ -283,7 +283,7 @@ function ChannelTabContent(props: ChannelTabsProps & {
             return (
                 <>
                     <Icon />
-                    <BaseText className={cl("name-text")}>{label}</BaseText>
+                    <Text className={cl("name-text")}>{label}</Text>
                 </>
             );
         }
@@ -293,7 +293,7 @@ function ChannelTabContent(props: ChannelTabsProps & {
         return (
             <>
                 <FriendsIcon />
-                <BaseText className={cl("name-text")}>{getIntlMessage("FRIENDS")}</BaseText>
+                <Text className={cl("name-text")}>{getIntlMessage("FRIENDS")}</Text>
             </>
         );
     }
@@ -301,7 +301,7 @@ function ChannelTabContent(props: ChannelTabsProps & {
     return (
         <>
             <CircleQuestionIcon />
-            <BaseText className={cl("name-text")}>{getIntlMessage("UNKNOWN_CHANNEL")}</BaseText>
+            <Text className={cl("name-text")}>{getIntlMessage("UNKNOWN_CHANNEL")}</Text>
         </>
     );
 }

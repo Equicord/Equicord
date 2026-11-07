@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { BaseText } from "@components/BaseText";
+import { Text } from "@components/Text";
 import { TooltipContainer } from "@components/TooltipContainer";
 import { settings } from "@equicordplugins/musicControls/settings";
 import { TidalLrcStore } from "@equicordplugins/musicControls/tidal/lyrics/providers/store";
@@ -55,9 +55,9 @@ function LyricsDisplay({ scroll = true }: { scroll?: boolean; }) {
         >
             {currentLyrics.map((line, i) => (
                 <div ref={lyricRefs[i]} key={i}>
-                    <BaseText size={currLrcIndex === i ? "sm" : "xs"} className={makeClassName(i)}>
+                    <Text size={currLrcIndex === i ? "sm" : "xs"} className={makeClassName(i)}>
                         {line.text || NoteElement}
-                    </BaseText>
+                    </Text>
                 </div>
             ))}
         </div>

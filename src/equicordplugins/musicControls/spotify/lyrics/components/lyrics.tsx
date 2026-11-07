@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { BaseText } from "@components/BaseText";
+import { Text } from "@components/Text";
 import { TooltipContainer } from "@components/TooltipContainer";
 import { settings } from "@equicordplugins/musicControls/settings";
 import { SpotifyLrcStore } from "@equicordplugins/musicControls/spotify/lyrics/providers/store";
@@ -42,12 +42,12 @@ function LyricsDisplay({ scroll = true }: { scroll?: boolean; }) {
         >
             {currentLyrics ? currentLyrics.map((line, i) => (
                 <div ref={lyricRefs[i]} key={i}>
-                    <BaseText
+                    <Text
                         size={currLrcIndex === i ? "sm" : "xs"}
                         className={makeClassName(i)}
                     >
                         {line.text || NoteSvg()}
-                    </BaseText>
+                    </Text>
                 </div>
             )) : showMusicNoteOnNoLyrics ? (
                 <TooltipContainer text="No synced lyrics found">

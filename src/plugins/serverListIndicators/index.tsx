@@ -20,8 +20,8 @@ import "./styles.css";
 
 import { addServerListElement, removeServerListElement, ServerListItem, ServerListRenderPosition } from "@api/ServerList";
 import { definePluginSettings } from "@api/Settings";
-import { BaseText } from "@components/BaseText";
 import { FriendsIcon, ServerIcon } from "@components/Icons";
+import { Text } from "@components/Text";
 import { Devs, EquicordDevs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
 import definePlugin, { OptionType } from "@utils/types";
@@ -58,7 +58,7 @@ function FriendsIndicator() {
     return (
         <div id="vc-friendcount" className={cl("item")} aria-label={onlineFriendsCount + " Friends"}>
             <FriendsIcon width="12px" height="12px" />
-            <BaseText size="xs" id="vc-friendcount-text">{onlineFriendsCount}</BaseText>
+            <Text size="xs" id="vc-friendcount-text">{onlineFriendsCount}</Text>
         </div>
     );
 }
@@ -75,7 +75,7 @@ function ServersIndicator() {
     return (
         <div id="vc-guildcount" className={cl("item")} aria-label={guildCount + " Servers"}>
             <ServerIcon width="12px" height="12px"/>
-            <BaseText size="xs" id="vc-guildcount-text">{guildCount}</BaseText>
+            <Text size="xs" id="vc-guildcount-text">{guildCount}</Text>
         </div>
     );
 }

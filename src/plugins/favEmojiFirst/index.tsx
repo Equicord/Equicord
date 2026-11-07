@@ -9,10 +9,10 @@ import "./styles.css";
 import { addGlobalContextMenuPatch, findGroupChildrenByChildId, GlobalContextMenuPatchCallback, NavContextMenuPatchCallback, removeGlobalContextMenuPatch } from "@api/ContextMenu";
 import { DataStore } from "@api/index";
 import { definePluginSettings } from "@api/Settings";
-import { BaseText } from "@components/BaseText";
 import { Button } from "@components/Button";
 import { PencilIcon } from "@components/Icons";
 import { Paragraph } from "@components/Paragraph";
+import { Text } from "@components/Text";
 import { Devs, EquicordDevs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
 import { Logger } from "@utils/Logger";
@@ -930,7 +930,7 @@ function EmojiPreview({ emojiRef }: { emojiRef: StoredEmojiRef; }) {
         return <img src={previewUrl} width="20" height="20" alt={getEmojiDisplayName(emojiRef)} />;
     }
 
-    return <BaseText>{getEmojiDisplayName(emojiRef)}</BaseText>;
+    return <Text>{getEmojiDisplayName(emojiRef)}</Text>;
 }
 
 function AliasRow({ alias, emojiRef }: { alias: string; emojiRef: StoredEmojiRef; }) {
@@ -980,12 +980,12 @@ function AliasRow({ alias, emojiRef }: { alias: string; emojiRef: StoredEmojiRef
                         }}
                     />
                 ) : (
-                    <BaseText weight="semibold">:{alias}:</BaseText>
+                    <Text weight="semibold">:{alias}:</Text>
                 )}
-                <BaseText className={cl("row-arrow")}>→</BaseText>
+                <Text className={cl("row-arrow")}>→</Text>
                 <EmojiPreview emojiRef={emojiRef} />
-                <BaseText>{`:${normalizeEmojiName(emojiRef.name)}:`}</BaseText>
-                {error && <BaseText className={cl("row-error")}>{error}</BaseText>}
+                <Text>{`:${normalizeEmojiName(emojiRef.name)}:`}</Text>
+                {error && <Text className={cl("row-error")}>{error}</Text>}
             </div>
             <div className={cl("row-button")}>
                 <Button

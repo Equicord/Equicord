@@ -5,8 +5,8 @@
  */
 
 import { definePluginSettings } from "@api/Settings";
-import { BaseText } from "@components/BaseText";
 import ErrorBoundary from "@components/ErrorBoundary";
+import { Text } from "@components/Text";
 import { EquicordDevs } from "@utils/constants";
 import { Margins } from "@utils/margins";
 import definePlugin, { OptionType } from "@utils/types";
@@ -26,7 +26,7 @@ const CollapsibleCard = ErrorBoundary.wrap(
                     aria-expanded={open}
                     onClick={() => setOpen(v => !v)}
                 >
-                    <BaseText
+                    <Text
                         size="lg"
                         weight="semibold"
                         className={AdvancedClasses.advancedTitle}
@@ -49,7 +49,7 @@ const CollapsibleCard = ErrorBoundary.wrap(
                                 d="M5.3 9.3a1 1 0 0 1 1.4 0l5.3 5.29 5.3-5.3a1 1 0 1 1 1.4 1.42l-6 6a1 1 0 0 1-1.4 0l-6-6a1 1 0 0 1 0-1.42Z"
                             />
                         </svg>
-                    </BaseText>
+                    </Text>
                 </Clickable>
                 {open ? children : null}
             </div>

@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { BaseText } from "@components/BaseText";
+import { Text } from "@components/Text";
 import { SpotifyStore, Track } from "@equicordplugins/musicControls/spotify/SpotifyStore";
 import { openImageModal } from "@utils/discord";
 import { RenderModalProps } from "@vencord/discord-types";
@@ -20,7 +20,7 @@ const formatTime = (time: number) => {
 
 function getTitleNode(track: Track | null) {
     if (!track) {
-        return <BaseText size="sm" weight="semibold">No track playing</BaseText>;
+        return <Text size="sm" weight="semibold">No track playing</Text>;
     }
     return (
         <div className={cl("header-content")}>
@@ -37,9 +37,9 @@ function getTitleNode(track: Track | null) {
                 />
             )}
             <div>
-                <BaseText size="sm" weight="semibold">{track.name}</BaseText>
-                <BaseText size="sm">by {track.artists.map(a => a.name).join(", ")}</BaseText>
-                <BaseText size="sm">on {track.album.name}</BaseText>
+                <Text size="sm" weight="semibold">{track.name}</Text>
+                <Text size="sm">by {track.artists.map(a => a.name).join(", ")}</Text>
+                <Text size="sm">on {track.album.name}</Text>
             </div>
         </div>
     );
@@ -57,7 +57,7 @@ export function LyricsModal({ props }: { props: RenderModalProps; }) {
             <div className={`${cl("lyrics-modal-container")} ${scrollClasses.auto}`}>
                 {currentLyrics ? (
                     currentLyrics.map((line, i) => (
-                        <BaseText
+                        <Text
                             key={i}
                             size={currLrcIndex === i ? "md" : "sm"}
                             weight={currLrcIndex === i ? "semibold" : "normal"}
@@ -67,12 +67,12 @@ export function LyricsModal({ props }: { props: RenderModalProps; }) {
                                 {formatTime(line.time)}
                             </span>
                             {line.text || NoteSvg()}
-                        </BaseText>
+                        </Text>
                     ))
                 ) : (
-                    <BaseText size="sm" className={cl("modal-no-lyrics")}>
+                    <Text size="sm" className={cl("modal-no-lyrics")}>
                         No lyrics available :(
-                    </BaseText>
+                    </Text>
                 )}
             </div>
         </Modal>

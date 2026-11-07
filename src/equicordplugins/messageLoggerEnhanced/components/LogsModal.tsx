@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { BaseText } from "@components/BaseText";
 import { Button } from "@components/Button";
 import { Flex } from "@components/Flex";
 import { InfoIcon } from "@components/Icons";
+import { Text } from "@components/Text";
 import { copyWithToast, openUserProfile } from "@utils/discord";
 import { LazyComponent } from "@utils/react";
 import { Channel, RenderModalProps, type User } from "@vencord/discord-types";
@@ -230,12 +230,12 @@ function NoResults({ tab }: { tab: LogTabs; }) {
 
     return (
         <div className={cl("modal-empty-logs", "modal-content-inner")} style={{ textAlign: "center" }}>
-            <BaseText size="lg">
+            <Text size="lg">
                 No results in <b>{tab}</b>.
-            </BaseText>
-            <BaseText size="lg" style={{ marginTop: "0.2rem" }}>
+            </Text>
+            <Text size="lg" style={{ marginTop: "0.2rem" }}>
                 Maybe try <b>{nextTab}</b> or <b>{lastTab}</b>
-            </BaseText>
+            </Text>
         </div>
     );
 }
@@ -245,9 +245,9 @@ function EmptyLogs({ hasQuery, reset: forceUpdate }: { hasQuery: boolean; reset:
         <div className={cl("modal-empty-logs", "modal-content-inner")} style={{ textAlign: "center" }}>
             <Flex flexDirection="column" style={{ position: "relative" }}>
 
-                <BaseText size="lg">
+                <Text size="lg">
                     Empty eh
-                </BaseText>
+                </Text>
 
                 {!hasQuery && (
                     <>
@@ -277,9 +277,9 @@ function LoadingLogs({ tab }: { tab: LogTabs; }) {
     return (
         <div className={cl("modal-empty-logs", "modal-content-inner")} style={{ textAlign: "center" }}>
             <Flex flexDirection="column" style={{ position: "relative" }}>
-                <BaseText size="lg">
+                <Text size="lg">
                     Loading {tab} Logs...
-                </BaseText>
+                </Text>
             </Flex>
         </div>
     );

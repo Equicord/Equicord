@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { BaseText } from "@components/BaseText";
+import { Text } from "@components/Text";
 import { getLanguageColor } from "@equicordplugins/githubRepos/colors";
 import { RepoCardProps } from "@equicordplugins/githubRepos/types";
 import { getLanguageIconUrl } from "@equicordplugins/githubRepos/utils";
@@ -23,13 +23,13 @@ export function RepoCard({ repo, showStars, showLanguage }: RepoCardProps) {
                 <img className={cl("art-icon")} src={getLanguageIconUrl(repo.language)} alt="" />
             </div>
             <div className={cl("info")}>
-                <BaseText size="sm" weight="semibold" className={cl("name")}>
+                <Text size="sm" weight="semibold" className={cl("name")}>
                     {repo.name}
-                </BaseText>
+                </Text>
                 {repo.description && (
-                    <BaseText size="sm" className={cl("description")}>
+                    <Text size="sm" className={cl("description")}>
                         {repo.description}
-                    </BaseText>
+                    </Text>
                 )}
                 {(showLanguage || showStars) && (
                     <div className={cl("meta")}>

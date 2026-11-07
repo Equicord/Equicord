@@ -7,8 +7,8 @@
 import "./styles.css";
 
 import { get, set } from "@api/DataStore";
-import { BaseText } from "@components/BaseText";
 import ErrorBoundary from "@components/ErrorBoundary";
+import { Text } from "@components/Text";
 import { EquicordDevs } from "@utils/constants";
 import { useTimer } from "@utils/react";
 import definePlugin from "@utils/types";
@@ -103,7 +103,7 @@ const VoiceStatsSection = ErrorBoundary.wrap(({ userId, isSideBar }: { userId: s
                 headingVariant="text-xs/semibold"
                 headingColor="text-strong"
             >
-                <BaseText size="sm">{text}</BaseText>
+                <Text size="sm">{text}</Text>
             </Section>
         );
     }
@@ -127,7 +127,7 @@ const VoiceStatsSection = ErrorBoundary.wrap(({ userId, isSideBar }: { userId: s
                         <path d="M12 1a4 4 0 0 0-4 4v6a4 4 0 0 0 8 0V5a4 4 0 0 0-4-4Z" />
                         <path d="M19 11a1 1 0 0 0-2 0 5 5 0 0 1-10 0 1 1 0 1 0-2 0 7 7 0 0 0 6 6.92V21a1 1 0 1 0 2 0v-3.08A7 7 0 0 0 19 11Z" />
                     </svg>
-                    <BaseText size="sm">{text}</BaseText>
+                    <Text size="sm">{text}</Text>
                 </div>
             </div>
         </Section>

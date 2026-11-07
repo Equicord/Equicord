@@ -6,10 +6,10 @@
 
 import "./styles.css";
 
-import { BaseText } from "@components/BaseText";
 import { Button } from "@components/Button";
 import { Flex } from "@components/Flex";
 import { Heading } from "@components/Heading";
+import { Text } from "@components/Text";
 import { copyToClipboard } from "@utils/clipboard";
 import { findByPropsLazy, findCssClassesLazy } from "@webpack";
 import { Parser, useEffect, useState } from "@webpack/common";
@@ -108,21 +108,21 @@ export default function FriendCodesPanel() {
                 </Flex>
             </header>
             {loading ? (
-                <BaseText
+                <Text
                     size="md"
                     weight="semibold"
                     className="vc-friend-codes-text"
                 >
                     Loading...
-                </BaseText>
+                </Text>
             ) : invites.length === 0 ? (
-                <BaseText
+                <Text
                     size="md"
                     weight="semibold"
                     className="vc-friend-codes-text"
                 >
                     You don't have any friend codes yet
-                </BaseText>
+                </Text>
             ) : (
                 <div style={{ marginTop: "16px", display: "flex", flexWrap: "wrap", gap: "16px", justifyContent: "space-evenly" }}>
                     {invites.map(invite => (

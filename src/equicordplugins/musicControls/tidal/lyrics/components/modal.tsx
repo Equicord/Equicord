@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { BaseText } from "@components/BaseText";
+import { Text } from "@components/Text";
 import { TidalStore, Track } from "@equicordplugins/musicControls/tidal/TidalStore";
 import { RenderModalProps } from "@vencord/discord-types";
 import { Modal,React } from "@webpack/common";
@@ -29,9 +29,9 @@ function getTitleNode(track: Track | null) {
                 />
             )}
             <div>
-                <BaseText size="sm" weight="semibold">{track.name}</BaseText>
-                <BaseText size="sm">by {track.artist}</BaseText>
-                {track.album && <BaseText size="sm">on {track.album}</BaseText>}
+                <Text size="sm" weight="semibold">{track.name}</Text>
+                <Text size="sm">by {track.artist}</Text>
+                {track.album && <Text size="sm">on {track.album}</Text>}
             </div>
         </div>
     );
@@ -46,7 +46,7 @@ export function LyricsModal({ rootProps }: { rootProps: RenderModalProps; }) {
             <div className={cl("lyrics-modal-container") + ` ${scrollClasses.auto}`}>
                 {currentLyrics ? (
                     currentLyrics.map((line, i) => (
-                        <BaseText
+                        <Text
                             key={i}
                             size={currLrcIndex === i ? "md" : "sm"}
                             weight={currLrcIndex === i ? "semibold" : "normal"}
@@ -58,10 +58,10 @@ export function LyricsModal({ rootProps }: { rootProps: RenderModalProps; }) {
                                 {formatTime(line.time)}
                             </span>
                             {line.text || NoteSvg(cl("modal-note"))}
-                        </BaseText>
+                        </Text>
                     ))
                 ) : (
-                    <BaseText size="sm" className={cl("modal-no-lyrics")}>No lyrics available :(</BaseText>
+                    <Text size="sm" className={cl("modal-no-lyrics")}>No lyrics available :(</Text>
                 )}
             </div>
         </Modal>

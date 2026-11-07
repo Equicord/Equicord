@@ -7,9 +7,9 @@
 import "./style.css";
 
 import { definePluginSettings } from "@api/Settings";
-import { BaseText } from "@components/BaseText";
 import { Heading } from "@components/Heading";
 import { Link } from "@components/Link";
+import { Text } from "@components/Text";
 import { Devs } from "@utils/constants";
 import { identity } from "@utils/misc";
 import definePlugin, { OptionType } from "@utils/types";
@@ -19,7 +19,7 @@ import { FluxDispatcher, MediaEngineStore, Select, Slider, useEffect, useState }
 const settings = definePluginSettings({
     title1: {
         type: OptionType.COMPONENT,
-        component: () => <BaseText weight="bold" style={{ fontSize: "1.27rem" }}>Appearance</BaseText>,
+        component: () => <Text weight="bold" style={{ fontSize: "1.27rem" }}>Appearance</Text>,
         description: ""
     },
     uncollapseSettingsByDefault: {
@@ -29,7 +29,7 @@ const settings = definePluginSettings({
     },
     title2: {
         type: OptionType.COMPONENT,
-        component: () => <BaseText weight="bold" style={{ fontSize: "1.27rem" }}>Settings to show</BaseText>,
+        component: () => <Text weight="bold" style={{ fontSize: "1.27rem" }}>Settings to show</Text>,
         description: ""
     },
     outputVolume: {
@@ -59,7 +59,7 @@ const settings = definePluginSettings({
     },
     title3: {
         type: OptionType.COMPONENT,
-        component: () => <BaseText weight="bold" style={{ fontSize: "1.27rem" }}>Headers to show</BaseText>,
+        component: () => <Text weight="bold" style={{ fontSize: "1.27rem" }}>Headers to show</Text>,
         description: ""
     },
     showOutputVolumeHeader: {

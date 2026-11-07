@@ -4,12 +4,12 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { BaseText } from "@components/BaseText";
 import { CodeBlock } from "@components/CodeBlock";
 import { Flex } from "@components/Flex";
 import { Heading } from "@components/Heading";
 import { Margins } from "@components/margins";
 import { Paragraph } from "@components/Paragraph";
+import { Text } from "@components/Text";
 import { TooltipContainer } from "@components/TooltipContainer";
 import { copyWithToast, getIntlMessage } from "@utils/discord";
 import { Logger } from "@utils/Logger";
@@ -263,15 +263,15 @@ function IconModal({ iconName, Icon, onClose, transitionState }: { iconName: str
                         ))}
                     </Flex>
                     <TooltipContainer text="Right-click icon to change">
-                        <BaseText size="sm" color="text-muted" className="vc-ic-color-label">
+                        <Text size="sm" color="text-muted" className="vc-ic-color-label">
                             {colorData?.name}
-                        </BaseText>
+                        </Text>
                     </TooltipContainer>
                 </Flex>
             </Flex>
             <div className="vc-ic-use-as">
-                <BaseText size="md" weight="semibold">Usage</BaseText>
-                <BaseText size="sm" color="text-muted">Click to copy</BaseText>
+                <Text size="md" weight="semibold">Usage</Text>
+                <Text size="sm" color="text-muted">Click to copy</Text>
             </div>
             {/* for some reason i cant make this shit codeblock full width, FF 15 */}
             <Clickable className="vc-ic-codeblock-wrapper" onClick={() => copyWithToast(findCode, "Copied!")}>

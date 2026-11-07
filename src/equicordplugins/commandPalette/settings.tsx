@@ -5,8 +5,8 @@
  */
 
 import { definePluginSettings } from "@api/Settings";
-import { BaseText } from "@components/BaseText";
 import { Button } from "@components/Button";
+import { Text } from "@components/Text";
 import { IS_MAC } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
 import { OptionType } from "@utils/types";
@@ -61,7 +61,7 @@ function HotkeyRecorder() {
 
     return (
         <div className={cl("hotkey-setting")}>
-            <BaseText size="md" weight="semibold">Open palette hotkey</BaseText>
+            <Text size="md" weight="semibold">Open palette hotkey</Text>
             <Button variant="secondary" onClick={() => setRecording(true)}>
                 {recording ? "Press keys..." : formatCombo(hotkey)}
             </Button>

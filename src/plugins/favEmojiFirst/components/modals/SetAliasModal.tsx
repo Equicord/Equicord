@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { BaseText } from "@components/BaseText";
 import { Paragraph } from "@components/Paragraph";
+import { Text } from "@components/Text";
 import { Modal, TextInput, useState } from "@webpack/common";
 
 import { SetAliasModalProps } from "./types";
@@ -57,9 +57,9 @@ export function SetAliasModal({
                 placeholder='Alias, e.g. "sob"'
             />
             {finalError && (
-                <BaseText style={{ color: "var(--text-feedback-critical)", marginTop: 8 }}>
+                <Text style={{ color: "var(--text-feedback-critical)", marginTop: 8 }}>
                     {finalError}
-                </BaseText>
+                </Text>
             )}
         </Modal>
     );

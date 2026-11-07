@@ -5,11 +5,11 @@
  */
 
 import { definePluginSettings } from "@api/Settings";
-import { BaseText } from "@components/BaseText";
 import { Button } from "@components/Button";
 import { Flex } from "@components/Flex";
 import { FormSwitch } from "@components/FormSwitch";
 import { Heading } from "@components/Heading";
+import { Text } from "@components/Text";
 import { Devs } from "@utils/constants";
 import { makeLazy } from "@utils/lazy";
 import definePlugin, { OptionType } from "@utils/types";
@@ -115,12 +115,12 @@ function TarModal({ modalProps }: { modalProps: RenderModalProps; }) {
             ]}
         >
             <div style={{ marginBottom: "16px" }}>
-                <BaseText size="md">
+                <Text size="md">
                     <Timestamp timestamp={new Date(builtAt)} isInline={false}>
                         {"Build number "}
                         {buildNumber}
                     </Timestamp>
-                </BaseText>
+                </Text>
             </div>
 
             <div style={{ marginTop: "8px", marginBottom: "24px" }}>
@@ -128,13 +128,13 @@ function TarModal({ modalProps }: { modalProps: RenderModalProps; }) {
                     Lazy chunks
                 </Heading>
                 <Flex alignItems="center">
-                    <BaseText
+                    <Text
                         size="md"
                         style={{ flexGrow: 1 }}
                     >
                         {loaded}/{all}
                         {errored ? ` (${errored} errors)` : null}
-                    </BaseText>
+                    </Text>
                     <Button
                         disabled={loading === all || isLoading}
                         onClick={async () => {

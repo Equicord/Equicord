@@ -9,9 +9,9 @@ import "styles.css?managed";
 import { NavContextMenuPatchCallback } from "@api/ContextMenu";
 import { DataStore } from "@api/index";
 import { definePluginSettings } from "@api/Settings";
-import { BaseText } from "@components/BaseText";
 import { Button } from "@components/Button";
 import { Divider } from "@components/Divider";
+import { Text } from "@components/Text";
 import { Devs } from "@utils/constants";
 import { useForceUpdater } from "@utils/react";
 import definePlugin, { OptionType } from "@utils/types";
@@ -100,12 +100,12 @@ function TagConfigCard(props) {
 
     return (
         <>
-            <BaseText size="md" tag="h5">Name</BaseText>
+            <Text size="md" tag="h5">Name</Text>
             <TextInput value={tagName} onChange={setTagName}></TextInput>
-            <BaseText size="md" tag="h5">Users (Seperated by comma)</BaseText>
+            <Text size="md" tag="h5">Users (Seperated by comma)</Text>
             <TextInput value={userIds} onChange={setUserIDs}></TextInput>
             <div className={"vc-friend-tags-user-header-container"}>
-                <BaseText>User List (Click A User To Remove)</BaseText>
+                <Text>User List (Click A User To Remove)</Text>
                 <div className={"vc-friend-tags-user-header-btns"}>
                     {
                         userIds.split(", ").map(user => {
@@ -114,7 +114,7 @@ function TagConfigCard(props) {
                             return (
                                 <div style={{ display: "flex" }} key={user.id}>
                                     <img src={userData.getAvatarURL()} style={{ height: "20px", borderRadius: "50%", marginRight: "5px" }}></img>
-                                    <BaseText style={{ cursor: "pointer" }} size="md" onClick={() => setUserIDs(userIds.replace(`, ${user}`, "").replace(user, ""))}>{userData.globalName || userData.username}</BaseText>
+                                    <Text style={{ cursor: "pointer" }} size="md" onClick={() => setUserIDs(userIds.replace(`, ${user}`, "").replace(user, ""))}>{userData.globalName || userData.username}</Text>
                                 </div>
                             );
                         })
