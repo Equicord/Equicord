@@ -14,6 +14,7 @@ import { WebpackRequire } from "@vencord/discord-types/webpack";
 
 import { AnyModuleFactory, AnyWebpackRequire, MaybePatchedModuleFactory, PatchedModuleFactory } from "./types";
 import { _blacklistBadModules, _initWebpack, factoryListeners, moduleListeners, waitForSubscriptions, wreq } from "./webpack";
+import { makeLazy } from "@utils/lazy";
 
 export const patches = [] as Patch[];
 
@@ -25,6 +26,10 @@ export const SYM_PATCHED_BY = Symbol("WebpackPatcher.patchedBy");
 export const allWebpackInstances = new Set<AnyWebpackRequire>();
 
 export const patchTimings = [] as Array<[plugin: string, moduleId: PropertyKey, match: PatchReplacement["match"], totalTime: number]>;
+
+export const getBuildNumber = makeLazy(() => {
+    return Number(window.GLOBAL_ENV?.BUILD_NUMBER ?? -1);
+});
 
 export function getFactoryPatchedSource(moduleId: PropertyKey, webpackRequire = wreq as AnyWebpackRequire) {
     return webpackRequire.m[moduleId]?.[SYM_PATCHED_SOURCE];
@@ -492,7 +497,7 @@ function patchFactory(moduleId: PropertyKey, originalFactory: AnyModuleFactory):
     for (let i = 0; i < patches.length; i++) {
         const patch = patches[i];
 
-        const buildNumber = window.GLOBAL_ENV.BUILD_NUMBER || -1;
+        const buildNumber = getBuildNumber();
         const shouldCheckBuildNumber = buildNumber !== -1;
 
         if (
