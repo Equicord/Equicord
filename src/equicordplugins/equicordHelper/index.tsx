@@ -70,6 +70,13 @@ export default definePlugin({
                 match: /(?<=handleContextMenu.{0,350})(?=link:(\i)\.url)/,
                 replace: "...$1,"
             }
+        },
+        {
+            find: 'id:"quiet-mode"',
+            replacement: {
+                match: /,(\i)\?\(0,(\i)\.jsxs\)\((\i)\.Fragment,\{children:\[\(0,\2\.jsx\)\((\i)\.bX,\{\},"menu-separator-statuses"\),\(0,\2\.jsx\)\((\i)\.Dr,\{id:"quiet-mode"(.{0,1500}?)badge:\{text:([^{}]*)\}/,
+                replace: ',true?(0,$2.jsxs)($3.Fragment,{children:[(0,$2.jsx)($4.bX,{},"menu-separator-statuses"),(0,$2.jsx)($5.Dr,{id:"quiet-mode"$6badge:$1?{text:$7}:void 0'
+            }
         }
     ],
     renderMessageAccessory(props) {
