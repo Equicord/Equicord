@@ -75,6 +75,7 @@ export interface Settings {
     disableMinSize: boolean;
     nativeTitleBar: boolean;
     pinDiscordBuild: boolean;
+    pinDiscordChunks: boolean;
     disableDiscordUpdates: boolean;
     plugins: {
         [plugin: string]: {
@@ -128,6 +129,7 @@ const DefaultSettings: Settings = {
     disableMinSize: false,
     nativeTitleBar: false,
     pinDiscordBuild: false,
+    pinDiscordChunks: false,
     disableDiscordUpdates: false,
     plugins: {},
 

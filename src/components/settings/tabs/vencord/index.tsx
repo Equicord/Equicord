@@ -48,7 +48,7 @@ type KeysOfType<Object, Type> = {
 }[keyof Object];
 
 function Switches() {
-    const settings = useSettings(["useQuickCss", "enableReactDevtools", "mainWindowFrameless", "frameless", "nativeTitleBar", "noRoundCorners", "transparent", "winCtrlQ", "disableMinSize", "pinDiscordBuild", "disableDiscordUpdates"]);
+    const settings = useSettings(["useQuickCss", "enableReactDevtools", "mainWindowFrameless", "frameless", "nativeTitleBar", "noRoundCorners", "transparent", "winCtrlQ", "disableMinSize", "pinDiscordBuild", "pinDiscordChunks", "disableDiscordUpdates"]);
     const { disableAnalytics } = NoTrack.settings.use(["disableAnalytics"]);
 
     const Switches = [
@@ -116,6 +116,13 @@ function Switches() {
             restartRequired: true
         },
         IS_DISCORD_DESKTOP && {
+            key: "pinDiscordChunks",
+            title: "Pin Discord Chunks",
+            description: "Download every chunk and asset of the pinned build, so it keeps working after Discord removes them from their servers. Takes around 300 MB.",
+            restartRequired: true,
+            disabled: !settings.pinDiscordBuild
+        },
+        IS_DISCORD_DESKTOP && {
             key: "disableDiscordUpdates",
             title: "Disable Discord App Updates",
             description: "Stop Discord from installing new app and module updates.",
@@ -140,6 +147,7 @@ function Switches() {
         description?: string;
         restartRequired?: boolean;
         warning?: string;
+        disabled?: boolean;
         updateSetting?(newValue: boolean): void;
         value?: boolean;
     }>;
@@ -149,7 +157,7 @@ function Switches() {
             return null;
         }
 
-        const { reactKey, key, value, title, description, restartRequired, warning, updateSetting = v => (settings[key] = v) } = setting;
+        const { reactKey, key, value, title, description, restartRequired, warning, disabled, updateSetting = v => (settings[key] = v) } = setting;
 
         return (
             <FormSwitch
@@ -168,6 +176,7 @@ function Switches() {
                     )
                 }
                 value={value ?? settings[key]}
+                disabled={disabled}
                 hideBorder
                 onChange={v => {
                     updateSetting(v);
