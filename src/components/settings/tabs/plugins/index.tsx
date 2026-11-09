@@ -195,7 +195,7 @@ export default function PluginSettings() {
     )
         .toSorted((a, b) => Number(settings.plugins[b.name]?.isFavorite ?? false) - Number(settings.plugins[a.name]?.isFavorite ?? false));
 
-    const hasUserPlugins = useMemo(() => Object.values(PluginMeta).some(m => m.userPlugin), []);
+    const hasUserPlugins = useMemo(() => !IS_STANDALONE && Object.values(PluginMeta).some(m => m.userPlugin), []);
 
     const [searchValue, setSearchValue] = useState({ value: "", tags: [] as PluginTag[], status: SearchStatus.ALL });
 
