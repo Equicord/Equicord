@@ -17,16 +17,10 @@ export default definePlugin({
     patches: [
         {
             find: "x-google-max-bitrate",
-            replacement: [
-                {
-                    match: /`x-google-max-bitrate=\$\{\i\}`/,
-                    replace: '"x-google-max-bitrate=80000"'
-                },
-                {
-                    match: /;usedtx=\$\{(\i)\?"0":"1"\}/,
-                    replace: '$&${$1?";stereo=1;sprop-stereo=1":""}'
-                },
-            ]
+            replacement: {
+                match: /`x-google-max-bitrate=\$\{\i\}`/,
+                replace: '"x-google-max-bitrate=80000"'
+            }
         },
         {
             find: "ApplicationStreamPreviewUploadManager",
