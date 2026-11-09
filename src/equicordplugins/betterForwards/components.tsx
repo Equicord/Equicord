@@ -12,7 +12,7 @@ import { getGuildAcronym, getIntlMessage } from "@utils/discord";
 import { getUserAvatarUrl, identity } from "@utils/misc";
 import { BasicGuild, Channel, Guild, GuildProfile, Message, MessageAttachment } from "@vencord/discord-types";
 import { findByCodeLazy, findComponentByCodeLazy } from "@webpack";
-import { BasicGuildStore, ChannelActionCreators, ChannelStore, DateUtils, GuildProfileStore, GuildStore, IconUtils, InviteActions, Popout, React, RelationshipStore, RestAPI, SnowflakeUtils, useCallback, useEffect, useMemo, useRef, UserStore, useState, useStateFromStores } from "@webpack/common";
+import { BasicGuildStore, ChannelActionCreators, ChannelStore, DateUtils, GuildProfileStore, GuildStore, IconUtils, InviteActions, NavigationRouter, Popout, React, RelationshipStore, RestAPI, SnowflakeUtils, useCallback, useEffect, useMemo, useRef, UserStore, useState, useStateFromStores } from "@webpack/common";
 
 import { cl, ForwardOptionsContext, ForwardOptionsState } from ".";
 
@@ -23,7 +23,6 @@ const ServerProfileComponent = findComponentByCodeLazy("{guildProfile:", "GUILD_
 const getAttachmentType = findByCodeLazy('"PLAINTEXT_PREVIEW":"OTHER"');
 const formatChannelName = findByCodeLazy("#{intl::NO_ACCESS}", "isObfuscated()");
 const getChannelIcon = findByCodeLazy("textFocused:", "isGameInvitesChannel()");
-const navigateTo = findByCodeLazy('getConfig({location:"channel_mention"})');
 const fetchBasicGuild = findByCodeLazy('type:"BASIC_GUILD_FETCH_SUCCESS"');
 const fetchGuildProfile = findByCodeLazy('type:"GUILD_PROFILE_FETCH_SUCCESS"');
 
@@ -153,7 +152,7 @@ function ChannelName({ guildId, channelId, messageId }: { guildId?: string; chan
     );
 
     const prefetch = useCallback(() => ChannelActionCreators.preload(guildId ?? "@me", channelId), [guildId, channelId]);
-    const navigate = useCallback(() => navigateTo(guildId ?? "@me", channelId, messageId), [guildId, channelId, messageId]);
+    const navigate = useCallback(() => NavigationRouter.transitionTo(`/channels/${guildId ?? "@me"}/${channelId}/${messageId}`), [guildId, channelId, messageId]);
     const FallbackIcon = guildId ? TextIcon : AtIcon;
 
     return (
