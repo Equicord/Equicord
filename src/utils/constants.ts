@@ -730,10 +730,6 @@ export const Devs = /* #__PURE__*/ Object.freeze({
     NiNoX: {
         name: "NiNoX",
         id: 123435354958200833n
-    },
-    dev0xz02: {
-        name: "dev0xz02",
-        id: 1135547862533550141n
     }
 } satisfies Record<string, Dev>);
 
@@ -1498,6 +1494,10 @@ export const EquicordDevs = Object.freeze({
     rot: {
         name: "rot",
         id: 1021210809164111932n
+    },
+    dev0xz02: {
+        name: "dev0xz02",
+        id: 1135547862533550141n
     }
 } satisfies Record<string, Dev>);
 
