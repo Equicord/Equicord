@@ -118,7 +118,7 @@ function Switches() {
         IS_DISCORD_DESKTOP && {
             key: "pinDiscordChunks",
             title: "Pin Discord Chunks",
-            description: "Download every chunk and asset of the pinned build, so it keeps working after Discord removes them from their servers. Takes around 300 MB.",
+            description: "Download every chunk and asset of the pinned build, so it keeps working after Discord removes them from their servers.",
             restartRequired: true,
             disabled: !settings.pinDiscordBuild
         },
