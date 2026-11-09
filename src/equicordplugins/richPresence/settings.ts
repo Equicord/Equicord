@@ -169,6 +169,20 @@ export const settings = definePluginSettings({
         hidden: true,
     },
 
+    // tosu
+    tosu_serverUrl: {
+        description: "tosu domain URL.",
+        type: OptionType.STRING,
+        default: "",
+        hidden: true
+    },
+    tosu_privacyMode: {
+        description: "Privacy Mode",
+        type: OptionType.BOOLEAN,
+        default: false,
+        hidden: true
+    },
+
     // Jellyfin
     jf_serverUrl: {
         description: "Jellyfin server URL.",
