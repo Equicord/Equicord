@@ -457,7 +457,7 @@ export default definePlugin({
             },
         },
         {
-            find: "openChatWithoutConnecting:",
+            find: ",openChatWithoutConnecting:",
             replacement: {
                 // Show inside voice channel instead of trying to join them when clicking on a channel mention
                 match: /(?<=getChannel\(\i\);if\(null!=(\i))(?=&&.{0,100}?selectVoiceChannel)/,
