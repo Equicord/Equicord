@@ -255,12 +255,12 @@ export default function PluginModal({ plugin, onRestartNeeded, onClose, transiti
                                 )}
                             </Tooltip>
                         ) : <div />}
-                        {!pluginMeta.userPlugin && (
-                            <div className={cl("links")}>
-                                <FavoriteButton
-                                    isFavorite={pluginSettings.isFavorite ?? false}
-                                    onClick={() => pluginSettings.isFavorite = !pluginSettings.isFavorite}
-                                />
+                        <div className={cl("links")}>
+                            <FavoriteButton
+                                isFavorite={pluginSettings.isFavorite ?? false}
+                                onClick={() => pluginSettings.isFavorite = !pluginSettings.isFavorite}
+                            />
+                            {!pluginMeta.userPlugin && <>
                                 <WebsiteButton
                                     text="Website"
                                     href={isEquicordPlugin ? `https://equicord.org/plugins/${plugin.name}` : `https://vencord.dev/plugins/${plugin.name}`}
@@ -269,8 +269,8 @@ export default function PluginModal({ plugin, onRestartNeeded, onClose, transiti
                                     text="Source Code"
                                     href={`https://github.com/${gitRemote}/tree/main/${pluginMeta.folderName}`}
                                 />
-                            </div>
-                        )}
+                            </>}
+                        </div>
                     </Flex>
                 </Flex>
             </div>
