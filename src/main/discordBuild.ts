@@ -52,7 +52,7 @@ export function unpinDiscordChunks() {
 }
 
 const assetNames = (code: string) => [
-    ...Array.from(code.matchAll(/"(?:\/assets\/)?((?:\w+\.)?[0-9a-f]{16,}(?:\.module)?\.\w+)"/g), m => m[1]),
+    ...Array.from(code.matchAll(/"(?:\/assets\/)?((?:[\w-]+\.)?[0-9a-f]{16,}(?:\.module)?\.\w+)"/g), m => m[1]),
     ...Array.from(code.matchAll(/\.v\(\w+,\w+\.id,"([0-9a-f]{16,})"/g), m => `${m[1]}.module.wasm`),
     ...Array.from(code.matchAll(/url\(\/assets\/([\w.-]+)\)/g), m => m[1]),
     ...Array.from(code.matchAll(/(\d[\d.e]*)===\w\)return""\+\w\+"\.([0-9a-f]{16}\.(?:js|css))"/g), m => `${Number(m[1])}.${m[2]}`),
