@@ -74,6 +74,8 @@ export interface Settings {
     windowsMaterial: "none" | "mica" | "tabbed" | "acrylic";
     disableMinSize: boolean;
     nativeTitleBar: boolean;
+    pinDiscordBuild: boolean;
+    disableDiscordUpdates: boolean;
     plugins: {
         [plugin: string]: {
             enabled: boolean;
@@ -125,6 +127,8 @@ const DefaultSettings: Settings = {
     windowsMaterial: "none",
     disableMinSize: false,
     nativeTitleBar: false,
+    pinDiscordBuild: false,
+    disableDiscordUpdates: false,
     plugins: {},
 
     uiElements: {

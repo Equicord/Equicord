@@ -20,6 +20,7 @@ import { onceDefined } from "@shared/onceDefined";
 import electron, { app, BrowserWindowConstructorOptions, Menu } from "electron";
 import { dirname, join } from "path";
 
+import { disableDiscordUpdates, pinDiscordBuild, unpinDiscordBuild } from "./discordBuild";
 import { RendererSettings } from "./settings";
 import { patchTrayMenu } from "./trayMenu";
 import { IS_VANILLA } from "./utils/constants";
@@ -54,6 +55,9 @@ if (!IS_VANILLA) {
         } catch (err) {
             console.error("[Equicord] Failed to install host update hook", err);
         }
+
+        if (settings.disableDiscordUpdates) disableDiscordUpdates();
+        if (!settings.pinDiscordBuild) unpinDiscordBuild();
     }
 
     // Repatch after host updates on Windows and Linux
@@ -127,6 +131,8 @@ if (!IS_VANILLA) {
             process.env.DISCORD_PRELOAD = original;
 
             super(options);
+
+            if (isMainWindow && settings.pinDiscordBuild) pinDiscordBuild(this.webContents);
 
             if (disableMinSize) {
                 // Disable the Electron call entirely so that Discord can't dynamically change the size

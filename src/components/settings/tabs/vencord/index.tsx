@@ -48,7 +48,7 @@ type KeysOfType<Object, Type> = {
 }[keyof Object];
 
 function Switches() {
-    const settings = useSettings(["useQuickCss", "enableReactDevtools", "mainWindowFrameless", "frameless", "nativeTitleBar", "noRoundCorners", "transparent", "winCtrlQ", "disableMinSize"]);
+    const settings = useSettings(["useQuickCss", "enableReactDevtools", "mainWindowFrameless", "frameless", "nativeTitleBar", "noRoundCorners", "transparent", "winCtrlQ", "disableMinSize", "pinDiscordBuild", "disableDiscordUpdates"]);
     const { disableAnalytics } = NoTrack.settings.use(["disableAnalytics"]);
 
     const Switches = [
@@ -107,6 +107,18 @@ function Switches() {
             key: "disableMinSize",
             title: "Disable Minimum Window Size",
             description: "Allows you to resize the window to any size, even smaller than Discord's minimum size",
+            restartRequired: true
+        },
+        IS_DISCORD_DESKTOP && {
+            key: "pinDiscordBuild",
+            title: "Pin Discord Build",
+            description: "Keep Discord on the build it loads next, so new Discord versions can't break Equicord. Turn this off to go back to the latest build.",
+            restartRequired: true
+        },
+        IS_DISCORD_DESKTOP && {
+            key: "disableDiscordUpdates",
+            title: "Disable Discord App Updates",
+            description: "Stop Discord from installing new app and module updates.",
             restartRequired: true
         },
         !IS_WEB && IS_WINDOWS && {
