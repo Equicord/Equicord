@@ -95,7 +95,7 @@ export default definePlugin({
             find: '"MessageStore"',
             replacement: [
                 {
-                    match: /(?<=MESSAGE_CREATE:function\((\i)\){)/,
+                    match: /(?<=MESSAGE_CREATE:function\((i)\){)/,
                     replace: (_, props) => `if($self.disableNotification(${props}.message))return;`
                 }
             ]
@@ -104,7 +104,7 @@ export default definePlugin({
             find: '"ReadStateStore"',
             replacement: [
                 {
-                    match: /(?<=MESSAGE_CREATE:function\((\i)\){)/,
+                    match: /(?<=MESSAGE_CREATE:function\((i)\){)/,
                     replace: (_, props) => `if($self.disableNotification(${props}.message))return;`
                 }
             ]
@@ -113,7 +113,7 @@ export default definePlugin({
             find: "`forum-post-action-bar-",
             replacement: [
                 {
-                    match: /(?<=\);)(let \i=null,\i=\[\],\i=(\i))/,
+                    match: /(?<=\);)(let i=null,i=\[\],i=(i))/,
                     replace: "$2=$self.filterStream($2);$1"
                 }
             ]
