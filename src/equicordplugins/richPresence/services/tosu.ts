@@ -8,6 +8,7 @@ import { Activity } from "@vencord/discord-types";
 import { ActivityType } from "@vencord/discord-types/enums";
 import { ApplicationAssetUtils, FluxDispatcher } from "@webpack/common";
 
+import { settings } from "../settings";
 import { BanchoStatusEnum, GameState, Modes, TosuApi } from "../types/tosu";
 
 const OSU_APP_ID = "367827983903490050";
@@ -49,10 +50,11 @@ const throttledOnMessage = throttle(onMessage, 3000, () =>
 
 async function onMessage(data: string) {
     const json: TosuApi = JSON.parse(data);
-    // @ts-ignore
+    // @ts-ignore | ???
     if (json.error) return FluxDispatcher.dispatch({ type: "LOCAL_ACTIVITY_UPDATE", activity: null, socketId: SOCKET_ID });
 
     const { state, session, profile, beatmap, play, resultsScreen } = json;
+    const targetPrivacyUsername = profile.name;
 
     const assets: NonNullable<Activity["assets"]> = {};
 
@@ -98,7 +100,10 @@ async function onMessage(data: string) {
             activity.type = profile.banchoStatus.number === BanchoStatusEnum.Playing
                 ? ActivityType.PLAYING : ActivityType.WATCHING;
 
-            const player = profile.banchoStatus.number === BanchoStatusEnum.Playing ? "" : `${play.playerName} | `;
+            const player = (profile.banchoStatus.number === BanchoStatusEnum.Playing || (settings.store.tosu_privacyMode && play.playerName === targetPrivacyUsername))
+                ? ""
+                : `${play.playerName} | `;
+
             mods = play.mods.name ? `+${play.mods.name} ` : "";
             activity.name = `${player}${beatmap.artist} - ${beatmap.title} [${beatmap.version}] ${mods}(${beatmap.mapper}, ${beatmap.stats.stars.total.toFixed(2)}*)`;
 
@@ -204,7 +209,7 @@ async function onMessage(data: string) {
 export function start() {
     shouldReconnect = true;
     (function connect() {
-        ws = new WebSocket("ws://127.0.0.1:24050/websocket/v2");
+        ws = new WebSocket(`ws://${settings.store.tosu_serverUrl || "127.0.0.1:24050"}/websocket/v2`);
         ws.addEventListener("error", () => ws.close());
         ws.addEventListener("close", () => {
             if (!shouldReconnect) return;

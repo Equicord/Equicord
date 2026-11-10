@@ -98,7 +98,7 @@ export default definePlugin({
         },
         {
             // Gradient roles in member list
-            find: "dotAlignment:",
+            find: ".roleStyle);",
             replacement: {
                 match: /,animateGradient:/,
                 replace: ",animateGradient:!0,_oldAnimateGradient:"

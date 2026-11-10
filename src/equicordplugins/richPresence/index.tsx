@@ -87,6 +87,7 @@ export default definePlugin({
         EquicordDevs.Prince527,
         EquicordDevs.creations,
         EquicordDevs.Star123451,
+        EquicordDevs.dev0xz02
     ],
     reporterTestable: ReporterTestable.None,
 

@@ -16,19 +16,19 @@
 }
 
 .vc-card-danger {
-    background-color: var(--background-feedback-critical);
+    background-color: var(--background-feedback-mod-critical);
     border-color: var(--background-feedback-critical);
     color: var(--text-feedback-critical);
 }
 
 .vc-card-warning {
-    background-color: var(--background-feedback-warning);
+    background-color: var(--background-feedback-mod-warning);
     border-color: var(--background-feedback-warning);
     color: var(--text-feedback-warning);
 }
 
 .vc-card-success {
-    background-color: var(--background-feedback-positive);
+    background-color: var(--background-feedback-mod-positive);
     border-color: var(--background-feedback-positive);
     color: var(--text-feedback-positive);
 }

@@ -32,6 +32,7 @@ import { GuildMemberStore, React, useMemo, UserStore } from "@webpack/common";
 import { DonateButtonComponent } from "./DonateButton";
 import { MacOSVibrancySettings } from "./MacVibrancySettings";
 import { NotificationSection } from "./NotificationSettings";
+import { openPlayground } from "./playground";
 import { WindowsMaterialSettings } from "./WindowsMaterialSettings";
 
 const DEFAULT_DONATE_IMAGE = "https://cdn.discordapp.com/emojis/1026533090627174460.png";
@@ -268,6 +269,11 @@ function EquicordSettings() {
                         )
                     }
                 />
+                {IS_DEV && <QuickAction
+                    Icon={PaintbrushIcon}
+                    text="Open Component Playground"
+                    action={() => openPlayground()}
+                />}
             </QuickActionCard>
 
             <Divider className={Margins.top20} />
