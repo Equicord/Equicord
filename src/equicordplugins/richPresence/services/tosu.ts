@@ -7,8 +7,8 @@
 import { Activity } from "@vencord/discord-types";
 import { ActivityType } from "@vencord/discord-types/enums";
 import { ApplicationAssetUtils, FluxDispatcher } from "@webpack/common";
-import { settings } from "../settings";
 
+import { settings } from "../settings";
 import { BanchoStatusEnum, GameState, Modes, TosuApi } from "../types/tosu";
 
 const OSU_APP_ID = "367827983903490050";
