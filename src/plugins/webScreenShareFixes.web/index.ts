@@ -34,7 +34,7 @@ export default definePlugin({
             find: "x-google-max-bitrate",
             replacement: [
                 {
-                    match: /`x-google-max-bitrate=\$\{i\}`/,
+                    match: /`x-google-max-bitrate=\$\{\i\}`/,
                     replace: '"x-google-max-bitrate=80000"'
                 },
             ]
