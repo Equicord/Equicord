@@ -35,7 +35,7 @@ function Section({ children, title, ...props }: { children: React.ReactNode; tit
 function Playground() {
     const [buttonSize, setButtonSize] = useState<ButtonSize>("small");
 
-    const CardVariants = ["normal", "info", "success", "warning", "danger"] as const;
+    const CardVariants = ["primary", "brand", "success", "warning", "danger"] as const;
     const ButtonVariants = ["primary", "secondary", "dangerPrimary", "dangerSecondary", "overlayPrimary", "positive", "link", "none"] as ButtonVariant[];
     const ButtonSizes = ["iconOnly", "min", "xs", "small", "medium"] as ButtonSize[];
 
