@@ -4,21 +4,18 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { isNonNullish } from "@utils/guards";
 import { classes } from "@utils/misc";
-import { ProfilePreset } from "@vencord/discord-types";
-import { ContextMenuApi, Menu, React, TextInput } from "@webpack/common";
+import { ContextMenuApi, IconUtils, Menu, React, TextInput, UserStore } from "@webpack/common";
 
 import { cl } from "..";
-import { deletePreset, movePreset, renamePreset, updatePresetField } from "../utils/actions";
-import { getCurrentProfile } from "../utils/profile";
+import { deletePreset, movePreset, renamePreset, updatePresetFromCurrent } from "../utils/actions";
 import { PresetSection, type ProfilePresetEx } from "../utils/storage";
 
 interface PresetListProps {
     presets: ProfilePresetEx[];
     allPresets: ProfilePresetEx[];
     avatarSize: number;
-    selectedPreset: number;
+    selectedPreset: ProfilePresetEx | null;
     onLoad: (index: number) => void;
     onUpdate: () => void;
     guildId?: string;
@@ -39,17 +36,15 @@ export function PresetList({
     currentPage,
     onPageChange
 }: PresetListProps) {
-    type EditableProfile = Omit<ProfilePreset, "name" | "timestamp">;
     const [renaming, setRenaming] = React.useState<number>(-1);
     const [renameText, setRenameText] = React.useState("");
-    const isGuildProfile = section === "server";
 
     return (
         <div className={cl("list-container")}>
             {presets.map(preset => {
                 const actualIndex = allPresets.indexOf(preset);
                 const isRenaming = renaming === actualIndex;
-                const isSelected = !isRenaming && selectedPreset === actualIndex;
+                const isSelected = !isRenaming && selectedPreset === preset;
                 const date = new Date(preset.timestamp);
                 const formattedDate = date.toLocaleDateString(undefined, {
                     month: "short",
@@ -89,14 +84,12 @@ export function PresetList({
                         className={classes(cl("row"), isSelected ? "selected" : "")}
                     >
                         <div className={cl("avatar-url")}>
-                            {preset.avatarDataUrl && (
-                                <img
-                                    src={preset.avatarDataUrl}
-                                    alt=""
-                                    className={cl("avatar")}
-                                    style={{ width: `${avatarSize}px`, height: `${avatarSize}px` }}
-                                />
-                            )}
+                            <img
+                                src={preset.avatarDataUrl || IconUtils.getDefaultAvatarURL(UserStore.getCurrentUser()?.id ?? "0")}
+                                alt=""
+                                className={cl("avatar")}
+                                style={{ width: `${avatarSize}px`, height: `${avatarSize}px` }}
+                            />
                             <div className={cl("rename")}>
                                 {isRenaming ? (
                                     <TextInput
@@ -152,12 +145,7 @@ export function PresetList({
                                                 id="update"
                                                 label="Update"
                                                 action={async () => {
-                                                    const profile = await getCurrentProfile(guildId, { isGuildProfile });
-                                                    await Promise.all(
-                                                        (Object.entries(profile) as [keyof EditableProfile, EditableProfile[keyof EditableProfile]][])
-                                                            .filter(([, value]) => isNonNullish(value))
-                                                            .map(([key, value]) => updatePresetField(actualIndex, key, value, section, guildId))
-                                                    );
+                                                    await updatePresetFromCurrent(actualIndex, section, guildId);
                                                     onUpdate();
                                                 }}
                                             />

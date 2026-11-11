@@ -12,7 +12,7 @@ import { openModal, React, SelectedGuildStore, TextInput, useStateFromStores } f
 import { cl, settings } from "../index";
 import { exportPresets, ImportDecision, importPresets, savePreset } from "../utils/actions";
 import { loadPresetAsPending } from "../utils/profile";
-import { loadPresets, presets, PresetSection, setCurrentPresetIndex } from "../utils/storage";
+import { loadPresets, presets, PresetSection, type ProfilePresetEx, setCurrentPresetIndex } from "../utils/storage";
 import { ImportProfilesModal } from "./confirmModal";
 import { PresetList } from "./presetList";
 
@@ -29,7 +29,7 @@ export function PresetManager({ section, guildId }: PresetManagerProps) {
     const [isSaving, setIsSaving] = React.useState(false);
     const [currentPage, setCurrentPage] = React.useState(1);
     const [pageInput, setPageInput] = React.useState("1");
-    const [selectedPreset, setSelectedPreset] = React.useState<number>(-1);
+    const [selectedPreset, setSelectedPreset] = React.useState<ProfilePresetEx | null>(null);
     const [searchMode, setSearchMode] = React.useState(false);
     const lastRandomIndexRef = React.useRef<number>(-1);
     const resolvedSection: PresetSection = section ?? "main";
@@ -46,9 +46,11 @@ export function PresetManager({ section, guildId }: PresetManagerProps) {
         (async () => {
             await loadPresets(resolvedSection);
             if (!isActive) return;
-            setSelectedPreset(-1);
+            setSelectedPreset(null);
             setCurrentPage(1);
             setPageInput("1");
+            setSearchMode(false);
+            setPresetName("");
             forceUpdate();
         })();
         return () => {
@@ -60,9 +62,17 @@ export function PresetManager({ section, guildId }: PresetManagerProps) {
         ? presets
         : presets.filter(preset => preset.name.toLowerCase().includes(presetName.toLowerCase()));
 
-    const totalPages = Math.ceil(filteredPresets.length / PRESETS_PER_PAGE);
-    const startIndex = (currentPage - 1) * PRESETS_PER_PAGE;
+    const totalPages = Math.max(1, Math.ceil(filteredPresets.length / PRESETS_PER_PAGE));
+    const effectivePage = Math.min(currentPage, totalPages);
+    const startIndex = (effectivePage - 1) * PRESETS_PER_PAGE;
     const currentPresets = filteredPresets.slice(startIndex, startIndex + PRESETS_PER_PAGE);
+
+    React.useEffect(() => {
+        if (currentPage > totalPages) {
+            setCurrentPage(totalPages);
+            setPageInput(String(totalPages));
+        }
+    }, [currentPage, totalPages]);
 
     const handlePageChange = (newPage: number) => {
         if (newPage >= 1 && newPage <= totalPages) {
@@ -80,14 +90,17 @@ export function PresetManager({ section, guildId }: PresetManagerProps) {
         setPresetName("");
         setIsSaving(false);
         const newTotalPages = Math.ceil(presets.length / PRESETS_PER_PAGE);
-        handlePageChange(newTotalPages);
+        setCurrentPage(newTotalPages);
+        setPageInput(String(newTotalPages));
         forceUpdate();
     };
 
     const applyPreset = (index: number) => {
-        setSelectedPreset(index);
+        const preset = presets[index];
+        if (!preset) return;
+        setSelectedPreset(preset);
         setCurrentPresetIndex(index);
-        loadPresetAsPending(presets[index], resolvedGuildId, {
+        loadPresetAsPending(preset, resolvedGuildId, {
             isGuildProfile: resolvedSection === "server"
         });
         forceUpdate();
@@ -156,7 +169,7 @@ export function PresetManager({ section, guildId }: PresetManagerProps) {
             </div>
 
             <div className={cl("search")}>
-                {!searchMode && (
+                {(!searchMode || !hasPresets) && (
                     <Button
                         size="small"
                         disabled={isSaving || !presetName.trim() || !canUseGuild}
@@ -212,11 +225,10 @@ export function PresetManager({ section, guildId }: PresetManagerProps) {
                         selectedPreset={selectedPreset}
                         onLoad={handleLoadPreset}
                         onUpdate={() => {
-                            const newTotal = Math.ceil(presets.length / PRESETS_PER_PAGE);
-                            if (newTotal === 0) {
-                                handlePageChange(1);
-                            } else if (currentPage > newTotal) {
-                                handlePageChange(newTotal);
+                            const newTotal = Math.max(1, Math.ceil(presets.length / PRESETS_PER_PAGE));
+                            if (currentPage > newTotal) {
+                                setCurrentPage(newTotal);
+                                setPageInput(String(newTotal));
                             }
                             forceUpdate();
                         }}
@@ -231,8 +243,8 @@ export function PresetManager({ section, guildId }: PresetManagerProps) {
                             <Button
                                 size="small"
                                 variant="secondary"
-                                disabled={currentPage === 1}
-                                onClick={() => handlePageChange(currentPage - 1)}
+                                disabled={effectivePage === 1}
+                                onClick={() => handlePageChange(effectivePage - 1)}
                             >
                                 ←
                             </Button>
@@ -257,8 +269,8 @@ export function PresetManager({ section, guildId }: PresetManagerProps) {
                             <Button
                                 size="small"
                                 variant="secondary"
-                                disabled={currentPage === totalPages}
-                                onClick={() => handlePageChange(currentPage + 1)}
+                                disabled={effectivePage === totalPages}
+                                onClick={() => handlePageChange(effectivePage + 1)}
                             >
                                 →
                             </Button>
