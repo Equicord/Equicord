@@ -1,0 +1,89 @@
+.vc-duplicate-category-label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 14px;
+    line-height: 18px;
+    font-weight: 600;
+    color: var(--header-secondary, #b5bac1);
+    font-family: var(--font-primary, "gg sans", sans-serif);
+}
+
+.vc-duplicate-category-permissions {
+    margin-top: 16px;
+}
+
+.vc-duplicate-category-toggle-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 24px;
+    margin-bottom: 8px;
+}
+
+.vc-duplicate-category-toggle-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 16px;
+    line-height: 24px;
+    height: 24px;
+    font-weight: 600;
+    color: var(--header-primary, #f2f3f5);
+    cursor: pointer;
+    user-select: none;
+    outline: none;
+}
+
+.vc-duplicate-category-toggle-label.vc-duplicate-category-disabled {
+    cursor: default;
+}
+
+.vc-duplicate-category-icon {
+    color: currentColor;
+    flex-shrink: 0;
+}
+
+.vc-duplicate-category-switch {
+    width: 40px;
+    min-width: 40px;
+    height: 24px;
+    border-radius: 12px;
+    background-color: var(--bg-mod-strong, #4e5058);
+    position: relative;
+    cursor: pointer;
+    transition: background-color 0.15s ease-in-out;
+    flex-shrink: 0;
+    outline: none;
+}
+
+.vc-duplicate-category-switch.vc-duplicate-category-checked {
+    background-color: var(--brand-500, #5865f2);
+}
+
+.vc-duplicate-category-switch.vc-duplicate-category-disabled {
+    cursor: default;
+}
+
+.vc-duplicate-category-switch-thumb {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background-color: #ffffff;
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    transform: translateX(0);
+    transition: transform 0.15s ease-in-out;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.vc-duplicate-category-switch.vc-duplicate-category-checked .vc-duplicate-category-switch-thumb {
+    transform: translateX(16px);
+}
+
+.vc-duplicate-category-description {
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: 400;
+    color: var(--text-muted, #949ba4);
+}
