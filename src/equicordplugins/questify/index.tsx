@@ -487,7 +487,7 @@ export default definePlugin({
             replacement: [
                 {
                     // Subscribes each Quest tile to Questify's manual rerender trigger.
-                    match: /(?=return\(0,\i\.\i\)\("article",\{id:)/,
+                    match: /(?=return\(0,\i\.\i\)\(\i\.\i,\{value:)/,
                     replace: "void $self.useQuestRerender();"
                 },
                 {
