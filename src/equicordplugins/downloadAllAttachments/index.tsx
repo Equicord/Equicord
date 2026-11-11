@@ -60,7 +60,7 @@ async function fetchAttachment(attachment: MessageAttachment) {
 }
 
 async function downloadAll(message: Message) {
-    const { attachments } = message;
+    const { id, attachments } = message;
     if (attachments.reduce((sum, a) => sum + a.size, 0) > MAX_ZIP_BYTES)
         return showToast({ text: "These attachments are too large to zip. Save them one by one instead.", variant: "critical" });
 
@@ -81,7 +81,7 @@ async function downloadAll(message: Message) {
 
     saveFile(saved.length === 1
         ? new File([files[saved[0]] as BlobPart], saved[0])
-        : new File([zipSync(files, { level: 0 }) as BlobPart], `attachments-${message.id}.zip`, { type: "application/zip" }));
+        : new File([zipSync(files, { level: 0 }) as BlobPart], `attachments-${id}.zip`, { type: "application/zip" }));
 
     if (failed === 0)
         showToast({ text: `Saved ${pluralize(saved.length, "attachment")}.`, variant: "success" });
