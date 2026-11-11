@@ -93,6 +93,12 @@ export const settings = definePluginSettings({
         default: "",
         hidden: true
     },
+    ziplineStripExtension: {
+        type: OptionType.BOOLEAN,
+        description: "Strip file extension",
+        default: false,
+        hidden: true
+    },
     ziplineOriginalName: {
         type: OptionType.BOOLEAN,
         description: "Keep original file name",
@@ -605,6 +611,12 @@ export function SettingsComponent() {
                         value={settings.store.folderId}
                         onChange={v => settings.store.folderId = v}
                         placeholder="Leave empty for no folder"
+                    />
+                    <SettingSwitch
+                        name="Strip file extension"
+                        description="Remove the file extension from the generated URL"
+                        checked={settings.store.ziplineStripExtension}
+                        onChange={v => settings.store.ziplineStripExtension = v}
                     />
                     <SettingSwitch
                         name="Save original file name"
