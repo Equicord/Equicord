@@ -12,6 +12,6 @@ Adds a **Duplicate Category** option to the category context menu.
 ## Preview
 
 <p align="left">
-  <img src="https://raw.githubusercontent.com/autistickun/DuplicateCategory/main/assets/menu.png" alt="Context menu" height="320" />
-  <img src="https://raw.githubusercontent.com/autistickun/DuplicateCategory/main/assets/modal.png" alt="Modal dialog" height="320" />
+  <img src="https://github.com/user-attachments/assets/79e17de4-979b-4b89-9ae9-e55cb76fce3c" alt="Context menu" height="320" />
+  <img src="https://github.com/user-attachments/assets/190c0cfb-7e5f-48e9-9c3c-e9861d9ee582" alt="Modal dialog" height="320" />
 </p>
