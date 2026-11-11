@@ -448,6 +448,10 @@ async function uploadToZipline(fileBlob: Blob, filename: string): Promise<string
         headers["x-zipline-folder"] = folderId;
     }
 
+    if (settings.store.ziplineOriginalName) {
+        headers["x-zipline-original-name"] = "true";
+    }
+
     const response = await uploadRequestWithTimeout(`${baseUrl}/api/upload`, {
         method: "POST",
         headers,

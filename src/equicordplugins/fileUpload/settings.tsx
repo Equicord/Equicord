@@ -93,6 +93,12 @@ export const settings = definePluginSettings({
         default: "",
         hidden: true
     },
+    ziplineOriginalName: {
+        type: OptionType.BOOLEAN,
+        description: "Keep original file name",
+        default: false,
+        hidden: true
+    },
     folderId: {
         type: OptionType.STRING,
         description: "Optional Zipline folder ID",
@@ -599,6 +605,12 @@ export function SettingsComponent() {
                         value={settings.store.folderId}
                         onChange={v => settings.store.folderId = v}
                         placeholder="Leave empty for no folder"
+                    />
+                    <SettingSwitch
+                        name="Save original file name"
+                        description="Whether the file name will be saved on Zipline and restored on download, regardless of the chosen URL format"
+                        checked={settings.store.ziplineOriginalName}
+                        onChange={v => settings.store.ziplineOriginalName = v}
                     />
                 </SettingGroup>
             )}
