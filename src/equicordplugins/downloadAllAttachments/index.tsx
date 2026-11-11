@@ -93,7 +93,7 @@ export default definePlugin({
     name: "DownloadAllAttachments",
     description: "Adds a popover button to download all attachments in a message at once.",
     tags: ["Utility", "Chat"],
-    authors: [EquicordDevs.dhopcs],
+    authors: [EquicordDevs.dhopcs, EquicordDevs.ShaunLWM],
     dependencies: ["MessagePopoverAPI"],
     settings,
     messagePopoverButton: {
