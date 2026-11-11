@@ -51,29 +51,31 @@ export default definePlugin({
     description: "Shows user avatars and role icons inside mentions",
     tags: ["Appearance", "Customisation"],
     authors: [Devs.Ven, Devs.SerStars],
-    patches: [{
-        // HEY THOR UPDATE SHOW ME YOUR NAME IF THIS SHIT CHANGES TY :)
-        find: ".USER_MENTION)",
-        replacement: {
-            match: /children:`@\$\{(\i\?\?\i)\}`(?<=\.useName\((\i)\).+?)/,
-            replace: "children:$self.renderUsername({username:$1,user:$2,showMeYourNameMention:typeof showMeYourNameMention!=='undefined'?showMeYourNameMention:undefined})"
+    patches: [
+        {
+            // HEY THOR UPDATE SHOW ME YOUR NAME IF THIS SHIT CHANGES TY :)
+            find: ".USER_MENTION)",
+            replacement: {
+                match: /children:`@\$\{(\i\?\?\i)\}`(?<=\.useName\((\i)\).+?)/,
+                replace: "children:$self.renderUsername({username:$1,user:$2,showMeYourNameMention:typeof showMeYourNameMention!=='undefined'?showMeYourNameMention:undefined})"
+            }
+        },
+        {
+            find: ".ROLE_MENTION)",
+            replacement: {
+                match: /children:\[\i&&.{0,100}className:\i.\i,background:!1,.{0,50}?,\i(?=\])/,
+                replace: "$&,$self.renderRoleIcon(arguments[0])"
+            }
+        },
+        {
+            // show avatar in the chat input box
+            find: '"text":"locked"',
+            replacement: {
+                match: /(?<=null==\i\?`<@\$\{(\i)\}>`:)`@\$\{(\i)\}`/,
+                replace: "$self.renderInputMention($2,$1)"
+            }
         }
-    },
-    {
-        find: ".ROLE_MENTION)",
-        replacement: {
-            match: /children:\[\i&&.{0,100}className:\i.\i,background:!1,.{0,50}?,\i(?=\])/,
-            replace: "$&,$self.renderRoleIcon(arguments[0])"
-        }
-    },
-    {
-        // show avatar in the chat input box
-        find: '"text":"locked"',
-        replacement: {
-            match: /(?<=null==\i\?`<@\$\{(\i)\}>`:)`@\$\{(\i)\}`/,
-            replace: "$self.renderInputMention($2,$1)"
-        }
-    }],
+    ],
 
     settings,
 
