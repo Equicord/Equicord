@@ -43,4 +43,3 @@ export default definePlugin({
         return settings.store.hideShowResultsButton ? void 0 : orig;
     }
 });
-
