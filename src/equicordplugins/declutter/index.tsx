@@ -231,10 +231,10 @@ export default definePlugin({
         },
         {
             // Nameplate palette
-            find: 'AK:"custom_palette",',
+            find: ',darkBackground:"",lightBackground:""',
             replacement: {
-                match: /fc:\i/,
-                replace: "fc:{}",
+                match: /(?<=lightBackground:""\},.{0,5},\i:)\i/,
+                replace: "{}",
             },
             predicate: () => settings.store.removeNameplate,
         },
