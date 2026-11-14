@@ -28,7 +28,7 @@ export default definePlugin({
     patches: [
         {
             // Exports Discord's guildless item for the shared server-list component.
-            find: '="DOWNLOAD_APPS";function',
+            find: '="DOWNLOAD_APPS"',
             replacement: {
                 match: /(?<=\i\.\i\(\i,\{)(?=\i:\(\)=>\i.{0,30000}?let (\i)=function\(\i\)\{let\{ref:)/,
                 replace: "GuildlessServerListItemComponent:()=>$1,"
