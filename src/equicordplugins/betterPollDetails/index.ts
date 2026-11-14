@@ -8,21 +8,11 @@ import { definePluginSettings } from "@api/Settings";
 import { EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 
-export const settings = definePluginSettings({
-    hideShowResultsButton: {
-        type: OptionType.BOOLEAN,
-        description: "Hide the 'Show results' button since results are already visible",
-        default: true
-    }
-});
-
 export default definePlugin({
     name: "BetterPollDetails",
     description: "Shows poll percentages and vote counts before voting or expiration without disabling the ability to vote",
     authors: [EquicordDevs.lethied],
     tags: ["Chat", "Utility"],
-    settings,
-
     patches: [
         {
             find: 'containerStyle:"normal"',
@@ -38,8 +28,7 @@ export default definePlugin({
             ]
         }
     ],
-
-    getTertiaryAction(orig: unknown) {
-        return settings.store.hideShowResultsButton ? void 0 : orig;
+    getTertiaryAction() {
+        return void 0;
     }
 });
