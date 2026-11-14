@@ -487,12 +487,12 @@ export default definePlugin({
             replacement: [
                 {
                     // Subscribes each Quest tile to Questify's manual rerender trigger.
-                    match: /(?=return\(0,\i\.\i\)\(\i\.\i,\{value:)/,
+                    match: /(?=return\(0,\i\.\i\)\(\i\.\i\.Provider,\{value:)/,
                     replace: "void $self.useQuestRerender();"
                 },
                 {
                     // Adds Questify tile classes and inline CSS variables.
-                    match: /(?<=className:)(\i\(\)\(\i\.\i,\i\))(?=,onMouseEnter)/,
+                    match: /(?<=className:)(\i\(\)\(\i\.\i,\i,.{1,40}?\))(?=,onMouseEnter)/,
                     replace: "$self.getQuestTileClasses($1,arguments[0].quest),style:$self.getQuestTileStyle(arguments[0].quest)"
                 },
                 {
