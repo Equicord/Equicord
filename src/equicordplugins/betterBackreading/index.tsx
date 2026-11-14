@@ -895,7 +895,7 @@ export default definePlugin({
                 },
                 {
                     // Keep ongoing scrolling when correcting for embed height changes.
-                    match: /(?<=fixedScrollTop:)\i\.offsetTop-\((\i)\.offsetFromTop\+\i\)/,
+                    match: /(?<=fixedScrollTop:)\i\(\i,\i\)-\((\i)\.offsetFromTop\+\i\)/,
                     replace: "$self.isActive(this)&&$1===this.automaticAnchor?$self.getAutomaticAnchorScrollTop(this,$1,$&):$&"
                 }
             ]
