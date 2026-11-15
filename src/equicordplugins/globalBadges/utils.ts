@@ -73,7 +73,7 @@ export async function loadBadges() {
             return {
                 ...b,
                 key: b.tooltip,
-                modSource: serviceMap[b.mod],
+                source: serviceMap[b.mod],
             };
         });
     }
