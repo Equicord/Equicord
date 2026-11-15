@@ -23,7 +23,7 @@ export default definePlugin({
     name: "GlobalBadges",
     description: "Adds global badges from other client mods",
     tags: ["Appearance"],
-    authors: [Devs.HypedDomi, EquicordDevs.Wolfie, Devs.thororen],
+    authors: [Devs.HypedDomi, EquicordDevs.Wolfie, Devs.thororen, EquicordDevs.auggeeo],
     settings,
     settingsAboutComponent: () => (
         <>
@@ -59,6 +59,7 @@ export default definePlugin({
             iconSrc: badge.badge,
             description: badge.tooltip,
             position: BadgePosition.START,
+            infoLabel: badge.source,
             props: {
                 style: {
                     borderRadius: "50%",

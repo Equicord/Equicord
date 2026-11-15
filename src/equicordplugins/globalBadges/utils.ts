@@ -69,15 +69,11 @@ export async function loadBadges() {
 
             return true;
         }).map(b => {
-            const modFormatted = serviceMap[b.mod];
-            const prefix = settings.store.showModStyle === "prefix" ? `${modFormatted} - ` : "";
-            const suffix = settings.store.showModStyle === "suffix" ? ` - ${modFormatted}` : "";
 
-            const tooltip = prefix + b.tooltip + suffix;
             return {
                 ...b,
                 key: b.tooltip,
-                tooltip
+                source: serviceMap[b.mod],
             };
         });
     }
