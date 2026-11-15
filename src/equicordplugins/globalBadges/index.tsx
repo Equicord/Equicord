@@ -59,6 +59,7 @@ export default definePlugin({
             iconSrc: badge.badge,
             description: badge.tooltip,
             position: BadgePosition.START,
+            infoLabel: badge.modSource,
             props: {
                 style: {
                     borderRadius: "50%",
