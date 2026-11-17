@@ -42,6 +42,16 @@ async function loadIcon(source: string, signal: AbortSignal) {
     return (await canvas.convertToBlob()).arrayBuffer();
 }
 
+async function restoreDefaultIcon() {
+    try {
+        const error = await Native.setWindowIcon(null);
+        if (error) throw new Error(error);
+        logger.info("Restored the default Windows icon.");
+    } catch (error) {
+        logger.error("Could not restore the default icon", error);
+    }
+}
+
 let unsubscribe: (() => void) | undefined;
 
 export default definePlugin({
@@ -59,6 +69,7 @@ export default definePlugin({
             });
         if (!store || !getIcon) {
             logger.error("Could not find Discord's app icon store or assets.");
+            void restoreDefaultIcon();
             return;
         }
 
@@ -92,6 +103,7 @@ export default definePlugin({
                 if (controller.signal.aborted) return;
                 requestedId = undefined;
                 logger.error("Could not sync app icon", id, error);
+                if (id !== defaultIcon) await restoreDefaultIcon();
             }
         };
 
@@ -99,10 +111,7 @@ export default definePlugin({
         unsubscribe = () => {
             store.removeChangeListener(syncIcon);
             request?.abort();
-            Native.setWindowIcon(null).then(error => {
-                if (error) logger.error("Could not restore the default icon", error);
-                else logger.info("Restored the default Windows icon.");
-            }).catch(error => logger.error("Could not restore the default icon", error));
+            void restoreDefaultIcon();
         };
         void syncIcon();
     },
