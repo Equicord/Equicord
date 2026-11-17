@@ -27,7 +27,7 @@ function saveIcon(png: Buffer) {
 
     const directory = join(app.getPath("userData"), "equicord-taskbar-icons");
     const hash = createHash("sha256").update(png).digest("hex");
-    const iconPath = join(directory, `${hash}.ico`);
+    const iconPath = join(directory, `${hash}.ico`); //hashed so that new images (e.g. with crop) are used and not old cached ones
     mkdirSync(directory, { recursive: true });
     writeFileSync(iconPath, Buffer.concat([header, png]));
     return { iconPath, hash };
@@ -70,7 +70,7 @@ export function setWindowIcon(event: IpcMainInvokeEvent, png: ArrayBuffer | null
             if (image.isEmpty()) return "Electron could not decode the PNG icon.";
             const savedIcon = saveIcon(image.toPNG());
             iconPath = savedIcon.iconPath;
-            groupId = `${appId}.EquicordIcon.${savedIcon.hash.slice(0, 16)}`;
+            groupId = `${appId}.EquicordSyncIcon.${savedIcon.hash.slice(0, 16)}`;
         } catch {
             return "Could not save the Windows icon resource.";
         }
@@ -84,8 +84,9 @@ export function setWindowIcon(event: IpcMainInvokeEvent, png: ArrayBuffer | null
             appIconPath: iconPath,
             relaunchCommand: `"${join(dirname(installation), "Update.exe")}" --processStart "${executable}.exe"`,
             relaunchDisplayName: executable,
+            appId: groupId,
         });
-        window.setAppDetails({ appId: groupId });
+        // window.setAppDetails({ appId: groupId });
         window.setIcon(icon);
         return null;
     } catch {
