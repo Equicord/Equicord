@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { IS_WINDOWS } from "@utils/constants";
+import { EquicordDevs, IS_WINDOWS } from "@utils/constants";
 import { Logger } from "@utils/Logger";
 import definePlugin, { type PluginNative } from "@utils/types";
 import type { FluxStore } from "@vencord/discord-types";
@@ -13,7 +13,7 @@ import { filters, findStore, mapMangledModule } from "@webpack";
 const Native = VencordNative.pluginHelpers.TaskbarIconSync as PluginNative<typeof import("./native")>;
 const logger = new Logger("TaskbarIconSync");
 const defaultIcon = "AppIcon";
-const customGlyphScale = 30 / 28; //Discord default is 30px, but the others are slighly smaller at 28, so we scale up
+const customGlyphScale = 30 / 28; // Discord default is 30px, but the others are slighly smaller at 28, so we scale up
 
 interface AppIconStore extends FluxStore {
     getCurrentDesktopIcon(): string | undefined;
@@ -29,7 +29,7 @@ async function loadIcon(source: string, signal: AbortSignal) {
         const context = canvas.getContext("2d");
         if (!context) throw new Error("Could not create an icon canvas.");
 
-        //scale+circular crop
+        // scale+circular crop
         const scale = Math.min(canvas.width / bitmap.width, canvas.height / bitmap.height) * customGlyphScale;
         const width = bitmap.width * scale;
         const height = bitmap.height * scale;
@@ -58,7 +58,7 @@ let unsubscribe: (() => void) | undefined;
 export default definePlugin({
     name: "TaskbarIconSync",
     description: "Syncs the Windows taskbar icon with your Discord app icon.",
-    authors: [{ name: "vracto", id: 958519152878964756n }],
+    authors: [EquicordDevs.vracto],
 
     start() {
         if (!IS_WINDOWS) return;

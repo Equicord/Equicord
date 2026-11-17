@@ -27,7 +27,7 @@ function saveIcon(png: Buffer) {
 
     const directory = join(app.getPath("userData"), "equicord-taskbar-icons");
     const hash = createHash("sha256").update(png).digest("hex");
-    const iconPath = join(directory, `${hash}.ico`); //hashed so that new images (e.g. with crop) are used and not old cached ones
+    const iconPath = join(directory, `${hash}.ico`); // hashed so that new images (e.g. with crop) are used and not old cached ones
     mkdirSync(directory, { recursive: true });
     writeFileSync(iconPath, Buffer.concat([header, png]));
     return { iconPath, hash };
