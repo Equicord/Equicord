@@ -60,6 +60,7 @@ export default definePlugin({
             description: badge.tooltip,
             position: BadgePosition.START,
             infoLabel: badge.source,
+            rarity: badge.rarity,
             props: {
                 style: {
                     borderRadius: "50%",
