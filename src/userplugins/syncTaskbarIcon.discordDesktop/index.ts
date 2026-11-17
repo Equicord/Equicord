@@ -31,6 +31,9 @@ async function loadIcon(source: string, signal: AbortSignal) {
         const scale = Math.min(canvas.width / bitmap.width, canvas.height / bitmap.height);
         const width = bitmap.width * scale;
         const height = bitmap.height * scale;
+        context.beginPath();
+        context.arc(canvas.width / 2, canvas.height / 2, canvas.width / 2, 0, 2 * Math.PI);
+        context.clip();
         context.drawImage(bitmap, (canvas.width - width) / 2, (canvas.height - height) / 2, width, height);
     } finally {
         bitmap.close();
