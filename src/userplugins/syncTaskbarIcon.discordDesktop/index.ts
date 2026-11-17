@@ -59,6 +59,8 @@ export default definePlugin({
             return;
         }
 
+        logger.info("Subscribed to Discord app icon changes.");
+
         let requestedId: string | undefined;
         let request: AbortController | undefined;
 
@@ -66,22 +68,27 @@ export default definePlugin({
             const id = store.getCurrentDesktopIcon() ?? defaultIcon;
             if (id === requestedId) return;
             requestedId = id;
+            logger.info("Discord selected app icon", id);
             request?.abort();
 
             const controller = new AbortController();
             request = controller;
             try {
                 const icon = id === defaultIcon ? null : getIcon(id);
-                const png = icon?.id === id
+                if (id !== defaultIcon && icon?.id !== id) throw new Error("Discord did not provide an asset for the selected icon.");
+                const png = icon
                     ? await loadIcon(icon.iconSource, AbortSignal.any([controller.signal, AbortSignal.timeout(10_000)]))
                     : null;
 
                 if (controller.signal.aborted) return;
-                if (!await Native.setWindowIcon(png)) throw new Error("Could not update the Windows icon.");
+                const error = await Native.setWindowIcon(png);
+                if (controller.signal.aborted) return;
+                if (error) throw new Error(error);
+                logger.info("Submitted icon to the Windows window and taskbar", id);
             } catch (error) {
                 if (controller.signal.aborted) return;
                 requestedId = undefined;
-                logger.error(error);
+                logger.error("Could not sync app icon", id, error);
             }
         };
 
@@ -89,7 +96,10 @@ export default definePlugin({
         unsubscribe = () => {
             store.removeChangeListener(syncIcon);
             request?.abort();
-            Native.setWindowIcon(null).catch(error => logger.error(error));
+            Native.setWindowIcon(null).then(error => {
+                if (error) logger.error("Could not restore the default icon", error);
+                else logger.info("Restored the default Windows icon.");
+            }).catch(error => logger.error("Could not restore the default icon", error));
         };
         void syncIcon();
     },
