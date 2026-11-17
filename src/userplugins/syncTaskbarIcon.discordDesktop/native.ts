@@ -30,7 +30,7 @@ function saveIcon(png: Buffer) {
     const iconPath = join(directory, `${hash}.ico`);
     mkdirSync(directory, { recursive: true });
     writeFileSync(iconPath, Buffer.concat([header, png]));
-    return iconPath;
+    return { iconPath, hash };
 }
 
 export function setWindowIcon(event: IpcMainInvokeEvent, png: ArrayBuffer | null): string | null {
@@ -49,7 +49,10 @@ export function setWindowIcon(event: IpcMainInvokeEvent, png: ArrayBuffer | null
     const executable = basename(process.execPath, ".exe");
     if (!discordExecutable.test(executable)) return "Could not determine Discord's Windows app ID.";
 
-    let iconPath = join(dirname(process.execPath), "app.ico");
+    const appId = `com.squirrel.${executable}.${executable}`;
+    const installation = dirname(process.execPath);
+    let iconPath = join(installation, "app.ico");
+    let groupId = appId;
     if (png !== null) {
         if (!(png instanceof ArrayBuffer) || png.byteLength < 33 || png.byteLength > 128 * 1024) {
             return "Invalid icon payload size or type.";
@@ -65,7 +68,9 @@ export function setWindowIcon(event: IpcMainInvokeEvent, png: ArrayBuffer | null
         try {
             const image = nativeImage.createFromBuffer(bytes);
             if (image.isEmpty()) return "Electron could not decode the PNG icon.";
-            iconPath = saveIcon(image.toPNG());
+            const savedIcon = saveIcon(image.toPNG());
+            iconPath = savedIcon.iconPath;
+            groupId = `${appId}.EquicordIcon.${savedIcon.hash.slice(0, 16)}`;
         } catch {
             return "Could not save the Windows icon resource.";
         }
@@ -75,7 +80,12 @@ export function setWindowIcon(event: IpcMainInvokeEvent, png: ArrayBuffer | null
         const icon = nativeImage.createFromPath(iconPath);
         if (icon.isEmpty()) return "Electron could not load the Windows icon resource.";
 
-        window.setAppDetails({ appId: `com.squirrel.${executable}.${executable}`, appIconPath: iconPath });
+        window.setAppDetails({
+            appIconPath: iconPath,
+            relaunchCommand: `"${join(dirname(installation), "Update.exe")}" --processStart "${executable}.exe"`,
+            relaunchDisplayName: executable,
+        });
+        window.setAppDetails({ appId: groupId });
         window.setIcon(icon);
         return null;
     } catch {
