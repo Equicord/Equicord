@@ -13,6 +13,7 @@ import { filters, findStore, mapMangledModule } from "@webpack";
 const Native = VencordNative.pluginHelpers.SyncTaskbarIcon as PluginNative<typeof import("./native")>;
 const logger = new Logger("SyncTaskbarIcon");
 const defaultIcon = "AppIcon";
+const customGlyphScale = 30 / 28;
 
 interface AppIconStore extends FluxStore {
     getCurrentDesktopIcon(): string | undefined;
@@ -28,7 +29,7 @@ async function loadIcon(source: string, signal: AbortSignal) {
         const context = canvas.getContext("2d");
         if (!context) throw new Error("Could not create an icon canvas.");
 
-        const scale = Math.min(canvas.width / bitmap.width, canvas.height / bitmap.height);
+        const scale = Math.min(canvas.width / bitmap.width, canvas.height / bitmap.height) * customGlyphScale;
         const width = bitmap.width * scale;
         const height = bitmap.height * scale;
         context.beginPath();
