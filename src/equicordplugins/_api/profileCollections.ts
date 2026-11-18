@@ -34,11 +34,7 @@ export default definePlugin({
             replacement: [
                 {
                     match: /user:\i,widgets:.{0,100}?\}\),(?=.{0,100}user:\i,currentUser:\i)/,
-                    replace: "$&arguments[0]?.isRedesignEnabled&&Vencord.Api.ProfileCollections.renderProfileCollections({...arguments[0],isSideBar:true}),"
-                },
-                {
-                    match: /user:\i,widgets:.{0,100}?\}\),(?=.{0,100}unownedWishlistItems:\i,wishlistId:\i)/,
-                    replace: "$&!arguments[0]?.isRedesignEnabled&&Vencord.Api.ProfileCollections.renderProfileCollections({...arguments[0],isSideBar:true}),"
+                    replace: "$&Vencord.Api.ProfileCollections.renderProfileCollections({...arguments[0],isSideBar:true}),"
                 }
             ]
         }

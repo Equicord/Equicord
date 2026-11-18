@@ -22,7 +22,6 @@ export const ContainerClasses = findCssClassesLazy(
 );
 export const CardClasses = findCssClassesLazy("card", "headerText", "headerContextMenu");
 export const WidgetClasses = findCssClassesLazy("tabPanelScroller", "tabListScroller");
-export const DMSideBarClasses = findCssClassesLazy("widgetPreviews");
 export const ProfileCardClasses = findCssClassesLazy("cardsList", "firstCardContainer", "card", "container");
 
 export enum SpinnerTypes {

@@ -15,12 +15,11 @@ import { Clickable, openModal, React, useEffect, UserProfileStore, useState } fr
 
 import { ReposModal } from "./ReposModal";
 
-const DMSideBarClasses = findCssClassesLazy("widgetPreviews");
 const ProfileCardClasses = findCssClassesLazy("cardsList", "firstCardContainer", "card", "container");
 const ProfileCardContainerClasses = findCssClassesLazy("innerContainer", "icons", "icon", "displayCount", "displayCountText", "displayCountTextColor", "breadcrumb");
 const ProfileCardOverlayClasses = findCssClassesLazy("overlay", "isPrivate", "outer");
 
-export function ProfilePopoutComponent({ id, isSideBar = false, isRedesignEnabled = false }: { id: string, isSideBar?: boolean; isRedesignEnabled?: boolean; }) {
+export function ProfilePopoutComponent({ id, isSideBar = false }: { id: string, isSideBar?: boolean; }) {
     const [repos, setRepos] = useState<GitHubRepo[]>([]);
     const [groups, setGroups] = useState<RepoGroup[]>([]);
     const [loading, setLoading] = useState(true);
@@ -82,7 +81,7 @@ export function ProfilePopoutComponent({ id, isSideBar = false, isRedesignEnable
 
     const topRepos = repos.slice(0, 4);
 
-    const reposSection = (
+    return (
         <section className={ProfileCardClasses.container}>
             <ul className={ProfileCardClasses.cardsList} tabIndex={-1}>
                 <li className={ProfileCardClasses.firstCardContainer}>
@@ -121,8 +120,4 @@ export function ProfilePopoutComponent({ id, isSideBar = false, isRedesignEnable
             </ul>
         </section>
     );
-
-    return isSideBar && !isRedesignEnabled
-        ? <div className={DMSideBarClasses.widgetPreviews}>{reposSection}</div>
-        : reposSection;
 }
