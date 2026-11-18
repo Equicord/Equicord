@@ -31,10 +31,7 @@ interface BadgeDirectoryDetailProps {
     isViewingOtherUser?: boolean;
 }
 
-interface BadgeDirectoryDetailContentProps {
-    badge?: DirectoryBadge;
-    userId?: string;
-    isViewingOtherUser?: boolean;
+interface BadgeDirectoryDetailContentProps extends BadgeDirectoryDetailProps {
     isContributor: boolean;
     isDonorBadge: boolean;
     isTranslatorBadge: boolean;
@@ -68,8 +65,9 @@ function BadgeDirectoryDetailContent({
     const plugins = useMemo(() => {
         if (!isContributor || !targetUserId) return [];
         const allPlugins = Object.values(Plugins);
-        const pluginsByAuthor = (VencordDevsById[targetUserId] || EquicordDevsById[targetUserId])
-            ? allPlugins.filter(p => p.authors.includes(VencordDevsById[targetUserId] || EquicordDevsById[targetUserId]))
+        const authorDev = VencordDevsById[targetUserId] || EquicordDevsById[targetUserId];
+        const pluginsByAuthor = authorDev
+            ? allPlugins.filter(p => p.authors.includes(authorDev))
             : allPlugins.filter(p =>
                 PluginMeta[p.name]?.userPlugin && p.authors.some(a => a.id.toString() === targetUserId)
                 || p.authors.some(a => a.name === user?.username)
@@ -133,20 +131,18 @@ function BadgeDirectoryDetailContent({
     }
 
     if (isDonorBadge) {
-        const isEquicordDonor = isEquicordBadge;
-
         return (
             <div className="vc-badge-directory-section">
                 <SpecialCard
                     title="Donations"
                     subtitle={isSelf
                         ? "Thank you for donating!"
-                        : isEquicordDonor ? "This user is an Equicord donor!" : "This user is a Vencord donor!"}
+                        : isEquicordBadge ? "This user is an Equicord donor!" : "This user is a Vencord donor!"}
                     description={isSelf
-                        ? (isEquicordDonor
+                        ? (isEquicordBadge
                             ? "Manage your perks by making a ticket in Equicord's server."
                             : "Manage your perks by messaging @vending.machine.")
-                        : (isEquicordDonor
+                        : (isEquicordBadge
                             ? "Support Equicord to get your own badge and perks!"
                             : "Support Vencord to get your own badge and perks!")}
                     cardImage={VENNIE_DONATOR_IMAGE}
@@ -155,7 +151,7 @@ function BadgeDirectoryDetailContent({
                 >
                     <Flex gap="0.5em" style={{ marginTop: "0.75em" }}>
                         <DonateButton
-                            equicord={isEquicordDonor}
+                            equicord={isEquicordBadge}
                             variant="overlayPrimary"
                         />
                         <InviteButton variant="secondary" />
@@ -173,32 +169,17 @@ export function BadgeDirectoryDetail({
     userId,
     isViewingOtherUser
 }: BadgeDirectoryDetailProps) {
-    const badgeId = typeof badge?.badge_id === "string"
-        ? badge.badge_id
-        : typeof badge?.badge_id === "number"
-            ? String(badge.badge_id)
-            : "";
-    const originalBadgeId = typeof badge?.originalBadgeId === "string"
-        ? badge.originalBadgeId
-        : "";
+    const badgeId = String(badge?.badge_id ?? "");
+    const originalBadgeId = badge?.originalBadgeId ?? "";
 
-    const isContributor = badgeId.includes("vencord_contributor_badge")
-        || badgeId.includes("equicord_contributor_badge")
-        || badgeId.includes("user_plugin_contributor_badge")
-        || originalBadgeId === "vencord_contributor_badge"
-        || originalBadgeId === "equicord_contributor_badge"
-        || originalBadgeId === "user_plugin_contributor_badge";
+    const isContributor = ["vencord_contributor_badge", "equicord_contributor_badge", "user_plugin_contributor_badge"]
+        .some(name => badgeId.includes(name) || originalBadgeId === name);
 
     const badgeName = badge?.name || badge?.description || "";
-    const isTranslatorBadge = badgeName.includes("Translator")
-        || originalBadgeId.includes("translator");
+    const isTranslatorBadge = badgeName.includes("Translator") || originalBadgeId.includes("translator");
 
-    const isDonorBadge = !isTranslatorBadge && (
-        badgeId.includes("vencord_donor_badge_")
-        || badgeId.includes("equicord_donor_badge_")
-        || originalBadgeId.startsWith("vencord_donor_badge_")
-        || originalBadgeId.startsWith("equicord_donor_badge_")
-    );
+    const isDonorBadge = !isTranslatorBadge && ["vencord_donor_badge_", "equicord_donor_badge_"]
+        .some(name => badgeId.includes(name) || originalBadgeId.startsWith(name));
 
     const isEquicordBadge = badgeId.includes("equicord_donor_badge_")
         || originalBadgeId.startsWith("equicord_donor_badge_");
