@@ -78,10 +78,16 @@ export default definePlugin({
     patches: [
         {
             find: '"LocalActivityStore"',
-            replacement: {
-                match: /(function\(\i\)\{.{0,40}activity:(\i).{0,25}=\i),(\i)/,
-                replace: "$1;$self.patchActivity($2);let $3",
-            }
+            replacement: [
+                {
+                    match: /(function\(\i\)\{.{0,40}activity:(\i).{0,25}=\i),(\i)/,
+                    replace: "$1;$self.patchActivity($2);let $3",
+                },
+                {
+                    match: /(?<=\.push\()\{type:\i\.\i\.PLAYING,name:\i\.name,application_id:.{0,150}?\(\i\)\}(?=\))/,
+                    replace: "$self.patchActivity($&)"
+                }
+            ]
         }
     ],
     settings,
@@ -121,5 +127,6 @@ export default definePlugin({
                 if (app.disableTimestamps) activity.timestamps = {};
             }
         });
+        return activity;
     },
 });
