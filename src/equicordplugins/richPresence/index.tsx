@@ -88,7 +88,7 @@ export default definePlugin({
         EquicordDevs.qouesm,
         Devs.RyanCaoDev,
         EquicordDevs.Prince527,
-        EquicordDevs.creations,
+        Devs.creations,
         EquicordDevs.Star123451,
         EquicordDevs.dev0xz02
     ],

@@ -199,10 +199,10 @@ export default definePlugin({
     dependencies: ["CommandsAPI", "HeaderBarAPI"],
     authors: [
         Devs.thororen,
-        EquicordDevs.nyx,
+        Devs.nyx,
         EquicordDevs.Naibuu,
         EquicordDevs.keircn,
-        EquicordDevs.SerStars,
+        Devs.SerStars,
         EquicordDevs.mart,
         EquicordDevs.omaw,
         Devs.Samwich,

@@ -6,7 +6,7 @@
 
 import "./style.css";
 
-import { Devs, EquicordDevs } from "@utils/constants";
+import { Devs } from "@utils/constants";
 import definePlugin from "@utils/types";
 import { Channel } from "@vencord/discord-types";
 import { GuildStore, React, SelectedGuildStore } from "@webpack/common";
@@ -33,7 +33,7 @@ export default definePlugin({
     name: "ChannelBadges",
     description: "Adds badges to channels based on their type",
     tags: ["Appearance", "Customisation", "Servers"],
-    authors: [EquicordDevs.creations, Devs.thororen],
+    authors: [Devs.creations, Devs.thororen],
     settings,
     patches: [
         // TY TypingIndicator

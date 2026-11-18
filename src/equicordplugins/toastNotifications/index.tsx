@@ -6,7 +6,7 @@
 
 import { definePluginSettings } from "@api/Settings";
 import { Button } from "@components/Button";
-import { EquicordDevs } from "@utils/constants";
+import { Devs, EquicordDevs } from "@utils/constants";
 import definePlugin, { makeRange, OptionType } from "@utils/types";
 import { Channel, Message } from "@vencord/discord-types";
 import { UserNotificationSetting } from "@vencord/discord-types/enums";
@@ -116,7 +116,7 @@ export default definePlugin({
     name: "ToastNotifications",
     description: "Show a pop-up toast notification, configurable for DMs, group, friends, or guild channels.",
     tags: ["Appearance", "Customisation", "Notifications"],
-    authors: [EquicordDevs.Skully, EquicordDevs.Ethan, EquicordDevs.Buzzy],
+    authors: [EquicordDevs.Skully, Devs.Ethan, EquicordDevs.Buzzy],
     settings,
     flux: {
         MESSAGE_CREATE({ message }: { message: Message; }) {

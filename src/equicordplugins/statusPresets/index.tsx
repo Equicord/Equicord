@@ -21,7 +21,7 @@ import "./style.css";
 import { definePluginSettings } from "@api/Settings";
 import { getUserSettingLazy } from "@api/UserSettings";
 import ErrorBoundary from "@components/ErrorBoundary";
-import { EquicordDevs } from "@utils/constants";
+import { Devs } from "@utils/constants";
 import { proxyLazy } from "@utils/lazy";
 import { useForceUpdater } from "@utils/react";
 import definePlugin, { OptionType, StartAt } from "@utils/types";
@@ -127,7 +127,7 @@ export default definePlugin({
     name: "StatusPresets",
     description: "Allows you to remember your statuses and set them later",
     tags: ["Activity", "Utility"],
-    authors: [EquicordDevs.iamme],
+    authors: [Devs.iamme],
     settings,
     dependencies: ["UserSettingsAPI"],
     patches: [

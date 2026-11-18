@@ -18,14 +18,14 @@
 
 import ErrorBoundary from "@components/ErrorBoundary";
 import { PinIcon } from "@components/Icons";
-import { EquicordDevs } from "@utils/constants";
+import { Devs } from "@utils/constants";
 import definePlugin from "@utils/types";
 
 export default definePlugin({
     name: "PinIcon",
     description: "Adds a pin icon to pinned messages",
     tags: ["Appearance", "Chat"],
-    authors: [EquicordDevs.iamme],
+    authors: [Devs.iamme],
     patches: [
         {
             find: "isUnsupported})",

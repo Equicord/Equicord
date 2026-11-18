@@ -7,7 +7,7 @@
 import "./style.css";
 
 import { NavContextMenuPatchCallback } from "@api/ContextMenu";
-import { EquicordDevs } from "@utils/constants";
+import { Devs } from "@utils/constants";
 import definePlugin from "@utils/types";
 import { ContextMenuApi, FluxDispatcher, Menu } from "@webpack/common";
 import type { MouseEvent } from "react";
@@ -49,7 +49,7 @@ export default definePlugin({
     name: "GifCollections",
     description: "Allows you to create collections of gifs.",
     tags: ["Chat", "Emotes"],
-    authors: [EquicordDevs.creations],
+    authors: [Devs.creations],
     settings,
     contextMenus: {
         "message": addCollectionContextMenuPatch,

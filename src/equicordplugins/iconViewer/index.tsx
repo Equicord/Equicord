@@ -8,7 +8,7 @@ import "./styles.css";
 
 import { MagnifyingGlassIcon } from "@components/Icons";
 import SettingsPlugin from "@plugins/_core/settings";
-import { EquicordDevs } from "@utils/constants";
+import { Devs } from "@utils/constants";
 import { removeFromArray } from "@utils/misc";
 import definePlugin, { StartAt } from "@utils/types";
 import { SettingsRouter } from "@webpack/common";
@@ -20,7 +20,7 @@ export default definePlugin({
     name: "IconViewer",
     description: "Adds a new tab to settings to preview all icons.",
     tags: ["Developers"],
-    authors: [EquicordDevs.iamme],
+    authors: [Devs.iamme],
     dependencies: ["Settings", "ConcatenatedModules"],
     startAt: StartAt.WebpackReady,
     toolboxActions: {

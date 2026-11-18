@@ -7,7 +7,7 @@
 import "./styles.css";
 
 import { definePluginSettings } from "@api/Settings";
-import { EquicordDevs } from "@utils/constants";
+import { Devs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
 import definePlugin, { OptionType, PluginNative } from "@utils/types";
 import { ColorUtils, React, showToast } from "@webpack/common";
@@ -243,7 +243,7 @@ export default definePlugin({
     name: "BetterAudioPlayer",
     description: "Adds a spectrograph and oscilloscope visualizer to audio attachment players.",
     tags: ["Appearance", "Media", "Voice"],
-    authors: [EquicordDevs.creations],
+    authors: [Devs.creations],
     settings,
 
     patches: [

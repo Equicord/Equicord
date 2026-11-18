@@ -20,6 +20,8 @@ import { loadLazyChunks } from "@debug/loadLazyChunks";
 import { User } from "@vencord/discord-types";
 import { ChannelStore, GuildMemberStore, IconUtils } from "@webpack/common";
 
+import Plugins, { PluginMeta } from "~plugins";
+
 import { EQUICORD_HELPERS, EquicordDevsById, GUILD_ID, KNOWN_ISSUES_CHANNEL_ID, KNOWN_ISSUES_CHANNEL_IDS, SUPPORT_CHANNEL_ID, SUPPORT_CHANNEL_IDS, VencordDevsById } from "./constants";
 
 /**
@@ -82,8 +84,11 @@ export function identity<T>(value: T): T {
 export const isPluginDev = (id: string) => Object.hasOwn(VencordDevsById, id);
 export const shouldShowContributorBadge = (id: string) => isPluginDev(id) && VencordDevsById[id].badge !== false;
 
-export const isEquicordPluginDev = (id: string) => Object.hasOwn(EquicordDevsById, id);
-export const shouldShowEquicordContributorBadge = (id: string) => isEquicordPluginDev(id) && EquicordDevsById[id].badge !== false;
+export const isEquicordPluginDev = (id: string) => Object.hasOwn(EquicordDevsById, id) || isPluginDev(id) && Object.values(Plugins).some(p =>
+    PluginMeta[p.name]?.folderName.startsWith("src/equicordplugins/")
+    && p.authors.some(a => a.id.toString() === id)
+);
+export const shouldShowEquicordContributorBadge = (id: string) => isEquicordPluginDev(id) && (EquicordDevsById[id] ?? VencordDevsById[id]).badge !== false;
 
 export const isAnyPluginDev = (id: string) => Object.hasOwn(VencordDevsById, id) || Object.hasOwn(EquicordDevsById, id);
 

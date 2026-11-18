@@ -55,7 +55,7 @@ export default definePlugin({
     name: "VoiceChannelLog",
     description: "Logs voice channel activity including joins, leaves, soundboard, mute, camera, screenshare, and more.",
     tags: ["Servers", "Utility", "Voice"],
-    authors: [Devs.Sqaaakoi, Devs.thororen, EquicordDevs.nyx, Devs.Moxxie, EquicordDevs.Fres, Devs.amy],
+    authors: [Devs.Sqaaakoi, Devs.thororen, Devs.nyx, Devs.Moxxie, EquicordDevs.Fres, Devs.amy],
     dependencies: ["AudioPlayerAPI", "HeaderBarAPI"],
     settings,
     contextMenus: {

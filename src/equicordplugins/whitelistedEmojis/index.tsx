@@ -10,7 +10,7 @@ import { addContextMenuPatch, NavContextMenuPatchCallback, removeContextMenuPatc
 import { DataStore } from "@api/index";
 import { definePluginSettings } from "@api/Settings";
 import { Button } from "@components/Button";
-import { EquicordDevs } from "@utils/constants";
+import { Devs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 import { chooseFile, saveFile } from "@utils/web";
 import { CustomEmoji, ToastVariant, UnicodeEmoji } from "@vencord/discord-types";
@@ -397,7 +397,7 @@ export default definePlugin({
     name: "WhitelistedEmojis",
     description: "Adds the ability to disable all message emojis except for a whitelisted set.",
     tags: ["Chat", "Emotes"],
-    authors: [EquicordDevs.creations],
+    authors: [Devs.creations],
     patches: [
         {
             find: "queryEmojiResults({query:",
