@@ -377,7 +377,7 @@ export default definePlugin({
             iconSrc: badge.badge,
             description: badge.tooltip,
             name: badge.tooltip,
-            infoLabel: badge.tooltip?.toLowerCase().includes("translator") ? "Equicord" : "Equicord Donor",
+            infoLabel: badge.tooltip === "Equicord Translator" ? "Equicord" : "Equicord Donor",
             rarity: BadgeRarity.MYTHIC,
             position: BadgePosition.START,
             props: {
