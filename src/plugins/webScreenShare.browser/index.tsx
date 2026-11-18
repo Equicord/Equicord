@@ -16,9 +16,8 @@ import { Devs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
 import { Logger } from "@utils/Logger";
 import definePlugin, { OptionType } from "@utils/types";
-import { ApplicationStreamingSettingsStore, GoLiveQuality, GoLiveSourceOptions, MediaEngine, VideoSize, WebRTCConnection } from "@vencord/discord-types";
-import { findStoreLazy } from "@webpack";
-import { Checkbox, closeModal, FluxDispatcher, Modal, openModal, useState } from "@webpack/common";
+import { GoLiveQuality, GoLiveSourceOptions, MediaEngine, VideoSize, WebRTCConnection } from "@vencord/discord-types";
+import { ApplicationStreamingSettingsStore, Checkbox, closeModal, FluxDispatcher, Modal, openModal, useState } from "@webpack/common";
 
 import managedStyle from "./styles.css?managed";
 
@@ -29,8 +28,6 @@ class NotAllowedError extends Error {
 }
 
 const logger = new Logger("VencordScreenShare");
-
-const ApplicationStreamingSettingsStore: ApplicationStreamingSettingsStore = findStoreLazy("ApplicationStreamingSettingsStore");
 
 const getDisplayMedia = navigator.mediaDevices.getDisplayMedia.bind(navigator.mediaDevices);
 
