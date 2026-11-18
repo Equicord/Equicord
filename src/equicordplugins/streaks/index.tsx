@@ -185,7 +185,16 @@ export default definePlugin({
 
     renderMessageDecoration({ message }) {
         const userId = message?.author?.id;
-        if (!userId || userId === UserStore.getCurrentUser()?.id) return null;
+        if (!userId) return null;
+
+        const channel = ChannelStore.getChannel(message.channel_id);
+        const isDM = channel.isDM();
+        if (userId === UserStore.getCurrentUser()?.id) {
+            if (!settings.store.showOnSelf || !isDM) return null;
+            return <StreakBadge userId={channel.recipients[0]} />;
+        }
+
+        if (!isDM && !settings.store.showOutsideDMs) return null;
         return <StreakBadge userId={userId} />;
     },
 

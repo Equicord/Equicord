@@ -46,6 +46,16 @@ export const settings = definePluginSettings({
             }
         }
     },
+    showOnSelf: {
+        type: OptionType.BOOLEAN,
+        description: "Show the streak on your own messages in DMs",
+        default: false
+    },
+    showOutsideDMs: {
+        type: OptionType.BOOLEAN,
+        description: "Show streaks on messages outside DMs",
+        default: true
+    },
     eliteColor: {
         type: OptionType.STRING,
         description: "Elite Streak Color (100+ days)",
