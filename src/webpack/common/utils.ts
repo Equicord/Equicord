@@ -149,7 +149,6 @@ export const ColorUtils = mapMangledModuleLazy("Invalid hex color format", {
 export const ImageUtils = mapMangledModuleLazy("Input data is not a valid image.", {
     extractColors: filters.byCode('"number"==typeof'),
     fileToDataURL: filters.byCode("Result must be a string"),
-    dataURLToBlob: filters.byCode("new Uint8Array("),
     dataURLToFile: filters.byCode("new File(["),
     fitDimensions: filters.byCode("minWidth:", "minHeight:"),
     loadImage: filters.byCode('addEventListener("load"'),

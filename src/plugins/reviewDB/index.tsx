@@ -37,7 +37,6 @@ import { getCurrentUserInfo, getReviews, readNotification } from "./reviewDbApi"
 import { settings } from "./settings";
 import { cl, showToast } from "./utils";
 
-const DMSideBarClasses = findCssClassesLazy("widgetPreviews");
 const ProfileCardClasses = findCssClassesLazy("cardsList", "firstCardContainer", "card", "container");
 const ProfileCardContainerClasses = findCssClassesLazy("innerContainer", "icons", "icon", "displayCount", "displayCountText", "displayCountTextColor", "breadcrumb");
 const ProfileCardOverlayClasses = findCssClassesLazy("overlay", "isPrivate", "outer");
@@ -149,12 +148,12 @@ export default definePlugin({
 
     renderProfileCollection: {
         priority: 0,
-        render: ({ user, isSideBar = false, isRedesignEnabled = false }: { user: User; isSideBar?: boolean; isRedesignEnabled?: boolean; }) => {
+        render: ({ user, isSideBar = false }: { user: User; isSideBar?: boolean; }) => {
             const [reviewData] = useAwaiter(() => getReviews(user.id, { limit: 4 }), { deps: [user.id], fallbackValue: null });
 
             // Discord are masters at using a crap ton of html elements and css classes to create a simple ui that could have
             // been made with less than half of the number of elements, so we have to do this insanity to replicate their ui
-            const reviewsSection = (
+            return (
                 <section className={ProfileCardClasses.container}>
                     <ul className={ProfileCardClasses.cardsList} tabIndex={-1}>
                         <li className={ProfileCardClasses.firstCardContainer}>
@@ -201,10 +200,6 @@ export default definePlugin({
                     </ul>
                 </section>
             );
-
-            return isSideBar && !isRedesignEnabled
-                ? <div className={DMSideBarClasses.widgetPreviews}>{reviewsSection}</div>
-                : reviewsSection;
         },
     },
 });

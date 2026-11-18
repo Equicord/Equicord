@@ -12,7 +12,7 @@ import type { ReactNode } from "react";
 
 const logger = new Logger("ProfileCollectionAPI");
 
-export type ProfileCollectionFactory = (props: { user: User; isSideBar: boolean; isRedesignEnabled?: boolean; }) => ReactNode | Promise<ReactNode> | null;
+export type ProfileCollectionFactory = (props: { user: User; isSideBar: boolean; }) => ReactNode | Promise<ReactNode> | null;
 
 export interface ProfileCollectionData {
     render: ProfileCollectionFactory;
