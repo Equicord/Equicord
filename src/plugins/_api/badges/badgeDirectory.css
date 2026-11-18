@@ -12,10 +12,17 @@
 .vc-badge-directory-section .vc-special-card-special {
     margin-bottom: 0;
     padding: 1em 1.25em;
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+    overflow: hidden;
+    position: relative;
 }
 
 .vc-badge-directory-section .vc-special-card-flex {
     align-items: center;
+    position: relative;
+    z-index: 1;
 }
 
 .vc-badge-directory-section .vc-special-image-container {
@@ -27,11 +34,79 @@
 
 .vc-badge-directory-section .vc-special-subtitle {
     font-size: 1.1em;
-    margin-top: 0.25em;
+    margin-top: 0.1em;
 }
 
 .vc-badge-directory-section .vc-special-text {
     font-size: 0.9em;
     margin-top: 0.35em;
     line-height: 1.3;
+}
+
+.vc-badge-directory-dark .vc-special-card-special,
+.vc-badge-directory-translator .vc-special-card-special,
+.vc-badge-directory-equicord-donor .vc-special-card-special {
+    background-color: #232428 !important;
+    background-image: none !important;
+}
+
+.vc-badge-directory-dark .vc-special-card-special::before,
+.vc-badge-directory-translator .vc-special-card-special::before,
+.vc-badge-directory-equicord-donor .vc-special-card-special::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url("https://media.discordapp.net/stickers/1311070116305436712.png?size=2048");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-blend-mode: luminosity;
+    pointer-events: none;
+    z-index: 0;
+    -webkit-mask-image: linear-gradient(
+        to bottom,
+        transparent 0,
+        black 2px,
+        black calc(100% - 2px),
+        transparent 100%
+    );
+    mask-image: linear-gradient(
+        to bottom,
+        transparent 0,
+        black 2px,
+        black calc(100% - 2px),
+        transparent 100%
+    );
+}
+
+.vc-badge-directory-dark .vc-special-title,
+.vc-badge-directory-dark .vc-special-subtitle,
+.vc-badge-directory-dark .vc-special-text,
+.vc-badge-directory-translator .vc-special-title,
+.vc-badge-directory-translator .vc-special-subtitle,
+.vc-badge-directory-translator .vc-special-text,
+.vc-badge-directory-equicord-donor .vc-special-title,
+.vc-badge-directory-equicord-donor .vc-special-subtitle,
+.vc-badge-directory-equicord-donor .vc-special-text {
+    color: #ffffff !important;
+}
+
+.vc-badge-directory-equicord-donor .vc-donate-button,
+.vc-badge-directory-equicord-donor .vc-invite-button,
+.vc-badge-directory-equicord-donor .vc-special-card-special button {
+    overflow: visible !important;
+    color: black !important;
+    background-color: color-mix(in srgb, #575757 50%, rgb(255 255 255)) !important;
+}
+
+.vc-badge-directory-equicord-donor .vc-donate-button:hover,
+.vc-badge-directory-equicord-donor .vc-invite-button:hover,
+.vc-badge-directory-equicord-donor .vc-special-card-special button:hover {
+    overflow: visible !important;
+    color: black !important;
+    background-color: color-mix(in srgb, #575757 50%, rgb(201 201 201)) !important;
+}
+
+.vc-badge-directory-section .vc-special-image {
+    object-fit: contain;
 }

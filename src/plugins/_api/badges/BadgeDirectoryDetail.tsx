@@ -24,6 +24,7 @@ import Plugins, { PluginMeta } from "~plugins";
 const DONOR_BACKGROUND_IMAGE = "https://media.discordapp.net/stickers/1311070116305436712.png?size=2048";
 const VENNIE_DONATOR_IMAGE = "https://cdn.discordapp.com/emojis/1238120638020063377.png";
 const TRANSLATOR_IMAGE = "https://badge.equicord.org/translator.png";
+const EQUICORD_DONOR_IMAGE = "https://cdn.discordapp.com/emojis/1026533090627174460.png";
 
 interface BadgeDirectoryDetailProps {
     badge?: DirectoryBadge;
@@ -110,20 +111,19 @@ function BadgeDirectoryDetailContent({
 
     if (isTranslatorBadge) {
         return (
-            <div className="vc-badge-directory-section">
+            <div className="vc-badge-directory-section vc-badge-directory-translator vc-badge-directory-dark">
                 <SpecialCard
-                    title="Translations"
+                    className="vc-special-card-dark"
                     subtitle={isSelf ? "Thank you for translating!" : "This user is an Equicord translator!"}
                     description={isSelf
                         ? "Awarded for helping expand Equicord's language support."
-                        : "Awarded to contributors who expand Equicord's language support by translating content."}
+                        : "Awarded to contributors who expand Equicord's language support by translating content for the community."}
                     cardImage={TRANSLATOR_IMAGE}
                     backgroundImage={DONOR_BACKGROUND_IMAGE}
-                    backgroundColor="#5b7c99"
+                    backgroundColor="#232428"
                 >
                     <Flex gap="0.5em" style={{ marginTop: "0.75em" }}>
                         <TranslateButton variant="overlayPrimary" />
-                        <InviteButton variant="secondary" />
                     </Flex>
                 </SpecialCard>
             </div>
@@ -131,27 +131,30 @@ function BadgeDirectoryDetailContent({
     }
 
     if (isDonorBadge) {
+        const isEquicordDonor = isEquicordBadge;
+
         return (
-            <div className="vc-badge-directory-section">
+            <div className={`vc-badge-directory-section ${isEquicordDonor ? "vc-badge-directory-equicord-donor vc-badge-directory-dark" : ""}`}>
                 <SpecialCard
-                    title="Donations"
+                    className={isEquicordDonor ? "vc-special-card-dark" : ""}
+                    title={isEquicordDonor ? undefined : "Donations"}
                     subtitle={isSelf
                         ? "Thank you for donating!"
-                        : isEquicordBadge ? "This user is an Equicord donor!" : "This user is a Vencord donor!"}
+                        : isEquicordDonor ? "This user is an Equicord donor!" : "This user is a Vencord donor!"}
                     description={isSelf
-                        ? (isEquicordBadge
+                        ? (isEquicordDonor
                             ? "Manage your perks by making a ticket in Equicord's server."
                             : "Manage your perks by messaging @vending.machine.")
-                        : (isEquicordBadge
+                        : (isEquicordDonor
                             ? "Support Equicord to get your own badge and perks!"
                             : "Support Vencord to get your own badge and perks!")}
-                    cardImage={VENNIE_DONATOR_IMAGE}
+                    cardImage={isEquicordDonor ? EQUICORD_DONOR_IMAGE : VENNIE_DONATOR_IMAGE}
                     backgroundImage={DONOR_BACKGROUND_IMAGE}
-                    backgroundColor="#ED87A9"
+                    backgroundColor={isEquicordDonor ? "#232428" : "#ED87A9"}
                 >
                     <Flex gap="0.5em" style={{ marginTop: "0.75em" }}>
                         <DonateButton
-                            equicord={isEquicordBadge}
+                            equicord={isEquicordDonor}
                             variant="overlayPrimary"
                         />
                         <InviteButton variant="secondary" />
@@ -176,7 +179,9 @@ export function BadgeDirectoryDetail({
         .some(name => badgeId.includes(name) || originalBadgeId === name);
 
     const badgeName = badge?.name || badge?.description || "";
-    const isTranslatorBadge = badgeName.includes("Translator") || originalBadgeId.includes("translator");
+    const isTranslatorBadge = badgeName.toLowerCase().includes("translator")
+        || originalBadgeId.toLowerCase().includes("translator")
+        || (typeof badge?.simple_icon_url === "string" && badge.simple_icon_url.includes("translator"));
 
     const isDonorBadge = !isTranslatorBadge && ["vencord_donor_badge_", "equicord_donor_badge_"]
         .some(name => badgeId.includes(name) || originalBadgeId.startsWith(name));

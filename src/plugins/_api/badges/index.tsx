@@ -225,11 +225,11 @@ export default definePlugin({
                     replace: "[...$1,...$self.getDirectoryBadges($2)]"
                 },
                 {
-                    match: /(?<=\}\),)(?=null!=(\i)&&(?:\(\i\?)?\(0,\i\.jsx\)\(\i,\{badge:\1,.{0,100}?isViewingOtherUser:(\i),.{0,100}?displayedUserId:(\i))/,
+                    match: /(?<=\}\),)(?=null!=(\i)&&(?:\(?\i\?)?\(0,\i\.jsx\)\(\i,\{badge:\1,.{0,100}?isViewingOtherUser:(\i),.{0,100}?displayedUserId:(\i))/,
                     replace: "$self.setDirectoryBadgeState($1,$3,$2),"
                 },
                 {
-                    match: /(?<=!\i&&\i)(?=\]\}\))/,
+                    match: /(?<=(?:\((?:0|\i),\i\.\i\)\(\i\)|!\i)&&\i)(?=\]\}\))/,
                     replace: ",$self.renderDirectoryBadgeContent()"
                 }
             ]
@@ -377,7 +377,7 @@ export default definePlugin({
             iconSrc: badge.badge,
             description: badge.tooltip,
             name: badge.tooltip,
-            infoLabel: "Equicord Donor",
+            infoLabel: badge.tooltip?.toLowerCase().includes("translator") ? "Equicord" : "Equicord Donor",
             rarity: BadgeRarity.MYTHIC,
             position: BadgePosition.START,
             props: {

@@ -16,14 +16,14 @@
 .vc-donate-support-button {
     overflow: visible !important;
     color: black;
-    background-color: color-mix(in srgb, #c3a3ce 25%, rgb(240 178 240));
+    background-color: color-mix(in srgb, #575757 50%, rgb(255 255 255));
 }
 
 .vc-invite-support-button:hover,
 .vc-donate-support-button:hover {
     overflow: visible !important;
     color: black;
-    background-color: color-mix(in srgb, #c3a3ce 50%, rgb(240 178 240));
+    background-color: color-mix(in srgb, #575757 50%, rgb(201 201 201));
 }
 
 .vc-translate-button {
@@ -164,4 +164,72 @@
 .vc-translate-modal-paragraph {
     padding: 12px;
     text-align: center;
+}
+
+.vc-special-card-dark {
+    background-color: #232428 !important;
+    background-image: none !important;
+    position: relative;
+    overflow: hidden;
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+.vc-special-card-dark::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url("https://media.discordapp.net/stickers/1311070116305436712.png?size=2048");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-blend-mode: luminosity;
+    pointer-events: none;
+    z-index: 0;
+    -webkit-mask-image: linear-gradient(
+        to bottom,
+        transparent 0,
+        black 2px,
+        black calc(100% - 2px),
+        transparent 100%
+    );
+    mask-image: linear-gradient(
+        to bottom,
+        transparent 0,
+        black 2px,
+        black calc(100% - 2px),
+        transparent 100%
+    );
+}
+
+.vc-special-card-dark .vc-special-card-flex {
+    position: relative;
+    z-index: 1;
+}
+
+.vc-special-card-dark .vc-special-title,
+.vc-special-card-dark .vc-special-subtitle,
+.vc-special-card-dark .vc-special-text {
+    color: #ffffff !important;
+}
+
+.vc-special-card-dark .vc-donate-button,
+.vc-special-card-dark .vc-invite-button,
+.vc-special-card-dark .vc-donate-support-button,
+.vc-special-card-dark .vc-invite-support-button,
+.vc-special-card-dark button {
+    overflow: visible !important;
+    color: black !important;
+    background-color: color-mix(in srgb, #575757 50%, rgb(255 255 255)) !important;
+}
+
+.vc-special-card-dark .vc-donate-button:hover,
+.vc-special-card-dark .vc-invite-button:hover,
+.vc-special-card-dark .vc-donate-support-button:hover,
+.vc-special-card-dark .vc-invite-support-button:hover,
+.vc-special-card-dark button:hover {
+    overflow: visible !important;
+    color: black !important;
+    background-color: color-mix(in srgb, #575757 50%, rgb(201 201 201)) !important;
 }
