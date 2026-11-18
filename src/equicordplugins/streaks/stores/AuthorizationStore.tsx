@@ -7,7 +7,7 @@
 import * as DataStore from "@api/DataStore";
 import { proxyLazy } from "@utils/lazy";
 import { Logger } from "@utils/Logger";
-import { OAuth2AuthorizeModal, openModal, showToast, UserStore, zustandCreate, zustandPersist } from "@webpack/common";
+import { OAuth2AuthorizeModal, openModal, RestAPI, showToast, UserStore, zustandCreate, zustandPersist } from "@webpack/common";
 
 import { AUTHORIZE_URL, CLIENT_ID } from "../constants";
 import { useStreaksStore } from "./StreaksStore";
@@ -17,11 +17,13 @@ interface AuthorizationState {
     tokens: Record<string, string>;
     init: () => void;
     authorize: () => Promise<void>;
+    reauthorize: (token: string) => Promise<boolean>;
     setToken: (token: string) => void;
     remove: (id: string) => void;
     expireToken: (token: string) => void;
     isAuthorized: () => boolean;
 }
+
 const indexedDBStorage = {
     async getItem(name: string): Promise<string | null> {
         return DataStore.get(name).then(v => v ?? null);
@@ -33,6 +35,8 @@ const indexedDBStorage = {
         await DataStore.del(name);
     },
 };
+
+let reauthorizing: Promise<boolean> | null = null;
 export const useAuthorizationStore = proxyLazy(() => zustandCreate(
     zustandPersist(
         (set: any, get: any) => ({
@@ -104,6 +108,32 @@ export const useAuthorizationStore = proxyLazy(() => zustandCreate(
                         },
                     });
                 });
+            },
+            reauthorize(token: string) {
+                if (get().token !== token) return Promise.resolve(!!get().token);
+                reauthorizing ??= (async () => {
+                    try {
+                        const { body: tokens } = await RestAPI.get({ url: "/oauth2/tokens", query: { application_ids: CLIENT_ID } });
+                        if (!tokens?.some((t: any) => t.application?.id === CLIENT_ID)) return false;
+
+                        const query = new URLSearchParams({ client_id: CLIENT_ID, response_type: "code", redirect_uri: AUTHORIZE_URL, scope: "identify" });
+                        const { body } = await RestAPI.post({ url: `/oauth2/authorize?${query}`, body: { permissions: "0", authorize: true, integration_type: 0 } });
+                        const code = body?.location && new URL(body.location).searchParams.get("code");
+                        if (!code) return false;
+
+                        const req = await fetch(`${AUTHORIZE_URL}?code=${encodeURIComponent(code)}`);
+                        const { access_token } = req.ok ? await req.json() : {};
+                        if (!access_token) return false;
+                        get().setToken(access_token);
+                        return true;
+                    } catch (e) {
+                        new Logger("Streaks").error("Failed to reauthorize", e);
+                        return false;
+                    } finally {
+                        reauthorizing = null;
+                    }
+                })();
+                return reauthorizing;
             },
             isAuthorized: () => !!get().token,
         } as AuthorizationState),

@@ -34,17 +34,17 @@ export interface RemoteStreak {
 
 export interface StreaksState {
     streaks: Record<string, RemoteStreak>;
-    fetch: () => Promise<void>;
-    update: (recipientId: string, senderId: string) => Promise<void>;
-    refresh: (recipientId: string) => Promise<void>;
-    migrate: () => Promise<void>;
+    fetch: (retried?: boolean) => Promise<void>;
+    update: (recipientId: string, senderId: string, retried?: boolean) => Promise<void>;
+    refresh: (recipientId: string, retried?: boolean) => Promise<void>;
+    migrate: (retried?: boolean) => Promise<void>;
     clear: () => void;
 }
 
 export const useStreaksStore = proxyLazy(() => zustandCreate((set: any, get: any) => ({
     streaks: {},
     clear: () => set({ streaks: {} }),
-    async fetch() {
+    async fetch(retried = false) {
         const { token } = useAuthorizationStore.getState();
         if (!token) return;
 
@@ -53,6 +53,7 @@ export const useStreaksStore = proxyLazy(() => zustandCreate((set: any, get: any
                 headers: { Authorization: `Bearer ${token}` }
             });
             if (res.status === 401) {
+                if (!retried && await useAuthorizationStore.getState().reauthorize(token)) return get().fetch(true);
                 useAuthorizationStore.getState().expireToken(token);
                 return;
             }
@@ -70,7 +71,7 @@ export const useStreaksStore = proxyLazy(() => zustandCreate((set: any, get: any
             console.error("Failed to fetch streaks", e);
         }
     },
-    async update(recipientId: string, senderId: string) {
+    async update(recipientId: string, senderId: string, retried = false) {
         const { token } = useAuthorizationStore.getState();
         if (!token) return;
 
@@ -87,6 +88,7 @@ export const useStreaksStore = proxyLazy(() => zustandCreate((set: any, get: any
                 })
             });
             if (res.status === 401) {
+                if (!retried && await useAuthorizationStore.getState().reauthorize(token)) return get().update(recipientId, senderId, true);
                 useAuthorizationStore.getState().expireToken(token);
                 return;
             }
@@ -98,7 +100,7 @@ export const useStreaksStore = proxyLazy(() => zustandCreate((set: any, get: any
             console.error("Failed to update streak", e);
         }
     },
-    async refresh(recipientId: string) {
+    async refresh(recipientId: string, retried = false) {
         const { token } = useAuthorizationStore.getState();
         if (!token) return;
 
@@ -107,6 +109,7 @@ export const useStreaksStore = proxyLazy(() => zustandCreate((set: any, get: any
                 headers: { Authorization: `Bearer ${token}` }
             });
             if (res.status === 401) {
+                if (!retried && await useAuthorizationStore.getState().reauthorize(token)) return get().refresh(recipientId, true);
                 useAuthorizationStore.getState().expireToken(token);
                 return;
             }
@@ -118,7 +121,7 @@ export const useStreaksStore = proxyLazy(() => zustandCreate((set: any, get: any
             console.error("Failed to refresh streak", e);
         }
     },
-    async migrate() {
+    async migrate(retried = false) {
         const { token } = useAuthorizationStore.getState();
         if (!token) return;
 
@@ -136,6 +139,7 @@ export const useStreaksStore = proxyLazy(() => zustandCreate((set: any, get: any
             });
 
             if (res.status === 401) {
+                if (!retried && await useAuthorizationStore.getState().reauthorize(token)) return get().migrate(true);
                 useAuthorizationStore.getState().expireToken(token);
                 return;
             }
