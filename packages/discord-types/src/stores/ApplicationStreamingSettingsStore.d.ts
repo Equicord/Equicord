@@ -1,13 +1,16 @@
-import { ApplicationStreamFPS, ApplicationStreamPresets, ApplicationStreamResolutions } from "../../enums";
 import { FluxStore } from "..";
 
-export interface ApplicationStreamingSettingsState {
-    preset: ApplicationStreamPresets;
-    resolution: ApplicationStreamResolutions;
-    fps: ApplicationStreamFPS;
+export interface ApplicationStreamingSettings {
+    /** 1 video, 2 documents, 3 custom, 4 auto. */
+    preset: number;
+    /** stream height in pixels. 0 is the source resolution. */
+    resolution: number;
+    /** frame rate in fps. */
+    fps: number;
+    /** whether the stream includes audio. */
     soundshareEnabled: boolean;
 }
 
-export class ApplicationStreamingSettingsStore extends FluxStore {
-    getState(): ApplicationStreamingSettingsState;
+export interface ApplicationStreamingSettingsStore extends FluxStore {
+    getState(): ApplicationStreamingSettings;
 }
