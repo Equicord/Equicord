@@ -44,8 +44,12 @@ export default definePlugin({
                 },
                 {
                     // Specify the index for individual items in embed.images
-                    match: /\.images\.map\((\i)=>(this.renderImage\(\{[^}]{50,100}\}\))\)/,
-                    replace: ".images.map(($1,index)=>$self.renderEmbedMosaicItem($2,index))"
+                    match: /(?<=\.map\(\(\i,(\i)\)=>\{)(?=let \i=.{0,25}return\{message:\i,item:\{uniqueId:)/,
+                    replace: "let vcIndex=$1;"
+                },
+                {
+                    match: /(?<=renderImageComponent:\i=>\(0,\i\.jsx\)\()\i\.Fragment,\{/,
+                    replace: "$self.EmbedMosaicContext.Provider,{value:vcIndex,"
                 }
             ]
         },
@@ -154,9 +158,7 @@ export default definePlugin({
     renderEmbed(comp: EmbedComponent) {
         return <EmbedContext.Provider value={comp.props.embed}>{comp.__render()}</EmbedContext.Provider>;
     },
-    renderEmbedMosaicItem(children: ReactNode, index: number) {
-        return <EmbedMosaicContext.Provider value={index}>{children}</EmbedMosaicContext.Provider>;
-    },
+    EmbedMosaicContext,
     renderAttachmentAccessory: () => <AttachmentAccessory />,
     renderEmbedAccessory: () => <EmbedAccessory />,
     filterGifs: (item: FavoriteItem) => item.format !== FavoriteItemFormat.NONE,
