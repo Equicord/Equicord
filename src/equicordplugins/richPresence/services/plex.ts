@@ -36,28 +36,12 @@ interface PlexSession {
 let updateInterval: NodeJS.Timeout | undefined;
 let hasShownError = false;
 
-async function getAsset(key: string): Promise<string> {
-    return (await ApplicationAssetUtils.fetchAssetIds(APPLICATION_ID, [key]))[0];
-}
-
 function setActivity(activity: Activity | null) {
     FluxDispatcher.dispatch({ type: "LOCAL_ACTIVITY_UPDATE", activity, socketId: SOCKET_ID });
 }
 
-async function fetchSession(baseUrl: string): Promise<PlexSession | null> {
-    const { px_token, px_username } = settings.store;
-    const res = await fetch(`${baseUrl}/status/sessions?X-Plex-Token=${encodeURIComponent(px_token)}`, {
-        headers: { Accept: "application/json" }
-    });
-    if (!res.ok) throw `${res.status} ${res.statusText}`;
-
-    const sessions: PlexSession[] = (await res.json()).MediaContainer?.Metadata ?? [];
-    const mine = sessions.filter(s => s.User?.title?.toLowerCase() === px_username.toLowerCase());
-    return mine.find(s => s.Player?.state === "playing") ?? mine[0] ?? null;
-}
-
 async function getActivity(): Promise<Activity | null> {
-    const { px_serverUrl, px_token, px_username, px_privacyMode, px_showCover } = settings.store;
+    const { px_serverUrl, px_token, px_username, px_privacyMode, px_showCover, px_showPausedState, px_showEpisodeName } = settings.store;
     if (!px_serverUrl || !px_token || !px_username) {
         if (!hasShownError) {
             logger.warn("Plex server URL, token, or username is not set.");
@@ -68,11 +52,18 @@ async function getActivity(): Promise<Activity | null> {
     }
 
     const baseUrl = (px_serverUrl.startsWith("http") ? px_serverUrl : `https://${px_serverUrl}`).replace(/\/$/, "");
-    const session = await fetchSession(baseUrl);
+    const res = await fetch(`${baseUrl}/status/sessions?X-Plex-Token=${encodeURIComponent(px_token)}`, {
+        headers: { Accept: "application/json" }
+    });
+    if (!res.ok) throw `${res.status} ${res.statusText}`;
+
+    const sessions: PlexSession[] = (await res.json()).MediaContainer?.Metadata ?? [];
+    const mine = sessions.filter(s => s.User?.title?.toLowerCase() === px_username.toLowerCase());
+    const session = mine.find(s => s.Player?.state === "playing") ?? mine[0];
     if (!session) return null;
 
     const isPaused = session.Player?.state !== "playing";
-    if (isPaused && !settings.store.px_showPausedState) return null;
+    if (isPaused && !px_showPausedState) return null;
 
     const isEpisode = session.type === "episode";
     const isTrack = session.type === "track";
@@ -87,7 +78,7 @@ async function getActivity(): Promise<Activity | null> {
     } else if (isEpisode) {
         details = session.grandparentTitle || name;
         const se = `S${String(session.parentIndex ?? 0).padStart(2, "0")}E${String(session.index ?? 0).padStart(2, "0")}`;
-        state = settings.store.px_showEpisodeName ? `${se} - ${name}` : se;
+        state = px_showEpisodeName ? `${se} - ${name}` : se;
     } else if (isTrack) {
         details = name;
         state = session.originalTitle || session.grandparentTitle;
@@ -113,7 +104,7 @@ async function getActivity(): Promise<Activity | null> {
         details,
         state: state || "Plex",
         assets: {
-            large_image: await getAsset(imageUrl),
+            large_image: (await ApplicationAssetUtils.fetchAssetIds(APPLICATION_ID, [imageUrl]))[0],
             large_text: px_privacyMode ? undefined : session.parentTitle,
         },
         timestamps: !isPaused && duration ? {
