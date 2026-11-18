@@ -29,7 +29,8 @@ import type { PropsWithChildren } from "react";
 const cl = classNameFactory("vc-special-");
 
 interface StyledCardProps {
-    title: string;
+    className?: string;
+    title?: string;
     subtitle?: string;
     description: string;
     cardImage?: string;
@@ -39,18 +40,18 @@ interface StyledCardProps {
     buttonOnClick?: () => void;
 }
 
-export function SpecialCard({ title, subtitle, description, cardImage, backgroundImage, backgroundColor, buttonTitle, buttonOnClick: onClick, children }: PropsWithChildren<StyledCardProps>) {
+export function SpecialCard({ className, title, subtitle, description, cardImage, backgroundImage, backgroundColor, buttonTitle, buttonOnClick: onClick, children }: PropsWithChildren<StyledCardProps>) {
     const cardStyle: React.CSSProperties = {
         backgroundColor: backgroundColor || "#9c85ef",
         backgroundImage: `url(${backgroundImage || ""})`,
     };
 
     return (
-        <Card className={cl("card", "card-special")} style={cardStyle}>
+        <Card className={`${cl("card", "card-special")} ${className ?? ""}`} style={cardStyle}>
             <div className={cl("card-flex")}>
                 <div className={cl("card-flex-main")}>
-                    <Heading className={cl("title")} tag="h5">{title}</Heading>
-                    <Paragraph className={cl("subtitle")}>{subtitle}</Paragraph>
+                    {title && <Heading className={cl("title")} tag="h5">{title}</Heading>}
+                    {subtitle && <Paragraph className={cl("subtitle")}>{subtitle}</Paragraph>}
                     <Paragraph className={cl("text")}>{description}</Paragraph>
 
                     {children}

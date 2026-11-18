@@ -24,6 +24,7 @@ import Plugins, { PluginMeta } from "~plugins";
 const DONOR_BACKGROUND_IMAGE = "https://media.discordapp.net/stickers/1311070116305436712.png?size=2048";
 const VENNIE_DONATOR_IMAGE = "https://cdn.discordapp.com/emojis/1238120638020063377.png";
 const TRANSLATOR_IMAGE = "https://badge.equicord.org/translator.png";
+const EQUICORD_DONOR_IMAGE = "https://cdn.discordapp.com/emojis/1026533090627174460.png";
 
 interface BadgeDirectoryDetailProps {
     badge?: DirectoryBadge;
@@ -33,9 +34,8 @@ interface BadgeDirectoryDetailProps {
 
 interface BadgeDirectoryDetailContentProps extends BadgeDirectoryDetailProps {
     isContributor: boolean;
-    isDonorBadge: boolean;
-    isTranslatorBadge: boolean;
-    isEquicordBadge: boolean;
+    isTranslator: boolean;
+    donorType?: "equicord" | "vencord";
 }
 
 function BadgeDirectoryDetailContent({
@@ -43,9 +43,8 @@ function BadgeDirectoryDetailContent({
     userId,
     isViewingOtherUser,
     isContributor,
-    isDonorBadge,
-    isTranslatorBadge,
-    isEquicordBadge
+    isTranslator,
+    donorType
 }: BadgeDirectoryDetailContentProps) {
     useSettings();
 
@@ -108,50 +107,50 @@ function BadgeDirectoryDetailContent({
         );
     }
 
-    if (isTranslatorBadge) {
+    if (isTranslator) {
         return (
-            <div className="vc-badge-directory-section">
+            <div className="vc-badge-directory-section vc-badge-directory-translator vc-badge-directory-dark">
                 <SpecialCard
-                    title="Translations"
+                    className="vc-special-card-dark"
                     subtitle={isSelf ? "Thank you for translating!" : "This user is an Equicord translator!"}
                     description={isSelf
                         ? "Awarded for helping expand Equicord's language support."
-                        : "Awarded to contributors who expand Equicord's language support by translating content."}
+                        : "Awarded to contributors who expand Equicord's language support by translating content for the community."}
                     cardImage={TRANSLATOR_IMAGE}
                     backgroundImage={DONOR_BACKGROUND_IMAGE}
-                    backgroundColor="#5b7c99"
+                    backgroundColor="#232428"
                 >
                     <Flex gap="0.5em" style={{ marginTop: "0.75em" }}>
                         <TranslateButton variant="overlayPrimary" />
-                        <InviteButton variant="secondary" />
                     </Flex>
                 </SpecialCard>
             </div>
         );
     }
 
-    if (isDonorBadge) {
+    if (donorType) {
         return (
-            <div className="vc-badge-directory-section">
+            <div className={`vc-badge-directory-section ${donorType === "equicord" ? "vc-badge-directory-equicord-donor vc-badge-directory-dark" : ""}`}>
                 <SpecialCard
-                    title="Donations"
+                    className={donorType === "equicord" ? "vc-special-card-dark" : ""}
+                    title={donorType === "equicord" ? undefined : "Donations"}
                     subtitle={isSelf
                         ? "Thank you for donating!"
-                        : isEquicordBadge ? "This user is an Equicord donor!" : "This user is a Vencord donor!"}
+                        : donorType === "equicord" ? "This user is an Equicord donor!" : "This user is a Vencord donor!"}
                     description={isSelf
-                        ? (isEquicordBadge
+                        ? (donorType === "equicord"
                             ? "Manage your perks by making a ticket in Equicord's server."
                             : "Manage your perks by messaging @vending.machine.")
-                        : (isEquicordBadge
+                        : (donorType === "equicord"
                             ? "Support Equicord to get your own badge and perks!"
                             : "Support Vencord to get your own badge and perks!")}
-                    cardImage={VENNIE_DONATOR_IMAGE}
+                    cardImage={donorType === "equicord" ? EQUICORD_DONOR_IMAGE : VENNIE_DONATOR_IMAGE}
                     backgroundImage={DONOR_BACKGROUND_IMAGE}
-                    backgroundColor="#ED87A9"
+                    backgroundColor={donorType === "equicord" ? "#232428" : "#ED87A9"}
                 >
                     <Flex gap="0.5em" style={{ marginTop: "0.75em" }}>
                         <DonateButton
-                            equicord={isEquicordBadge}
+                            equicord={donorType === "equicord"}
                             variant="overlayPrimary"
                         />
                         <InviteButton variant="secondary" />
@@ -171,20 +170,16 @@ export function BadgeDirectoryDetail({
 }: BadgeDirectoryDetailProps) {
     const badgeId = String(badge?.badge_id ?? "");
     const originalBadgeId = badge?.originalBadgeId ?? "";
+    const iconUrl = badge?.simple_icon_url ?? "";
 
-    const isContributor = ["vencord_contributor_badge", "equicord_contributor_badge", "user_plugin_contributor_badge"]
-        .some(name => badgeId.includes(name) || originalBadgeId === name);
+    const isTranslator = badge?.name === "Equicord Translator";
+    const isContributor = ["vencord_contributor_badge", "equicord_contributor_badge", "user_plugin_contributor_badge"].includes(originalBadgeId);
+    const donorType = isTranslator ? undefined
+        : iconUrl.startsWith("https://badge.equicord.org/badges/") ? "equicord"
+            : iconUrl.startsWith("https://badges.vencord.dev/badges/") ? "vencord"
+                : undefined;
 
-    const badgeName = badge?.name || badge?.description || "";
-    const isTranslatorBadge = badgeName.includes("Translator") || originalBadgeId.includes("translator");
-
-    const isDonorBadge = !isTranslatorBadge && ["vencord_donor_badge_", "equicord_donor_badge_"]
-        .some(name => badgeId.includes(name) || originalBadgeId.startsWith(name));
-
-    const isEquicordBadge = badgeId.includes("equicord_donor_badge_")
-        || originalBadgeId.startsWith("equicord_donor_badge_");
-
-    if (!isContributor && !isDonorBadge && !isTranslatorBadge) return null;
+    if (!isContributor && !donorType && !isTranslator) return null;
 
     return (
         <BadgeDirectoryDetailContent
@@ -193,9 +188,8 @@ export function BadgeDirectoryDetail({
             userId={userId}
             isViewingOtherUser={isViewingOtherUser}
             isContributor={isContributor}
-            isDonorBadge={isDonorBadge}
-            isTranslatorBadge={isTranslatorBadge}
-            isEquicordBadge={isEquicordBadge}
+            isTranslator={isTranslator}
+            donorType={donorType}
         />
     );
 }
