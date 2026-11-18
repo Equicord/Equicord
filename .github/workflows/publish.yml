@@ -2,7 +2,7 @@ name: Release Browser Extension
 on:
     push:
         tags:
-            - v*
+            - "v[0-9]+.[0-9]+.[0-9]+.[0-9]+"
 
 env:
     FORCE_COLOR: true
