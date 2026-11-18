@@ -34,9 +34,8 @@ interface BadgeDirectoryDetailProps {
 
 interface BadgeDirectoryDetailContentProps extends BadgeDirectoryDetailProps {
     isContributor: boolean;
-    isDonor: boolean;
     isTranslator: boolean;
-    donorType: "equicord" | "vencord";
+    donorType?: "equicord" | "vencord";
 }
 
 function BadgeDirectoryDetailContent({
@@ -44,7 +43,6 @@ function BadgeDirectoryDetailContent({
     userId,
     isViewingOtherUser,
     isContributor,
-    isDonor,
     isTranslator,
     donorType
 }: BadgeDirectoryDetailContentProps) {
@@ -130,7 +128,7 @@ function BadgeDirectoryDetailContent({
         );
     }
 
-    if (isDonor) {
+    if (donorType) {
         return (
             <div className={`vc-badge-directory-section ${donorType === "equicord" ? "vc-badge-directory-equicord-donor vc-badge-directory-dark" : ""}`}>
                 <SpecialCard
@@ -174,21 +172,18 @@ export function BadgeDirectoryDetail({
     const originalBadgeId = badge?.originalBadgeId ?? "";
 
     const isContributor = ["vencord_contributor_badge", "equicord_contributor_badge", "user_plugin_contributor_badge"]
-        .some(name => badgeId.includes(name) || originalBadgeId === name);
+        .includes(originalBadgeId);
 
-    const badgeName = badge?.name || badge?.description || "";
+    const iconUrl = badge?.simple_icon_url ?? "";
 
-    const isTranslator = badgeName.toLowerCase().includes("translator")
-        || originalBadgeId.toLowerCase().includes("translator")
-        || (typeof badge?.simple_icon_url === "string" && badge.simple_icon_url.includes("translator"));
+    const isTranslator = badge?.name === "Equicord Translator";
 
-    const isDonor = !isTranslator && ["vencord_donor_badge_", "equicord_donor_badge_"]
-        .some(name => badgeId.includes(name) || originalBadgeId.startsWith(name));
+    const donorType = isTranslator ? undefined
+        : iconUrl.startsWith("https://badge.equicord.org/badges/") ? "equicord"
+            : iconUrl.startsWith("https://badges.vencord.dev/badges/") ? "vencord"
+                : undefined;
 
-    const donorType = badgeId.includes("equicord_donor_badge_")
-        || originalBadgeId.startsWith("equicord_donor_badge_") ? "equicord" : "vencord";
-
-    if (!isContributor && !isDonor && !isTranslator) return null;
+    if (!isContributor && !donorType && !isTranslator) return null;
 
     return (
         <BadgeDirectoryDetailContent
@@ -197,7 +192,6 @@ export function BadgeDirectoryDetail({
             userId={userId}
             isViewingOtherUser={isViewingOtherUser}
             isContributor={isContributor}
-            isDonor={isDonor}
             isTranslator={isTranslator}
             donorType={donorType}
         />
