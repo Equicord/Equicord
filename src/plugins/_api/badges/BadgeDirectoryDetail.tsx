@@ -170,14 +170,10 @@ export function BadgeDirectoryDetail({
 }: BadgeDirectoryDetailProps) {
     const badgeId = String(badge?.badge_id ?? "");
     const originalBadgeId = badge?.originalBadgeId ?? "";
-
-    const isContributor = ["vencord_contributor_badge", "equicord_contributor_badge", "user_plugin_contributor_badge"]
-        .includes(originalBadgeId);
-
     const iconUrl = badge?.simple_icon_url ?? "";
 
     const isTranslator = badge?.name === "Equicord Translator";
-
+    const isContributor = ["vencord_contributor_badge", "equicord_contributor_badge", "user_plugin_contributor_badge"].includes(originalBadgeId);
     const donorType = isTranslator ? undefined
         : iconUrl.startsWith("https://badge.equicord.org/badges/") ? "equicord"
             : iconUrl.startsWith("https://badges.vencord.dev/badges/") ? "vencord"
