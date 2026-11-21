@@ -70,6 +70,12 @@ function Switches() {
             description: NoTrack.settings.def.disableAnalytics.description,
             restartRequired: NoTrack.settings.def.disableAnalytics.restartNeeded,
         },
+        !IS_WEB && {
+            key: "enableBackgroundRendering",
+            title: "Enable Background Rendering",
+            description: "Keeps the app window updating even when it is not fully focused",
+            restartRequired: true
+        },
         (!IS_WEB && !IS_DISCORD_DESKTOP || !IS_WINDOWS) && {
             key: "mainWindowFrameless",
             title: "Disable the Main Window Frame",
