@@ -1,10 +1,10 @@
 /*
  * Vencord, a Discord client mod
- * Copyright (c) 2023 Vendicated and contributors
+ * Copyright (c) 2026 Vendicated and contributors
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { definePluginSettings, migratePluginSettings } from "@api/Settings";
+import { definePluginSettings, SettingsStore } from "@api/Settings";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Devs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
@@ -14,22 +14,40 @@ import { useState } from "@webpack/common";
 interface ToggleableDescriptionProps { embed: Embed, original: () => any; }
 
 const settings = definePluginSettings({
-    youtubeDescription: {
-        description: "Adds descriptions to youtube video embeds",
+    fixBlockedEmbeds: {
         type: OptionType.BOOLEAN,
+        description: "Restore videos blocked from displaying in Discord, for example by UMG",
+        default: true,
+        restartNeeded: true
+    },
+    blockAds: {
+        type: OptionType.BOOLEAN,
+        description: "Blocks ads in YouTube embeds and WatchTogether. Video may take some seconds to load, due to YouTube's anti-ad measures",
+        default: true
+    },
+    youtubeDescription: {
+        type: OptionType.BOOLEAN,
+        description: "Adds descriptions to youtube video embeds",
         default: false,
         restartNeeded: true
     }
 });
 
-migratePluginSettings("FixYoutubeEmbeds", "YoutubeDescription");
+const { plugins } = SettingsStore.plain;
+const { BetterYouTubeEmbeds, FixYoutubeEmbeds, YoutubeAdblock } = plugins;
+if (!BetterYouTubeEmbeds && (FixYoutubeEmbeds?.enabled || YoutubeAdblock?.enabled)) {
+    plugins.BetterYouTubeEmbeds = { enabled: true, youtubeDescription: !!FixYoutubeEmbeds?.youtubeDescription };
+    SettingsStore.markAsChanged();
+}
 
 export default definePlugin({
-    name: "FixYoutubeEmbeds",
-    description: "Bypasses youtube videos being blocked from display on Discord (for example by UMG)",
+    name: "BetterYouTubeEmbeds",
+    description: "Block ads & bypass UMG blocks",
     tags: ["Media", "Utility"],
-    authors: [Devs.coolelectronics, Devs.arHSM],
+    searchTerms: ["YoutubeAdblock", "FixYoutubeEmbeds", "YoutubeDescription"],
+    authors: [Devs.coolelectronics, Devs.ImLvna, Devs.Ven, Devs.arHSM],
     isModified: true,
+    requiresRestart: true,
     settings,
     patches: [
         {

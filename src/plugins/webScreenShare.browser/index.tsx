@@ -29,7 +29,7 @@ class NotAllowedError extends Error {
 
 const logger = new Logger("VencordScreenShare");
 
-const getDisplayMedia = navigator.mediaDevices.getDisplayMedia.bind(navigator.mediaDevices);
+const originalGetDisplayMedia = navigator.mediaDevices?.getDisplayMedia;
 
 function openScreenSharePicker(options: DisplayMediaStreamOptions) {
     return new Promise<MediaStream>((resolve, reject) => {
@@ -119,7 +119,7 @@ function ModalComponent({ modalProps, submit, close, options }: {
             delete videoOptions.height;
 
             submit(
-                getDisplayMedia({
+                originalGetDisplayMedia.call(navigator.mediaDevices, {
                     video: {
                         ...videoOptions,
                         frameRate: { max: frameRate }
@@ -305,10 +305,12 @@ export default definePlugin({
     managedStyle,
 
     start() {
+        if (!originalGetDisplayMedia) return;
+
         navigator.mediaDevices.getDisplayMedia = openScreenSharePicker;
     },
     stop() {
-        navigator.mediaDevices.getDisplayMedia = getDisplayMedia;
+        navigator.mediaDevices.getDisplayMedia = originalGetDisplayMedia;
     },
 
     patches: [
