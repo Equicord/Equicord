@@ -13,9 +13,9 @@ import definePlugin from "@utils/types";
 
 // Reporter ignores plugin targets, so we need to mock VesktopPatchGlobals & Vesktop version for it to work
 
-const vesktopVersion: string = IS_VESKTOP ? VesktopNative.app.getVersion() : "0";
+const vesktopVersion: string = IS_VESKTOP || IS_EQUIBOP ? VesktopNative.app.getVersion() : "0";
 
-if (IS_REPORTER && !IS_VESKTOP) {
+if (IS_REPORTER && !IS_VESKTOP && !IS_EQUIBOP) {
     window.VesktopPatchGlobals = new Proxy({}, {
         get(target, prop) {
             return target[prop] || (() => { });
@@ -29,7 +29,7 @@ function isVesktopVersionAtLeast(version: string) {
 
 export default definePlugin({
     name: "VesktopPatches",
-    description: "Contains patches for Vesktop",
+    description: "Contains patches for Vesktop and Equibop",
     required: true,
     authors: [Devs.Ven],
 
@@ -41,7 +41,7 @@ export default definePlugin({
                     // setObservedGamesCallback(detectableDB, callback, currentUserId) {
                     match: /setObservedGamesCallback\(\i,(\i),\i\)\{/,
                     replace: "$&return VesktopPatchGlobals.setObservedGamesCallback($1);",
-                    predicate: () => isVesktopVersionAtLeast("1.7.0")
+                    predicate: () => isVesktopVersionAtLeast(IS_EQUIBOP ? "3.3.3" : "1.7.0")
                 },
             ]
         }
