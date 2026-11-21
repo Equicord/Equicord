@@ -166,6 +166,12 @@ const settings = definePluginSettings({
         restartNeeded: true,
         default: false,
     },
+    removeChannelSuggestions: {
+        type: OptionType.BOOLEAN,
+        description: "Removes the Suggested channels category from the server sidebar",
+        restartNeeded: true,
+        default: false,
+    },
     showAllBadges: {
         type: OptionType.BOOLEAN,
         description: "Shows every profile badge instead of collapsing the rest behind +n",
@@ -211,7 +217,8 @@ export default definePlugin({
         EquicordDevs.secp192k1,
         EquicordDevs.tie,
         EquicordDevs.itzmeshadow999,
-        EquicordDevs.luqenov
+        EquicordDevs.luqenov,
+        EquicordDevs.lethied
     ],
     settings,
     contextMenus: {
@@ -370,6 +377,14 @@ export default definePlugin({
                 replace: ",enabled:!1"
             },
             predicate: () => settings.store.noOnboarding
+        },
+        {
+            find: '"placeholder-channel-id"',
+            replacement: {
+                match: /(function \i\(\i,\i,\i\)\{)(let\{selectedChannel:\i,activeJoinedRelevantThreads:\i\})/,
+                replace: "$1return false;$2"
+            },
+            predicate: () => settings.store.removeChannelSuggestions
         },
         {
             find: "UserProfileBadgeListRows",
