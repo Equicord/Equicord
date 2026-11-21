@@ -223,7 +223,7 @@ export default definePlugin({
         {
             find: ".VOICE_CHANNEL_TILE,children:",
             replacement: {
-                match: /(?<=\.VOICE_USER,.{0,250})className:\i\.\i,onDoubleClick:\i,/,
+                match: /(?<=\.VOICE_USER,.{0,250})className:\i\.\i,onDoubleClick:\i\.\i,/,
                 replace: "draggable:!0,onDragStart:e=>$self.onUserDragStart(e,{id:arguments[0].participantUserId}),\"data-dragify-user\":!0,\"data-user-id\":arguments[0].participantUserId,$&"
             }
         },

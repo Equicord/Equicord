@@ -39,7 +39,7 @@ export default definePlugin({
             }
         },
         {
-            find: "StreamTile",
+            find: '"StreamTile"',
             replacement: {
                 match: /\i\.\i\.isFocused\(\)/,
                 replace: "true"
