@@ -1,10 +1,10 @@
 /*
- * Vencord, a Discord client mod
+ * Equicord, a Discord client mod
  * Copyright (c) 2024 Vendicated and contributors
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { useEffect, useState } from "@webpack/common";
+import { useEffect, useRef, useState } from "@webpack/common";
 
 import { countMessagesByStatusIDB, countMessagesIDB, DBMessageRecord, DBMessageStatus, getDateStortedMessagesByStatusIDB } from "../db";
 import { doesMatch, tokenizeQuery } from "../utils/parseQuery";
@@ -26,25 +26,29 @@ function useDebouncedValue<T>(value: T, delay: number): T {
     return debouncedValue;
 }
 
-// this is so shit
 export function useMessages(query: string, currentTab: LogTabs, sortNewest: boolean, numDisplayedMessages: number) {
-    // only for initial load
+    // only true on initial load / tab switch (fix: used to blank the list on every reload)
     const [pending, setPending] = useState(true);
     const [messages, setMessages] = useState<DBMessageRecord[]>([]);
     const [statusTotal, setStatusTotal] = useState<number>(0);
     const [total, setTotal] = useState<number>(0);
     const [resetCounter, setResetCounter] = useState(0);
 
+    const lastTab = useRef(currentTab);
     const debouncedQuery = useDebouncedValue(query, 300);
 
     useEffect(() => {
         countMessagesIDB().then(x => setTotal(x));
-    }, [pending]);
+    }, [pending, resetCounter]);
 
     useEffect(() => {
-        setPending(true);
-
         let isMounted = true;
+
+        if (lastTab.current !== currentTab) {
+            lastTab.current = currentTab;
+            setMessages([]);
+            setPending(true);
+        }
 
         const loadMessages = async () => {
             const status = getStatus(currentTab);
@@ -79,7 +83,8 @@ export function useMessages(query: string, currentTab: LogTabs, sortNewest: bool
 
                 if (isMounted) {
                     setMessages(filteredMessages);
-                    setStatusTotal(Number.MAX_SAFE_INTEGER);
+                    // fix: was MAX_SAFE_INTEGER, which made "Load More" show up (and do nothing) while searching
+                    setStatusTotal(filteredMessages.length);
                     setPending(false);
                 }
             }

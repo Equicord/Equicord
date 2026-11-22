@@ -48,19 +48,6 @@
     justify-content: space-around;
 }
 
-.vc-msg-logger-enhanced-modal-from {
-    font-size: 14px;
-    margin-left: 12px;
-}
-
-.msg-logger-modal-from-deleted {
-    color: var(--status-danger);
-}
-
-.vc-msg-logger-enhanced-modal-from-edited {
-    color: var(--white-600);
-}
-
 .vc-msg-logger-enhanced-toolbox-btn svg {
     color: var(--interactive-icon-default);
 }
@@ -106,4 +93,135 @@
 
 .vc-msg-logger-enhanced-modal-filter {
     width: 106%;
+}
+
+/* ---------- Groups (server card → channel strips → messages) ---------- */
+
+.vc-msg-logger-enhanced-group {
+    border: 1px solid var(--border-subtle, rgba(128, 128, 128, 0.25));
+    border-radius: 8px;
+}
+
+.vc-msg-logger-enhanced-group + .vc-msg-logger-enhanced-group {
+    margin-top: 20px;
+}
+
+.vc-msg-logger-enhanced-group-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    border: none;
+    font: inherit;
+    text-align: left;
+    color: var(--text-default);
+    cursor: pointer;
+}
+
+.vc-msg-logger-enhanced-group-header:focus-visible {
+    outline: 2px solid var(--focus-primary, var(--brand-500, #5865f2));
+    outline-offset: -2px;
+}
+
+/* server / DM bar: same left padding as the channel strips below */
+.vc-msg-logger-enhanced-group-header-top {
+    padding: 10px 12px;
+    border-radius: 7px 7px 0 0;
+    font-size: 16px;
+    font-weight: 700;
+    background-color: var(--background-secondary-alt);
+}
+
+/* channel strip: full width, tinted, with an accent so it stands out from messages */
+.vc-msg-logger-enhanced-group-header-channel {
+    padding: 8px 12px;
+    border-top: 1px solid var(--border-subtle, rgba(128, 128, 128, 0.25));
+    border-left: 3px solid var(--brand-500, #5865f2);
+    font-size: 15px;
+    font-weight: 600;
+    background-color: rgba(128, 128, 128, 0.1);
+}
+
+.vc-msg-logger-enhanced-group-header:hover {
+    filter: brightness(1.15);
+}
+
+.vc-msg-logger-enhanced-group-chevron {
+    flex: 0 0 12px;
+    font-size: 12px;
+    color: var(--interactive-icon-default);
+}
+
+.vc-msg-logger-enhanced-group-icon {
+    display: inline-grid;
+    place-items: center;
+    flex: 0 0 28px;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    font-size: 11px;
+    font-weight: 600;
+    overflow: hidden;
+    color: var(--text-default);
+    background-color: var(--background-tertiary, rgba(128, 128, 128, 0.3));
+}
+
+.vc-msg-logger-enhanced-group-hash {
+    flex: 0 0 28px;
+    text-align: center;
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 1;
+    color: var(--interactive-icon-default);
+}
+
+.vc-msg-logger-enhanced-group-label {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.vc-msg-logger-enhanced-group-meta {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    gap: 14px;
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--text-muted);
+}
+
+/* breathing room between a header and its messages */
+.vc-msg-logger-enhanced-group-messages {
+    padding: 12px 0 8px;
+}
+
+.vc-msg-logger-enhanced-day-divider {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 12px 12px 4px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-muted);
+}
+
+.vc-msg-logger-enhanced-day-divider:first-child {
+    margin-top: 0;
+}
+
+.vc-msg-logger-enhanced-day-divider::before,
+.vc-msg-logger-enhanced-day-divider::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background-color: var(--border-subtle, rgba(128, 128, 128, 0.25));
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .vc-msg-logger-enhanced-modal-content-container {
+        transition: none;
+    }
 }
