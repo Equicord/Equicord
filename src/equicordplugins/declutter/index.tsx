@@ -145,6 +145,24 @@ export const settings = definePluginSettings({
         default: false,
         restartNeeded: true,
     },
+    removeAccountPopoutBadges: {
+        type: OptionType.BOOLEAN,
+        description: "Remove badges from the account popout.",
+        default: false,
+        restartNeeded: true,
+    },
+    removeAccountPopoutOrbs: {
+        type: OptionType.BOOLEAN,
+        description: "Remove orbs from the account popout.",
+        default: false,
+        restartNeeded: true,
+    },
+    removeInvisibleWarning: {
+        type: OptionType.BOOLEAN,
+        description: "Remove the invisible status warning from the account popout.",
+        default: false,
+        restartNeeded: true,
+    },
 });
 
 function SectionSeparator(title: string) {
@@ -283,6 +301,27 @@ export default definePlugin({
                 replace: "hoverText:$1,forceHover:!0,children:",
             },
             predicate: () => settings.store.alwaysShowUsername,
+        },
+        {
+            // Account popout
+            find: "#{intl::L99HQm::raw}",
+            replacement: [
+                {
+                    match: /(?=\i&&\(0,\i\.jsxs?\)\(\i,\{action:"PRESS_VIEW_BADGES")/,
+                    replace: "false&&",
+                    predicate: () => settings.store.removeAccountPopoutBadges,
+                },
+                {
+                    match: /(?=\i&&\(0,\i\.jsxs?\)\(\i,\{popoutContainerRef:\i,scrollerRef:)/,
+                    replace: "false&&",
+                    predicate: () => settings.store.removeAccountPopoutOrbs,
+                },
+                {
+                    match: /(?=\i\.length>0&&\i&&\(0,\i\.jsxs?\)\(\i\.\i,\{text:\i\.intl\.string\(\i\.t#{intl::L99HQm::raw}\))/,
+                    replace: "false&&",
+                    predicate: () => settings.store.removeInvisibleWarning,
+                },
+            ],
         },
         {
             // Button tooltips in user area
