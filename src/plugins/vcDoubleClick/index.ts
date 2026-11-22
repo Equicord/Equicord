@@ -52,7 +52,7 @@ export default definePlugin({
             // channel mentions
             find: 'className:"channelMention",children:[null!=',
             replacement: {
-                match: /onClick:(\i)(?=,.{0,30}className:"channelMention".+?(\i)\.inContent)/,
+                match: /onClick:(\i)(?=,.{0,100}className:"channelMention".+?(\i)\.inContent)/,
                 replace: (_, onClick, props) => ""
                     + `onClick:(vcDoubleClickEvt)=>$self.shouldRunOnClick(vcDoubleClickEvt,${props})&&${onClick}()`,
             }
