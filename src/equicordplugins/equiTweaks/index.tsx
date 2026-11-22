@@ -381,8 +381,8 @@ export default definePlugin({
         {
             find: '"placeholder-channel-id"',
             replacement: {
-                match: /(function \i\(\i,\i,\i\)\{)(let\{selectedChannel:\i,activeJoinedRelevantThreads:\i\})/,
-                replace: "$1return false;$2"
+                match: /let\{selectedChannel:\i,activeJoinedRelevantThreads:\i\}.{0,30}\.GUILD_DIRECTORY\|\|/,
+                replace: "return false;$*"
             },
             predicate: () => settings.store.removeChannelSuggestions
         },
