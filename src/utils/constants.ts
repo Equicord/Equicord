@@ -1,5 +1,5 @@
 /*
- * Vencord, a modification for Discord's desktop app
+ * Equicord, a modification for Discord's desktop app
  * Copyright (c) 2022 Vendicated and contributors
  *
  * This program is free software: you can redistribute it and/or modify
@@ -1365,6 +1365,10 @@ export const EquicordDevs = Object.freeze({
     ShaunLWM: {
         name: "sprxsheep",
         id: 130964561900732416n,
+    },
+    primsxzx: {
+        name: "therealprimsxzx",
+        id: 1198622694367842415n,
     }
 } satisfies Record<string, Dev>);
 

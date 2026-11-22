@@ -1,5 +1,5 @@
 /*
- * Vencord, a Discord client mod
+ * Equicord, a Discord client mod
  * Copyright (c) 2024 Vendicated and contributors
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
@@ -55,7 +55,7 @@ export default definePlugin({
     name: "VoiceChannelLog",
     description: "Logs voice channel activity including joins, leaves, soundboard, mute, camera, screenshare, and more.",
     tags: ["Servers", "Utility", "Voice"],
-    authors: [Devs.Sqaaakoi, Devs.thororen, Devs.nyx, Devs.Moxxie, EquicordDevs.Fres, Devs.amy],
+    authors: [Devs.Sqaaakoi, Devs.thororen, Devs.nyx, Devs.Moxxie, EquicordDevs.Fres, Devs.amy, EquicordDevs.primsxzx],
     dependencies: ["AudioPlayerAPI", "HeaderBarAPI"],
     settings,
     contextMenus: {
