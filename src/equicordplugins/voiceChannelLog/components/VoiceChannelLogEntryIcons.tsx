@@ -21,7 +21,9 @@ function LeaveIcon() {
 }
 
 function MoveIcon() {
-    return <svg {...iconProps}><g fill="none" fillRule="evenodd"><path d="m18 0h-18v18h18z" /><path d="m0 8h14.2l-3.6-3.6 1.4-1.4 6 6-6 6-1.4-1.4 3.6-3.6h-14.2" fill="currentColor" /></g></svg>;
+    return <svg {...iconProps} viewBox="0 0 24 24" fill="none">
+        <path d="M5 8h14M15 4l4 4-4 4M19 16H5M9 12l-4 4 4 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>;
 }
 
 function SoundboardIcon() {
@@ -98,5 +100,6 @@ const colorMap: Record<LogEventType, string> = {
 
 export default function EventIcon({ type }: { type: LogEventType; }) {
     const IconComponent = iconMap[type];
-    return <div className={classes(cl("icon"), cl(`icon-${colorMap[type]}`))}><IconComponent /></div>;
+    // decorative: the description next to it already says what happened
+    return <div className={classes(cl("icon"), cl(`icon-${colorMap[type]}`))} aria-hidden><IconComponent /></div>;
 }

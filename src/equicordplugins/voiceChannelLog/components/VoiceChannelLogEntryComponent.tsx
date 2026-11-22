@@ -8,12 +8,14 @@ import "./VoiceChannelLogEntryComponent.css";
 
 import { openUserProfile } from "@utils/discord";
 import { Channel } from "@vencord/discord-types";
-import { ApplicationStore, Clickable, closeAllModals,IconUtils, NavigationRouter, Timestamp, Tooltip, UserStore } from "@webpack/common";
+import { ApplicationStore, ChannelStore, Clickable, closeAllModals, IconUtils, NavigationRouter, Timestamp, Tooltip, UserStore } from "@webpack/common";
 
 import { getCallStartTime } from "../logs";
 import { VoiceChannelLogEntry } from "../types";
 import { cl, downloadSound, formatElapsedTime, getEmojiUrl, playSound } from "../utils";
 import EventIcon from "./VoiceChannelLogEntryIcons";
+
+const channelName = (id?: string | null) => id ? ChannelStore.getChannel(id)?.name : undefined;
 
 function getEventDescription(entry: VoiceChannelLogEntry): string {
     switch (entry.type) {
@@ -21,10 +23,16 @@ function getEventDescription(entry: VoiceChannelLogEntry): string {
             return "Joined the channel";
         case "leave":
             return "Left the channel";
-        case "move":
-            if (entry.newChannelId && entry.oldChannelId && entry.channelId === entry.oldChannelId)
-                return "Moved to another channel";
-            return "Moved from another channel";
+        case "move": {
+            // this log belongs to the old channel when the user moved away from it
+            if (entry.newChannelId && entry.oldChannelId && entry.channelId === entry.oldChannelId) {
+                const name = channelName(entry.newChannelId);
+                return name ? `Moved to #${name}` : "Moved to another channel";
+            }
+
+            const name = channelName(entry.oldChannelId);
+            return name ? `Moved from #${name}` : "Moved from another channel";
+        }
         case "soundboard":
             return "";
         case "server_mute":
@@ -65,17 +73,22 @@ export function VoiceChannelLogEntryComponent({ logEntry, channel }: { logEntry:
             )}
             <Tooltip text={username}>
                 {(tooltipProps: any) => (
-                    <img
+                    <Clickable
                         {...tooltipProps}
-                        className={cl("avatar")}
+                        className={cl("avatar-button")}
+                        aria-label={`Open ${username}'s profile`}
                         onClick={() => openUserProfile(logEntry.userId)}
-                        src={user ? user.getAvatarURL(channel.getGuildId()) : IconUtils.getDefaultAvatarURL(logEntry.userId)}
-                        alt={username}
-                    />
+                    >
+                        <img
+                            className={cl("avatar")}
+                            src={user ? user.getAvatarURL(channel.getGuildId()) : IconUtils.getDefaultAvatarURL(logEntry.userId)}
+                            alt=""
+                        />
+                    </Clickable>
                 )}
             </Tooltip>
             <div className={cl("content")}>
-                <span className={cl("username")} onClick={() => openUserProfile(logEntry.userId)}>{username}</span>
+                <Clickable className={cl("username")} onClick={() => openUserProfile(logEntry.userId)}>{username}</Clickable>
                 {logEntry.type === "soundboard" ? (
                     <div className={cl("soundboard-info")}>
                         {logEntry.emoji && <img className={cl("soundboard-emoji")} src={getEmojiUrl(logEntry.emoji)} alt={logEntry.emoji.name} />}
@@ -83,14 +96,14 @@ export function VoiceChannelLogEntryComponent({ logEntry, channel }: { logEntry:
                         <div className={cl("soundboard-actions")}>
                             <Tooltip text="Play sound">
                                 {tooltipProps => (
-                                    <Clickable {...tooltipProps} className={cl("soundboard-action")} onClick={() => playSound(logEntry.soundId!)}>
+                                    <Clickable {...tooltipProps} aria-label="Play sound" className={cl("soundboard-action")} onClick={() => playSound(logEntry.soundId!)}>
                                         <svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M8 5v14l11-7z" /></svg>
                                     </Clickable>
                                 )}
                             </Tooltip>
                             <Tooltip text="Save sound">
                                 {tooltipProps => (
-                                    <Clickable {...tooltipProps} className={cl("soundboard-action")} onClick={() => downloadSound(logEntry.soundId!)}>
+                                    <Clickable {...tooltipProps} aria-label="Save sound" className={cl("soundboard-action")} onClick={() => downloadSound(logEntry.soundId!)}>
                                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3" /></svg>
                                     </Clickable>
                                 )}
@@ -105,6 +118,7 @@ export function VoiceChannelLogEntryComponent({ logEntry, channel }: { logEntry:
                                 {tooltipProps => (
                                     <Clickable
                                         {...tooltipProps}
+                                        aria-label="View activity"
                                         className={cl("soundboard-action")}
                                         onClick={() => {
                                             closeAllModals();
