@@ -18,12 +18,12 @@
 
 import "./styles.css";
 
+import * as DataStore from "@api/DataStore";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Devs, EquicordDevs } from "@utils/constants";
 import definePlugin from "@utils/types";
 
 import { settings, toggleHoverControls } from "./settings";
-import { migrateOldLyrics } from "./spotify/lyrics/api";
 import { SpotifyLyrics } from "./spotify/lyrics/components/lyrics";
 import { SpotifyPlayer } from "./spotify/PlayerComponent";
 import { TidalLyrics } from "./tidal/lyrics/components/lyrics";
@@ -114,7 +114,7 @@ export default definePlugin({
     },
 
     async start() {
-        await migrateOldLyrics();
+        await DataStore.delMany(["SpotifyLyricsCache", "SpotifyLyricsCacheNew"]);
         toggleHoverControls(settings.store.hoverControls);
     },
 

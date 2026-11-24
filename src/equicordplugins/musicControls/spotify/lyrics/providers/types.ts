@@ -10,8 +10,7 @@ export interface SyncedLyric {
 }
 
 export enum Provider {
-    Lrclib = "LRCLIB",
-    Spotify = "Spotify",
+    Lyrica = "Lyrica",
     Translated = "Translated",
     Romanized = "Romanized",
     None = "None",

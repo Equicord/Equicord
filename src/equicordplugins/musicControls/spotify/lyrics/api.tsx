@@ -5,25 +5,17 @@
  */
 
 import { DataStore } from "@api/index";
-import { settings } from "@equicordplugins/musicControls/settings";
 import { Track } from "@equicordplugins/musicControls/spotify/SpotifyStore";
 
-import { getLyricsLrclib } from "./providers/lrclibAPI";
-import { getLyricsSpotify } from "./providers/SpotifyAPI";
+import { getLyricsLyrica } from "./providers/lyricaAPI";
 import { LyricsData, Provider, SyncedLyric } from "./providers/types";
 
-const LyricsCacheKey = "SpotifyLyricsCacheNew";
+const LyricsCacheKey = "MusicControlsLyricsCache";
 
-interface NullLyricCacheEntry {
-    [Provider.Lrclib]?: boolean;
-    [Provider.Spotify]?: boolean;
-}
-
-const nullLyricCache = new Map<string, NullLyricCacheEntry>();
+const nullLyricCache = new Set<string>();
 
 export const lyricFetchers = {
-    [Provider.Spotify]: async (track: Track) => await getLyricsSpotify(track.id, settings.store.spotifyLyricsApiUrl),
-    [Provider.Lrclib]: getLyricsLrclib,
+    [Provider.Lyrica]: getLyricsLyrica,
 };
 
 export const providers = Object.keys(lyricFetchers) as Provider[];
@@ -38,33 +30,16 @@ export async function getLyrics(track: Track | null): Promise<LyricsData | null>
         return cached[cacheKey];
     }
 
-    const nullCacheEntry = nullLyricCache.get(cacheKey);
+    if (nullLyricCache.has(cacheKey)) return null;
 
-    if (nullCacheEntry) {
-        const provider = settings.store.lyricsProvider;
-        if (!settings.store.fallbackProvider && nullCacheEntry[provider]) {
-            return null;
-        }
+    const lyricsInfo = await getLyricsLyrica(track);
 
-        if (providers.every(p => nullCacheEntry[p])) {
-            return null;
-        }
+    if (lyricsInfo) {
+        await DataStore.set(LyricsCacheKey, { ...cached, [cacheKey]: lyricsInfo });
+        return lyricsInfo;
     }
 
-    const providersToTry = [settings.store.lyricsProvider, ...providers.filter(p => p !== settings.store.lyricsProvider)];
-
-    for (const provider of providersToTry) {
-        const lyricsInfo = await lyricFetchers[provider](track);
-
-        if (lyricsInfo) {
-            await DataStore.set(LyricsCacheKey, { ...cached, [cacheKey]: lyricsInfo });
-            return lyricsInfo;
-        }
-
-        const updatedNullCacheEntry = nullLyricCache.get(cacheKey) || {};
-        nullLyricCache.set(cacheKey, { ...updatedNullCacheEntry, [provider]: true });
-    }
-
+    nullLyricCache.add(cacheKey);
     return null;
 }
 
@@ -102,31 +77,8 @@ export async function removeTranslations() {
 
     for (const [trackId, trackData] of Object.entries(cache)) {
         const { Translated, ...lyricsVersions } = trackData?.lyricsVersions || {};
-        const newUseLyric = !!lyricsVersions[Provider.Spotify] ? Provider.Spotify : Provider.Lrclib;
-
-        newCache[trackId] = { lyricsVersions, useLyric: newUseLyric };
+        newCache[trackId] = { lyricsVersions, useLyric: Provider.Lyrica };
     }
 
     await DataStore.set(LyricsCacheKey, newCache);
-}
-
-export async function migrateOldLyrics() {
-    const oldCache = await DataStore.get("SpotifyLyricsCache");
-    if (!oldCache || !Object.entries(oldCache).length) return;
-
-    const filteredCache = Object.entries(oldCache).filter(lrc => lrc[1]);
-    const result = {};
-
-    filteredCache.forEach(([trackId, lyrics]) => {
-        result[trackId] = {
-            lyricsVersions: {
-                // @ts-ignore
-                LRCLIB: lyrics.map(({ time, text }) => ({ time, text }))
-            },
-            useLyric: "LRCLIB"
-        };
-    });
-
-    await DataStore.set(LyricsCacheKey, result);
-    await DataStore.set("SpotifyLyricsCache", {});
 }

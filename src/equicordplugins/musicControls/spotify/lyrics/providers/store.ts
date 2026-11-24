@@ -6,7 +6,7 @@
 
 import { showNotification } from "@api/Notifications";
 import { settings } from "@equicordplugins/musicControls/settings";
-import { getLyrics, lyricFetchers, providers, updateLyrics } from "@equicordplugins/musicControls/spotify/lyrics/api";
+import { getLyrics, lyricFetchers, updateLyrics } from "@equicordplugins/musicControls/spotify/lyrics/api";
 import { SpotifyStore, type Track } from "@equicordplugins/musicControls/spotify/SpotifyStore";
 import { proxyLazyWebpack } from "@webpack";
 import { Flux, FluxDispatcher } from "@webpack/common";
@@ -74,8 +74,7 @@ export const SpotifyLrcStore = proxyLazyWebpack(() => {
             }
 
             if (provider === Provider.Translated || provider === Provider.Romanized) {
-                const originalLyrics = currentInfo?.lyricsVersions[settings.store.lyricsProvider] ||
-                    providers.map(p => currentInfo?.lyricsVersions[p]).find(Boolean);
+                const originalLyrics = currentInfo?.lyricsVersions[Provider.Lyrica];
 
                 if (!originalLyrics || !currentInfo) {
                     showNotif("No lyrics", `No lyrics to ${provider === Provider.Translated ? "translate" : "romanize"}`);
@@ -87,7 +86,7 @@ export const SpotifyLrcStore = proxyLazyWebpack(() => {
                 if (provider === Provider.Romanized && !/[^\u0000-\u007F]/.test(lyricsCheckText)) {
                     lyricsInfo = {
                         ...currentInfo,
-                        useLyric: settings.store.lyricsProvider,
+                        useLyric: Provider.Lyrica,
                         lyricsVersions: {
                             ...currentInfo.lyricsVersions,
                         },
