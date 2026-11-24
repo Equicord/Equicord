@@ -117,6 +117,7 @@ async function loadAllBadges(noCache = false) {
 
     DonorBadges = vencordBadges;
     EquicordDonorBadges = equicordBadges;
+    DirectoryBadges = {};
 }
 
 let intervalId: any;

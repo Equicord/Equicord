@@ -7,7 +7,7 @@
 import type { Settings } from "@api/Settings";
 import type { CspRequestResult } from "@main/csp/manager";
 import type { PluginIpcMappings } from "@main/ipcPlugins";
-import { UserThemeHeader } from "@main/themes";
+import type { UserThemeHeader } from "@main/themes";
 import { UpdateData } from "@main/updater";
 import { IpcEvents } from "@shared/IpcEvents";
 import type { IpcRes } from "@utils/types";
