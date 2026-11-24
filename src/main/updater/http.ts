@@ -41,9 +41,6 @@ async function githubGet<T = any>(endpoint: string) {
 }
 
 async function listUpdates() {
-    const isOutdated = await fetchUpdate();
-    if (!isOutdated) return [];
-
     const data = await githubGet(`/compare/${gitHash}...HEAD`);
 
     return data.commits.map((c: any) => ({
@@ -54,12 +51,11 @@ async function listUpdates() {
 }
 
 async function fetchUpdate() {
-    const data = await githubGet("/releases/latest");
-
-    const hash = data.name.slice(data.name.lastIndexOf(" ") + 1);
-    if (hash === gitHash)
+    const { ahead_by } = await githubGet(`/compare/${gitHash}...HEAD`);
+    if (!ahead_by)
         return false;
 
+    const data = await githubGet("/releases/latest");
     const asset = data.assets.find(a => a.name === ASAR_FILE);
     PendingUpdate = asset.browser_download_url;
 
