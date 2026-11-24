@@ -13,6 +13,7 @@ import type { ReactNode } from "react";
 import { getQuestifySettings, useQuestifySettings } from "../settings/access";
 import { defaultClaimedSubsort, defaultExpiredSubsort, defaultIgnoredSubsort, defaultQuestOrder, defaultUnclaimedSubsort, type QuestOrderStatus, type QuestSubsort, type QuestTileColorSetting, type QuestTileGradient } from "../settings/def";
 import { getIgnoredQuestIDs } from "../settings/ignoredQuests";
+import { excludeBlockedQuests } from "./filtering";
 import { getQuestStatus, isQuestHidden, QuestStatus } from "./questState";
 import { adjustRGB, decimalToRGB, isDarkish, q, type RGB } from "./ui";
 
@@ -262,6 +263,7 @@ export function sortQuests(quests: Quest[], skip?: boolean): Quest[] {
     const questSorting = useQuestifySettings([
         "disableQuestsEverything",
         "ignoredQuestIDs",
+        "blockedQuestWords",
         "makeMobileVideoQuestsDesktopCompatible",
         "completeVideoQuestsQuicker",
         "questOrder",
@@ -277,6 +279,8 @@ export function sortQuests(quests: Quest[], skip?: boolean): Quest[] {
     if (questSorting.disableQuestsEverything) {
         return quests;
     }
+
+    quests = excludeBlockedQuests(quests, questSorting.blockedQuestWords);
 
     if (questSorting.makeMobileVideoQuestsDesktopCompatible || !!questSorting.autoCompleteQuestTypes.WATCH_VIDEO_ON_MOBILE) {
         injectDesktopVideoQuestTasks(quests);
