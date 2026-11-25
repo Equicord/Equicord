@@ -1,0 +1,39 @@
+.vc-empty-voice-finder-controls,
+.vc-empty-voice-finder-category {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.vc-empty-voice-finder-category {
+    margin-top: 16px;
+}
+
+.vc-empty-voice-finder-header,
+.vc-empty-voice-finder-row,
+.vc-empty-voice-finder-channel {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.vc-empty-voice-finder-channel {
+    flex: 1;
+    min-width: 0;
+    padding: 8px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.vc-empty-voice-finder-channel:hover,
+.vc-empty-voice-finder-channel:focus-visible {
+    background: var(--background-mod-subtle);
+}
+
+.vc-empty-voice-finder-name {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
