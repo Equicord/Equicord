@@ -7,18 +7,18 @@
 import type { Quest } from "@vencord/discord-types";
 import { QuestStore } from "@webpack/common";
 
-import type { QuestIncludedTypes } from "../utils/filtering";
-import { countIncludedUnclaimedQuests, getQuestStatus, QuestStatus } from "../utils/questState";
+import { initialQuestDataFetched } from "../state";
+import { pruneIneligibleQueuedAutoCompletes } from "../utils/completion";
+import { countIncludedUnclaimedQuests, getQuestStatus, isQuestHidden, QuestStatus } from "../utils/questState";
 import { getQuestifySettings } from "./access";
 import { ignoredQuestIDsKey } from "./def";
 import { rerenderQuests } from "./rerender";
 
-function validateQuestBadgeCount(): void {
+export function validateQuestBadgeCount(): void {
     const settings = getQuestifySettings();
-    const questButtonIncludedTypes = settings.questButtonIncludedTypes as QuestIncludedTypes;
     const quests = Array.from(QuestStore.quests.values());
     const ignoredQuestIds = getIgnoredQuestIDs();
-    const count = countIncludedUnclaimedQuests(quests, ignoredQuestIds, questButtonIncludedTypes);
+    const count = countIncludedUnclaimedQuests(quests, ignoredQuestIds);
 
     settings.questButtonBadgeCount = count;
 }
@@ -30,16 +30,27 @@ export function getIgnoredQuestIDs(): string[] {
 }
 
 function setIgnoredQuestIDs(questIDs: string[]): void {
-    getQuestifySettings().ignoredQuestIDs[ignoredQuestIDsKey] = questIDs;
+    const { ignoredQuestIDs } = getQuestifySettings();
+    const current = ignoredQuestIDs[ignoredQuestIDsKey] ?? [];
+
+    if (current.length === questIDs.length && current.every((id, index) => id === questIDs[index])) {
+        return;
+    }
+
+    ignoredQuestIDs[ignoredQuestIDsKey] = questIDs;
 }
 
 export function validateIgnoredQuests(qs?: Quest[]): void {
-    const currentlyIgnoredQuests = getIgnoredQuestIDs();
-    const quests = qs ?? Array.from(QuestStore.quests.values());
-    const excludedQuests = Array.from(QuestStore.excludedQuests.values());
-    const validIgnored = Array.from(new Set<string>(currentlyIgnoredQuests.filter(id => quests.some(quest => quest.id === id) || excludedQuests.some(quest => quest.id === id))));
+    if (qs !== undefined || initialQuestDataFetched) {
+        const currentlyIgnoredQuests = getIgnoredQuestIDs();
+        const quests = qs ?? Array.from(QuestStore.quests.values());
+        const excludedQuests = Array.from(QuestStore.excludedQuests.values());
+        const validIgnored = Array.from(new Set<string>(currentlyIgnoredQuests.filter(id => quests.some(quest => quest.id === id) || excludedQuests.some(quest => quest.id === id))));
 
-    setIgnoredQuestIDs(validIgnored);
+        setIgnoredQuestIDs(validIgnored);
+    }
+
+    pruneIneligibleQueuedAutoCompletes();
     validateQuestBadgeCount();
     rerenderQuests();
 }
@@ -63,21 +74,33 @@ export function questIsIgnored(questId: string): boolean {
     return getIgnoredQuestIDs().includes(questId);
 }
 
-export function ignoreAllQuests(): void {
-    const currentlyIgnored = new Set(getIgnoredQuestIDs());
-    const ignoredQuests = new Set<string>();
+export function hasIgnorableQuests(): boolean {
+    const currentlyIgnored = getIgnoredQuestIDs();
+    const currentlyIgnoredSet = new Set(currentlyIgnored);
 
     for (const quest of QuestStore.quests.values()) {
         if (
-            currentlyIgnored.has(quest.id)
-            || getQuestStatus(quest, Array.from(currentlyIgnored), false) === QuestStatus.Unclaimed
+            !currentlyIgnoredSet.has(quest.id)
+            && !isQuestHidden(quest, currentlyIgnored)
+            && getQuestStatus(quest, currentlyIgnored, false) === QuestStatus.Unclaimed
         ) {
-            ignoredQuests.add(quest.id);
+            return true;
         }
     }
 
-    for (const quest of QuestStore.excludedQuests.values()) {
-        if (currentlyIgnored.has(quest.id)) {
+    return false;
+}
+
+export function ignoreAllQuests(): void {
+    const currentlyIgnored = getIgnoredQuestIDs();
+    const ignoredQuests = new Set<string>(currentlyIgnored);
+
+    for (const quest of QuestStore.quests.values()) {
+        if (
+            !ignoredQuests.has(quest.id)
+            && !isQuestHidden(quest, currentlyIgnored)
+            && getQuestStatus(quest, currentlyIgnored, false) === QuestStatus.Unclaimed
+        ) {
             ignoredQuests.add(quest.id);
         }
     }

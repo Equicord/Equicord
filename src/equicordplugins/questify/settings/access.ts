@@ -7,6 +7,8 @@
 import { Settings, useSettings } from "@api/Settings";
 import { UserStore } from "@webpack/common";
 
+import type { QuestCombinationKey } from "./def";
+
 export const QUESTIFY_PLUGIN_NAME = "Questify";
 
 interface QuestifySettingsOverrides {
@@ -14,6 +16,11 @@ interface QuestifySettingsOverrides {
     autoEnrollQuestsUnpaused?: boolean;
     autoCompleteQuestsUnpaused?: boolean;
     enrollmentRateLimitBlockedUntil?: Record<string, number>;
+    autoCompleteQuestCombinations: QuestCombinationKey[];
+    preventNotificationCombinations: QuestCombinationKey[];
+    preventNotificationTerms: string;
+    hiddenQuestCombinations: QuestCombinationKey[];
+    hiddenQuestTerms: string;
     ignoredQuestIDs: Record<string, string[]>;
     resumeQuestIDs: Record<string, { timestamp: number, questIDs: string[]; automaticQuestIDs?: string[]; }>;
 }

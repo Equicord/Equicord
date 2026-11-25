@@ -6,6 +6,7 @@
 
 export let initialQuestDataFetched = false;
 let settingsModalOpen = false;
+const injectedDesktopVideoTasks = new WeakSet<object>();
 
 export function setInitialQuestDataFetched(fetched: boolean): void {
     initialQuestDataFetched = fetched;
@@ -17,4 +18,12 @@ export function setSettingsModalOpen(open: boolean): void {
 
 export function getSettingsModalOpen(): boolean {
     return settingsModalOpen;
+}
+
+export function markInjectedDesktopVideoTask(task: object): void {
+    injectedDesktopVideoTasks.add(task);
+}
+
+export function isInjectedDesktopVideoTask(task?: object | null): boolean {
+    return Boolean(task && injectedDesktopVideoTasks.has(task));
 }

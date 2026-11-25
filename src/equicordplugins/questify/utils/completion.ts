@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { PlainSettings } from "@api/Settings";
 import type { PluginNative } from "@utils/types";
 import type { Quest, User } from "@vencord/discord-types";
 import { QuestTargetedContent, QuestTaskJoinOperator, QuestTaskType } from "@vencord/discord-types/enums";
@@ -12,14 +13,14 @@ import { FluxDispatcher, QuestStore, RestAPI, showToast, SnowflakeUtils, UserSto
 
 import { createQuestEnrollmentGuard } from "../index";
 import { getCurrentUserId, getQuestifySettings } from "../settings/access";
-import { autoCompleteQuestTaskTypes, isAutoCompleteCompatible, isEnrollmentCompatible } from "../settings/def";
+import { autoCompleteQuestTaskTypes, defaultAutoCompleteQuestsSimultaneously, isAutoCompleteCompatible, isEnrollmentCompatible } from "../settings/def";
 import { resetQuestsToResume } from "../settings/fetching";
-import { getIgnoredQuestIDs } from "../settings/ignoredQuests";
+import { getIgnoredQuestIDs, validateQuestBadgeCount } from "../settings/ignoredQuests";
 import { rerenderQuests } from "../settings/rerender";
-import { normalizeQuestName, type QuestIncludedTypes, questMatchesIncludedTypes } from "./filtering";
+import { isInjectedDesktopVideoTask } from "../state";
+import { hasEnabledAutoCompleteCombinations, normalizeQuestName, questTaskMatchesAutoCompleteCombinations } from "./filtering";
 import { QL } from "./logging";
 import { getQuestStatus, getQuestStoredProgress, isQuestHidden, isVideoQuestTask, QuestStatus, QuestTask, refreshQuest } from "./questState";
-import { hasInjectedDesktopVideoCompatibility } from "./questTiles";
 
 type QuestEnrollResult =
     | { type: "success"; }
@@ -95,7 +96,7 @@ const sendHeartbeat = findByCodeLazy(".QUESTS_HEARTBEAT(") as (options: {
     terminal?: boolean;
     executableFingerprint?: unknown;
 }) => Promise<void>;
-const getApplicationProxyTicket = findByCodeLazy(".expiresAt>", ".ticket;") as (applicationId: string, channelId?: string) => Promise<string>;
+const getApplicationProxyTicket = findByCodeLazy(".expiresAt>", ".ticket;") as (applicationId: string, channelId?: string) => Promise<{ prefetched: boolean, ticket: string; }>;
 export const enrollInQuestNative = findByCodeLazy('type:"QUESTS_ENROLL_BEGIN",') as (questId: string, options: QuestEnrollmentMetadata) => Promise<QuestEnrollResult>;
 const sortQuestsNative = findByCodeLazy("sortMethod:", "isRenewableEndDateSortEnabled") as (quests: Quest[], options: { sortMethod: string; filters: unknown[]; }) => Quest[];
 const getQuestOrbQuantity = findByCodeLazy("premiumOrbQuantity??", "orbQuantity") as (
@@ -107,9 +108,23 @@ const ActivityLauncher = findByPropsLazy("launch", "getDetectableGames") as {
     launch(options: { applicationId: string; }): Promise<boolean>;
 };
 
+function resolveQuestCTA(quest: Quest): string {
+    const tasks = quest.config.taskConfigV2?.tasks;
+    const taskType = tasks?.[QuestTaskType.WATCH_VIDEO]?.type ?? Object.values(tasks ?? {})[0]?.type;
+
+    switch (taskType) {
+        case QuestTaskType.ACHIEVEMENT_IN_ACTIVITY:
+        case QuestTaskType.PLAY_ACTIVITY:
+        case QuestTaskType.WATCH_VIDEO:
+            return QuestCTA.START_QUEST;
+        default:
+            return QuestCTA.ACCEPT_QUEST;
+    }
+}
+
 async function getActivityProxyTicket(appId: string): Promise<string | undefined> {
     try {
-        return await getApplicationProxyTicket(appId);
+        return (await getApplicationProxyTicket(appId)).ticket;
     } catch {
         QL.error("AUTO_COMPLETE_ACHIEVEMENT_PROXY_TICKET_FAILED", { appId });
     }
@@ -129,20 +144,6 @@ async function getApplicationGrantId(appId: string): Promise<string | null> {
 }
 
 const activeAchievementApplications = new Set<string>();
-
-function resolveQuestCTA(quest: Quest): string {
-    const tasks = quest.config.taskConfigV2?.tasks;
-    const taskType = tasks?.[QuestTaskType.WATCH_VIDEO]?.type ?? Object.values(tasks ?? {})[0]?.type;
-
-    switch (taskType) {
-        case QuestTaskType.ACHIEVEMENT_IN_ACTIVITY:
-        case QuestTaskType.PLAY_ACTIVITY:
-        case QuestTaskType.WATCH_VIDEO:
-            return QuestCTA.START_QUEST;
-        default:
-            return QuestCTA.ACCEPT_QUEST;
-    }
-}
 
 export function makeEnrollmentData(quest: Quest, analytics: QuestButtonAnalyticsArgs = {}): QuestEnrollmentMetadata {
     const questContent = analytics.analyticsCtxQuestContent ?? QuestTargetedContent.QUEST_HOME_DESKTOP;
@@ -181,6 +182,8 @@ const QuestifyNative = VencordNative?.pluginHelpers?.Questify as PluginNative<ty
 
 const videoQuestLeeway = 24;
 const resumeExpiryMs = 60 * 60 * 1000;
+const minSequentialStaggerMs = 5 * 1000;
+const maxSequentialStaggerMs = 3 * 60 * 1000;
 const maxBatchNonRateLimitEnrollmentFailures = 3;
 const maxQuestProcessingBatches = 4;
 const minBatchEnrollmentDelayMs = 1000;
@@ -204,6 +207,7 @@ export interface AutoCompleteEntry {
 export interface AutoCompleteStartOptions {
     force?: boolean;
     source?: AutoCompleteStartSource;
+    staggerIfIdle?: boolean;
 }
 
 interface ProcessQuestsOptions {
@@ -246,6 +250,7 @@ interface VideoProgressReportOptions {
     displayProgress?: number;
 }
 
+const simultaneousAutoCompleteOnStartup = Boolean(PlainSettings.plugins.Questify?.autoCompleteQuestsSimultaneously ?? defaultAutoCompleteQuestsSimultaneously);
 const activeAutoCompletes = new Map<string, AutoCompleteEntry>();
 const manuallyStoppedQuests = new Set<string>();
 let autoCompleteStartGeneration = 0;
@@ -254,6 +259,9 @@ let nextQuestProcessingBatchId = 0;
 const questProcessingControllers = new Map<AbortController, QuestProcessingBatch>();
 const failedBatchEnrollments = new Set<string>();
 let suppressQueueDrain = false;
+let sequentialStaggerTimeout: ReturnType<typeof setTimeout> | null = null;
+let sequentialStaggerRerenderInterval: ReturnType<typeof setInterval> | null = null;
+let sequentialStaggerUntil: number | null = null;
 let videoProgressStackTracePatchSucceeded = false;
 let heartbeatStackTracePatchSucceeded = false;
 let didShowBrokenAutoCompleteToast = false;
@@ -311,8 +319,12 @@ function showBrokenAutoCompleteToast(): void {
     showToast({ text: "AutoComplete is broken. A fix will be implemented shortly.", variant: "critical" });
 }
 
+export function isSimultaneousAutoCompleteEnabled(): boolean {
+    return simultaneousAutoCompleteOnStartup;
+}
+
 export function hasEnabledAutoCompleteQuestTypes(): boolean {
-    return autoCompleteQuestTaskTypes.some(questType => getQuestifySettings().autoCompleteQuestTypes[questType]);
+    return hasEnabledAutoCompleteCombinations(getQuestifySettings().autoCompleteQuestCombinations);
 }
 
 function isAutoCompleteRuntimeReady(notify: boolean = false): boolean {
@@ -331,13 +343,26 @@ function isAutoCompleteRuntimeReady(notify: boolean = false): boolean {
 }
 
 export function getQuestAutoCompleteProgress(quest: Quest): number | null {
-    return activeAutoCompletes.get(quest.id)?.progress ?? null;
+    return getQuestAutoCompleteEntry(quest)?.progress ?? null;
 }
 
 export function getQuestAutoCompleteEntry(questOrId: Quest | string): Readonly<AutoCompleteEntry> | null {
     const questId = typeof questOrId === "string" ? questOrId : questOrId.id;
+    const entry = activeAutoCompletes.get(questId);
 
-    return activeAutoCompletes.get(questId) ?? null;
+    if (!entry) {
+        return null;
+    }
+
+    if (entry.status === "queued") {
+        const quest = typeof questOrId === "string" ? QuestStore.getQuest(questId) : refreshQuest(questOrId);
+
+        if (!isQueuedEntryEligible(entry, quest)) {
+            return null;
+        }
+    }
+
+    return entry;
 }
 
 export function getAutoCompleteQuestTarget(task: QuestTask): AutoCompleteQuestTarget {
@@ -380,16 +405,17 @@ function getQuestAutoCompleteKind(task: QuestTask): AutoCompleteQuestKind | null
     }
 }
 
-function getEffectiveAutoCompleteTaskType(task: QuestTask, quest: Quest): QuestTaskType {
-    return task.type === QuestTaskType.WATCH_VIDEO && hasInjectedDesktopVideoCompatibility(quest)
+function getEffectiveAutoCompleteTaskType(task: QuestTask): QuestTaskType {
+    return task.type === QuestTaskType.WATCH_VIDEO && isInjectedDesktopVideoTask(task)
         ? QuestTaskType.WATCH_VIDEO_ON_MOBILE
         : task.type;
 }
 
 function isAutoCompleteQuestTaskEnabled(quest: Quest, task: QuestTask): boolean {
-    const taskType = getEffectiveAutoCompleteTaskType(task, quest);
+    const settings = getQuestifySettings();
+    const taskType = getEffectiveAutoCompleteTaskType(task);
     const compatible = isAutoCompleteCompatible(taskType);
-    const enabled = getQuestifySettings().autoCompleteQuestTypes[taskType] === true;
+    const enabled = questTaskMatchesAutoCompleteCombinations(quest, taskType, settings.autoCompleteQuestCombinations);
 
     return compatible && enabled && getQuestAutoCompleteKind(task) != null;
 }
@@ -499,9 +525,13 @@ function isQuestQueuedForResume(questId: string): boolean {
     return Boolean(resumeState && !isResumeStateExpired(resumeState.timestamp) && resumeState.questIDs.includes(questId));
 }
 
+function isQueuedEntryEligible(entry: Readonly<AutoCompleteEntry>, quest: Quest | undefined = QuestStore.getQuest(entry.questId)): quest is Quest {
+    return quest != null && canAutoCompleteQuest(quest) && isAutoCompleteQuestTaskEnabled(quest, entry.task);
+}
+
 function getQueuedAutoCompletePosition(questId: string): number | null {
     const queuedQuestIds = Array.from(activeAutoCompletes.values())
-        .filter(entry => entry.status === "queued")
+        .filter(entry => entry.status === "queued" && isQueuedEntryEligible(entry))
         .map(entry => entry.questId);
     const queuedIndex = queuedQuestIds.indexOf(questId);
 
@@ -511,7 +541,7 @@ function getQueuedAutoCompletePosition(questId: string): number | null {
 export function getQuestCompletionState(quest: Quest, options: QuestButtonTextOptions = {}): QuestCompletionStateTuple {
     quest = refreshQuest(quest);
 
-    const activeEntry = activeAutoCompletes.get(quest.id);
+    const activeEntry = getQuestAutoCompleteEntry(quest);
     const resolvedQuest = activeEntry ?? resolveAutoCompleteQuest(quest);
 
     if (!resolvedQuest) {
@@ -539,7 +569,17 @@ export function getQuestCompletionState(quest: Quest, options: QuestButtonTextOp
     }
 
     if (activeEntry?.status === "queued") {
-        return [`Queued (${getQueuedAutoCompletePosition(quest.id) ?? "?"})`, QuestCompletionState.Queued];
+        const position = getQueuedAutoCompletePosition(quest.id);
+
+        if (position === 1 && sequentialStaggerUntil !== null) {
+            const waitRemaining = Math.max(0, (sequentialStaggerUntil - Date.now()) / 1000);
+            const formattedWait = formatQuestTime(waitRemaining, options.prepositional);
+            const text = options.prepositional ? `Starting in ${formattedWait}` : `Waiting (${formattedWait})`;
+
+            return [text, QuestCompletionState.Queued];
+        }
+
+        return [`Queued (${position ?? "?"})`, QuestCompletionState.Queued];
     }
 
     if (enrolledAt) {
@@ -640,11 +680,10 @@ export function canAutoCompleteQuest(quest: Quest): boolean {
         return false;
     }
 
-    if (quest.userStatus?.completedAt) {
-        return false;
-    }
-
-    if (getQuestStatus(quest, getIgnoredQuestIDs()) !== QuestStatus.Unclaimed) {
+    if (
+        quest.userStatus?.completedAt
+        || getQuestStatus(quest, getIgnoredQuestIDs()) !== QuestStatus.Unclaimed
+    ) {
         return false;
     }
 
@@ -870,12 +909,11 @@ function getQuestExpiryTime(quest: Quest): number {
 }
 
 export function getQueueableAutoCompleteQuests(): Quest[] {
-    const settings = getQuestifySettings();
-    const includedTypes = settings.questButtonIncludedTypes as QuestIncludedTypes;
+    const ignoredQuestIds = getIgnoredQuestIDs();
 
     return Array.from(QuestStore.quests.values())
-        .filter(quest => !activeAutoCompletes.has(quest.id))
-        .filter(quest => questMatchesIncludedTypes(quest, includedTypes))
+        .filter(quest => !getQuestAutoCompleteEntry(quest))
+        .filter(quest => !isQuestHidden(quest, ignoredQuestIds))
         .filter(canAutoCompleteQuest);
 }
 
@@ -1081,6 +1119,7 @@ function startRerenderInterval(entry: AutoCompleteEntry): void {
             return;
         }
 
+        pruneIneligibleQueuedAutoCompletes();
         rerenderQuests();
     }, 1000);
 }
@@ -1340,6 +1379,40 @@ function hasRunningQueuedAutoComplete(): boolean {
     return Array.from(activeAutoCompletes.values()).some(entry => entry.status === "running");
 }
 
+function hasQueuedAutoComplete(): boolean {
+    return Array.from(activeAutoCompletes.values()).some(entry =>
+        entry.status === "queued" && isQueuedEntryEligible(entry)
+    );
+}
+
+function clearSequentialStagger(): void {
+    if (sequentialStaggerTimeout !== null) {
+        clearTimeout(sequentialStaggerTimeout);
+        sequentialStaggerTimeout = null;
+    }
+
+    if (sequentialStaggerRerenderInterval !== null) {
+        clearInterval(sequentialStaggerRerenderInterval);
+        sequentialStaggerRerenderInterval = null;
+    }
+
+    sequentialStaggerUntil = null;
+}
+
+function getRandomSequentialStaggerMs(): number {
+    return Math.floor(minSequentialStaggerMs + Math.random() * (maxSequentialStaggerMs - minSequentialStaggerMs + 1));
+}
+
+export function flushPendingAutoCompleteStagger(): void {
+    if (sequentialStaggerTimeout === null) {
+        return;
+    }
+
+    clearSequentialStagger();
+    runNextQueuedQuest();
+    rerenderQuests();
+}
+
 async function runEntry(quest: Quest, entry: AutoCompleteEntry): Promise<void> {
     entry.status = "running";
     updateResumeState();
@@ -1372,30 +1445,97 @@ async function runEntry(quest: Quest, entry: AutoCompleteEntry): Promise<void> {
         activeAutoCompletes.delete(entry.questId);
         resetQuestsToResume(quest);
         updateResumeState();
+        validateQuestBadgeCount();
 
-        if (!getQuestifySettings().autoCompleteQuestsSimultaneously && !suppressQueueDrain) {
-            runNextQueuedQuest();
+        if (!isSimultaneousAutoCompleteEnabled() && !suppressQueueDrain) {
+            runNextQueuedQuest({ stagger: true });
         }
+
+        rerenderQuests();
     }
 }
 
-function runNextQueuedQuest(): void {
-    if (suppressQueueDrain || getQuestifySettings().autoCompleteQuestsSimultaneously || hasRunningQueuedAutoComplete()) {
+export function pruneIneligibleQueuedAutoCompletes(): boolean {
+    let pruned = false;
+
+    for (const entry of Array.from(activeAutoCompletes.values())) {
+        if (entry.status !== "queued") {
+            continue;
+        }
+
+        const quest = QuestStore.getQuest(entry.questId);
+
+        if (!isQueuedEntryEligible(entry, quest)) {
+            activeAutoCompletes.delete(entry.questId);
+
+            if (quest) {
+                resetQuestsToResume(quest);
+            }
+
+            pruned = true;
+        }
+    }
+
+    if (pruned) {
+        updateResumeState();
+        validateQuestBadgeCount();
+
+        if (sequentialStaggerTimeout !== null && !hasQueuedAutoComplete()) {
+            clearSequentialStagger();
+        }
+    }
+
+    return pruned;
+}
+
+function runNextQueuedQuest(options: { stagger?: boolean; } = {}): void {
+    if (suppressQueueDrain || isSimultaneousAutoCompleteEnabled() || hasRunningQueuedAutoComplete()) {
         return;
     }
+
+    pruneIneligibleQueuedAutoCompletes();
 
     const nextEntry = Array.from(activeAutoCompletes.values()).find(entry => entry.status === "queued");
 
     if (!nextEntry) {
+        clearSequentialStagger();
+        return;
+    }
+
+    if (sequentialStaggerTimeout !== null) {
         return;
     }
 
     const nextQuest = QuestStore.getQuest(nextEntry.questId);
 
     if (!nextQuest) {
-        activeAutoCompletes.delete(nextEntry.questId);
-        updateResumeState();
-        runNextQueuedQuest();
+        return;
+    }
+
+    if (options.stagger && getQuestifySettings().staggerSequentialAutoCompletes) {
+        const delayMs = getRandomSequentialStaggerMs();
+        sequentialStaggerUntil = Date.now() + delayMs;
+
+        sequentialStaggerRerenderInterval = setInterval(() => {
+            pruneIneligibleQueuedAutoCompletes();
+
+            if (sequentialStaggerTimeout === null || !hasQueuedAutoComplete()) {
+                clearSequentialStagger();
+                rerenderQuests();
+                return;
+            }
+
+            rerenderQuests();
+        }, 1000);
+
+        sequentialStaggerTimeout = setTimeout(() => {
+            clearSequentialStagger();
+            runNextQueuedQuest();
+            rerenderQuests();
+        }, delayMs);
+
+        QL.info("AUTO_COMPLETE_STAGGER_STARTED", { questId: nextEntry.questId, questName: nextEntry.questName, delayMs });
+        rerenderQuests();
         return;
     }
 
@@ -1403,7 +1543,7 @@ function runNextQueuedQuest(): void {
 }
 
 export function processQuestForAutoComplete(quest: Quest, options: AutoCompleteStartOptions = {}): boolean {
-    const { force = false, source = "manual" } = options;
+    const { force = false, source = "manual", staggerIfIdle = false } = options;
     const questName = normalizeQuestName(quest);
     const existingEntry = activeAutoCompletes.get(quest.id);
     const settings = getQuestifySettings();
@@ -1429,6 +1569,11 @@ export function processQuestForAutoComplete(quest: Quest, options: AutoCompleteS
         return false;
     }
 
+    if (source === "auto" && isQuestHidden(quest, getIgnoredQuestIDs())) {
+        QL.warn("AUTO_COMPLETE_HIDDEN", { questId: quest.id, questName });
+        return false;
+    }
+
     if (quest.userStatus?.completedAt || getQuestStatus(quest, getIgnoredQuestIDs()) !== QuestStatus.Unclaimed) {
         QL.warn("AUTO_COMPLETE_INCOMPATIBLE_STATUS", { questId: quest.id, questName });
         return false;
@@ -1444,19 +1589,20 @@ export function processQuestForAutoComplete(quest: Quest, options: AutoCompleteS
     const entry = createAutoCompleteEntry(quest, resolvedQuest.task, resolvedQuest.kind, source);
 
     activeAutoCompletes.set(quest.id, entry);
+    validateQuestBadgeCount();
 
-    if (getQuestifySettings().autoCompleteQuestsSimultaneously) {
+    if (isSimultaneousAutoCompleteEnabled()) {
         void runEntry(quest, entry);
     } else {
         updateResumeState();
-        runNextQueuedQuest();
+        runNextQueuedQuest({ stagger: staggerIfIdle });
     }
 
     QL.info("AUTO_COMPLETE_STARTED", {
         questId: quest.id,
         questName,
         source,
-        mode: getQuestifySettings().autoCompleteQuestsSimultaneously ? "simultaneous" : "queue",
+        mode: isSimultaneousAutoCompleteEnabled() ? "simultaneous" : "queue",
         taskType: entry.task.type,
     });
 
@@ -1487,15 +1633,15 @@ function getQuestProcessingAction(quest: Quest, { autoComplete, source = "manual
     if (
         settings.disableQuestsEverything ||
         quest.userStatus?.completedAt ||
+        isQuestHidden(quest, ignoredQuestIds) ||
         getQuestStatus(quest, ignoredQuestIds) !== QuestStatus.Unclaimed ||
         new Date(quest.config.startsAt).getTime() > Date.now() ||
-        (!quest.userStatus?.enrolledAt && !isQuestEnrollmentCompatible(quest)) ||
-        !questMatchesIncludedTypes(quest, settings.questButtonIncludedTypes as QuestIncludedTypes)
+        (!quest.userStatus?.enrolledAt && !isQuestEnrollmentCompatible(quest))
     ) {
         return { enroll: false, complete: false };
     }
 
-    if (source === "auto" && (settings.usedKonamiCode !== true || !settings.allowChangingDangerousSettings || isQuestHidden(quest, ignoredQuestIds))) {
+    if (source === "auto" && (settings.usedKonamiCode !== true || !settings.allowChangingDangerousSettings)) {
         return { enroll: false, complete: false };
     }
 
@@ -1541,6 +1687,7 @@ export function processQuests(quests: readonly Quest[], options: ProcessQuestsOp
     const processing = questProcessingTail.then(async () => {
         batch.status = "running";
         let processed = 0;
+        let startedAutoComplete = hasRunningQueuedAutoComplete() || sequentialStaggerTimeout !== null;
         let enrollmentFailures = 0;
         let stopReason = "finished";
         let loggedCooldownUntil: number | undefined;
@@ -1650,7 +1797,12 @@ export function processQuests(quests: readonly Quest[], options: ProcessQuestsOp
                     let changed = !wasEnrolled;
 
                     if (getQuestProcessingAction(refreshedQuest, options).complete) {
-                        changed = processQuestForAutoComplete(refreshedQuest, { force: source === "manual", source }) || changed;
+                        const started = processQuestForAutoComplete(refreshedQuest, { force: source === "manual", source, staggerIfIdle: startedAutoComplete });
+
+                        if (started) {
+                            startedAutoComplete = true;
+                            changed = true;
+                        }
                     }
 
                     if (changed) {
@@ -1742,8 +1894,12 @@ export function stopQuestAutoComplete(questOrId: Quest | string, options: AutoCo
         updateResumeState(resumeQuestIds, userId, automaticQuestIds);
     }
 
-    if (!getQuestifySettings().autoCompleteQuestsSimultaneously && !suppressQueueDrain) {
-        runNextQueuedQuest();
+    if (!suppressQueueDrain) {
+        validateQuestBadgeCount();
+
+        if (!isSimultaneousAutoCompleteEnabled()) {
+            runNextQueuedQuest();
+        }
     }
 
     QL.info("AUTO_COMPLETE_STOPPED", { questId, manual, preserveResume, terminalHeartbeat });
@@ -1752,6 +1908,7 @@ export function stopQuestAutoComplete(questOrId: Quest | string, options: AutoCo
 
 export function stopAllAutoCompletes(options: AutoCompleteStopOptions = {}): void {
     autoCompleteStartGeneration++;
+    clearSequentialStagger();
     stopQuestProcessing();
 
     const resumeQuestIds = options.preserveResume ? getResumeQuestIds() : undefined;
@@ -1772,6 +1929,8 @@ export function stopAllAutoCompletes(options: AutoCompleteStopOptions = {}): voi
     } finally {
         suppressQueueDrain = false;
     }
+
+    validateQuestBadgeCount();
 }
 
 export function stopAutomaticAutoCompletes(): void {
@@ -1787,6 +1946,7 @@ export function stopAutomaticAutoCompletes(): void {
         suppressQueueDrain = false;
     }
 
+    validateQuestBadgeCount();
     runNextQueuedQuest();
 }
 
@@ -1866,5 +2026,7 @@ export function resumeInterruptedAutoCompletes(): void {
 }
 
 export function getActiveAutoCompletes(): readonly Readonly<AutoCompleteEntry>[] {
-    return Array.from(activeAutoCompletes.values());
+    return Array.from(activeAutoCompletes.values()).filter(entry =>
+        entry.status === "running" || isQueuedEntryEligible(entry)
+    );
 }

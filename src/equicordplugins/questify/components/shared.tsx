@@ -10,7 +10,7 @@ import { Card } from "@components/Card";
 import { Heading } from "@components/Heading";
 import { Paragraph } from "@components/Paragraph";
 import { findComponentByCodeLazy } from "@webpack";
-import { ColorPicker, React, Slider } from "@webpack/common";
+import { ColorPicker, React, Slider, TextInput } from "@webpack/common";
 import type { ComponentProps, ComponentType, JSX, ReactElement, ReactNode } from "react";
 
 import { collectSettingsSearchTerms, getSettingsSearchMatchScore, registerSettingsSearchTerms, SettingsSearchPriority, useSettingsSearchQuery } from "../settings/search";
@@ -195,6 +195,133 @@ export function SettingsSelect({
     }
 
     return selectElement;
+}
+
+export interface ManaComboSelectOption {
+    id: string;
+    value: string;
+    label: string;
+    description?: string;
+    leading?: ReactNode;
+    trailing?: ReactNode;
+    disabled?: boolean;
+}
+
+export interface ManaComboSelectProps {
+    options: ManaComboSelectOption[];
+    value?: string | string[] | null;
+    onSelectionChange?: (value: string | string[] | null) => void;
+    selectionMode?: "single" | "multiple";
+    placeholder?: string;
+    disabled?: boolean;
+    readOnly?: boolean;
+    clearable?: boolean;
+    autoFocus?: boolean;
+    closeOnSelect?: boolean;
+    hideTags?: boolean;
+    wrapTags?: boolean;
+    maxOptionsVisible?: number;
+    formatOption?: (option: ManaComboSelectOption) => ManaComboSelectOption;
+    customMatchSorter?: (options: ManaComboSelectOption[], query: string) => ManaComboSelectOption[];
+    matchSorterOptions?: Record<string, unknown>;
+    onQueryChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    onFocus?: React.FocusEventHandler<HTMLInputElement>;
+    onBlur?: React.FocusEventHandler<HTMLInputElement>;
+    onKeyDown?: React.KeyboardEventHandler<HTMLInputElement>;
+    name?: string;
+    form?: string;
+    required?: boolean;
+}
+
+export const ManaComboSelect = findComponentByCodeLazy("showChevronButton:!0") as React.ComponentType<ManaComboSelectProps>;
+
+export interface SettingsComboSelectProps extends ManaComboSelectProps {
+    label: ReactNode;
+    className?: string | string[];
+    labelClassName?: string | string[];
+    selectClassName?: string | string[];
+    tooltip?: { position: "top" | "bottom", text: string; wider?: boolean; };
+}
+
+export function SettingsComboSelect({
+    label,
+    className,
+    labelClassName,
+    selectClassName,
+    tooltip,
+    ...props
+}: SettingsComboSelectProps): JSX.Element {
+    const labelElement = <SettingsParagraph className={withDimmedClass(labelClassName, !!props.disabled)}>{label}</SettingsParagraph>;
+
+    return (
+        <div className={q("settings-select", className)}>
+            {tooltip ? (
+                <SettingsTooltip text={tooltip.text} position={tooltip.position} wider={tooltip.wider}>
+                    {labelElement}
+                </SettingsTooltip>
+            ) : labelElement}
+            <div className={q(selectClassName)}>
+                <ManaComboSelect {...props} />
+            </div>
+        </div>
+    );
+}
+
+export interface SettingsTextInputProps {
+    label: ReactNode;
+    value: string;
+    onChange: (value: string) => void;
+    onBlur?: React.FocusEventHandler<HTMLInputElement>;
+    onKeyDown?: React.KeyboardEventHandler<HTMLInputElement>;
+    placeholder?: string;
+    disabled?: boolean;
+    className?: string | string[];
+    labelClassName?: string | string[];
+    inputClassName?: string | string[];
+    maxLength?: number | null;
+    tooltip?: { position: "top" | "bottom", text: string; wider?: boolean; };
+}
+
+export function SettingsTextInput({
+    label,
+    value,
+    onChange,
+    onBlur,
+    onKeyDown,
+    placeholder,
+    disabled,
+    className,
+    labelClassName,
+    inputClassName,
+    maxLength = null,
+    tooltip,
+}: SettingsTextInputProps): JSX.Element {
+    const inputElement = (
+        <div className={q("settings-text-input", className)}>
+            <SettingsParagraph className={withDimmedClass(labelClassName, !!disabled)}>{label}</SettingsParagraph>
+            <div className={q("settings-text-input-control", inputClassName)}>
+                <TextInput
+                    value={value}
+                    onChange={onChange}
+                    onBlur={onBlur}
+                    onKeyDown={onKeyDown}
+                    placeholder={placeholder}
+                    disabled={disabled}
+                    maxLength={maxLength}
+                />
+            </div>
+        </div>
+    );
+
+    if (tooltip) {
+        return (
+            <SettingsTooltip text={tooltip.text} position={tooltip.position} wider={tooltip.wider}>
+                {inputElement}
+            </SettingsTooltip>
+        );
+    }
+
+    return inputElement;
 }
 
 type ColorPickerWithOnCloseProps = ComponentProps<typeof ColorPicker> & {

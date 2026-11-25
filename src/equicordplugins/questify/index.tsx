@@ -29,10 +29,10 @@ import { getSettingsModalOpen, initialQuestDataFetched, setInitialQuestDataFetch
 import managedStyle from "./styles.css?managed";
 import { canAutoCompleteQuest, getActiveAutoCompletes, getQuestAutoCompleteProgress, getQuestButtonProps, getQuestPanelSubtitleText, getQuestProcessingBatches, hasEnabledAutoCompleteQuestTypes, processQuestForAutoComplete, resumeInterruptedAutoCompletes, setHeartbeatStackTracePatchSucceeded, setVideoProgressStackTracePatchSucceeded, stopAllAutoCompletes, stopAutoCompletesForRunningGames, stopQuestAutoComplete } from "./utils/completion";
 import { canOpenDevToolsWindow, fetchAndDispatchQuests, openDevToolsWindow, snakeToCamel } from "./utils/fetching";
-import { normalizeQuestName } from "./utils/filtering";
+import { hasQuestOptimisticProgress, normalizeQuestName } from "./utils/filtering";
 import { notifyQuestCompletion, QL } from "./utils/logging";
-import { getQuestEmbedProgress, getQuestPanelOverride, getQuestPanelPercentComplete, shouldForceQuestPanelVisible } from "./utils/questState";
-import { getLastFilterChoices, getLastSortChoice, getQuestClaimDeadlineText, getQuestTileClasses, getQuestTileStyle, setLastFilterChoices, setLastSortChoice, shouldPreloadQuestAssets, sortQuests } from "./utils/questTiles";
+import { getQuestEmbedProgress, getQuestPanelOverride, getQuestPanelPercentComplete, shouldForceQuestPanelVisible, shouldRestoreExpiredQuest } from "./utils/questState";
+import { appendHiddenQuestStatuses, getLastSortChoice, getQuestClaimDeadlineText, getQuestFilterMenuProps, getQuestTileClasses, getQuestTileStyle, questifyFilterGroup, resolveFilterChoices, setLastFilterChoices, setLastSortChoice, shouldPreloadQuestAssets, sortQuests, useQuestHomeVisibility } from "./utils/questTiles";
 import { QUEST_PAGE } from "./utils/ui";
 
 let isPluginStarted = false;
@@ -40,7 +40,30 @@ let activeAccountUserId: string | null = null;
 let accountSessionGeneration = 0;
 let didAttemptAutoCompleteResume = false;
 const notifiedCompletedQuests = new Set<string>();
+const optimisticProgressQuests = new Set<string>();
 export const enabledOnStartup = PlainSettings.plugins.Questify?.enabled;
+
+function syncOptimisticProgressQuest(questId: string | undefined): boolean {
+    if (!questId) {
+        return false;
+    }
+
+    const quest = QuestStore.getQuest(questId);
+    const hasOptimisticProgress = Boolean(quest?.userStatus) && hasQuestOptimisticProgress(quest!);
+    const hadOptimisticProgress = optimisticProgressQuests.has(questId);
+
+    if (hasOptimisticProgress === hadOptimisticProgress) {
+        return false;
+    }
+
+    if (hasOptimisticProgress) {
+        optimisticProgressQuests.add(questId);
+    } else {
+        optimisticProgressQuests.delete(questId);
+    }
+
+    return true;
+}
 
 export function createQuestEnrollmentGuard(): () => boolean {
     const userId = getCurrentUserId();
@@ -85,6 +108,7 @@ function stopPerAccountTasks(source: string, preserveResume: boolean = true): vo
     disposeQuestAutomation();
     stopAutoFetchingQuests();
     notifiedCompletedQuests.clear();
+    optimisticProgressQuests.clear();
     stopAllAutoCompletes({ manual: false, preserveResume, terminalHeartbeat: true, userId: activeAccountUserId });
     activeAccountUserId = null;
 
@@ -136,6 +160,7 @@ export default definePlugin({
     managedStyle,
     settings,
 
+    appendHiddenQuestStatuses,
     canOpenDevToolsWindow,
     canAutoCompleteQuest,
     createQuestEnrollmentGuard,
@@ -143,12 +168,12 @@ export default definePlugin({
     enrolledIncompleteButton,
     getActiveAutoCompletes,
     getQuestProcessingBatches,
-    getLastFilterChoices,
     getLastSortChoice,
     getQuestAutoCompleteProgress,
     getQuestEmbedProgress,
     getQuestButtonProps,
     getQuestClaimDeadlineText,
+    getQuestFilterMenuProps,
     getQuestPanelOverride,
     getQuestPanelPercentComplete,
     getQuestPanelSubtitleText,
@@ -159,15 +184,19 @@ export default definePlugin({
     normalizeQuestName,
     openDevToolsWindow,
     processQuestForAutoComplete,
+    questifyFilterGroup,
     rerenderQuests,
+    resolveFilterChoices,
     setHeartbeatStackTracePatchSucceeded,
     setLastFilterChoices,
     setLastSortChoice,
     setVideoProgressStackTracePatchSucceeded,
     shouldForceQuestPanelVisible,
     shouldPreloadQuestAssets,
+    shouldRestoreExpiredQuest,
     sortQuests,
     stopQuestAutoComplete,
+    useQuestHomeVisibility,
     useQuestRerender,
     wrapOrbsBalance,
 
@@ -234,15 +263,6 @@ export default definePlugin({
             ]
         },
         {
-            // Hides the sponsored banner on the Quests page.
-            find: "QUEST_HOME)},[]),",
-            predicate: () => !getQuestifySettings().disableQuestsEverything && getQuestifySettings().disableSponsoredBanner,
-            replacement: {
-                match: /(?<=,{questHomeHero:(\i),isLoading:(\i),confirmedEmpty:(\i)}=.{0,300}?ORBS_BALANCE_MENU}\)},\[\]\);)/,
-                replace: "$1=null;$2=false;$3=true;"
-            }
-        },
-        {
             // Hides the Quest & Orbs badges on user profiles.
             find: ".MODAL]:26",
             group: true,
@@ -257,7 +277,6 @@ export default definePlugin({
         {
             // Overrides the account panel Quest popup and progress display.
             find: "collapsed-with-rewards\":\"collapsed-without-rewards",
-            predicate: () => getQuestifySettings().disableAccountPanelPromo || !getQuestifySettings().disableAccountPanelQuestProgress,
             replacement: {
                 match: /(?<=function\(\)\{)(let (\i)=\(0,\i\.\i\)\(\),\i=\(0,\i\.\i\)\(.{0,55}?\);)(?=switch\(\2\.type\)\{case (\i\.\i\.QUEST):)/,
                 replace: "void $self.useQuestRerender();$1$2=$self.getQuestPanelOverride($2,$3);if(null==$2)return null;"
@@ -371,29 +390,56 @@ export default definePlugin({
             }
         },
         {
-            find: "QUEST_HOME)},[]),",
+            find: "removeExpiredQuests:!0",
             group: true,
             predicate: () => !getQuestifySettings().disableQuestsEverything,
             replacement: [
                 {
+                    match: /(?<=,{questHomeHero:(\i),isLoading:(\i),confirmedEmpty:(\i)}=.{0,300}?ORBS_BALANCE_MENU}\)},\[\]\);)/,
+                    replace: "const questifyVisibility=$self.useQuestHomeVisibility($1,$2,$3);({questHomeHero:$1,isLoading:$2,confirmedEmpty:$3}=questifyVisibility);"
+                },
+                {
+                    match: /(?<=banner:\i===\i.\i.ALL&&!\i&&)/,
+                    replace: "!questifyVisibility.hideBanner&&"
+                },
+                {
+                    // Share the temporary checkbox with the All Quests list.
+                    match: /(?<=\{ref:\i)(?=\}\),!\i&&)/,
+                    replace: ",questifyVisibility"
+                },
+                {
+                    // Render the Questify group through Discord's checkbox list.
+                    match: /(\i)(\.map\(\(\i,\i\)=>\{let \i=\i\.options\.map\((\i)=>\(\{label:)/,
+                    replace: "[...$1,$self.questifyFilterGroup]$2$3.label??"
+                },
+                {
+                    match: /(?<=,)\{onChange:(\i),selectedFilters:(\i)\}/,
+                    replace: "$self.getQuestFilterMenuProps($2,$1,questifyVisibility)"
+                },
+                {
+                    // Clear the temporary checkbox when the empty-state Clear Filters button is clicked, without clearing it during hero scrollToQuest.
+                    match: /(?<=,onClearFilters:)(\i)(?=\}\))/,
+                    replace: "()=>{questifyVisibility.setShowHiddenQuests(false);$1();}"
+                },
+                {
                     // Subscribes the Quest page sort/filter state to Questify rerenders.
-                    match: /(\{ref:\i,\.\.\.\i\}=\i,\i=\i\.useRef\(null\),)(?=\[\i,\i\]=)/,
-                    replace: "$1questRerenderTrigger=$self.useQuestRerender(),"
+                    match: /\{(ref:\i,\.\.\.\i\}=\i,\i=\i\.useRef\(null\),)/,
+                    replace: "{questifyVisibility,$1questRerenderTrigger=$self.useQuestRerender(),"
                 },
                 {
                     // Set the initial sort method.
-                    match: /(\i.\i.SUGGESTED)/,
+                    match: /(?<=\?\?)(\i\.\i\.SUGGESTED)/,
                     replace: "$self.getLastSortChoice()??$1"
                 },
                 {
-                    // Set the initial filters and update the filters and sort method when they change.
-                    match: /(get\(\i\)\)\?\?)(\i,\[)(\i)(\]\),\i=\i.useCallback\((\i)=>{)(.{0,60}?useCallback\((\i)=>{)/,
-                    replace: "$1$self.getLastFilterChoices()??$2$3,questRerenderTrigger$4$self.setLastSortChoice($5);$6$self.setLastFilterChoices($7);$self.rerenderQuests();"
+                    // Stabilize selected filters across URL and remembered sources and update sort/filter memory when they change.
+                    match: /(useMemo\(\(\)=>)(.{0,180}?get\(\i\)\))\?\?(\i),\[(\i)\]\),(\i=\i\.useCallback\((\i)=>{)(.{0,60}?useCallback\((\i)=>{)/,
+                    replace: "$1$self.resolveFilterChoices($2,$3),[$4,questRerenderTrigger]),$5$self.setLastSortChoice($6);$7$self.setLastFilterChoices($8);$self.rerenderQuests();"
                 },
                 {
                     // Update the last used sort and filter choices when the toggle setting for either is changed.
-                    match: /(?<=ALL,\i.useMemo\(\(\)=>\()({sortMethod:(\i),filters:(\i))/,
-                    replace: "$self.setLastSortChoice($2),$self.setLastFilterChoices($3),$1"
+                    match: /\{(sortMethod:(\i),filters:(\i),removeExpiredQuests:!0\}\),\[\2,\3)/,
+                    replace: "$self.setLastSortChoice($2),$self.setLastFilterChoices($3),{showHiddenQuests:questifyVisibility.showHiddenQuests,$1,questifyVisibility.showHiddenQuests"
                 }
             ]
         },
@@ -555,7 +601,17 @@ export default definePlugin({
                 {
                     // Applies Questify filtering and sorting before Discord's Quest list hooks.
                     match: /,(\i)=new Map\((\i)\.map/,
-                    replace: ";const questRerenderTrigger=$self.useQuestRerender();const questifySorted=$self.sortQuests($2,arguments[1]?.sortMethod!==\"questify\");const questifyListChanged=questifySorted!==$2;$2=questifySorted;let $1=new Map($2.map"
+                    replace: ";const questRerenderTrigger=$self.useQuestRerender();const questifySorted=$self.sortQuests($2,arguments[1]??{});const questifyListChanged=questifySorted!==$2;$2=questifySorted;let $1=new Map($2.map"
+                },
+                {
+                    // Restore expired Quests hidden by the Expired status filter when Show Hidden Quests is checked.
+                    match: /(\i)\.removeExpiredQuests&&.{0,60}?\((\i)\.userStatus\)/,
+                    replace: "$&&&!($1.showHiddenQuests&&$self.shouldRestoreExpiredQuest($2))"
+                },
+                {
+                    // Keep restored status groups below the selected sort's visible results.
+                    match: /(?<=return\{quests:)(\i)(?=,excludedQuests:\i,isFetchingCurrentQuests:)/,
+                    replace: "arguments[1]?.showHiddenQuests?$self.appendHiddenQuestStatuses($1):$1"
                 },
                 {
                     // Bypasses Discord's memo cache when Questify changes the list.
@@ -610,6 +666,14 @@ export default definePlugin({
         QUESTS_FETCH_CURRENT_QUESTS_SUCCESS(data: { quests: Quest[]; }): void {
             setInitialQuestDataFetched(true);
             QL.log("QUESTS_FETCH_CURRENT_QUESTS_SUCCESS", data);
+            optimisticProgressQuests.clear();
+
+            for (const quest of QuestStore.quests.values()) {
+                if (quest.userStatus && hasQuestOptimisticProgress(quest)) {
+                    optimisticProgressQuests.add(quest.id);
+                }
+            }
+
             validateIgnoredQuests(data.quests);
             resumeAutoCompletesIfReady();
             processAutomaticQuests(data.quests);
@@ -617,11 +681,34 @@ export default definePlugin({
 
         QUESTS_ENROLL_SUCCESS(data: any): void {
             QL.log("QUESTS_ENROLL_SUCCESS", data);
+            syncOptimisticProgressQuest(data?.enrolledQuestUserStatus?.questId);
             validateIgnoredQuests();
         },
 
         QUESTS_CLAIM_REWARD_SUCCESS(data: any): void {
             QL.log("QUESTS_CLAIM_REWARD_SUCCESS", data);
+            validateIgnoredQuests();
+        },
+
+        QUESTS_SEND_HEARTBEAT_SUCCESS(data: any): void {
+            QL.log("QUESTS_SEND_HEARTBEAT_SUCCESS", data);
+            validateIgnoredQuests();
+        },
+
+        QUESTS_UPDATE_OPTIMISTIC_PROGRESS(data: { questId?: string; }): void {
+            if (syncOptimisticProgressQuest(data?.questId)) {
+                QL.log("QUESTS_UPDATE_OPTIMISTIC_PROGRESS", data);
+                validateIgnoredQuests();
+            }
+        },
+
+        QUESTS_RESET_OPTIMISTIC_PROGRESS(data: { questId?: string; }): void {
+            QL.log("QUESTS_RESET_OPTIMISTIC_PROGRESS", data);
+
+            if (data?.questId) {
+                optimisticProgressQuests.delete(data.questId);
+            }
+
             validateIgnoredQuests();
         },
 
@@ -634,19 +721,27 @@ export default definePlugin({
                 ? Date.now() - new Date(userStatus.completedAt).getTime() <= 5000
                 : false;
 
+            syncOptimisticProgressQuest(userStatus?.questId);
             validateIgnoredQuests();
 
             if (completedRecently && !claimedAt && !notifiedCompletedQuests.has(userStatus!.questId)) {
-                notifiedCompletedQuests.add(userStatus!.questId);
+                const questifySettings = getQuestifySettings();
+                const completedQuest = QuestStore.getQuest(userStatus!.questId);
 
-                if (getQuestifySettings().notifyOnQuestComplete) {
-                    notifyQuestCompletion(QuestStore.getQuest(userStatus!.questId));
+                if (!completedQuest) {
+                    return;
                 }
 
-                if (getQuestifySettings().questCompletedAlertSound) {
+                notifiedCompletedQuests.add(userStatus!.questId);
+
+                if (questifySettings.notifyOnQuestComplete) {
+                    notifyQuestCompletion(completedQuest);
+                }
+
+                if (questifySettings.questCompletedAlertSound) {
                     playAudio(
-                        getQuestifySettings().questCompletedAlertSound,
-                        { volume: Math.max(0, Math.min(100, getQuestifySettings().questCompletedAlertVolume)) }
+                        questifySettings.questCompletedAlertSound,
+                        { volume: Math.max(0, Math.min(100, questifySettings.questCompletedAlertVolume)) }
                     );
                 }
             }

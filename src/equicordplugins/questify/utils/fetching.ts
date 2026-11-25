@@ -15,7 +15,7 @@ import { NavigationRouter } from "@webpack/common/utils";
 
 import { getQuestifySettings } from "../settings/access";
 import { getIgnoredQuestIDs } from "../settings/ignoredQuests";
-import { getNewQuests, normalizeQuestName, type QuestIncludedTypes, questMatchesIncludedTypes } from "./filtering";
+import { getNewQuests, isQuestNotificationPrevented, normalizeQuestName } from "./filtering";
 import { QL } from "./logging";
 import { isQuestHidden } from "./questState";
 import { QUEST_PAGE } from "./ui";
@@ -146,7 +146,6 @@ export async function fetchAndAlertQuests(source: string): Promise<Quest[] | nul
     const shouldFetchExcludedQuests = settings.notifyOnNewExcludedQuests || Boolean(excludedAlertSound);
     const currentQuests = Array.from(QuestStore.quests.values());
     const currentExcludedQuestIds = new Set(Array.from(QuestStore.excludedQuests.values()).map(quest => quest.id));
-    const includedTypes = settings.questButtonIncludedTypes as QuestIncludedTypes;
 
     await fetchAndDispatchQuests();
     await sleep(1000);
@@ -170,9 +169,9 @@ export async function fetchAndAlertQuests(source: string): Promise<Quest[] | nul
 
     const newExcludedQuests = newExcludedQuestIds.length > 0 ? await fetchExcludedQuestConfigs(newExcludedQuestIds) : [];
     const ignoredQuestIds = getIgnoredQuestIDs();
-    const includeQuest = (quest: Quest) => questMatchesIncludedTypes(quest, includedTypes)
-        && !ignoredQuestIds.includes(quest.id)
-        && !isQuestHidden(quest, ignoredQuestIds);
+    const includeQuest = (quest: Quest) => !ignoredQuestIds.includes(quest.id)
+        && !isQuestHidden(quest, ignoredQuestIds)
+        && !isQuestNotificationPrevented(quest, settings.preventNotificationCombinations, settings.preventNotificationTerms);
     const newIncludedQuests = newQuests.filter(includeQuest);
     const newIncludedExcludedQuests = newExcludedQuests.filter(includeQuest);
     const shouldAlert = Boolean(alertSound) && newIncludedQuests.length > 0;

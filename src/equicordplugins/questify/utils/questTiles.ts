@@ -7,18 +7,36 @@
 import { getIntlMessage } from "@utils/discord";
 import type { Quest, QuestTaskWatchVideo, QuestTaskWatchVideoOnMobile } from "@vencord/discord-types";
 import { QuestTaskType } from "@vencord/discord-types/enums";
-import { LocaleStore } from "@webpack/common";
+import { LocaleStore, QuestStore, useMemo, useState, useStateFromStores } from "@webpack/common";
 import type { ReactNode } from "react";
 
 import { getQuestifySettings, useQuestifySettings } from "../settings/access";
 import { defaultClaimedSubsort, defaultExpiredSubsort, defaultIgnoredSubsort, defaultQuestOrder, defaultUnclaimedSubsort, type QuestOrderStatus, type QuestSubsort, type QuestTileColorSetting, type QuestTileGradient } from "../settings/def";
 import { getIgnoredQuestIDs } from "../settings/ignoredQuests";
+import { useQuestRerender } from "../settings/rerender";
+import { markInjectedDesktopVideoTask } from "../state";
+import { hasEnabledAutoCompleteTaskType, questTaskMatchesAutoCompleteCombinations } from "./filtering";
 import { getQuestStatus, isQuestHidden, QuestStatus } from "./questState";
 import { adjustRGB, decimalToRGB, isDarkish, q, type RGB } from "./ui";
 
 type QuestGroupKey = "claimed" | "expired" | "ignored" | "unclaimed" | "unknown";
 
-export const desktopVideoCompatibilityQuestIds = new Set<string>();
+export interface QuestHomeHero {
+    id: string;
+    questIds?: string[] | null;
+}
+
+interface QuestPageVisibility {
+    showHiddenQuests: boolean;
+    setShowHiddenQuests: (checked: boolean) => void;
+}
+
+export interface QuestHomeHeroState<THero extends QuestHomeHero = QuestHomeHero> extends QuestPageVisibility {
+    hideBanner: boolean;
+    questHomeHero: THero | null;
+    isLoading: boolean;
+    confirmedEmpty: boolean;
+}
 
 interface QuestTileColorSettings {
     questTileUnclaimedColor: QuestTileColorSetting;
@@ -225,8 +243,12 @@ function getValidQuestOrder(value: unknown): QuestOrderStatus[] {
     return order;
 }
 
-function injectDesktopVideoQuestTasks(quests: Quest[]): void {
+function injectDesktopVideoQuestTasks(quests: Quest[], includeQuest: (quest: Quest) => boolean): void {
     for (const quest of quests) {
+        if (!includeQuest(quest)) {
+            continue;
+        }
+
         const tasks = quest.config.taskConfigV2?.tasks;
         const mobileVideoTask = tasks?.[QuestTaskType.WATCH_VIDEO_ON_MOBILE] as QuestTaskWatchVideoOnMobile | undefined;
 
@@ -239,6 +261,8 @@ function injectDesktopVideoQuestTasks(quests: Quest[]): void {
             type: QuestTaskType.WATCH_VIDEO,
         };
 
+        markInjectedDesktopVideoTask(desktopVideoTask);
+
         const reorderedTasks: typeof tasks = {};
 
         for (const [taskType, task] of Object.entries(tasks) as [QuestTaskType, typeof tasks[QuestTaskType]][]) {
@@ -250,15 +274,96 @@ function injectDesktopVideoQuestTasks(quests: Quest[]): void {
         }
 
         quest.config.taskConfigV2.tasks = reorderedTasks;
-        desktopVideoCompatibilityQuestIds.add(quest.id);
     }
 }
 
-export function hasInjectedDesktopVideoCompatibility(quest?: Quest | string | null): boolean {
-    return !quest ? false : desktopVideoCompatibilityQuestIds.has(typeof quest === "string" ? quest : quest.id);
+export function useQuestHomeVisibility<THero extends QuestHomeHero>(
+    hero: THero | null,
+    isLoading: boolean,
+    confirmedEmpty: boolean,
+): QuestHomeHeroState<THero> {
+    const settings = useQuestifySettings([
+        "disableQuestsEverything",
+        "disableSponsoredBanner",
+        "ignoredQuestIDs",
+        "hiddenQuestStatuses",
+        "hiddenQuestCombinations",
+        "hiddenQuestTerms",
+        "hideNonAutoCompletableQuests",
+        "autoCompleteQuestCombinations",
+    ]);
+    const questRerenderTrigger = useQuestRerender();
+    const [showHiddenQuests, setShowHiddenQuests] = useState(false);
+    const quests = useStateFromStores([QuestStore], () => QuestStore.quests);
+    const hideBanner = settings.disableQuestsEverything || settings.disableSponsoredBanner;
+    const ignoredQuestIdsKey = getIgnoredQuestIDs().join("|");
+    const hiddenStatusesKey = Array.isArray(settings.hiddenQuestStatuses) ? settings.hiddenQuestStatuses.join("|") : "";
+    const hiddenCombinationsKey = Array.isArray(settings.hiddenQuestCombinations) ? settings.hiddenQuestCombinations.join("|") : "";
+    const autoCompleteCombinationsKey = Array.isArray(settings.autoCompleteQuestCombinations) ? settings.autoCompleteQuestCombinations.join("|") : "";
+
+    const heroState = useMemo(() => {
+        if (hideBanner) {
+            return { questHomeHero: null, isLoading: false, confirmedEmpty: true };
+        }
+
+        if (showHiddenQuests || !hero || !Array.isArray(hero.questIds) || hero.questIds.length === 0) {
+            return { questHomeHero: hero, isLoading, confirmedEmpty };
+        }
+
+        const ignoredQuestIds = ignoredQuestIdsKey ? ignoredQuestIdsKey.split("|") : [];
+        let hasAccessibleQuest = false;
+        let hasHiddenQuest = false;
+        const visibleQuestIds: string[] = [];
+
+        for (const questId of hero.questIds) {
+            const quest = quests.get(questId);
+
+            if (!quest) {
+                visibleQuestIds.push(questId);
+                continue;
+            }
+
+            hasAccessibleQuest = true;
+
+            if (isQuestHidden(quest, ignoredQuestIds)) {
+                hasHiddenQuest = true;
+            } else {
+                visibleQuestIds.push(questId);
+            }
+        }
+
+        if (!hasHiddenQuest) {
+            return { questHomeHero: hero, isLoading, confirmedEmpty };
+        }
+
+        const hasVisibleAccessibleQuest = visibleQuestIds.some(questId => quests.has(questId));
+
+        if (hasAccessibleQuest && !hasVisibleAccessibleQuest) {
+            return { questHomeHero: null, isLoading: false, confirmedEmpty: true };
+        }
+
+        return { questHomeHero: { ...hero, questIds: visibleQuestIds }, isLoading, confirmedEmpty };
+    }, [
+        hero,
+        isLoading,
+        confirmedEmpty,
+        showHiddenQuests,
+        quests,
+        hideBanner,
+        ignoredQuestIdsKey,
+        hiddenStatusesKey,
+        hiddenCombinationsKey,
+        settings.hiddenQuestTerms,
+        settings.hideNonAutoCompletableQuests,
+        autoCompleteCombinationsKey,
+        questRerenderTrigger,
+    ]);
+
+    return { ...heroState, hideBanner, showHiddenQuests, setShowHiddenQuests };
 }
 
-export function sortQuests(quests: Quest[], skip?: boolean): Quest[] {
+// The Claimed tab supplies its own list and only uses Questify's sort.
+export function sortQuests(quests: Quest[], page?: { sortMethod?: string; showHiddenQuests?: boolean; }): Quest[] {
     const questSorting = useQuestifySettings([
         "disableQuestsEverything",
         "ignoredQuestIDs",
@@ -266,30 +371,47 @@ export function sortQuests(quests: Quest[], skip?: boolean): Quest[] {
         "completeVideoQuestsQuicker",
         "questOrder",
         "hiddenQuestStatuses",
+        "hiddenQuestCombinations",
+        "hiddenQuestTerms",
         "hideNonAutoCompletableQuests",
         "unclaimedSubsort",
         "claimedSubsort",
         "ignoredSubsort",
         "expiredSubsort",
-        "autoCompleteQuestTypes",
+        "autoCompleteQuestCombinations",
     ]);
 
     if (questSorting.disableQuestsEverything) {
         return quests;
     }
 
-    if (questSorting.makeMobileVideoQuestsDesktopCompatible || !!questSorting.autoCompleteQuestTypes.WATCH_VIDEO_ON_MOBILE) {
-        injectDesktopVideoQuestTasks(quests);
-    }
-
     const ignoredQuestIds = getIgnoredQuestIDs();
 
-    if (questSorting.hiddenQuestStatuses.length > 0 || questSorting.hideNonAutoCompletableQuests) {
-        quests = quests.filter(quest => !isQuestHidden(quest, ignoredQuestIds));
-    }
+    if (page) {
+        const hasHiddenQuests = questSorting.hiddenQuestStatuses.length > 0
+            || questSorting.hideNonAutoCompletableQuests
+            || questSorting.hiddenQuestCombinations.length > 0
+            || questSorting.hiddenQuestTerms.trim().length > 0;
 
-    if (skip) {
-        return quests;
+        const displayedQuests = !page.showHiddenQuests && hasHiddenQuests
+            ? quests.filter(quest => !isQuestHidden(quest, ignoredQuestIds))
+            : quests;
+        const injectAllDesktopVideo = questSorting.makeMobileVideoQuestsDesktopCompatible;
+        const injectAutoCompleteDesktopVideo = hasEnabledAutoCompleteTaskType(questSorting.autoCompleteQuestCombinations, QuestTaskType.WATCH_VIDEO_ON_MOBILE);
+
+        if (injectAllDesktopVideo || injectAutoCompleteDesktopVideo) {
+            injectDesktopVideoQuestTasks(displayedQuests, quest =>
+                injectAllDesktopVideo
+                || questTaskMatchesAutoCompleteCombinations(quest, QuestTaskType.WATCH_VIDEO_ON_MOBILE, questSorting.autoCompleteQuestCombinations)
+            );
+        }
+
+        quests = displayedQuests;
+
+        if (page.sortMethod !== "questify") {
+            // Discord's native sort can mutate the unfiltered list in place.
+            return page.showHiddenQuests ? [...quests] : quests;
+        }
     }
 
     const questGroups: Record<QuestGroupKey, Quest[]> = {
@@ -343,6 +465,53 @@ export function sortQuests(quests: Quest[], skip?: boolean): Quest[] {
     ];
 }
 
+export function appendHiddenQuestStatuses(quests: Quest[]): Quest[] {
+    const { hiddenQuestStatuses } = getQuestifySettings();
+
+    if (!hiddenQuestStatuses.length) return quests;
+
+    const visible: Quest[] = [];
+    const hiddenGroups = new Map<string, Quest[]>();
+    const ignoredQuestIds = getIgnoredQuestIDs();
+
+    for (const status of defaultQuestOrder) {
+        if (hiddenQuestStatuses.includes(status)) hiddenGroups.set(status, []);
+    }
+
+    for (const quest of quests) {
+        const group = hiddenGroups.get(getQuestStatus(quest, ignoredQuestIds)) ?? visible;
+        group.push(quest);
+    }
+
+    return visible.concat(...hiddenGroups.values());
+}
+
+interface QuestPageFilter {
+    group: string;
+    filter: string;
+}
+
+const showHiddenFilter = { group: "questify", filter: "show_hidden_quests", label: "Show Hidden Quests" };
+export const questifyFilterGroup = { heading: "Questify", options: [showHiddenFilter] };
+
+export function getQuestFilterMenuProps(
+    selectedFilters: QuestPageFilter[],
+    onChange: (filters: QuestPageFilter[]) => void,
+    { showHiddenQuests, setShowHiddenQuests }: QuestPageVisibility,
+) {
+    return {
+        selectedFilters: showHiddenQuests ? [...selectedFilters, showHiddenFilter] : selectedFilters,
+        onChange(filters: QuestPageFilter[]) {
+            const nativeFilters = filters.filter(filter => filter.group !== showHiddenFilter.group);
+            setShowHiddenQuests(nativeFilters.length !== filters.length);
+
+            if (nativeFilters.length !== selectedFilters.length || nativeFilters.some((filter, index) => filter !== selectedFilters[index])) {
+                onChange(nativeFilters);
+            }
+        },
+    };
+}
+
 export function shouldPreloadQuestAssets(): boolean {
     const settings = getQuestifySettings();
 
@@ -359,21 +528,53 @@ export function setLastSortChoice(sort: string): void {
     getQuestifySettings().lastQuestPageSort = sort || "questify";
 }
 
-function getFilterChoiceKey({ group, filter }: { group: string; filter: string; }): string {
+function getFilterChoiceKey({ group, filter }: QuestPageFilter): string {
     return JSON.stringify([group, filter]);
 }
 
-export function getLastFilterChoices(): { group: string, filter: string; }[] | null {
-    const { rememberQuestPageFilters, lastQuestPageFilters } = getQuestifySettings();
-
-    return rememberQuestPageFilters
-        ? Object.values(lastQuestPageFilters).map(item => JSON.parse(JSON.stringify(item)))
-        : null;
+function serializeFilterChoices(filters: readonly QuestPageFilter[]): string {
+    return JSON.stringify(filters.map(({ group, filter }) => [group, filter]));
 }
 
-export function setLastFilterChoices(filters: { group: string, filter: string; }[] | null): void {
+function getLastFilterChoices(): QuestPageFilter[] | null {
+    const { rememberQuestPageFilters, lastQuestPageFilters } = getQuestifySettings();
+
+    if (!rememberQuestPageFilters) {
+        return null;
+    }
+
+    return (Object.values(lastQuestPageFilters ?? {}) as QuestPageFilter[])
+        .filter(item => Boolean(item?.group && item?.filter))
+        .map(({ group, filter }) => ({ group, filter }));
+}
+
+let cachedResolvedFiltersKey: string | null = null;
+let cachedResolvedFilters: QuestPageFilter[] = [];
+
+export function resolveFilterChoices(urlFilters: QuestPageFilter[] | null, fallback: QuestPageFilter[]): QuestPageFilter[] {
+    const filters = urlFilters ?? getLastFilterChoices() ?? fallback;
+
+    if (filters.length === 0) {
+        return fallback;
+    }
+
+    const key = serializeFilterChoices(filters);
+
+    if (key !== cachedResolvedFiltersKey) {
+        cachedResolvedFiltersKey = key;
+        cachedResolvedFilters = filters.map(({ group, filter }) => ({ group, filter }));
+    }
+
+    return cachedResolvedFilters;
+}
+
+export function setLastFilterChoices(filters: QuestPageFilter[] | null): void {
+    const currentMap = getQuestifySettings().lastQuestPageFilters ?? {};
+
     if (!filters?.length) {
-        getQuestifySettings().lastQuestPageFilters = {};
+        if (Object.keys(currentMap).length > 0) {
+            getQuestifySettings().lastQuestPageFilters = {};
+        }
 
         return;
     }
@@ -382,9 +583,23 @@ export function setLastFilterChoices(filters: { group: string, filter: string; }
         return;
     }
 
-    getQuestifySettings().lastQuestPageFilters = JSON.parse(JSON.stringify(filters)).reduce((acc, item) => {
+    const nextMap = filters.reduce((acc, { group, filter }) => {
+        const item = { group, filter };
         acc[getFilterChoiceKey(item)] = item;
 
         return acc;
-    }, {} as Record<string, { group: string, filter: string; }>);
+    }, {} as Record<string, QuestPageFilter>);
+
+    const currentEntries = (Object.values(currentMap) as QuestPageFilter[])
+        .filter(item => Boolean(item?.group && item?.filter));
+    const nextEntries = Object.values(nextMap);
+
+    if (
+        Object.keys(currentMap).length === nextEntries.length
+        && serializeFilterChoices(currentEntries) === serializeFilterChoices(nextEntries)
+    ) {
+        return;
+    }
+
+    getQuestifySettings().lastQuestPageFilters = nextMap;
 }
