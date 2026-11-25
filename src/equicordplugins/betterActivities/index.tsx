@@ -35,7 +35,7 @@ export default definePlugin({
                     predicate: () => settings.store.removeGameActivityStatus,
                 },
                 {
-                    match: /(?<=className:\i,children:\[\i\(.{0,4}\),)null.*?tooltipClassName:\i\}\),/,
+                    match: /(?<=className:\i,children:\[\i\(.{0,15}\),)null.*?tooltipClassName:\i\}\),/,
                     replace: "",
                     predicate: () => settings.store.removeGameActivityStatus,
                 },
