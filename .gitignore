@@ -41,3 +41,5 @@ misc/bundle
 
 # intl scripts
 misc/scripts
+
+.env

@@ -19,6 +19,7 @@
 import { definePluginSettings, Settings } from "@api/Settings";
 import { getCustomColorString } from "@equicordplugins/customUserColors";
 import { hash as h64 } from "@intrnl/xxhash64";
+import { customColorOverride } from "@plugins/editUsers";
 import { Devs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 import { useMemo, UserStore } from "@webpack/common";
@@ -98,10 +99,10 @@ export default definePlugin({
         }
     ],
 
-    wrapMessageColorProps(colorProps: { colorString: string, colorStrings?: Record<"primaryColor" | "secondaryColor" | "tertiaryColor", string>; }, context: any) {
+    wrapMessageColorProps(colorProps: { colorString: string, colorStrings?: Record<"primaryColor" | "secondaryColor" | "tertiaryColor", string>, [customColorOverride]?: boolean; }, context: any) {
         try {
             const colorString = this.calculateNameColorForMessageContext(context);
-            if (colorString === colorProps.colorString) {
+            if (colorString === colorProps.colorString || colorProps[customColorOverride]) {
                 return colorProps;
             }
 

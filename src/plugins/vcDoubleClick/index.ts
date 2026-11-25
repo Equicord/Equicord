@@ -17,7 +17,10 @@
 */
 
 import { Devs } from "@utils/constants";
+import { tryOrElse } from "@utils/misc";
 import definePlugin from "@utils/types";
+import type { Channel } from "@vencord/discord-types";
+import type { InviteTargetType } from "@vencord/discord-types/enums";
 import { ChannelRouter, ChannelStore, SelectedChannelStore } from "@webpack/common";
 
 const timers = {} as Record<string, {
@@ -49,12 +52,10 @@ export default definePlugin({
             ]
         },
         {
-            // channel mentions
-            find: 'className:"channelMention",children:[null!=',
+            find: ",acceptInviteAndTransitionToInviteChannel(",
             replacement: {
-                match: /onClick:(\i)(?=,.{0,100}className:"channelMention".+?(\i)\.inContent)/,
-                replace: (_, onClick, props) => ""
-                    + `onClick:(vcDoubleClickEvt)=>$self.shouldRunOnClick(vcDoubleClickEvt,${props})&&${onClick}()`,
+                match: /(\i)\.id&&\(0,\i\.\i\)\(\i\)&&(\i)\?\.autoJoin!==!1/,
+                replace: (match, channel, options) => `${match}&&$self.shouldAutoJoinInvite(${channel},${options})`
             }
         },
         // Voice channels in the active now section
@@ -73,6 +74,16 @@ export default definePlugin({
         const { id } = props ?? {};
         if (!id) return console.error("No channel id found");
         ChannelRouter.transitionToChannel(id);
+    },
+
+    shouldAutoJoinInvite(channel: Channel, options?: {
+        targetType?: InviteTargetType;
+        isGuestInvite?: boolean;
+    }) {
+        if (options?.targetType != null || options?.isGuestInvite) {
+            return true;
+        }
+        return tryOrElse(() => !channel.isGuildVocal(), true);
     },
 
     shouldRunOnClick(e: MouseEvent, { channelId }) {

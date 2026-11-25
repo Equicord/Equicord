@@ -85,7 +85,7 @@ export default definePlugin({
     authors: [Devs.Ven, Devs.Aria],
 
     patches: [{
-        find: ".__invalid_searchResultFocusRing,",
+        find: "search-result-${",
         replacement: {
             match: /this(?=\.handleContextMenu\(\i,\i\))/,
             replace: "$self"
