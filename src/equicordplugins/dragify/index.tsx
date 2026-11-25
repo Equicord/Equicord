@@ -181,7 +181,7 @@ export default definePlugin({
         {
             find: "__invalid_threadMainContent",
             replacement: {
-                match: /className:\i\.\i,.{0,30},onAuxClick:(?=.{0,100}__invalid_threadMainContent)/,
+                match: /className:\i\.\i,.{0,50},onAuxClick:(?=.{0,100}__invalid_threadMainContent)/,
                 replace: "draggable:!0,onDragStart:e=>$self.onChannelDragStart(e),$&"
             }
         },
