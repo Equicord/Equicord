@@ -4,15 +4,17 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { QuestTaskType } from "@vencord/discord-types/enums";
+import { useCallback, useMemo } from "@webpack/common";
 import type { JSX } from "react";
 
 import { getQuestifySettings, useQuestifySettings } from "../settings/access";
 import { resetDangerousSettings } from "../settings/dangerous";
-import { autoCompleteQuestTaskTypes, defaultAutoCompleteQuestTypes, isAutoCompleteCompatible } from "../settings/def";
+import { autoCompleteQuestTaskTypes, isAutoCompleteCompatible, type QuestCombinationKey } from "../settings/def";
 import { validateIgnoredQuests } from "../settings/ignoredQuests";
+import { flushPendingAutoCompleteStagger } from "../utils/completion";
 import { Alerts, q } from "../utils/ui";
-import { ManaButton, type ManaSelectOption, SettingsCard, SettingsDescription, SettingsHeader, SettingsNotice, SettingsParagraph, SettingsSelect, SettingsSubheader, SettingsSubtleSwitch } from "./shared";
+import { useQuestCombinationSelectProps } from "./questCombinationSelect";
+import { ManaButton, type ManaSelectOption, SettingsCard, SettingsComboSelect, SettingsDescription, SettingsHeader, SettingsNotice, SettingsParagraph, SettingsSelect, SettingsSubheader, SettingsSubtleSwitch } from "./shared";
 
 type QuestDisableSettingKey =
     | "disableAccountPanelPromo"
@@ -26,6 +28,7 @@ type QuestDisableSettingKey =
 type QuestModifySettingKey =
     | "autoEnrollQuests"
     | "autoCompleteQuests"
+    | "staggerSequentialAutoCompletes"
     | "autoCompleteQuestsSimultaneously"
     | "resumeInterruptedQuests"
     | "completeVideoQuestsQuicker"
@@ -75,28 +78,6 @@ const disableManaOptions: ManaSelectOption[] = disableFeatureOptions.map(({ key,
     value: key,
 }));
 
-const autoCompleteQuestTypeLabels = {
-    [QuestTaskType.WATCH_VIDEO]: "Watch Video",
-    [QuestTaskType.WATCH_VIDEO_ON_MOBILE]: "Watch Video on Mobile",
-    [QuestTaskType.ACHIEVEMENT_IN_ACTIVITY]: "Achievement in Activity",
-    [QuestTaskType.PLAY_ACTIVITY]: "Play Activity",
-    [QuestTaskType.PLAY_ON_DESKTOP]: "Play on Desktop",
-    [QuestTaskType.PLAY_ON_PLAYSTATION]: "Play on PlayStation",
-    [QuestTaskType.PLAY_ON_XBOX]: "Play on Xbox",
-} as const satisfies Record<typeof autoCompleteQuestTaskTypes[number], string>;
-
-const autoCompleteQuestTypeOptions = autoCompleteQuestTaskTypes.map(questType => ({
-    label: autoCompleteQuestTypeLabels[questType],
-    value: questType,
-})) satisfies { label: string; value: QuestTaskType; }[];
-
-const autoCompleteQuestTypeManaOptions: ManaSelectOption[] = autoCompleteQuestTypeOptions.map(({ label, value }) => ({
-    id: String(value),
-    label,
-    value: String(value),
-    disabled: !isAutoCompleteCompatible(value),
-}));
-
 export function QuestFeaturesSetting(): JSX.Element {
     const questFeatures = useQuestifySettings([
         "disableQuestsEverything",
@@ -113,20 +94,19 @@ export function QuestFeaturesSetting(): JSX.Element {
         "usedKonamiCode",
         "autoEnrollQuests",
         "autoCompleteQuests",
+        "staggerSequentialAutoCompletes",
         "autoCompleteQuestsSimultaneously",
-        "autoCompleteQuestTypes",
+        "autoCompleteQuestCombinations",
         "completeVideoQuestsQuicker",
         "preventVideoQuestsPausing",
         "hideNonAutoCompletableQuests",
     ]);
 
+    const compatibleAutoCompleteTaskTypes = useMemo(() => autoCompleteQuestTaskTypes.filter(isAutoCompleteCompatible), []);
+
     const selectedDisableValues = disableFeatureOptions
         .filter(({ key }) => questFeatures[key])
         .map(({ key }) => key);
-
-    const selectedAutoCompleteQuestTypeValues = autoCompleteQuestTypeOptions
-        .filter(({ value }) => isAutoCompleteCompatible(value) && questFeatures.autoCompleteQuestTypes[value] === true)
-        .map(({ value }) => String(value));
 
     function updateDisableValue(value: string | string[] | null) {
         const selectedKeys = new Set(Array.isArray(value) ? value : value ? [value] : []);
@@ -147,20 +127,12 @@ export function QuestFeaturesSetting(): JSX.Element {
         });
     }
 
-    function updateAutoCompleteQuestTypes(value: string | string[] | null) {
-        const selectedValues = new Set(Array.isArray(value) ? value : value ? [value] : []);
-        const nextAutoCompleteQuestTypes = { ...defaultAutoCompleteQuestTypes };
-
-        for (const { value: questType } of autoCompleteQuestTypeOptions) {
-            const nextValue = selectedValues.has(String(questType))
-                && isAutoCompleteCompatible(questType);
-
-            nextAutoCompleteQuestTypes[questType] = nextValue;
-        }
-
-        getQuestifySettings().autoCompleteQuestTypes = nextAutoCompleteQuestTypes;
+    const updateAutoCompleteQuestCombinations = useCallback((combinations: QuestCombinationKey[]) => {
+        getQuestifySettings().autoCompleteQuestCombinations = combinations;
         validateIgnoredQuests();
-    }
+    }, []);
+
+    const autoCompleteComboProps = useQuestCombinationSelectProps({ value: questFeatures.autoCompleteQuestCombinations, onChange: updateAutoCompleteQuestCombinations, taskTypes: compatibleAutoCompleteTaskTypes });
 
     function updateDisableEverything(checked: boolean) {
         function setDisableEverything() {
@@ -201,6 +173,8 @@ export function QuestFeaturesSetting(): JSX.Element {
 
         if (key === "hideNonAutoCompletableQuests" || key === "makeMobileVideoQuestsDesktopCompatible") {
             validateIgnoredQuests();
+        } else if (key === "staggerSequentialAutoCompletes" && !checked) {
+            flushPendingAutoCompleteStagger();
         }
     }
 
@@ -279,7 +253,7 @@ export function QuestFeaturesSetting(): JSX.Element {
                         bottomSpacing="5"
                         tooltip={{
                             position: "top",
-                            text: "Hide incomplete Quests with an unclaimed or ignored status when no auto-complete task is supported on this platform and enabled in the Quest types dropdown. Claimed, expired, and completed Quests are exempt. Use the Status Order Hidden options to hide those Quests."
+                            text: "Hide incomplete Quests with an unclaimed or ignored status when no reward and task combination is supported on this platform and enabled in the auto-complete dropdown. Claimed, expired, completed, queued, auto-completing, and in-progress Quests are exempt. Use the Status Order Hidden options to hide those Quests."
                         }}
                     />
                     <SettingsSubtleSwitch
@@ -323,8 +297,20 @@ export function QuestFeaturesSetting(): JSX.Element {
                     />
                     <SettingsSubtleSwitch
                         disabled={questFeatures.disableQuestsEverything || !questFeatures.allowChangingDangerousSettings}
+                        checked={questFeatures.staggerSequentialAutoCompletes}
+                        label="Stagger sequentially auto-completing Quests with 5s-3m delays:"
+                        onChange={checked => updateModifyValue("staggerSequentialAutoCompletes", checked)}
+                        bottomSpacing="5"
+                        tooltip={{
+                            position: "top",
+                            text: "Waits a random delay between 5 seconds and 3 minutes after a Quest finishes before starting the next queued Quest."
+                                + "\n\nThis setting applies only to sequential auto-completion and has no effect when simultaneous completion is enabled below."
+                        }}
+                    />
+                    <SettingsSubtleSwitch
+                        disabled={questFeatures.disableQuestsEverything || !questFeatures.allowChangingDangerousSettings}
                         checked={questFeatures.autoCompleteQuestsSimultaneously}
-                        label="Auto-complete Quests simultaneously rather than sequentially:"
+                        label="Simultaneously auto-complete Quests rather than sequentially:"
                         onChange={checked => updateModifyValue("autoCompleteQuestsSimultaneously", checked)}
                         bottomSpacing="5"
                         tooltip={{
@@ -355,7 +341,7 @@ export function QuestFeaturesSetting(): JSX.Element {
                                 bottomSpacing="5"
                                 tooltip={{
                                     position: "top",
-                                    text: "Complete eligible, unclaimed, unignored, and unexpired Quests included by your reward and Quest type filters that are detected while Discord is running. Only supported task types enabled below are included."
+                                    text: "Complete eligible, visible, unclaimed, unignored, and unexpired Quests that are detected while Discord is running. Only supported reward and task combinations enabled below are included."
                                         + "\n\nAutomatically enrolls in compatible Quests before queuing them for auto-completion. Waits for known rate-limit cooldowns. Stops on unknown errors, rate limits without a retry delay, or repeated enrollment failures."
                                 }}
                             />
@@ -367,22 +353,18 @@ export function QuestFeaturesSetting(): JSX.Element {
                                 bottomSpacing="5"
                                 tooltip={{
                                     position: "top",
-                                    text: "Enroll in eligible, unclaimed, unignored, and unexpired Quests included by your reward and Quest type filters that are detected while Discord is running."
+                                    text: "Enroll in eligible, visible, unclaimed, unignored, and unexpired Quests that are detected while Discord is running."
                                         + "\n\nEnrolls in Quests without queuing them for auto-completion. Waits for known rate-limit cooldowns. Stops on unknown errors, rate limits without a retry delay, or repeated enrollment failures."
                                 }}
                             />
                         </>
                     )}
-                    <SettingsSelect
-                        label="Auto-complete specific Quest types:"
-                        wrapTags={true}
-                        options={autoCompleteQuestTypeManaOptions}
-                        value={selectedAutoCompleteQuestTypeValues}
-                        closeOnSelect={false}
+                    <SettingsComboSelect
+                        label="Automatically complete Quests with these reward and task combinations:"
                         maxOptionsVisible={7}
-                        selectionMode="multiple"
+                        placeholder="Search reward and task combinations..."
                         disabled={questFeatures.disableQuestsEverything || !questFeatures.allowChangingDangerousSettings}
-                        onSelectionChange={updateAutoCompleteQuestTypes}
+                        {...autoCompleteComboProps}
                         tooltip={{
                             position: "top",
                             wider: true,
@@ -390,7 +372,7 @@ export function QuestFeaturesSetting(): JSX.Element {
                                 + "\n\nAll video related Quests usually send a stack trace with the progress reports. This means Discord would know exactly which functions were called, and can therefore verify that their own functions initiated the progress. Questify erases this stack trace, but the absence of it will be just as telling as its presence."
                                 + "\n\nPlay on Desktop, Play on PlayStation, Play on Xbox, Play Activity, and Achievement in Activity Quests are only available on official desktop clients due to a limitation imposed by Discord. 3rd party clients such as web extensions, Vesktop, Equibop, and others, do not support auto-completing these Quest types."
                                 + "\n\nAll game related Quests usually send a game fingerprint with the heartbeat reports. This means Discord can use data from tens of thousands of users to determine whether other users are likely using a real game or are emulating the executable. There is no reasonable method to spoof this value, so Questify leaves it blank, but the absence of it will be just as telling as poorly spoofing the value."
-                                + "\n\nAuto-completion starts from Quest buttons on the Quests page or automatic processing. Quests are completed in the order they were queued, unless simultaneous completion is enabled above."
+                                + "\n\nSelected reward and task combinations apply to both manually queued and automatically started Quests. Auto-completion starts from Quest buttons on the Quests page or automatic processing. Quests are completed in the order they were queued, unless simultaneous completion is enabled above."
                                 + "\n\nAuto-completing Quests is the riskiest dangerous setting available. Enable it at your own risk."
                         }}
                     />

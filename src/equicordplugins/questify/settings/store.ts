@@ -11,24 +11,79 @@ import { OptionType } from "@utils/types";
 import { QuestButtonSetting } from "../components/questButtonSettings";
 import { QuestFeaturesSetting } from "../components/questFeaturesSetting";
 import { QuestNotificationsSetting } from "../components/questNotificationsSetting";
+import { QuestRelevancySetting } from "../components/questRelevancySetting";
 import { QuestTilesSetting } from "../components/questTilesSetting";
 import { ReorderQuestsSetting } from "../components/reorderQuestsSetting";
 import { SettingsSearch } from "../components/settingsSearch";
-import { defaultAcknowledgedNotices, defaultAllowChangingDangerousSettings, defaultAutoCompleteQuests, defaultAutoCompleteQuestsSimultaneously, defaultAutoCompleteQuestTypes, defaultAutoEnrollQuests, defaultClaimedSubsort, defaultCompleteVideoQuestsQuicker, defaultDisableAccountPanelPromo, defaultDisableAccountPanelQuestProgress, defaultDisableFriendsListPromo, defaultDisableMembersListPromo, defaultDisableOrbsAndQuestsBadges, defaultDisableQuestsEverything, defaultDisableRelocationNotices, defaultDisableSponsoredBanner, defaultExpiredSubsort, defaultHiddenQuestStatuses, defaultHideNonAutoCompletableQuests, defaultIgnoredQuestIDs, defaultIgnoredSubsort, defaultIsOnQuestsPage, defaultLastQuestPageFilters, defaultLastQuestPageSort, defaultLeftClickAction, defaultMakeMobileVideoQuestsDesktopCompatible, defaultMiddleClickAction, defaultNewExcludedQuestAlertSound, defaultNewExcludedQuestAlertVolume, defaultNewQuestAlertSound, defaultNewQuestAlertVolume, defaultNotifyOnNewExcludedQuests, defaultNotifyOnNewQuests, defaultNotifyOnQuestComplete, defaultPreventVideoQuestsPausing, defaultQuestButtonBadgeColor, defaultQuestButtonBadgeCount, defaultQuestButtonDisplay, defaultQuestButtonIncludedTypes, defaultQuestButtonIndicator, defaultQuestCompletedAlertSound, defaultQuestCompletedAlertVolume, defaultQuestFetchInterval, defaultQuestOrder, defaultQuestTileClaimedColorSetting, defaultQuestTileExpiredColorSetting, defaultQuestTileGradient, defaultQuestTileIgnoredColorSetting, defaultQuestTilePreload, defaultQuestTileUnclaimedColorSetting, defaultRememberQuestPageFilters, defaultRememberQuestPageSort, defaultResumeInterruptedQuests, defaultResumeQuestIDs, defaultRightClickAction, defaultUnclaimedSubsort, type QuestButtonAction, type QuestButtonDisplayMode, type QuestButtonIncludedTypes, type QuestButtonIndicatorMode, type QuestOrderStatus } from "./def";
+import { allQuestRewardTypes, allQuestTaskTypes, autoCompleteQuestTaskTypes, defaultAcknowledgedNotices, defaultAllowChangingDangerousSettings, defaultAutoCompleteQuestCombinations, defaultAutoCompleteQuests, defaultAutoCompleteQuestsSimultaneously, defaultAutoEnrollQuests, defaultClaimedSubsort, defaultCompleteVideoQuestsQuicker, defaultDisableAccountPanelPromo, defaultDisableAccountPanelQuestProgress, defaultDisableFriendsListPromo, defaultDisableMembersListPromo, defaultDisableOrbsAndQuestsBadges, defaultDisableQuestsEverything, defaultDisableRelocationNotices, defaultDisableSponsoredBanner, defaultExpiredSubsort, defaultHiddenQuestCombinations, defaultHiddenQuestStatuses, defaultHiddenQuestTerms, defaultHideNonAutoCompletableQuests, defaultIgnoredQuestIDs, defaultIgnoredSubsort, defaultIsOnQuestsPage, defaultLastQuestPageFilters, defaultLastQuestPageSort, defaultLeftClickAction, defaultMakeMobileVideoQuestsDesktopCompatible, defaultMiddleClickAction, defaultNewExcludedQuestAlertSound, defaultNewExcludedQuestAlertVolume, defaultNewQuestAlertSound, defaultNewQuestAlertVolume, defaultNotifyOnNewExcludedQuests, defaultNotifyOnNewQuests, defaultNotifyOnQuestComplete, defaultPreventNotificationCombinations, defaultPreventNotificationTerms, defaultPreventVideoQuestsPausing, defaultQuestButtonBadgeColor, defaultQuestButtonBadgeCount, defaultQuestButtonDisplay, defaultQuestButtonIndicator, defaultQuestCompletedAlertSound, defaultQuestCompletedAlertVolume, defaultQuestFetchInterval, defaultQuestOrder, defaultQuestTileClaimedColorSetting, defaultQuestTileExpiredColorSetting, defaultQuestTileGradient, defaultQuestTileIgnoredColorSetting, defaultQuestTilePreload, defaultQuestTileUnclaimedColorSetting, defaultRememberQuestPageFilters, defaultRememberQuestPageSort, defaultResumeInterruptedQuests, defaultResumeQuestIDs, defaultRightClickAction, defaultStaggerSequentialAutoCompletes, defaultUnclaimedSubsort, getQuestCombinationKey, type QuestButtonAction, type QuestButtonDisplayMode, type QuestButtonIndicatorMode, type QuestCombinationKey, type QuestOrderStatus } from "./def";
 
-const MIGRATION_TARGET = 1;
-const CURRENT_SETTINGS = PlainSettings.plugins.Questify;
+const MIGRATION_TARGET = 2;
 
-if (CURRENT_SETTINGS) {
-    let migrationVersion = CURRENT_SETTINGS.migrationVersion ?? 0;
+if (PlainSettings.plugins.Questify) {
+    let currentSettings = PlainSettings.plugins.Questify;
+    const initialMigrationVersion = currentSettings.migrationVersion;
+    let migrationVersion = initialMigrationVersion ?? 0;
 
     // 0 -> 1: Reset Settings
     if (migrationVersion === 0) {
-        PlainSettings.plugins.Questify = { enabled: CURRENT_SETTINGS.enabled, migrationVersion: 1 };
+        currentSettings = { enabled: currentSettings.enabled, migrationVersion: 1 };
+        PlainSettings.plugins.Questify = currentSettings;
         migrationVersion = 1;
     }
 
-    if (migrationVersion !== CURRENT_SETTINGS.migrationVersion) {
+    // 1 -> 2: Migrate included reward/task maps to combination lists
+    if (migrationVersion === 1) {
+        const oldIncludedTypes = currentSettings.questButtonIncludedTypes && typeof currentSettings.questButtonIncludedTypes === "object"
+            ? currentSettings.questButtonIncludedTypes as Record<string | number, unknown>
+            : null;
+        const oldAutoCompleteTypes = currentSettings.autoCompleteQuestTypes && typeof currentSettings.autoCompleteQuestTypes === "object"
+            ? currentSettings.autoCompleteQuestTypes as Record<string, unknown>
+            : null;
+
+        if (oldIncludedTypes) {
+            const excludedCombinations: QuestCombinationKey[] = [];
+
+            for (const rewardType of allQuestRewardTypes) {
+                const rewardIncluded = oldIncludedTypes[rewardType] !== false;
+
+                for (const taskType of allQuestTaskTypes) {
+                    const taskIncluded = oldIncludedTypes[taskType] !== false;
+
+                    if (!(rewardIncluded && taskIncluded)) {
+                        excludedCombinations.push(getQuestCombinationKey(rewardType, taskType));
+                    }
+                }
+            }
+
+            currentSettings.preventNotificationCombinations = excludedCombinations;
+        }
+
+        if (oldAutoCompleteTypes) {
+            const enabledTasks = autoCompleteQuestTaskTypes.filter(taskType =>
+                oldAutoCompleteTypes[taskType] === true
+                && (!oldIncludedTypes || oldIncludedTypes[taskType] !== false)
+            );
+            const allowedRewards = oldIncludedTypes
+                ? allQuestRewardTypes.filter(rewardType => oldIncludedTypes[rewardType] !== false)
+                : Array.from(allQuestRewardTypes);
+            const autoCompleteCombinations: QuestCombinationKey[] = [];
+
+            for (const rewardType of allowedRewards) {
+                for (const taskType of enabledTasks) {
+                    autoCompleteCombinations.push(getQuestCombinationKey(rewardType, taskType));
+                }
+            }
+
+            currentSettings.autoCompleteQuestCombinations = autoCompleteCombinations;
+        }
+
+        delete currentSettings.questButtonIncludedTypes;
+        delete currentSettings.autoCompleteQuestTypes;
+        currentSettings.migrationVersion = 2;
+        migrationVersion = 2;
+    }
+
+    if (migrationVersion !== initialMigrationVersion) {
         SettingsStore.markAsChanged();
     }
 }
@@ -74,14 +129,12 @@ export const settings = definePluginSettings({
         type: OptionType.BOOLEAN,
         description: "Disable the sponsored banner on the Quest page.",
         default: defaultDisableSponsoredBanner,
-        restartNeeded: true,
         hidden: true,
     },
     disableAccountPanelPromo: {
         type: OptionType.BOOLEAN,
         description: "Disable the promoted Quest popup above your account panel.",
         default: defaultDisableAccountPanelPromo,
-        restartNeeded: true,
         hidden: true,
     },
     disableAccountPanelQuestProgress: {
@@ -150,9 +203,15 @@ export const settings = definePluginSettings({
         default: defaultAutoCompleteQuests,
         hidden: true,
     },
+    staggerSequentialAutoCompletes: {
+        type: OptionType.BOOLEAN,
+        description: "Stagger sequentially auto-completing Quests with 5s-3m delays.",
+        default: defaultStaggerSequentialAutoCompletes,
+        hidden: true,
+    },
     autoCompleteQuestsSimultaneously: {
         type: OptionType.BOOLEAN,
-        description: "Complete Quests simultaneously rather than sequentially.",
+        description: "Simultaneously auto-complete Quests rather than sequentially.",
         default: defaultAutoCompleteQuestsSimultaneously,
         restartNeeded: true,
         hidden: true,
@@ -171,11 +230,40 @@ export const settings = definePluginSettings({
         restartNeeded: true,
         hidden: true,
     },
-    autoCompleteQuestTypes: {
+    autoCompleteQuestCombinations: {
         type: OptionType.CUSTOM,
-        description: "Which types of Quests to auto-complete in the background.",
-        default: defaultAutoCompleteQuestTypes,
+        description: "Which reward and task combinations to auto-complete.",
+        default: Array.from(defaultAutoCompleteQuestCombinations),
         restartNeeded: true,
+        hidden: true,
+    },
+    questRelevancy: {
+        type: OptionType.COMPONENT,
+        component: ErrorBoundary.wrap(QuestRelevancySetting) as any,
+        description: "Filter which Quests are eligible for various Questify settings.",
+    },
+    preventNotificationCombinations: {
+        type: OptionType.CUSTOM,
+        description: "Reward and task combinations ignored by Quest Button visibility, badge count, and new Quest alerts.",
+        default: Array.from(defaultPreventNotificationCombinations),
+        hidden: true,
+    },
+    preventNotificationTerms: {
+        type: OptionType.STRING,
+        description: "Comma-separated terms ignored by Quest Button visibility, badge count, and new Quest alerts.",
+        default: defaultPreventNotificationTerms,
+        hidden: true,
+    },
+    hiddenQuestCombinations: {
+        type: OptionType.CUSTOM,
+        description: "Reward and task combinations hidden from the Quests page and ignored by all Questify settings.",
+        default: Array.from(defaultHiddenQuestCombinations),
+        hidden: true,
+    },
+    hiddenQuestTerms: {
+        type: OptionType.STRING,
+        description: "Comma-separated terms hidden from the Quests page and ignored by all Questify settings.",
+        default: defaultHiddenQuestTerms,
         hidden: true,
     },
     questButton: {
@@ -188,12 +276,6 @@ export const settings = definePluginSettings({
         description: "Which display type to use for the Quest button in the server list.",
         default: defaultQuestButtonDisplay as QuestButtonDisplayMode,
         restartNeeded: true,
-        hidden: true,
-    },
-    questButtonIncludedTypes: {
-        type: OptionType.CUSTOM,
-        description: "Which reward types and Quest types to include when displaying Quest counts on the Quest button.",
-        default: defaultQuestButtonIncludedTypes as QuestButtonIncludedTypes,
         hidden: true,
     },
     questButtonIndicator: {

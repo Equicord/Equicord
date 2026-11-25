@@ -11,7 +11,7 @@ import { QuestStore } from "@webpack/common";
 import { getQuestifySettings, useQuestifySettings } from "../settings/access";
 import { ignoredQuestIDsKey } from "../settings/def";
 import { getActiveAutoCompletes, getAutoCompleteQuestTarget, getQuestAutoCompleteEntry, hasEnabledAutoCompleteQuestTask } from "./completion";
-import { type QuestIncludedTypes, questMatchesIncludedTypes } from "./filtering";
+import { isQuestExemptFromRelevancy, isQuestHiddenByRelevancy, isQuestNotificationPrevented } from "./filtering";
 
 export interface QuestTask {
     type: QuestTaskType;
@@ -163,13 +163,29 @@ function getCurrentIgnoredQuestIds(): string[] {
 function getAutoCompleteShowcaseQuest(): Quest | null {
     const entries = getActiveAutoCompletes();
     const runningEntries = entries.filter(entry => entry.status === "running");
-    const showcaseEntries = runningEntries.length > 0 ? runningEntries : entries;
+
+    if (runningEntries.length === 0) {
+        for (const entry of entries) {
+            const quest = QuestStore.getQuest(entry.questId);
+
+            if (quest) {
+                showcasedAutoCompleteQuestId = quest.id;
+
+                return quest;
+            }
+        }
+
+        showcasedAutoCompleteQuestId = null;
+
+        return null;
+    }
+
     let bestQuest: Quest | null = null;
     let bestTimeRemaining = Infinity;
     let currentQuest: Quest | null = null;
     let currentTimeRemaining = Infinity;
 
-    for (const entry of showcaseEntries) {
+    for (const entry of runningEntries) {
         const quest = QuestStore.getQuest(entry.questId);
 
         if (!quest) {
@@ -221,7 +237,13 @@ function getMostRecentlyCompletedUnclaimedQuest(): Quest | null {
 }
 
 export function getQuestPanelOverride(creative: QuestPanelCreative, questType: number): QuestPanelCreative | null {
-    const panelState = useQuestifySettings(["disableQuestsEverything", "disableAccountPanelPromo", "disableAccountPanelQuestProgress"]);
+    const panelState = useQuestifySettings([
+        "disableQuestsEverything",
+        "disableAccountPanelPromo",
+        "disableAccountPanelQuestProgress",
+        "hiddenQuestCombinations",
+        "hiddenQuestTerms",
+    ]);
 
     if (panelState.disableQuestsEverything) {
         return null;
@@ -231,8 +253,12 @@ export function getQuestPanelOverride(creative: QuestPanelCreative, questType: n
         return null;
     }
 
+    const creativeQuest = creative?.quest ? refreshQuest(creative.quest) : null;
+    const hideCreativeQuest = creativeQuest != null
+        && isQuestHiddenByRelevancy(creativeQuest, panelState.hiddenQuestCombinations, panelState.hiddenQuestTerms);
+
     if (panelState.disableAccountPanelQuestProgress) {
-        return creative;
+        return hideCreativeQuest ? null : creative;
     }
 
     const nextQuest = getAutoCompleteShowcaseQuest() ?? getMostRecentlyCompletedUnclaimedQuest();
@@ -241,7 +267,7 @@ export function getQuestPanelOverride(creative: QuestPanelCreative, questType: n
         return { ...creative, type: questType, quest: nextQuest };
     }
 
-    return panelState.disableAccountPanelPromo ? null : creative;
+    return panelState.disableAccountPanelPromo || hideCreativeQuest ? null : creative;
 }
 
 export function shouldForceQuestPanelVisible(quest: Quest | null): boolean {
@@ -329,15 +355,19 @@ export function getQuestStatus(
     return QuestStatus.Unknown;
 }
 
-export function isQuestHidden(quest: Quest, ignoredQuestIds: ReadonlyArray<string>): boolean {
+export function isQuestHidden(quest: Quest, ignoredQuestIds: ReadonlyArray<string> = getCurrentIgnoredQuestIds()): boolean {
     const settings = getQuestifySettings();
 
     if (settings.disableQuestsEverything) {
         return false;
     }
 
+    if (isQuestHiddenByRelevancy(quest, settings.hiddenQuestCombinations, settings.hiddenQuestTerms)) {
+        return true;
+    }
+
     const questStatus = getQuestStatus(quest, ignoredQuestIds);
-    const autoCompleteExempt = Boolean(quest.userStatus?.completedAt)
+    const autoCompleteExempt = isQuestExemptFromRelevancy(quest)
         || questStatus === QuestStatus.Claimed
         || questStatus === QuestStatus.Expired;
 
@@ -345,17 +375,29 @@ export function isQuestHidden(quest: Quest, ignoredQuestIds: ReadonlyArray<strin
         || (settings.hideNonAutoCompletableQuests && !autoCompleteExempt && !hasEnabledAutoCompleteQuestTask(quest));
 }
 
+export function shouldRestoreExpiredQuest(quest: Quest): boolean {
+    const settings = getQuestifySettings();
+
+    return !settings.disableQuestsEverything
+        && settings.hiddenQuestStatuses.includes("EXPIRED")
+        && getQuestStatus(quest, getCurrentIgnoredQuestIds()) === QuestStatus.Expired;
+}
+
 export function countIncludedUnclaimedQuests(
     quests: Quest[],
     ignoredQuestIds: ReadonlyArray<string>,
-    includedTypes: QuestIncludedTypes,
 ): number {
+    const settings = getQuestifySettings();
     let count = 0;
 
     for (const quest of quests) {
         const questStatus = getQuestStatus(quest, ignoredQuestIds);
 
-        if (questMatchesIncludedTypes(quest, includedTypes) && questStatus === QuestStatus.Unclaimed && !isQuestHidden(quest, ignoredQuestIds)) {
+        if (
+            questStatus === QuestStatus.Unclaimed
+            && !isQuestHidden(quest, ignoredQuestIds)
+            && !isQuestNotificationPrevented(quest, settings.preventNotificationCombinations, settings.preventNotificationTerms)
+        ) {
             count++;
         }
     }

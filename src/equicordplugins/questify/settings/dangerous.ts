@@ -5,7 +5,7 @@
  */
 
 import { getQuestifySettings } from "./access";
-import { defaultAllowChangingDangerousSettings, defaultAutoCompleteQuests, defaultAutoCompleteQuestsSimultaneously, defaultAutoCompleteQuestTypes, defaultAutoEnrollQuests, defaultCompleteVideoQuestsQuicker, defaultHideNonAutoCompletableQuests, defaultMakeMobileVideoQuestsDesktopCompatible, defaultPreventVideoQuestsPausing, defaultResumeInterruptedQuests } from "./def";
+import { defaultAllowChangingDangerousSettings, defaultAutoCompleteQuestCombinations, defaultAutoCompleteQuests, defaultAutoCompleteQuestsSimultaneously, defaultAutoEnrollQuests, defaultCompleteVideoQuestsQuicker, defaultHideNonAutoCompletableQuests, defaultMakeMobileVideoQuestsDesktopCompatible, defaultPreventVideoQuestsPausing, defaultResumeInterruptedQuests, defaultStaggerSequentialAutoCompletes } from "./def";
 import { validateIgnoredQuests } from "./ignoredQuests";
 
 export function resetDangerousSettings(): void {
@@ -14,13 +14,14 @@ export function resetDangerousSettings(): void {
     settings.allowChangingDangerousSettings = defaultAllowChangingDangerousSettings;
     settings.autoEnrollQuests = defaultAutoEnrollQuests;
     settings.autoCompleteQuests = defaultAutoCompleteQuests;
+    settings.staggerSequentialAutoCompletes = defaultStaggerSequentialAutoCompletes;
     settings.autoCompleteQuestsSimultaneously = defaultAutoCompleteQuestsSimultaneously;
     settings.completeVideoQuestsQuicker = defaultCompleteVideoQuestsQuicker;
     settings.hideNonAutoCompletableQuests = defaultHideNonAutoCompletableQuests;
     settings.makeMobileVideoQuestsDesktopCompatible = defaultMakeMobileVideoQuestsDesktopCompatible;
     settings.preventVideoQuestsPausing = defaultPreventVideoQuestsPausing;
     settings.resumeInterruptedQuests = defaultResumeInterruptedQuests;
-    settings.autoCompleteQuestTypes = { ...defaultAutoCompleteQuestTypes };
+    settings.autoCompleteQuestCombinations = Array.from(defaultAutoCompleteQuestCombinations);
 
     validateIgnoredQuests();
 }

@@ -164,6 +164,10 @@
     display: none;
 }
 
+.questify-settings-text-input-control {
+    margin-top: 4px;
+}
+
 .questify-no-top-margin,
 .questify-margin-top-0 {
     margin-top: 0;

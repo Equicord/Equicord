@@ -285,7 +285,7 @@ export function QuestNotificationsSetting(): JSX.Element {
                 tooltip={{
                     position: "top",
                     text: "Some Quests are excluded from your available Quests list due to region or platform restrictions."
-                        + "\n\nWhen enabled, Questify will fetch their Quest configs, apply your included Quest and reward type filters, print the resolved excluded Quest data to console, and show a separate notification for matching excluded Quests."
+                        + "\n\nWhen enabled, Questify will fetch their Quest configs, apply your Quest Relevancy filters, print the resolved excluded Quest data to console, and show a separate notification for matching excluded Quests."
                 }}
             />
             <SettingsRow>
@@ -304,7 +304,7 @@ export function QuestNotificationsSetting(): JSX.Element {
                         tooltip={{
                             position: "top",
                             text: "Some Quests are excluded from your available Quests list due to region or platform restrictions."
-                                + "\n\nWhen a sound is selected, Questify will fetch their Quest configs, apply your included Quest and reward type filters, print the resolved excluded Quest data to console, and play this sound for matching excluded Quests."
+                                + "\n\nWhen a sound is selected, Questify will fetch their Quest configs, apply your Quest Relevancy filters, print the resolved excluded Quest data to console, and play this sound for matching excluded Quests."
                         }}
                     />
                 </SettingsRowItem>

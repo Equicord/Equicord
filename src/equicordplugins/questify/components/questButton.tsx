@@ -11,10 +11,10 @@ import type { JSX, MouseEvent } from "react";
 
 import { useQuestifySettings } from "../settings/access";
 import type { QuestButtonAction, QuestButtonDisplayMode, QuestButtonIndicatorMode } from "../settings/def";
-import { getIgnoredQuestIDs, ignoreAllQuests, resetIgnoredQuests } from "../settings/ignoredQuests";
+import { getIgnoredQuestIDs, hasIgnorableQuests, ignoreAllQuests, resetIgnoredQuests } from "../settings/ignoredQuests";
 import { rerenderQuests, useQuestRerender } from "../settings/rerender";
 import { initialQuestDataFetched } from "../state";
-import { getActiveAutoCompletes, getQueueableAutoCompleteQuests, isProcessingQuests, isQuestEnrollmentRateLimited, processQuests, stopAllAutoCompletes } from "../utils/completion";
+import { getActiveAutoCompletes, getQueueableAutoCompleteQuests, isProcessingQuests, isQuestEnrollmentRateLimited, isSimultaneousAutoCompleteEnabled, processQuests, stopAllAutoCompletes } from "../utils/completion";
 import { fetchAndAlertQuests } from "../utils/fetching";
 import { QL } from "../utils/logging";
 import { decimalToRGB, isDarkish, leftClick, middleClick, q, QUEST_PAGE, rightClick } from "../utils/ui";
@@ -131,8 +131,12 @@ export function QuestButtonContextMenu({ dummy = false }: { dummy?: boolean; }):
     useQuestRerender();
 
     const settings = useQuestifySettings([
-        "questButtonBadgeCount",
-        "autoCompleteQuestsSimultaneously",
+        "autoCompleteQuestCombinations",
+        "hiddenQuestCombinations",
+        "hiddenQuestStatuses",
+        "hiddenQuestTerms",
+        "hideNonAutoCompletableQuests",
+        "ignoredQuestIDs",
         "usedKonamiCode",
         "allowChangingDangerousSettings",
         "autoEnrollQuests",
@@ -142,10 +146,10 @@ export function QuestButtonContextMenu({ dummy = false }: { dummy?: boolean; }):
     ]);
 
     const navId = q(dummy ? "dummy-quest-button-context-menu" : "quest-button-context-menu");
-    const markAllIgnoredDisabled = dummy || settings.questButtonBadgeCount <= 0;
+    const markAllIgnoredDisabled = dummy || !hasIgnorableQuests();
     const resetIgnoredDisabled = dummy || getIgnoredQuestIDs().length <= 0;
     const noneAutoCompletable = getQueueableAutoCompleteQuests().length <= 0;
-    const queueAllQuestsVisible = !settings.autoCompleteQuestsSimultaneously && !noneAutoCompletable;
+    const queueAllQuestsVisible = !isSimultaneousAutoCompleteEnabled() && !noneAutoCompletable;
     const enrollmentRateLimited = isQuestEnrollmentRateLimited();
     const queueAllQuestsInProgress = isProcessingQuests();
     const queueAllQuestsDisabled = dummy || queueAllQuestsInProgress || enrollmentRateLimited;

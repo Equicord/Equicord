@@ -164,7 +164,7 @@ async function progress(origin: URL, authToken: string, questTarget: number, que
 
         try {
             data = JSON.parse(detail);
-        } catch {}
+        } catch { }
 
         if (response.ok && data != null && typeof data === "object" && "status" in data && data.status === "ok") {
             return { success: true, error: null };

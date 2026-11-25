@@ -53,6 +53,7 @@ export const defaultCompleteVideoQuestsQuicker = false; // true -> Risky
 export const defaultPreventVideoQuestsPausing = false; // true -> Risky
 export const defaultAutoEnrollQuests = false; // true -> Risky
 export const defaultAutoCompleteQuests = false; // true -> Risky
+export const defaultStaggerSequentialAutoCompletes = true;
 export const defaultAutoCompleteQuestsSimultaneously = false; // true -> Risky
 export const defaultHideNonAutoCompletableQuests = false;
 export const defaultNotifyOnQuestComplete = true;
@@ -106,22 +107,87 @@ export function isAutoCompleteCompatible(questType: QuestTaskType): boolean {
         && (!capability.requiresNativeCompletion || typeof VencordNative?.pluginHelpers?.Questify?.complete === "function");
 }
 
-export type AutoCompleteQuestTypes = Partial<Record<QuestTaskType, boolean>>;
+export const allQuestRewardTypes = [
+    QuestRewardType.VIRTUAL_CURRENCY,
+    QuestRewardType.IN_GAME,
+    QuestRewardType.COLLECTIBLE,
+    QuestRewardType.REWARD_CODE,
+    QuestRewardType.FRACTIONAL_PREMIUM,
+] as const satisfies readonly QuestRewardType[];
 
-export const defaultAutoCompleteQuestTypes = Object.fromEntries(
-    autoCompleteQuestTaskTypes.map(questType => [questType, false])
-) as AutoCompleteQuestTypes;
+export const allQuestTaskTypes = [
+    QuestTaskType.WATCH_VIDEO,
+    QuestTaskType.WATCH_VIDEO_ON_MOBILE,
+    QuestTaskType.ACHIEVEMENT_IN_ACTIVITY,
+    QuestTaskType.ACHIEVEMENT_IN_GAME,
+    QuestTaskType.PLAY_ACTIVITY,
+    QuestTaskType.PLAY_ON_DESKTOP,
+    QuestTaskType.PLAY_ON_DESKTOP_V2,
+    QuestTaskType.STREAM_ON_DESKTOP,
+    QuestTaskType.PLAY_ON_PLAYSTATION,
+    QuestTaskType.PLAY_ON_XBOX,
+] as const satisfies readonly QuestTaskType[];
 
-export type QuestButtonIncludedTypes = Record<QuestTaskType | QuestRewardType, boolean>;
+export const questRewardTypeLabels = {
+    [QuestRewardType.VIRTUAL_CURRENCY]: "Orbs",
+    [QuestRewardType.FRACTIONAL_PREMIUM]: "Nitro Codes",
+    [QuestRewardType.REWARD_CODE]: "Reward Codes",
+    [QuestRewardType.IN_GAME]: "In Game Items",
+    [QuestRewardType.COLLECTIBLE]: "Profile Collectibles",
+} as const satisfies Record<QuestRewardType, string>;
 
-export const defaultQuestButtonIncludedTypes: QuestButtonIncludedTypes = {
-    ...Object.fromEntries(questTaskTypes.map(questType => [questType, true])),
-    [QuestRewardType.REWARD_CODE]: true,
-    [QuestRewardType.IN_GAME]: true,
-    [QuestRewardType.COLLECTIBLE]: true,
-    [QuestRewardType.VIRTUAL_CURRENCY]: true,
-    [QuestRewardType.FRACTIONAL_PREMIUM]: true,
-} as QuestButtonIncludedTypes;
+export const questTaskTypeLabels = {
+    [QuestTaskType.WATCH_VIDEO]: "Watch Video",
+    [QuestTaskType.WATCH_VIDEO_ON_MOBILE]: "Watch Video on Mobile",
+    [QuestTaskType.ACHIEVEMENT_IN_ACTIVITY]: "Achievement in Activity",
+    [QuestTaskType.ACHIEVEMENT_IN_GAME]: "Achievement in Game",
+    [QuestTaskType.PLAY_ACTIVITY]: "Play Activity",
+    [QuestTaskType.PLAY_ON_DESKTOP]: "Play on Desktop",
+    [QuestTaskType.PLAY_ON_DESKTOP_V2]: "Play on Desktop V2",
+    [QuestTaskType.STREAM_ON_DESKTOP]: "Stream on Desktop",
+    [QuestTaskType.PLAY_ON_PLAYSTATION]: "Play on PlayStation",
+    [QuestTaskType.PLAY_ON_XBOX]: "Play on Xbox",
+} as const satisfies Record<QuestTaskType, string>;
+
+export type QuestCombinationKey = `${QuestRewardType}:${QuestTaskType}` | `${QuestTaskType}:${QuestRewardType}`;
+
+export function getQuestCombinationKey(rewardType: QuestRewardType, taskType: QuestTaskType): `${QuestRewardType}:${QuestTaskType}` {
+    return `${rewardType}:${taskType}`;
+}
+
+export function getTaskFirstCombinationKey(taskType: QuestTaskType, rewardType: QuestRewardType): `${QuestTaskType}:${QuestRewardType}` {
+    return `${taskType}:${rewardType}`;
+}
+
+export function parseQuestCombinationKey(key: string): { rewardType: QuestRewardType; taskType: QuestTaskType; } | null {
+    const separatorIndex = key.indexOf(":");
+
+    if (separatorIndex === -1) {
+        return null;
+    }
+
+    const first = key.slice(0, separatorIndex);
+    const second = key.slice(separatorIndex + 1);
+    const firstAsReward = Number(first) as QuestRewardType;
+
+    if (allQuestRewardTypes.includes(firstAsReward) && allQuestTaskTypes.includes(second as QuestTaskType)) {
+        return { rewardType: firstAsReward, taskType: second as QuestTaskType };
+    }
+
+    const secondAsReward = Number(second) as QuestRewardType;
+
+    if (allQuestTaskTypes.includes(first as QuestTaskType) && allQuestRewardTypes.includes(secondAsReward)) {
+        return { rewardType: secondAsReward, taskType: first as QuestTaskType };
+    }
+
+    return null;
+}
+
+export const defaultAutoCompleteQuestCombinations: QuestCombinationKey[] = [];
+export const defaultPreventNotificationCombinations: QuestCombinationKey[] = [];
+export const defaultPreventNotificationTerms = "";
+export const defaultHiddenQuestCombinations: QuestCombinationKey[] = [];
+export const defaultHiddenQuestTerms = "";
 
 export const defaultQuestButtonBadgeCount = 0;
 export const defaultQuestFetchInterval = 2700;

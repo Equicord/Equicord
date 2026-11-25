@@ -4,22 +4,15 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { QuestRewardType, QuestTaskType } from "@vencord/discord-types/enums";
 import type { JSX } from "react";
 
 import { enabledOnStartup } from "..";
 import { getQuestifySettings, useQuestifySettings } from "../settings/access";
-import { type QuestButtonAction, type QuestButtonDisplayMode, type QuestButtonIncludedTypes, type QuestButtonIndicatorMode } from "../settings/def";
+import { type QuestButtonAction, type QuestButtonDisplayMode, type QuestButtonIndicatorMode } from "../settings/def";
 import { startAutoFetchingQuests } from "../settings/fetching";
-import { validateIgnoredQuests } from "../settings/ignoredQuests";
 import { canShowBadge, canShowButton, canShowPill } from "../utils/ui";
 import { DummyQuestButton } from "./questButton";
 import { type ManaSelectOption, SettingsCard, SettingsColorPicker, SettingsDescription, SettingsHeader, SettingsRow, SettingsRowItem, SettingsSelect, SettingsSubheader } from "./shared";
-
-interface QuestButtonIncludedTypeOption {
-    label: string;
-    value: QuestTaskType | QuestRewardType;
-}
 
 const questButtonDisplayOptions = [
     { label: "Always", value: "always" },
@@ -41,27 +34,6 @@ const questButtonClickOptions = [
     { label: "Nothing", value: "nothing" },
 ] as const satisfies readonly { label: string; value: QuestButtonAction; }[];
 
-const questButtonRewardTypeOptions = [
-    { label: "Orbs", value: QuestRewardType.VIRTUAL_CURRENCY },
-    { label: "Nitro Codes", value: QuestRewardType.FRACTIONAL_PREMIUM },
-    { label: "Reward Codes", value: QuestRewardType.REWARD_CODE },
-    { label: "In Game Items", value: QuestRewardType.IN_GAME },
-    { label: "Profile Collectibles", value: QuestRewardType.COLLECTIBLE },
-] as const satisfies readonly QuestButtonIncludedTypeOption[];
-
-const questButtonQuestTypeOptions = [
-    { label: "Watch Video", value: QuestTaskType.WATCH_VIDEO },
-    { label: "Watch Video on Mobile", value: QuestTaskType.WATCH_VIDEO_ON_MOBILE },
-    { label: "Achievement in Activity", value: QuestTaskType.ACHIEVEMENT_IN_ACTIVITY },
-    { label: "Achievement in Game", value: QuestTaskType.ACHIEVEMENT_IN_GAME },
-    { label: "Play Activity", value: QuestTaskType.PLAY_ACTIVITY },
-    { label: "Play on Desktop", value: QuestTaskType.PLAY_ON_DESKTOP },
-    { label: "Play on Desktop V2", value: QuestTaskType.PLAY_ON_DESKTOP_V2 },
-    { label: "Stream on Desktop", value: QuestTaskType.STREAM_ON_DESKTOP },
-    { label: "Play on PlayStation", value: QuestTaskType.PLAY_ON_PLAYSTATION },
-    { label: "Play on Xbox", value: QuestTaskType.PLAY_ON_XBOX },
-] as const satisfies readonly QuestButtonIncludedTypeOption[];
-
 function toManaOptions<T extends string | number>(options: readonly { label: string; value: T; }[]): ManaSelectOption[] {
     return options.map(({ label, value }) => ({
         id: String(value),
@@ -73,14 +45,11 @@ function toManaOptions<T extends string | number>(options: readonly { label: str
 const questButtonDisplayManaOptions = toManaOptions(questButtonDisplayOptions);
 const questButtonIndicatorManaOptions = toManaOptions(questButtonIndicatorOptions);
 const questButtonClickManaOptions = toManaOptions(questButtonClickOptions);
-const questButtonRewardTypeManaOptions = toManaOptions(questButtonRewardTypeOptions);
-const questButtonQuestTypeManaOptions = toManaOptions(questButtonQuestTypeOptions);
 
 export function QuestButtonSetting(): JSX.Element {
     const questButton = useQuestifySettings([
         "disableQuestsEverything",
         "questButtonDisplay",
-        "questButtonIncludedTypes",
         "questButtonIndicator",
         "questButtonBadgeCount",
         "questButtonBadgeColor",
@@ -90,15 +59,6 @@ export function QuestButtonSetting(): JSX.Element {
     ]);
 
     const disabled = questButton.disableQuestsEverything;
-    const includedTypes = questButton.questButtonIncludedTypes as QuestButtonIncludedTypes;
-
-    const selectedRewardTypes = questButtonRewardTypeOptions
-        .filter(({ value }) => includedTypes[value])
-        .map(({ value }) => String(value));
-
-    const selectedQuestTypes = questButtonQuestTypeOptions
-        .filter(({ value }) => includedTypes[value])
-        .map(({ value }) => String(value));
 
     function updateQuestButtonDisplay(value: string | string[] | null) {
         if (typeof value !== "string") return;
@@ -122,18 +82,6 @@ export function QuestButtonSetting(): JSX.Element {
 
     function updateBadgeColor(value: number | null) {
         getQuestifySettings().questButtonBadgeColor = value;
-    }
-
-    function updateIncludedTypes(options: readonly QuestButtonIncludedTypeOption[], value: string | string[] | null) {
-        const selectedValues = new Set(Array.isArray(value) ? value : value ? [value] : []);
-        const nextIncludedTypes = { ...getQuestifySettings().questButtonIncludedTypes };
-
-        for (const option of options) {
-            nextIncludedTypes[option.value] = selectedValues.has(String(option.value));
-        }
-
-        getQuestifySettings().questButtonIncludedTypes = nextIncludedTypes;
-        validateIgnoredQuests();
     }
 
     return (
@@ -238,40 +186,6 @@ export function QuestButtonSetting(): JSX.Element {
                     />
                 </SettingsRowItem>
             </SettingsRow>
-            <SettingsSubheader> Quest Relevancy </SettingsSubheader>
-            <SettingsSelect
-                label="Included Reward Types:"
-                wrapTags={true}
-                options={questButtonRewardTypeManaOptions}
-                value={selectedRewardTypes}
-                closeOnSelect={false}
-                maxOptionsVisible={questButtonRewardTypeManaOptions.length}
-                selectionMode="multiple"
-                disabled={disabled}
-                fullWidth={true}
-                onSelectionChange={value => updateIncludedTypes(questButtonRewardTypeOptions, value)}
-                tooltip={{
-                    position: "top",
-                    text: "Only count Quests with these reward types as unclaimed when determining button visibility, badge count, and alert behavior."
-                }}
-            />
-            <SettingsSelect
-                label="Included Quest Types:"
-                labelClassName="margin-top-9"
-                wrapTags={true}
-                options={questButtonQuestTypeManaOptions}
-                value={selectedQuestTypes}
-                closeOnSelect={false}
-                maxOptionsVisible={questButtonQuestTypeManaOptions.length}
-                selectionMode="multiple"
-                disabled={disabled}
-                fullWidth={true}
-                onSelectionChange={value => updateIncludedTypes(questButtonQuestTypeOptions, value)}
-                tooltip={{
-                    position: "top",
-                    text: "Only count Quests with these task types as unclaimed when determining button visibility, badge count, and alert behavior."
-                }}
-            />
         </SettingsCard>
     );
 }
