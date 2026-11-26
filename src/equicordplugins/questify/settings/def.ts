@@ -38,7 +38,6 @@ export const defaultMiddleClickAction: QuestButtonAction = "plugin-settings";
 export const defaultRightClickAction: QuestButtonAction = "context-menu";
 
 export const defaultDisableQuestsEverything = false;
-export const defaultDisableRelocationNotices = true;
 export const defaultDisableSponsoredBanner = false;
 export const defaultDisableAccountPanelPromo = true;
 export const defaultDisableAccountPanelQuestProgress = false;

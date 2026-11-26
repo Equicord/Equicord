@@ -241,17 +241,6 @@ export default definePlugin({
             ]
         },
         {
-            // Hides Quests tab in the Discovery page.
-            find: "GLOBAL_DISCOVERY_SIDEBAR},",
-            predicate: () => getQuestifySettings().disableQuestsEverything || getQuestifySettings().disableRelocationNotices,
-            replacement: [
-                {
-                    match: /\i\.\i(?=\.filter\(\i=>\(\i!==\i\.GlobalDiscoveryTab\.QUESTS)/,
-                    replace: '$&.filter(tab=>tab!=="quests")'
-                }
-            ]
-        },
-        {
             // Hides Quests tab in the DMs tab list.
             find: '.QUEST_HOME)},"quests")',
             predicate: () => getQuestifySettings().disableQuestsEverything,

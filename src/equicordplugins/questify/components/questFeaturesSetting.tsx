@@ -22,7 +22,6 @@ type QuestDisableSettingKey =
     | "disableFriendsListPromo"
     | "disableMembersListPromo"
     | "disableOrbsAndQuestsBadges"
-    | "disableRelocationNotices"
     | "disableSponsoredBanner";
 
 type QuestModifySettingKey =
@@ -45,10 +44,6 @@ const disableFeatureOptions = [
     {
         key: "disableSponsoredBanner",
         label: "Sponsored Banner",
-    },
-    {
-        key: "disableRelocationNotices",
-        label: "Relocation Notices",
     },
     {
         key: "disableFriendsListPromo",
@@ -82,7 +77,6 @@ export function QuestFeaturesSetting(): JSX.Element {
     const questFeatures = useQuestifySettings([
         "disableQuestsEverything",
         "disableSponsoredBanner",
-        "disableRelocationNotices",
         "disableFriendsListPromo",
         "disableMembersListPromo",
         "disableAccountPanelPromo",
@@ -206,7 +200,6 @@ export function QuestFeaturesSetting(): JSX.Element {
                 tooltip={{
                     position: "top",
                     text: "Sponsored Banner is a paid-for Quest banner at the top of the Quests page."
-                        + "\n\nRelocation Notices are indicators such as in the Discovery page about Quests moving to DMs."
                         + "\n\nFriends List Promo is a card that displays on the \"Active Now\" section of your Friends List while a user you share a server with is playing a game with an active Quest."
                         + "\n\nMembers List Promo is an icon that displays on members in a server's Members List while they are playing a game with an active Quest."
                         + "\n\nAccount Panel Promo is a paid-for Quest promotion that appears above your user account panel."
