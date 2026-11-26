@@ -110,9 +110,11 @@ Thank you to [Vendicated](https://github.com/Vendicated) for creating [Vencord](
 
 ## Disclaimer
 
-Discord is trademark of Discord Inc., and solely mentioned for the sake of descriptivity.
-Mentioning it does not imply any affiliation with or endorsement by Discord Inc.
-Vencord is not connected to Equicord and as such, all donation links go to Vendicated's donation link.
+Discord is a trademark of Discord Inc. and is mentioned solely for descriptive purposes. Mention of Discord does not imply any affiliation with or endorsement by Discord Inc.
+
+Equicord is an independently maintained fork of Vencord with its own donation links. Existing Vencord donor perks are still displayed in Equicord and managed by Vencord's owner, Vendicated.
+
+Donations made to Vendicated support Vencord, not Equicord, and donations made to Equicord support Equicord, not Vencord. The two projects maintain separate donation channels.
 
 <details>
 <summary>Using Equicord violates Discord's terms of service</summary>
