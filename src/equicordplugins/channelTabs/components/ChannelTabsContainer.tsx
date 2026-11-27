@@ -169,17 +169,16 @@ export default function ChannelsTabsContainer(props: BasicChannelTabsProps) {
         const handleKeyDown = (event: KeyboardEvent) => {
             const target = event.target as HTMLElement;
 
-            // skip if typing in input fields
-            if (
+            // Discord binds Ctrl+Tab / Ctrl+Shift+Tab to next/previous guild, so modified
+            // shortcuts must still fire while the message box has focus (e.g. in DMs).
+            const isTyping =
                 target.tagName === "INPUT" ||
                 target.tagName === "TEXTAREA" ||
-                target.isContentEditable
-            ) {
-                return;
-            }
+                target.isContentEditable;
+            const canUseShortcut = !isTyping || event.ctrlKey || event.metaKey || event.altKey;
 
             // 1. number key switching (1-9)
-            if (enableNumberKeySwitching) {
+            if (enableNumberKeySwitching && !isTyping) {
                 const keyNumber = parseInt(event.key, 10);
                 if (!isNaN(keyNumber) && keyNumber >= 1 && keyNumber <= numberKeySwitchCount) {
                     const tabIndex = keyNumber - 1;
@@ -192,7 +191,7 @@ export default function ChannelsTabsContainer(props: BasicChannelTabsProps) {
             }
 
             // 2. close tab shortcut (default: CTRL+W)
-            if (enableCloseTabShortcut && matchesKeybind(event, closeTabKeybind)) {
+            if (canUseShortcut && enableCloseTabShortcut && matchesKeybind(event, closeTabKeybind)) {
                 event.preventDefault();
                 const currentTab = openedTabs.find(t => isTabSelected(t.id));
                 if (currentTab && openedTabs.length > 1) {
@@ -202,7 +201,7 @@ export default function ChannelsTabsContainer(props: BasicChannelTabsProps) {
             }
 
             // 3. new tab shortcut (default: CTRL+T)
-            if (enableNewTabShortcut && matchesKeybind(event, newTabKeybind)) {
+            if (canUseShortcut && enableNewTabShortcut && matchesKeybind(event, newTabKeybind)) {
                 event.preventDefault();
                 event.stopPropagation(); // prevent discord's quick switcher from seeing this
                 createTab(props, true);
@@ -210,7 +209,7 @@ export default function ChannelsTabsContainer(props: BasicChannelTabsProps) {
             }
 
             // 4. cycle tabs forward (default: CTRL+TAB)
-            if (enableTabCycleShortcut && matchesKeybind(event, cycleTabForwardKeybind)) {
+            if (canUseShortcut && enableTabCycleShortcut && matchesKeybind(event, cycleTabForwardKeybind)) {
                 event.preventDefault();
                 event.stopPropagation(); // prevent discord's guild switcher from seeing this
                 const currentIndex = openedTabs.findIndex(t => isTabSelected(t.id));
@@ -222,7 +221,7 @@ export default function ChannelsTabsContainer(props: BasicChannelTabsProps) {
             }
 
             // 5. cycle tabs backward (default: CTRL+SHIFT+TAB)
-            if (enableTabCycleShortcut && matchesKeybind(event, cycleTabBackwardKeybind)) {
+            if (canUseShortcut && enableTabCycleShortcut && matchesKeybind(event, cycleTabBackwardKeybind)) {
                 event.preventDefault();
                 event.stopPropagation(); // prevent Discord's guild switcher from seeing this
                 const currentIndex = openedTabs.findIndex(t => isTabSelected(t.id));
