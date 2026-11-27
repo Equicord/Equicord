@@ -1,0 +1,154 @@
+.vc-split-chat-host {
+    display: flex;
+    position: relative;
+    flex: 0 0 var(--vc-split-chat-width, 40%);
+    min-width: 0;
+    min-height: 0;
+    border-inline-start: 1px solid var(--border-subtle, #4b4e58);
+    background: var(--background-base-lowest, var(--background-primary, #23252c));
+    color: var(--text-default, var(--text-normal, #e0e1e5));
+}
+
+.vc-split-chat-pane,
+.vc-split-chat-body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-width: 0;
+    min-height: 0;
+}
+
+.vc-split-chat-title-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 0;
+}
+
+.vc-split-chat-title-label {
+    flex: 0 1 auto;
+    margin-inline: 8px;
+    padding-inline-start: 8px;
+    border-inline-start: 1px solid var(--border-subtle, #4b4e58);
+}
+
+.vc-split-chat-title-label svg {
+    flex: 0 0 auto;
+    width: 16px;
+    height: 16px;
+}
+
+.vc-split-chat-title-label strong {
+    max-width: min(24vw, 220px);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: var(--text-strong, var(--text-default));
+}
+
+.vc-split-chat-pane > p {
+    margin: 12px;
+}
+
+.vc-split-chat-body {
+    overflow: hidden;
+}
+
+.vc-split-chat-divider {
+    position: absolute;
+    z-index: 2;
+    inset-block: 0;
+    inset-inline-start: -4px;
+    width: 8px;
+    cursor: col-resize;
+    touch-action: none;
+}
+
+.vc-split-chat-divider:hover,
+.vc-split-chat-divider:active,
+.vc-split-chat-divider:focus-visible {
+    background: var(--brand-500, #5865f2);
+    outline: none;
+}
+
+.vc-split-chat-close-fallback {
+    display: grid;
+    flex: 0 0 auto;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 4px;
+    color: var(--interactive-icon-default, var(--interactive-normal));
+    cursor: pointer;
+}
+
+.vc-split-chat-close-fallback:hover {
+    color: var(--interactive-icon-hover, var(--interactive-hover));
+    background: var(--background-modifier-hover, #414452);
+}
+
+.vc-split-chat-close-fallback:focus-visible {
+    outline: 2px solid var(--focus-primary, #8da4ff);
+    outline-offset: 2px;
+}
+
+
+.vc-split-chat-picker {
+    display: grid;
+    flex: 1;
+    min-height: 0;
+    place-items: center;
+    padding: 16px;
+}
+
+.vc-split-chat-picker-content {
+    display: grid;
+    gap: 10px;
+    width: min(100%, 320px);
+    max-height: 100%;
+    grid-template-rows: auto auto minmax(0, 1fr);
+    overflow: hidden;
+}
+
+.vc-split-chat-picker h2 {
+    font-weight: 600;
+    color: var(--text-strong, var(--text-default));
+}
+
+.vc-split-chat-picker input,
+.vc-split-chat-picker button {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 8px 10px;
+    border-radius: 6px;
+    color: inherit;
+}
+
+.vc-split-chat-picker input {
+    background: var(--background-base-lower, #242429);
+}
+
+.vc-split-chat-picker ul {
+    min-height: 0;
+    max-height: 280px;
+    overflow: auto;
+}
+
+.vc-split-chat-picker button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-align: start;
+    cursor: pointer;
+}
+
+.vc-split-chat-picker button:hover,
+.vc-split-chat-picker button:focus-visible {
+    background: var(--background-modifier-hover, #383a40);
+}
+
+.vc-split-chat-picker button svg {
+    flex: none;
+    width: 16px;
+    height: 16px;
+}

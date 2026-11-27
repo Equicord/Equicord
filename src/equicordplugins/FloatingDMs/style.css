@@ -1,0 +1,115 @@
+.vc-floating-dms-panel {
+    transform-origin: top left;
+    position: fixed;
+    z-index: 900;
+    right: 18px;
+    bottom: 18px;
+    display: flex;
+    flex-direction: column;
+    width: min(440px, calc(100vw - 16px));
+    height: min(440px, calc(100vh - 16px));
+    min-width: min(270px, calc(100vw - 16px));
+    min-height: min(240px, calc(100vh - 16px));
+    max-width: calc(100vw - 16px);
+    max-height: calc(100vh - 16px);
+    resize: both;
+    overflow: hidden;
+    border: 1px solid var(--border-subtle, #484951);
+    border-radius: 12px;
+    background: var(--background-base-lowest, #18191c);
+    color: var(--text-default, #e6e6eb);
+    box-shadow: 0 12px 36px #0008;
+}
+
+.vc-floating-dms-panel[data-minimized="true"] {
+    z-index: 902;
+    width: 52px !important;
+    height: 52px !important;
+    min-width: 0;
+    min-height: 0;
+    resize: none;
+    border-radius: 50%;
+}
+
+.vc-floating-dms-front > .vc-floating-dms-panel[data-minimized="false"] {
+    z-index: 901;
+}
+
+.vc-floating-dms-front > .vc-floating-dms-panel[data-minimized="true"] {
+    z-index: 903;
+}
+
+.vc-floating-dms-panel > header[hidden] {
+    display: none;
+}
+
+.vc-floating-dms-bubble { touch-action: none; user-select: none;
+    display: grid;
+    place-items: center;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+}
+
+.vc-floating-dms-bubble img {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    object-fit: cover;
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.vc-floating-dms-bubble:hover,
+.vc-floating-dms-bubble:focus-visible {
+    outline: 2px solid var(--focus-primary, #8796ff);
+    outline-offset: -3px;
+}
+
+.vc-floating-dms-panel > header { flex: none; }
+
+.vc-floating-dms-handle {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+    padding: 10px 12px;
+    cursor: grab;
+    touch-action: none;
+    user-select: none;
+}
+
+.vc-floating-dms-handle:active {
+    cursor: grabbing;
+}
+
+.vc-floating-dms-handle svg {
+    flex: none;
+}
+
+.vc-floating-dms-handle strong {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.vc-floating-dms-body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-height: 0;
+    min-width: 0;
+}
+
+.vc-floating-dms-body[hidden] {
+    display: none;
+}
+
+.vc-floating-dms-body > p {
+    padding: 12px;
+}
+
