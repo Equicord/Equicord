@@ -1,0 +1,44 @@
+.vc-pinned-voice-chat-host {
+    display: flex;
+    flex: 0 0 clamp(190px, 28%, 420px);
+    min-height: 0;
+    min-width: 0;
+    border-inline-start: 1px solid var(--border-subtle, #484951);
+    background: var(--background-base-lowest, #18191c);
+    color: var(--text-default, #e6e6eb);
+}
+
+.vc-pinned-voice-chat,
+.vc-pinned-voice-chat-body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-width: 0;
+    min-height: 0;
+}
+
+.vc-pinned-voice-chat-title,
+.vc-pinned-voice-chat > header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+}
+
+.vc-pinned-voice-chat > header,
+.vc-pinned-voice-chat-body > p {
+    padding: 10px 12px;
+}
+
+.vc-pinned-voice-chat-title strong {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.vc-pinned-voice-chat-title svg {
+    flex: none;
+    width: 16px;
+    height: 16px;
+}
